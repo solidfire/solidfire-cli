@@ -1,0 +1,11 @@
+*.eggs
+*.pyc
+*.swp
+*~
+build
+dist
+python_solidfireclient.egg-info
+solidfireclient/versioninfo
+.tox
+venv
+.venv

@@ -1,0 +1,22 @@
+Metadata-Version: 1.1
+Name: solidfire-python
+Version: 0.0.1
+Summary: A python client and CLI for accessing the SolidFire API.
+Home-page: http://github.com/j-griffith/solidfire-python
+Author: SolidFire, Inc.
+Author-email: john.griffith@solidfire.com
+License: MIT
+Description: A python client and CLI for accessing the SolidFire API.
+Keywords: solidfire
+Platform: UNKNOWN
+Classifier: Environment :: Console
+Classifier: Environment :: Web Environment
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: System Administrators
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.3
+Classifier: Programming Language :: Python :: 2.7
