@@ -8,6 +8,8 @@ import csv
 from element import solidfire_element_api as api
 from element import exceptions
 
+from solidfire.factory import ElementFactory
+
 LOG = logging.getLogger(__name__)
 CONTEXT_SETTINGS = dict(auto_envvar_prefix='SOLIDFIRE')
 DEBUG_LOGGING_MAP = {
@@ -30,6 +32,7 @@ class Context(object):
     def __init__(self):
         self.verbose = False
         self.home = os.getcwd()
+        self.connections = dict()
 
     def log(self, msg, *args):
         """Logs a message to stderr."""
@@ -155,7 +158,7 @@ def cli(ctx,
         if(pushconnection):
             connections = connections + [cfg]
             connections_dirty = True
-
+        ctx.element = ElementFactory.create(cfg["mvip"],cfg["login"],cfg["password"],port=cfg["port"])
     # If someone accidentally passed in an argument, but didn't specify everything, throw an error.
     elif mvip or login or password:
         raise exceptions.SolidFireConnectionException("In order to manually connect, please provide mvip, login, AND password")
@@ -184,6 +187,7 @@ def cli(ctx,
 
      # TODO(jdg): Use the client to query the cluster for the supported version
     ctx.sfapi_endpoint_version = 7
+    ctx.element = ElementFactory.create(cfg["mvip"],cfg["login"],cfg["password"],port=cfg["port"])
 
 if __name__ == '__main__':
     cli.main()
