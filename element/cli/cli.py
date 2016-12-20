@@ -5,8 +5,8 @@ import sys
 import click
 import csv
 
-from solidfire import solidfire_element_api as api
-from solidfire import exceptions
+from element import solidfire_element_api as api
+from element import exceptions
 
 LOG = logging.getLogger(__name__)
 CONTEXT_SETTINGS = dict(auto_envvar_prefix='SOLIDFIRE')
@@ -63,7 +63,7 @@ class SolidFireCLI(click.MultiCommand):
             if sys.version_info[0] == 2:
                 name = name.encode('ascii', 'replace')
             import_string = (
-                "solidfire.cli.commands.cmd_%s" % (name))
+                "element.cli.commands.cmd_%s" % (name))
             mod = __import__(import_string, None, None, ['cli'])
         except ImportError:
             return

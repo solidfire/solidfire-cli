@@ -11,4 +11,5 @@ venv
 .venv
 .idea
 python3
+python32
 connections.csv

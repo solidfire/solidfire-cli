@@ -1,9 +1,9 @@
 import click
 
-from solidfire.cli import utils as cli_utils
-from solidfire.cli.cli import pass_context
-from solidfire.solidfire_element_api import SolidFireRequestException
-from solidfire import utils
+from element.cli import utils as cli_utils
+from element.cli.cli import pass_context
+from element.solidfire_element_api import SolidFireRequestException
+from element import utils
 
 
 @click.group()

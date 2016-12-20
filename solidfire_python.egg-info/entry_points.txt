@@ -1,3 +1,3 @@
 [console_scripts]
-sfcli = solidfire.cli.cli:cli
+sfcli = element.cli.cli:cli
 

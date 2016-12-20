@@ -19,14 +19,14 @@ setup(
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
     author='SolidFire, Inc.',
-    author_email='john.griffith@solidfire.com',
-    packages=["solidfire.cli"]+find_packages(exclude=["solidfire.tests"]),
+    author_email='ariel.hoffman@solidfire.com, adam.haid@solidfire.com',
+    packages=["element.cli"]+find_packages(exclude=["element.tests"]),
     license='MIT',
     zip_safe=False,
-    url='http://github.com/j-griffith/solidfire-python',
+    url='git@bitbucket.org:solidfire/solidfire-cli.git',
     entry_points={
         'console_scripts': [
-            'sfcli= solidfire.cli.cli:cli',
+            'sfcli= element.cli.cli:cli',
         ],
     },
     install_requires=[
@@ -42,7 +42,7 @@ setup(
         'mock',
         'nose2',
     ],
-    keywords=['solidfire'],
+    keywords=['element'],
     classifiers=[
         'Environment :: Console',
         'Environment :: Web Environment',
