@@ -20,7 +20,7 @@ setup(
     long_description=LONG_DESCRIPTION,
     author='SolidFire, Inc.',
     author_email='john.griffith@solidfire.com',
-    packages=find_packages(exclude=["solidfire.tests"]),
+    packages=["solidfire.cli"]+find_packages(exclude=["solidfire.tests"]),
     license='MIT',
     zip_safe=False,
     url='http://github.com/j-griffith/solidfire-python',
@@ -35,6 +35,8 @@ setup(
         'click >= 5',
         'requests >= 2.7.0',
         'prompt_toolkit',
+		'future',
+		'setuptools',
     ],
     tests_require=[
         'mock',

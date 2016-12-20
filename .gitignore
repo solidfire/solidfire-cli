@@ -9,3 +9,6 @@ solidfireclient/versioninfo
 .tox
 venv
 .venv
+.idea
+python3
+connections.csv

@@ -3,8 +3,10 @@ import logging.config
 import os
 import sys
 import click
+import csv
 
 from solidfire import solidfire_element_api as api
+from solidfire import exceptions
 
 LOG = logging.getLogger(__name__)
 CONTEXT_SETTINGS = dict(auto_envvar_prefix='SOLIDFIRE')
@@ -81,15 +83,22 @@ class SolidFireCLI(click.MultiCommand):
               default=None,
               help="SolidFire cluster password",
               required=False)
+@click.option('--useConnection', '-c',
+              default=None,
+              type=click.INT,
+              help="The index of the connection you wish to use in connections.csv. You can use this if you have previously stored away a connection.",
+              required=False)
+@click.option('--pushConnection',
+              is_flag=True,
+              help="Use this if you've provided a mvip, login, and password and you'd like to store the config so you can access it later.")
+@click.option('--popConnection',
+              default=None,
+              type=click.INT,
+              help="Use this if you want to use and remove a connection stored away in connections.csv.")
 @click.option('--format',
               default=DEFAULT_FORMAT,
               help="Output format",
               type=click.Choice(VALID_FORMATS))
-@click.option('--conf', '-c',
-              required=False,
-              default=click.get_app_dir('solidfire', force_posix=True),
-              help="Config file location",
-              type=click.Path(resolve_path=True))
 @click.option('--debug',
               required=False,
               default=None,
@@ -109,8 +118,11 @@ def cli(ctx,
         mvip=None,
         login=None,
         password=None,
+        store=False,
+        useconnection=None,
+        pushconnection=False,
+        popconnection=None,
         format='table',
-        conf=None,
         timings=False,
         debug=0,
         verbose=0):
@@ -121,17 +133,16 @@ def cli(ctx,
     # need to define a new entry point one level up that parses
     # out what version we want to use
     ctx.debug = debug
-
-    logging.config.fileConfig(os.path.join(os.path.dirname(__file__), "../../logging.cfg"))
-
-    LOG = logging.getLogger("ism")
-    LOG.debug('debug')
-    LOG.info('info')
-    LOG.warn('warn')
-    LOG.error('error')
-    LOG.critical('critical')
-
+    logging.basicConfig(
+        level=logging.WARNING,
+        format=('%(levelname)s in %(filename)s@%(lineno)s: %(message)s'))
     ctx.verbose = verbose
+
+    connections_dirty = False
+
+    connectionsCsvLocation = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "..", "connections.csv")
+    with open(connectionsCsvLocation) as connectionFile:
+        connections = list(csv.DictReader(connectionFile, delimiter=','))
 
     # Arguments take precedence regardless of env settings
     if mvip and login and password:
@@ -140,12 +151,35 @@ def cli(ctx,
                'password': password,
                'port': 443,
                'url': 'https://%s:%s' % (mvip, 443)}
+        # If we want to push the connection, we put the new cfg on the end.
+        if(pushconnection):
+            connections = connections + [cfg]
+            connections_dirty = True
+
+    # If someone accidentally passed in an argument, but didn't specify everything, throw an error.
+    elif mvip or login or password:
+        raise exceptions.SolidFireConnectionException("In order to manually connect, please provide mvip, login, AND password")
     else:
-        cfg = {'mvip': os.environ.get('mvip', None),
-               'login': os.environ.get('login', None),
-               'password': os.environ.get('password', None),
-               'port': os.environ.get('port', None),
-               'url': os.environ.get('url', None)}
+        if(popconnection is not None and useconnection is not None):
+            raise exceptions.SolidFireUsageException("You cannot provide both pop_connection and use_connection parameters. Pick one.")
+        elif(popconnection is not None):
+            cfg = connections[popconnection]
+            del connections[popconnection]
+            connections_dirty = True
+        elif(useconnection is not None):
+            cfg = connections[useconnection]
+        cfg["port"] = int(cfg["port"])
+    print(cfg)
+
+    # If the connections are dirty, we need to rewrite our connections file.
+    if connections_dirty:
+        with open(connectionsCsvLocation, 'w') as f:
+            w = csv.DictWriter(f, ["mvip","port","login","password","url"], lineterminator='\n')
+            w.writeheader()
+            for connection in connections:
+                if connection is not None:
+                    w.writerow(connection)
+
     ctx.client = api.SolidFireAPI(endpoint_dict=cfg)
 
      # TODO(jdg): Use the client to query the cluster for the supported version
