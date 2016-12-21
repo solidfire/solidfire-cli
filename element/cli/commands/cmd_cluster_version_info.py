@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -25,5 +27,5 @@ def get(ctx):
     """Return information about the Element software version running on each node in the cluster."""
     """Information about the nodes that are currently in the process of upgrading software is also returned."""
     GetClusterVersionInfoResult = ctx.element.get_cluster_version_info()
-    print(GetClusterVersionInfoResult)
+    print(json.dumps(json.loads(jsonpickle.encode(GetClusterVersionInfoResult)),indent=4))
 

@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -28,5 +30,5 @@ def cli(ctx):
 def prepare(ctx, virtual_volume_id, name = None, writable_snapshot = None, calling_virtual_volume_host_id = None):
     """PrepareVirtualSnapshot is used to set up VMware Virtual Volume snapshot."""
     PrepareVirtualSnapshotResult = ctx.element.prepare_virtual_snapshot(virtual_volume_id=virtual_volume_id, name=name, writable_snapshot=writable_snapshot, calling_virtual_volume_host_id=calling_virtual_volume_host_id)
-    print(PrepareVirtualSnapshotResult)
+    print(json.dumps(json.loads(jsonpickle.encode(PrepareVirtualSnapshotResult)),indent=4))
 

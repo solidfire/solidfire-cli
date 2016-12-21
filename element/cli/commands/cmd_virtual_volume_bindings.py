@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -25,5 +27,5 @@ def cli(ctx):
 def list(ctx, virtual_volume_binding_ids = None):
     """ListVirtualVolumeBindings returns a list of VVol bindings."""
     ListVirtualVolumeBindingsResult = ctx.element.list_virtual_volume_bindings(virtual_volume_binding_ids=virtual_volume_binding_ids)
-    print(ListVirtualVolumeBindingsResult)
+    print(json.dumps(json.loads(jsonpickle.encode(ListVirtualVolumeBindingsResult)),indent=4))
 

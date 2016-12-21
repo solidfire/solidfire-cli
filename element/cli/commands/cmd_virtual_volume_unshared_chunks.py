@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -34,5 +36,5 @@ def get(ctx, virtual_volume_id, base_virtual_volume_id, segment_start, segment_l
     """error is thrown. If the offset/length combination is invalid or out fo range """
     """an error is thrown."""
     VirtualVolumeUnsharedChunkResult = ctx.element.get_virtual_volume_unshared_chunks(virtual_volume_id=virtual_volume_id, base_virtual_volume_id=base_virtual_volume_id, segment_start=segment_start, segment_length=segment_length, chunk_size=chunk_size, calling_virtual_volume_host_id=calling_virtual_volume_host_id)
-    print(VirtualVolumeUnsharedChunkResult)
+    print(json.dumps(json.loads(jsonpickle.encode(VirtualVolumeUnsharedChunkResult)),indent=4))
 

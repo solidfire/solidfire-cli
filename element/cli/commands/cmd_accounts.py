@@ -12,6 +12,7 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
 import json
 
 @click.group()
@@ -27,5 +28,5 @@ def cli(ctx):
 def list(ctx, start_account_id = None, limit = None):
     """Returns the entire list of accounts, with optional paging support."""
     ListAccountsResult = ctx.element.list_accounts(start_account_id=start_account_id, limit=limit)
-    json.dumps(ListAccountsResult.__dict__)
+    print(json.dumps(json.loads(jsonpickle.encode(ListAccountsResult)),indent=4))
 

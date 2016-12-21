@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -25,5 +27,5 @@ def cli(ctx):
 def get(ctx, feature = None):
     """GetFeatureStatus allows you to retrieve the status of a cluster feature."""
     GetFeatureStatusResult = ctx.element.get_feature_status(feature=feature)
-    print(GetFeatureStatusResult)
+    print(json.dumps(json.loads(jsonpickle.encode(GetFeatureStatusResult)),indent=4))
 

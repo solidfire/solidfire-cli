@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -30,5 +32,5 @@ def list(ctx, virtual_network_id = None, virtual_network_tag = None, virtual_net
     """"""
     """This method does not require any parameters to be passed. But, one or more VirtualNetworkIDs or VirtualNetworkTags can be passed in order to filter the results."""
     ListVirtualNetworksResult = ctx.element.list_virtual_networks(virtual_network_id=virtual_network_id, virtual_network_tag=virtual_network_tag, virtual_network_ids=virtual_network_ids, virtual_network_tags=virtual_network_tags)
-    print(ListVirtualNetworksResult)
+    print(json.dumps(json.loads(jsonpickle.encode(ListVirtualNetworksResult)),indent=4))
 

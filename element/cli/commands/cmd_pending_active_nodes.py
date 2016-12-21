@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -24,5 +26,5 @@ def cli(ctx):
 def list(ctx):
     """ListPendingActiveNodes returns the list of nodes in the cluster that are currently in the PendingActive state, between the pending and active states. These are nodes that are currently being returned to the factory image."""
     ListPendingActiveNodesResult = ctx.element.list_pending_active_nodes()
-    print(ListPendingActiveNodesResult)
+    print(json.dumps(json.loads(jsonpickle.encode(ListPendingActiveNodesResult)),indent=4))
 

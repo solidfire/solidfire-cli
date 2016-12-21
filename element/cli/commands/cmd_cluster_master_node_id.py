@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -24,5 +26,5 @@ def cli(ctx):
 def get(ctx):
     """GetClusterMasterNodeID is used to return the ID of the node that can perform cluster-wide administration tasks and holds the storage virtual IP (SVIP) and management virtual IP (MVIP)."""
     GetClusterMasterNodeIDResult = ctx.element.get_cluster_master_node_id()
-    print(GetClusterMasterNodeIDResult)
+    print(json.dumps(json.loads(jsonpickle.encode(GetClusterMasterNodeIDResult)),indent=4))
 

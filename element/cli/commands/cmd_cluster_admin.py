@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -25,5 +27,5 @@ def cli(ctx):
 def remove(ctx, cluster_admin_id):
     """RemoveClusterAdmin is used to remove a Cluster Admin. The &quot;admin&quot; Cluster Admin cannot be removed."""
     RemoveClusterAdminResult = ctx.element.remove_cluster_admin(cluster_admin_id=cluster_admin_id)
-    print(RemoveClusterAdminResult)
+    print(json.dumps(json.loads(jsonpickle.encode(RemoveClusterAdminResult)),indent=4))
 

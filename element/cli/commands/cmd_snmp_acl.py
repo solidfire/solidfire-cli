@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -26,5 +28,5 @@ def cli(ctx):
 def set(ctx, networks, usm_users):
     """SetSnmpACL is used to configure SNMP access permissions on the cluster nodes. The values set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to SetSnmpACL. Also note that the values set with this interface replace all &quot;network&quot; or &quot;usmUsers&quot; values set with the older SetSnmpInfo."""
     SetSnmpACLResult = ctx.element.set_snmp_acl(networks=networks, usm_users=usm_users)
-    print(SetSnmpACLResult)
+    print(json.dumps(json.loads(jsonpickle.encode(SetSnmpACLResult)),indent=4))
 

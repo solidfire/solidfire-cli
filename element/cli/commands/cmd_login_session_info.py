@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -25,5 +27,5 @@ def cli(ctx):
 def set(ctx, timeout):
     """SetLoginSessionInfo is used to set the period of time a log in authentication is valid. After the log in period elapses without activity on the system the authentication will expire. New log in credentials will be required for continued access to the cluster once the timeout period has elapsed."""
     SetLoginSessionInfoResult = ctx.element.set_login_session_info(timeout=timeout)
-    print(SetLoginSessionInfoResult)
+    print(json.dumps(json.loads(jsonpickle.encode(SetLoginSessionInfoResult)),indent=4))
 

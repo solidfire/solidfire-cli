@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -24,5 +26,5 @@ def cli(ctx):
 def list(ctx):
     """The ListNetworkInterfaces API method is used to return information about each network interface on a node. The API method is intended for use on individual nodes. """
     ListNetworkInterfacesResult = ctx.element.list_network_interfaces()
-    print(ListNetworkInterfacesResult)
+    print(json.dumps(json.loads(jsonpickle.encode(ListNetworkInterfacesResult)),indent=4))
 

@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -25,5 +27,5 @@ def cli(ctx):
 def list(ctx, force):
     """ListDriveHardware returns all the drives connected to a node. Use this method on the cluster to return drive hardware information for all the drives on all nodes."""
     ListDriveHardwareResult = ctx.element.list_drive_hardware(force=force)
-    print(ListDriveHardwareResult)
+    print(json.dumps(json.loads(jsonpickle.encode(ListDriveHardwareResult)),indent=4))
 

@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -25,5 +27,5 @@ def cli(ctx):
 def get(ctx, force):
     """GetOrigin enables you to retrieve the origination certificate for where the node was built.NOTE: The GetOrigin method may return &quot;null&quot; if there is no origination certification."""
     GetOriginResult = ctx.element.get_origin(force=force)
-    print(GetOriginResult)
+    print(json.dumps(json.loads(jsonpickle.encode(GetOriginResult)),indent=4))
 

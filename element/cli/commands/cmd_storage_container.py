@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -27,5 +29,5 @@ def cli(ctx):
 def modify(ctx, storage_container_id, initiator_secret = None, target_secret = None):
     """Modifies an existing storage container."""
     ModifyStorageContainerResult = ctx.element.modify_storage_container(storage_container_id=storage_container_id, initiator_secret=initiator_secret, target_secret=target_secret)
-    print(ModifyStorageContainerResult)
+    print(json.dumps(json.loads(jsonpickle.encode(ModifyStorageContainerResult)),indent=4))
 

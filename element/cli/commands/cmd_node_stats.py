@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -24,5 +26,5 @@ def cli(ctx):
 def list(ctx):
     """ListNodeStats is used to return the high-level activity measurements for all nodes in a cluster."""
     ListNodeStatsResult = ctx.element.list_node_stats()
-    print(ListNodeStatsResult)
+    print(json.dumps(json.loads(jsonpickle.encode(ListNodeStatsResult)),indent=4))
 

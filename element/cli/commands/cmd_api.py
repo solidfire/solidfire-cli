@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -24,5 +26,5 @@ def cli(ctx):
 def get(ctx):
     """Retrieves the current version of the API and a list of all supported versions."""
     GetAPIResult = ctx.element.get_api()
-    print(GetAPIResult)
+    print(json.dumps(json.loads(jsonpickle.encode(GetAPIResult)),indent=4))
 

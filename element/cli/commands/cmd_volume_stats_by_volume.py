@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -25,5 +27,5 @@ def list(ctx):
     """ListVolumeStatsByVolume returns high-level activity measurements for every volume, by volume."""
     """Values are cumulative from the creation of the volume."""
     ListVolumeStatsByVolumeResult = ctx.element.list_volume_stats_by_volume()
-    print(ListVolumeStatsByVolumeResult)
+    print(json.dumps(json.loads(jsonpickle.encode(ListVolumeStatsByVolumeResult)),indent=4))
 

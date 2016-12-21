@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -24,5 +26,5 @@ def cli(ctx):
 def get(ctx):
     """Return configuration information about the cluster."""
     GetClusterInfoResult = ctx.element.get_cluster_info()
-    print(GetClusterInfoResult)
+    print(json.dumps(json.loads(jsonpickle.encode(GetClusterInfoResult)),indent=4))
 

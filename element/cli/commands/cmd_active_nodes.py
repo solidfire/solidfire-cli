@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -24,5 +26,5 @@ def cli(ctx):
 def list(ctx):
     """ListActiveNodes returns the list of currently active nodes that are in the cluster."""
     ListActiveNodesResult = ctx.element.list_active_nodes()
-    print(ListActiveNodesResult)
+    print(json.dumps(json.loads(jsonpickle.encode(ListActiveNodesResult)),indent=4))
 

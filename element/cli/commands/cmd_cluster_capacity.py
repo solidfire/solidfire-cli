@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -25,5 +27,5 @@ def get(ctx):
     """Return the high-level capacity measurements for an entire cluster."""
     """The fields returned from this method can be used to calculate the efficiency rates that are displayed in the Element User Interface."""
     GetClusterCapacityResult = ctx.element.get_cluster_capacity()
-    print(GetClusterCapacityResult)
+    print(json.dumps(json.loads(jsonpickle.encode(GetClusterCapacityResult)),indent=4))
 

@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -25,5 +27,5 @@ def list(ctx):
     """ListActivePairedVolumes is used to list all of the active volumes paired with a volume."""
     """Volumes listed in the return for this method include volumes with active and pending pairings."""
     ListActivePairedVolumesResult = ctx.element.list_active_paired_volumes()
-    print(ListActivePairedVolumesResult)
+    print(json.dumps(json.loads(jsonpickle.encode(ListActivePairedVolumesResult)),indent=4))
 

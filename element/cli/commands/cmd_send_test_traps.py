@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -24,5 +26,5 @@ def cli(ctx):
 def snmp(ctx):
     """SnmpSendTestTraps enables you to test SNMP functionality for a cluster. This method instructs the cluster to send test SNMP traps to the currently configured SNMP manager."""
     SnmpSendTestTrapsResult = ctx.element.snmp_send_test_traps()
-    print(SnmpSendTestTrapsResult)
+    print(json.dumps(json.loads(jsonpickle.encode(SnmpSendTestTrapsResult)),indent=4))
 

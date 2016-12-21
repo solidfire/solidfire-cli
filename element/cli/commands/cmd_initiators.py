@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -19,13 +21,12 @@ def cli(ctx):
     """Account methods."""
     ctx.sfapi = ctx.client
 
-@cli.command('list', short_help="ListInitiators")
-@click.argument('start_initiator_id', type=int, required=False)
-@click.argument('limit', type=int, required=False)
-@click.argument('initiators', type=int, required=False)
+@cli.command('modify', short_help="ModifyInitiators")
+@click.argument('initiators', type=ModifyInitiator, required=True)
 @pass_context
-def list(ctx, start_initiator_id = None, limit = None, initiators = None):
-    """ListInitiators enables you to list initiator IQNs or World Wide Port Names (WWPNs)."""
-    ListInitiatorsResult = ctx.element.list_initiators(start_initiator_id=start_initiator_id, limit=limit, initiators=initiators)
-    print(ListInitiatorsResult)
+def modify(ctx, initiators):
+    """ModifyInitiators enables you to change the attributes of an existing initiator. You cannot change the name of an existing initiator. If you need to change the name of an initiator, delete the existing initiator with DeleteInitiators and create a new one with CreateInitiators."""
+    """If ModifyInitiators fails to change one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible)."""
+    ModifyInitiatorsResult = ctx.element.modify_initiators(initiators=initiators)
+    print(json.dumps(json.loads(jsonpickle.encode(ModifyInitiatorsResult)),indent=4))
 

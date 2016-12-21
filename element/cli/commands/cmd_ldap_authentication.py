@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -19,10 +21,13 @@ def cli(ctx):
     """Account methods."""
     ctx.sfapi = ctx.client
 
-@cli.command('disable', short_help="DisableLdapAuthentication")
+@cli.command('test', short_help="TestLdapAuthentication")
+@click.argument('username', type=str, required=True)
+@click.argument('password', type=str, required=True)
+@click.argument('ldap_configuration', type=LdapConfiguration, required=False)
 @pass_context
-def disable(ctx):
-    """The DisableLdapAuthentication method is used disable LDAP authentication and remove all LDAP configuration settings. This call will not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no longer be able to log in."""
-    DisableLdapAuthenticationResult = ctx.element.disable_ldap_authentication()
-    print(DisableLdapAuthenticationResult)
+def test(ctx, username, password, ldap_configuration = None):
+    """The TestLdapAuthentication is used to verify the currently enabled LDAP authentication configuration settings are correct. If the configuration settings are correct, the API call returns a list of the groups the tested user is a member of."""
+    TestLdapAuthenticationResult = ctx.element.test_ldap_authentication(username=username, password=password, ldap_configuration=ldap_configuration)
+    print(json.dumps(json.loads(jsonpickle.encode(TestLdapAuthenticationResult)),indent=4))
 

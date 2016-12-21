@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -24,5 +26,5 @@ def cli(ctx):
 def list(ctx):
     """You can use ListBackupTargets to retrieve information about all backup targets that have been created."""
     ListBackupTargetsResult = ctx.element.list_backup_targets()
-    print(ListBackupTargetsResult)
+    print(json.dumps(json.loads(jsonpickle.encode(ListBackupTargetsResult)),indent=4))
 

@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -42,5 +44,5 @@ def start(ctx, volume_id, format, snapshot_id = None, script = None, script_para
     """Snapshots can be created if cluster fullness is at stage 2 or 3."""
     """Snapshots are not created when cluster fullness is at stage 4 or 5."""
     StartBulkVolumeReadResult = ctx.element.start_bulk_volume_read(volume_id=volume_id, format=format, snapshot_id=snapshot_id, script=script, script_parameters=script_parameters, attributes=attributes)
-    print(StartBulkVolumeReadResult)
+    print(json.dumps(json.loads(jsonpickle.encode(StartBulkVolumeReadResult)),indent=4))
 

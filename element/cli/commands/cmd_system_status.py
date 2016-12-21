@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -23,5 +25,5 @@ def cli(ctx):
 @pass_context
 def get(ctx):
     GetSystemStatusResult = ctx.element.get_system_status()
-    print(GetSystemStatusResult)
+    print(json.dumps(json.loads(jsonpickle.encode(GetSystemStatusResult)),indent=4))
 

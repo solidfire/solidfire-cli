@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -25,5 +27,5 @@ def cli(ctx):
 def list(ctx, virtual_volume_host_ids = None):
     """ListVirtualVolumeHosts returns a list of known ESX hosts."""
     ListVirtualVolumeHostsResult = ctx.element.list_virtual_volume_hosts(virtual_volume_host_ids=virtual_volume_host_ids)
-    print(ListVirtualVolumeHostsResult)
+    print(json.dumps(json.loads(jsonpickle.encode(ListVirtualVolumeHostsResult)),indent=4))
 

@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -25,5 +27,5 @@ def cli(ctx):
 def remove(ctx, backup_target_id):
     """RemoveBackupTarget allows you to delete backup targets."""
     RemoveBackupTargetResult = ctx.element.remove_backup_target(backup_target_id=backup_target_id)
-    print(RemoveBackupTargetResult)
+    print(json.dumps(json.loads(jsonpickle.encode(RemoveBackupTargetResult)),indent=4))
 

@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -25,5 +27,5 @@ def cli(ctx):
 def enable(ctx, feature):
     """EnableFeature allows you to enable cluster features that are disabled by default."""
     EnableFeatureResult = ctx.element.enable_feature(feature=feature)
-    print(EnableFeatureResult)
+    print(json.dumps(json.loads(jsonpickle.encode(EnableFeatureResult)),indent=4))
 

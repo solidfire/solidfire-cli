@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -27,5 +29,5 @@ def invoke(ctx, method, parameters = None):
     """This will invoke any API method supported by the SolidFire API for the version and port the connection is using."""
     """Returns a nested hashtable of key/value pairs that contain the result of the invoked method."""
     str = ctx.element.invoke_sfapi(method=method, parameters=parameters)
-    print(str)
+    print(json.dumps(json.loads(jsonpickle.encode(str)),indent=4))
 

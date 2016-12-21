@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -24,5 +26,5 @@ def cli(ctx):
 def list(ctx):
     """The ListFibreChannelSessions is used to return information about the active Fibre Channel sessions on a cluster."""
     ListFibreChannelSessionsResult = ctx.element.list_fibre_channel_sessions()
-    print(ListFibreChannelSessionsResult)
+    print(json.dumps(json.loads(jsonpickle.encode(ListFibreChannelSessionsResult)),indent=4))
 

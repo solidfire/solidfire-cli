@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -25,5 +27,5 @@ def cli(ctx):
 def cancel(ctx, group_clone_id):
     """CancelGroupClone enables you to stop an ongoing CloneMultipleVolumes process for a group of clones. When you cancel a group clone operation, the system completes and removes the operation's associated asyncHandle. This method does not return anything."""
     CancelGroupCloneResult = ctx.element.cancel_group_clone(group_clone_id=group_clone_id)
-    print(CancelGroupCloneResult)
+    print(json.dumps(json.loads(jsonpickle.encode(CancelGroupCloneResult)),indent=4))
 

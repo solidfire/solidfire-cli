@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -25,5 +27,5 @@ def list(ctx):
     """ListClusterPairs is used to list all of the clusters a cluster is paired with."""
     """This method returns information about active and pending cluster pairings, such as statistics about the current pairing as well as the connectivity and latency (in milliseconds) of the cluster pairing."""
     ListClusterPairsResult = ctx.element.list_cluster_pairs()
-    print(ListClusterPairsResult)
+    print(json.dumps(json.loads(jsonpickle.encode(ListClusterPairsResult)),indent=4))
 

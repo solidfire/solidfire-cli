@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -25,5 +27,5 @@ def cli(ctx):
 def get(ctx, drive_id):
     """GetDriveHardwareInfo returns all the hardware info for the given drive. This generally includes manufacturers, vendors, versions, and other associated hardware identification information."""
     GetDriveHardwareInfoResult = ctx.element.get_drive_hardware_info(drive_id=drive_id)
-    print(GetDriveHardwareInfoResult)
+    print(json.dumps(json.loads(jsonpickle.encode(GetDriveHardwareInfoResult)),indent=4))
 

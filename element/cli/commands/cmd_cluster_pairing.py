@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -19,12 +21,12 @@ def cli(ctx):
     """Account methods."""
     ctx.sfapi = ctx.client
 
-@cli.command('complete', short_help="CompleteClusterPairing")
-@click.argument('cluster_pairing_key', type=str, required=True)
+@cli.command('start', short_help="StartClusterPairing")
 @pass_context
-def complete(ctx, cluster_pairing_key):
-    """The CompleteClusterPairing method is the second step in the cluster pairing process."""
-    """Use this method with the encoded key received from the &quot;StartClusterPairing&quot; API method to complete the cluster pairing process."""
-    CompleteClusterPairingResult = ctx.element.complete_cluster_pairing(cluster_pairing_key=cluster_pairing_key)
-    print(CompleteClusterPairingResult)
+def start(ctx):
+    """StartClusterPairing is used to create an encoded key from a cluster that is used to pair with another cluster."""
+    """The key created from this API method is used in the &quot;CompleteClusterPairing&quot; API method to establish a cluster pairing."""
+    """You can pair a cluster with a maximum of four other SolidFire clusters."""
+    StartClusterPairingResult = ctx.element.start_cluster_pairing()
+    print(json.dumps(json.loads(jsonpickle.encode(StartClusterPairingResult)),indent=4))
 

@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -28,5 +30,5 @@ def cli(ctx):
 def list(ctx, max_events = None, start_event_id = None, end_event_id = None, event_queue_type = None):
     """ListEvents returns events detected on the cluster, sorted from oldest to newest."""
     ListEventsResult = ctx.element.list_events(max_events=max_events, start_event_id=start_event_id, end_event_id=end_event_id, event_queue_type=event_queue_type)
-    print(ListEventsResult)
+    print(json.dumps(json.loads(jsonpickle.encode(ListEventsResult)),indent=4))
 

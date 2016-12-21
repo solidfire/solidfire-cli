@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -26,5 +28,5 @@ def get(ctx):
     """&lt;br/&gt;&lt;br/&gt;"""
     """&lt;b&gt;Note&lt;/b&gt;: GetSnmpState is new for Element OS 8. Please use this method and SetSnmpACL to migrate your SNMP functionality in the future."""
     GetSnmpStateResult = ctx.element.get_snmp_state()
-    print(GetSnmpStateResult)
+    print(json.dumps(json.loads(jsonpickle.encode(GetSnmpStateResult)),indent=4))
 

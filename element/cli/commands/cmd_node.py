@@ -21,12 +21,13 @@ def cli(ctx):
     """Account methods."""
     ctx.sfapi = ctx.client
 
-@cli.command('get', short_help="GetIpmiConfig")
-@click.argument('chassis_type', type=str, required=False)
+@cli.command('reset', short_help="ResetNode")
+@click.argument('build', type=str, required=True)
 @click.argument('force', type=bool, required=True)
+@click.argument('option', type=str, required=True)
 @pass_context
-def get(ctx, force, chassis_type = None):
-    """GetIpmiConfig enables you to retrieve hardware sensor information from sensors that are in your node."""
-    GetIpmiConfigResult = ctx.element.get_ipmi_config(force=force, chassis_type=chassis_type)
-    print(json.dumps(json.loads(jsonpickle.encode(GetIpmiConfigResult)),indent=4))
+def reset(ctx, build, force, option):
+    """Allows you to reset a node to the SolidFire factory settings. All data will be deleted from the node when you call this method. A node participating in a cluster cannot be reset."""
+    ResetNodeResult = ctx.element.reset_node(build=build, force=force, option=option)
+    print(json.dumps(json.loads(jsonpickle.encode(ResetNodeResult)),indent=4))
 

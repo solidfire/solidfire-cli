@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -27,5 +29,5 @@ def remove(ctx, account_id):
     """All Volumes must be deleted and purged on the account before it can be removed."""
     """If volumes on the account are still pending deletion, RemoveAccount cannot be used until DeleteVolume to delete and purge the volumes."""
     RemoveAccountResult = ctx.element.remove_account(account_id=account_id)
-    print(RemoveAccountResult)
+    print(json.dumps(json.loads(jsonpickle.encode(RemoveAccountResult)),indent=4))
 

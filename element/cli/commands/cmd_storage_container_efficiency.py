@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -25,5 +27,5 @@ def cli(ctx):
 def get(ctx, storage_container_id):
     """GetStorageContainerEfficiency enables you to retrieve efficiency information about a virtual volume storage container."""
     GetStorageContainerEfficiencyResult = ctx.element.get_storage_container_efficiency(storage_container_id=storage_container_id)
-    print(GetStorageContainerEfficiencyResult)
+    print(json.dumps(json.loads(jsonpickle.encode(GetStorageContainerEfficiencyResult)),indent=4))
 

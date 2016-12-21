@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -26,5 +28,5 @@ def cli(ctx):
 def get(ctx, virtual_volume_task_id, calling_virtual_volume_host_id = None):
     """GetVirtualVolumeTaskUpdate checks the status of a VVol Async Task."""
     VirtualVolumeTaskResult = ctx.element.get_virtual_volume_task_update(virtual_volume_task_id=virtual_volume_task_id, calling_virtual_volume_host_id=calling_virtual_volume_host_id)
-    print(VirtualVolumeTaskResult)
+    print(json.dumps(json.loads(jsonpickle.encode(VirtualVolumeTaskResult)),indent=4))
 

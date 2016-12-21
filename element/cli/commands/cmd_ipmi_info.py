@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -25,5 +27,5 @@ def cli(ctx):
 def get(ctx, force):
     """GetIpmiInfo allows you to display a detailed reporting of sensors (objects) for node fans, intake and exhaust temperatures, and power supplies  that are monitored by . """
     GetIpmiInfoResult = ctx.element.get_ipmi_info(force=force)
-    print(GetIpmiInfoResult)
+    print(json.dumps(json.loads(jsonpickle.encode(GetIpmiInfoResult)),indent=4))
 

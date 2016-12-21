@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -27,5 +29,5 @@ def cli(ctx):
 def modify(ctx, group_snapshot_id, expiration_time = None, enable_remote_replication = None):
     """ModifyGroupSnapshot is used to change the attributes currently assigned to a group snapshot."""
     ModifyGroupSnapshotResult = ctx.element.modify_group_snapshot(group_snapshot_id=group_snapshot_id, expiration_time=expiration_time, enable_remote_replication=enable_remote_replication)
-    print(ModifyGroupSnapshotResult)
+    print(json.dumps(json.loads(jsonpickle.encode(ModifyGroupSnapshotResult)),indent=4))
 

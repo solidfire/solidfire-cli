@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -24,5 +26,5 @@ def cli(ctx):
 def list(ctx):
     """ListBulkVolumeJobs is used to return information about each bulk volume read or write operation that is occurring in the system."""
     ListBulkVolumeJobsResult = ctx.element.list_bulk_volume_jobs()
-    print(ListBulkVolumeJobsResult)
+    print(json.dumps(json.loads(jsonpickle.encode(ListBulkVolumeJobsResult)),indent=4))
 

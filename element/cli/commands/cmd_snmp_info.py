@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -30,5 +32,5 @@ def set(ctx, networks = None, enabled = None, snmp_v3_enabled = None, usm_users 
     """&lt;br/&gt;&lt;br/&gt;"""
     """&lt;b&gt;Note&lt;/b&gt;: EnableSnmp and SetSnmpACL methods can be used to accomplish the same results as SetSnmpInfo. SetSnmpInfo will no longer be available after the Element 8 release. Please use EnableSnmp and SetSnmpACL in the future."""
     SetSnmpInfoResult = ctx.element.set_snmp_info(networks=networks, enabled=enabled, snmp_v3_enabled=snmp_v3_enabled, usm_users=usm_users)
-    print(SetSnmpInfoResult)
+    print(json.dumps(json.loads(jsonpickle.encode(SetSnmpInfoResult)),indent=4))
 

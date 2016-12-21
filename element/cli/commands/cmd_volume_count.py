@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -24,5 +26,5 @@ def cli(ctx):
 def get(ctx):
     """GetVolumeCount enables you to retrieve the number of volumes currently in the system."""
     GetVolumeCountResult = ctx.element.get_volume_count()
-    print(GetVolumeCountResult)
+    print(json.dumps(json.loads(jsonpickle.encode(GetVolumeCountResult)),indent=4))
 

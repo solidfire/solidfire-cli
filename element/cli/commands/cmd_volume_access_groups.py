@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -26,5 +28,5 @@ def cli(ctx):
 def list(ctx, start_volume_access_group_id = None, limit = None):
     """ListVolumeAccessGroups is used to return information about the volume access groups that are currently in the system."""
     ListVolumeAccessGroupsResult = ctx.element.list_volume_access_groups(start_volume_access_group_id=start_volume_access_group_id, limit=limit)
-    print(ListVolumeAccessGroupsResult)
+    print(json.dumps(json.loads(jsonpickle.encode(ListVolumeAccessGroupsResult)),indent=4))
 

@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -24,5 +26,5 @@ def cli(ctx):
 def get(ctx):
     """GetHardwareConfig enables you to display the hardware configuration information for a node. NOTE: This method is available only through the per-node API endpoint 5.0 or later."""
     GetHardwareConfigResult = ctx.element.get_hardware_config()
-    print(GetHardwareConfigResult)
+    print(json.dumps(json.loads(jsonpickle.encode(GetHardwareConfigResult)),indent=4))
 

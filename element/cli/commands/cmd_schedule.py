@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -25,5 +27,5 @@ def cli(ctx):
 def modify(ctx, schedule):
     """ModifySchedule is used to change the intervals at which a scheduled snapshot occurs. This allows for adjustment to the snapshot frequency and retention.&lt;br/&gt;"""
     ModifyScheduleResult = ctx.element.modify_schedule(schedule=schedule)
-    print(ModifyScheduleResult)
+    print(json.dumps(json.loads(jsonpickle.encode(ModifyScheduleResult)),indent=4))
 

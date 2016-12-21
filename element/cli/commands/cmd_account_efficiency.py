@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -25,5 +27,5 @@ def cli(ctx):
 def get(ctx, account_id):
     """GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity."""
     GetEfficiencyResult = ctx.element.get_account_efficiency(account_id=account_id)
-    print(GetEfficiencyResult)
+    print(json.dumps(json.loads(jsonpickle.encode(GetEfficiencyResult)),indent=4))
 

@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -25,5 +27,5 @@ def cli(ctx):
 def list(ctx, async_result_types = None):
     """You can use ListAsyncResults to list the results of all currently running and completed asynchronous methods on the system. Querying asynchronous results with ListAsyncResults does not cause completed asyncHandles to expire; you can use GetAsyncResult to query any of the asyncHandles returned by ListAsyncResults."""
     ListAsyncResultsResult = ctx.element.list_async_results(async_result_types=async_result_types)
-    print(ListAsyncResultsResult)
+    print(json.dumps(json.loads(jsonpickle.encode(ListAsyncResultsResult)),indent=4))
 

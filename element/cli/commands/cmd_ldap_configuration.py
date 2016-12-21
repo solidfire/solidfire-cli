@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -24,5 +26,5 @@ def cli(ctx):
 def get(ctx):
     """The GetLdapConfiguration is used to get the LDAP configuration currently active on the cluster."""
     GetLdapConfigurationResult = ctx.element.get_ldap_configuration()
-    print(GetLdapConfigurationResult)
+    print(json.dumps(json.loads(jsonpickle.encode(GetLdapConfigurationResult)),indent=4))
 

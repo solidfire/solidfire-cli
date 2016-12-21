@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -24,5 +26,5 @@ def cli(ctx):
 def list(ctx):
     """ListISCSISessions is used to return iSCSI connection information for volumes in the cluster."""
     ListISCSISessionsResult = ctx.element.list_iscsisessions()
-    print(ListISCSISessionsResult)
+    print(json.dumps(json.loads(jsonpickle.encode(ListISCSISessionsResult)),indent=4))
 

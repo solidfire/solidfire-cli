@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -19,13 +21,13 @@ def cli(ctx):
     """Account methods."""
     ctx.sfapi = ctx.client
 
-@cli.command('modify', short_help="ModifyVolumePair")
+@cli.command('remove', short_help="RemoveVolumePair")
 @click.argument('volume_id', type=int, required=True)
-@click.argument('paused_manual', type=bool, required=False)
-@click.argument('mode', type=str, required=False)
 @pass_context
-def modify(ctx, volume_id, paused_manual = None, mode = None):
-    """ModifyVolumePair is used to pause or restart replication between a pair of volumes."""
-    ModifyVolumePairResult = ctx.element.modify_volume_pair(volume_id=volume_id, paused_manual=paused_manual, mode=mode)
-    print(ModifyVolumePairResult)
+def remove(ctx, volume_id):
+    """RemoveVolumePair is used to remove the remote pairing between two volumes."""
+    """When the volume pairing information is removed, data is no longer replicated to or from the volume."""
+    """This method should be run on both the source and target volumes that are paired together."""
+    RemoveVolumePairResult = ctx.element.remove_volume_pair(volume_id=volume_id)
+    print(json.dumps(json.loads(jsonpickle.encode(RemoveVolumePairResult)),indent=4))
 

@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -24,5 +26,5 @@ def cli(ctx):
 def list(ctx):
     """ListSchedule is used to return information about all scheduled snapshots that have been created."""
     ListSchedulesResult = ctx.element.list_schedules()
-    print(ListSchedulesResult)
+    print(json.dumps(json.loads(jsonpickle.encode(ListSchedulesResult)),indent=4))
 

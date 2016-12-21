@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -25,5 +27,5 @@ def cli(ctx):
 def get(ctx, type = None):
     """You can use the GetClusterHardwareInfo method to retrieve the hardware status and information for all Fibre Channel nodes, iSCSI nodes and drives in the cluster. This generally includes manufacturers, vendors, versions, and other associated hardware identification information."""
     GetClusterHardwareInfoResult = ctx.element.get_cluster_hardware_info(type=type)
-    print(GetClusterHardwareInfoResult)
+    print(json.dumps(json.loads(jsonpickle.encode(GetClusterHardwareInfoResult)),indent=4))
 

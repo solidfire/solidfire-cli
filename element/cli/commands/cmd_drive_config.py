@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -26,5 +28,5 @@ def get(ctx):
     """&lt;br/&gt;&lt;br/&gt;"""
     """&lt;b&gt;Note&lt;/b&gt;: This method is available only through the per-node API endpoint 5.0 or later."""
     GetDriveConfigResult = ctx.element.get_drive_config()
-    print(GetDriveConfigResult)
+    print(json.dumps(json.loads(jsonpickle.encode(GetDriveConfigResult)),indent=4))
 

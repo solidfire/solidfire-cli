@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -29,5 +31,5 @@ def cli(ctx):
 def update(ctx, key, status, percent_complete = None, message = None, attributes = None):
     """You can use UpdateBulkVolumeStatus in a script to return to the SolidFire system the status of a bulk volume job that you have started with the &quot;StartBulkVolumeRead&quot; or &quot;StartBulkVolumeWrite&quot; methods."""
     UpdateBulkVolumeStatusResult = ctx.element.update_bulk_volume_status(key=key, status=status, percent_complete=percent_complete, message=message, attributes=attributes)
-    print(UpdateBulkVolumeStatusResult)
+    print(json.dumps(json.loads(jsonpickle.encode(UpdateBulkVolumeStatusResult)),indent=4))
 

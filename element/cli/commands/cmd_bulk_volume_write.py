@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -33,5 +35,5 @@ def start(ctx, volume_id, format, script = None, script_parameters = None, attri
     """The external data is accessed by a web server running on a SolidFire node."""
     """Communications and server interaction information for external data access is passed by a script running on the SolidFire storage system."""
     StartBulkVolumeWriteResult = ctx.element.start_bulk_volume_write(volume_id=volume_id, format=format, script=script, script_parameters=script_parameters, attributes=attributes)
-    print(StartBulkVolumeWriteResult)
+    print(json.dumps(json.loads(jsonpickle.encode(StartBulkVolumeWriteResult)),indent=4))
 

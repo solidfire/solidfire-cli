@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -25,5 +27,5 @@ def list(ctx):
     """Gets the list of pending nodes."""
     """Pending nodes are running and configured to join the cluster, but have not been added via the AddNodes method."""
     ListPendingNodesResult = ctx.element.list_pending_nodes()
-    print(ListPendingNodesResult)
+    print(json.dumps(json.loads(jsonpickle.encode(ListPendingNodesResult)),indent=4))
 

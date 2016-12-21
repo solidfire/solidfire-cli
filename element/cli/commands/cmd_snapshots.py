@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -25,5 +27,5 @@ def cli(ctx):
 def list(ctx, volume_id = None):
     """ListSnapshots is used to return the attributes of each snapshot taken on the volume."""
     ListSnapshotsResult = ctx.element.list_snapshots(volume_id=volume_id)
-    print(ListSnapshotsResult)
+    print(json.dumps(json.loads(jsonpickle.encode(ListSnapshotsResult)),indent=4))
 

@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -29,5 +31,5 @@ def secure(ctx, drives):
     """&lt;br/&gt;&lt;br/&gt;"""
     """Use the &quot;ListDrives&quot; method to obtain the driveIDs for the drives you want to secure erase."""
     AsyncHandleResult = ctx.element.secure_erase_drives(drives=drives)
-    print(AsyncHandleResult)
+    print(json.dumps(json.loads(jsonpickle.encode(AsyncHandleResult)),indent=4))
 

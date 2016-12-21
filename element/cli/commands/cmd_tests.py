@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -25,5 +27,5 @@ def list(ctx):
     """The ListTests API method is used to return the tests that are available to run on a node."""
     """&lt;br/&gt;&lt;b&gt;Note&lt;/b&gt;: This method is available only through the per-node API endpoint 5.0 or later."""
     ListTestsResult = ctx.element.list_tests()
-    print(ListTestsResult)
+    print(json.dumps(json.loads(jsonpickle.encode(ListTestsResult)),indent=4))
 

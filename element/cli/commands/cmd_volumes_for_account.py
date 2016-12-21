@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -27,5 +29,5 @@ def cli(ctx):
 def list(ctx, account_id, start_volume_id = None, limit = None):
     """ListVolumesForAccount returns the list of active AND (pending) deleted volumes for an account."""
     ListVolumesForAccountResult = ctx.element.list_volumes_for_account(account_id=account_id, start_volume_id=start_volume_id, limit=limit)
-    print(ListVolumesForAccountResult)
+    print(json.dumps(json.loads(jsonpickle.encode(ListVolumesForAccountResult)),indent=4))
 

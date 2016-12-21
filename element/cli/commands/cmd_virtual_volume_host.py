@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -30,5 +32,5 @@ def cli(ctx):
 def create(ctx, virtual_volume_host_id, cluster_id, initiator_names = None, visible_protocol_endpoint_ids = None, host_address = None, calling_virtual_volume_host_id = None):
     """CreateVirtualVolumeHost creates a new ESX host."""
     VirtualVolumeNullResult = ctx.element.create_virtual_volume_host(virtual_volume_host_id=virtual_volume_host_id, cluster_id=cluster_id, initiator_names=initiator_names, visible_protocol_endpoint_ids=visible_protocol_endpoint_ids, host_address=host_address, calling_virtual_volume_host_id=calling_virtual_volume_host_id)
-    print(VirtualVolumeNullResult)
+    print(json.dumps(json.loads(jsonpickle.encode(VirtualVolumeNullResult)),indent=4))
 

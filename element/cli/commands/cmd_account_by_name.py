@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -25,5 +27,5 @@ def cli(ctx):
 def get(ctx, username):
     """Returns details about an account, given its Username."""
     GetAccountResult = ctx.element.get_account_by_name(username=username)
-    print(GetAccountResult)
+    print(json.dumps(json.loads(jsonpickle.encode(GetAccountResult)),indent=4))
 

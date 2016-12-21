@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -25,5 +27,5 @@ def cli(ctx):
 def list(ctx, storage_container_ids = None):
     """Gets information for all storage containers currently in the system."""
     ListStorageContainersResult = ctx.element.list_storage_containers(storage_container_ids=storage_container_ids)
-    print(ListStorageContainersResult)
+    print(json.dumps(json.loads(jsonpickle.encode(ListStorageContainersResult)),indent=4))
 

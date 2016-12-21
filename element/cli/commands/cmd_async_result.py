@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -33,5 +35,5 @@ def get(ctx, async_handle):
     """The result for a completed asynchronous method call can only be retrieved once."""
     """Once the final result has been returned, later attempts returns an error."""
     GetAsyncResultResult = ctx.element.get_async_result(async_handle=async_handle)
-    print(GetAsyncResultResult)
+    print(json.dumps(json.loads(jsonpickle.encode(GetAsyncResultResult)),indent=4))
 

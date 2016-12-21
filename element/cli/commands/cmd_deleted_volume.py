@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -26,5 +28,5 @@ def restore(ctx, volume_id):
     """RestoreDeletedVolume marks a deleted volume as active again."""
     """This action makes the volume immediately available for iSCSI connection."""
     RestoreDeletedVolumeResult = ctx.element.restore_deleted_volume(volume_id=volume_id)
-    print(RestoreDeletedVolumeResult)
+    print(json.dumps(json.loads(jsonpickle.encode(RestoreDeletedVolumeResult)),indent=4))
 

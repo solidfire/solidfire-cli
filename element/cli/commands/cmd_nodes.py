@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -27,5 +29,5 @@ def remove(ctx, nodes):
     """&lt;br/&gt;&lt;br/&gt;"""
     """Once removed, a node registers itself as a pending node and can be added again, or shut down which removes it from the &quot;Pending Node&quot; list."""
     RemoveNodesResult = ctx.element.remove_nodes(nodes=nodes)
-    print(RemoveNodesResult)
+    print(json.dumps(json.loads(jsonpickle.encode(RemoveNodesResult)),indent=4))
 

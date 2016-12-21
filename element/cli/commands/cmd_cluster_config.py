@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -27,5 +29,5 @@ def set(ctx, cluster):
     """&lt;br/&gt;&lt;br/&gt;"""
     """&lt;b&gt;Note&lt;/b&gt;: This method is available only through the per-node API endpoint 5.0 or later."""
     SetClusterConfigResult = ctx.element.set_cluster_config(cluster=cluster)
-    print(SetClusterConfigResult)
+    print(json.dumps(json.loads(jsonpickle.encode(SetClusterConfigResult)),indent=4))
 

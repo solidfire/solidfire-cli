@@ -12,6 +12,8 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
+import jsonpickle
+import json
 
 @click.group()
 @pass_context
@@ -25,5 +27,5 @@ def cli(ctx):
 def list(ctx, virtual_volume_ids = None):
     """ListVolumeStatsByVirtualVolume enables you to list statistics for volumes, sorted by virtual volumes."""
     ListVolumeStatsByVirtualVolumeResult = ctx.element.list_volume_stats_by_virtual_volume(virtual_volume_ids=virtual_volume_ids)
-    print(ListVolumeStatsByVirtualVolumeResult)
+    print(json.dumps(json.loads(jsonpickle.encode(ListVolumeStatsByVirtualVolumeResult)),indent=4))
 
