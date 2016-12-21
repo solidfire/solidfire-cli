@@ -28,5 +28,6 @@ def cli(ctx):
 def list(ctx, start_account_id = None, limit = None):
     """Returns the entire list of accounts, with optional paging support."""
     ListAccountsResult = ctx.element.list_accounts(start_account_id=start_account_id, limit=limit)
-    print(json.dumps(json.loads(jsonpickle.encode(ListAccountsResult)),indent=4))
+    cli_utils.print_result_as_tree(ListAccountsResult)
+    #print(json.dumps(json.loads(jsonpickle.encode(ListAccountsResult)),indent=4))
 

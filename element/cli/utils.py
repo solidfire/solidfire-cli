@@ -17,6 +17,37 @@ def kv_string_to_dict(kv_string):
         kvs = item.split('=')
         new_dict[kvs[0]] = kvs[1]
 
+def print_result_as_json(objs):
+    print(json.dumps(json.loads(jsonpickle.encode(ListAccountsResult)),indent=4))
+
+def get_result_as_tree(objs, depth=1, currentDepth=0, lastKey = ""):
+    stringToReturn = ""
+    if(currentDepth > depth):
+        return "<to see more details, increase depth>\n"
+    if(type(objs) is str or type(objs) is bool or type(objs) is int):
+        return str(objs) + "\n"
+    if(type(objs) is list):
+        stringToReturn += "\n"
+        for i in range(len(objs)):
+            obj = objs[i]
+            stringToReturn += currentDepth*"    "+get_result_as_tree(obj, depth, currentDepth+1, lastKey)
+        return stringToReturn
+    if(type(objs) is dict):
+        stringToReturn += "\n"
+        for key in objs:
+            stringToReturn += currentDepth*"    "+key+":   "+get_result_as_tree(objs[key], depth, currentDepth+1, key)
+        return stringToReturn
+    if(objs is None):
+        return stringToReturn
+    mydict = objs.__dict__
+    stringToReturn += "\n"
+    for key in mydict:
+        stringToReturn += currentDepth*"    "
+        stringToReturn += key+":   "+get_result_as_tree(mydict[key], depth, currentDepth+1, key)
+    return stringToReturn
+
+def print_result_as_tree(objs, depth=1):
+    print(get_result_as_tree(objs, depth))
 
 def print_list(objs, fields, formatters={}, order_by=None):
     pt = prettytable.PrettyTable([f for f in fields], caching=False)
