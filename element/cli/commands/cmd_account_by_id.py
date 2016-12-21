@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('get', short_help="GetAccountByID")
-@click.argument('account_id', type=int, required=True)
+@click.option('--account_id',
+              type=int,
+              required=True,
+              help="Specifies the account for which details are gathered. ")
 @pass_context
 def get(ctx, account_id):
     """Returns details about an account, given its AccountID."""

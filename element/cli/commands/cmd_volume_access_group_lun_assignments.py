@@ -22,8 +22,14 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('modify', short_help="ModifyVolumeAccessGroupLunAssignments")
-@click.argument('volume_access_group_id', type=int, required=True)
-@click.argument('lun_assignments', type=LunAssignment, required=True)
+@click.option('--volume_access_group_id',
+              type=int,
+              required=True,
+              help="Unique volume access group ID for which the LUN assignments will be modified. ")
+@click.option('--lun_assignments',
+              type=LunAssignment,
+              required=True,
+              help="The volume IDs with new assigned LUN values. ")
 @pass_context
 def modify(ctx, volume_access_group_id, lun_assignments):
     """The ModifytVolumeAccessGroupLunAssignments is used to define custom LUN assignments for specific volumes. Only LUN values set on the lunAssignments parameter will be changed in the volume access group. All other LUN assignments will remain unchanged."""

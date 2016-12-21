@@ -22,9 +22,18 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('set', short_help="SetDefaultQoS")
-@click.argument('min_iops', type=int, required=False)
-@click.argument('max_iops', type=int, required=False)
-@click.argument('burst_iops', type=int, required=False)
+@click.option('--min_iops',
+              type=int,
+              required=False,
+              help="The minimum number of sustained IOPS that are provided by the cluster to a volume. ")
+@click.option('--max_iops',
+              type=int,
+              required=False,
+              help="The maximum number of sustained IOPS that are provided by the cluster to a volume. ")
+@click.option('--burst_iops',
+              type=int,
+              required=False,
+              help="The maximum number of IOPS allowed in a short burst scenario. ")
 @pass_context
 def set(ctx, min_iops = None, max_iops = None, burst_iops = None):
     """SetDefaultQoS enables you to configure the default Quality of Service (QoS) values (measured in inputs and outputs per second, or IOPS) for all volumes not yet created."""

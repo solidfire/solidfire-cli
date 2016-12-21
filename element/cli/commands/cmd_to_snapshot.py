@@ -22,11 +22,26 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('rollback', short_help="RollbackToSnapshot")
-@click.argument('volume_id', type=int, required=True)
-@click.argument('snapshot_id', type=int, required=True)
-@click.argument('save_current_state', type=bool, required=True)
-@click.argument('name', type=str, required=False)
-@click.argument('attributes', type=dict, required=False)
+@click.option('--volume_id',
+              type=int,
+              required=True,
+              help="VolumeID for the volume. ")
+@click.option('--snapshot_id',
+              type=int,
+              required=True,
+              help="ID of a previously created snapshot on the given volume. ")
+@click.option('--save_current_state',
+              type=bool,
+              required=True,
+              help="<br/><b>true</b>: The previous active volume image is kept. <br/><b>false</b>: (default) The previous active volume image is deleted. ")
+@click.option('--name',
+              type=str,
+              required=False,
+              help="Name for the snapshot. If no name is given, then the name of the snapshot being rolled back to is used with  "-copy" appended to the end of the name. ")
+@click.option('--attributes',
+              type=dict,
+              required=False,
+              help="List of Name/Value pairs in JSON object format ")
 @pass_context
 def rollback(ctx, volume_id, snapshot_id, save_current_state, name = None, attributes = None):
     """RollbackToSnapshot is used to make an existing snapshot the &quot;active&quot; volume image. This method creates a new """

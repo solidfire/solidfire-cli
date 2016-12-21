@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('set', short_help="SetLoginSessionInfo")
-@click.argument('timeout', type=str, required=True)
+@click.option('--timeout',
+              type=str,
+              required=True,
+              help="Cluster authentication expiration period. Formatted in HH:mm:ss. For example: 01:30:00, 00:90:00, and 00:00:5400 can all be used to equal a 90 minute timeout period. Default is 30 minutes. ")
 @pass_context
 def set(ctx, timeout):
     """SetLoginSessionInfo is used to set the period of time a log in authentication is valid. After the log in period elapses without activity on the system the authentication will expire. New log in credentials will be required for continued access to the cluster once the timeout period has elapsed."""

@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('enable', short_help="EnableFeature")
-@click.argument('feature', type=str, required=True)
+@click.option('--feature',
+              type=str,
+              required=True,
+              help="Valid values: vvols: Enable the Virtual Volumes (VVOLs) cluster feature. ")
 @pass_context
 def enable(ctx, feature):
     """EnableFeature allows you to enable cluster features that are disabled by default."""

@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('list', short_help="ListStorageContainers")
-@click.argument('storage_container_ids', type=UUID, required=False)
+@click.option('--storage_container_ids',
+              type=UUID,
+              required=False,
+              help="List of storage containers to get ")
 @pass_context
 def list(ctx, storage_container_ids = None):
     """Gets information for all storage containers currently in the system."""

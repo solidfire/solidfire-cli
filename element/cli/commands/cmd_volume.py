@@ -22,12 +22,30 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('modify', short_help="ModifyVolume")
-@click.argument('volume_id', type=int, required=True)
-@click.argument('account_id', type=int, required=False)
-@click.argument('access', type=str, required=False)
-@click.argument('qos', type=QoS, required=False)
-@click.argument('total_size', type=int, required=False)
-@click.argument('attributes', type=dict, required=False)
+@click.option('--volume_id',
+              type=int,
+              required=True,
+              help="VolumeID for the volume to be modified. ")
+@click.option('--account_id',
+              type=int,
+              required=False,
+              help="AccountID to which the volume is reassigned. If none is specified, the previous account name is used. ")
+@click.option('--access',
+              type=str,
+              required=False,
+              help="Access allowed for the volume. <br/><b>readOnly</b>: Only read operations are allowed. <br/><b>readWrite</b>: Reads and writes are allowed. <br/><b>locked</b>: No reads or writes are allowed. <br/><b>replicationTarget</b>: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked. <br/><br/> If unspecified, the access settings of the clone will be the same as the source. ")
+@click.option('--qos',
+              type=QoS,
+              required=False,
+              help="New quality of service settings for this volume. ")
+@click.option('--total_size',
+              type=int,
+              required=False,
+              help="New size of the volume in bytes. Size is rounded up to the nearest 1MiB size. This parameter can only be used to *increase* the size of a volume. ")
+@click.option('--attributes',
+              type=dict,
+              required=False,
+              help="List of Name/Value pairs in JSON object format. ")
 @pass_context
 def modify(ctx, volume_id, account_id = None, access = None, qos = None, total_size = None, attributes = None):
     """ModifyVolume is used to modify settings on an existing volume."""

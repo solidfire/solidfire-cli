@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('get', short_help="GetAccountByName")
-@click.argument('username', type=str, required=True)
+@click.option('--username',
+              type=str,
+              required=True,
+              help="Username for the account. ")
 @pass_context
 def get(ctx, username):
     """Returns details about an account, given its Username."""

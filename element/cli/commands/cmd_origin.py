@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('get', short_help="GetOrigin")
-@click.argument('force', type=bool, required=True)
+@click.option('--force',
+              type=bool,
+              required=True,
+              help="")
 @pass_context
 def get(ctx, force):
     """GetOrigin enables you to retrieve the origination certificate for where the node was built.NOTE: The GetOrigin method may return &quot;null&quot; if there is no origination certification."""

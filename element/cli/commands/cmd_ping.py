@@ -22,11 +22,26 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('test', short_help="TestPing")
-@click.argument('attempts', type=int, required=False)
-@click.argument('hosts', type=str, required=False)
-@click.argument('total_timeout_sec', type=int, required=False)
-@click.argument('packet_size', type=int, required=False)
-@click.argument('ping_timeout_msec', type=int, required=False)
+@click.option('--attempts',
+              type=int,
+              required=False,
+              help="Specifies the number of times the system should repeat the test ping. Default is 5. ")
+@click.option('--hosts',
+              type=str,
+              required=False,
+              help="Specify address or hostnames of devices to ping. ")
+@click.option('--total_timeout_sec',
+              type=int,
+              required=False,
+              help="Specifies the length of time the ping should wait for a system response before issuing the next ping attempt or ending the process. ")
+@click.option('--packet_size',
+              type=int,
+              required=False,
+              help="Specify the number of bytes to send in the ICMP packet sent to each IP. Number be less than the maximum MTU specified in the network configuration. ")
+@click.option('--ping_timeout_msec',
+              type=int,
+              required=False,
+              help="Specify the number of milliseconds to wait for each individual ping response. Default is 500ms. ")
 @pass_context
 def test(ctx, attempts = None, hosts = None, total_timeout_sec = None, packet_size = None, ping_timeout_msec = None):
     """The TestPing API method is used to validate the connection to all nodes in the cluster on both 1G and 10G interfaces using ICMP packets. The test uses the appropriate MTU sizes for each packet based on the MTU settings in the network configuration."""

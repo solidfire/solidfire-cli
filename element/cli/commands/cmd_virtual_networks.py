@@ -22,10 +22,22 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('list', short_help="ListVirtualNetworks")
-@click.argument('virtual_network_id', type=int, required=False)
-@click.argument('virtual_network_tag', type=int, required=False)
-@click.argument('virtual_network_ids', type=int, required=False)
-@click.argument('virtual_network_tags', type=int, required=False)
+@click.option('--virtual_network_id',
+              type=int,
+              required=False,
+              help="Network ID to filter the list for a single virtual network ")
+@click.option('--virtual_network_tag',
+              type=int,
+              required=False,
+              help="Network Tag to filter the list for a single virtual network ")
+@click.option('--virtual_network_ids',
+              type=int,
+              required=False,
+              help="NetworkIDs to include in the list. ")
+@click.option('--virtual_network_tags',
+              type=int,
+              required=False,
+              help="Network Tags to include in the list. ")
 @pass_context
 def list(ctx, virtual_network_id = None, virtual_network_tag = None, virtual_network_ids = None, virtual_network_tags = None):
     """ListVirtualNetworks is used to get a list of all the configured virtual networks for the cluster. This method can be used to verify the virtual network settings in the cluster."""

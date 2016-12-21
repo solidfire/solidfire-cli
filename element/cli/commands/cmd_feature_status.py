@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('get', short_help="GetFeatureStatus")
-@click.argument('feature', type=str, required=False)
+@click.option('--feature',
+              type=str,
+              required=False,
+              help="Valid values: vvols: Find the status of the Virtual Volumes (VVOLs) cluster feature. ")
 @pass_context
 def get(ctx, feature = None):
     """GetFeatureStatus allows you to retrieve the status of a cluster feature."""

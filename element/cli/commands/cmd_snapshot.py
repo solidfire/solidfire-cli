@@ -22,9 +22,18 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('modify', short_help="ModifySnapshot")
-@click.argument('snapshot_id', type=int, required=True)
-@click.argument('expiration_time', type=str, required=False)
-@click.argument('enable_remote_replication', type=bool, required=False)
+@click.option('--snapshot_id',
+              type=int,
+              required=True,
+              help="ID of the snapshot. ")
+@click.option('--expiration_time',
+              type=str,
+              required=False,
+              help="Use to set the time when the snapshot should be removed. ")
+@click.option('--enable_remote_replication',
+              type=bool,
+              required=False,
+              help="Use to enable the snapshot created to be replicated to a remote SolidFire cluster. Possible values: <br/><b>true</b>: the snapshot will be replicated to remote storage. <br/><b>false</b>: Default. No replication. ")
 @pass_context
 def modify(ctx, snapshot_id, expiration_time = None, enable_remote_replication = None):
     """ModifySnapshot is used to change the attributes currently assigned to a snapshot."""

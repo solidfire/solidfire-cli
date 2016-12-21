@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('get', short_help="GetClusterState")
-@click.argument('force', type=bool, required=True)
+@click.option('--force',
+              type=bool,
+              required=True,
+              help="To run this command, the force parameter must be set to true. ")
 @pass_context
 def get(ctx, force):
     """The GetClusterState method is used to indicate if a node is part of a cluster or not. The three states are: &lt;br&gt;&lt;strong&gt;Available:&lt;/strong&gt; Node has not been configured with a cluster name.&lt;br&gt;&lt;strong&gt;Pending:&lt;/strong&gt; Node is pending for a specific named cluster and can be added.&lt;br&gt;&lt;strong&gt;Active:&lt;/strong&gt; Node is active and a member of a cluster and may not be added to another cluster."""

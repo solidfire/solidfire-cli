@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('remove', short_help="RemoveClusterPair")
-@click.argument('cluster_pair_id', type=int, required=True)
+@click.option('--cluster_pair_id',
+              type=int,
+              required=True,
+              help="Unique identifier used to pair two clusters. ")
 @pass_context
 def remove(ctx, cluster_pair_id):
     """You can use the RemoveClusterPair method to close the open connections between two paired clusters.&lt;br/&gt;"""

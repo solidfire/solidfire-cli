@@ -22,12 +22,17 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('list', short_help="ListAccounts")
-@click.argument('start_account_id', type=int, required=False)
-@click.argument('limit', type=int, required=False)
+@click.option('--start_account_id',
+              type=int,
+              required=False,
+              help="Starting AccountID to return. If no Account exists with this AccountID, the next Account by AccountID order is used as the start of the list. To page through the list, pass the AccountID of the last Account in the previous response + 1 ")
+@click.option('--limit',
+              type=int,
+              required=False,
+              help="Maximum number of AccountInfo objects to return. ")
 @pass_context
 def list(ctx, start_account_id = None, limit = None):
     """Returns the entire list of accounts, with optional paging support."""
     ListAccountsResult = ctx.element.list_accounts(start_account_id=start_account_id, limit=limit)
-    cli_utils.print_result_as_tree(ListAccountsResult)
-    #print(json.dumps(json.loads(jsonpickle.encode(ListAccountsResult)),indent=4))
+    print(json.dumps(json.loads(jsonpickle.encode(ListAccountsResult)),indent=4))
 

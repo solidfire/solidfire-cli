@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('remove', short_help="RemoveBackupTarget")
-@click.argument('backup_target_id', type=int, required=True)
+@click.option('--backup_target_id',
+              type=int,
+              required=True,
+              help="Unique target ID of the target to remove. ")
 @pass_context
 def remove(ctx, backup_target_id):
     """RemoveBackupTarget allows you to delete backup targets."""

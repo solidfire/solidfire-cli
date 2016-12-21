@@ -22,9 +22,18 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('list', short_help="ListVolumesForAccount")
-@click.argument('account_id', type=int, required=True)
-@click.argument('start_volume_id', type=int, required=False)
-@click.argument('limit', type=int, required=False)
+@click.option('--account_id',
+              type=int,
+              required=True,
+              help="The ID of the account to list the volumes for. ")
+@click.option('--start_volume_id',
+              type=int,
+              required=False,
+              help="The ID of the first volume to list. This can be useful for paging results. By default, this starts at the lowest VolumeID. ")
+@click.option('--limit',
+              type=int,
+              required=False,
+              help="The maximum number of volumes to return from the API. ")
 @pass_context
 def list(ctx, account_id, start_volume_id = None, limit = None):
     """ListVolumesForAccount returns the list of active AND (pending) deleted volumes for an account."""

@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('list', short_help="ListDriveStats")
-@click.argument('drives', type=int, required=False)
+@click.option('--drives',
+              type=int,
+              required=False,
+              help="Optional list of DriveIDs for which to return drive statistics. If you omit this parameter, measurements for all drives are returned. ")
 @pass_context
 def list(ctx, drives = None):
     """ListDriveStats enables you to retrieve  high-level activity measurements for multiple drives in the cluster. By default, this method returns statistics for all drives in the cluster, and these measurements are cumulative from the addition of the drive to the cluster. Some values this method returns are specific to block drives, and some are specific to metadata drives. For more information on what data each drive type returns, see the response examples for the GetDriveStats method."""

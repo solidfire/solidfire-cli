@@ -22,10 +22,22 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('rollback', short_help="RollbackToGroupSnapshot")
-@click.argument('group_snapshot_id', type=int, required=True)
-@click.argument('save_current_state', type=bool, required=True)
-@click.argument('name', type=str, required=False)
-@click.argument('attributes', type=dict, required=False)
+@click.option('--group_snapshot_id',
+              type=int,
+              required=True,
+              help="Unique ID of the group snapshot. ")
+@click.option('--save_current_state',
+              type=bool,
+              required=True,
+              help="<br/><b>true</b>: The previous active volume image is kept. <br/><b>false</b>: (default) The previous active volume image is deleted. ")
+@click.option('--name',
+              type=str,
+              required=False,
+              help="Name for the snapshot. If no name is given, then the name of the snapshot being rolled back to is used with  "-copy" appended to the end of the name. ")
+@click.option('--attributes',
+              type=dict,
+              required=False,
+              help="List of Name/Value pairs in JSON object format ")
 @pass_context
 def rollback(ctx, group_snapshot_id, save_current_state, name = None, attributes = None):
     """RollbackToGroupSnapshot is used to roll back each individual volume in a snapshot group to a copy of their individual snapshots."""

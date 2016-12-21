@@ -22,10 +22,22 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('list', short_help="ListClusterFaults")
-@click.argument('exceptions', type=bool, required=False)
-@click.argument('best_practices', type=bool, required=False)
-@click.argument('update', type=bool, required=False)
-@click.argument('fault_types', type=str, required=False)
+@click.option('--exceptions',
+              type=bool,
+              required=False,
+              help="")
+@click.option('--best_practices',
+              type=bool,
+              required=False,
+              help="Include faults triggered by sub-optimal system configuration. Possible values: true, false ")
+@click.option('--update',
+              type=bool,
+              required=False,
+              help="")
+@click.option('--fault_types',
+              type=str,
+              required=False,
+              help="Determines the types of faults returned: current: List active, unresolved faults. <b>resolved</b>: List faults that were previously detected and resolved. <b>all</b>: (Default) List both current and resolved faults. You can see the fault status in the 'resolved' field of the Cluster Fault object. ")
 @pass_context
 def list(ctx, exceptions = None, best_practices = None, update = None, fault_types = None):
     """ListClusterFaults is used to retrieve information about any faults detected on the cluster."""

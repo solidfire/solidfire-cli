@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('get', short_help="GetAsyncResult")
-@click.argument('async_handle', type=int, required=True)
+@click.option('--async_handle',
+              type=int,
+              required=True,
+              help="A value that was returned from the original asynchronous method call. ")
 @pass_context
 def get(ctx, async_handle):
     """Used to retrieve the result of asynchronous method calls."""

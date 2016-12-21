@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('modify', short_help="ModifyInitiators")
-@click.argument('initiators', type=ModifyInitiator, required=True)
+@click.option('--initiators',
+              type=ModifyInitiator,
+              required=True,
+              help="A list of Initiator objects containing characteristics of each initiator to modify. ")
 @pass_context
 def modify(ctx, initiators):
     """ModifyInitiators enables you to change the attributes of an existing initiator. You cannot change the name of an existing initiator. If you need to change the name of an initiator, delete the existing initiator with DeleteInitiators and create a new one with CreateInitiators."""

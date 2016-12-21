@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('restore', short_help="RestoreDeletedVolume")
-@click.argument('volume_id', type=int, required=True)
+@click.option('--volume_id',
+              type=int,
+              required=True,
+              help="VolumeID for the deleted volume to restore. ")
 @pass_context
 def restore(ctx, volume_id):
     """RestoreDeletedVolume marks a deleted volume as active again."""

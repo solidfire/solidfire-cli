@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('enable', short_help="EnableSnmp")
-@click.argument('snmp_v3_enabled', type=bool, required=True)
+@click.option('--snmp_v3_enabled',
+              type=bool,
+              required=True,
+              help="If set to "true", then SNMP v3 is enabled on each node in the cluster. If set to "false", then SNMP v2 is enabled. ")
 @pass_context
 def enable(ctx, snmp_v3_enabled):
     """EnableSnmp is used to enable SNMP on the cluster nodes. The values set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to EnableSnmp."""

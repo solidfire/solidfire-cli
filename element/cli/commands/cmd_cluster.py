@@ -22,14 +22,38 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('create', short_help="CreateCluster")
-@click.argument('accept_eula', type=bool, required=False)
-@click.argument('mvip', type=str, required=True)
-@click.argument('svip', type=str, required=True)
-@click.argument('rep_count', type=int, required=True)
-@click.argument('username', type=str, required=True)
-@click.argument('password', type=str, required=True)
-@click.argument('nodes', type=str, required=True)
-@click.argument('attributes', type=dict, required=False)
+@click.option('--accept_eula',
+              type=bool,
+              required=False,
+              help="Indicate your acceptance of the End User License Agreement when creating this cluster. To accept the EULA, set this parameter to true. ")
+@click.option('--mvip',
+              type=str,
+              required=True,
+              help="Floating (virtual) IP address for the cluster on the management network. ")
+@click.option('--svip',
+              type=str,
+              required=True,
+              help="Floating (virtual) IP address for the cluster on the storage (iSCSI) network. ")
+@click.option('--rep_count',
+              type=int,
+              required=True,
+              help="Number of replicas of each piece of data to store in the cluster. Valid value is "2". ")
+@click.option('--username',
+              type=str,
+              required=True,
+              help="User name for the cluster admin. ")
+@click.option('--password',
+              type=str,
+              required=True,
+              help="Initial password for the cluster admin account. ")
+@click.option('--nodes',
+              type=str,
+              required=True,
+              help="CIP/SIP addresses of the initial set of nodes making up the cluster. This node's IP must be in the list. ")
+@click.option('--attributes',
+              type=dict,
+              required=False,
+              help="List of Name/Value pairs in JSON object format. ")
 @pass_context
 def create(ctx, mvip, svip, rep_count, username, password, nodes, accept_eula = None, attributes = None):
     """The CreateCluster method is used to initialize the node in a cluster that has ownership of the &quot;mvip&quot; and &quot;svip&quot; addresses. Each new cluster is initialized using the MIP of the first node in the cluster. This method also automatically adds all the nodes being configured into the cluster. The method is used only once each time a new cluster is initialized."""

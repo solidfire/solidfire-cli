@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('cancel', short_help="CancelClone")
-@click.argument('clone_id', type=int, required=True)
+@click.option('--clone_id',
+              type=int,
+              required=True,
+              help="")
 @pass_context
 def cancel(ctx, clone_id):
     """Cancels a currently running clone operation. This method does not return anything."""

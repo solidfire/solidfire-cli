@@ -22,11 +22,26 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('start', short_help="StartBulkVolumeWrite")
-@click.argument('volume_id', type=int, required=True)
-@click.argument('format', type=str, required=True)
-@click.argument('script', type=str, required=False)
-@click.argument('script_parameters', type=str, required=False)
-@click.argument('attributes', type=dict, required=False)
+@click.option('--volume_id',
+              type=int,
+              required=True,
+              help="ID of the volume to be written to. ")
+@click.option('--format',
+              type=str,
+              required=True,
+              help="The format of the volume data. Can be either: <br/><b>uncompressed</b>: every byte of the volume is returned without any compression. <br/><b>native</b>: opaque data is returned that is smaller and more efficiently stored and written on a subsequent bulk volume write ")
+@click.option('--script',
+              type=str,
+              required=False,
+              help="Executable name of a script. If no script name is given then the key and URL are necessary to access SolidFire nodes. The script runs on the primary node and the key and URL is returned to the script so the local web server can be contacted. ")
+@click.option('--script_parameters',
+              type=str,
+              required=False,
+              help="JSON parameters to pass to the script. ")
+@click.option('--attributes',
+              type=dict,
+              required=False,
+              help="JSON attributes for the bulk volume job. ")
 @pass_context
 def start(ctx, volume_id, format, script = None, script_parameters = None, attributes = None):
     """StartBulkVolumeWrite allows you to initialize a bulk volume write session on a specified volume."""

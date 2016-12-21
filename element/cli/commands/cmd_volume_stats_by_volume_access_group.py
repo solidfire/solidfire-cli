@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('list', short_help="ListVolumeStatsByVolumeAccessGroup")
-@click.argument('volume_access_groups', type=int, required=False)
+@click.option('--volume_access_groups',
+              type=int,
+              required=False,
+              help="An array of VolumeAccessGroupIDs for which volume activity is returned. If no VolumeAccessGroupID is specified, stats for all volume access groups is returned. ")
 @pass_context
 def list(ctx, volume_access_groups = None):
     """ListVolumeStatsByVolumeAccessGroup is used to get total activity measurements for all of the volumes that are a member of the specified volume access group(s)."""

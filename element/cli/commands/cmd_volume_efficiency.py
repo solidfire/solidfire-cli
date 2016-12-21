@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('get', short_help="GetVolumeEfficiency")
-@click.argument('volume_id', type=int, required=True)
+@click.option('--volume_id',
+              type=int,
+              required=True,
+              help="Specifies the volume for which capacity is computed. ")
 @pass_context
 def get(ctx, volume_id):
     """GetVolumeEfficiency is used to retrieve information about a volume."""

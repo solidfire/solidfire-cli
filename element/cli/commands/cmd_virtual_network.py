@@ -22,8 +22,14 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('remove', short_help="RemoveVirtualNetwork")
-@click.argument('virtual_network_id', type=int, required=False)
-@click.argument('virtual_network_tag', type=int, required=False)
+@click.option('--virtual_network_id',
+              type=int,
+              required=False,
+              help="Network ID that identifies the virtual network to remove. ")
+@click.option('--virtual_network_tag',
+              type=int,
+              required=False,
+              help="Network Tag that identifies the virtual network to remove. ")
 @pass_context
 def remove(ctx, virtual_network_id = None, virtual_network_tag = None):
     """RemoveVirtualNetwork is used to remove a previously added virtual network."""

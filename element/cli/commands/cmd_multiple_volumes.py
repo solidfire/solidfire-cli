@@ -22,10 +22,22 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('clone', short_help="CloneMultipleVolumes")
-@click.argument('volumes', type=CloneMultipleVolumeParams, required=True)
-@click.argument('access', type=str, required=False)
-@click.argument('group_snapshot_id', type=int, required=False)
-@click.argument('new_account_id', type=int, required=False)
+@click.option('--volumes',
+              type=CloneMultipleVolumeParams,
+              required=True,
+              help="Array of Unique ID for each volume to include in the clone with optional parameters. If optional parameters are not specified, the values will be inherited from the source volumes. ")
+@click.option('--access',
+              type=str,
+              required=False,
+              help="New default access method for the new volumes if not overridden by information passed in the volumes array. <br/><b>readOnly</b>: Only read operations are allowed. <br/><b>readWrite</b>: Reads and writes are allowed. <br/><b>locked</b>: No reads or writes are allowed. <br/><b>replicationTarget</b>: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked. <br/><br/> If unspecified, the access settings of the clone will be the same as the source. ")
+@click.option('--group_snapshot_id',
+              type=int,
+              required=False,
+              help="ID of the group snapshot to use as a basis for the clone. ")
+@click.option('--new_account_id',
+              type=int,
+              required=False,
+              help="New account ID for the volumes if not overridden by information passed in the volumes array. ")
 @pass_context
 def clone(ctx, volumes, access = None, group_snapshot_id = None, new_account_id = None):
     """CloneMultipleVolumes is used to create a clone of a group of specified volumes. A consistent set of characteristics can be assigned to a group of multiple volume when they are cloned together."""

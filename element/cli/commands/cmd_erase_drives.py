@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('secure', short_help="SecureEraseDrives")
-@click.argument('drives', type=int, required=True)
+@click.option('--drives',
+              type=int,
+              required=True,
+              help="List of driveIDs to secure erase. ")
 @pass_context
 def secure(ctx, drives):
     """SecureEraseDrives is used to remove any residual data from drives that have a status of &quot;available.&quot; For example, when replacing a drive at its end-of-life that contained sensitive data."""

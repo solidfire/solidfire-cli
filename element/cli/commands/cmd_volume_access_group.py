@@ -22,13 +22,34 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('modify', short_help="ModifyVolumeAccessGroup")
-@click.argument('volume_access_group_id', type=int, required=True)
-@click.argument('virtual_network_id', type=int, required=False)
-@click.argument('virtual_network_tags', type=int, required=False)
-@click.argument('name', type=str, required=False)
-@click.argument('initiators', type=str, required=False)
-@click.argument('volumes', type=int, required=False)
-@click.argument('attributes', type=dict, required=False)
+@click.option('--volume_access_group_id',
+              type=int,
+              required=True,
+              help="The ID of the volume access group to modify. ")
+@click.option('--virtual_network_id',
+              type=int,
+              required=False,
+              help="The ID of the SolidFire Virtual Network ID to associate the volume access group with. ")
+@click.option('--virtual_network_tags',
+              type=int,
+              required=False,
+              help="The ID of the VLAN Virtual Network Tag to associate the volume access group with. ")
+@click.option('--name',
+              type=str,
+              required=False,
+              help="Name of the volume access group. It is not required to be unique, but recommended. ")
+@click.option('--initiators',
+              type=str,
+              required=False,
+              help="List of initiators to include in the volume access group. If unspecified, the access group's configured initiators will not be modified. ")
+@click.option('--volumes',
+              type=int,
+              required=False,
+              help="List of volumes to initially include in the volume access group. If unspecified, the access group's volumes will not be modified. ")
+@click.option('--attributes',
+              type=dict,
+              required=False,
+              help="List of Name/Value pairs in JSON object format. ")
 @pass_context
 def modify(ctx, volume_access_group_id, virtual_network_id = None, virtual_network_tags = None, name = None, initiators = None, volumes = None, attributes = None):
     """Update initiators and add or remove volumes from a volume access group."""

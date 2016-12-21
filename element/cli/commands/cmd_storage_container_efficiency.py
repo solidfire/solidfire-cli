@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('get', short_help="GetStorageContainerEfficiency")
-@click.argument('storage_container_id', type=UUID, required=True)
+@click.option('--storage_container_id',
+              type=UUID,
+              required=True,
+              help="The ID of the storage container for which to retrieve efficiency information. ")
 @pass_context
 def get(ctx, storage_container_id):
     """GetStorageContainerEfficiency enables you to retrieve efficiency information about a virtual volume storage container."""

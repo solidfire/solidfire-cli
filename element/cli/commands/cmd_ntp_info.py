@@ -22,8 +22,14 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('set', short_help="SetNtpInfo")
-@click.argument('servers', type=str, required=True)
-@click.argument('broadcastclient', type=bool, required=False)
+@click.option('--servers',
+              type=str,
+              required=True,
+              help="List of NTP servers to add to each node's NTP configuration. ")
+@click.option('--broadcastclient',
+              type=bool,
+              required=False,
+              help="Enable every node in the cluster as a broadcase client. ")
 @pass_context
 def set(ctx, servers, broadcastclient = None):
     """SetNtpInfo is used to configure the NTP on cluster nodes. The values set with this interface apply to all nodes in the cluster. The nodes can only be configured as a server where a host is selected to administrate the networking and/or a broadcast client where each host sends each message to each peer."""

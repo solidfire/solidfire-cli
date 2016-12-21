@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('list', short_help="ListGroupSnapshots")
-@click.argument('volume_id', type=int, required=False)
+@click.option('--volume_id',
+              type=int,
+              required=False,
+              help="An array of unique volume IDs to query. If this parameter is not specified, all group snapshots on the cluster will be included. ")
 @pass_context
 def list(ctx, volume_id = None):
     """ListGroupSnapshots is used to return information about all group snapshots that have been created."""

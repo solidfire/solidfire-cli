@@ -22,10 +22,22 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('prepare', short_help="PrepareVirtualSnapshot")
-@click.argument('virtual_volume_id', type=UUID, required=True)
-@click.argument('name', type=str, required=False)
-@click.argument('writable_snapshot', type=bool, required=False)
-@click.argument('calling_virtual_volume_host_id', type=UUID, required=False)
+@click.option('--virtual_volume_id',
+              type=UUID,
+              required=True,
+              help="The ID of the Virtual Volume to clone. ")
+@click.option('--name',
+              type=str,
+              required=False,
+              help="The name for the newly-created volume. ")
+@click.option('--writable_snapshot',
+              type=bool,
+              required=False,
+              help="Will the snapshot be writable? ")
+@click.option('--calling_virtual_volume_host_id',
+              type=UUID,
+              required=False,
+              help="")
 @pass_context
 def prepare(ctx, virtual_volume_id, name = None, writable_snapshot = None, calling_virtual_volume_host_id = None):
     """PrepareVirtualSnapshot is used to set up VMware Virtual Volume snapshot."""

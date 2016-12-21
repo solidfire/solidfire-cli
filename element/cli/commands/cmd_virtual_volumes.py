@@ -22,11 +22,26 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('list', short_help="ListVirtualVolumes")
-@click.argument('details', type=bool, required=False)
-@click.argument('limit', type=int, required=False)
-@click.argument('recursive', type=bool, required=False)
-@click.argument('start_virtual_volume_id', type=UUID, required=False)
-@click.argument('virtual_volume_ids', type=UUID, required=False)
+@click.option('--details',
+              type=bool,
+              required=False,
+              help="Possible values:true: Include more details about each VVOL in the response.false: Include the standard level of detail about each VVOL in the response. ")
+@click.option('--limit',
+              type=int,
+              required=False,
+              help="The maximum number of virtual volumes to list. ")
+@click.option('--recursive',
+              type=bool,
+              required=False,
+              help="Possible values:true: Include information about the children of each VVOL in the response.false: Do not include information about the children of each VVOL in the response. ")
+@click.option('--start_virtual_volume_id',
+              type=UUID,
+              required=False,
+              help="The ID of the virtual volume at which to begin the list. ")
+@click.option('--virtual_volume_ids',
+              type=UUID,
+              required=False,
+              help="A list of virtual volume  IDs for which to retrieve information. If you specify this parameter, the method returns information about only these virtual volumes. ")
 @pass_context
 def list(ctx, details = None, limit = None, recursive = None, start_virtual_volume_id = None, virtual_volume_ids = None):
     """ListVirtualVolumes enables you to list the virtual volumes currently in the system. You can use this method to list all virtual volumes, or only list a subset."""

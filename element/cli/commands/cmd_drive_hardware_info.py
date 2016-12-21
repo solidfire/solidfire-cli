@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('get', short_help="GetDriveHardwareInfo")
-@click.argument('drive_id', type=int, required=True)
+@click.option('--drive_id',
+              type=int,
+              required=True,
+              help="DriveID for the drive information requested. DriveIDs can be obtained via the "ListDrives" method. ")
 @pass_context
 def get(ctx, drive_id):
     """GetDriveHardwareInfo returns all the hardware info for the given drive. This generally includes manufacturers, vendors, versions, and other associated hardware identification information."""

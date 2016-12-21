@@ -22,8 +22,14 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('remove', short_help="RemoveVolumesFromVolumeAccessGroup")
-@click.argument('volume_access_group_id', type=int, required=True)
-@click.argument('volumes', type=int, required=True)
+@click.option('--volume_access_group_id',
+              type=int,
+              required=True,
+              help="The ID of the volume access group to modify. ")
+@click.option('--volumes',
+              type=int,
+              required=True,
+              help="List of volumes to remove from this volume access group. ")
 @pass_context
 def remove(ctx, volume_access_group_id, volumes):
     """Remove volumes from a volume access group."""

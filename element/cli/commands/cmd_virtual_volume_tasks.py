@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('list', short_help="ListVirtualVolumeTasks")
-@click.argument('virtual_volume_task_ids', type=UUID, required=False)
+@click.option('--virtual_volume_task_ids',
+              type=UUID,
+              required=False,
+              help="")
 @pass_context
 def list(ctx, virtual_volume_task_ids = None):
     """ListVirtualVolumeTasks returns a list of VVol Async Tasks."""

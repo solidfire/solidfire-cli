@@ -22,8 +22,14 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('list', short_help="ListVolumeAccessGroups")
-@click.argument('start_volume_access_group_id', type=int, required=False)
-@click.argument('limit', type=int, required=False)
+@click.option('--start_volume_access_group_id',
+              type=int,
+              required=False,
+              help="The lowest VolumeAccessGroupID to return. This can be useful for paging. If unspecified, there is no lower limit (implicitly 0). ")
+@click.option('--limit',
+              type=int,
+              required=False,
+              help="The maximum number of results to return. This can be useful for paging. ")
 @pass_context
 def list(ctx, start_volume_access_group_id = None, limit = None):
     """ListVolumeAccessGroups is used to return information about the volume access groups that are currently in the system."""

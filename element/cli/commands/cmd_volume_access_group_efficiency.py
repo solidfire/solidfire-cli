@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('get', short_help="GetVolumeAccessGroupEfficiency")
-@click.argument('volume_access_group_id', type=int, required=True)
+@click.option('--volume_access_group_id',
+              type=int,
+              required=True,
+              help="Specifies the volume access group for which capacity is computed. ")
 @pass_context
 def get(ctx, volume_access_group_id):
     """GetVolumeAccessGroupEfficiency is used to retrieve efficiency information about a volume access group. Only the volume access group provided as parameters in this API method is used to compute the capacity."""

@@ -22,12 +22,30 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('create', short_help="CreateVirtualVolumeHost")
-@click.argument('virtual_volume_host_id', type=UUID, required=True)
-@click.argument('cluster_id', type=UUID, required=True)
-@click.argument('initiator_names', type=str, required=False)
-@click.argument('visible_protocol_endpoint_ids', type=UUID, required=False)
-@click.argument('host_address', type=str, required=False)
-@click.argument('calling_virtual_volume_host_id', type=UUID, required=False)
+@click.option('--virtual_volume_host_id',
+              type=UUID,
+              required=True,
+              help="The GUID of the ESX host. ")
+@click.option('--cluster_id',
+              type=UUID,
+              required=True,
+              help="The GUID of the ESX Cluster. ")
+@click.option('--initiator_names',
+              type=str,
+              required=False,
+              help="")
+@click.option('--visible_protocol_endpoint_ids',
+              type=UUID,
+              required=False,
+              help="A list of PEs the host is aware of. ")
+@click.option('--host_address',
+              type=str,
+              required=False,
+              help="IP or DNS name for the host. ")
+@click.option('--calling_virtual_volume_host_id',
+              type=UUID,
+              required=False,
+              help="")
 @pass_context
 def create(ctx, virtual_volume_host_id, cluster_id, initiator_names = None, visible_protocol_endpoint_ids = None, host_address = None, calling_virtual_volume_host_id = None):
     """CreateVirtualVolumeHost creates a new ESX host."""

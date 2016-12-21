@@ -22,8 +22,14 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('get', short_help="GetVirtualVolumeTaskUpdate")
-@click.argument('virtual_volume_task_id', type=UUID, required=True)
-@click.argument('calling_virtual_volume_host_id', type=UUID, required=False)
+@click.option('--virtual_volume_task_id',
+              type=UUID,
+              required=True,
+              help="The UUID of the VVol Task. ")
+@click.option('--calling_virtual_volume_host_id',
+              type=UUID,
+              required=False,
+              help="")
 @pass_context
 def get(ctx, virtual_volume_task_id, calling_virtual_volume_host_id = None):
     """GetVirtualVolumeTaskUpdate checks the status of a VVol Async Task."""

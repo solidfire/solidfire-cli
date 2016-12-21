@@ -22,10 +22,22 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('list', short_help="ListEvents")
-@click.argument('max_events', type=int, required=False)
-@click.argument('start_event_id', type=int, required=False)
-@click.argument('end_event_id', type=int, required=False)
-@click.argument('event_queue_type', type=str, required=False)
+@click.option('--max_events',
+              type=int,
+              required=False,
+              help="Specifies the maximum number of events to return. ")
+@click.option('--start_event_id',
+              type=int,
+              required=False,
+              help="Identifies the beginning of a range of events to return. ")
+@click.option('--end_event_id',
+              type=int,
+              required=False,
+              help="Identifies the end of a range of events to return. ")
+@click.option('--event_queue_type',
+              type=str,
+              required=False,
+              help="")
 @pass_context
 def list(ctx, max_events = None, start_event_id = None, end_event_id = None, event_queue_type = None):
     """ListEvents returns events detected on the cluster, sorted from oldest to newest."""

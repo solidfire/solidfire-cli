@@ -22,8 +22,14 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('get', short_help="GetIpmiConfig")
-@click.argument('chassis_type', type=str, required=False)
-@click.argument('force', type=bool, required=True)
+@click.option('--chassis_type',
+              type=str,
+              required=False,
+              help="Used to display information for each node chassis type. Valid values:all - returns sensor information for each chassis type. {chassis type} - returns sensor information for a specified chassis type. ")
+@click.option('--force',
+              type=bool,
+              required=True,
+              help="")
 @pass_context
 def get(ctx, force, chassis_type = None):
     """GetIpmiConfig enables you to retrieve hardware sensor information from sensors that are in your node."""

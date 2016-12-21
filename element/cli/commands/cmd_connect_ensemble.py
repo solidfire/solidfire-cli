@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('test', short_help="TestConnectEnsemble")
-@click.argument('ensemble', type=str, required=False)
+@click.option('--ensemble',
+              type=str,
+              required=False,
+              help="A comma-separated list of ensemble node CIPs for connectivity testing ")
 @pass_context
 def test(ctx, ensemble = None):
     """The TestConnectEnsemble API method is used to verify connectivity with a sepcified database ensemble. By default it uses the ensemble for the cluster the node is associated with. Alternatively you can provide a different ensemble to test connectivity with."""

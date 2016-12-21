@@ -22,8 +22,14 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('start', short_help="StartVolumePairing")
-@click.argument('volume_id', type=int, required=True)
-@click.argument('mode', type=str, required=False)
+@click.option('--volume_id',
+              type=int,
+              required=True,
+              help="The ID of the volume on which to start the pairing process. ")
+@click.option('--mode',
+              type=str,
+              required=False,
+              help="The mode of the volume on which to start the pairing process. The mode can only be set if the volume is the source volume.<br/> Possible values:<br/> <b>Async</b>: (default if no mode parameter specified) Writes are acknowledged when they complete locally. The cluster does not wait for writes to be replicated to the target cluster.<br/> <b>Sync</b>: Source acknowledges write when the data is stored locally and on the remote cluster.<br/> <b>SnapshotsOnly</b>: Only snapshots created on the source cluster will be replicated. Active writes from the source volume will not be replicated.<br/> ")
 @pass_context
 def start(ctx, volume_id, mode = None):
     """StartVolumePairing is used to create an encoded key from a volume that is used to pair with another volume."""

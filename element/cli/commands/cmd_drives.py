@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('test', short_help="TestDrives")
-@click.argument('minutes', type=int, required=False)
+@click.option('--minutes',
+              type=int,
+              required=False,
+              help="The number of minutes to run the test can be specified. ")
 @pass_context
 def test(ctx, minutes = None):
     """The TestDrives API method is used to run a hardware validation on all the drives on the node. Hardware failures on the drives are detected if present and they are reported in the results of the validation tests."""

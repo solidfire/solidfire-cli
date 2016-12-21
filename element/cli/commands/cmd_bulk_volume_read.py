@@ -22,12 +22,30 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('start', short_help="StartBulkVolumeRead")
-@click.argument('volume_id', type=int, required=True)
-@click.argument('format', type=str, required=True)
-@click.argument('snapshot_id', type=int, required=False)
-@click.argument('script', type=str, required=False)
-@click.argument('script_parameters', type=str, required=False)
-@click.argument('attributes', type=dict, required=False)
+@click.option('--volume_id',
+              type=int,
+              required=True,
+              help="ID of the volume to be read. ")
+@click.option('--format',
+              type=str,
+              required=True,
+              help="The format of the volume data. Can be either: <br/><b>uncompressed</b>: every byte of the volume is returned without any compression. <br/><b>native</b>: opaque data is returned that is smaller and more efficiently stored and written on a subsequent bulk volume write. ")
+@click.option('--snapshot_id',
+              type=int,
+              required=False,
+              help="ID of a previously created snapshot used for bulk volume reads. If no ID is entered, a snapshot of the current active volume image is made. ")
+@click.option('--script',
+              type=str,
+              required=False,
+              help="Executable name of a script. If no script name is given then the key and URL is necessary to access SolidFire nodes. The script is run on the primary node and the key and URL is returned to the script so the local web server can be contacted. ")
+@click.option('--script_parameters',
+              type=str,
+              required=False,
+              help="JSON parameters to pass to the script. ")
+@click.option('--attributes',
+              type=dict,
+              required=False,
+              help="JSON attributes for the bulk volume job. ")
 @pass_context
 def start(ctx, volume_id, format, snapshot_id = None, script = None, script_parameters = None, attributes = None):
     """StartBulkVolumeRead allows you to initialize a bulk volume read session on a specified volume."""

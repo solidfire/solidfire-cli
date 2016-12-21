@@ -22,12 +22,30 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('get', short_help="GetVirtualVolumeUnsharedChunks")
-@click.argument('virtual_volume_id', type=UUID, required=True)
-@click.argument('base_virtual_volume_id', type=UUID, required=True)
-@click.argument('segment_start', type=int, required=True)
-@click.argument('segment_length', type=int, required=True)
-@click.argument('chunk_size', type=int, required=True)
-@click.argument('calling_virtual_volume_host_id', type=UUID, required=False)
+@click.option('--virtual_volume_id',
+              type=UUID,
+              required=True,
+              help="The ID of the Virtual Volume. ")
+@click.option('--base_virtual_volume_id',
+              type=UUID,
+              required=True,
+              help="The ID of the Virtual Volume to compare against. ")
+@click.option('--segment_start',
+              type=int,
+              required=True,
+              help="Start Byte offset. ")
+@click.option('--segment_length',
+              type=int,
+              required=True,
+              help="Length of the scan segment in bytes. ")
+@click.option('--chunk_size',
+              type=int,
+              required=True,
+              help="Number of bytes represented by one bit in the bitmap. ")
+@click.option('--calling_virtual_volume_host_id',
+              type=UUID,
+              required=False,
+              help="")
 @pass_context
 def get(ctx, virtual_volume_id, base_virtual_volume_id, segment_start, segment_length, chunk_size, calling_virtual_volume_host_id = None):
     """GetVirtualVolumeAllocatedBitmap scans a VVol segment and returns the number of """

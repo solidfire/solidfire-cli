@@ -22,9 +22,18 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('test', short_help="TestLdapAuthentication")
-@click.argument('username', type=str, required=True)
-@click.argument('password', type=str, required=True)
-@click.argument('ldap_configuration', type=LdapConfiguration, required=False)
+@click.option('--username',
+              type=str,
+              required=True,
+              help="The username to be tested. ")
+@click.option('--password',
+              type=str,
+              required=True,
+              help="The password for the username to be tester. ")
+@click.option('--ldap_configuration',
+              type=LdapConfiguration,
+              required=False,
+              help="An ldapConfiguration object to be tested. If this parameter is provided, the API call will test the provided configuration even if LDAP authentication is currently disabled. ")
 @pass_context
 def test(ctx, username, password, ldap_configuration = None):
     """The TestLdapAuthentication is used to verify the currently enabled LDAP authentication configuration settings are correct. If the configuration settings are correct, the API call returns a list of the groups the tested user is a member of."""

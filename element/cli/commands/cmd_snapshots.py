@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('list', short_help="ListSnapshots")
-@click.argument('volume_id', type=int, required=False)
+@click.option('--volume_id',
+              type=int,
+              required=False,
+              help="The volume to list snapshots for. If not provided, all snapshots for all volumes are returned. ")
 @pass_context
 def list(ctx, volume_id = None):
     """ListSnapshots is used to return the attributes of each snapshot taken on the volume."""

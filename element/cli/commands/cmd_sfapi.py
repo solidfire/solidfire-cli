@@ -22,8 +22,14 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('invoke', short_help="InvokeSFApi")
-@click.argument('method', type=str, required=True)
-@click.argument('parameters', type=dict, required=False)
+@click.option('--method',
+              type=str,
+              required=True,
+              help="The name of the method to invoke. This is case sensitive. ")
+@click.option('--parameters',
+              type=dict,
+              required=False,
+              help="An object, normally a dictionary or hashtable of the key/value pairs, to be passed as the params for the method being invoked. ")
 @pass_context
 def invoke(ctx, method, parameters = None):
     """This will invoke any API method supported by the SolidFire API for the version and port the connection is using."""

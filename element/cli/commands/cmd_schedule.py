@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('modify', short_help="ModifySchedule")
-@click.argument('schedule', type=Schedule, required=True)
+@click.option('--schedule',
+              type=Schedule,
+              required=True,
+              help="The "Schedule" object will be used to modify an existing schedule.<br/> The ScheduleID property is required.<br/> Frequency property must be of type that inherits from Frequency. Valid types are:<br/> DaysOfMonthFrequency<br/> DaysOrWeekFrequency<br/> TimeIntervalFrequency ")
 @pass_context
 def modify(ctx, schedule):
     """ModifySchedule is used to change the intervals at which a scheduled snapshot occurs. This allows for adjustment to the snapshot frequency and retention.&lt;br/&gt;"""

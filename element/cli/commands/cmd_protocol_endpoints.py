@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('list', short_help="ListProtocolEndpoints")
-@click.argument('protocol_endpoint_ids', type=UUID, required=False)
+@click.option('--protocol_endpoint_ids',
+              type=UUID,
+              required=False,
+              help="")
 @pass_context
 def list(ctx, protocol_endpoint_ids = None):
     """Gets protocol endpoints in the system"""

@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('cancel', short_help="CancelGroupClone")
-@click.argument('group_clone_id', type=int, required=True)
+@click.option('--group_clone_id',
+              type=int,
+              required=True,
+              help="cloneID for the ongoing clone process. ")
 @pass_context
 def cancel(ctx, group_clone_id):
     """CancelGroupClone enables you to stop an ongoing CloneMultipleVolumes process for a group of clones. When you cancel a group clone operation, the system completes and removes the operation's associated asyncHandle. This method does not return anything."""

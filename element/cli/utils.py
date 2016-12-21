@@ -17,6 +17,20 @@ def kv_string_to_dict(kv_string):
         kvs = item.split('=')
         new_dict[kvs[0]] = kvs[1]
 
+def print_result(objs, depth=None, fields=None, json=False):
+    # If a depth is provided, we print it as a tree:
+    if depth is not None:
+        print_result_as_tree(objs, depth)
+        return
+
+    # If json is true, we print it as json:
+    if json == True:
+        print_result_as_json(objs)
+
+    # If fields are provided, we print it as a table
+    if fields is not None:
+        print_result(objs)
+
 def print_result_as_json(objs):
     print(json.dumps(json.loads(jsonpickle.encode(ListAccountsResult)),indent=4))
 

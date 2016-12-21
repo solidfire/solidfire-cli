@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('remove', short_help="RemoveVolumePair")
-@click.argument('volume_id', type=int, required=True)
+@click.option('--volume_id',
+              type=int,
+              required=True,
+              help="ID of the volume on which to stop the replication process. ")
 @pass_context
 def remove(ctx, volume_id):
     """RemoveVolumePair is used to remove the remote pairing between two volumes."""

@@ -22,8 +22,14 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('set', short_help="SetSnmpACL")
-@click.argument('networks', type=SnmpNetwork, required=True)
-@click.argument('usm_users', type=SnmpV3UsmUser, required=True)
+@click.option('--networks',
+              type=SnmpNetwork,
+              required=True,
+              help="List of networks and what type of access they have to the SNMP servers running on the cluster nodes. See SNMP Network Object for possible "networks" values. REQUIRED if SNMP v# is disabled. ")
+@click.option('--usm_users',
+              type=SnmpV3UsmUser,
+              required=True,
+              help="List of users and the type of access they have to the SNMP servers running on the cluster nodes. REQUIRED if SNMP v3 is enabled. ")
 @pass_context
 def set(ctx, networks, usm_users):
     """SetSnmpACL is used to configure SNMP access permissions on the cluster nodes. The values set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to SetSnmpACL. Also note that the values set with this interface replace all &quot;network&quot; or &quot;usmUsers&quot; values set with the older SetSnmpInfo."""

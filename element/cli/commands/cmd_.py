@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('shutdown', short_help="Shutdown")
-@click.argument('option', type=str, required=True)
+@click.option('--option',
+              type=str,
+              required=True,
+              help="Action to take for the node shutdown:restart: Restarts the node.halt: Performs full power-off of the node. ")
 @pass_context
 def shutdown(ctx, option):
     """The Shutdown API method enables you to restart or shutdown a node that has not yet been added to a cluster. To use this method, login in to the MIP for the pending node and enter the &quot;shutdown&quot; method with either the &quot;restart&quot; or &quot;halt&quot; options in the following table."""

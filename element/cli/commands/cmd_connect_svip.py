@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('test', short_help="TestConnectSvip")
-@click.argument('svip', type=str, required=False)
+@click.option('--svip',
+              type=str,
+              required=False,
+              help="Optionally, use to test the storage connection of a different SVIP. This is not needed to test the connection to the target cluster. ")
 @pass_context
 def test(ctx, svip = None):
     """The TestConnectSvip API method is used to test the storage connection to the cluster. The test pings the SVIP using ICMP packets and when successful connects as an iSCSI initiator."""

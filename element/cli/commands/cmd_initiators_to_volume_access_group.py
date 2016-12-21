@@ -22,8 +22,14 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('add', short_help="AddInitiatorsToVolumeAccessGroup")
-@click.argument('volume_access_group_id', type=int, required=True)
-@click.argument('initiators', type=str, required=True)
+@click.option('--volume_access_group_id',
+              type=int,
+              required=True,
+              help="The ID of the volume access group to modify. ")
+@click.option('--initiators',
+              type=str,
+              required=True,
+              help="List of initiators to add to the volume access group. ")
 @pass_context
 def add(ctx, volume_access_group_id, initiators):
     """Add initiators to a volume access group."""

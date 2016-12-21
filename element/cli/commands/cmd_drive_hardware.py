@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('list', short_help="ListDriveHardware")
-@click.argument('force', type=bool, required=True)
+@click.option('--force',
+              type=bool,
+              required=True,
+              help="To run this command, the force parameter must be set to true. ")
 @pass_context
 def list(ctx, force):
     """ListDriveHardware returns all the drives connected to a node. Use this method on the cluster to return drive hardware information for all the drives on all nodes."""

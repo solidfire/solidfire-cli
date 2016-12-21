@@ -22,8 +22,14 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('remove', short_help="RemoveInitiatorsFromVolumeAccessGroup")
-@click.argument('volume_access_group_id', type=int, required=True)
-@click.argument('initiators', type=str, required=True)
+@click.option('--volume_access_group_id',
+              type=int,
+              required=True,
+              help="The ID of the volume access group to modify. ")
+@click.option('--initiators',
+              type=str,
+              required=True,
+              help="List of initiators to remove from the volume access group. ")
 @pass_context
 def remove(ctx, volume_access_group_id, initiators):
     """Remove initiators from a volume access group."""

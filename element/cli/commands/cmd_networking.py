@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('restart', short_help="RestartNetworking")
-@click.argument('force', type=bool, required=True)
+@click.option('--force',
+              type=bool,
+              required=True,
+              help="The "force" parameter must be included on this method to successfully restart the networking. ")
 @pass_context
 def restart(ctx, force):
     """The RestartNetworking API method is used to restart the networking services on a node.WARNING! This method restarts all networking services on a node, causing temporary loss of networking connectivity. Exercise caution when using this method."""

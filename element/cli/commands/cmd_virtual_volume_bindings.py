@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('list', short_help="ListVirtualVolumeBindings")
-@click.argument('virtual_volume_binding_ids', type=int, required=False)
+@click.option('--virtual_volume_binding_ids',
+              type=int,
+              required=False,
+              help="")
 @pass_context
 def list(ctx, virtual_volume_binding_ids = None):
     """ListVirtualVolumeBindings returns a list of VVol bindings."""

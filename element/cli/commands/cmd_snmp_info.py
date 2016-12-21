@@ -22,10 +22,22 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('set', short_help="SetSnmpInfo")
-@click.argument('networks', type=SnmpNetwork, required=False)
-@click.argument('enabled', type=bool, required=False)
-@click.argument('snmp_v3_enabled', type=bool, required=False)
-@click.argument('usm_users', type=SnmpV3UsmUser, required=False)
+@click.option('--networks',
+              type=SnmpNetwork,
+              required=False,
+              help="List of networks and what type of access they have to the SNMP servers running on the cluster nodes. See SNMP Network Object for possible "networks" values. SNMP v2 only. ")
+@click.option('--enabled',
+              type=bool,
+              required=False,
+              help="If set to "true", then SNMP is enabled on each node in the cluster. ")
+@click.option('--snmp_v3_enabled',
+              type=bool,
+              required=False,
+              help="If set to "true", then SNMP v3 is enabled on each node in the cluster. ")
+@click.option('--usm_users',
+              type=SnmpV3UsmUser,
+              required=False,
+              help="If SNMP v3 is enabled, this value must be passed in place of the "networks" parameter. SNMP v3 only. ")
 @pass_context
 def set(ctx, networks = None, enabled = None, snmp_v3_enabled = None, usm_users = None):
     """SetSnmpInfo is used to configure SNMP v2 and v3 on the cluster nodes. The values set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to SetSnmpInfo."""

@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('remove', short_help="RemoveAccount")
-@click.argument('account_id', type=int, required=True)
+@click.option('--account_id',
+              type=int,
+              required=True,
+              help="AccountID for the account to remove. ")
 @pass_context
 def remove(ctx, account_id):
     """Used to remove an existing account."""

@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('test', short_help="TestConnectMvip")
-@click.argument('mvip', type=str, required=False)
+@click.option('--mvip',
+              type=str,
+              required=False,
+              help="Optionally, use to test the management connection of a different MVIP. This is not needed to test the connection to the target cluster. ")
 @pass_context
 def test(ctx, mvip = None):
     """The TestConnectMvip API method is used to test the management connection to the cluster. The test pings the MVIP and executes a simple API method to verify connectivity."""

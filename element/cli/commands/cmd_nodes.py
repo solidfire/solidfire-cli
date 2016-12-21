@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('remove', short_help="RemoveNodes")
-@click.argument('nodes', type=int, required=True)
+@click.option('--nodes',
+              type=int,
+              required=True,
+              help="List of NodeIDs for the nodes to be removed. ")
 @pass_context
 def remove(ctx, nodes):
     """RemoveNodes is used to remove one or more nodes that should no longer participate in the cluster. Before removing a node, all drives it contains must first be removed with &quot;RemoveDrives&quot; method. A node cannot be removed until the RemoveDrives process has completed and all data has been migrated away from the node."""

@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('list', short_help="ListVolumeStatsByVirtualVolume")
-@click.argument('virtual_volume_ids', type=UUID, required=False)
+@click.option('--virtual_volume_ids',
+              type=UUID,
+              required=False,
+              help="A list of virtual volume  IDs for which to retrieve information. If you specify this parameter, the method returns information about only these virtual volumes. ")
 @pass_context
 def list(ctx, virtual_volume_ids = None):
     """ListVolumeStatsByVirtualVolume enables you to list statistics for volumes, sorted by virtual volumes."""

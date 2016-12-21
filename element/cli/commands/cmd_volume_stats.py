@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('get', short_help="GetVolumeStats")
-@click.argument('volume_id', type=int, required=True)
+@click.option('--volume_id',
+              type=int,
+              required=True,
+              help="Specifies the volume for which statistics is gathered. ")
 @pass_context
 def get(ctx, volume_id):
     """GetVolumeStats is used to retrieve high-level activity measurements for a single volume."""

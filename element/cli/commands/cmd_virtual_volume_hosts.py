@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('list', short_help="ListVirtualVolumeHosts")
-@click.argument('virtual_volume_host_ids', type=UUID, required=False)
+@click.option('--virtual_volume_host_ids',
+              type=UUID,
+              required=False,
+              help="")
 @pass_context
 def list(ctx, virtual_volume_host_ids = None):
     """ListVirtualVolumeHosts returns a list of known ESX hosts."""

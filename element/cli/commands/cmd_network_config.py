@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('set', short_help="SetNetworkConfig")
-@click.argument('network', type=Network, required=True)
+@click.option('--network',
+              type=Network,
+              required=True,
+              help="Objects that will be changed for the node network settings. ")
 @pass_context
 def set(ctx, network):
     """The &quot;SetNetworkConfig&quot; method is used to set the network configuration for a node. To see the states in which these objects can be modified, see &quot;Network Object for 1G and 10G Interfaces&quot; on page 109 of the Element API. To display the current network settings for a node, run the &quot;GetNetworkConfig&quot; method."""

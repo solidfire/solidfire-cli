@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('set', short_help="SetRemoteLoggingHosts")
-@click.argument('remote_hosts', type=LoggingServer, required=True)
+@click.option('--remote_hosts',
+              type=LoggingServer,
+              required=True,
+              help="List of hosts to send log messages to. ")
 @pass_context
 def set(ctx, remote_hosts):
     """RemoteLoggingHosts is used to configure remote logging from the nodes in the storage cluster to a centralized log server or servers. Remote logging is performed over TCP using the default port 514. This API does not add to the existing logging hosts. Rather, it replaces what currently exists with new values specified by this API method. You can use the GetRemoteLoggingHosts to determine what the current logging hosts are and then use the SetRemoteLoggingHosts to set the desired list of current and new logging hosts."""

@@ -22,9 +22,18 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('modify', short_help="ModifyStorageContainer")
-@click.argument('storage_container_id', type=UUID, required=True)
-@click.argument('initiator_secret', type=str, required=False)
-@click.argument('target_secret', type=str, required=False)
+@click.option('--storage_container_id',
+              type=UUID,
+              required=True,
+              help="")
+@click.option('--initiator_secret',
+              type=str,
+              required=False,
+              help="")
+@click.option('--target_secret',
+              type=str,
+              required=False,
+              help="")
 @pass_context
 def modify(ctx, storage_container_id, initiator_secret = None, target_secret = None):
     """Modifies an existing storage container."""

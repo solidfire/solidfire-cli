@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('get', short_help="GetAccountEfficiency")
-@click.argument('account_id', type=int, required=True)
+@click.option('--account_id',
+              type=int,
+              required=True,
+              help="Specifies the volume account for which capacity is computed. ")
 @pass_context
 def get(ctx, account_id):
     """GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity."""

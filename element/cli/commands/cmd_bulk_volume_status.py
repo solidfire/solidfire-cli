@@ -22,11 +22,26 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('update', short_help="UpdateBulkVolumeStatus")
-@click.argument('key', type=str, required=True)
-@click.argument('status', type=str, required=True)
-@click.argument('percent_complete', type=str, required=False)
-@click.argument('message', type=str, required=False)
-@click.argument('attributes', type=dict, required=False)
+@click.option('--key',
+              type=str,
+              required=True,
+              help="The key assigned during initialization of a "StartBulkVolumeRead" or "StartBulkVolumeWrite" session. ")
+@click.option('--status',
+              type=str,
+              required=True,
+              help="The SolidFire system sets the status of the given bulk volume job.<br/> Possible values:<br/> <br/><b>running</b>: jobs that are still active. <br/><b>complete</b>: jobs that are done. failed - jobs that have failed. <br/><b>failed</b>: jobs that have failed. ")
+@click.option('--percent_complete',
+              type=str,
+              required=False,
+              help="The completed progress of the bulk volume job as a percentage. ")
+@click.option('--message',
+              type=str,
+              required=False,
+              help="Returns the status of the bulk volume job when the job has completed. ")
+@click.option('--attributes',
+              type=dict,
+              required=False,
+              help="JSON attributes  updates what is on the bulk volume job. ")
 @pass_context
 def update(ctx, key, status, percent_complete = None, message = None, attributes = None):
     """You can use UpdateBulkVolumeStatus in a script to return to the SolidFire system the status of a bulk volume job that you have started with the &quot;StartBulkVolumeRead&quot; or &quot;StartBulkVolumeWrite&quot; methods."""

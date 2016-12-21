@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('remove', short_help="RemoveClusterAdmin")
-@click.argument('cluster_admin_id', type=int, required=True)
+@click.option('--cluster_admin_id',
+              type=int,
+              required=True,
+              help="ClusterAdminID for the Cluster Admin to remove. ")
 @pass_context
 def remove(ctx, cluster_admin_id):
     """RemoveClusterAdmin is used to remove a Cluster Admin. The &quot;admin&quot; Cluster Admin cannot be removed."""

@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('set', short_help="SetClusterConfig")
-@click.argument('cluster', type=ClusterConfig, required=True)
+@click.option('--cluster',
+              type=ClusterConfig,
+              required=True,
+              help="Objects that are changed for the cluster interface settings. Only the fields you want changed need to be added to this method as objects in the "cluster" parameter. ")
 @pass_context
 def set(ctx, cluster):
     """The SetClusterConfig API method is used to set the configuration this node uses to communicate with the cluster it is associated with. To see the states in which these objects can be modified see Cluster Object on page 109. To display the current cluster interface settings for a node, run the GetClusterConfig API method."""

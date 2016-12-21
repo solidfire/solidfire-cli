@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('get', short_help="GetNodeHardwareInfo")
-@click.argument('node_id', type=int, required=True)
+@click.option('--node_id',
+              type=int,
+              required=True,
+              help="The ID of the node for which hardware information is being requested.  Information about a  node is returned if a   node is specified. ")
 @pass_context
 def get(ctx, node_id):
     """GetNodeHardwareInfo is used to return all the hardware info and status for the node specified. This generally includes manufacturers, vendors, versions, and other associated hardware identification information."""

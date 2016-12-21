@@ -22,7 +22,10 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('get', short_help="GetIpmiInfo")
-@click.argument('force', type=bool, required=True)
+@click.option('--force',
+              type=bool,
+              required=True,
+              help="")
 @pass_context
 def get(ctx, force):
     """GetIpmiInfo allows you to display a detailed reporting of sensors (objects) for node fans, intake and exhaust temperatures, and power supplies  that are monitored by . """
