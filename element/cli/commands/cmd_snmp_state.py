@@ -12,7 +12,6 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
-import json
 
 @click.group()
 @pass_context
@@ -20,12 +19,12 @@ def cli(ctx):
     """Account methods."""
     ctx.sfapi = ctx.client
 
-@cli.command('list', short_help="ListAccounts")
-@click.argument('start_account_id', type=int, required=False)
-@click.argument('limit', type=int, required=False)
+@cli.command('get', short_help="GetSnmpState")
 @pass_context
-def list(ctx, start_account_id = None, limit = None):
-    """Returns the entire list of accounts, with optional paging support."""
-    ListAccountsResult = ctx.element.list_accounts(start_account_id=start_account_id, limit=limit)
-    json.dumps(ListAccountsResult.__dict__)
+def get(ctx):
+    """GetSnmpState is used to return the current state of the SNMP feature."""
+    """&lt;br/&gt;&lt;br/&gt;"""
+    """&lt;b&gt;Note&lt;/b&gt;: GetSnmpState is new for Element OS 8. Please use this method and SetSnmpACL to migrate your SNMP functionality in the future."""
+    GetSnmpStateResult = ctx.element.get_snmp_state()
+    print(GetSnmpStateResult)
 

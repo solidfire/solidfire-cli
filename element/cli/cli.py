@@ -4,6 +4,7 @@ import os
 import sys
 import click
 import csv
+from solidfire.factory import ElementFactory
 
 from element import solidfire_element_api as api
 from element import exceptions
@@ -33,6 +34,7 @@ class Context(object):
         self.verbose = False
         self.home = os.getcwd()
         self.connections = dict()
+        self.element = None
 
     def log(self, msg, *args):
         """Logs a message to stderr."""
@@ -171,10 +173,14 @@ def cli(ctx,
             connections_dirty = True
         elif(useconnection is not None):
             cfg = connections[useconnection]
+        else:
+            raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
         cfg["port"] = int(cfg["port"])
-    print(cfg)
 
-    # If the connections are dirty, we need to rewrite our connections file.
+    # Finaly, we need to establish our connection via elementfactory:
+    ctx.element = ElementFactory.create(cfg["mvip"],cfg["login"],cfg["password"],9.0,port=cfg["port"])
+
+    # If the connections are dirty and we were able to create the element, we need to rewrite our connections file.
     if connections_dirty:
         with open(connectionsCsvLocation, 'w') as f:
             w = csv.DictWriter(f, ["mvip","port","login","password","url"], lineterminator='\n')
@@ -182,6 +188,7 @@ def cli(ctx,
             for connection in connections:
                 if connection is not None:
                     w.writerow(connection)
+
 
     ctx.client = api.SolidFireAPI(endpoint_dict=cfg)
 

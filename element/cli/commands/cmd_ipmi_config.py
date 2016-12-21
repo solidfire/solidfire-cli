@@ -12,7 +12,6 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
-import json
 
 @click.group()
 @pass_context
@@ -20,12 +19,12 @@ def cli(ctx):
     """Account methods."""
     ctx.sfapi = ctx.client
 
-@cli.command('list', short_help="ListAccounts")
-@click.argument('start_account_id', type=int, required=False)
-@click.argument('limit', type=int, required=False)
+@cli.command('get', short_help="GetIpmiConfig")
+@click.argument('chassis_type', type=str, required=False)
+@click.argument('force', type=bool, required=True)
 @pass_context
-def list(ctx, start_account_id = None, limit = None):
-    """Returns the entire list of accounts, with optional paging support."""
-    ListAccountsResult = ctx.element.list_accounts(start_account_id=start_account_id, limit=limit)
-    json.dumps(ListAccountsResult.__dict__)
+def get(ctx, force, chassis_type = None):
+    """GetIpmiConfig enables you to retrieve hardware sensor information from sensors that are in your node."""
+    GetIpmiConfigResult = ctx.element.get_ipmi_config(force=force, chassis_type=chassis_type)
+    print(GetIpmiConfigResult)
 

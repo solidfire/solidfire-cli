@@ -12,7 +12,6 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
-import json
 
 @click.group()
 @pass_context
@@ -20,12 +19,11 @@ def cli(ctx):
     """Account methods."""
     ctx.sfapi = ctx.client
 
-@cli.command('list', short_help="ListAccounts")
-@click.argument('start_account_id', type=int, required=False)
-@click.argument('limit', type=int, required=False)
+@cli.command('get', short_help="GetDriveHardwareInfo")
+@click.argument('drive_id', type=int, required=True)
 @pass_context
-def list(ctx, start_account_id = None, limit = None):
-    """Returns the entire list of accounts, with optional paging support."""
-    ListAccountsResult = ctx.element.list_accounts(start_account_id=start_account_id, limit=limit)
-    json.dumps(ListAccountsResult.__dict__)
+def get(ctx, drive_id):
+    """GetDriveHardwareInfo returns all the hardware info for the given drive. This generally includes manufacturers, vendors, versions, and other associated hardware identification information."""
+    GetDriveHardwareInfoResult = ctx.element.get_drive_hardware_info(drive_id=drive_id)
+    print(GetDriveHardwareInfoResult)
 

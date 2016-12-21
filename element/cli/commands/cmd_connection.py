@@ -36,7 +36,8 @@ def cli(ctx):
               required=False)
 @click.option('--name', '-n',
               default=None,
-              type=click.INT,
+
+              type=click.STRING,
               help="The connection name",
               required=True)
 @pass_context
@@ -102,6 +103,8 @@ def save(ctx, name):
     if existingConnection is None:
         raise SolidFireUsageException("No connection of that name.")
 
+    # Set up and store the new connection
+    newConnection = {"mvip": mvip, "login": login, "password": password, "port": port, "name": name}
     # Next, we check to make sure the connection has a unique name.
     connectionsCsvLocation = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "..","..","connections.csv")
     with open(connectionsCsvLocation) as connectionFile:
@@ -112,6 +115,7 @@ def save(ctx, name):
 
     # Finally, we pull out all the features of the connection and store them away.
     connections += [existingConnection["cfg"]]
+    connections += [newConnection["cfg"]]
     with open(connectionsCsvLocation, 'w') as f:
         w = csv.DictWriter(f, ["mvip","port","login","password","url"], lineterminator='\n')
         w.writeheader()
@@ -141,3 +145,27 @@ def remove(ctx, name):
         for connection in newConnectionsList:
             if connection is not None:
                 w.writerow(connection)
+        w = csv.DictWriter(f, ["name","mvip","port","login","password","url"], lineterminator='\n')
+        w.writeheader()
+        for connection in newConnectionsList:
+            if connection is not None:
+                w.writerow(connection)
+
+@cli.command('list', short_help='This lists the connections')
+@click.option('--name', '-n',
+              default=None,
+              type=click.STRING,
+              help="The connection name",
+              required=False)
+@pass_context
+def list(ctx, name):
+    connectionsCsvLocation = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "..","..","connections.csv")
+
+    # First, get all the connections and delete the one we don't want.
+    with open(connectionsCsvLocation) as connectionFile:
+        connections = csv.DictReader(connectionFile, delimiter=',')
+        connectionsList = list(connections)
+        for item in connections:
+            if(name is not None and name != item["name"]):
+                continue
+            cli_utils.print_list(connectionsList, ["mvip","port","login","password","url"])
