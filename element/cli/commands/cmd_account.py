@@ -32,5 +32,8 @@ def remove(ctx, account_id):
     """All Volumes must be deleted and purged on the account before it can be removed."""
     """If volumes on the account are still pending deletion, RemoveAccount cannot be used until DeleteVolume to delete and purge the volumes."""
     RemoveAccountResult = ctx.element.remove_account(account_id=account_id)
-    print(json.dumps(json.loads(jsonpickle.encode(RemoveAccountResult)),indent=4))
+    keyPaths = {"username": True}
+    print(keyPaths)
+    cli_utils.print_result_as_tree(cli_utils.filter_objects(RemoveAccountResult, keyPaths))
+    #print(json.dumps(json.loads(jsonpickle.encode(RemoveAccountResult)),indent=4))
 

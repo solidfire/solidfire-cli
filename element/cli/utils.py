@@ -60,6 +60,56 @@ def get_result_as_tree(objs, depth=1, currentDepth=0, lastKey = ""):
         stringToReturn += key+":   "+get_result_as_tree(mydict[key], depth, currentDepth+1, key)
     return stringToReturn
 
+# Keypaths is arranged as follows:
+# it is a nested dict with the order of the keys.
+def filter_objects(objs, keyPaths):
+    # Otherwise, we keep recursing deeper.
+    # Because there are deeper keys, we know that we can go deeper.
+    # This means we are dealing with either an array or a dict.
+    # If keyPaths looks like this:
+    # {"username": True, "volumes": {"Id": True}}
+    # The keys in this sequence will be username and volumes.
+    # When we recurse into volumes, the keys will be Id.
+    finalFilteredObjects = dict()
+    if keyPaths == True and type(objs) is not list:
+        return objs
+    for key in keyPaths:
+        print(key)
+        # This is our terminating condition. If it is a dict, we need to
+        # go ahead and pull out the details of the object.
+        if keyPaths[key] == True and (type(objs) is bool or type(objs) is str or type(objs) is int):
+            finalFilteredObjects[key] = objs
+            continue
+
+        # If we've found a list, we recurse deeper to pull out the objs.
+        # We do not advance our keyPath recursion because this is just a list.
+        if type(objs) is list:
+            # If we have a list of objects, we will need to assemble and return a list of stuff.
+            filteredObjsDict = [None]*len(objs)
+            for i in range(len(objs)):
+                # Each element could be a string, dict, or list.
+                print(type(objs[i]))
+                filteredObjsDict[i] = filter_objects(objs[i], keyPaths)
+            finalFilteredObjects[key] = filteredObjsDict
+            continue
+
+        # If we've found a dict, we recurse deeper to pull out the objs.
+        # Because this is a dict, we must advance our keyPaths recursion.
+        # Consider the following example:
+        dictionaryOfInterest = None
+        if type(objs) is dict:
+            dictionaryOfInterest = objs
+        else:
+            dictionaryOfInterest = objs.__dict__
+        print(dictionaryOfInterest[key])
+        print(keyPaths[key])
+        finalFilteredObjects[key] = filter_objects(dictionaryOfInterest[key], keyPaths[key])
+    return finalFilteredObjects
+
+def print_result_as_table(objs, keyPaths):
+    filteredDictionary = filter_objects(objs, keyPaths)
+
+
 def print_result_as_tree(objs, depth=1):
     print(get_result_as_tree(objs, depth))
 
