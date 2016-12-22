@@ -48,7 +48,9 @@ def list(ctx, start_account_id = None, limit = None, json=None, depth=None, tabl
     ListAccountsResult = ctx.element.list_accounts(start_account_id=start_account_id, limit=limit)
     #print(serializer.dumps(serializer.loads(jsonpickle.encode(ListAccountsResult)),indent=4))
     #cli_utils.print_result_as_tree(ListAccountsResult, depth=10)
-    keyPaths = {"accounts":{"username": True, "status": True}}
-    cli_utils.print_result_as_tree(cli_utils.filter_objects(ListAccountsResult, keyPaths), depth=10)
+    #keyPaths = {"accounts":{"username": True, "status": True}}
+    #cli_utils.print_result_as_tree(cli_utils.filter_objects(ListAccountsResult, keyPaths), depth=10)
+
+    cli_utils.print_result_as_tree(cli_utils.filter_objects_from_simple_keypaths(ListAccountsResult, ["accounts.username", "accounts.status"]), depth=10)
     #print(table)
 

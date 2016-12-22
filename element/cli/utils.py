@@ -60,6 +60,28 @@ def get_result_as_tree(objs, depth=1, currentDepth=0, lastKey = ""):
         stringToReturn += key+":   "+get_result_as_tree(mydict[key], depth, currentDepth+1, key)
     return stringToReturn
 
+def filter_objects_from_simple_keypaths(objs, simpleKeyPaths):
+    # First, we assemble the key paths.
+    # They start out like this:
+    # [accouts.username, accounts.initiator_secret.secret, accounts.status]
+    # and become like this:
+    # {"accounts":{"username":True, "initiator_secret":{"secret":True}, "status":True}
+    keyPaths = dict()
+    for simpleKeyPath in simpleKeyPaths:
+        currentLevel = keyPaths
+        keyPathArray = simpleKeyPath.split('.')
+        for i in range(len(keyPathArray)):
+            if(i<(len(keyPathArray) - 1)):
+                if currentLevel.get(keyPathArray[i]) is None:
+                    currentLevel[keyPathArray[i]] = dict()
+            else:
+                currentLevel[keyPathArray[i]] = True
+            currentLevel = currentLevel[keyPathArray[i]]
+
+    # Then we pass it in to filter objects.
+    return filter_objects(objs, keyPaths)
+
+
 # Keypaths is arranged as follows:
 # it is a nested dict with the order of the keys.
 def filter_objects(objs, keyPaths):
@@ -73,36 +95,26 @@ def filter_objects(objs, keyPaths):
     finalFilteredObjects = dict()
     if keyPaths == True and type(objs) is not list:
         return objs
+
+    # If we've found a list, we recurse deeper to pull out the objs.
+    # We do not advance our keyPath recursion because this is just a list.
+    if type(objs) is list:
+        # If we have a list of objects, we will need to assemble and return a list of stuff.
+        filteredObjsDict = [None]*len(objs)
+        for i in range(len(objs)):
+            # Each element could be a string, dict, or list.
+            filteredObjsDict[i] = filter_objects(objs[i], keyPaths)
+        return filteredObjsDict
+
+    dictionaryOfInterest = None
+    if type(objs) is dict:
+        dictionaryOfInterest = objs
+    else:
+        dictionaryOfInterest = objs.__dict__
     for key in keyPaths:
-        print(key)
-        # This is our terminating condition. If it is a dict, we need to
-        # go ahead and pull out the details of the object.
-        if keyPaths[key] == True and (type(objs) is bool or type(objs) is str or type(objs) is int):
-            finalFilteredObjects[key] = objs
-            continue
-
-        # If we've found a list, we recurse deeper to pull out the objs.
-        # We do not advance our keyPath recursion because this is just a list.
-        if type(objs) is list:
-            # If we have a list of objects, we will need to assemble and return a list of stuff.
-            filteredObjsDict = [None]*len(objs)
-            for i in range(len(objs)):
-                # Each element could be a string, dict, or list.
-                print(type(objs[i]))
-                filteredObjsDict[i] = filter_objects(objs[i], keyPaths)
-            finalFilteredObjects[key] = filteredObjsDict
-            continue
-
         # If we've found a dict, we recurse deeper to pull out the objs.
         # Because this is a dict, we must advance our keyPaths recursion.
         # Consider the following example:
-        dictionaryOfInterest = None
-        if type(objs) is dict:
-            dictionaryOfInterest = objs
-        else:
-            dictionaryOfInterest = objs.__dict__
-        print(dictionaryOfInterest[key])
-        print(keyPaths[key])
         finalFilteredObjects[key] = filter_objects(dictionaryOfInterest[key], keyPaths[key])
     return finalFilteredObjects
 
