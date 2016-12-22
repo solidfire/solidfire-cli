@@ -31,5 +31,5 @@ def modify(ctx, initiators):
     """ModifyInitiators enables you to change the attributes of an existing initiator. You cannot change the name of an existing initiator. If you need to change the name of an initiator, delete the existing initiator with DeleteInitiators and create a new one with CreateInitiators."""
     """If ModifyInitiators fails to change one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible)."""
     ModifyInitiatorsResult = ctx.element.modify_initiators(initiators=initiators)
-    print(json.dumps(json.loads(jsonpickle.encode(ModifyInitiatorsResult)),indent=4))
+    cli_utils.print_result(ModifyInitiatorsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

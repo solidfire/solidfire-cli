@@ -42,5 +42,5 @@ def cli(ctx):
 def set(ctx, trap_recipients, cluster_fault_traps_enabled, cluster_fault_resolved_traps_enabled, cluster_event_traps_enabled):
     """SetSnmpTrapInfo is used to enable and disable the generation of SolidFire SNMP notifications (traps) and to specify the set of network host computers that are to receive the notifications. The values passed with each SetSnmpTrapInfo method replaces all values set in any previous method to SetSnmpTrapInfo."""
     SetSnmpTrapInfoResult = ctx.element.set_snmp_trap_info(trap_recipients=trap_recipients, cluster_fault_traps_enabled=cluster_fault_traps_enabled, cluster_fault_resolved_traps_enabled=cluster_fault_resolved_traps_enabled, cluster_event_traps_enabled=cluster_event_traps_enabled)
-    print(json.dumps(json.loads(jsonpickle.encode(SetSnmpTrapInfoResult)),indent=4))
+    cli_utils.print_result(SetSnmpTrapInfoResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

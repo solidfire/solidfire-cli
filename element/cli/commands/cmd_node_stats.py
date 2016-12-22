@@ -26,5 +26,5 @@ def cli(ctx):
 def list(ctx):
     """ListNodeStats is used to return the high-level activity measurements for all nodes in a cluster."""
     ListNodeStatsResult = ctx.element.list_node_stats()
-    print(json.dumps(json.loads(jsonpickle.encode(ListNodeStatsResult)),indent=4))
+    cli_utils.print_result(ListNodeStatsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

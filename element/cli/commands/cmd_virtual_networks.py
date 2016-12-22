@@ -44,5 +44,5 @@ def list(ctx, virtual_network_id = None, virtual_network_tag = None, virtual_net
     """"""
     """This method does not require any parameters to be passed. But, one or more VirtualNetworkIDs or VirtualNetworkTags can be passed in order to filter the results."""
     ListVirtualNetworksResult = ctx.element.list_virtual_networks(virtual_network_id=virtual_network_id, virtual_network_tag=virtual_network_tag, virtual_network_ids=virtual_network_ids, virtual_network_tags=virtual_network_tags)
-    print(json.dumps(json.loads(jsonpickle.encode(ListVirtualNetworksResult)),indent=4))
+    cli_utils.print_result(ListVirtualNetworksResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

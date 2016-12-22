@@ -26,5 +26,5 @@ def cli(ctx):
 def list(ctx):
     """ListBulkVolumeJobs is used to return information about each bulk volume read or write operation that is occurring in the system."""
     ListBulkVolumeJobsResult = ctx.element.list_bulk_volume_jobs()
-    print(json.dumps(json.loads(jsonpickle.encode(ListBulkVolumeJobsResult)),indent=4))
+    cli_utils.print_result(ListBulkVolumeJobsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

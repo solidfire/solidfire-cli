@@ -28,5 +28,5 @@ def get(ctx):
     """&lt;br/&gt;"""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
     GetPendingOperationResult = ctx.element.get_pending_operation()
-    print(json.dumps(json.loads(jsonpickle.encode(GetPendingOperationResult)),indent=4))
+    cli_utils.print_result(GetPendingOperationResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

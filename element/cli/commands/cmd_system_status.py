@@ -25,5 +25,5 @@ def cli(ctx):
 @pass_context
 def get(ctx):
     GetSystemStatusResult = ctx.element.get_system_status()
-    print(json.dumps(json.loads(jsonpickle.encode(GetSystemStatusResult)),indent=4))
+    cli_utils.print_result(GetSystemStatusResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

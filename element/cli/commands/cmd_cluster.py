@@ -60,5 +60,5 @@ def create(ctx, mvip, svip, rep_count, username, password, nodes, accept_eula = 
     """&lt;br/&gt;&lt;br/&gt;"""
     """&lt;b&gt;Note&lt;/b&gt;: You need to log into the node that is used as the master node for the cluster. Once logged in, run the GetBootstrapConfig method on the node to get the IP addresses for the rest of the nodes that you want to include in the cluster. Then run the CreateCluster method."""
     CreateClusterResult = ctx.element.create_cluster(mvip=mvip, svip=svip, rep_count=rep_count, username=username, password=password, nodes=nodes, accept_eula=accept_eula, attributes=attributes)
-    print(json.dumps(json.loads(jsonpickle.encode(CreateClusterResult)),indent=4))
+    cli_utils.print_result(CreateClusterResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

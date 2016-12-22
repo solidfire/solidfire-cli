@@ -30,5 +30,5 @@ def cli(ctx):
 def list(ctx, virtual_volume_ids = None):
     """ListVolumeStatsByVirtualVolume enables you to list statistics for volumes, sorted by virtual volumes."""
     ListVolumeStatsByVirtualVolumeResult = ctx.element.list_volume_stats_by_virtual_volume(virtual_volume_ids=virtual_volume_ids)
-    print(json.dumps(json.loads(jsonpickle.encode(ListVolumeStatsByVirtualVolumeResult)),indent=4))
+    cli_utils.print_result(ListVolumeStatsByVirtualVolumeResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

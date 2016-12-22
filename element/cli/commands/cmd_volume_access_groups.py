@@ -34,5 +34,5 @@ def cli(ctx):
 def list(ctx, start_volume_access_group_id = None, limit = None):
     """ListVolumeAccessGroups is used to return information about the volume access groups that are currently in the system."""
     ListVolumeAccessGroupsResult = ctx.element.list_volume_access_groups(start_volume_access_group_id=start_volume_access_group_id, limit=limit)
-    print(json.dumps(json.loads(jsonpickle.encode(ListVolumeAccessGroupsResult)),indent=4))
+    cli_utils.print_result(ListVolumeAccessGroupsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

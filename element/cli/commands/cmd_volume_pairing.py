@@ -35,5 +35,5 @@ def start(ctx, volume_id, mode = None):
     """StartVolumePairing is used to create an encoded key from a volume that is used to pair with another volume."""
     """The key that this method creates is used in the &quot;CompleteVolumePairing&quot; API method to establish a volume pairing."""
     StartVolumePairingResult = ctx.element.start_volume_pairing(volume_id=volume_id, mode=mode)
-    print(json.dumps(json.loads(jsonpickle.encode(StartVolumePairingResult)),indent=4))
+    cli_utils.print_result(StartVolumePairingResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

@@ -30,5 +30,5 @@ def cli(ctx):
 def cancel(ctx, clone_id):
     """Cancels a currently running clone operation. This method does not return anything."""
     CancelCloneResult = ctx.element.cancel_clone(clone_id=clone_id)
-    print(json.dumps(json.loads(jsonpickle.encode(CancelCloneResult)),indent=4))
+    cli_utils.print_result(CancelCloneResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

@@ -30,5 +30,5 @@ def cli(ctx):
 def list(ctx, virtual_volume_task_ids = None):
     """ListVirtualVolumeTasks returns a list of VVol Async Tasks."""
     ListVirtualVolumeTasksResult = ctx.element.list_virtual_volume_tasks(virtual_volume_task_ids=virtual_volume_task_ids)
-    print(json.dumps(json.loads(jsonpickle.encode(ListVirtualVolumeTasksResult)),indent=4))
+    cli_utils.print_result(ListVirtualVolumeTasksResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

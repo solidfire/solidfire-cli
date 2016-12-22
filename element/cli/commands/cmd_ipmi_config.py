@@ -34,5 +34,5 @@ def cli(ctx):
 def get(ctx, force, chassis_type = None):
     """GetIpmiConfig enables you to retrieve hardware sensor information from sensors that are in your node."""
     GetIpmiConfigResult = ctx.element.get_ipmi_config(force=force, chassis_type=chassis_type)
-    print(json.dumps(json.loads(jsonpickle.encode(GetIpmiConfigResult)),indent=4))
+    cli_utils.print_result(GetIpmiConfigResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

@@ -30,5 +30,5 @@ def cli(ctx):
 def set(ctx, timeout):
     """SetLoginSessionInfo is used to set the period of time a log in authentication is valid. After the log in period elapses without activity on the system the authentication will expire. New log in credentials will be required for continued access to the cluster once the timeout period has elapsed."""
     SetLoginSessionInfoResult = ctx.element.set_login_session_info(timeout=timeout)
-    print(json.dumps(json.loads(jsonpickle.encode(SetLoginSessionInfoResult)),indent=4))
+    cli_utils.print_result(SetLoginSessionInfoResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

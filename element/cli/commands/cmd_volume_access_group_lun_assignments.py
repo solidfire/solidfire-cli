@@ -40,5 +40,5 @@ def modify(ctx, volume_access_group_id, lun_assignments):
     """&lt;br/&gt;&lt;br/&gt;"""
     """&lt;b&gt;Caution:&lt;/b&gt; If a LUN assignment is changed for a volume with active I/O, the I/O could be disrupted. Changes to the server configuration may be required in order to change volume LUN assignments."""
     ModifyVolumeAccessGroupLunAssignmentsResult = ctx.element.modify_volume_access_group_lun_assignments(volume_access_group_id=volume_access_group_id, lun_assignments=lun_assignments)
-    print(json.dumps(json.loads(jsonpickle.encode(ModifyVolumeAccessGroupLunAssignmentsResult)),indent=4))
+    cli_utils.print_result(ModifyVolumeAccessGroupLunAssignmentsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

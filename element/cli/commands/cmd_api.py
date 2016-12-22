@@ -26,5 +26,5 @@ def cli(ctx):
 def get(ctx):
     """Retrieves the current version of the API and a list of all supported versions."""
     GetAPIResult = ctx.element.get_api()
-    print(json.dumps(json.loads(jsonpickle.encode(GetAPIResult)),indent=4))
+    cli_utils.print_result(GetAPIResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

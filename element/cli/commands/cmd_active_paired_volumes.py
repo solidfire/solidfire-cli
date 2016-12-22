@@ -27,5 +27,5 @@ def list(ctx):
     """ListActivePairedVolumes is used to list all of the active volumes paired with a volume."""
     """Volumes listed in the return for this method include volumes with active and pending pairings."""
     ListActivePairedVolumesResult = ctx.element.list_active_paired_volumes()
-    print(json.dumps(json.loads(jsonpickle.encode(ListActivePairedVolumesResult)),indent=4))
+    cli_utils.print_result(ListActivePairedVolumesResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

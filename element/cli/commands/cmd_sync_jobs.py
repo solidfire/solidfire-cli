@@ -26,5 +26,5 @@ def cli(ctx):
 def list(ctx):
     """ListSyncJobs is used to return information about synchronization jobs that are running on a SolidFire cluster. Synchronization jobs that are returned with this method are, &quot;slice,&quot; &quot;clone&quot; and &quot;remote.&quot;"""
     ListSyncJobsResult = ctx.element.list_sync_jobs()
-    print(json.dumps(json.loads(jsonpickle.encode(ListSyncJobsResult)),indent=4))
+    cli_utils.print_result(ListSyncJobsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

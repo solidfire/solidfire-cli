@@ -38,5 +38,5 @@ def cli(ctx):
 def test(ctx, username, password, ldap_configuration = None):
     """The TestLdapAuthentication is used to verify the currently enabled LDAP authentication configuration settings are correct. If the configuration settings are correct, the API call returns a list of the groups the tested user is a member of."""
     TestLdapAuthenticationResult = ctx.element.test_ldap_authentication(username=username, password=password, ldap_configuration=ldap_configuration)
-    print(json.dumps(json.loads(jsonpickle.encode(TestLdapAuthenticationResult)),indent=4))
+    cli_utils.print_result(TestLdapAuthenticationResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

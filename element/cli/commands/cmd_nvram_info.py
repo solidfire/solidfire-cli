@@ -26,5 +26,5 @@ def cli(ctx):
 def get(ctx):
     """GetNvramInfo allows you to retrieve information from each node about the NVRAM card.  """
     GetNvramInfoResult = ctx.element.get_nvram_info()
-    print(json.dumps(json.loads(jsonpickle.encode(GetNvramInfoResult)),indent=4))
+    cli_utils.print_result(GetNvramInfoResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

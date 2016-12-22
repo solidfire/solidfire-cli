@@ -62,5 +62,5 @@ def start(ctx, volume_id, format, snapshot_id = None, script = None, script_para
     """Snapshots can be created if cluster fullness is at stage 2 or 3."""
     """Snapshots are not created when cluster fullness is at stage 4 or 5."""
     StartBulkVolumeReadResult = ctx.element.start_bulk_volume_read(volume_id=volume_id, format=format, snapshot_id=snapshot_id, script=script, script_parameters=script_parameters, attributes=attributes)
-    print(json.dumps(json.loads(jsonpickle.encode(StartBulkVolumeReadResult)),indent=4))
+    cli_utils.print_result(StartBulkVolumeReadResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

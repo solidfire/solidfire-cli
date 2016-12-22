@@ -30,5 +30,5 @@ def cli(ctx):
 def list(ctx, virtual_volume_host_ids = None):
     """ListVirtualVolumeHosts returns a list of known ESX hosts."""
     ListVirtualVolumeHostsResult = ctx.element.list_virtual_volume_hosts(virtual_volume_host_ids=virtual_volume_host_ids)
-    print(json.dumps(json.loads(jsonpickle.encode(ListVirtualVolumeHostsResult)),indent=4))
+    cli_utils.print_result(ListVirtualVolumeHostsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

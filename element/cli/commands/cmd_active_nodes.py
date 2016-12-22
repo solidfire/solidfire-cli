@@ -26,5 +26,5 @@ def cli(ctx):
 def list(ctx):
     """ListActiveNodes returns the list of currently active nodes that are in the cluster."""
     ListActiveNodesResult = ctx.element.list_active_nodes()
-    print(json.dumps(json.loads(jsonpickle.encode(ListActiveNodesResult)),indent=4))
+    cli_utils.print_result(ListActiveNodesResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

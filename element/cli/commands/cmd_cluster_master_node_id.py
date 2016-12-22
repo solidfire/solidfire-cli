@@ -26,5 +26,5 @@ def cli(ctx):
 def get(ctx):
     """GetClusterMasterNodeID is used to return the ID of the node that can perform cluster-wide administration tasks and holds the storage virtual IP (SVIP) and management virtual IP (MVIP)."""
     GetClusterMasterNodeIDResult = ctx.element.get_cluster_master_node_id()
-    print(json.dumps(json.loads(jsonpickle.encode(GetClusterMasterNodeIDResult)),indent=4))
+    cli_utils.print_result(GetClusterMasterNodeIDResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

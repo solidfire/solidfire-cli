@@ -26,5 +26,5 @@ def cli(ctx):
 def list(ctx):
     """ListAllNodes enables you to retrieve a list of active and pending nodes in the cluster."""
     ListAllNodesResult = ctx.element.list_all_nodes()
-    print(json.dumps(json.loads(jsonpickle.encode(ListAllNodesResult)),indent=4))
+    cli_utils.print_result(ListAllNodesResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

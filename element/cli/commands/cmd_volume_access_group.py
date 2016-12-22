@@ -63,5 +63,5 @@ def modify(ctx, volume_access_group_id, virtual_network_id = None, virtual_netwo
     """AddVolumesToVolumeAccessGroup&lt;br/&gt;"""
     """RemoveVolumesFromVolumeAccessGroup&lt;br/&gt;"""
     ModifyVolumeAccessGroupResult = ctx.element.modify_volume_access_group(volume_access_group_id=volume_access_group_id, virtual_network_id=virtual_network_id, virtual_network_tags=virtual_network_tags, name=name, initiators=initiators, volumes=volumes, attributes=attributes)
-    print(json.dumps(json.loads(jsonpickle.encode(ModifyVolumeAccessGroupResult)),indent=4))
+    cli_utils.print_result(ModifyVolumeAccessGroupResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

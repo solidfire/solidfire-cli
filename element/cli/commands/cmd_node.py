@@ -38,5 +38,5 @@ def cli(ctx):
 def reset(ctx, build, force, option):
     """Allows you to reset a node to the SolidFire factory settings. All data will be deleted from the node when you call this method. A node participating in a cluster cannot be reset."""
     ResetNodeResult = ctx.element.reset_node(build=build, force=force, option=option)
-    print(json.dumps(json.loads(jsonpickle.encode(ResetNodeResult)),indent=4))
+    cli_utils.print_result(ResetNodeResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

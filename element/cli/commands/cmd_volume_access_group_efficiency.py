@@ -30,5 +30,5 @@ def cli(ctx):
 def get(ctx, volume_access_group_id):
     """GetVolumeAccessGroupEfficiency is used to retrieve efficiency information about a volume access group. Only the volume access group provided as parameters in this API method is used to compute the capacity."""
     GetEfficiencyResult = ctx.element.get_volume_access_group_efficiency(volume_access_group_id=volume_access_group_id)
-    print(json.dumps(json.loads(jsonpickle.encode(GetEfficiencyResult)),indent=4))
+    cli_utils.print_result(GetEfficiencyResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

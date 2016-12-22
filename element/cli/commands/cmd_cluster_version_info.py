@@ -27,5 +27,5 @@ def get(ctx):
     """Return information about the Element software version running on each node in the cluster."""
     """Information about the nodes that are currently in the process of upgrading software is also returned."""
     GetClusterVersionInfoResult = ctx.element.get_cluster_version_info()
-    print(json.dumps(json.loads(jsonpickle.encode(GetClusterVersionInfoResult)),indent=4))
+    cli_utils.print_result(GetClusterVersionInfoResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

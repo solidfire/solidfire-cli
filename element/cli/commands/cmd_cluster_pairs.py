@@ -27,5 +27,5 @@ def list(ctx):
     """ListClusterPairs is used to list all of the clusters a cluster is paired with."""
     """This method returns information about active and pending cluster pairings, such as statistics about the current pairing as well as the connectivity and latency (in milliseconds) of the cluster pairing."""
     ListClusterPairsResult = ctx.element.list_cluster_pairs()
-    print(json.dumps(json.loads(jsonpickle.encode(ListClusterPairsResult)),indent=4))
+    cli_utils.print_result(ListClusterPairsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

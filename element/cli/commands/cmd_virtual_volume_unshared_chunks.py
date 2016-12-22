@@ -54,5 +54,5 @@ def get(ctx, virtual_volume_id, base_virtual_volume_id, segment_start, segment_l
     """error is thrown. If the offset/length combination is invalid or out fo range """
     """an error is thrown."""
     VirtualVolumeUnsharedChunkResult = ctx.element.get_virtual_volume_unshared_chunks(virtual_volume_id=virtual_volume_id, base_virtual_volume_id=base_virtual_volume_id, segment_start=segment_start, segment_length=segment_length, chunk_size=chunk_size, calling_virtual_volume_host_id=calling_virtual_volume_host_id)
-    print(json.dumps(json.loads(jsonpickle.encode(VirtualVolumeUnsharedChunkResult)),indent=4))
+    cli_utils.print_result(VirtualVolumeUnsharedChunkResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

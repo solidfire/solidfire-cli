@@ -26,5 +26,5 @@ def cli(ctx):
 def list(ctx):
     """ListClusterAdmins returns the list of all cluster administrators for the cluster. There can be several cluster administrators that have different levels of permissions. There can be only one primary cluster administrator in the system. The primary Cluster Admin is the administrator that was created when the cluster was created. LDAP administrators can also be created when setting up an LDAP system on the cluster."""
     ListClusterAdminsResult = ctx.element.list_cluster_admins()
-    print(json.dumps(json.loads(jsonpickle.encode(ListClusterAdminsResult)),indent=4))
+    cli_utils.print_result(ListClusterAdminsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

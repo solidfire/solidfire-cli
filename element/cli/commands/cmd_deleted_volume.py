@@ -31,5 +31,5 @@ def restore(ctx, volume_id):
     """RestoreDeletedVolume marks a deleted volume as active again."""
     """This action makes the volume immediately available for iSCSI connection."""
     RestoreDeletedVolumeResult = ctx.element.restore_deleted_volume(volume_id=volume_id)
-    print(json.dumps(json.loads(jsonpickle.encode(RestoreDeletedVolumeResult)),indent=4))
+    cli_utils.print_result(RestoreDeletedVolumeResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

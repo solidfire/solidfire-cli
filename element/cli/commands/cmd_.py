@@ -30,5 +30,5 @@ def cli(ctx):
 def shutdown(ctx, option):
     """The Shutdown API method enables you to restart or shutdown a node that has not yet been added to a cluster. To use this method, login in to the MIP for the pending node and enter the &quot;shutdown&quot; method with either the &quot;restart&quot; or &quot;halt&quot; options in the following table."""
     ShutdownResult = ctx.element.shutdown(option=option)
-    print(json.dumps(json.loads(jsonpickle.encode(ShutdownResult)),indent=4))
+    cli_utils.print_result(ShutdownResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

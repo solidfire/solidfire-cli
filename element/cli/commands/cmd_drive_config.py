@@ -28,5 +28,5 @@ def get(ctx):
     """&lt;br/&gt;&lt;br/&gt;"""
     """&lt;b&gt;Note&lt;/b&gt;: This method is available only through the per-node API endpoint 5.0 or later."""
     GetDriveConfigResult = ctx.element.get_drive_config()
-    print(json.dumps(json.loads(jsonpickle.encode(GetDriveConfigResult)),indent=4))
+    cli_utils.print_result(GetDriveConfigResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

@@ -30,5 +30,5 @@ def cli(ctx):
 def get(ctx, node_id):
     """GetNodeHardwareInfo is used to return all the hardware info and status for the node specified. This generally includes manufacturers, vendors, versions, and other associated hardware identification information."""
     GetNodeHardwareInfoResult = ctx.element.get_node_hardware_info(node_id=node_id)
-    print(json.dumps(json.loads(jsonpickle.encode(GetNodeHardwareInfoResult)),indent=4))
+    cli_utils.print_result(GetNodeHardwareInfoResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

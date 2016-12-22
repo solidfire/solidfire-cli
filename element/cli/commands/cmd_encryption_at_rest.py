@@ -28,5 +28,5 @@ def enable(ctx):
     """Enabling or disabling encryption should be performed when the cluster is running and in a healthy state. Encryption can be enabled or disabled at your discretion and can be performed as often as you need."""
     """&lt;br/&gt;&lt;b&gt;Note&lt;/b&gt;: This process is asynchronous and returns a response before encryption is enabled. The GetClusterInfo method can be used to poll the system to see when the process has completed."""
     EnableEncryptionAtRestResult = ctx.element.enable_encryption_at_rest()
-    print(json.dumps(json.loads(jsonpickle.encode(EnableEncryptionAtRestResult)),indent=4))
+    cli_utils.print_result(EnableEncryptionAtRestResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

@@ -30,5 +30,5 @@ def cli(ctx):
 def get(ctx, account_id):
     """Returns details about an account, given its AccountID."""
     GetAccountResult = ctx.element.get_account_by_id(account_id=account_id)
-    print(json.dumps(json.loads(jsonpickle.encode(GetAccountResult)),indent=4))
+    cli_utils.print_result(GetAccountResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

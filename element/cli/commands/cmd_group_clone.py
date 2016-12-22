@@ -30,5 +30,5 @@ def cli(ctx):
 def cancel(ctx, group_clone_id):
     """CancelGroupClone enables you to stop an ongoing CloneMultipleVolumes process for a group of clones. When you cancel a group clone operation, the system completes and removes the operation's associated asyncHandle. This method does not return anything."""
     CancelGroupCloneResult = ctx.element.cancel_group_clone(group_clone_id=group_clone_id)
-    print(json.dumps(json.loads(jsonpickle.encode(CancelGroupCloneResult)),indent=4))
+    cli_utils.print_result(CancelGroupCloneResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

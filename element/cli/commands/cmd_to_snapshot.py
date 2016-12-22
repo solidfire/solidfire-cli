@@ -51,5 +51,5 @@ def rollback(ctx, volume_id, snapshot_id, save_current_state, name = None, attri
     """&lt;b&gt;Note&lt;/b&gt;: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3."""
     """Snapshots are not created when cluster fullness is at stage 4 or 5."""
     CreateSnapshotResult = ctx.element.rollback_to_snapshot(volume_id=volume_id, snapshot_id=snapshot_id, save_current_state=save_current_state, name=name, attributes=attributes)
-    print(json.dumps(json.loads(jsonpickle.encode(CreateSnapshotResult)),indent=4))
+    cli_utils.print_result(CreateSnapshotResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

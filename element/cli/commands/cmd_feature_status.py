@@ -30,5 +30,5 @@ def cli(ctx):
 def get(ctx, feature = None):
     """GetFeatureStatus allows you to retrieve the status of a cluster feature."""
     GetFeatureStatusResult = ctx.element.get_feature_status(feature=feature)
-    print(json.dumps(json.loads(jsonpickle.encode(GetFeatureStatusResult)),indent=4))
+    cli_utils.print_result(GetFeatureStatusResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

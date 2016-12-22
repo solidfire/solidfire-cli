@@ -26,5 +26,5 @@ def cli(ctx):
 def get(ctx):
     """GetCurrentClusterAdmin returns information for the current primary cluster administrator. The primary Cluster Admin was ncreated when the cluster was created."""
     GetCurrentClusterAdminResult = ctx.element.get_current_cluster_admin()
-    print(json.dumps(json.loads(jsonpickle.encode(GetCurrentClusterAdminResult)),indent=4))
+    cli_utils.print_result(GetCurrentClusterAdminResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

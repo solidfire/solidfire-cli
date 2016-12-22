@@ -50,5 +50,5 @@ def start(ctx, volume_id, format, script = None, script_parameters = None, attri
     """The external data is accessed by a web server running on a SolidFire node."""
     """Communications and server interaction information for external data access is passed by a script running on the SolidFire storage system."""
     StartBulkVolumeWriteResult = ctx.element.start_bulk_volume_write(volume_id=volume_id, format=format, script=script, script_parameters=script_parameters, attributes=attributes)
-    print(json.dumps(json.loads(jsonpickle.encode(StartBulkVolumeWriteResult)),indent=4))
+    cli_utils.print_result(StartBulkVolumeWriteResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

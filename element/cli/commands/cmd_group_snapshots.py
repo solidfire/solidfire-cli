@@ -30,5 +30,5 @@ def cli(ctx):
 def list(ctx, volume_id = None):
     """ListGroupSnapshots is used to return information about all group snapshots that have been created."""
     ListGroupSnapshotsResult = ctx.element.list_group_snapshots(volume_id=volume_id)
-    print(json.dumps(json.loads(jsonpickle.encode(ListGroupSnapshotsResult)),indent=4))
+    cli_utils.print_result(ListGroupSnapshotsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

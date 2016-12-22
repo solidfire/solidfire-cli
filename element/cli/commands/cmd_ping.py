@@ -47,5 +47,5 @@ def test(ctx, attempts = None, hosts = None, total_timeout_sec = None, packet_si
     """The TestPing API method is used to validate the connection to all nodes in the cluster on both 1G and 10G interfaces using ICMP packets. The test uses the appropriate MTU sizes for each packet based on the MTU settings in the network configuration."""
     """&lt;br/&gt;&lt;b&gt;Note&lt;/b&gt;: This method is available only through the per-node API endpoint 5.0 or later."""
     TestPingResult = ctx.element.test_ping(attempts=attempts, hosts=hosts, total_timeout_sec=total_timeout_sec, packet_size=packet_size, ping_timeout_msec=ping_timeout_msec)
-    print(json.dumps(json.loads(jsonpickle.encode(TestPingResult)),indent=4))
+    cli_utils.print_result(TestPingResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

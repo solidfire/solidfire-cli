@@ -34,5 +34,5 @@ def test(ctx, minutes = None):
     """&lt;br/&gt;&lt;br/&gt;"""
     """&lt;b&gt;Note&lt;/b&gt;: This method is available only through the per-node API endpoint 5.0 or later."""
     TestDrivesResult = ctx.element.test_drives(minutes=minutes)
-    print(json.dumps(json.loads(jsonpickle.encode(TestDrivesResult)),indent=4))
+    cli_utils.print_result(TestDrivesResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

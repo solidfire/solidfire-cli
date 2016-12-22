@@ -26,5 +26,5 @@ def cli(ctx):
 def snmp(ctx):
     """SnmpSendTestTraps enables you to test SNMP functionality for a cluster. This method instructs the cluster to send test SNMP traps to the currently configured SNMP manager."""
     SnmpSendTestTrapsResult = ctx.element.snmp_send_test_traps()
-    print(json.dumps(json.loads(jsonpickle.encode(SnmpSendTestTrapsResult)),indent=4))
+    cli_utils.print_result(SnmpSendTestTrapsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

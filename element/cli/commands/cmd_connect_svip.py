@@ -31,5 +31,5 @@ def test(ctx, svip = None):
     """The TestConnectSvip API method is used to test the storage connection to the cluster. The test pings the SVIP using ICMP packets and when successful connects as an iSCSI initiator."""
     """&lt;br/&gt;&lt;b&gt;Note&lt;/b&gt;: This method is available only through the per-node API endpoint 5.0 or later."""
     TestConnectSvipResult = ctx.element.test_connect_svip(svip=svip)
-    print(json.dumps(json.loads(jsonpickle.encode(TestConnectSvipResult)),indent=4))
+    cli_utils.print_result(TestConnectSvipResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

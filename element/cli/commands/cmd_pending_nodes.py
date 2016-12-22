@@ -27,5 +27,5 @@ def list(ctx):
     """Gets the list of pending nodes."""
     """Pending nodes are running and configured to join the cluster, but have not been added via the AddNodes method."""
     ListPendingNodesResult = ctx.element.list_pending_nodes()
-    print(json.dumps(json.loads(jsonpickle.encode(ListPendingNodesResult)),indent=4))
+    cli_utils.print_result(ListPendingNodesResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

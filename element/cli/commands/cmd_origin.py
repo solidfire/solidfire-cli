@@ -30,5 +30,5 @@ def cli(ctx):
 def get(ctx, force):
     """GetOrigin enables you to retrieve the origination certificate for where the node was built.NOTE: The GetOrigin method may return &quot;null&quot; if there is no origination certification."""
     GetOriginResult = ctx.element.get_origin(force=force)
-    print(json.dumps(json.loads(jsonpickle.encode(GetOriginResult)),indent=4))
+    cli_utils.print_result(GetOriginResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

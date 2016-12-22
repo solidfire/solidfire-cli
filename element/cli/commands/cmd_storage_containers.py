@@ -30,5 +30,5 @@ def cli(ctx):
 def list(ctx, storage_container_ids = None):
     """Gets information for all storage containers currently in the system."""
     ListStorageContainersResult = ctx.element.list_storage_containers(storage_container_ids=storage_container_ids)
-    print(json.dumps(json.loads(jsonpickle.encode(ListStorageContainersResult)),indent=4))
+    cli_utils.print_result(ListStorageContainersResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

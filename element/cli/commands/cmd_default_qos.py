@@ -38,5 +38,5 @@ def cli(ctx):
 def set(ctx, min_iops = None, max_iops = None, burst_iops = None):
     """SetDefaultQoS enables you to configure the default Quality of Service (QoS) values (measured in inputs and outputs per second, or IOPS) for all volumes not yet created."""
     SetDefaultQoSResult = ctx.element.set_default_qos(min_iops=min_iops, max_iops=max_iops, burst_iops=burst_iops)
-    print(json.dumps(json.loads(jsonpickle.encode(SetDefaultQoSResult)),indent=4))
+    cli_utils.print_result(SetDefaultQoSResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

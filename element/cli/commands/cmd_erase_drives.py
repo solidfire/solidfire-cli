@@ -34,5 +34,5 @@ def secure(ctx, drives):
     """&lt;br/&gt;&lt;br/&gt;"""
     """Use the &quot;ListDrives&quot; method to obtain the driveIDs for the drives you want to secure erase."""
     AsyncHandleResult = ctx.element.secure_erase_drives(drives=drives)
-    print(json.dumps(json.loads(jsonpickle.encode(AsyncHandleResult)),indent=4))
+    cli_utils.print_result(AsyncHandleResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

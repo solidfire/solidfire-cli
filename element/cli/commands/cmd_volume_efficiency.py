@@ -31,5 +31,5 @@ def get(ctx, volume_id):
     """GetVolumeEfficiency is used to retrieve information about a volume."""
     """Only the volume given as a parameter in this API method is used to compute the capacity."""
     GetVolumeEfficiencyResult = ctx.element.get_volume_efficiency(volume_id=volume_id)
-    print(json.dumps(json.loads(jsonpickle.encode(GetVolumeEfficiencyResult)),indent=4))
+    cli_utils.print_result(GetVolumeEfficiencyResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

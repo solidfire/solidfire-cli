@@ -38,5 +38,5 @@ def get(ctx, async_handle):
     """The result for a completed asynchronous method call can only be retrieved once."""
     """Once the final result has been returned, later attempts returns an error."""
     GetAsyncResultResult = ctx.element.get_async_result(async_handle=async_handle)
-    print(json.dumps(json.loads(jsonpickle.encode(GetAsyncResultResult)),indent=4))
+    cli_utils.print_result(GetAsyncResultResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

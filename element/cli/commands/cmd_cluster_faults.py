@@ -43,5 +43,5 @@ def list(ctx, exceptions = None, best_practices = None, update = None, fault_typ
     """ListClusterFaults is used to retrieve information about any faults detected on the cluster."""
     """With this method, both current and resolved faults can be retrieved. The system caches faults every 30 seconds."""
     ListClusterFaultsResult = ctx.element.list_cluster_faults(exceptions=exceptions, best_practices=best_practices, update=update, fault_types=fault_types)
-    print(json.dumps(json.loads(jsonpickle.encode(ListClusterFaultsResult)),indent=4))
+    cli_utils.print_result(ListClusterFaultsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

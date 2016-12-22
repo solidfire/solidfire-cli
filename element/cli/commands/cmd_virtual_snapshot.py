@@ -42,5 +42,5 @@ def cli(ctx):
 def prepare(ctx, virtual_volume_id, name = None, writable_snapshot = None, calling_virtual_volume_host_id = None):
     """PrepareVirtualSnapshot is used to set up VMware Virtual Volume snapshot."""
     PrepareVirtualSnapshotResult = ctx.element.prepare_virtual_snapshot(virtual_volume_id=virtual_volume_id, name=name, writable_snapshot=writable_snapshot, calling_virtual_volume_host_id=calling_virtual_volume_host_id)
-    print(json.dumps(json.loads(jsonpickle.encode(PrepareVirtualSnapshotResult)),indent=4))
+    cli_utils.print_result(PrepareVirtualSnapshotResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

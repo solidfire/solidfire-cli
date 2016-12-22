@@ -27,5 +27,5 @@ def get(ctx):
     """The GetCompleteStats API method is used by SolidFire engineering to troubleshoot new features. The data returned from GetCompleteStats is not documented, changes frequently, and is not guaranteed to be accurate. It is not recommended to ever use GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster."""
     """The data returned from GetCompleteStats changes frequently, and is not guaranteed to accurately show performance from the system. It is not recommended to ever use GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster."""
     str = ctx.element.get_complete_stats()
-    print(json.dumps(json.loads(jsonpickle.encode(str)),indent=4))
+    cli_utils.print_result(str, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

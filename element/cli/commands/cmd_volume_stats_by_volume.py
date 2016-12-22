@@ -27,5 +27,5 @@ def list(ctx):
     """ListVolumeStatsByVolume returns high-level activity measurements for every volume, by volume."""
     """Values are cumulative from the creation of the volume."""
     ListVolumeStatsByVolumeResult = ctx.element.list_volume_stats_by_volume()
-    print(json.dumps(json.loads(jsonpickle.encode(ListVolumeStatsByVolumeResult)),indent=4))
+    cli_utils.print_result(ListVolumeStatsByVolumeResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

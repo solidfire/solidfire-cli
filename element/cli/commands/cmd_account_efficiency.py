@@ -30,5 +30,5 @@ def cli(ctx):
 def get(ctx, account_id):
     """GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity."""
     GetEfficiencyResult = ctx.element.get_account_efficiency(account_id=account_id)
-    print(json.dumps(json.loads(jsonpickle.encode(GetEfficiencyResult)),indent=4))
+    cli_utils.print_result(GetEfficiencyResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

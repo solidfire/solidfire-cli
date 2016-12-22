@@ -30,5 +30,5 @@ def cli(ctx):
 def remove(ctx, cluster_admin_id):
     """RemoveClusterAdmin is used to remove a Cluster Admin. The &quot;admin&quot; Cluster Admin cannot be removed."""
     RemoveClusterAdminResult = ctx.element.remove_cluster_admin(cluster_admin_id=cluster_admin_id)
-    print(json.dumps(json.loads(jsonpickle.encode(RemoveClusterAdminResult)),indent=4))
+    cli_utils.print_result(RemoveClusterAdminResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

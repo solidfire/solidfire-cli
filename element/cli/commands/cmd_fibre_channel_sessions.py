@@ -26,5 +26,5 @@ def cli(ctx):
 def list(ctx):
     """The ListFibreChannelSessions is used to return information about the active Fibre Channel sessions on a cluster."""
     ListFibreChannelSessionsResult = ctx.element.list_fibre_channel_sessions()
-    print(json.dumps(json.loads(jsonpickle.encode(ListFibreChannelSessionsResult)),indent=4))
+    cli_utils.print_result(ListFibreChannelSessionsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

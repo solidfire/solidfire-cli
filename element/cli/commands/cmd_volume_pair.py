@@ -32,5 +32,5 @@ def remove(ctx, volume_id):
     """When the volume pairing information is removed, data is no longer replicated to or from the volume."""
     """This method should be run on both the source and target volumes that are paired together."""
     RemoveVolumePairResult = ctx.element.remove_volume_pair(volume_id=volume_id)
-    print(json.dumps(json.loads(jsonpickle.encode(RemoveVolumePairResult)),indent=4))
+    cli_utils.print_result(RemoveVolumePairResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

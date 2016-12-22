@@ -30,5 +30,5 @@ def cli(ctx):
 def get(ctx, force):
     """GetIpmiInfo allows you to display a detailed reporting of sensors (objects) for node fans, intake and exhaust temperatures, and power supplies  that are monitored by . """
     GetIpmiInfoResult = ctx.element.get_ipmi_info(force=force)
-    print(json.dumps(json.loads(jsonpickle.encode(GetIpmiInfoResult)),indent=4))
+    cli_utils.print_result(GetIpmiInfoResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

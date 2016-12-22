@@ -30,5 +30,5 @@ def cli(ctx):
 def get(ctx, storage_container_id):
     """GetStorageContainerEfficiency enables you to retrieve efficiency information about a virtual volume storage container."""
     GetStorageContainerEfficiencyResult = ctx.element.get_storage_container_efficiency(storage_container_id=storage_container_id)
-    print(json.dumps(json.loads(jsonpickle.encode(GetStorageContainerEfficiencyResult)),indent=4))
+    cli_utils.print_result(GetStorageContainerEfficiencyResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

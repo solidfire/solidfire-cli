@@ -26,5 +26,5 @@ def cli(ctx):
 def get(ctx):
     """The GetLdapConfiguration is used to get the LDAP configuration currently active on the cluster."""
     GetLdapConfigurationResult = ctx.element.get_ldap_configuration()
-    print(json.dumps(json.loads(jsonpickle.encode(GetLdapConfigurationResult)),indent=4))
+    cli_utils.print_result(GetLdapConfigurationResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

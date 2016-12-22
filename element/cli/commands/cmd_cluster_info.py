@@ -26,5 +26,5 @@ def cli(ctx):
 def get(ctx):
     """Return configuration information about the cluster."""
     GetClusterInfoResult = ctx.element.get_cluster_info()
-    print(json.dumps(json.loads(jsonpickle.encode(GetClusterInfoResult)),indent=4))
+    cli_utils.print_result(GetClusterInfoResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

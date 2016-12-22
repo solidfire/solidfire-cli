@@ -214,9 +214,9 @@ def cli(ctx,
      # TODO(jdg): Use the client to query the cluster for the supported version
     ctx.sfapi_endpoint_version = 7
     ctx.element = ElementFactory.create(cfg["mvip"],cfg["login"],cfg["password"],port=cfg["port"])
-    ctx.json = None
-    ctx.depth = None
-    ctx.filter_tree = None
+    ctx.json = json
+    ctx.depth = depth
+    ctx.filter_tree = filter_tree
 
 if __name__ == '__main__':
     cli.main()

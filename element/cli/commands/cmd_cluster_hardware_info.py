@@ -30,5 +30,5 @@ def cli(ctx):
 def get(ctx, type = None):
     """You can use the GetClusterHardwareInfo method to retrieve the hardware status and information for all Fibre Channel nodes, iSCSI nodes and drives in the cluster. This generally includes manufacturers, vendors, versions, and other associated hardware identification information."""
     GetClusterHardwareInfoResult = ctx.element.get_cluster_hardware_info(type=type)
-    print(json.dumps(json.loads(jsonpickle.encode(GetClusterHardwareInfoResult)),indent=4))
+    cli_utils.print_result(GetClusterHardwareInfoResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

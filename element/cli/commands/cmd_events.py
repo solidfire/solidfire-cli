@@ -42,5 +42,5 @@ def cli(ctx):
 def list(ctx, max_events = None, start_event_id = None, end_event_id = None, event_queue_type = None):
     """ListEvents returns events detected on the cluster, sorted from oldest to newest."""
     ListEventsResult = ctx.element.list_events(max_events=max_events, start_event_id=start_event_id, end_event_id=end_event_id, event_queue_type=event_queue_type)
-    print(json.dumps(json.loads(jsonpickle.encode(ListEventsResult)),indent=4))
+    cli_utils.print_result(ListEventsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

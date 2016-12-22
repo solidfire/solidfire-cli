@@ -30,5 +30,5 @@ def cli(ctx):
 def list(ctx, virtual_volume_binding_ids = None):
     """ListVirtualVolumeBindings returns a list of VVol bindings."""
     ListVirtualVolumeBindingsResult = ctx.element.list_virtual_volume_bindings(virtual_volume_binding_ids=virtual_volume_binding_ids)
-    print(json.dumps(json.loads(jsonpickle.encode(ListVirtualVolumeBindingsResult)),indent=4))
+    cli_utils.print_result(ListVirtualVolumeBindingsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

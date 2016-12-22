@@ -34,5 +34,5 @@ def set(ctx, network):
     """&lt;br/&gt;&lt;br/&gt;"""
     """&lt;b&gt;Note&lt;/b&gt;: This method is available only through the per-node API endpoint 5.0 or later."""
     SetNetworkConfigResult = ctx.element.set_network_config(network=network)
-    print(json.dumps(json.loads(jsonpickle.encode(SetNetworkConfigResult)),indent=4))
+    cli_utils.print_result(SetNetworkConfigResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

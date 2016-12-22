@@ -26,5 +26,5 @@ def cli(ctx):
 def list(ctx):
     """List the services in the cluster."""
     ListServicesResult = ctx.element.list_services()
-    print(json.dumps(json.loads(jsonpickle.encode(ListServicesResult)),indent=4))
+    cli_utils.print_result(ListServicesResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

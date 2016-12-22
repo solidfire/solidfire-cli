@@ -50,5 +50,5 @@ def cli(ctx):
 def modify(ctx, volume_ids, account_id = None, access = None, qos = None, total_size = None, attributes = None):
     """ModifyVolumes allows you to configure up to 500 existing volumes at one time. Changes take place immediately. If ModifyVolumes fails to modify any of the specified volumes, none of the specified volumes are changed.If you do not specify QoS values when you modify volumes, the QoS values for each volume remain unchanged. You can retrieve default QoS values for a newly created volume by running the GetDefaultQoS method.When you need to increase the size of volumes that are being replicated, do so in the following order to prevent replication errors:Increase the size of the &quot;Replication Target&quot; volume.Increase the size of the source or &quot;Read / Write&quot; volume. recommends that both the target and source volumes be the same size.NOTE: If you change access status to locked or replicationTarget all existing iSCSI connections are terminated."""
     ModifyVolumesResult = ctx.element.modify_volumes(volume_ids=volume_ids, account_id=account_id, access=access, qos=qos, total_size=total_size, attributes=attributes)
-    print(json.dumps(json.loads(jsonpickle.encode(ModifyVolumesResult)),indent=4))
+    cli_utils.print_result(ModifyVolumesResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

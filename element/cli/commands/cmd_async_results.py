@@ -30,5 +30,5 @@ def cli(ctx):
 def list(ctx, async_result_types = None):
     """You can use ListAsyncResults to list the results of all currently running and completed asynchronous methods on the system. Querying asynchronous results with ListAsyncResults does not cause completed asyncHandles to expire; you can use GetAsyncResult to query any of the asyncHandles returned by ListAsyncResults."""
     ListAsyncResultsResult = ctx.element.list_async_results(async_result_types=async_result_types)
-    print(json.dumps(json.loads(jsonpickle.encode(ListAsyncResultsResult)),indent=4))
+    cli_utils.print_result(ListAsyncResultsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

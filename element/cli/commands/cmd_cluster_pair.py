@@ -31,5 +31,5 @@ def remove(ctx, cluster_pair_id):
     """You can use the RemoveClusterPair method to close the open connections between two paired clusters.&lt;br/&gt;"""
     """&lt;b&gt;Note&lt;/b&gt;: Before you remove a cluster pair, you must first remove all volume pairing to the clusters with the &quot;RemoveVolumePair&quot; API method."""
     RemoveClusterPairResult = ctx.element.remove_cluster_pair(cluster_pair_id=cluster_pair_id)
-    print(json.dumps(json.loads(jsonpickle.encode(RemoveClusterPairResult)),indent=4))
+    cli_utils.print_result(RemoveClusterPairResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

@@ -34,5 +34,5 @@ def cli(ctx):
 def add(ctx, volume_access_group_id, volumes):
     """Add volumes to a volume access group."""
     ModifyVolumeAccessGroupResult = ctx.element.add_volumes_to_volume_access_group(volume_access_group_id=volume_access_group_id, volumes=volumes)
-    print(json.dumps(json.loads(jsonpickle.encode(ModifyVolumeAccessGroupResult)),indent=4))
+    cli_utils.print_result(ModifyVolumeAccessGroupResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

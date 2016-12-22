@@ -26,5 +26,5 @@ def cli(ctx):
 def get(ctx):
     """GetVolumeCount enables you to retrieve the number of volumes currently in the system."""
     GetVolumeCountResult = ctx.element.get_volume_count()
-    print(json.dumps(json.loads(jsonpickle.encode(GetVolumeCountResult)),indent=4))
+    cli_utils.print_result(GetVolumeCountResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

@@ -38,5 +38,5 @@ def cli(ctx):
 def purge(ctx, volume_ids = None, account_ids = None, volume_access_group_ids = None):
     """PurgeDeletedVolumes immediately and permanently purges volumes that have been deleted; you can use this method to purge up to 500 volumes at one time. You must delete volumes using DeleteVolumes before they can be purged. Volumes are purged by the system automatically after a period of time, so usage of this method is not typically required."""
     PurgeDeletedVolumesResult = ctx.element.purge_deleted_volumes(volume_ids=volume_ids, account_ids=account_ids, volume_access_group_ids=volume_access_group_ids)
-    print(json.dumps(json.loads(jsonpickle.encode(PurgeDeletedVolumesResult)),indent=4))
+    cli_utils.print_result(PurgeDeletedVolumesResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

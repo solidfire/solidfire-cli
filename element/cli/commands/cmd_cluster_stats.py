@@ -26,5 +26,5 @@ def cli(ctx):
 def get(ctx):
     """GetClusterStats is used to return high-level activity measurements for the cluster. Values returned are cumulative from the creation of the cluster."""
     GetClusterStatsResult = ctx.element.get_cluster_stats()
-    print(json.dumps(json.loads(jsonpickle.encode(GetClusterStatsResult)),indent=4))
+    cli_utils.print_result(GetClusterStatsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

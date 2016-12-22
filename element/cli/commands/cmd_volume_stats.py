@@ -31,5 +31,5 @@ def get(ctx, volume_id):
     """GetVolumeStats is used to retrieve high-level activity measurements for a single volume."""
     """Values are cumulative from the creation of the volume."""
     GetVolumeStatsResult = ctx.element.get_volume_stats(volume_id=volume_id)
-    print(json.dumps(json.loads(jsonpickle.encode(GetVolumeStatsResult)),indent=4))
+    cli_utils.print_result(GetVolumeStatsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

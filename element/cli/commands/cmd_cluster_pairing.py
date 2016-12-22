@@ -28,5 +28,5 @@ def start(ctx):
     """The key created from this API method is used in the &quot;CompleteClusterPairing&quot; API method to establish a cluster pairing."""
     """You can pair a cluster with a maximum of four other SolidFire clusters."""
     StartClusterPairingResult = ctx.element.start_cluster_pairing()
-    print(json.dumps(json.loads(jsonpickle.encode(StartClusterPairingResult)),indent=4))
+    cli_utils.print_result(StartClusterPairingResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

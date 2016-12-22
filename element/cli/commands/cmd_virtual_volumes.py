@@ -46,5 +46,5 @@ def cli(ctx):
 def list(ctx, details = None, limit = None, recursive = None, start_virtual_volume_id = None, virtual_volume_ids = None):
     """ListVirtualVolumes enables you to list the virtual volumes currently in the system. You can use this method to list all virtual volumes, or only list a subset."""
     ListVirtualVolumesResult = ctx.element.list_virtual_volumes(details=details, limit=limit, recursive=recursive, start_virtual_volume_id=start_virtual_volume_id, virtual_volume_ids=virtual_volume_ids)
-    print(json.dumps(json.loads(jsonpickle.encode(ListVirtualVolumesResult)),indent=4))
+    cli_utils.print_result(ListVirtualVolumesResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

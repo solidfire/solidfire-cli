@@ -35,5 +35,5 @@ def list(ctx, start_volume_id = None, limit = None):
     """ListActiveVolumes is used to return the list of active volumes currently in the system."""
     """The list of volumes is returned sorted in VolumeID order and can be returned in multiple parts (pages)."""
     ListActiveVolumesResult = ctx.element.list_active_volumes(start_volume_id=start_volume_id, limit=limit)
-    print(json.dumps(json.loads(jsonpickle.encode(ListActiveVolumesResult)),indent=4))
+    cli_utils.print_result(ListActiveVolumesResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

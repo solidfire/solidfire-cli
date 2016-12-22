@@ -38,5 +38,5 @@ def cli(ctx):
 def list(ctx, account_id, start_volume_id = None, limit = None):
     """ListVolumesForAccount returns the list of active AND (pending) deleted volumes for an account."""
     ListVolumesForAccountResult = ctx.element.list_volumes_for_account(account_id=account_id, start_volume_id=start_volume_id, limit=limit)
-    print(json.dumps(json.loads(jsonpickle.encode(ListVolumesForAccountResult)),indent=4))
+    cli_utils.print_result(ListVolumesForAccountResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

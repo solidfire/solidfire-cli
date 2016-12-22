@@ -30,5 +30,5 @@ def cli(ctx):
 def get(ctx, drive_id):
     """GetDriveHardwareInfo returns all the hardware info for the given drive. This generally includes manufacturers, vendors, versions, and other associated hardware identification information."""
     GetDriveHardwareInfoResult = ctx.element.get_drive_hardware_info(drive_id=drive_id)
-    print(json.dumps(json.loads(jsonpickle.encode(GetDriveHardwareInfoResult)),indent=4))
+    cli_utils.print_result(GetDriveHardwareInfoResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

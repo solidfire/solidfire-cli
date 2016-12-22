@@ -44,5 +44,5 @@ def add(ctx, username, access, accept_eula = None, attributes = None):
     """&lt;br/&gt;&lt;br/&gt;"""
     """An LDAP group that has been defined in Active Directory can also be added using this API method. The access level that is given to the group will be passed to the individual users in the LDAP group."""
     AddLdapClusterAdminResult = ctx.element.add_ldap_cluster_admin(username=username, access=access, accept_eula=accept_eula, attributes=attributes)
-    print(json.dumps(json.loads(jsonpickle.encode(AddLdapClusterAdminResult)),indent=4))
+    cli_utils.print_result(AddLdapClusterAdminResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

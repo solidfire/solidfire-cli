@@ -32,5 +32,5 @@ def remove(ctx, nodes):
     """&lt;br/&gt;&lt;br/&gt;"""
     """Once removed, a node registers itself as a pending node and can be added again, or shut down which removes it from the &quot;Pending Node&quot; list."""
     RemoveNodesResult = ctx.element.remove_nodes(nodes=nodes)
-    print(json.dumps(json.loads(jsonpickle.encode(RemoveNodesResult)),indent=4))
+    cli_utils.print_result(RemoveNodesResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

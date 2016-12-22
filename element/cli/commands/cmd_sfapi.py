@@ -35,5 +35,5 @@ def invoke(ctx, method, parameters = None):
     """This will invoke any API method supported by the SolidFire API for the version and port the connection is using."""
     """Returns a nested hashtable of key/value pairs that contain the result of the invoked method."""
     str = ctx.element.invoke_sfapi(method=method, parameters=parameters)
-    print(json.dumps(json.loads(jsonpickle.encode(str)),indent=4))
+    cli_utils.print_result(str, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

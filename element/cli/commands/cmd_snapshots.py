@@ -30,5 +30,5 @@ def cli(ctx):
 def list(ctx, volume_id = None):
     """ListSnapshots is used to return the attributes of each snapshot taken on the volume."""
     ListSnapshotsResult = ctx.element.list_snapshots(volume_id=volume_id)
-    print(json.dumps(json.loads(jsonpickle.encode(ListSnapshotsResult)),indent=4))
+    cli_utils.print_result(ListSnapshotsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

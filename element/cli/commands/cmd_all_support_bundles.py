@@ -26,5 +26,5 @@ def cli(ctx):
 def delete(ctx):
     """DeleteAllSupportBundles is used to delete all support bundles generated with the CreateSupportBundle API method."""
     DeleteAllSupportBundlesResult = ctx.element.delete_all_support_bundles()
-    print(json.dumps(json.loads(jsonpickle.encode(DeleteAllSupportBundlesResult)),indent=4))
+    cli_utils.print_result(DeleteAllSupportBundlesResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

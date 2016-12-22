@@ -32,5 +32,5 @@ def list(ctx, protocol_endpoint_ids = None):
     """If protocolEndpointIDs isn't specified all protocol endpoints"""
     """are returned. Else the supplied protocolEndpointIDs are."""
     ListProtocolEndpointsResult = ctx.element.list_protocol_endpoints(protocol_endpoint_ids=protocol_endpoint_ids)
-    print(json.dumps(json.loads(jsonpickle.encode(ListProtocolEndpointsResult)),indent=4))
+    cli_utils.print_result(ListProtocolEndpointsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

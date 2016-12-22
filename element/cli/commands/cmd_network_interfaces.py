@@ -26,5 +26,5 @@ def cli(ctx):
 def list(ctx):
     """The ListNetworkInterfaces API method is used to return information about each network interface on a node. The API method is intended for use on individual nodes. """
     ListNetworkInterfacesResult = ctx.element.list_network_interfaces()
-    print(json.dumps(json.loads(jsonpickle.encode(ListNetworkInterfacesResult)),indent=4))
+    cli_utils.print_result(ListNetworkInterfacesResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

@@ -26,5 +26,5 @@ def cli(ctx):
 def list(ctx):
     """ListSchedule is used to return information about all scheduled snapshots that have been created."""
     ListSchedulesResult = ctx.element.list_schedules()
-    print(json.dumps(json.loads(jsonpickle.encode(ListSchedulesResult)),indent=4))
+    cli_utils.print_result(ListSchedulesResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

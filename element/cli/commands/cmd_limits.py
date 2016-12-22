@@ -26,5 +26,5 @@ def cli(ctx):
 def get(ctx):
     """GetLimits enables you to retrieve the limit values set by the API. These values might change between releases of  Element, but do not change without an update to the system. Knowing the limit values set by the API can be useful when writing API scripts for user-facing tools.NOTE: The GetLimits method returns the limits for the current software version regardless of the API endpoint version used to pass the method."""
     GetLimitsResult = ctx.element.get_limits()
-    print(json.dumps(json.loads(jsonpickle.encode(GetLimitsResult)),indent=4))
+    cli_utils.print_result(GetLimitsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

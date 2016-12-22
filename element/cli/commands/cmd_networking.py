@@ -30,5 +30,5 @@ def cli(ctx):
 def restart(ctx, force):
     """The RestartNetworking API method is used to restart the networking services on a node.WARNING! This method restarts all networking services on a node, causing temporary loss of networking connectivity. Exercise caution when using this method."""
     dict = ctx.element.restart_networking(force=force)
-    print(json.dumps(json.loads(jsonpickle.encode(dict)),indent=4))
+    cli_utils.print_result(dict, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

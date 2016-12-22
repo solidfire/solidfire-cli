@@ -27,5 +27,5 @@ def list(ctx):
     """ListVolumeStatsByAccount returns high-level activity measurements for every account."""
     """Values are summed from all the volumes owned by the account."""
     ListVolumeStatsByAccountResult = ctx.element.list_volume_stats_by_account()
-    print(json.dumps(json.loads(jsonpickle.encode(ListVolumeStatsByAccountResult)),indent=4))
+    cli_utils.print_result(ListVolumeStatsByAccountResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

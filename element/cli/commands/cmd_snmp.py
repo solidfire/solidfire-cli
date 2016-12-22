@@ -30,5 +30,5 @@ def cli(ctx):
 def enable(ctx, snmp_v3_enabled):
     """EnableSnmp is used to enable SNMP on the cluster nodes. The values set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to EnableSnmp."""
     EnableSnmpResult = ctx.element.enable_snmp(snmp_v3_enabled=snmp_v3_enabled)
-    print(json.dumps(json.loads(jsonpickle.encode(EnableSnmpResult)),indent=4))
+    cli_utils.print_result(EnableSnmpResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

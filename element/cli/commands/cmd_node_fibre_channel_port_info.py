@@ -26,5 +26,5 @@ def cli(ctx):
 def list(ctx):
     """The ListNodeFibreChannelPortInfo is used to return information about the Fibre Channel ports. The API method is intended for use on individual nodes; userid and password is required for access to individual Fibre Channel nodes."""
     ListNodeFibreChannelPortInfoResult = ctx.element.list_node_fibre_channel_port_info()
-    print(json.dumps(json.loads(jsonpickle.encode(ListNodeFibreChannelPortInfoResult)),indent=4))
+    cli_utils.print_result(ListNodeFibreChannelPortInfoResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

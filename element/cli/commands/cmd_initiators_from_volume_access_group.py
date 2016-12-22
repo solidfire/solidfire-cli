@@ -34,5 +34,5 @@ def cli(ctx):
 def remove(ctx, volume_access_group_id, initiators):
     """Remove initiators from a volume access group."""
     ModifyVolumeAccessGroupResult = ctx.element.remove_initiators_from_volume_access_group(volume_access_group_id=volume_access_group_id, initiators=initiators)
-    print(json.dumps(json.loads(jsonpickle.encode(ModifyVolumeAccessGroupResult)),indent=4))
+    cli_utils.print_result(ModifyVolumeAccessGroupResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

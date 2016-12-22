@@ -30,5 +30,5 @@ def cli(ctx):
 def enable(ctx, feature):
     """EnableFeature allows you to enable cluster features that are disabled by default."""
     EnableFeatureResult = ctx.element.enable_feature(feature=feature)
-    print(json.dumps(json.loads(jsonpickle.encode(EnableFeatureResult)),indent=4))
+    cli_utils.print_result(EnableFeatureResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

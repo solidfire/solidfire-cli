@@ -26,5 +26,5 @@ def cli(ctx):
 def list(ctx):
     """ListISCSISessions is used to return iSCSI connection information for volumes in the cluster."""
     ListISCSISessionsResult = ctx.element.list_iscsisessions()
-    print(json.dumps(json.loads(jsonpickle.encode(ListISCSISessionsResult)),indent=4))
+    cli_utils.print_result(ListISCSISessionsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

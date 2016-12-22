@@ -26,5 +26,5 @@ def cli(ctx):
 def list(ctx):
     """You can use ListBackupTargets to retrieve information about all backup targets that have been created."""
     ListBackupTargetsResult = ctx.element.list_backup_targets()
-    print(json.dumps(json.loads(jsonpickle.encode(ListBackupTargetsResult)),indent=4))
+    cli_utils.print_result(ListBackupTargetsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

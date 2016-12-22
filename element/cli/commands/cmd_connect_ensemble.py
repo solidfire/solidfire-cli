@@ -31,5 +31,5 @@ def test(ctx, ensemble = None):
     """The TestConnectEnsemble API method is used to verify connectivity with a sepcified database ensemble. By default it uses the ensemble for the cluster the node is associated with. Alternatively you can provide a different ensemble to test connectivity with."""
     """&lt;br/&gt;&lt;b&gt;Note&lt;/b&gt;: This method is available only through the per-node API endpoint 5.0 or later."""
     TestConnectEnsembleResult = ctx.element.test_connect_ensemble(ensemble=ensemble)
-    print(json.dumps(json.loads(jsonpickle.encode(TestConnectEnsembleResult)),indent=4))
+    cli_utils.print_result(TestConnectEnsembleResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

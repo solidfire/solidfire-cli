@@ -26,5 +26,5 @@ def cli(ctx):
 def get(ctx):
     """GetBootstrapConfig returns the cluster name and node name from the bootstrap configuration file. This API method should be performed on an individual node before it has been configured into a cluster. The resulting information from this method is used in the Cluster Configuration UI when the cluster is eventually created."""
     GetBootstrapConfigResult = ctx.element.get_bootstrap_config()
-    print(json.dumps(json.loads(jsonpickle.encode(GetBootstrapConfigResult)),indent=4))
+    cli_utils.print_result(GetBootstrapConfigResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

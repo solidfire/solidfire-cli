@@ -26,5 +26,5 @@ def cli(ctx):
 def list(ctx):
     """ListPendingActiveNodes returns the list of nodes in the cluster that are currently in the PendingActive state, between the pending and active states. These are nodes that are currently being returned to the factory image."""
     ListPendingActiveNodesResult = ctx.element.list_pending_active_nodes()
-    print(json.dumps(json.loads(jsonpickle.encode(ListPendingActiveNodesResult)),indent=4))
+    cli_utils.print_result(ListPendingActiveNodesResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

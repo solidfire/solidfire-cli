@@ -30,5 +30,5 @@ def cli(ctx):
 def modify(ctx, schedule):
     """ModifySchedule is used to change the intervals at which a scheduled snapshot occurs. This allows for adjustment to the snapshot frequency and retention.&lt;br/&gt;"""
     ModifyScheduleResult = ctx.element.modify_schedule(schedule=schedule)
-    print(json.dumps(json.loads(jsonpickle.encode(ModifyScheduleResult)),indent=4))
+    cli_utils.print_result(ModifyScheduleResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

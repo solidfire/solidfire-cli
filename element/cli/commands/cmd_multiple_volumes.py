@@ -45,5 +45,5 @@ def clone(ctx, volumes, access = None, group_snapshot_id = None, new_account_id 
     """&lt;br/&gt;&lt;br/&gt;"""
     """&lt;b&gt;Note&lt;/b&gt;: Cloning multiple volumes is allowed if cluster fullness is at stage 2 or 3. Clones are not created when cluster fullness is at stage 4 or 5."""
     CloneMultipleVolumesResult = ctx.element.clone_multiple_volumes(volumes=volumes, access=access, group_snapshot_id=group_snapshot_id, new_account_id=new_account_id)
-    print(json.dumps(json.loads(jsonpickle.encode(CloneMultipleVolumesResult)),indent=4))
+    cli_utils.print_result(CloneMultipleVolumesResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

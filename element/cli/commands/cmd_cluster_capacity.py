@@ -27,5 +27,5 @@ def get(ctx):
     """Return the high-level capacity measurements for an entire cluster."""
     """The fields returned from this method can be used to calculate the efficiency rates that are displayed in the Element User Interface."""
     GetClusterCapacityResult = ctx.element.get_cluster_capacity()
-    print(json.dumps(json.loads(jsonpickle.encode(GetClusterCapacityResult)),indent=4))
+    cli_utils.print_result(GetClusterCapacityResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

@@ -30,5 +30,5 @@ def cli(ctx):
 def remove(ctx, backup_target_id):
     """RemoveBackupTarget allows you to delete backup targets."""
     RemoveBackupTargetResult = ctx.element.remove_backup_target(backup_target_id=backup_target_id)
-    print(json.dumps(json.loads(jsonpickle.encode(RemoveBackupTargetResult)),indent=4))
+    cli_utils.print_result(RemoveBackupTargetResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

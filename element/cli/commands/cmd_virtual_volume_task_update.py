@@ -34,5 +34,5 @@ def cli(ctx):
 def get(ctx, virtual_volume_task_id, calling_virtual_volume_host_id = None):
     """GetVirtualVolumeTaskUpdate checks the status of a VVol Async Task."""
     VirtualVolumeTaskResult = ctx.element.get_virtual_volume_task_update(virtual_volume_task_id=virtual_volume_task_id, calling_virtual_volume_host_id=calling_virtual_volume_host_id)
-    print(json.dumps(json.loads(jsonpickle.encode(VirtualVolumeTaskResult)),indent=4))
+    cli_utils.print_result(VirtualVolumeTaskResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

@@ -46,5 +46,5 @@ def cli(ctx):
 def update(ctx, key, status, percent_complete = None, message = None, attributes = None):
     """You can use UpdateBulkVolumeStatus in a script to return to the SolidFire system the status of a bulk volume job that you have started with the &quot;StartBulkVolumeRead&quot; or &quot;StartBulkVolumeWrite&quot; methods."""
     UpdateBulkVolumeStatusResult = ctx.element.update_bulk_volume_status(key=key, status=status, percent_complete=percent_complete, message=message, attributes=attributes)
-    print(json.dumps(json.loads(jsonpickle.encode(UpdateBulkVolumeStatusResult)),indent=4))
+    cli_utils.print_result(UpdateBulkVolumeStatusResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
