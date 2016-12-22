@@ -35,6 +35,10 @@ class Context(object):
         self.home = os.getcwd()
         self.connections = dict()
         self.element = None
+        self.depth = None
+        self.json = None
+        self.filter_tree = None
+        self.table = None
 
     def log(self, msg, *args):
         """Logs a message to stderr."""
@@ -100,6 +104,18 @@ class SolidFireCLI(click.MultiCommand):
               default=None,
               type=click.INT,
               help="Use this if you want to use and remove a connection stored away in connections.csv.")
+@click.option('--json', '-j',
+              is_flag=True,
+              required=False,
+              help="To print the full output in json format, use this flag")
+@click.option('--depth', '-d',
+              type=int,
+              required=False,
+              help="To print the output as a tree and specify the depth, use this option.")
+@click.option('--filter_tree', '-f',
+              required=False,
+              type=click.STRING,
+              help="To filter the fields that will be displayed in a tree, use this parameter. Supply fields in a comma separated list of keypaths. For example, to filter accounts list, if I wanted only the username and status, I could supply 'accounts.username,accounts.status'.")
 @click.option('--format',
               default=DEFAULT_FORMAT,
               help="Output format",
@@ -127,6 +143,9 @@ def cli(ctx,
         useconnection=None,
         pushconnection=False,
         popconnection=None,
+        json=None,
+        depth=None,
+        filter_tree=None,
         format='table',
         timings=False,
         debug=0,
@@ -195,6 +214,9 @@ def cli(ctx,
      # TODO(jdg): Use the client to query the cluster for the supported version
     ctx.sfapi_endpoint_version = 7
     ctx.element = ElementFactory.create(cfg["mvip"],cfg["login"],cfg["password"],port=cfg["port"])
+    ctx.json = None
+    ctx.depth = None
+    ctx.filter_tree = None
 
 if __name__ == '__main__':
     cli.main()

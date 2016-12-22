@@ -1,4 +1,7 @@
 import prettytable
+from element.exceptions import *
+import jsonpickle
+import json as serializer
 
 import six
 
@@ -17,22 +20,36 @@ def kv_string_to_dict(kv_string):
         kvs = item.split('=')
         new_dict[kvs[0]] = kvs[1]
 
-def print_result(objs, depth=None, fields=None, json=False):
-    # If a depth is provided, we print it as a tree:
-    if depth is not None:
-        print_result_as_tree(objs, depth)
+def print_result(objs, as_json=False, depth=None, filter_tree=None):
+    # There are 3 acceptable parameter sets to provide:
+    # 1. json=True, depth=None, filter_tree=None
+    # 2. json=False, depth=#, filter_tree=None
+    # 3. json=False, depth=#, filter_tree=acceptable string
+
+    # Error case
+    if as_json and (depth is not None or filter_tree is not None):
+        raise SolidFireUsageException("If you choose to print it as json, do not provide a depth or filter. Those are for printing it as a tree.")
+
+    # If json is true, we print it as json and return:
+    if as_json == True:
+        print_result_as_json(objs)
         return
 
-    # If json is true, we print it as json:
-    if json == True:
-        print_result_as_json(objs)
+    # If we have a filter, apply it.
+    if filter_tree is not None:
+        objs_to_print = filter_objects_from_simple_keypaths(objs, filter_tree.split(','))
+    else:
+        objs_to_print = objs
 
-    # If fields are provided, we print it as a table
-    if fields is not None:
-        print_result(objs)
+    # Set up a default depth
+    if depth is None:
+        depth = 3
+
+    # Next, print the tree to the appropriate depth
+    print_result_as_tree(objs_to_print, depth)
 
 def print_result_as_json(objs):
-    print(json.dumps(json.loads(jsonpickle.encode(ListAccountsResult)),indent=4))
+    print(serializer.dumps(serializer.loads(jsonpickle.encode(objs)),indent=4))
 
 def get_result_as_tree(objs, depth=1, currentDepth=0, lastKey = ""):
     stringToReturn = ""
@@ -120,7 +137,6 @@ def filter_objects(objs, keyPaths):
 
 def print_result_as_table(objs, keyPaths):
     filteredDictionary = filter_objects(objs, keyPaths)
-
 
 def print_result_as_tree(objs, depth=1):
     print(get_result_as_tree(objs, depth))

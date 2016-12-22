@@ -12,8 +12,6 @@ from element.cli import utils as cli_utils
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
-import jsonpickle
-import json as serializer
 
 @click.group()
 @pass_context
@@ -22,18 +20,6 @@ def cli(ctx):
     ctx.sfapi = ctx.client
 
 @cli.command('list', short_help="ListAccounts")
-@click.option('--json', '-j',
-              is_flag=True,
-              required=False,
-              help="To print the full output in json format, use this flag")
-@click.option('--depth', '-d',
-              type=int,
-              required=False,
-              help="To print the output as a tree and specify the depth, use this option.")
-@click.option('--table', '-t',
-              required=False,
-              type=click.STRING,
-              help="A comma separated list of the keys you wish to include in the table.")
 @click.option('--start_account_id',
               type=int,
               required=False,
@@ -51,6 +37,7 @@ def list(ctx, start_account_id = None, limit = None, json=None, depth=None, tabl
     #keyPaths = {"accounts":{"username": True, "status": True}}
     #cli_utils.print_result_as_tree(cli_utils.filter_objects(ListAccountsResult, keyPaths), depth=10)
 
-    cli_utils.print_result_as_tree(cli_utils.filter_objects_from_simple_keypaths(ListAccountsResult, ["accounts.username", "accounts.status"]), depth=10)
+    #cli_utils.print_result_as_tree(cli_utils.filter_objects_from_simple_keypaths(ListAccountsResult, ["accounts.username", "accounts.status"]), depth=10)
+    cli_utils.print_result(ListAccountsResult, as_json=False, depth=10, filter_tree="accounts.account_id,accounts.username")
     #print(table)
 
