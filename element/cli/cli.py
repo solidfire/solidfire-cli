@@ -19,9 +19,6 @@ DEBUG_LOGGING_MAP = {
     2: logging.INFO,
     3: logging.DEBUG
 }
-
-VALID_FORMATS = ['table', 'raw', 'json']
-DEFAULT_FORMAT = 'raw'
 CLI_VERSION = 'v1'
 
 if sys.stdout.isatty():
@@ -92,15 +89,24 @@ class SolidFireCLI(click.MultiCommand):
               default=None,
               help="SolidFire cluster password",
               required=False)
-@click.option('--useConnection', '-c',
+@click.option('--name',
+              default = None,
+              help="The connection name for later reference (-n)",
+              required=False)
+@click.option('--connectionIndex', '-c',
               default=None,
               type=click.INT,
               help="The index of the connection you wish to use in connections.csv. You can use this if you have previously stored away a connection.",
               required=False)
-@click.option('--pushConnection',
+@click.option('--connectionName', '-n',
+              default=None,
+              type=click.STRING,
+              help="The name of the connection you wish to use in connections.csv. You can use this if you have previously stored away a connection.",
+              required=False)
+@click.option('--pushconnection',
               is_flag=True,
               help="Use this if you've provided a mvip, login, and password and you'd like to store the config so you can access it later.")
-@click.option('--popConnection',
+@click.option('--popconnection',
               default=None,
               type=click.INT,
               help="Use this if you want to use and remove a connection stored away in connections.csv.")
@@ -116,10 +122,6 @@ class SolidFireCLI(click.MultiCommand):
               required=False,
               type=click.STRING,
               help="To filter the fields that will be displayed in a tree, use this parameter. Supply fields in a comma separated list of keypaths. For example, to filter accounts list, if I wanted only the username and status, I could supply 'accounts.username,accounts.status'.")
-@click.option('--format',
-              default=DEFAULT_FORMAT,
-              help="Output format",
-              type=click.Choice(VALID_FORMATS))
 @click.option('--debug',
               required=False,
               default=None,
@@ -130,24 +132,19 @@ class SolidFireCLI(click.MultiCommand):
               help="Provide extra output info",
               type=click.IntRange(0, 3, clamp=True),
               count=True)
-@click.option('--timings',
-              required=False,
-              is_flag=True,
-              help="Time each API call and display after results")
 @pass_context
 def cli(ctx,
         mvip=None,
         login=None,
         password=None,
-        store=False,
-        useconnection=None,
+        name=None,
+        connectionindex=None,
+        connectionname=None,
         pushconnection=False,
         popconnection=None,
         json=None,
         depth=None,
         filter_tree=None,
-        format='table',
-        timings=False,
         debug=0,
         verbose=0):
     """SolidFire command line interface."""
@@ -169,10 +166,11 @@ def cli(ctx,
         connections = list(csv.DictReader(connectionFile, delimiter=','))
 
     # Arguments take precedence regardless of env settings
-    if mvip and login and password:
+    if mvip and login and password and name:
         cfg = {'mvip': mvip,
                'login': login,
                'password': password,
+               'name': name,
                'port': 443,
                'url': 'https://%s:%s' % (mvip, 443)}
         # If we want to push the connection, we put the new cfg on the end.
@@ -184,14 +182,21 @@ def cli(ctx,
     elif mvip or login or password:
         raise exceptions.SolidFireConnectionException("In order to manually connect, please provide mvip, login, AND password")
     else:
-        if(popconnection is not None and useconnection is not None):
-            raise exceptions.SolidFireUsageException("You cannot provide both pop_connection and use_connection parameters. Pick one.")
+        if(popconnection is not None and (connectionindex is not None or connectionname is not None)):
+            raise exceptions.SolidFireUsageException("You cannot provide both pop_connection and a connection specification parameter. Pick one.")
         elif(popconnection is not None):
             cfg = connections[popconnection]
             del connections[popconnection]
             connections_dirty = True
-        elif(useconnection is not None):
-            cfg = connections[useconnection]
+        elif(connectionindex is not None):
+            cfg = connections[connectionindex]
+        elif(connectionname is not None):
+            filteredCfg = [connection for connection in connections if connection["name"] == connectionname]
+            if(len(filteredCfg) > 1):
+                raise exceptions.SolidFireUsageException("Your connections.csv file has become corrupted. There are two connections of the same name.")
+            if(len(filteredCfg) < 1):
+                raise exceptions.SolidFireUsageException("Could not find a connection named "+connectionname)
+            cfg = filteredCfg[0]
         else:
             raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
         cfg["port"] = int(cfg["port"])
@@ -202,12 +207,11 @@ def cli(ctx,
     # If the connections are dirty and we were able to create the element, we need to rewrite our connections file.
     if connections_dirty:
         with open(connectionsCsvLocation, 'w') as f:
-            w = csv.DictWriter(f, ["mvip","port","login","password","url"], lineterminator='\n')
+            w = csv.DictWriter(f, ["name","mvip","port","login","password","url"], lineterminator='\n')
             w.writeheader()
             for connection in connections:
                 if connection is not None:
                     w.writerow(connection)
-
 
     ctx.client = api.SolidFireAPI(endpoint_dict=cfg)
 
@@ -217,6 +221,7 @@ def cli(ctx,
     ctx.json = json
     ctx.depth = depth
     ctx.filter_tree = filter_tree
+    print(type(ctx))
 
 if __name__ == '__main__':
     cli.main()
