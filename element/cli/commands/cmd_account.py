@@ -9,28 +9,187 @@
 import click
 
 from element.cli import utils as cli_utils
+from element.cli import parser
 from element.cli.cli import pass_context
 from element.solidfire_element_api import SolidFireRequestException
 from element import utils
 import jsonpickle
-import json
+import simplejson
+from solidfire.models import CHAPSecret
+from solidfire.models import CHAPSecret
+from solidfire.models import CHAPSecret
+from solidfire.models import CHAPSecret
+from uuid import UUID
+
 
 @click.group()
 @pass_context
 def cli(ctx):
-    """Account methods."""
+    """AddAccount GetAccountByID GetAccountByName GetAccountEfficiency ListAccounts ModifyAccount RemoveAccount """
     ctx.sfapi = ctx.client
 
-@cli.command('remove', short_help="RemoveAccount")
+@cli.command('AddAccount', short_help="AddAccount")
+@click.option('--username',
+              type=str,
+              required=True,
+              help="""Unique username for this account. (May be 1 to 64 characters in length). """)
+@click.option('--attributes',
+              type=dict,
+              required=False,
+              help="""List of Name/Value pairs in JSON object format. """)
+@pass_context
+def AddAccount(ctx,
+           username,
+           attributes = None):
+    """Used to add a new account to the system."""
+    """New volumes can be created under the new account."""
+    """The CHAP settings specified for the account applies to all volumes owned by the account."""
+
+
+
+    kwargsDict = dict()
+
+    initiator_secret = CHAPSecret(**kwargsDict)
+
+    kwargsDict = dict()
+
+    target_secret = CHAPSecret(**kwargsDict)
+
+    AddAccountResult = ctx.element.add_account(username=username, initiator_secret=initiator_secret, target_secret=target_secret, attributes=attributes)
+    cli_utils.print_result(AddAccountResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetAccountByID', short_help="GetAccountByID")
 @click.option('--account_id',
               type=int,
               required=True,
-              help="AccountID for the account to remove. ")
+              help="""Specifies the account for which details are gathered. """)
 @pass_context
-def remove(ctx, account_id):
+def GetAccountByID(ctx,
+           account_id):
+    """Returns details about an account, given its AccountID."""
+
+
+
+    GetAccountResult = ctx.element.get_account_by_id(account_id=account_id)
+    cli_utils.print_result(GetAccountResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetAccountByName', short_help="GetAccountByName")
+@click.option('--username',
+              type=str,
+              required=True,
+              help="""Username for the account. """)
+@pass_context
+def GetAccountByName(ctx,
+           username):
+    """Returns details about an account, given its Username."""
+
+
+
+    GetAccountResult = ctx.element.get_account_by_name(username=username)
+    cli_utils.print_result(GetAccountResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetAccountEfficiency', short_help="GetAccountEfficiency")
+@click.option('--account_id',
+              type=int,
+              required=True,
+              help="""Specifies the volume account for which capacity is computed. """)
+@pass_context
+def GetAccountEfficiency(ctx,
+           account_id):
+    """GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity."""
+
+
+
+    GetEfficiencyResult = ctx.element.get_account_efficiency(account_id=account_id)
+    cli_utils.print_result(GetEfficiencyResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('ListAccounts', short_help="ListAccounts")
+@click.option('--start_account_id',
+              type=int,
+              required=False,
+              help="""Starting AccountID to return. If no Account exists with this AccountID, the next Account by AccountID order is used as the start of the list. To page through the list, pass the AccountID of the last Account in the previous response + 1 """)
+@click.option('--limit',
+              type=int,
+              required=False,
+              help="""Maximum number of AccountInfo objects to return. """)
+@pass_context
+def ListAccounts(ctx,
+           start_account_id = None,
+           limit = None):
+    """Returns the entire list of accounts, with optional paging support."""
+
+
+
+    ListAccountsResult = ctx.element.list_accounts(start_account_id=start_account_id, limit=limit)
+    cli_utils.print_result(ListAccountsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('ModifyAccount', short_help="ModifyAccount")
+@click.option('--account_id',
+              type=int,
+              required=True,
+              help="""AccountID for the account to modify. """)
+@click.option('--username',
+              type=str,
+              required=False,
+              help="""Change the username of the account to this value. """)
+@click.option('--status',
+              type=str,
+              required=False,
+              help="""Status of the account. """)
+@click.option('--attributes',
+              type=dict,
+              required=False,
+              help="""List of Name/Value pairs in JSON object format. """)
+@pass_context
+def ModifyAccount(ctx,
+           account_id,
+           username = None,
+           status = None,
+           attributes = None):
+    """Used to modify an existing account."""
+    """When locking an account, any existing connections from that account are immediately terminated."""
+    """When changing CHAP settings, any existing connections continue to be active,"""
+    """and the new CHAP values are only used on subsequent connection or reconnection."""
+
+
+
+    kwargsDict = dict()
+
+    initiator_secret = CHAPSecret(**kwargsDict)
+
+    kwargsDict = dict()
+
+    target_secret = CHAPSecret(**kwargsDict)
+
+    ModifyAccountResult = ctx.element.modify_account(account_id=account_id, username=username, status=status, initiator_secret=initiator_secret, target_secret=target_secret, attributes=attributes)
+    cli_utils.print_result(ModifyAccountResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('RemoveAccount', short_help="RemoveAccount")
+@click.option('--account_id',
+              type=int,
+              required=True,
+              help="""AccountID for the account to remove. """)
+@pass_context
+def RemoveAccount(ctx,
+           account_id):
     """Used to remove an existing account."""
     """All Volumes must be deleted and purged on the account before it can be removed."""
     """If volumes on the account are still pending deletion, RemoveAccount cannot be used until DeleteVolume to delete and purge the volumes."""
+
+
+
     RemoveAccountResult = ctx.element.remove_account(account_id=account_id)
     cli_utils.print_result(RemoveAccountResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

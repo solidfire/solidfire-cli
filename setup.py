@@ -37,6 +37,7 @@ setup(
         'prompt_toolkit',
 		'future',
 		'setuptools',
+        'simplejson',
         'jsonpickle >= 0.9.3',
     ],
     tests_require=[
