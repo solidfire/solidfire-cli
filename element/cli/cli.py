@@ -103,9 +103,6 @@ class SolidFireCLI(click.MultiCommand):
               type=click.STRING,
               help="The name of the connection you wish to use in connections.csv. You can use this if you have previously stored away a connection.",
               required=False)
-@click.option('--pushconnection',
-              is_flag=True,
-              help="Use this if you've provided a mvip, login, and password and you'd like to store the config so you can access it later.")
 @click.option('--popconnection',
               default=None,
               type=click.INT,
@@ -140,7 +137,6 @@ def cli(ctx,
         name=None,
         connectionindex=None,
         connectionname=None,
-        pushconnection=False,
         popconnection=None,
         json=None,
         depth=None,
@@ -167,17 +163,13 @@ def cli(ctx,
         connections = list(csv.DictReader(connectionFile, delimiter=','))
 
     # Arguments take precedence regardless of env settings
-    if mvip and login and password and name:
+    if mvip and login and password:
         cfg = {'mvip': mvip,
                'login': login,
                'password': password,
                'name': name,
                'port': 443,
                'url': 'https://%s:%s' % (mvip, 443)}
-        # If we want to push the connection, we put the new cfg on the end.
-        if(pushconnection):
-            connections = connections + [cfg]
-            connections_dirty = True
         ctx.element = ElementFactory.create(cfg["mvip"],cfg["login"],cfg["password"],port=cfg["port"])
     # If someone accidentally passed in an argument, but didn't specify everything, throw an error.
     elif mvip or login or password:
@@ -217,6 +209,7 @@ def cli(ctx,
          # TODO(jdg): Use the client to query the cluster for the supported version
         ctx.sfapi_endpoint_version = 7
         ctx.element = ElementFactory.create(cfg["mvip"],cfg["login"],cfg["password"],port=cfg["port"])
+        ctx.cfg = cfg
         ctx.json = json
         ctx.depth = depth
         ctx.filter_tree = filter_tree
