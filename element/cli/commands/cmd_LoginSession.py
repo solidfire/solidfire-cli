@@ -17,18 +17,20 @@ import jsonpickle
 import simplejson
 from solidfire.models import LoggingServer
 from uuid import UUID
+from element import exceptions
 
 
 @click.group()
 @pass_context
 def cli(ctx):
     """GetLoginSessionInfo GetRemoteLoggingHosts SetLoginSessionInfo SetRemoteLoggingHosts """
-    ctx.sfapi = ctx.client
 
 @cli.command('GetLoginSessionInfo', short_help="GetLoginSessionInfo")
 @pass_context
 def GetLoginSessionInfo(ctx):
     """GetLoginSessionInfo is used to return the period of time a log in authentication is valid for both log in shells and the TUI."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -41,6 +43,8 @@ def GetLoginSessionInfo(ctx):
 @pass_context
 def GetRemoteLoggingHosts(ctx):
     """GetRemoteLoggingHosts is used to retrieve the current list of log servers."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -58,6 +62,8 @@ def GetRemoteLoggingHosts(ctx):
 def SetLoginSessionInfo(ctx,
            timeout):
     """SetLoginSessionInfo is used to set the period of time a log in authentication is valid. After the log in period elapses without activity on the system the authentication will expire. New log in credentials will be required for continued access to the cluster once the timeout period has elapsed."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -80,6 +86,8 @@ def SetRemoteLoggingHosts(ctx,
            logging_server_host,
            logging_server_port):
     """RemoteLoggingHosts is used to configure remote logging from the nodes in the storage cluster to a centralized log server or servers. Remote logging is performed over TCP using the default port 514. This API does not add to the existing logging hosts. Rather, it replaces what currently exists with new values specified by this API method. You can use the GetRemoteLoggingHosts to determine what the current logging hosts are and then use the SetRemoteLoggingHosts to set the desired list of current and new logging hosts."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 

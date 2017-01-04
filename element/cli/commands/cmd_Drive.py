@@ -17,13 +17,13 @@ import jsonpickle
 import simplejson
 from solidfire.models import NewDrive
 from uuid import UUID
+from element import exceptions
 
 
 @click.group()
 @pass_context
 def cli(ctx):
     """AddDrives GetDriveConfig GetDriveHardwareInfo GetDriveStats ListDriveHardware ListDrives RemoveDrives ResetDrives SecureEraseDrives TestDrives """
-    ctx.sfapi = ctx.client
 
 @cli.command('AddDrives', short_help="AddDrives")
 @click.option('--new_drive_drive_id',
@@ -43,6 +43,8 @@ def AddDrives(ctx,
     """&lt;br/&gt;&lt;br/&gt;"""
     """The method returns immediately. However, it may take some time for the data in the cluster to be rebalanced using the newly added drives."""
     """As the new drive(s) are syncing on the system, you can use the &quot;ListSyncJobs&quot; method to see how the drive(s) are being rebalanced and the progress of adding the new drive."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -64,6 +66,8 @@ def GetDriveConfig(ctx):
     """GetDriveConfig is used to display drive information for expected slice and block drive counts as well as the number of slices and block drives that are currently connected to the node."""
     """&lt;br/&gt;&lt;br/&gt;"""
     """&lt;b&gt;Note&lt;/b&gt;: This method is available only through the per-node API endpoint 5.0 or later."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -81,6 +85,8 @@ def GetDriveConfig(ctx):
 def GetDriveHardwareInfo(ctx,
            drive_id):
     """GetDriveHardwareInfo returns all the hardware info for the given drive. This generally includes manufacturers, vendors, versions, and other associated hardware identification information."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -99,6 +105,8 @@ def GetDriveStats(ctx,
            drive_id):
     """GetDriveStats return high-level activity measurements for a single drive. Values are cumulative from the addition of the drive to the cluster. Some values are specific to Block Drives. Statistical data may not be returned for both block and metadata drives when running this method."""
     """For more information on which drive type returns which data, see Response Example (Block Drive) and Response Example (Volume Metadata Drive) in the SolidFire API guide."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -116,6 +124,8 @@ def GetDriveStats(ctx,
 def ListDriveHardware(ctx,
            force):
     """ListDriveHardware returns all the drives connected to a node. Use this method on the cluster to return drive hardware information for all the drives on all nodes."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -129,6 +139,8 @@ def ListDriveHardware(ctx,
 def ListDrives(ctx):
     """ListDrives allows you to retrieve the list of the drives that exist in the cluster's active nodes."""
     """This method returns drives that have been added as volume metadata or block drives as well as drives that have not been added and are available."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -159,6 +171,8 @@ def RemoveDrives(ctx,
     """The drive is unavailable for use in the cluster."""
     """&lt;br/&gt;&lt;br/&gt;"""
     """Use the &quot;ListDrives&quot; method to obtain the driveIDs for the drives you want to remove."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -185,6 +199,8 @@ def ResetDrives(ctx,
     """ResetDrives is used to pro-actively initialize drives and remove all data currently residing on the drive. The drive can then be reused in an existing node or used in an upgraded SolidFire node. This method requires the force=true parameter to be included in the method call."""
     """&lt;br/&gt;&lt;br/&gt;"""
     """&lt;b&gt;Note&lt;/b&gt;: This method is available only through the per-node API endpoint 5.0 or later."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -206,6 +222,8 @@ def SecureEraseDrives(ctx,
     """The GetAsyncResult method can be used to check on the status of the secure erase operation."""
     """&lt;br/&gt;&lt;br/&gt;"""
     """Use the &quot;ListDrives&quot; method to obtain the driveIDs for the drives you want to secure erase."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -229,6 +247,8 @@ def TestDrives(ctx,
     """&lt;b&gt;Note&lt;/b&gt;: This test takes approximately 10 minutes."""
     """&lt;br/&gt;&lt;br/&gt;"""
     """&lt;b&gt;Note&lt;/b&gt;: This method is available only through the per-node API endpoint 5.0 or later."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 

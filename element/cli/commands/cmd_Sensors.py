@@ -16,13 +16,13 @@ from element import utils
 import jsonpickle
 import simplejson
 from uuid import UUID
+from element import exceptions
 
 
 @click.group()
 @pass_context
 def cli(ctx):
     """GetIpmiConfig GetIpmiInfo """
-    ctx.sfapi = ctx.client
 
 @cli.command('GetIpmiConfig', short_help="GetIpmiConfig")
 @click.option('--chassis_type',
@@ -38,6 +38,8 @@ def GetIpmiConfig(ctx,
            force,
            chassis_type = None):
     """GetIpmiConfig enables you to retrieve hardware sensor information from sensors that are in your node."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -55,6 +57,8 @@ def GetIpmiConfig(ctx,
 def GetIpmiInfo(ctx,
            force):
     """GetIpmiInfo allows you to display a detailed reporting of sensors (objects) for node fans, intake and exhaust temperatures, and power supplies  that are monitored by . """
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 

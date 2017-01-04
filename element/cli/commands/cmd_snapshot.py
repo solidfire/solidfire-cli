@@ -18,13 +18,13 @@ import simplejson
 from solidfire.models import Schedule
 from solidfire.models import Schedule
 from uuid import UUID
+from element import exceptions
 
 
 @click.group()
 @pass_context
 def cli(ctx):
     """CreateGroupSnapshot CreateSchedule CreateSnapshot DeleteGroupSnapshot DeleteSnapshot GetSchedule ListGroupSnapshots ListSchedules ListSnapshots ModifyGroupSnapshot ModifySchedule ModifySnapshot RollbackToGroupSnapshot RollbackToSnapshot """
-    ctx.sfapi = ctx.client
 
 @cli.command('CreateGroupSnapshot', short_help="CreateGroupSnapshot")
 @click.option('--volumes',
@@ -59,6 +59,8 @@ def CreateGroupSnapshot(ctx,
     """&lt;br/&gt;&lt;br/&gt;"""
     """&lt;b&gt;Note&lt;/b&gt;: Creating a group snapshot is allowed if cluster fullness is at stage 2 or 3."""
     """Snapshots are not created when cluster fullness is at stage 4 or 5."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -82,6 +84,8 @@ def CreateSchedule(ctx,
     """The snapshot created can be used later as a backup or rollback to ensure the data on a volume or group of volumes is consistent for the point in time in which the snapshot was created. &lt;br/&gt;"""
     """&lt;br/&gt;"""
     """&lt;b&gt;Note&lt;/b&gt;: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
     kwargsDict = simplejson.loads(schedule)
     schedule = Schedule(**kwargsDict)
@@ -129,6 +133,8 @@ def CreateSnapshot(ctx,
     """&lt;br/&gt;&lt;br/&gt;"""
     """&lt;b&gt;Note&lt;/b&gt;: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3."""
     """Snapshots are not created when cluster fullness is at stage 4 or 5."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -153,6 +159,8 @@ def DeleteGroupSnapshot(ctx,
     """DeleteGroupSnapshot is used to delete a group snapshot."""
     """The saveMembers parameter can be used to preserve all the snapshots that"""
     """were made for the volumes in the group but the group association will be removed."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -173,6 +181,8 @@ def DeleteSnapshot(ctx,
     """A snapshot that is currently the &quot;active&quot; snapshot cannot be deleted."""
     """You must rollback and make another snapshot &quot;active&quot; before the current snapshot can be deleted."""
     """To rollback a snapshot, use RollbackToSnapshot."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -190,6 +200,8 @@ def DeleteSnapshot(ctx,
 def GetSchedule(ctx,
            schedule_id):
     """GetSchedule is used to return information about a scheduled snapshot that has been created. You can see information about a specified schedule if there are many snapshot schedules in the system. You can include more than one schedule with this method by specifying additional scheduleIDs to the parameter."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -207,6 +219,8 @@ def GetSchedule(ctx,
 def ListGroupSnapshots(ctx,
            volume_id = None):
     """ListGroupSnapshots is used to return information about all group snapshots that have been created."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -219,6 +233,8 @@ def ListGroupSnapshots(ctx,
 @pass_context
 def ListSchedules(ctx):
     """ListSchedule is used to return information about all scheduled snapshots that have been created."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -236,6 +252,8 @@ def ListSchedules(ctx):
 def ListSnapshots(ctx,
            volume_id = None):
     """ListSnapshots is used to return the attributes of each snapshot taken on the volume."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -263,6 +281,8 @@ def ModifyGroupSnapshot(ctx,
            expiration_time = None,
            enable_remote_replication = None):
     """ModifyGroupSnapshot is used to change the attributes currently assigned to a group snapshot."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -280,6 +300,8 @@ def ModifyGroupSnapshot(ctx,
 def ModifySchedule(ctx,
            schedule):
     """ModifySchedule is used to change the intervals at which a scheduled snapshot occurs. This allows for adjustment to the snapshot frequency and retention.&lt;br/&gt;"""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
     kwargsDict = simplejson.loads(schedule)
     schedule = Schedule(**kwargsDict)
@@ -309,6 +331,8 @@ def ModifySnapshot(ctx,
            enable_remote_replication = None):
     """ModifySnapshot is used to change the attributes currently assigned to a snapshot."""
     """Use this API method to enable the snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -344,6 +368,8 @@ def RollbackToGroupSnapshot(ctx,
     """&lt;br/&gt;&lt;br/&gt;"""
     """&lt;b&gt;Note&lt;/b&gt;: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3."""
     """Snapshots are not created when cluster fullness is at stage 4 or 5."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -386,6 +412,8 @@ def RollbackToSnapshot(ctx,
     """a value of &quot;true.&quot;"""
     """&lt;b&gt;Note&lt;/b&gt;: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3."""
     """Snapshots are not created when cluster fullness is at stage 4 or 5."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 

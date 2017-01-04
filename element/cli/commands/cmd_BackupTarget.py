@@ -16,13 +16,13 @@ from element import utils
 import jsonpickle
 import simplejson
 from uuid import UUID
+from element import exceptions
 
 
 @click.group()
 @pass_context
 def cli(ctx):
     """CreateBackupTarget GetBackupTarget ListBackupTargets ModifyBackupTarget RemoveBackupTarget """
-    ctx.sfapi = ctx.client
 
 @cli.command('CreateBackupTarget', short_help="CreateBackupTarget")
 @click.option('--name',
@@ -38,6 +38,8 @@ def CreateBackupTarget(ctx,
            name,
            attributes = None):
     """CreateBackupTarget allows you to create and store backup target information so that you do not need to re-enter it each time a backup is created."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -55,6 +57,8 @@ def CreateBackupTarget(ctx,
 def GetBackupTarget(ctx,
            backup_target_id):
     """GetBackupTarget allows you to return information about a specific backup target that has been created."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -67,6 +71,8 @@ def GetBackupTarget(ctx,
 @pass_context
 def ListBackupTargets(ctx):
     """You can use ListBackupTargets to retrieve information about all backup targets that have been created."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -94,6 +100,8 @@ def ModifyBackupTarget(ctx,
            name = None,
            attributes = None):
     """ModifyBackupTarget is used to change attributes of a backup target."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -111,6 +119,8 @@ def ModifyBackupTarget(ctx,
 def RemoveBackupTarget(ctx,
            backup_target_id):
     """RemoveBackupTarget allows you to delete backup targets."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 

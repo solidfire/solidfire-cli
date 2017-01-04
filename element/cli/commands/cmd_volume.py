@@ -20,13 +20,13 @@ from solidfire.models import QoS
 from solidfire.models import QoS
 from solidfire.models import QoS
 from uuid import UUID
+from element import exceptions
 
 
 @click.group()
 @pass_context
 def cli(ctx):
     """CancelClone CancelGroupClone CloneMultipleVolumes CloneVolume CopyVolume CreateVolume DeleteVolume DeleteVolumes GetAsyncResult GetDefaultQoS GetVolumeCount GetVolumeEfficiency GetVolumeStats ListActiveVolumes ListAsyncResults ListBulkVolumeJobs ListDeletedVolumes ListVolumes ListVolumesForAccount ListVolumeStatsByAccount ListVolumeStatsByVolume ListVolumeStatsByVolumeAccessGroup ModifyVolume ModifyVolumes PurgeDeletedVolume PurgeDeletedVolumes RestoreDeletedVolume SetDefaultQoS StartBulkVolumeRead StartBulkVolumeWrite UpdateBulkVolumeStatus """
-    ctx.sfapi = ctx.client
 
 @cli.command('CancelClone', short_help="CancelClone")
 @click.option('--clone_id',
@@ -37,6 +37,8 @@ def cli(ctx):
 def CancelClone(ctx,
            clone_id):
     """Cancels a currently running clone operation. This method does not return anything."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -54,6 +56,8 @@ def CancelClone(ctx,
 def CancelGroupClone(ctx,
            group_clone_id):
     """CancelGroupClone enables you to stop an ongoing CloneMultipleVolumes process for a group of clones. When you cancel a group clone operation, the system completes and removes the operation's associated asyncHandle. This method does not return anything."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -114,6 +118,8 @@ def CloneMultipleVolumes(ctx,
     """If groupSnapshotID is going to be used to clone the volumes in a group snapshot, the group snapshot must be created first using the CreateGroupSnapshot API method or the SolidFire Element WebUI. Using groupSnapshotID is optional when cloning multiple volumes."""
     """&lt;br/&gt;&lt;br/&gt;"""
     """&lt;b&gt;Note&lt;/b&gt;: Cloning multiple volumes is allowed if cluster fullness is at stage 2 or 3. Clones are not created when cluster fullness is at stage 4 or 5."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -182,6 +188,8 @@ def CloneVolume(ctx,
     """If different settings are required, they can be changed via ModifyVolume."""
     """&lt;br/&gt;&lt;br/&gt;"""
     """&lt;b&gt;Note&lt;/b&gt;: Cloned volumes do not inherit volume access group memberships from the source volume."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -209,6 +217,8 @@ def CopyVolume(ctx,
            dst_volume_id,
            snapshot_id = None):
     """Copies one volume to another."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -267,6 +277,8 @@ def CreateVolume(ctx,
            attributes = None):
     """CreateVolume is used to create a new (empty) volume on the cluster."""
     """When the volume is created successfully it is available for connection via iSCSI."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -306,6 +318,8 @@ def DeleteVolume(ctx,
     """Until the deleted volume is purged, it can be restored and data transfers resumes."""
     """If the deleted volume gets purged from the system, the volume it was paired with enters into a StoppedMisconfigured state and the volume pairing status is removed."""
     """The purged volume becomes permanently unavailable."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -333,6 +347,8 @@ def DeleteVolumes(ctx,
            volume_access_group_ids = None,
            volume_ids = None):
     """DeleteVolumes marks multiple (up to 500) active volumes for deletion. Once marked, the volumes are purged (permanently deleted) after the cleanup interval elapses.The cleanup interval can be set in the SetClusterSettings method. For more information on using this method, see SetClusterSettings on page 1. After making a request to delete volumes, any active iSCSI connections to the volumes are immediately terminated and no further connections are allowed while the volumes are in this state. A marked volume is not returned in target discovery requests. Any snapshots of a volume that has been marked for deletion are not affected. Snapshots are kept until the volume is purged from the system. If a volume is marked for deletion and has a bulk volume read or bulk volume write operation in progress, the bulk volume read or write operation is stopped. If the volumes you delete are paired with a volume, replication between the paired volumes is suspended and no data is transferred to them or from them while in a deleted state. The remote volumes the deleted volumes were paired with enter into a PausedMisconfigured state and data is no longer sent to them or from the deleted volumes. Until the deleted volumes are purged, they can be restored and data transfers resume. If the deleted volumes are purged from the system, the volumes they were paired with enter into a StoppedMisconfigured state and the volume pairing status is removed. The purged volumes become permanently unavailable."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -364,6 +380,8 @@ def GetAsyncResult(ctx,
     """&lt;br/&gt;&lt;br/&gt;"""
     """The result for a completed asynchronous method call can only be retrieved once."""
     """Once the final result has been returned, later attempts returns an error."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -376,6 +394,8 @@ def GetAsyncResult(ctx,
 @pass_context
 def GetDefaultQoS(ctx):
     """GetDefaultQoS is used to retrieve the default QoS values that are set for a volume if QoS is not supplied."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -388,6 +408,8 @@ def GetDefaultQoS(ctx):
 @pass_context
 def GetVolumeCount(ctx):
     """GetVolumeCount enables you to retrieve the number of volumes currently in the system."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -406,6 +428,8 @@ def GetVolumeEfficiency(ctx,
            volume_id):
     """GetVolumeEfficiency is used to retrieve information about a volume."""
     """Only the volume given as a parameter in this API method is used to compute the capacity."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -424,6 +448,8 @@ def GetVolumeStats(ctx,
            volume_id):
     """GetVolumeStats is used to retrieve high-level activity measurements for a single volume."""
     """Values are cumulative from the creation of the volume."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -447,6 +473,8 @@ def ListActiveVolumes(ctx,
            limit = None):
     """ListActiveVolumes is used to return the list of active volumes currently in the system."""
     """The list of volumes is returned sorted in VolumeID order and can be returned in multiple parts (pages)."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -464,6 +492,8 @@ def ListActiveVolumes(ctx,
 def ListAsyncResults(ctx,
            async_result_types = None):
     """You can use ListAsyncResults to list the results of all currently running and completed asynchronous methods on the system. Querying asynchronous results with ListAsyncResults does not cause completed asyncHandles to expire; you can use GetAsyncResult to query any of the asyncHandles returned by ListAsyncResults."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -478,6 +508,8 @@ def ListAsyncResults(ctx,
 @pass_context
 def ListBulkVolumeJobs(ctx):
     """ListBulkVolumeJobs is used to return information about each bulk volume read or write operation that is occurring in the system."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -490,6 +522,8 @@ def ListBulkVolumeJobs(ctx):
 @pass_context
 def ListDeletedVolumes(ctx):
     """ListDeletedVolumes is used to return the entire list of volumes that have been marked for deletion and is purged from the system."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -533,6 +567,8 @@ def ListVolumes(ctx,
            volume_ids = None):
     """The ListVolumes method is used to return a list of volumes that are in a cluster."""
     """You can specify the volumes you want to return in the list by using the available parameters."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -564,6 +600,8 @@ def ListVolumesForAccount(ctx,
            start_volume_id = None,
            limit = None):
     """ListVolumesForAccount returns the list of active AND (pending) deleted volumes for an account."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -577,6 +615,8 @@ def ListVolumesForAccount(ctx,
 def ListVolumeStatsByAccount(ctx):
     """ListVolumeStatsByAccount returns high-level activity measurements for every account."""
     """Values are summed from all the volumes owned by the account."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -590,6 +630,8 @@ def ListVolumeStatsByAccount(ctx):
 def ListVolumeStatsByVolume(ctx):
     """ListVolumeStatsByVolume returns high-level activity measurements for every volume, by volume."""
     """Values are cumulative from the creation of the volume."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -607,6 +649,8 @@ def ListVolumeStatsByVolume(ctx):
 def ListVolumeStatsByVolumeAccessGroup(ctx,
            volume_access_groups = None):
     """ListVolumeStatsByVolumeAccessGroup is used to get total activity measurements for all of the volumes that are a member of the specified volume access group(s)."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -674,6 +718,8 @@ def ModifyVolume(ctx,
     """It is recommended that both the target and the source volumes be the same size."""
     """&lt;br/&gt;&lt;br/&gt;"""
     """&lt;b&gt;Note&lt;/b&gt;: If you change access status to locked or target all existing iSCSI connections are terminated."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -739,6 +785,8 @@ def ModifyVolumes(ctx,
            total_size = None,
            attributes = None):
     """ModifyVolumes allows you to configure up to 500 existing volumes at one time. Changes take place immediately. If ModifyVolumes fails to modify any of the specified volumes, none of the specified volumes are changed.If you do not specify QoS values when you modify volumes, the QoS values for each volume remain unchanged. You can retrieve default QoS values for a newly created volume by running the GetDefaultQoS method.When you need to increase the size of volumes that are being replicated, do so in the following order to prevent replication errors:Increase the size of the &quot;Replication Target&quot; volume.Increase the size of the source or &quot;Read / Write&quot; volume. recommends that both the target and source volumes be the same size.NOTE: If you change access status to locked or replicationTarget all existing iSCSI connections are terminated."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -768,6 +816,8 @@ def PurgeDeletedVolume(ctx,
     """PurgeDeletedVolume immediately and permanently purges a volume which has been deleted."""
     """A volume must be deleted using DeleteVolume before it can be purged."""
     """Volumes are purged automatically after a period of time, so usage of this method is not typically required."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -795,6 +845,8 @@ def PurgeDeletedVolumes(ctx,
            account_ids = None,
            volume_access_group_ids = None):
     """PurgeDeletedVolumes immediately and permanently purges volumes that have been deleted; you can use this method to purge up to 500 volumes at one time. You must delete volumes using DeleteVolumes before they can be purged. Volumes are purged by the system automatically after a period of time, so usage of this method is not typically required."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -819,6 +871,8 @@ def RestoreDeletedVolume(ctx,
            volume_id):
     """RestoreDeletedVolume marks a deleted volume as active again."""
     """This action makes the volume immediately available for iSCSI connection."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -846,6 +900,8 @@ def SetDefaultQoS(ctx,
            max_iops = None,
            burst_iops = None):
     """SetDefaultQoS enables you to configure the default Quality of Service (QoS) values (measured in inputs and outputs per second, or IOPS) for all volumes not yet created."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -900,6 +956,8 @@ def StartBulkVolumeRead(ctx,
     """&lt;b&gt;Note&lt;/b&gt;: This process creates a new snapshot if the ID of an existing snapshot is not provided."""
     """Snapshots can be created if cluster fullness is at stage 2 or 3."""
     """Snapshots are not created when cluster fullness is at stage 4 or 5."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -941,6 +999,8 @@ def StartBulkVolumeWrite(ctx,
     """When the session is initialized, data can be written to a SolidFire storage volume from an external backup source."""
     """The external data is accessed by a web server running on a SolidFire node."""
     """Communications and server interaction information for external data access is passed by a script running on the SolidFire storage system."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -978,6 +1038,8 @@ def UpdateBulkVolumeStatus(ctx,
            message = None,
            attributes = None):
     """You can use UpdateBulkVolumeStatus in a script to return to the SolidFire system the status of a bulk volume job that you have started with the &quot;StartBulkVolumeRead&quot; or &quot;StartBulkVolumeWrite&quot; methods."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 

@@ -17,13 +17,13 @@ import jsonpickle
 import simplejson
 from solidfire.models import LdapConfiguration
 from uuid import UUID
+from element import exceptions
 
 
 @click.group()
 @pass_context
 def cli(ctx):
     """AddLdapClusterAdmin DisableLdapAuthentication EnableLdapAuthentication GetLdapConfiguration TestLdapAuthentication """
-    ctx.sfapi = ctx.client
 
 @cli.command('AddLdapClusterAdmin', short_help="AddLdapClusterAdmin")
 @click.option('--username',
@@ -51,6 +51,8 @@ def AddLdapClusterAdmin(ctx,
     """AddLdapClusterAdmin is used to add a new LDAP Cluster Admin. An LDAP Cluster Admin can be used to manage the cluster via the API and management tools. LDAP Cluster Admins are completely separate and unrelated to standard tenant accounts."""
     """&lt;br/&gt;&lt;br/&gt;"""
     """An LDAP group that has been defined in Active Directory can also be added using this API method. The access level that is given to the group will be passed to the individual users in the LDAP group."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -65,6 +67,8 @@ def AddLdapClusterAdmin(ctx,
 @pass_context
 def DisableLdapAuthentication(ctx):
     """The DisableLdapAuthentication method is used disable LDAP authentication and remove all LDAP configuration settings. This call will not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no longer be able to log in."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -127,6 +131,8 @@ def EnableLdapAuthentication(ctx,
            user_search_base_dn = None,
            user_search_filter = None):
     """The EnableLdapAuthentication method is used to configure an LDAP server connection to use for LDAP authentication to a SolidFire cluster. Users that are members on the LDAP server can then log in to a SolidFire storage system using their LDAP authentication userid and password."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -141,6 +147,8 @@ def EnableLdapAuthentication(ctx,
 @pass_context
 def GetLdapConfiguration(ctx):
     """The GetLdapConfiguration is used to get the LDAP configuration currently active on the cluster."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -213,6 +221,8 @@ def TestLdapAuthentication(ctx,
            ldap_configuration_user_search_base_dn = None,
            ldap_configuration_user_search_filter = None):
     """The TestLdapAuthentication is used to verify the currently enabled LDAP authentication configuration settings are correct. If the configuration settings are correct, the API call returns a list of the groups the tested user is a member of."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 

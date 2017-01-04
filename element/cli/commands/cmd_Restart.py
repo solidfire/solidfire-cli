@@ -16,13 +16,13 @@ from element import utils
 import jsonpickle
 import simplejson
 from uuid import UUID
+from element import exceptions
 
 
 @click.group()
 @pass_context
 def cli(ctx):
     """ResetNode RestartNetworking RestartServices Shutdown """
-    ctx.sfapi = ctx.client
 
 @cli.command('ResetNode', short_help="ResetNode")
 @click.option('--build',
@@ -43,6 +43,8 @@ def ResetNode(ctx,
            force,
            option):
     """Allows you to reset a node to the SolidFire factory settings. All data will be deleted from the node when you call this method. A node participating in a cluster cannot be reset."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -60,6 +62,8 @@ def ResetNode(ctx,
 def RestartNetworking(ctx,
            force):
     """The RestartNetworking API method is used to restart the networking services on a node.WARNING! This method restarts all networking services on a node, causing temporary loss of networking connectivity. Exercise caution when using this method."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -87,6 +91,8 @@ def RestartServices(ctx,
            service = None,
            action = None):
     """The RestartServices API method is used to restart the  Element services on a node.Caution: This method causes temporary node services interruption. Exercise caution when using this method."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -104,6 +110,8 @@ def RestartServices(ctx,
 def Shutdown(ctx,
            option):
     """The Shutdown API method enables you to restart or shutdown a node that has not yet been added to a cluster. To use this method, login in to the MIP for the pending node and enter the &quot;shutdown&quot; method with either the &quot;restart&quot; or &quot;halt&quot; options in the following table."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 

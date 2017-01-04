@@ -16,13 +16,13 @@ from element import utils
 import jsonpickle
 import simplejson
 from uuid import UUID
+from element import exceptions
 
 
 @click.group()
 @pass_context
 def cli(ctx):
     """GetClusterHardwareInfo GetHardwareConfig GetNodeHardwareInfo GetNvramInfo """
-    ctx.sfapi = ctx.client
 
 @cli.command('GetClusterHardwareInfo', short_help="GetClusterHardwareInfo")
 @click.option('--type',
@@ -33,6 +33,8 @@ def cli(ctx):
 def GetClusterHardwareInfo(ctx,
            type = None):
     """You can use the GetClusterHardwareInfo method to retrieve the hardware status and information for all Fibre Channel nodes, iSCSI nodes and drives in the cluster. This generally includes manufacturers, vendors, versions, and other associated hardware identification information."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -45,6 +47,8 @@ def GetClusterHardwareInfo(ctx,
 @pass_context
 def GetHardwareConfig(ctx):
     """GetHardwareConfig enables you to display the hardware configuration information for a node. NOTE: This method is available only through the per-node API endpoint 5.0 or later."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -62,6 +66,8 @@ def GetHardwareConfig(ctx):
 def GetNodeHardwareInfo(ctx,
            node_id):
     """GetNodeHardwareInfo is used to return all the hardware info and status for the node specified. This generally includes manufacturers, vendors, versions, and other associated hardware identification information."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -74,6 +80,8 @@ def GetNodeHardwareInfo(ctx,
 @pass_context
 def GetNvramInfo(ctx):
     """GetNvramInfo allows you to retrieve information from each node about the NVRAM card.  """
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 

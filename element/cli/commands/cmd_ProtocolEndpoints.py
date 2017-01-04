@@ -16,13 +16,13 @@ from element import utils
 import jsonpickle
 import simplejson
 from uuid import UUID
+from element import exceptions
 
 
 @click.group()
 @pass_context
 def cli(ctx):
     """ListProtocolEndpoints """
-    ctx.sfapi = ctx.client
 
 @cli.command('ListProtocolEndpoints', short_help="ListProtocolEndpoints")
 @click.option('--protocol_endpoint_ids',
@@ -35,6 +35,8 @@ def ListProtocolEndpoints(ctx,
     """Gets protocol endpoints in the system"""
     """If protocolEndpointIDs isn't specified all protocol endpoints"""
     """are returned. Else the supplied protocolEndpointIDs are."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 

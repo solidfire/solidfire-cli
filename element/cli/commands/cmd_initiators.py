@@ -18,13 +18,13 @@ import simplejson
 from solidfire.models import CreateInitiator
 from solidfire.models import ModifyInitiator
 from uuid import UUID
+from element import exceptions
 
 
 @click.group()
 @pass_context
 def cli(ctx):
     """CreateInitiators DeleteInitiators ListInitiators ModifyInitiators """
-    ctx.sfapi = ctx.client
 
 @cli.command('CreateInitiators', short_help="CreateInitiators")
 @click.option('--create_initiator_name',
@@ -51,6 +51,8 @@ def CreateInitiators(ctx,
            create_initiator_attributes = None):
     """CreateInitiators enables you to create multiple new initiator IQNs or World Wide Port Names (WWPNs) and optionally assign them aliases and attributes. When you use CreateInitiators to create new initiators, you can also add them to volume access groups."""
     """If CreateInitiators fails to create one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible)."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -79,6 +81,8 @@ def DeleteInitiators(ctx,
            initiators):
     """DeleteInitiators enables you to delete one or more initiators from the system (and from any associated volumes or volume access groups)."""
     """If DeleteInitiators fails to delete one of the initiators provided in the parameter, the system returns an error and does not delete any initiators (no partial completion is possible)."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -108,6 +112,8 @@ def ListInitiators(ctx,
            limit = None,
            initiators = None):
     """ListInitiators enables you to list initiator IQNs or World Wide Port Names (WWPNs)."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -143,6 +149,8 @@ def ModifyInitiators(ctx,
            modify_initiator_attributes = None):
     """ModifyInitiators enables you to change the attributes of an existing initiator. You cannot change the name of an existing initiator. If you need to change the name of an initiator, delete the existing initiator with DeleteInitiators and create a new one with CreateInitiators."""
     """If ModifyInitiators fails to change one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible)."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 

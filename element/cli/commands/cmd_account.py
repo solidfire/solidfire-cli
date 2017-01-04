@@ -20,13 +20,13 @@ from solidfire.models import CHAPSecret
 from solidfire.models import CHAPSecret
 from solidfire.models import CHAPSecret
 from uuid import UUID
+from element import exceptions
 
 
 @click.group()
 @pass_context
 def cli(ctx):
     """AddAccount GetAccountByID GetAccountByName GetAccountEfficiency ListAccounts ModifyAccount RemoveAccount """
-    ctx.sfapi = ctx.client
 
 @cli.command('AddAccount', short_help="AddAccount")
 @click.option('--username',
@@ -44,6 +44,8 @@ def AddAccount(ctx,
     """Used to add a new account to the system."""
     """New volumes can be created under the new account."""
     """The CHAP settings specified for the account applies to all volumes owned by the account."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -69,6 +71,8 @@ def AddAccount(ctx,
 def GetAccountByID(ctx,
            account_id):
     """Returns details about an account, given its AccountID."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -86,6 +90,8 @@ def GetAccountByID(ctx,
 def GetAccountByName(ctx,
            username):
     """Returns details about an account, given its Username."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -103,6 +109,8 @@ def GetAccountByName(ctx,
 def GetAccountEfficiency(ctx,
            account_id):
     """GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -125,6 +133,8 @@ def ListAccounts(ctx,
            start_account_id = None,
            limit = None):
     """Returns the entire list of accounts, with optional paging support."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -160,6 +170,8 @@ def ModifyAccount(ctx,
     """When locking an account, any existing connections from that account are immediately terminated."""
     """When changing CHAP settings, any existing connections continue to be active,"""
     """and the new CHAP values are only used on subsequent connection or reconnection."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -187,6 +199,8 @@ def RemoveAccount(ctx,
     """Used to remove an existing account."""
     """All Volumes must be deleted and purged on the account before it can be removed."""
     """If volumes on the account are still pending deletion, RemoveAccount cannot be used until DeleteVolume to delete and purge the volumes."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 

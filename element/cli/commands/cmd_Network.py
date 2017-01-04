@@ -16,18 +16,20 @@ from element import utils
 import jsonpickle
 import simplejson
 from uuid import UUID
+from element import exceptions
 
 
 @click.group()
 @pass_context
 def cli(ctx):
     """ListFibreChannelPortInfo ListFibreChannelSessions ListISCSISessions ListNetworkInterfaces ListNodeFibreChannelPortInfo """
-    ctx.sfapi = ctx.client
 
 @cli.command('ListFibreChannelPortInfo', short_help="ListFibreChannelPortInfo")
 @pass_context
 def ListFibreChannelPortInfo(ctx):
     """The ListFibreChannelPortInfo is used to return information about the Fibre Channel ports. The API method is intended for use on individual nodes; userid and password is required for access to individual Fibre Channel nodes."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -40,6 +42,8 @@ def ListFibreChannelPortInfo(ctx):
 @pass_context
 def ListFibreChannelSessions(ctx):
     """The ListFibreChannelSessions is used to return information about the active Fibre Channel sessions on a cluster."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -52,6 +56,8 @@ def ListFibreChannelSessions(ctx):
 @pass_context
 def ListISCSISessions(ctx):
     """ListISCSISessions is used to return iSCSI connection information for volumes in the cluster."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -64,6 +70,8 @@ def ListISCSISessions(ctx):
 @pass_context
 def ListNetworkInterfaces(ctx):
     """The ListNetworkInterfaces API method is used to return information about each network interface on a node. The API method is intended for use on individual nodes. """
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -76,6 +84,8 @@ def ListNetworkInterfaces(ctx):
 @pass_context
 def ListNodeFibreChannelPortInfo(ctx):
     """The ListNodeFibreChannelPortInfo is used to return information about the Fibre Channel ports. The API method is intended for use on individual nodes; userid and password is required for access to individual Fibre Channel nodes."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 

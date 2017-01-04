@@ -17,13 +17,13 @@ import jsonpickle
 import simplejson
 from solidfire.models import LunAssignment
 from uuid import UUID
+from element import exceptions
 
 
 @click.group()
 @pass_context
 def cli(ctx):
     """AddInitiatorsToVolumeAccessGroup AddVolumesToVolumeAccessGroup CreateVolumeAccessGroup DeleteVolumeAccessGroup GetVolumeAccessGroupEfficiency GetVolumeAccessGroupLunAssignments ListVolumeAccessGroups ModifyVolumeAccessGroup ModifyVolumeAccessGroupLunAssignments RemoveInitiatorsFromVolumeAccessGroup RemoveVolumesFromVolumeAccessGroup """
-    ctx.sfapi = ctx.client
 
 @cli.command('AddInitiatorsToVolumeAccessGroup', short_help="AddInitiatorsToVolumeAccessGroup")
 @click.option('--volume_access_group_id',
@@ -39,6 +39,8 @@ def AddInitiatorsToVolumeAccessGroup(ctx,
            volume_access_group_id,
            initiators):
     """Add initiators to a volume access group."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -63,6 +65,8 @@ def AddVolumesToVolumeAccessGroup(ctx,
            volume_access_group_id,
            volumes):
     """Add volumes to a volume access group."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -111,6 +115,8 @@ def CreateVolumeAccessGroup(ctx,
     """Entering initiators and volumes are optional when creating a volume access group."""
     """Once the group is created volumes and initiator IQNs can be added."""
     """Any initiator IQN that is successfully added to the volume access group is able to access any volume in the group without CHAP authentication."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -136,6 +142,8 @@ def CreateVolumeAccessGroup(ctx,
 def DeleteVolumeAccessGroup(ctx,
            volume_access_group_id):
     """Delete a volume access group from the system."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -153,6 +161,8 @@ def DeleteVolumeAccessGroup(ctx,
 def GetVolumeAccessGroupEfficiency(ctx,
            volume_access_group_id):
     """GetVolumeAccessGroupEfficiency is used to retrieve efficiency information about a volume access group. Only the volume access group provided as parameters in this API method is used to compute the capacity."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -170,6 +180,8 @@ def GetVolumeAccessGroupEfficiency(ctx,
 def GetVolumeAccessGroupLunAssignments(ctx,
            volume_access_group_id):
     """The GetVolumeAccessGroupLunAssignments is used to return information LUN mappings of a specified volume access group."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -192,6 +204,8 @@ def ListVolumeAccessGroups(ctx,
            start_volume_access_group_id = None,
            limit = None):
     """ListVolumeAccessGroups is used to return information about the volume access groups that are currently in the system."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -248,6 +262,8 @@ def ModifyVolumeAccessGroup(ctx,
     """RemoveInitiatorsFromVolumeAccessGroup&lt;br/&gt;"""
     """AddVolumesToVolumeAccessGroup&lt;br/&gt;"""
     """RemoveVolumesFromVolumeAccessGroup&lt;br/&gt;"""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -289,6 +305,8 @@ def ModifyVolumeAccessGroupLunAssignments(ctx,
     """&lt;b&gt;Note:&lt;/b&gt; Correct LUN values are 0 - 16383. An exception will be seen if an incorrect LUN value is passed. None of the specified LUN assignments will be modified if there is an exception."""
     """&lt;br/&gt;&lt;br/&gt;"""
     """&lt;b&gt;Caution:&lt;/b&gt; If a LUN assignment is changed for a volume with active I/O, the I/O could be disrupted. Changes to the server configuration may be required in order to change volume LUN assignments."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -319,6 +337,8 @@ def RemoveInitiatorsFromVolumeAccessGroup(ctx,
            volume_access_group_id,
            initiators):
     """Remove initiators from a volume access group."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -343,6 +363,8 @@ def RemoveVolumesFromVolumeAccessGroup(ctx,
            volume_access_group_id,
            volumes):
     """Remove volumes from a volume access group."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 

@@ -16,13 +16,13 @@ from element import utils
 import jsonpickle
 import simplejson
 from uuid import UUID
+from element import exceptions
 
 
 @click.group()
 @pass_context
 def cli(ctx):
     """InvokeSFApi """
-    ctx.sfapi = ctx.client
 
 @cli.command('InvokeSFApi', short_help="InvokeSFApi")
 @click.option('--method',
@@ -39,6 +39,8 @@ def InvokeSFApi(ctx,
            parameters = None):
     """This will invoke any API method supported by the SolidFire API for the version and port the connection is using."""
     """Returns a nested hashtable of key/value pairs that contain the result of the invoked method."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 

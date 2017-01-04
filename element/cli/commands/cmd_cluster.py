@@ -22,13 +22,13 @@ from solidfire.models import SnmpNetwork
 from solidfire.models import SnmpV3UsmUser
 from solidfire.models import SnmpTrapRecipient
 from uuid import UUID
+from element import exceptions
 
 
 @click.group()
 @pass_context
 def cli(ctx):
     """AddClusterAdmin ClearClusterFaults CreateCluster CreateSupportBundle DeleteAllSupportBundles DisableEncryptionAtRest DisableSnmp EnableEncryptionAtRest EnableSnmp GetAPI GetClusterCapacity GetClusterConfig GetClusterFullThreshold GetClusterInfo GetClusterMasterNodeID GetClusterState GetClusterStats GetClusterVersionInfo GetCurrentClusterAdmin GetLimits GetNtpInfo GetSnmpACL GetSnmpInfo GetSnmpState GetSnmpTrapInfo GetSystemStatus ListClusterAdmins ListClusterFaults ListEvents ListSyncJobs ModifyClusterAdmin ModifyClusterFullThreshold RemoveClusterAdmin SetClusterConfig SetNtpInfo SetSnmpACL SetSnmpInfo SetSnmpTrapInfo SnmpSendTestTraps """
-    ctx.sfapi = ctx.client
 
 @cli.command('AddClusterAdmin', short_help="AddClusterAdmin")
 @click.option('--username',
@@ -61,6 +61,8 @@ def AddClusterAdmin(ctx,
     """AddClusterAdmin adds a new Cluster Admin. A Cluster Admin can be used to manage the cluster via the API and management tools. Cluster Admins are completely separate and unrelated to standard tenant accounts."""
     """&lt;br/&gt;&lt;br/&gt;"""
     """Each Cluster Admin can be restricted to a sub-set of the API. SolidFire recommends using multiple Cluster Admins for different users and applications. Each Cluster Admin should be given the minimal permissions necessary to reduce the potential impact of credential compromise."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -80,6 +82,8 @@ def AddClusterAdmin(ctx,
 def ClearClusterFaults(ctx,
            fault_types = None):
     """ClearClusterFaults is used to clear information about both current faults that are resolved as well as faults that were previously detected and resolved can be cleared."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -134,6 +138,8 @@ def CreateCluster(ctx,
     """The CreateCluster method is used to initialize the node in a cluster that has ownership of the &quot;mvip&quot; and &quot;svip&quot; addresses. Each new cluster is initialized using the MIP of the first node in the cluster. This method also automatically adds all the nodes being configured into the cluster. The method is used only once each time a new cluster is initialized."""
     """&lt;br/&gt;&lt;br/&gt;"""
     """&lt;b&gt;Note&lt;/b&gt;: You need to log into the node that is used as the master node for the cluster. Once logged in, run the GetBootstrapConfig method on the node to get the IP addresses for the rest of the nodes that you want to include in the cluster. Then run the CreateCluster method."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -163,6 +169,8 @@ def CreateSupportBundle(ctx,
            extra_args = None,
            timeout_sec = None):
     """CreateSupportBundle is used to create a support bundle file under the node's directory. When the bundle has been successfully created, the bundle is stored on the node as a tar.gz file."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -175,6 +183,8 @@ def CreateSupportBundle(ctx,
 @pass_context
 def DeleteAllSupportBundles(ctx):
     """DeleteAllSupportBundles is used to delete all support bundles generated with the CreateSupportBundle API method."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -189,6 +199,8 @@ def DisableEncryptionAtRest(ctx):
     """The DisableEncryptionAtRest method enables you to remove the encryption that was previously applied to the cluster using the EnableEncryptionAtRest method."""
     """This disable method is asynchronous and returns a response before encryption is disabled."""
     """You can use the GetClusterInfo method to poll the system to see when the process has completed."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -201,6 +213,8 @@ def DisableEncryptionAtRest(ctx):
 @pass_context
 def DisableSnmp(ctx):
     """DisableSnmp is used to disable SNMP on the cluster nodes."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -215,6 +229,8 @@ def EnableEncryptionAtRest(ctx):
     """The EnableEncryptionAtRest method is used to enable the Advanced Encryption Standard (AES) 256-bit encryption at rest on the cluster so that the cluster can manage the encryption key used for the drives on each node. This feature is not enabled by default. Enabling this operation allows the cluster to automatically manage encryption keys internally for the drives on each node in the cluster. Nodes do not store the keys to unlock drives and the keys are never passed over the network. Two nodes participating in a cluster are required to access the key to disable encryption on a drive. The encryption management does not affect performance or efficiency on the cluster. If an encryption-enabled drive or node is removed from the cluster with the API, all data is secure erased and any data left on the drive cannot be read or accessed."""
     """Enabling or disabling encryption should be performed when the cluster is running and in a healthy state. Encryption can be enabled or disabled at your discretion and can be performed as often as you need."""
     """&lt;br/&gt;&lt;b&gt;Note&lt;/b&gt;: This process is asynchronous and returns a response before encryption is enabled. The GetClusterInfo method can be used to poll the system to see when the process has completed."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -232,6 +248,8 @@ def EnableEncryptionAtRest(ctx):
 def EnableSnmp(ctx,
            snmp_v3_enabled):
     """EnableSnmp is used to enable SNMP on the cluster nodes. The values set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to EnableSnmp."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -244,6 +262,8 @@ def EnableSnmp(ctx,
 @pass_context
 def GetAPI(ctx):
     """Retrieves the current version of the API and a list of all supported versions."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -257,6 +277,8 @@ def GetAPI(ctx):
 def GetClusterCapacity(ctx):
     """Return the high-level capacity measurements for an entire cluster."""
     """The fields returned from this method can be used to calculate the efficiency rates that are displayed in the Element User Interface."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -271,6 +293,8 @@ def GetClusterConfig(ctx):
     """The GetClusterConfig API method is used to return information about the cluster configuration this node uses to communicate with the cluster it is a part of."""
     """&lt;br/&gt;&lt;br/&gt;"""
     """&lt;b&gt;Note&lt;/b&gt;: This method is available only through the per-node API endpoint 5.0 or later."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -283,6 +307,8 @@ def GetClusterConfig(ctx):
 @pass_context
 def GetClusterFullThreshold(ctx):
     """GetClusterFullThreshold is used to view the stages set for cluster fullness levels. All levels are returned when this method is entered."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -295,6 +321,8 @@ def GetClusterFullThreshold(ctx):
 @pass_context
 def GetClusterInfo(ctx):
     """Return configuration information about the cluster."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -307,6 +335,8 @@ def GetClusterInfo(ctx):
 @pass_context
 def GetClusterMasterNodeID(ctx):
     """GetClusterMasterNodeID is used to return the ID of the node that can perform cluster-wide administration tasks and holds the storage virtual IP (SVIP) and management virtual IP (MVIP)."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -324,6 +354,8 @@ def GetClusterMasterNodeID(ctx):
 def GetClusterState(ctx,
            force):
     """The GetClusterState method is used to indicate if a node is part of a cluster or not. The three states are: &lt;br&gt;&lt;strong&gt;Available:&lt;/strong&gt; Node has not been configured with a cluster name.&lt;br&gt;&lt;strong&gt;Pending:&lt;/strong&gt; Node is pending for a specific named cluster and can be added.&lt;br&gt;&lt;strong&gt;Active:&lt;/strong&gt; Node is active and a member of a cluster and may not be added to another cluster."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -336,6 +368,8 @@ def GetClusterState(ctx,
 @pass_context
 def GetClusterStats(ctx):
     """GetClusterStats is used to return high-level activity measurements for the cluster. Values returned are cumulative from the creation of the cluster."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -349,6 +383,8 @@ def GetClusterStats(ctx):
 def GetClusterVersionInfo(ctx):
     """Return information about the Element software version running on each node in the cluster."""
     """Information about the nodes that are currently in the process of upgrading software is also returned."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -361,6 +397,8 @@ def GetClusterVersionInfo(ctx):
 @pass_context
 def GetCurrentClusterAdmin(ctx):
     """GetCurrentClusterAdmin returns information for the current primary cluster administrator. The primary Cluster Admin was ncreated when the cluster was created."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -373,6 +411,8 @@ def GetCurrentClusterAdmin(ctx):
 @pass_context
 def GetLimits(ctx):
     """GetLimits enables you to retrieve the limit values set by the API. These values might change between releases of  Element, but do not change without an update to the system. Knowing the limit values set by the API can be useful when writing API scripts for user-facing tools.NOTE: The GetLimits method returns the limits for the current software version regardless of the API endpoint version used to pass the method."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -385,6 +425,8 @@ def GetLimits(ctx):
 @pass_context
 def GetNtpInfo(ctx):
     """GetNtpInfo is used to return the current network time protocol (NTP) configuration information."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -397,6 +439,8 @@ def GetNtpInfo(ctx):
 @pass_context
 def GetSnmpACL(ctx):
     """GetSnmpACL is used to return the current SNMP access permissions on the cluster nodes."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -411,6 +455,8 @@ def GetSnmpInfo(ctx):
     """GetSnmpInfo is used to return the current simple network management protocol (SNMP) configuration information."""
     """&lt;br/&gt;&lt;br/&gt;"""
     """&lt;b&gt;Note&lt;/b&gt;: GetSnmpInfo will be available for Element OS 8 and prior releases. It will be deprecated after Element OS 8. There are two new SNMP API methods that you should migrate over to. They are GetSnmpState and GetSnmpACL. Please see details in this document for their descriptions and usage."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -425,6 +471,8 @@ def GetSnmpState(ctx):
     """GetSnmpState is used to return the current state of the SNMP feature."""
     """&lt;br/&gt;&lt;br/&gt;"""
     """&lt;b&gt;Note&lt;/b&gt;: GetSnmpState is new for Element OS 8. Please use this method and SetSnmpACL to migrate your SNMP functionality in the future."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -437,6 +485,8 @@ def GetSnmpState(ctx):
 @pass_context
 def GetSnmpTrapInfo(ctx):
     """GetSnmpTrapInfo is used to return current SNMP trap configuration information."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -448,6 +498,8 @@ def GetSnmpTrapInfo(ctx):
 @cli.command('GetSystemStatus', short_help="GetSystemStatus")
 @pass_context
 def GetSystemStatus(ctx):
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -460,6 +512,8 @@ def GetSystemStatus(ctx):
 @pass_context
 def ListClusterAdmins(ctx):
     """ListClusterAdmins returns the list of all cluster administrators for the cluster. There can be several cluster administrators that have different levels of permissions. There can be only one primary cluster administrator in the system. The primary Cluster Admin is the administrator that was created when the cluster was created. LDAP administrators can also be created when setting up an LDAP system on the cluster."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -493,6 +547,8 @@ def ListClusterFaults(ctx,
            fault_types = None):
     """ListClusterFaults is used to retrieve information about any faults detected on the cluster."""
     """With this method, both current and resolved faults can be retrieved. The system caches faults every 30 seconds."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -525,6 +581,8 @@ def ListEvents(ctx,
            end_event_id = None,
            event_queue_type = None):
     """ListEvents returns events detected on the cluster, sorted from oldest to newest."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -537,6 +595,8 @@ def ListEvents(ctx,
 @pass_context
 def ListSyncJobs(ctx):
     """ListSyncJobs is used to return information about synchronization jobs that are running on a SolidFire cluster. Synchronization jobs that are returned with this method are, &quot;slice,&quot; &quot;clone&quot; and &quot;remote.&quot;"""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -569,6 +629,8 @@ def ModifyClusterAdmin(ctx,
            access = None,
            attributes = None):
     """ModifyClusterAdmin is used to change the settings for a Cluster Admin or LDAP Cluster Admin. Access for the administrator Cluster Admin account cannot be changed."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -598,6 +660,8 @@ def ModifyClusterFullThreshold(ctx,
            stage3_block_threshold_percent = None,
            max_metadata_over_provision_factor = None):
     """ModifyClusterFullThreshold is used to change the level at which an event is generated when the storage cluster approaches the capacity utilization requested. The number entered in this setting is used to indicate the number of node failures the system is required to recover from. For example, on a 10 node cluster, if you want to be alerted when the system cannot recover from 3 nodes failures, enter the value of &quot;3&quot;. When this number is reached, a message alert is sent to the Event Log in the Cluster Management Console."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -615,6 +679,8 @@ def ModifyClusterFullThreshold(ctx,
 def RemoveClusterAdmin(ctx,
            cluster_admin_id):
     """RemoveClusterAdmin is used to remove a Cluster Admin. The &quot;admin&quot; Cluster Admin cannot be removed."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -679,6 +745,8 @@ def SetClusterConfig(ctx,
     """The SetClusterConfig API method is used to set the configuration this node uses to communicate with the cluster it is associated with. To see the states in which these objects can be modified see Cluster Object on page 109. To display the current cluster interface settings for a node, run the GetClusterConfig API method."""
     """&lt;br/&gt;&lt;br/&gt;"""
     """&lt;b&gt;Note&lt;/b&gt;: This method is available only through the per-node API endpoint 5.0 or later."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -715,6 +783,8 @@ def SetNtpInfo(ctx,
            servers,
            broadcastclient = None):
     """SetNtpInfo is used to configure the NTP on cluster nodes. The values set with this interface apply to all nodes in the cluster. The nodes can only be configured as a server where a host is selected to administrate the networking and/or a broadcast client where each host sends each message to each peer."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -774,6 +844,8 @@ def SetSnmpACL(ctx,
            snmp_v3_usm_user_passphrase,
            snmp_v3_usm_user_sec_level):
     """SetSnmpACL is used to configure SNMP access permissions on the cluster nodes. The values set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to SetSnmpACL. Also note that the values set with this interface replace all &quot;network&quot; or &quot;usmUsers&quot; values set with the older SetSnmpInfo."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -864,6 +936,8 @@ def SetSnmpInfo(ctx,
     """SetSnmpInfo is used to configure SNMP v2 and v3 on the cluster nodes. The values set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to SetSnmpInfo."""
     """&lt;br/&gt;&lt;br/&gt;"""
     """&lt;b&gt;Note&lt;/b&gt;: EnableSnmp and SetSnmpACL methods can be used to accomplish the same results as SetSnmpInfo. SetSnmpInfo will no longer be available after the Element 8 release. Please use EnableSnmp and SetSnmpACL in the future."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -927,6 +1001,8 @@ def SetSnmpTrapInfo(ctx,
            snmp_trap_recipient_community,
            snmp_trap_recipient_port):
     """SetSnmpTrapInfo is used to enable and disable the generation of SolidFire SNMP notifications (traps) and to specify the set of network host computers that are to receive the notifications. The values passed with each SetSnmpTrapInfo method replaces all values set in any previous method to SetSnmpTrapInfo."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -948,6 +1024,8 @@ def SetSnmpTrapInfo(ctx,
 @pass_context
 def SnmpSendTestTraps(ctx):
     """SnmpSendTestTraps enables you to test SNMP functionality for a cluster. This method instructs the cluster to send test SNMP traps to the currently configured SNMP manager."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 

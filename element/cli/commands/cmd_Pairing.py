@@ -16,13 +16,13 @@ from element import utils
 import jsonpickle
 import simplejson
 from uuid import UUID
+from element import exceptions
 
 
 @click.group()
 @pass_context
 def cli(ctx):
     """CompleteClusterPairing CompleteVolumePairing ListActivePairedVolumes ListClusterPairs ModifyVolumePair RemoveClusterPair RemoveVolumePair StartClusterPairing StartVolumePairing """
-    ctx.sfapi = ctx.client
 
 @cli.command('CompleteClusterPairing', short_help="CompleteClusterPairing")
 @click.option('--cluster_pairing_key',
@@ -34,6 +34,8 @@ def CompleteClusterPairing(ctx,
            cluster_pairing_key):
     """The CompleteClusterPairing method is the second step in the cluster pairing process."""
     """Use this method with the encoded key received from the &quot;StartClusterPairing&quot; API method to complete the cluster pairing process."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -56,6 +58,8 @@ def CompleteVolumePairing(ctx,
            volume_pairing_key,
            volume_id):
     """CompleteVolumePairing is used to complete the pairing of two volumes."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -69,6 +73,8 @@ def CompleteVolumePairing(ctx,
 def ListActivePairedVolumes(ctx):
     """ListActivePairedVolumes is used to list all of the active volumes paired with a volume."""
     """Volumes listed in the return for this method include volumes with active and pending pairings."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -82,6 +88,8 @@ def ListActivePairedVolumes(ctx):
 def ListClusterPairs(ctx):
     """ListClusterPairs is used to list all of the clusters a cluster is paired with."""
     """This method returns information about active and pending cluster pairings, such as statistics about the current pairing as well as the connectivity and latency (in milliseconds) of the cluster pairing."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -109,6 +117,8 @@ def ModifyVolumePair(ctx,
            paused_manual = None,
            mode = None):
     """ModifyVolumePair is used to pause or restart replication between a pair of volumes."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -127,6 +137,8 @@ def RemoveClusterPair(ctx,
            cluster_pair_id):
     """You can use the RemoveClusterPair method to close the open connections between two paired clusters.&lt;br/&gt;"""
     """&lt;b&gt;Note&lt;/b&gt;: Before you remove a cluster pair, you must first remove all volume pairing to the clusters with the &quot;RemoveVolumePair&quot; API method."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -146,6 +158,8 @@ def RemoveVolumePair(ctx,
     """RemoveVolumePair is used to remove the remote pairing between two volumes."""
     """When the volume pairing information is removed, data is no longer replicated to or from the volume."""
     """This method should be run on both the source and target volumes that are paired together."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -160,6 +174,8 @@ def StartClusterPairing(ctx):
     """StartClusterPairing is used to create an encoded key from a cluster that is used to pair with another cluster."""
     """The key created from this API method is used in the &quot;CompleteClusterPairing&quot; API method to establish a cluster pairing."""
     """You can pair a cluster with a maximum of four other SolidFire clusters."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -183,6 +199,8 @@ def StartVolumePairing(ctx,
            mode = None):
     """StartVolumePairing is used to create an encoded key from a volume that is used to pair with another volume."""
     """The key that this method creates is used in the &quot;CompleteVolumePairing&quot; API method to establish a volume pairing."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 

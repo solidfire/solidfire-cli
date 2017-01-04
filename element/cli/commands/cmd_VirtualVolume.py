@@ -16,13 +16,13 @@ from element import utils
 import jsonpickle
 import simplejson
 from uuid import UUID
+from element import exceptions
 
 
 @click.group()
 @pass_context
 def cli(ctx):
     """CreateVirtualVolumeHost EnableFeature GetFeatureStatus GetVirtualVolumeCount GetVirtualVolumeTaskUpdate GetVirtualVolumeUnsharedChunks ListVirtualVolumeBindings ListVirtualVolumeHosts ListVirtualVolumes ListVirtualVolumeTasks PrepareVirtualSnapshot """
-    ctx.sfapi = ctx.client
 
 @cli.command('CreateVirtualVolumeHost', short_help="CreateVirtualVolumeHost")
 @click.option('--virtual_volume_host_id',
@@ -58,6 +58,8 @@ def CreateVirtualVolumeHost(ctx,
            host_address = None,
            calling_virtual_volume_host_id = None):
     """CreateVirtualVolumeHost creates a new ESX host."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -79,6 +81,8 @@ def CreateVirtualVolumeHost(ctx,
 def EnableFeature(ctx,
            feature):
     """EnableFeature allows you to enable cluster features that are disabled by default."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -96,6 +100,8 @@ def EnableFeature(ctx,
 def GetFeatureStatus(ctx,
            feature = None):
     """GetFeatureStatus allows you to retrieve the status of a cluster feature."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -108,6 +114,8 @@ def GetFeatureStatus(ctx,
 @pass_context
 def GetVirtualVolumeCount(ctx):
     """Enables retrieval of the number of virtual volumes currently in the system."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -130,6 +138,8 @@ def GetVirtualVolumeTaskUpdate(ctx,
            virtual_volume_task_id,
            calling_virtual_volume_host_id = None):
     """GetVirtualVolumeTaskUpdate checks the status of a VVol Async Task."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -176,6 +186,8 @@ def GetVirtualVolumeUnsharedChunks(ctx,
     """than 30 seconds. If the specified VVol and the base VVil are not related, an """
     """error is thrown. If the offset/length combination is invalid or out fo range """
     """an error is thrown."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -193,6 +205,8 @@ def GetVirtualVolumeUnsharedChunks(ctx,
 def ListVirtualVolumeBindings(ctx,
            virtual_volume_binding_ids = None):
     """ListVirtualVolumeBindings returns a list of VVol bindings."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -212,6 +226,8 @@ def ListVirtualVolumeBindings(ctx,
 def ListVirtualVolumeHosts(ctx,
            virtual_volume_host_ids = None):
     """ListVirtualVolumeHosts returns a list of known ESX hosts."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -251,6 +267,8 @@ def ListVirtualVolumes(ctx,
            start_virtual_volume_id = None,
            virtual_volume_ids = None):
     """ListVirtualVolumes enables you to list the virtual volumes currently in the system. You can use this method to list all virtual volumes, or only list a subset."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -270,6 +288,8 @@ def ListVirtualVolumes(ctx,
 def ListVirtualVolumeTasks(ctx,
            virtual_volume_task_ids = None):
     """ListVirtualVolumeTasks returns a list of VVol Async Tasks."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -304,6 +324,8 @@ def PrepareVirtualSnapshot(ctx,
            writable_snapshot = None,
            calling_virtual_volume_host_id = None):
     """PrepareVirtualSnapshot is used to set up VMware Virtual Volume snapshot."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 

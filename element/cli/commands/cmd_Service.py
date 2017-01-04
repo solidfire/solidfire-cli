@@ -16,18 +16,20 @@ from element import utils
 import jsonpickle
 import simplejson
 from uuid import UUID
+from element import exceptions
 
 
 @click.group()
 @pass_context
 def cli(ctx):
     """ListServices """
-    ctx.sfapi = ctx.client
 
 @cli.command('ListServices', short_help="ListServices")
 @pass_context
 def ListServices(ctx):
     """List the services in the cluster."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 

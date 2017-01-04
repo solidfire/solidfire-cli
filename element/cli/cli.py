@@ -160,6 +160,7 @@ def cli(ctx,
     ctx.verbose = verbose
 
     connections_dirty = False
+    cfg = None
 
     connectionsCsvLocation = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "..", "connections.csv")
     with open(connectionsCsvLocation) as connectionFile:
@@ -197,31 +198,29 @@ def cli(ctx,
             if(len(filteredCfg) < 1):
                 raise exceptions.SolidFireUsageException("Could not find a connection named "+connectionname)
             cfg = filteredCfg[0]
-        else:
-            raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+    if cfg is not None:
         cfg["port"] = int(cfg["port"])
+        # Finaly, we need to establish our connection via elementfactory:
+        ctx.element = ElementFactory.create(cfg["mvip"],cfg["login"],cfg["password"],9.0,port=cfg["port"])
 
-    # Finaly, we need to establish our connection via elementfactory:
-    ctx.element = ElementFactory.create(cfg["mvip"],cfg["login"],cfg["password"],9.0,port=cfg["port"])
+        # If the connections are dirty and we were able to create the element, we need to rewrite our connections file.
+        if connections_dirty:
+            with open(connectionsCsvLocation, 'w') as f:
+                w = csv.DictWriter(f, ["name","mvip","port","login","password","url"], lineterminator='\n')
+                w.writeheader()
+                for connection in connections:
+                    if connection is not None:
+                        w.writerow(connection)
 
-    # If the connections are dirty and we were able to create the element, we need to rewrite our connections file.
-    if connections_dirty:
-        with open(connectionsCsvLocation, 'w') as f:
-            w = csv.DictWriter(f, ["name","mvip","port","login","password","url"], lineterminator='\n')
-            w.writeheader()
-            for connection in connections:
-                if connection is not None:
-                    w.writerow(connection)
+        ctx.client = api.SolidFireAPI(endpoint_dict=cfg)
 
-    ctx.client = api.SolidFireAPI(endpoint_dict=cfg)
-
-     # TODO(jdg): Use the client to query the cluster for the supported version
-    ctx.sfapi_endpoint_version = 7
-    ctx.element = ElementFactory.create(cfg["mvip"],cfg["login"],cfg["password"],port=cfg["port"])
-    ctx.json = json
-    ctx.depth = depth
-    ctx.filter_tree = filter_tree
-    print(type(ctx))
+         # TODO(jdg): Use the client to query the cluster for the supported version
+        ctx.sfapi_endpoint_version = 7
+        ctx.element = ElementFactory.create(cfg["mvip"],cfg["login"],cfg["password"],port=cfg["port"])
+        ctx.json = json
+        ctx.depth = depth
+        ctx.filter_tree = filter_tree
+        print(type(ctx))
 
 if __name__ == '__main__':
     cli.main()

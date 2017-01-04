@@ -18,13 +18,13 @@ import simplejson
 from solidfire.models import Config
 from solidfire.models import Network
 from uuid import UUID
+from element import exceptions
 
 
 @click.group()
 @pass_context
 def cli(ctx):
     """AddNodes GetBootstrapConfig GetConfig GetNetworkConfig GetNodeStats GetOrigin GetPendingOperation ListActiveNodes ListAllNodes ListNodeStats ListPendingActiveNodes ListPendingNodes RemoveNodes SetConfig SetNetworkConfig """
-    ctx.sfapi = ctx.client
 
 @cli.command('AddNodes', short_help="AddNodes")
 @click.option('--pending_nodes',
@@ -43,6 +43,8 @@ def AddNodes(ctx,
     """Once a node has been added, the drives on the node are made available and can then be added via the &quot;AddDrives&quot; method to increase the storage capacity of the cluster."""
     """&lt;br/&gt;&lt;br/&gt;"""
     """&lt;b&gt;Note&lt;/b&gt;: It may take several seconds after adding a new Node for it to start up and register the drives as being available."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -57,6 +59,8 @@ def AddNodes(ctx,
 @pass_context
 def GetBootstrapConfig(ctx):
     """GetBootstrapConfig returns the cluster name and node name from the bootstrap configuration file. This API method should be performed on an individual node before it has been configured into a cluster. The resulting information from this method is used in the Cluster Configuration UI when the cluster is eventually created."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -71,6 +75,8 @@ def GetConfig(ctx):
     """The GetConfig API method is used to retrieve all the configuration information for the node. This one API method includes the same information available in both &quot;GetClusterConfig&quot; and &quot;GetNetworkConfig&quot; methods."""
     """&lt;br/&gt;&lt;br/&gt;"""
     """&lt;b&gt;Note&lt;/b&gt;: This method is available only through the per-node API endpoint 5.0 or later."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -85,6 +91,8 @@ def GetNetworkConfig(ctx):
     """The GetNetworkConfig API method is used to display the network configuration information for a node."""
     """&lt;br/&gt;&lt;br/&gt;"""
     """&lt;b&gt;Note&lt;/b&gt;: This method is available only through the per-node API endpoint 5.0 or later."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -102,6 +110,8 @@ def GetNetworkConfig(ctx):
 def GetNodeStats(ctx,
            node_id):
     """GetNodeStats is used to return the high-level activity measurements for a single node."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -119,6 +129,8 @@ def GetNodeStats(ctx,
 def GetOrigin(ctx,
            force):
     """GetOrigin enables you to retrieve the origination certificate for where the node was built.NOTE: The GetOrigin method may return &quot;null&quot; if there is no origination certification."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -133,6 +145,8 @@ def GetPendingOperation(ctx):
     """GetPendingOperation is used to detect an operation on a node that is currently in progress. This method can also be used to report back when an operation has completed.&lt;br/&gt;"""
     """&lt;br/&gt;"""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -145,6 +159,8 @@ def GetPendingOperation(ctx):
 @pass_context
 def ListActiveNodes(ctx):
     """ListActiveNodes returns the list of currently active nodes that are in the cluster."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -157,6 +173,8 @@ def ListActiveNodes(ctx):
 @pass_context
 def ListAllNodes(ctx):
     """ListAllNodes enables you to retrieve a list of active and pending nodes in the cluster."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -169,6 +187,8 @@ def ListAllNodes(ctx):
 @pass_context
 def ListNodeStats(ctx):
     """ListNodeStats is used to return the high-level activity measurements for all nodes in a cluster."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -181,6 +201,8 @@ def ListNodeStats(ctx):
 @pass_context
 def ListPendingActiveNodes(ctx):
     """ListPendingActiveNodes returns the list of nodes in the cluster that are currently in the PendingActive state, between the pending and active states. These are nodes that are currently being returned to the factory image."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -194,6 +216,8 @@ def ListPendingActiveNodes(ctx):
 def ListPendingNodes(ctx):
     """Gets the list of pending nodes."""
     """Pending nodes are running and configured to join the cluster, but have not been added via the AddNodes method."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -213,6 +237,8 @@ def RemoveNodes(ctx,
     """RemoveNodes is used to remove one or more nodes that should no longer participate in the cluster. Before removing a node, all drives it contains must first be removed with &quot;RemoveDrives&quot; method. A node cannot be removed until the RemoveDrives process has completed and all data has been migrated away from the node."""
     """&lt;br/&gt;&lt;br/&gt;"""
     """Once removed, a node registers itself as a pending node and can be added again, or shut down which removes it from the &quot;Pending Node&quot; list."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -236,6 +262,8 @@ def SetConfig(ctx,
     """&lt;b&gt;Warning!&lt;/b&gt; Changing the 'bond-mode' on a node can cause a temporary loss of network connectivity. Caution should be taken when using this method."""
     """&lt;br/&gt;&lt;br/&gt;"""
     """&lt;b&gt;Note&lt;/b&gt;: This method is available only through the per-node API endpoint 5.0 or later."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
     kwargsDict = simplejson.loads(config)
     config = Config(**kwargsDict)
@@ -258,6 +286,8 @@ def SetNetworkConfig(ctx,
     """&lt;b&gt;WARNING!&lt;/b&gt; Changing the &quot;bond-mode&quot; on a node can cause a temporary loss of network connectivity. Caution should be taken when using this method."""
     """&lt;br/&gt;&lt;br/&gt;"""
     """&lt;b&gt;Note&lt;/b&gt;: This method is available only through the per-node API endpoint 5.0 or later."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
     kwargsDict = simplejson.loads(network)
     network = Network(**kwargsDict)

@@ -16,13 +16,13 @@ from element import utils
 import jsonpickle
 import simplejson
 from uuid import UUID
+from element import exceptions
 
 
 @click.group()
 @pass_context
 def cli(ctx):
     """CreateStorageContainer DeleteStorageContainers GetStorageContainerEfficiency ListStorageContainers ModifyStorageContainer """
-    ctx.sfapi = ctx.client
 
 @cli.command('CreateStorageContainer', short_help="CreateStorageContainer")
 @click.option('--name',
@@ -43,6 +43,8 @@ def CreateStorageContainer(ctx,
            initiator_secret = None,
            target_secret = None):
     """Creates a new VVols storage container."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -60,6 +62,8 @@ def CreateStorageContainer(ctx,
 def DeleteStorageContainers(ctx,
            storage_container_ids):
     """Deletes a storage container from the system."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -79,6 +83,8 @@ def DeleteStorageContainers(ctx,
 def GetStorageContainerEfficiency(ctx,
            storage_container_id):
     """GetStorageContainerEfficiency enables you to retrieve efficiency information about a virtual volume storage container."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -96,6 +102,8 @@ def GetStorageContainerEfficiency(ctx,
 def ListStorageContainers(ctx,
            storage_container_ids = None):
     """Gets information for all storage containers currently in the system."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
@@ -125,6 +133,8 @@ def ModifyStorageContainer(ctx,
            initiator_secret = None,
            target_secret = None):
     """Modifies an existing storage container."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
