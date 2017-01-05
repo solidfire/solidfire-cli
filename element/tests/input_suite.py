@@ -5,17 +5,23 @@ import jsonpickle
 import random
 import os
 import csv
+from solidfire.models import *
 from unittest.mock import MagicMock
 
 def rand_string(length):
     return ''.join(random.choice('abcdefghijklmnopqrstuvwxyz0123456789') for i in range(length))
 
 def check_strange_inputs():
-    # First, make a new account.
+    # First, make a new account. Set the CHAPSecret to confirm that CHAPSecrets work. This exercises a CHAPSecret parameter
     runner = CliRunner()
     account_name = rand_string(15)
-    result = runner.invoke(cli.cli, ['-c','0','-j',"Account", "Add", '--username', account_name])
+    result = runner.invoke(cli.cli, ['-c','0','-j',"Account", "Add", '--username', account_name, '--initiator_secret', "solidfire1234"])
     account = jsonpickle.decode(result.output)
+    result = runner.invoke(cli.cli, ['-c','0','-j',"Account", "GetByID", '--account_id', account.account_id])
+    fullAccount = jsonpickle.decode(result.output)
+
+    # Verify that CHAPSecret is working.
+    assert fullAccount.account.initiator_secret.secret == "solidfire1234"
 
     # Next, make two volumes
     result = runner.invoke(cli.cli, ['-c','0','-j',"Volume", "Create", '--name', rand_string(15), "--account_id", account.account_id, "--total_size", "1000000000", "--enable512e", True])
