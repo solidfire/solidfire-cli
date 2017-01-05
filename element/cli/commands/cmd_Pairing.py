@@ -22,15 +22,15 @@ from element import exceptions
 @click.group()
 @pass_context
 def cli(ctx):
-    """CompleteClusterPairing CompleteVolumePairing ListActivePairedVolumes ListClusterPairs ModifyVolumePair RemoveClusterPair RemoveVolumePair StartClusterPairing StartVolumePairing """
+    """CompleteCluster CompleteVolume ListActivePairedVolumes ListClusterPairs ModifyVolumePair RemoveClusterPair RemoveVolumePair StartCluster StartVolume """
 
-@cli.command('CompleteClusterPairing', short_help="CompleteClusterPairing")
+@cli.command('CompleteCluster', short_help="""The CompleteClusterPairing method is the second step in the cluster pairing process. Use this method with the encoded key received from the "StartClusterPairing" API method to complete the cluster pairing process. """)
 @click.option('--cluster_pairing_key',
               type=str,
               required=True,
               help="""A string of characters that is returned from the "StartClusterPairing" API method. """)
 @pass_context
-def CompleteClusterPairing(ctx,
+def CompleteCluster(ctx,
            cluster_pairing_key):
     """The CompleteClusterPairing method is the second step in the cluster pairing process."""
     """Use this method with the encoded key received from the &quot;StartClusterPairing&quot; API method to complete the cluster pairing process."""
@@ -44,7 +44,7 @@ def CompleteClusterPairing(ctx,
 
 
 
-@cli.command('CompleteVolumePairing', short_help="CompleteVolumePairing")
+@cli.command('CompleteVolume', short_help="""CompleteVolumePairing is used to complete the pairing of two volumes. """)
 @click.option('--volume_pairing_key',
               type=str,
               required=True,
@@ -54,7 +54,7 @@ def CompleteClusterPairing(ctx,
               required=True,
               help="""The ID of volume on which to complete the pairing process. """)
 @pass_context
-def CompleteVolumePairing(ctx,
+def CompleteVolume(ctx,
            volume_pairing_key,
            volume_id):
     """CompleteVolumePairing is used to complete the pairing of two volumes."""
@@ -68,7 +68,7 @@ def CompleteVolumePairing(ctx,
 
 
 
-@cli.command('ListActivePairedVolumes', short_help="ListActivePairedVolumes")
+@cli.command('ListActivePairedVolumes', short_help="""ListActivePairedVolumes is used to list all of the active volumes paired with a volume. Volumes listed in the return for this method include volumes with active and pending pairings. """)
 @pass_context
 def ListActivePairedVolumes(ctx):
     """ListActivePairedVolumes is used to list all of the active volumes paired with a volume."""
@@ -83,7 +83,7 @@ def ListActivePairedVolumes(ctx):
 
 
 
-@cli.command('ListClusterPairs', short_help="ListClusterPairs")
+@cli.command('ListClusterPairs', short_help="""ListClusterPairs is used to list all of the clusters a cluster is paired with. This method returns information about active and pending cluster pairings, such as statistics about the current pairing as well as the connectivity and latency (in milliseconds) of the cluster pairing. """)
 @pass_context
 def ListClusterPairs(ctx):
     """ListClusterPairs is used to list all of the clusters a cluster is paired with."""
@@ -98,7 +98,7 @@ def ListClusterPairs(ctx):
 
 
 
-@cli.command('ModifyVolumePair', short_help="ModifyVolumePair")
+@cli.command('ModifyVolumePair', short_help="""ModifyVolumePair is used to pause or restart replication between a pair of volumes. """)
 @click.option('--volume_id',
               type=int,
               required=True,
@@ -127,7 +127,7 @@ def ModifyVolumePair(ctx,
 
 
 
-@cli.command('RemoveClusterPair', short_help="RemoveClusterPair")
+@cli.command('RemoveClusterPair', short_help="""You can use the RemoveClusterPair method to close the open connections between two paired clusters.<br/> <b>Note</b>: Before you remove a cluster pair, you must first remove all volume pairing to the clusters with the "RemoveVolumePair" API method. """)
 @click.option('--cluster_pair_id',
               type=int,
               required=True,
@@ -147,7 +147,7 @@ def RemoveClusterPair(ctx,
 
 
 
-@cli.command('RemoveVolumePair', short_help="RemoveVolumePair")
+@cli.command('RemoveVolumePair', short_help="""RemoveVolumePair is used to remove the remote pairing between two volumes. When the volume pairing information is removed, data is no longer replicated to or from the volume. This method should be run on both the source and target volumes that are paired together. """)
 @click.option('--volume_id',
               type=int,
               required=True,
@@ -168,9 +168,9 @@ def RemoveVolumePair(ctx,
 
 
 
-@cli.command('StartClusterPairing', short_help="StartClusterPairing")
+@cli.command('StartCluster', short_help="""StartClusterPairing is used to create an encoded key from a cluster that is used to pair with another cluster. The key created from this API method is used in the "CompleteClusterPairing" API method to establish a cluster pairing. You can pair a cluster with a maximum of four other SolidFire clusters. """)
 @pass_context
-def StartClusterPairing(ctx):
+def StartCluster(ctx):
     """StartClusterPairing is used to create an encoded key from a cluster that is used to pair with another cluster."""
     """The key created from this API method is used in the &quot;CompleteClusterPairing&quot; API method to establish a cluster pairing."""
     """You can pair a cluster with a maximum of four other SolidFire clusters."""
@@ -184,7 +184,7 @@ def StartClusterPairing(ctx):
 
 
 
-@cli.command('StartVolumePairing', short_help="StartVolumePairing")
+@cli.command('StartVolume', short_help="""StartVolumePairing is used to create an encoded key from a volume that is used to pair with another volume. The key that this method creates is used in the "CompleteVolumePairing" API method to establish a volume pairing. """)
 @click.option('--volume_id',
               type=int,
               required=True,
@@ -194,7 +194,7 @@ def StartClusterPairing(ctx):
               required=False,
               help="""The mode of the volume on which to start the pairing process. The mode can only be set if the volume is the source volume.<br/> Possible values:<br/> <b>Async</b>: (default if no mode parameter specified) Writes are acknowledged when they complete locally. The cluster does not wait for writes to be replicated to the target cluster.<br/> <b>Sync</b>: Source acknowledges write when the data is stored locally and on the remote cluster.<br/> <b>SnapshotsOnly</b>: Only snapshots created on the source cluster will be replicated. Active writes from the source volume will not be replicated.<br/> """)
 @pass_context
-def StartVolumePairing(ctx,
+def StartVolume(ctx,
            volume_id,
            mode = None):
     """StartVolumePairing is used to create an encoded key from a volume that is used to pair with another volume."""

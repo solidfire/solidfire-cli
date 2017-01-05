@@ -24,9 +24,9 @@ from element import exceptions
 @click.group()
 @pass_context
 def cli(ctx):
-    """CreateGroupSnapshot CreateSchedule CreateSnapshot DeleteGroupSnapshot DeleteSnapshot GetSchedule ListGroupSnapshots ListSchedules ListSnapshots ModifyGroupSnapshot ModifySchedule ModifySnapshot RollbackToGroupSnapshot RollbackToSnapshot """
+    """CreateGroup CreateSchedule Create DeleteGroup Delete GetSchedule ListGroup ListSchedules List ModifyGroup ModifySchedule Modify RollbackToGroup RollbackTo """
 
-@cli.command('CreateGroupSnapshot', short_help="CreateGroupSnapshot")
+@cli.command('CreateGroup', short_help="""CreateGroupSnapshot is used to create a point-in-time copy of a group of volumes. The snapshot created can then be used later as a backup or rollback to ensure the data on the group of volumes is consistent for the point in time in which the snapshot was created. <br/><br/> <b>Note</b>: Creating a group snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """)
 @click.option('--volumes',
               type=str,
               required=True,
@@ -48,7 +48,7 @@ def cli(ctx):
               required=False,
               help="""List of Name/Value pairs in JSON object format. """)
 @pass_context
-def CreateGroupSnapshot(ctx,
+def CreateGroup(ctx,
            volumes,
            name = None,
            enable_remote_replication = None,
@@ -71,7 +71,7 @@ def CreateGroupSnapshot(ctx,
 
 
 
-@cli.command('CreateSchedule', short_help="CreateSchedule")
+@cli.command('CreateSchedule', short_help="""CreateSchedule is used to create a schedule that will autonomously make a snapshot of a volume at a defined interval.<br/> <br/> The snapshot created can be used later as a backup or rollback to ensure the data on a volume or group of volumes is consistent for the point in time in which the snapshot was created. <br/> <br/> <b>Note</b>: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """)
 @click.option('--schedule',
               type=str,
               required=True,
@@ -95,7 +95,7 @@ def CreateSchedule(ctx,
 
 
 
-@cli.command('CreateSnapshot', short_help="CreateSnapshot")
+@cli.command('Create', short_help="""CreateSnapshot is used to create a point-in-time copy of a volume. A snapshot can be created from any volume or from an existing snapshot. <br/><br/> <b>Note</b>: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """)
 @click.option('--volume_id',
               type=int,
               required=True,
@@ -121,7 +121,7 @@ def CreateSchedule(ctx,
               required=False,
               help="""List of Name/Value pairs in JSON object format. """)
 @pass_context
-def CreateSnapshot(ctx,
+def Create(ctx,
            volume_id,
            snapshot_id = None,
            name = None,
@@ -143,7 +143,7 @@ def CreateSnapshot(ctx,
 
 
 
-@cli.command('DeleteGroupSnapshot', short_help="DeleteGroupSnapshot")
+@cli.command('DeleteGroup', short_help="""DeleteGroupSnapshot is used to delete a group snapshot. The saveMembers parameter can be used to preserve all the snapshots that were made for the volumes in the group but the group association will be removed. """)
 @click.option('--group_snapshot_id',
               type=int,
               required=True,
@@ -153,7 +153,7 @@ def CreateSnapshot(ctx,
               required=True,
               help="""<br/><b>true</b>: Snapshots are kept, but group association is removed. <br/><b>false</b>: The group and snapshots are deleted. """)
 @pass_context
-def DeleteGroupSnapshot(ctx,
+def DeleteGroup(ctx,
            group_snapshot_id,
            save_members):
     """DeleteGroupSnapshot is used to delete a group snapshot."""
@@ -169,13 +169,13 @@ def DeleteGroupSnapshot(ctx,
 
 
 
-@cli.command('DeleteSnapshot', short_help="DeleteSnapshot")
+@cli.command('Delete', short_help="""DeleteSnapshot is used to delete a snapshot. A snapshot that is currently the "active" snapshot cannot be deleted. You must rollback and make another snapshot "active" before the current snapshot can be deleted. To rollback a snapshot, use RollbackToSnapshot. """)
 @click.option('--snapshot_id',
               type=int,
               required=True,
               help="""The ID of the snapshot to delete. """)
 @pass_context
-def DeleteSnapshot(ctx,
+def Delete(ctx,
            snapshot_id):
     """DeleteSnapshot is used to delete a snapshot."""
     """A snapshot that is currently the &quot;active&quot; snapshot cannot be deleted."""
@@ -191,7 +191,7 @@ def DeleteSnapshot(ctx,
 
 
 
-@cli.command('GetSchedule', short_help="GetSchedule")
+@cli.command('GetSchedule', short_help="""GetSchedule is used to return information about a scheduled snapshot that has been created. You can see information about a specified schedule if there are many snapshot schedules in the system. You can include more than one schedule with this method by specifying additional scheduleIDs to the parameter. """)
 @click.option('--schedule_id',
               type=int,
               required=True,
@@ -210,13 +210,13 @@ def GetSchedule(ctx,
 
 
 
-@cli.command('ListGroupSnapshots', short_help="ListGroupSnapshots")
+@cli.command('ListGroup', short_help="""ListGroupSnapshots is used to return information about all group snapshots that have been created. """)
 @click.option('--volume_id',
               type=int,
               required=False,
               help="""An array of unique volume IDs to query. If this parameter is not specified, all group snapshots on the cluster will be included. """)
 @pass_context
-def ListGroupSnapshots(ctx,
+def ListGroup(ctx,
            volume_id = None):
     """ListGroupSnapshots is used to return information about all group snapshots that have been created."""
     if ctx.element is None:
@@ -229,7 +229,7 @@ def ListGroupSnapshots(ctx,
 
 
 
-@cli.command('ListSchedules', short_help="ListSchedules")
+@cli.command('ListSchedules', short_help="""ListSchedule is used to return information about all scheduled snapshots that have been created. """)
 @pass_context
 def ListSchedules(ctx):
     """ListSchedule is used to return information about all scheduled snapshots that have been created."""
@@ -243,13 +243,13 @@ def ListSchedules(ctx):
 
 
 
-@cli.command('ListSnapshots', short_help="ListSnapshots")
+@cli.command('List', short_help="""ListSnapshots is used to return the attributes of each snapshot taken on the volume. """)
 @click.option('--volume_id',
               type=int,
               required=False,
               help="""The volume to list snapshots for. If not provided, all snapshots for all volumes are returned. """)
 @pass_context
-def ListSnapshots(ctx,
+def List(ctx,
            volume_id = None):
     """ListSnapshots is used to return the attributes of each snapshot taken on the volume."""
     if ctx.element is None:
@@ -262,7 +262,7 @@ def ListSnapshots(ctx,
 
 
 
-@cli.command('ModifyGroupSnapshot', short_help="ModifyGroupSnapshot")
+@cli.command('ModifyGroup', short_help="""ModifyGroupSnapshot is used to change the attributes currently assigned to a group snapshot. """)
 @click.option('--group_snapshot_id',
               type=int,
               required=True,
@@ -276,7 +276,7 @@ def ListSnapshots(ctx,
               required=False,
               help="""Use to enable the snapshot created to be replicated to a remote SolidFire cluster. Possible values: <br/><b>true</b>: the snapshot will be replicated to remote storage. <br/><b>false</b>: Default. No replication. """)
 @pass_context
-def ModifyGroupSnapshot(ctx,
+def ModifyGroup(ctx,
            group_snapshot_id,
            expiration_time = None,
            enable_remote_replication = None):
@@ -291,7 +291,7 @@ def ModifyGroupSnapshot(ctx,
 
 
 
-@cli.command('ModifySchedule', short_help="ModifySchedule")
+@cli.command('ModifySchedule', short_help="""ModifySchedule is used to change the intervals at which a scheduled snapshot occurs. This allows for adjustment to the snapshot frequency and retention.<br/> """)
 @click.option('--schedule',
               type=str,
               required=True,
@@ -311,7 +311,7 @@ def ModifySchedule(ctx,
 
 
 
-@cli.command('ModifySnapshot', short_help="ModifySnapshot")
+@cli.command('Modify', short_help="""ModifySnapshot is used to change the attributes currently assigned to a snapshot. Use this API method to enable the snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system. """)
 @click.option('--snapshot_id',
               type=int,
               required=True,
@@ -325,7 +325,7 @@ def ModifySchedule(ctx,
               required=False,
               help="""Use to enable the snapshot created to be replicated to a remote SolidFire cluster. Possible values: <br/><b>true</b>: the snapshot will be replicated to remote storage. <br/><b>false</b>: Default. No replication. """)
 @pass_context
-def ModifySnapshot(ctx,
+def Modify(ctx,
            snapshot_id,
            expiration_time = None,
            enable_remote_replication = None):
@@ -341,7 +341,7 @@ def ModifySnapshot(ctx,
 
 
 
-@cli.command('RollbackToGroupSnapshot', short_help="RollbackToGroupSnapshot")
+@cli.command('RollbackToGroup', short_help="""RollbackToGroupSnapshot is used to roll back each individual volume in a snapshot group to a copy of their individual snapshots. <br/><br/> <b>Note</b>: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """)
 @click.option('--group_snapshot_id',
               type=int,
               required=True,
@@ -359,7 +359,7 @@ def ModifySnapshot(ctx,
               required=False,
               help="""List of Name/Value pairs in JSON object format """)
 @pass_context
-def RollbackToGroupSnapshot(ctx,
+def RollbackToGroup(ctx,
            group_snapshot_id,
            save_current_state,
            name = None,
@@ -378,7 +378,7 @@ def RollbackToGroupSnapshot(ctx,
 
 
 
-@cli.command('RollbackToSnapshot', short_help="RollbackToSnapshot")
+@cli.command('RollbackTo', short_help="""RollbackToSnapshot is used to make an existing snapshot the "active" volume image. This method creates a new  snapshot from an existing snapshot. The new snapshot becomes "active" and the existing snapshot is preserved until  it is manually deleted. The previously "active" snapshot is deleted unless the parameter saveCurrentState is set with  a value of "true." <b>Note</b>: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """)
 @click.option('--volume_id',
               type=int,
               required=True,
@@ -400,7 +400,7 @@ def RollbackToGroupSnapshot(ctx,
               required=False,
               help="""List of Name/Value pairs in JSON object format """)
 @pass_context
-def RollbackToSnapshot(ctx,
+def RollbackTo(ctx,
            volume_id,
            snapshot_id,
            save_current_state,

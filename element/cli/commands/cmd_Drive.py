@@ -23,15 +23,15 @@ from element import exceptions
 @click.group()
 @pass_context
 def cli(ctx):
-    """AddDrives GetDriveConfig GetDriveHardwareInfo GetDriveStats ListDriveHardware ListDrives RemoveDrives ResetDrives SecureEraseDrives TestDrives """
+    """Add GetConfig GetHardwareInfo GetStats ListHardware List Remove Reset SecureErase Test """
 
-@cli.command('AddDrives', short_help="AddDrives")
+@cli.command('Add', short_help="""AddDrives is used to add one or more available drives to the cluster enabling the drives to host a portion of the cluster's data. When you add a node to the cluster or install new drives in an existing node, the new drives are marked as "available" and must be added via AddDrives before they can be utilized. Use the "ListDrives" method to display drives that are "available" to be added. When you add multiple drives, it is more efficient to add them in a single "AddDrives" method call rather than multiple individual methods with a single drive each. This reduces the amount of data balancing that must occur to stabilize the storage load on the cluster. <br/><br/> When you add a drive, the system automatically determines the "type" of drive it should be. <br/><br/> The method returns immediately. However, it may take some time for the data in the cluster to be rebalanced using the newly added drives. As the new drive(s) are syncing on the system, you can use the "ListSyncJobs" method to see how the drive(s) are being rebalanced and the progress of adding the new drive. """)
 @click.option('--new_drive_drive_id',
               type=int,
               required=True,
               help="""A unique identifier for this drive. """)
 @pass_context
-def AddDrives(ctx,
+def Add(ctx,
            new_drive_drive_id):
     """AddDrives is used to add one or more available drives to the cluster enabling the drives to host a portion of the cluster's data."""
     """When you add a node to the cluster or install new drives in an existing node, the new drives are marked as &quot;available&quot; and must be added via AddDrives before they can be utilized."""
@@ -60,9 +60,9 @@ def AddDrives(ctx,
 
 
 
-@cli.command('GetDriveConfig', short_help="GetDriveConfig")
+@cli.command('GetConfig', short_help="""GetDriveConfig is used to display drive information for expected slice and block drive counts as well as the number of slices and block drives that are currently connected to the node. <br/><br/> <b>Note</b>: This method is available only through the per-node API endpoint 5.0 or later. """)
 @pass_context
-def GetDriveConfig(ctx):
+def GetConfig(ctx):
     """GetDriveConfig is used to display drive information for expected slice and block drive counts as well as the number of slices and block drives that are currently connected to the node."""
     """&lt;br/&gt;&lt;br/&gt;"""
     """&lt;b&gt;Note&lt;/b&gt;: This method is available only through the per-node API endpoint 5.0 or later."""
@@ -76,13 +76,13 @@ def GetDriveConfig(ctx):
 
 
 
-@cli.command('GetDriveHardwareInfo', short_help="GetDriveHardwareInfo")
+@cli.command('GetHardwareInfo', short_help="""GetDriveHardwareInfo returns all the hardware info for the given drive. This generally includes manufacturers, vendors, versions, and other associated hardware identification information. """)
 @click.option('--drive_id',
               type=int,
               required=True,
               help="""DriveID for the drive information requested. DriveIDs can be obtained via the "ListDrives" method. """)
 @pass_context
-def GetDriveHardwareInfo(ctx,
+def GetHardwareInfo(ctx,
            drive_id):
     """GetDriveHardwareInfo returns all the hardware info for the given drive. This generally includes manufacturers, vendors, versions, and other associated hardware identification information."""
     if ctx.element is None:
@@ -95,13 +95,13 @@ def GetDriveHardwareInfo(ctx,
 
 
 
-@cli.command('GetDriveStats', short_help="GetDriveStats")
+@cli.command('GetStats', short_help="""GetDriveStats return high-level activity measurements for a single drive. Values are cumulative from the addition of the drive to the cluster. Some values are specific to Block Drives. Statistical data may not be returned for both block and metadata drives when running this method. For more information on which drive type returns which data, see Response Example (Block Drive) and Response Example (Volume Metadata Drive) in the SolidFire API guide. """)
 @click.option('--drive_id',
               type=int,
               required=True,
               help="""Specifies the drive for which statistics are gathered. """)
 @pass_context
-def GetDriveStats(ctx,
+def GetStats(ctx,
            drive_id):
     """GetDriveStats return high-level activity measurements for a single drive. Values are cumulative from the addition of the drive to the cluster. Some values are specific to Block Drives. Statistical data may not be returned for both block and metadata drives when running this method."""
     """For more information on which drive type returns which data, see Response Example (Block Drive) and Response Example (Volume Metadata Drive) in the SolidFire API guide."""
@@ -115,13 +115,13 @@ def GetDriveStats(ctx,
 
 
 
-@cli.command('ListDriveHardware', short_help="ListDriveHardware")
+@cli.command('ListHardware', short_help="""ListDriveHardware returns all the drives connected to a node. Use this method on the cluster to return drive hardware information for all the drives on all nodes. """)
 @click.option('--force',
               type=bool,
               required=True,
               help="""To run this command, the force parameter must be set to true. """)
 @pass_context
-def ListDriveHardware(ctx,
+def ListHardware(ctx,
            force):
     """ListDriveHardware returns all the drives connected to a node. Use this method on the cluster to return drive hardware information for all the drives on all nodes."""
     if ctx.element is None:
@@ -134,9 +134,9 @@ def ListDriveHardware(ctx,
 
 
 
-@cli.command('ListDrives', short_help="ListDrives")
+@cli.command('List', short_help="""ListDrives allows you to retrieve the list of the drives that exist in the cluster's active nodes. This method returns drives that have been added as volume metadata or block drives as well as drives that have not been added and are available. """)
 @pass_context
-def ListDrives(ctx):
+def List(ctx):
     """ListDrives allows you to retrieve the list of the drives that exist in the cluster's active nodes."""
     """This method returns drives that have been added as volume metadata or block drives as well as drives that have not been added and are available."""
     if ctx.element is None:
@@ -149,13 +149,13 @@ def ListDrives(ctx):
 
 
 
-@cli.command('RemoveDrives', short_help="RemoveDrives")
+@cli.command('Remove', short_help="""You can use RemoveDrives to proactively remove drives that are part of the cluster. You may want to use this method when reducing cluster capacity or preparing to replace drives nearing the end of their service life. Any data on the drives is removed and migrated to other drives in the cluster before the drive is removed from the cluster. This is an asynchronous method. Depending on the total capacity of the drives being removed, it may take several minutes to migrate all of the data. Use the "GetAsyncResult" method to check the status of the remove operation. <br/><br/> When removing multiple drives, use a single "RemoveDrives" method call rather than multiple individual methods with a single drive each. This reduces the amount of data balancing that must occur to even stabilize the storage load on the cluster. <br/><br/> You can also remove drives with a "failed" status using "RemoveDrives". When you remove a drive with a "failed" status it is not returned to an "available" or "active" status. The drive is unavailable for use in the cluster. <br/><br/> Use the "ListDrives" method to obtain the driveIDs for the drives you want to remove. """)
 @click.option('--drives',
               type=str,
               required=True,
               help="""List of driveIDs to remove from the cluster. """)
 @pass_context
-def RemoveDrives(ctx,
+def Remove(ctx,
            drives):
     """You can use RemoveDrives to proactively remove drives that are part of the cluster."""
     """You may want to use this method when reducing cluster capacity or preparing to replace drives nearing the end of their service life."""
@@ -183,7 +183,7 @@ def RemoveDrives(ctx,
 
 
 
-@cli.command('ResetDrives', short_help="ResetDrives")
+@cli.command('Reset', short_help="""ResetDrives is used to pro-actively initialize drives and remove all data currently residing on the drive. The drive can then be reused in an existing node or used in an upgraded SolidFire node. This method requires the force=true parameter to be included in the method call. <br/><br/> <b>Note</b>: This method is available only through the per-node API endpoint 5.0 or later. """)
 @click.option('--drives',
               type=str,
               required=True,
@@ -193,7 +193,7 @@ def RemoveDrives(ctx,
               required=True,
               help="""The "force" parameter must be included on this method to successfully reset a drive. """)
 @pass_context
-def ResetDrives(ctx,
+def Reset(ctx,
            drives,
            force):
     """ResetDrives is used to pro-actively initialize drives and remove all data currently residing on the drive. The drive can then be reused in an existing node or used in an upgraded SolidFire node. This method requires the force=true parameter to be included in the method call."""
@@ -209,13 +209,13 @@ def ResetDrives(ctx,
 
 
 
-@cli.command('SecureEraseDrives', short_help="SecureEraseDrives")
+@cli.command('SecureErase', short_help="""SecureEraseDrives is used to remove any residual data from drives that have a status of "available." For example, when replacing a drive at its end-of-life that contained sensitive data. It uses a Security Erase Unit command to write a predetermined pattern to the drive and resets the encryption key on the drive. The method may take up to two minutes to complete, so it is an asynchronous method. The GetAsyncResult method can be used to check on the status of the secure erase operation. <br/><br/> Use the "ListDrives" method to obtain the driveIDs for the drives you want to secure erase. """)
 @click.option('--drives',
               type=str,
               required=True,
               help="""List of driveIDs to secure erase. """)
 @pass_context
-def SecureEraseDrives(ctx,
+def SecureErase(ctx,
            drives):
     """SecureEraseDrives is used to remove any residual data from drives that have a status of &quot;available.&quot; For example, when replacing a drive at its end-of-life that contained sensitive data."""
     """It uses a Security Erase Unit command to write a predetermined pattern to the drive and resets the encryption key on the drive. The method may take up to two minutes to complete, so it is an asynchronous method."""
@@ -234,13 +234,13 @@ def SecureEraseDrives(ctx,
 
 
 
-@cli.command('TestDrives', short_help="TestDrives")
+@cli.command('Test', short_help="""The TestDrives API method is used to run a hardware validation on all the drives on the node. Hardware failures on the drives are detected if present and they are reported in the results of the validation tests. <br/><br/> <b>Note</b>: This test takes approximately 10 minutes. <br/><br/> <b>Note</b>: This method is available only through the per-node API endpoint 5.0 or later. """)
 @click.option('--minutes',
               type=int,
               required=False,
               help="""The number of minutes to run the test can be specified. """)
 @pass_context
-def TestDrives(ctx,
+def Test(ctx,
            minutes = None):
     """The TestDrives API method is used to run a hardware validation on all the drives on the node. Hardware failures on the drives are detected if present and they are reported in the results of the validation tests."""
     """&lt;br/&gt;&lt;br/&gt;"""

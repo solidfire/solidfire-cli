@@ -28,9 +28,9 @@ from element import exceptions
 @click.group()
 @pass_context
 def cli(ctx):
-    """AddClusterAdmin ClearClusterFaults CreateCluster CreateSupportBundle DeleteAllSupportBundles DisableEncryptionAtRest DisableSnmp EnableEncryptionAtRest EnableSnmp GetAPI GetClusterCapacity GetClusterConfig GetClusterFullThreshold GetClusterInfo GetClusterMasterNodeID GetClusterState GetClusterStats GetClusterVersionInfo GetCurrentClusterAdmin GetLimits GetNtpInfo GetSnmpACL GetSnmpInfo GetSnmpState GetSnmpTrapInfo GetSystemStatus ListClusterAdmins ListClusterFaults ListEvents ListSyncJobs ModifyClusterAdmin ModifyClusterFullThreshold RemoveClusterAdmin SetClusterConfig SetNtpInfo SetSnmpACL SetSnmpInfo SetSnmpTrapInfo SnmpSendTestTraps """
+    """AddAdmin ClearFaults Create CreateSupportBundle DeleteAllSupportBundles DisableEncryptionAtRest DisableSnmp EnableEncryptionAtRest EnableSnmp GetAPI GetCapacity GetConfig GetFullThreshold GetInfo GetMasterNodeID GetState GetStats GetVersionInfo GetCurrentAdmin GetLimits GetNtpInfo GetSnmpACL GetSnmpInfo GetSnmpState GetSnmpTrapInfo GetSystemStatus ListAdmins ListFaults ListEvents ListSyncJobs ModifyAdmin ModifyFullThreshold RemoveAdmin SetConfig SetNtpInfo SetSnmpACL SetSnmpInfo SetSnmpTrapInfo SnmpSendTestTraps """
 
-@cli.command('AddClusterAdmin', short_help="AddClusterAdmin")
+@cli.command('AddAdmin', short_help="""AddClusterAdmin adds a new Cluster Admin. A Cluster Admin can be used to manage the cluster via the API and management tools. Cluster Admins are completely separate and unrelated to standard tenant accounts. <br/><br/> Each Cluster Admin can be restricted to a sub-set of the API. SolidFire recommends using multiple Cluster Admins for different users and applications. Each Cluster Admin should be given the minimal permissions necessary to reduce the potential impact of credential compromise. """)
 @click.option('--username',
               type=str,
               required=True,
@@ -52,7 +52,7 @@ def cli(ctx):
               required=False,
               help="""List of Name/Value pairs in JSON object format. """)
 @pass_context
-def AddClusterAdmin(ctx,
+def AddAdmin(ctx,
            username,
            password,
            access,
@@ -73,13 +73,13 @@ def AddClusterAdmin(ctx,
 
 
 
-@cli.command('ClearClusterFaults', short_help="ClearClusterFaults")
+@cli.command('ClearFaults', short_help="""ClearClusterFaults is used to clear information about both current faults that are resolved as well as faults that were previously detected and resolved can be cleared. """)
 @click.option('--fault_types',
               type=str,
               required=False,
               help="""Determines the types of faults cleared:<br/> <b>current</b>: Faults that are currently detected and have not been resolved.<br/> <b>resolved</b>: Faults that were previously detected and resolved.<br/> <b>all</b>: Both current and resolved faults are cleared. The fault status can be determined by the "resolved" field of the fault object. """)
 @pass_context
-def ClearClusterFaults(ctx,
+def ClearFaults(ctx,
            fault_types = None):
     """ClearClusterFaults is used to clear information about both current faults that are resolved as well as faults that were previously detected and resolved can be cleared."""
     if ctx.element is None:
@@ -92,7 +92,7 @@ def ClearClusterFaults(ctx,
 
 
 
-@cli.command('CreateCluster', short_help="CreateCluster")
+@cli.command('Create', short_help="""The CreateCluster method is used to initialize the node in a cluster that has ownership of the "mvip" and "svip" addresses. Each new cluster is initialized using the MIP of the first node in the cluster. This method also automatically adds all the nodes being configured into the cluster. The method is used only once each time a new cluster is initialized. <br/><br/> <b>Note</b>: You need to log into the node that is used as the master node for the cluster. Once logged in, run the GetBootstrapConfig method on the node to get the IP addresses for the rest of the nodes that you want to include in the cluster. Then run the CreateCluster method. """)
 @click.option('--accept_eula',
               type=bool,
               required=False,
@@ -126,7 +126,7 @@ def ClearClusterFaults(ctx,
               required=False,
               help="""List of Name/Value pairs in JSON object format. """)
 @pass_context
-def CreateCluster(ctx,
+def Create(ctx,
            mvip,
            svip,
            rep_count,
@@ -150,7 +150,7 @@ def CreateCluster(ctx,
 
 
 
-@cli.command('CreateSupportBundle', short_help="CreateSupportBundle")
+@cli.command('CreateSupportBundle', short_help="""CreateSupportBundle is used to create a support bundle file under the node's directory. When the bundle has been successfully created, the bundle is stored on the node as a tar.gz file. """)
 @click.option('--bundle_name',
               type=str,
               required=False,
@@ -179,7 +179,7 @@ def CreateSupportBundle(ctx,
 
 
 
-@cli.command('DeleteAllSupportBundles', short_help="DeleteAllSupportBundles")
+@cli.command('DeleteAllSupportBundles', short_help="""DeleteAllSupportBundles is used to delete all support bundles generated with the CreateSupportBundle API method. """)
 @pass_context
 def DeleteAllSupportBundles(ctx):
     """DeleteAllSupportBundles is used to delete all support bundles generated with the CreateSupportBundle API method."""
@@ -193,7 +193,7 @@ def DeleteAllSupportBundles(ctx):
 
 
 
-@cli.command('DisableEncryptionAtRest', short_help="DisableEncryptionAtRest")
+@cli.command('DisableEncryptionAtRest', short_help="""The DisableEncryptionAtRest method enables you to remove the encryption that was previously applied to the cluster using the EnableEncryptionAtRest method. This disable method is asynchronous and returns a response before encryption is disabled. You can use the GetClusterInfo method to poll the system to see when the process has completed. """)
 @pass_context
 def DisableEncryptionAtRest(ctx):
     """The DisableEncryptionAtRest method enables you to remove the encryption that was previously applied to the cluster using the EnableEncryptionAtRest method."""
@@ -209,7 +209,7 @@ def DisableEncryptionAtRest(ctx):
 
 
 
-@cli.command('DisableSnmp', short_help="DisableSnmp")
+@cli.command('DisableSnmp', short_help="""DisableSnmp is used to disable SNMP on the cluster nodes. """)
 @pass_context
 def DisableSnmp(ctx):
     """DisableSnmp is used to disable SNMP on the cluster nodes."""
@@ -223,7 +223,7 @@ def DisableSnmp(ctx):
 
 
 
-@cli.command('EnableEncryptionAtRest', short_help="EnableEncryptionAtRest")
+@cli.command('EnableEncryptionAtRest', short_help="""The EnableEncryptionAtRest method is used to enable the Advanced Encryption Standard (AES) 256-bit encryption at rest on the cluster so that the cluster can manage the encryption key used for the drives on each node. This feature is not enabled by default. Enabling this operation allows the cluster to automatically manage encryption keys internally for the drives on each node in the cluster. Nodes do not store the keys to unlock drives and the keys are never passed over the network. Two nodes participating in a cluster are required to access the key to disable encryption on a drive. The encryption management does not affect performance or efficiency on the cluster. If an encryption-enabled drive or node is removed from the cluster with the API, all data is secure erased and any data left on the drive cannot be read or accessed. Enabling or disabling encryption should be performed when the cluster is running and in a healthy state. Encryption can be enabled or disabled at your discretion and can be performed as often as you need. <br/><b>Note</b>: This process is asynchronous and returns a response before encryption is enabled. The GetClusterInfo method can be used to poll the system to see when the process has completed. """)
 @pass_context
 def EnableEncryptionAtRest(ctx):
     """The EnableEncryptionAtRest method is used to enable the Advanced Encryption Standard (AES) 256-bit encryption at rest on the cluster so that the cluster can manage the encryption key used for the drives on each node. This feature is not enabled by default. Enabling this operation allows the cluster to automatically manage encryption keys internally for the drives on each node in the cluster. Nodes do not store the keys to unlock drives and the keys are never passed over the network. Two nodes participating in a cluster are required to access the key to disable encryption on a drive. The encryption management does not affect performance or efficiency on the cluster. If an encryption-enabled drive or node is removed from the cluster with the API, all data is secure erased and any data left on the drive cannot be read or accessed."""
@@ -239,7 +239,7 @@ def EnableEncryptionAtRest(ctx):
 
 
 
-@cli.command('EnableSnmp', short_help="EnableSnmp")
+@cli.command('EnableSnmp', short_help="""EnableSnmp is used to enable SNMP on the cluster nodes. The values set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to EnableSnmp. """)
 @click.option('--snmp_v3_enabled',
               type=bool,
               required=True,
@@ -258,7 +258,7 @@ def EnableSnmp(ctx,
 
 
 
-@cli.command('GetAPI', short_help="GetAPI")
+@cli.command('GetAPI', short_help="""Retrieves the current version of the API and a list of all supported versions. """)
 @pass_context
 def GetAPI(ctx):
     """Retrieves the current version of the API and a list of all supported versions."""
@@ -272,9 +272,9 @@ def GetAPI(ctx):
 
 
 
-@cli.command('GetClusterCapacity', short_help="GetClusterCapacity")
+@cli.command('GetCapacity', short_help="""Return the high-level capacity measurements for an entire cluster. The fields returned from this method can be used to calculate the efficiency rates that are displayed in the Element User Interface. """)
 @pass_context
-def GetClusterCapacity(ctx):
+def GetCapacity(ctx):
     """Return the high-level capacity measurements for an entire cluster."""
     """The fields returned from this method can be used to calculate the efficiency rates that are displayed in the Element User Interface."""
     if ctx.element is None:
@@ -287,9 +287,9 @@ def GetClusterCapacity(ctx):
 
 
 
-@cli.command('GetClusterConfig', short_help="GetClusterConfig")
+@cli.command('GetConfig', short_help="""The GetClusterConfig API method is used to return information about the cluster configuration this node uses to communicate with the cluster it is a part of. <br/><br/> <b>Note</b>: This method is available only through the per-node API endpoint 5.0 or later. """)
 @pass_context
-def GetClusterConfig(ctx):
+def GetConfig(ctx):
     """The GetClusterConfig API method is used to return information about the cluster configuration this node uses to communicate with the cluster it is a part of."""
     """&lt;br/&gt;&lt;br/&gt;"""
     """&lt;b&gt;Note&lt;/b&gt;: This method is available only through the per-node API endpoint 5.0 or later."""
@@ -303,9 +303,9 @@ def GetClusterConfig(ctx):
 
 
 
-@cli.command('GetClusterFullThreshold', short_help="GetClusterFullThreshold")
+@cli.command('GetFullThreshold', short_help="""GetClusterFullThreshold is used to view the stages set for cluster fullness levels. All levels are returned when this method is entered. """)
 @pass_context
-def GetClusterFullThreshold(ctx):
+def GetFullThreshold(ctx):
     """GetClusterFullThreshold is used to view the stages set for cluster fullness levels. All levels are returned when this method is entered."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
@@ -317,9 +317,9 @@ def GetClusterFullThreshold(ctx):
 
 
 
-@cli.command('GetClusterInfo', short_help="GetClusterInfo")
+@cli.command('GetInfo', short_help="""Return configuration information about the cluster. """)
 @pass_context
-def GetClusterInfo(ctx):
+def GetInfo(ctx):
     """Return configuration information about the cluster."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
@@ -331,9 +331,9 @@ def GetClusterInfo(ctx):
 
 
 
-@cli.command('GetClusterMasterNodeID', short_help="GetClusterMasterNodeID")
+@cli.command('GetMasterNodeID', short_help="""GetClusterMasterNodeID is used to return the ID of the node that can perform cluster-wide administration tasks and holds the storage virtual IP (SVIP) and management virtual IP (MVIP). """)
 @pass_context
-def GetClusterMasterNodeID(ctx):
+def GetMasterNodeID(ctx):
     """GetClusterMasterNodeID is used to return the ID of the node that can perform cluster-wide administration tasks and holds the storage virtual IP (SVIP) and management virtual IP (MVIP)."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
@@ -345,13 +345,13 @@ def GetClusterMasterNodeID(ctx):
 
 
 
-@cli.command('GetClusterState', short_help="GetClusterState")
+@cli.command('GetState', short_help="""The GetClusterState method is used to indicate if a node is part of a cluster or not. The three states are: <br><strong>Available:</strong> Node has not been configured with a cluster name.<br><strong>Pending:</strong> Node is pending for a specific named cluster and can be added.<br><strong>Active:</strong> Node is active and a member of a cluster and may not be added to another cluster. """)
 @click.option('--force',
               type=bool,
               required=True,
               help="""To run this command, the force parameter must be set to true. """)
 @pass_context
-def GetClusterState(ctx,
+def GetState(ctx,
            force):
     """The GetClusterState method is used to indicate if a node is part of a cluster or not. The three states are: &lt;br&gt;&lt;strong&gt;Available:&lt;/strong&gt; Node has not been configured with a cluster name.&lt;br&gt;&lt;strong&gt;Pending:&lt;/strong&gt; Node is pending for a specific named cluster and can be added.&lt;br&gt;&lt;strong&gt;Active:&lt;/strong&gt; Node is active and a member of a cluster and may not be added to another cluster."""
     if ctx.element is None:
@@ -364,9 +364,9 @@ def GetClusterState(ctx,
 
 
 
-@cli.command('GetClusterStats', short_help="GetClusterStats")
+@cli.command('GetStats', short_help="""GetClusterStats is used to return high-level activity measurements for the cluster. Values returned are cumulative from the creation of the cluster. """)
 @pass_context
-def GetClusterStats(ctx):
+def GetStats(ctx):
     """GetClusterStats is used to return high-level activity measurements for the cluster. Values returned are cumulative from the creation of the cluster."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
@@ -378,9 +378,9 @@ def GetClusterStats(ctx):
 
 
 
-@cli.command('GetClusterVersionInfo', short_help="GetClusterVersionInfo")
+@cli.command('GetVersionInfo', short_help="""Return information about the Element software version running on each node in the cluster. Information about the nodes that are currently in the process of upgrading software is also returned. """)
 @pass_context
-def GetClusterVersionInfo(ctx):
+def GetVersionInfo(ctx):
     """Return information about the Element software version running on each node in the cluster."""
     """Information about the nodes that are currently in the process of upgrading software is also returned."""
     if ctx.element is None:
@@ -393,9 +393,9 @@ def GetClusterVersionInfo(ctx):
 
 
 
-@cli.command('GetCurrentClusterAdmin', short_help="GetCurrentClusterAdmin")
+@cli.command('GetCurrentAdmin', short_help="""GetCurrentClusterAdmin returns information for the current primary cluster administrator. The primary Cluster Admin was ncreated when the cluster was created. """)
 @pass_context
-def GetCurrentClusterAdmin(ctx):
+def GetCurrentAdmin(ctx):
     """GetCurrentClusterAdmin returns information for the current primary cluster administrator. The primary Cluster Admin was ncreated when the cluster was created."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
@@ -407,7 +407,7 @@ def GetCurrentClusterAdmin(ctx):
 
 
 
-@cli.command('GetLimits', short_help="GetLimits")
+@cli.command('GetLimits', short_help="""GetLimits enables you to retrieve the limit values set by the API. These values might change between releases of  Element, but do not change without an update to the system. Knowing the limit values set by the API can be useful when writing API scripts for user-facing tools.NOTE: The GetLimits method returns the limits for the current software version regardless of the API endpoint version used to pass the method. """)
 @pass_context
 def GetLimits(ctx):
     """GetLimits enables you to retrieve the limit values set by the API. These values might change between releases of  Element, but do not change without an update to the system. Knowing the limit values set by the API can be useful when writing API scripts for user-facing tools.NOTE: The GetLimits method returns the limits for the current software version regardless of the API endpoint version used to pass the method."""
@@ -421,7 +421,7 @@ def GetLimits(ctx):
 
 
 
-@cli.command('GetNtpInfo', short_help="GetNtpInfo")
+@cli.command('GetNtpInfo', short_help="""GetNtpInfo is used to return the current network time protocol (NTP) configuration information. """)
 @pass_context
 def GetNtpInfo(ctx):
     """GetNtpInfo is used to return the current network time protocol (NTP) configuration information."""
@@ -435,7 +435,7 @@ def GetNtpInfo(ctx):
 
 
 
-@cli.command('GetSnmpACL', short_help="GetSnmpACL")
+@cli.command('GetSnmpACL', short_help="""GetSnmpACL is used to return the current SNMP access permissions on the cluster nodes. """)
 @pass_context
 def GetSnmpACL(ctx):
     """GetSnmpACL is used to return the current SNMP access permissions on the cluster nodes."""
@@ -449,7 +449,7 @@ def GetSnmpACL(ctx):
 
 
 
-@cli.command('GetSnmpInfo', short_help="GetSnmpInfo")
+@cli.command('GetSnmpInfo', short_help="""GetSnmpInfo is used to return the current simple network management protocol (SNMP) configuration information. <br/><br/> <b>Note</b>: GetSnmpInfo will be available for Element OS 8 and prior releases. It will be deprecated after Element OS 8. There are two new SNMP API methods that you should migrate over to. They are GetSnmpState and GetSnmpACL. Please see details in this document for their descriptions and usage. """)
 @pass_context
 def GetSnmpInfo(ctx):
     """GetSnmpInfo is used to return the current simple network management protocol (SNMP) configuration information."""
@@ -465,7 +465,7 @@ def GetSnmpInfo(ctx):
 
 
 
-@cli.command('GetSnmpState', short_help="GetSnmpState")
+@cli.command('GetSnmpState', short_help="""GetSnmpState is used to return the current state of the SNMP feature. <br/><br/> <b>Note</b>: GetSnmpState is new for Element OS 8. Please use this method and SetSnmpACL to migrate your SNMP functionality in the future. """)
 @pass_context
 def GetSnmpState(ctx):
     """GetSnmpState is used to return the current state of the SNMP feature."""
@@ -481,7 +481,7 @@ def GetSnmpState(ctx):
 
 
 
-@cli.command('GetSnmpTrapInfo', short_help="GetSnmpTrapInfo")
+@cli.command('GetSnmpTrapInfo', short_help="""GetSnmpTrapInfo is used to return current SNMP trap configuration information. """)
 @pass_context
 def GetSnmpTrapInfo(ctx):
     """GetSnmpTrapInfo is used to return current SNMP trap configuration information."""
@@ -495,7 +495,7 @@ def GetSnmpTrapInfo(ctx):
 
 
 
-@cli.command('GetSystemStatus', short_help="GetSystemStatus")
+@cli.command('GetSystemStatus', short_help="""""")
 @pass_context
 def GetSystemStatus(ctx):
     if ctx.element is None:
@@ -508,9 +508,9 @@ def GetSystemStatus(ctx):
 
 
 
-@cli.command('ListClusterAdmins', short_help="ListClusterAdmins")
+@cli.command('ListAdmins', short_help="""ListClusterAdmins returns the list of all cluster administrators for the cluster. There can be several cluster administrators that have different levels of permissions. There can be only one primary cluster administrator in the system. The primary Cluster Admin is the administrator that was created when the cluster was created. LDAP administrators can also be created when setting up an LDAP system on the cluster. """)
 @pass_context
-def ListClusterAdmins(ctx):
+def ListAdmins(ctx):
     """ListClusterAdmins returns the list of all cluster administrators for the cluster. There can be several cluster administrators that have different levels of permissions. There can be only one primary cluster administrator in the system. The primary Cluster Admin is the administrator that was created when the cluster was created. LDAP administrators can also be created when setting up an LDAP system on the cluster."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
@@ -522,7 +522,7 @@ def ListClusterAdmins(ctx):
 
 
 
-@cli.command('ListClusterFaults', short_help="ListClusterFaults")
+@cli.command('ListFaults', short_help="""ListClusterFaults is used to retrieve information about any faults detected on the cluster. With this method, both current and resolved faults can be retrieved. The system caches faults every 30 seconds. """)
 @click.option('--exceptions',
               type=bool,
               required=False,
@@ -540,7 +540,7 @@ def ListClusterAdmins(ctx):
               required=False,
               help="""Determines the types of faults returned: current: List active, unresolved faults. <b>resolved</b>: List faults that were previously detected and resolved. <b>all</b>: (Default) List both current and resolved faults. You can see the fault status in the 'resolved' field of the Cluster Fault object. """)
 @pass_context
-def ListClusterFaults(ctx,
+def ListFaults(ctx,
            exceptions = None,
            best_practices = None,
            update = None,
@@ -557,7 +557,7 @@ def ListClusterFaults(ctx,
 
 
 
-@cli.command('ListEvents', short_help="ListEvents")
+@cli.command('ListEvents', short_help="""ListEvents returns events detected on the cluster, sorted from oldest to newest. """)
 @click.option('--max_events',
               type=int,
               required=False,
@@ -591,7 +591,7 @@ def ListEvents(ctx,
 
 
 
-@cli.command('ListSyncJobs', short_help="ListSyncJobs")
+@cli.command('ListSyncJobs', short_help="""ListSyncJobs is used to return information about synchronization jobs that are running on a SolidFire cluster. Synchronization jobs that are returned with this method are, "slice," "clone" and "remote." """)
 @pass_context
 def ListSyncJobs(ctx):
     """ListSyncJobs is used to return information about synchronization jobs that are running on a SolidFire cluster. Synchronization jobs that are returned with this method are, &quot;slice,&quot; &quot;clone&quot; and &quot;remote.&quot;"""
@@ -605,7 +605,7 @@ def ListSyncJobs(ctx):
 
 
 
-@cli.command('ModifyClusterAdmin', short_help="ModifyClusterAdmin")
+@cli.command('ModifyAdmin', short_help="""ModifyClusterAdmin is used to change the settings for a Cluster Admin or LDAP Cluster Admin. Access for the administrator Cluster Admin account cannot be changed. """)
 @click.option('--cluster_admin_id',
               type=int,
               required=True,
@@ -623,7 +623,7 @@ def ListSyncJobs(ctx):
               required=False,
               help="""List of Name/Value pairs in JSON object format. """)
 @pass_context
-def ModifyClusterAdmin(ctx,
+def ModifyAdmin(ctx,
            cluster_admin_id,
            password = None,
            access = None,
@@ -641,7 +641,7 @@ def ModifyClusterAdmin(ctx,
 
 
 
-@cli.command('ModifyClusterFullThreshold', short_help="ModifyClusterFullThreshold")
+@cli.command('ModifyFullThreshold', short_help="""ModifyClusterFullThreshold is used to change the level at which an event is generated when the storage cluster approaches the capacity utilization requested. The number entered in this setting is used to indicate the number of node failures the system is required to recover from. For example, on a 10 node cluster, if you want to be alerted when the system cannot recover from 3 nodes failures, enter the value of "3". When this number is reached, a message alert is sent to the Event Log in the Cluster Management Console. """)
 @click.option('--stage2_aware_threshold',
               type=int,
               required=False,
@@ -655,7 +655,7 @@ def ModifyClusterAdmin(ctx,
               required=False,
               help="""A value representative of the number of times metadata space can be over provisioned relative to the amount of space available. For example, if there was enough metadata space to store 100 TiB of volumes and this number was set to 5, then 500 TiB worth of volumes could be created. """)
 @pass_context
-def ModifyClusterFullThreshold(ctx,
+def ModifyFullThreshold(ctx,
            stage2_aware_threshold = None,
            stage3_block_threshold_percent = None,
            max_metadata_over_provision_factor = None):
@@ -670,13 +670,13 @@ def ModifyClusterFullThreshold(ctx,
 
 
 
-@cli.command('RemoveClusterAdmin', short_help="RemoveClusterAdmin")
+@cli.command('RemoveAdmin', short_help="""RemoveClusterAdmin is used to remove a Cluster Admin. The "admin" Cluster Admin cannot be removed. """)
 @click.option('--cluster_admin_id',
               type=int,
               required=True,
               help="""ClusterAdminID for the Cluster Admin to remove. """)
 @pass_context
-def RemoveClusterAdmin(ctx,
+def RemoveAdmin(ctx,
            cluster_admin_id):
     """RemoveClusterAdmin is used to remove a Cluster Admin. The &quot;admin&quot; Cluster Admin cannot be removed."""
     if ctx.element is None:
@@ -689,7 +689,7 @@ def RemoveClusterAdmin(ctx,
 
 
 
-@cli.command('SetClusterConfig', short_help="SetClusterConfig")
+@cli.command('SetConfig', short_help="""The SetClusterConfig API method is used to set the configuration this node uses to communicate with the cluster it is associated with. To see the states in which these objects can be modified see Cluster Object on page 109. To display the current cluster interface settings for a node, run the GetClusterConfig API method. <br/><br/> <b>Note</b>: This method is available only through the per-node API endpoint 5.0 or later. """)
 @click.option('--cluster_config_cipi',
               type=str,
               required=False,
@@ -731,7 +731,7 @@ def RemoveClusterAdmin(ctx,
               required=False,
               help="""""")
 @pass_context
-def SetClusterConfig(ctx,
+def SetConfig(ctx,
            cluster_config_cipi = None,
            cluster_config_cluster = None,
            cluster_config_ensemble = None,
@@ -769,7 +769,7 @@ def SetClusterConfig(ctx,
 
 
 
-@cli.command('SetNtpInfo', short_help="SetNtpInfo")
+@cli.command('SetNtpInfo', short_help="""SetNtpInfo is used to configure the NTP on cluster nodes. The values set with this interface apply to all nodes in the cluster. The nodes can only be configured as a server where a host is selected to administrate the networking and/or a broadcast client where each host sends each message to each peer. """)
 @click.option('--servers',
               type=str,
               required=True,
@@ -795,7 +795,7 @@ def SetNtpInfo(ctx,
 
 
 
-@cli.command('SetSnmpACL', short_help="SetSnmpACL")
+@cli.command('SetSnmpACL', short_help="""SetSnmpACL is used to configure SNMP access permissions on the cluster nodes. The values set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to SetSnmpACL. Also note that the values set with this interface replace all "network" or "usmUsers" values set with the older SetSnmpInfo. """)
 @click.option('--snmp_network_access',
               type=str,
               required=True,
@@ -875,7 +875,7 @@ def SetSnmpACL(ctx,
 
 
 
-@cli.command('SetSnmpInfo', short_help="SetSnmpInfo")
+@cli.command('SetSnmpInfo', short_help="""SetSnmpInfo is used to configure SNMP v2 and v3 on the cluster nodes. The values set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to SetSnmpInfo. <br/><br/> <b>Note</b>: EnableSnmp and SetSnmpACL methods can be used to accomplish the same results as SetSnmpInfo. SetSnmpInfo will no longer be available after the Element 8 release. Please use EnableSnmp and SetSnmpACL in the future. """)
 @click.option('--snmp_network_access',
               type=str,
               required=True,
@@ -967,7 +967,7 @@ def SetSnmpInfo(ctx,
 
 
 
-@cli.command('SetSnmpTrapInfo', short_help="SetSnmpTrapInfo")
+@cli.command('SetSnmpTrapInfo', short_help="""SetSnmpTrapInfo is used to enable and disable the generation of SolidFire SNMP notifications (traps) and to specify the set of network host computers that are to receive the notifications. The values passed with each SetSnmpTrapInfo method replaces all values set in any previous method to SetSnmpTrapInfo. """)
 @click.option('--snmp_trap_recipient_host',
               type=str,
               required=True,
@@ -1020,7 +1020,7 @@ def SetSnmpTrapInfo(ctx,
 
 
 
-@cli.command('SnmpSendTestTraps', short_help="SnmpSendTestTraps")
+@cli.command('SnmpSendTestTraps', short_help="""SnmpSendTestTraps enables you to test SNMP functionality for a cluster. This method instructs the cluster to send test SNMP traps to the currently configured SNMP manager. """)
 @pass_context
 def SnmpSendTestTraps(ctx):
     """SnmpSendTestTraps enables you to test SNMP functionality for a cluster. This method instructs the cluster to send test SNMP traps to the currently configured SNMP manager."""

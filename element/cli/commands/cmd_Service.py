@@ -22,11 +22,11 @@ from element import exceptions
 @click.group()
 @pass_context
 def cli(ctx):
-    """ListServices """
+    """List """
 
-@cli.command('ListServices', short_help="ListServices")
+@cli.command('List', short_help="""List the services in the cluster. """)
 @pass_context
-def ListServices(ctx):
+def List(ctx):
     """List the services in the cluster."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")

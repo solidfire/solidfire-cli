@@ -22,11 +22,11 @@ from element import exceptions
 @click.group()
 @pass_context
 def cli(ctx):
-    """ListTests ListUtilities TestConnectEnsemble TestConnectMvip TestConnectSvip TestPing """
+    """List ListUtilities ConnectEnsemble ConnectMvip ConnectSvip Ping """
 
-@cli.command('ListTests', short_help="ListTests")
+@cli.command('List', short_help="""The ListTests API method is used to return the tests that are available to run on a node. <br/><b>Note</b>: This method is available only through the per-node API endpoint 5.0 or later. """)
 @pass_context
-def ListTests(ctx):
+def List(ctx):
     """The ListTests API method is used to return the tests that are available to run on a node."""
     """&lt;br/&gt;&lt;b&gt;Note&lt;/b&gt;: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
@@ -39,7 +39,7 @@ def ListTests(ctx):
 
 
 
-@cli.command('ListUtilities', short_help="ListUtilities")
+@cli.command('ListUtilities', short_help="""The ListUtilities API method is used to return the tests that are available to run on a node. <br/><b>Note</b>: This method is available only through the per-node API endpoint 5.0 or later. """)
 @pass_context
 def ListUtilities(ctx):
     """The ListUtilities API method is used to return the tests that are available to run on a node."""
@@ -54,13 +54,13 @@ def ListUtilities(ctx):
 
 
 
-@cli.command('TestConnectEnsemble', short_help="TestConnectEnsemble")
+@cli.command('ConnectEnsemble', short_help="""The TestConnectEnsemble API method is used to verify connectivity with a sepcified database ensemble. By default it uses the ensemble for the cluster the node is associated with. Alternatively you can provide a different ensemble to test connectivity with. <br/><b>Note</b>: This method is available only through the per-node API endpoint 5.0 or later. """)
 @click.option('--ensemble',
               type=str,
               required=False,
               help="""A comma-separated list of ensemble node CIPs for connectivity testing """)
 @pass_context
-def TestConnectEnsemble(ctx,
+def ConnectEnsemble(ctx,
            ensemble = None):
     """The TestConnectEnsemble API method is used to verify connectivity with a sepcified database ensemble. By default it uses the ensemble for the cluster the node is associated with. Alternatively you can provide a different ensemble to test connectivity with."""
     """&lt;br/&gt;&lt;b&gt;Note&lt;/b&gt;: This method is available only through the per-node API endpoint 5.0 or later."""
@@ -74,13 +74,13 @@ def TestConnectEnsemble(ctx,
 
 
 
-@cli.command('TestConnectMvip', short_help="TestConnectMvip")
+@cli.command('ConnectMvip', short_help="""The TestConnectMvip API method is used to test the management connection to the cluster. The test pings the MVIP and executes a simple API method to verify connectivity. <br/><b>Note</b>: This method is available only through the per-node API endpoint 5.0 or later. """)
 @click.option('--mvip',
               type=str,
               required=False,
               help="""Optionally, use to test the management connection of a different MVIP. This is not needed to test the connection to the target cluster. """)
 @pass_context
-def TestConnectMvip(ctx,
+def ConnectMvip(ctx,
            mvip = None):
     """The TestConnectMvip API method is used to test the management connection to the cluster. The test pings the MVIP and executes a simple API method to verify connectivity."""
     """&lt;br/&gt;&lt;b&gt;Note&lt;/b&gt;: This method is available only through the per-node API endpoint 5.0 or later."""
@@ -94,13 +94,13 @@ def TestConnectMvip(ctx,
 
 
 
-@cli.command('TestConnectSvip', short_help="TestConnectSvip")
+@cli.command('ConnectSvip', short_help="""The TestConnectSvip API method is used to test the storage connection to the cluster. The test pings the SVIP using ICMP packets and when successful connects as an iSCSI initiator. <br/><b>Note</b>: This method is available only through the per-node API endpoint 5.0 or later. """)
 @click.option('--svip',
               type=str,
               required=False,
               help="""Optionally, use to test the storage connection of a different SVIP. This is not needed to test the connection to the target cluster. """)
 @pass_context
-def TestConnectSvip(ctx,
+def ConnectSvip(ctx,
            svip = None):
     """The TestConnectSvip API method is used to test the storage connection to the cluster. The test pings the SVIP using ICMP packets and when successful connects as an iSCSI initiator."""
     """&lt;br/&gt;&lt;b&gt;Note&lt;/b&gt;: This method is available only through the per-node API endpoint 5.0 or later."""
@@ -114,7 +114,7 @@ def TestConnectSvip(ctx,
 
 
 
-@cli.command('TestPing', short_help="TestPing")
+@cli.command('Ping', short_help="""The TestPing API method is used to validate the connection to all nodes in the cluster on both 1G and 10G interfaces using ICMP packets. The test uses the appropriate MTU sizes for each packet based on the MTU settings in the network configuration. <br/><b>Note</b>: This method is available only through the per-node API endpoint 5.0 or later. """)
 @click.option('--attempts',
               type=int,
               required=False,
@@ -136,7 +136,7 @@ def TestConnectSvip(ctx,
               required=False,
               help="""Specify the number of milliseconds to wait for each individual ping response. Default is 500ms. """)
 @pass_context
-def TestPing(ctx,
+def Ping(ctx,
            attempts = None,
            hosts = None,
            total_timeout_sec = None,

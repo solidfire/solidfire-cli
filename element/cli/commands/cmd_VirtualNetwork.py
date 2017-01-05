@@ -24,9 +24,9 @@ from element import exceptions
 @click.group()
 @pass_context
 def cli(ctx):
-    """AddVirtualNetwork ListVirtualNetworks ModifyVirtualNetwork RemoveVirtualNetwork """
+    """Add List Modify Remove """
 
-@cli.command('AddVirtualNetwork', short_help="AddVirtualNetwork")
+@cli.command('Add', short_help="""AddVirtualNetwork is used to add a new virtual network to a cluster configuration. When a virtual network is added, an interface for each node is created and each will require a virtual network IP address. The number of IP addresses specified as a parameter for this API method must be equal to or greater than the number of nodes in the cluster. Virtual network addresses are bulk provisioned by SolidFire and assigned to individual nodes automatically. Virtual network addresses do not need to be assigned to nodes manually. <br/><br/> <b>Note:</b> The AddVirtualNetwork method is used only to create a new virtual network. If you want to make changes to a virtual network, please use the ModifyVirtualNetwork method. """)
 @click.option('--virtual_network_tag',
               type=int,
               required=True,
@@ -64,7 +64,7 @@ def cli(ctx):
               required=False,
               help="""List of Name/Value pairs in JSON object format. """)
 @pass_context
-def AddVirtualNetwork(ctx,
+def Add(ctx,
            virtual_network_tag,
            name,
            netmask,
@@ -95,7 +95,7 @@ def AddVirtualNetwork(ctx,
 
 
 
-@cli.command('ListVirtualNetworks', short_help="ListVirtualNetworks")
+@cli.command('List', short_help="""ListVirtualNetworks is used to get a list of all the configured virtual networks for the cluster. This method can be used to verify the virtual network settings in the cluster.  This method does not require any parameters to be passed. But, one or more VirtualNetworkIDs or VirtualNetworkTags can be passed in order to filter the results. """)
 @click.option('--virtual_network_id',
               type=int,
               required=False,
@@ -113,7 +113,7 @@ def AddVirtualNetwork(ctx,
               required=False,
               help="""Network Tags to include in the list. """)
 @pass_context
-def ListVirtualNetworks(ctx,
+def List(ctx,
            virtual_network_id = None,
            virtual_network_tag = None,
            virtual_network_ids = None,
@@ -135,7 +135,7 @@ def ListVirtualNetworks(ctx,
 
 
 
-@cli.command('ModifyVirtualNetwork', short_help="ModifyVirtualNetwork")
+@cli.command('Modify', short_help="""ModifyVirtualNetwork is used to change various attributes of a VirtualNetwork object. This method can be used to add or remove address blocks, change the netmask IP, or modify the name or description of the virtual network. <br/><br/> <b>Note:</b> This method requires either the VirtualNetworkID or the VirtualNetworkTag as a parameter, but not both. """)
 @click.option('--virtual_network_id',
               type=int,
               required=False,
@@ -177,7 +177,7 @@ def ListVirtualNetworks(ctx,
               required=False,
               help="""A new list of Name/Value pairs in JSON object format. """)
 @pass_context
-def ModifyVirtualNetwork(ctx,
+def Modify(ctx,
            virtual_network_id = None,
            virtual_network_tag = None,
            name = None,
@@ -209,7 +209,7 @@ def ModifyVirtualNetwork(ctx,
 
 
 
-@cli.command('RemoveVirtualNetwork', short_help="RemoveVirtualNetwork")
+@cli.command('Remove', short_help="""RemoveVirtualNetwork is used to remove a previously added virtual network. <br/><br/> <b>Note:</b> This method requires either the VirtualNetworkID of the VirtualNetworkTag as a parameter, but not both. """)
 @click.option('--virtual_network_id',
               type=int,
               required=False,
@@ -219,7 +219,7 @@ def ModifyVirtualNetwork(ctx,
               required=False,
               help="""Network Tag that identifies the virtual network to remove. """)
 @pass_context
-def RemoveVirtualNetwork(ctx,
+def Remove(ctx,
            virtual_network_id = None,
            virtual_network_tag = None):
     """RemoveVirtualNetwork is used to remove a previously added virtual network."""

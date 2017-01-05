@@ -22,15 +22,15 @@ from element import exceptions
 @click.group()
 @pass_context
 def cli(ctx):
-    """ListProtocolEndpoints """
+    """List """
 
-@cli.command('ListProtocolEndpoints', short_help="ListProtocolEndpoints")
+@cli.command('List', short_help="""Gets protocol endpoints in the system If protocolEndpointIDs isn't specified all protocol endpoints are returned. Else the supplied protocolEndpointIDs are. """)
 @click.option('--protocol_endpoint_ids',
               type=str,
               required=False,
               help="""""")
 @pass_context
-def ListProtocolEndpoints(ctx,
+def List(ctx,
            protocol_endpoint_ids = None):
     """Gets protocol endpoints in the system"""
     """If protocolEndpointIDs isn't specified all protocol endpoints"""

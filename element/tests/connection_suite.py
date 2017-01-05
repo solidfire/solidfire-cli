@@ -6,7 +6,7 @@ import csv
 from unittest.mock import MagicMock
 
 # For the connection commands we set it up so that the sdk returns a fake connection.
-def check_functionality():
+def check_functionality_of_connection_suite():
     runner = CliRunner()
     # First run the push
     result = runner.invoke(cli.cli, ['--mvip', "10.117.61.44", "--login", "admin", "--password", "admin", "--name", "b","Connection", "PushConnection"])
@@ -30,6 +30,7 @@ def check_functionality():
     print("Remove is working")
     print("Functionality is good")
 
+def verify_table_formatting():
 
 
-check_functionality()
+check_functionality_of_connection_suite()

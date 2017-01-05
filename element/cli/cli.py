@@ -103,10 +103,6 @@ class SolidFireCLI(click.MultiCommand):
               type=click.STRING,
               help="The name of the connection you wish to use in connections.csv. You can use this if you have previously stored away a connection.",
               required=False)
-@click.option('--popconnection',
-              default=None,
-              type=click.INT,
-              help="Use this if you want to use and remove a connection stored away in connections.csv.")
 @click.option('--json', '-j',
               is_flag=True,
               required=False,
@@ -137,7 +133,6 @@ def cli(ctx,
         name=None,
         connectionindex=None,
         connectionname=None,
-        popconnection=None,
         json=None,
         depth=None,
         filter_tree=None,
@@ -175,13 +170,7 @@ def cli(ctx,
     elif mvip or login or password:
         raise exceptions.SolidFireConnectionException("In order to manually connect, please provide mvip, login, AND password")
     else:
-        if(popconnection is not None and (connectionindex is not None or connectionname is not None)):
-            raise exceptions.SolidFireUsageException("You cannot provide both pop_connection and a connection specification parameter. Pick one.")
-        elif(popconnection is not None):
-            cfg = connections[popconnection]
-            del connections[popconnection]
-            connections_dirty = True
-        elif(connectionindex is not None):
+        if(connectionindex is not None):
             cfg = connections[connectionindex]
         elif(connectionname is not None):
             filteredCfg = [connection for connection in connections if connection["name"] == connectionname]
@@ -194,16 +183,6 @@ def cli(ctx,
         cfg["port"] = int(cfg["port"])
         # Finaly, we need to establish our connection via elementfactory:
         ctx.element = ElementFactory.create(cfg["mvip"],cfg["login"],cfg["password"],9.0,port=cfg["port"])
-
-        # If the connections are dirty and we were able to create the element, we need to rewrite our connections file.
-        if connections_dirty:
-            with open(connectionsCsvLocation, 'w') as f:
-                w = csv.DictWriter(f, ["name","mvip","port","login","password","url"], lineterminator='\n')
-                w.writeheader()
-                for connection in connections:
-                    if connection is not None:
-                        w.writerow(connection)
-
         ctx.client = api.SolidFireAPI(endpoint_dict=cfg)
 
          # TODO(jdg): Use the client to query the cluster for the supported version

@@ -22,9 +22,9 @@ from element import exceptions
 @click.group()
 @pass_context
 def cli(ctx):
-    """CreateVirtualVolumeHost EnableFeature GetFeatureStatus GetVirtualVolumeCount GetVirtualVolumeTaskUpdate GetVirtualVolumeUnsharedChunks ListVirtualVolumeBindings ListVirtualVolumeHosts ListVirtualVolumes ListVirtualVolumeTasks PrepareVirtualSnapshot """
+    """CreateHost EnableFeature GetFeatureStatus GetCount GetTaskUpdate GetUnsharedChunks ListBindings ListHosts List ListTasks PrepareVirtualSnapshot """
 
-@cli.command('CreateVirtualVolumeHost', short_help="CreateVirtualVolumeHost")
+@cli.command('CreateHost', short_help="""CreateVirtualVolumeHost creates a new ESX host. """)
 @click.option('--virtual_volume_host_id',
               type=UUID,
               required=True,
@@ -50,7 +50,7 @@ def cli(ctx):
               required=False,
               help="""""")
 @pass_context
-def CreateVirtualVolumeHost(ctx,
+def CreateHost(ctx,
            virtual_volume_host_id,
            cluster_id,
            initiator_names = None,
@@ -72,7 +72,7 @@ def CreateVirtualVolumeHost(ctx,
 
 
 
-@cli.command('EnableFeature', short_help="EnableFeature")
+@cli.command('EnableFeature', short_help="""EnableFeature allows you to enable cluster features that are disabled by default. """)
 @click.option('--feature',
               type=str,
               required=True,
@@ -91,7 +91,7 @@ def EnableFeature(ctx,
 
 
 
-@cli.command('GetFeatureStatus', short_help="GetFeatureStatus")
+@cli.command('GetFeatureStatus', short_help="""GetFeatureStatus allows you to retrieve the status of a cluster feature. """)
 @click.option('--feature',
               type=str,
               required=False,
@@ -110,9 +110,9 @@ def GetFeatureStatus(ctx,
 
 
 
-@cli.command('GetVirtualVolumeCount', short_help="GetVirtualVolumeCount")
+@cli.command('GetCount', short_help="""Enables retrieval of the number of virtual volumes currently in the system. """)
 @pass_context
-def GetVirtualVolumeCount(ctx):
+def GetCount(ctx):
     """Enables retrieval of the number of virtual volumes currently in the system."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
@@ -124,7 +124,7 @@ def GetVirtualVolumeCount(ctx):
 
 
 
-@cli.command('GetVirtualVolumeTaskUpdate', short_help="GetVirtualVolumeTaskUpdate")
+@cli.command('GetTaskUpdate', short_help="""GetVirtualVolumeTaskUpdate checks the status of a VVol Async Task. """)
 @click.option('--virtual_volume_task_id',
               type=UUID,
               required=True,
@@ -134,7 +134,7 @@ def GetVirtualVolumeCount(ctx):
               required=False,
               help="""""")
 @pass_context
-def GetVirtualVolumeTaskUpdate(ctx,
+def GetTaskUpdate(ctx,
            virtual_volume_task_id,
            calling_virtual_volume_host_id = None):
     """GetVirtualVolumeTaskUpdate checks the status of a VVol Async Task."""
@@ -148,7 +148,7 @@ def GetVirtualVolumeTaskUpdate(ctx,
 
 
 
-@cli.command('GetVirtualVolumeUnsharedChunks', short_help="GetVirtualVolumeUnsharedChunks")
+@cli.command('GetUnsharedChunks', short_help="""GetVirtualVolumeAllocatedBitmap scans a VVol segment and returns the number of  chunks not shared between two volumes. This call will return results in less  than 30 seconds. If the specified VVol and the base VVil are not related, an  error is thrown. If the offset/length combination is invalid or out fo range  an error is thrown. """)
 @click.option('--virtual_volume_id',
               type=UUID,
               required=True,
@@ -174,7 +174,7 @@ def GetVirtualVolumeTaskUpdate(ctx,
               required=False,
               help="""""")
 @pass_context
-def GetVirtualVolumeUnsharedChunks(ctx,
+def GetUnsharedChunks(ctx,
            virtual_volume_id,
            base_virtual_volume_id,
            segment_start,
@@ -196,13 +196,13 @@ def GetVirtualVolumeUnsharedChunks(ctx,
 
 
 
-@cli.command('ListVirtualVolumeBindings', short_help="ListVirtualVolumeBindings")
+@cli.command('ListBindings', short_help="""ListVirtualVolumeBindings returns a list of VVol bindings. """)
 @click.option('--virtual_volume_binding_ids',
               type=str,
               required=False,
               help="""""")
 @pass_context
-def ListVirtualVolumeBindings(ctx,
+def ListBindings(ctx,
            virtual_volume_binding_ids = None):
     """ListVirtualVolumeBindings returns a list of VVol bindings."""
     if ctx.element is None:
@@ -217,13 +217,13 @@ def ListVirtualVolumeBindings(ctx,
 
 
 
-@cli.command('ListVirtualVolumeHosts', short_help="ListVirtualVolumeHosts")
+@cli.command('ListHosts', short_help="""ListVirtualVolumeHosts returns a list of known ESX hosts. """)
 @click.option('--virtual_volume_host_ids',
               type=str,
               required=False,
               help="""""")
 @pass_context
-def ListVirtualVolumeHosts(ctx,
+def ListHosts(ctx,
            virtual_volume_host_ids = None):
     """ListVirtualVolumeHosts returns a list of known ESX hosts."""
     if ctx.element is None:
@@ -238,7 +238,7 @@ def ListVirtualVolumeHosts(ctx,
 
 
 
-@cli.command('ListVirtualVolumes', short_help="ListVirtualVolumes")
+@cli.command('List', short_help="""ListVirtualVolumes enables you to list the virtual volumes currently in the system. You can use this method to list all virtual volumes, or only list a subset. """)
 @click.option('--details',
               type=bool,
               required=False,
@@ -260,7 +260,7 @@ def ListVirtualVolumeHosts(ctx,
               required=False,
               help="""A list of virtual volume  IDs for which to retrieve information. If you specify this parameter, the method returns information about only these virtual volumes. """)
 @pass_context
-def ListVirtualVolumes(ctx,
+def List(ctx,
            details = None,
            limit = None,
            recursive = None,
@@ -279,13 +279,13 @@ def ListVirtualVolumes(ctx,
 
 
 
-@cli.command('ListVirtualVolumeTasks', short_help="ListVirtualVolumeTasks")
+@cli.command('ListTasks', short_help="""ListVirtualVolumeTasks returns a list of VVol Async Tasks. """)
 @click.option('--virtual_volume_task_ids',
               type=str,
               required=False,
               help="""""")
 @pass_context
-def ListVirtualVolumeTasks(ctx,
+def ListTasks(ctx,
            virtual_volume_task_ids = None):
     """ListVirtualVolumeTasks returns a list of VVol Async Tasks."""
     if ctx.element is None:
@@ -300,7 +300,7 @@ def ListVirtualVolumeTasks(ctx,
 
 
 
-@cli.command('PrepareVirtualSnapshot', short_help="PrepareVirtualSnapshot")
+@cli.command('PrepareVirtualSnapshot', short_help="""PrepareVirtualSnapshot is used to set up VMware Virtual Volume snapshot. """)
 @click.option('--virtual_volume_id',
               type=UUID,
               required=True,

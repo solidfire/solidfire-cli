@@ -22,9 +22,9 @@ from element import exceptions
 @click.group()
 @pass_context
 def cli(ctx):
-    """ResetNode RestartNetworking RestartServices Shutdown """
+    """ResetNode Networking Services Shutdown """
 
-@cli.command('ResetNode', short_help="ResetNode")
+@cli.command('ResetNode', short_help="""Allows you to reset a node to the SolidFire factory settings. All data will be deleted from the node when you call this method. A node participating in a cluster cannot be reset. """)
 @click.option('--build',
               type=str,
               required=True,
@@ -53,13 +53,13 @@ def ResetNode(ctx,
 
 
 
-@cli.command('RestartNetworking', short_help="RestartNetworking")
+@cli.command('Networking', short_help="""The RestartNetworking API method is used to restart the networking services on a node.WARNING! This method restarts all networking services on a node, causing temporary loss of networking connectivity. Exercise caution when using this method. """)
 @click.option('--force',
               type=bool,
               required=True,
               help="""The "force" parameter must be included on this method to successfully restart the networking. """)
 @pass_context
-def RestartNetworking(ctx,
+def Networking(ctx,
            force):
     """The RestartNetworking API method is used to restart the networking services on a node.WARNING! This method restarts all networking services on a node, causing temporary loss of networking connectivity. Exercise caution when using this method."""
     if ctx.element is None:
@@ -72,7 +72,7 @@ def RestartNetworking(ctx,
 
 
 
-@cli.command('RestartServices', short_help="RestartServices")
+@cli.command('Services', short_help="""The RestartServices API method is used to restart the  Element services on a node.Caution: This method causes temporary node services interruption. Exercise caution when using this method. """)
 @click.option('--force',
               type=bool,
               required=True,
@@ -86,7 +86,7 @@ def RestartNetworking(ctx,
               required=False,
               help="""Action to perform on the service (start, stop, restart). """)
 @pass_context
-def RestartServices(ctx,
+def Services(ctx,
            force,
            service = None,
            action = None):
@@ -101,7 +101,7 @@ def RestartServices(ctx,
 
 
 
-@cli.command('Shutdown', short_help="Shutdown")
+@cli.command('Shutdown', short_help="""The Shutdown API method enables you to restart or shutdown a node that has not yet been added to a cluster. To use this method, login in to the MIP for the pending node and enter the "shutdown" method with either the "restart" or "halt" options in the following table. """)
 @click.option('--option',
               type=str,
               required=True,

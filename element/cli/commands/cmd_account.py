@@ -26,9 +26,9 @@ from element import exceptions
 @click.group()
 @pass_context
 def cli(ctx):
-    """AddAccount GetAccountByID GetAccountByName GetAccountEfficiency ListAccounts ModifyAccount RemoveAccount """
+    """Add GetByID GetByName GetEfficiency List Modify Remove """
 
-@cli.command('AddAccount', short_help="AddAccount")
+@cli.command('Add', short_help="""Used to add a new account to the system. New volumes can be created under the new account. The CHAP settings specified for the account applies to all volumes owned by the account. """)
 @click.option('--username',
               type=str,
               required=True,
@@ -38,7 +38,7 @@ def cli(ctx):
               required=False,
               help="""List of Name/Value pairs in JSON object format. """)
 @pass_context
-def AddAccount(ctx,
+def Add(ctx,
            username,
            attributes = None):
     """Used to add a new account to the system."""
@@ -62,13 +62,13 @@ def AddAccount(ctx,
 
 
 
-@cli.command('GetAccountByID', short_help="GetAccountByID")
+@cli.command('GetByID', short_help="""Returns details about an account, given its AccountID. """)
 @click.option('--account_id',
               type=int,
               required=True,
               help="""Specifies the account for which details are gathered. """)
 @pass_context
-def GetAccountByID(ctx,
+def GetByID(ctx,
            account_id):
     """Returns details about an account, given its AccountID."""
     if ctx.element is None:
@@ -81,13 +81,13 @@ def GetAccountByID(ctx,
 
 
 
-@cli.command('GetAccountByName', short_help="GetAccountByName")
+@cli.command('GetByName', short_help="""Returns details about an account, given its Username. """)
 @click.option('--username',
               type=str,
               required=True,
               help="""Username for the account. """)
 @pass_context
-def GetAccountByName(ctx,
+def GetByName(ctx,
            username):
     """Returns details about an account, given its Username."""
     if ctx.element is None:
@@ -100,13 +100,13 @@ def GetAccountByName(ctx,
 
 
 
-@cli.command('GetAccountEfficiency', short_help="GetAccountEfficiency")
+@cli.command('GetEfficiency', short_help="""GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity. """)
 @click.option('--account_id',
               type=int,
               required=True,
               help="""Specifies the volume account for which capacity is computed. """)
 @pass_context
-def GetAccountEfficiency(ctx,
+def GetEfficiency(ctx,
            account_id):
     """GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity."""
     if ctx.element is None:
@@ -119,7 +119,7 @@ def GetAccountEfficiency(ctx,
 
 
 
-@cli.command('ListAccounts', short_help="ListAccounts")
+@cli.command('List', short_help="""Returns the entire list of accounts, with optional paging support. """)
 @click.option('--start_account_id',
               type=int,
               required=False,
@@ -129,7 +129,7 @@ def GetAccountEfficiency(ctx,
               required=False,
               help="""Maximum number of AccountInfo objects to return. """)
 @pass_context
-def ListAccounts(ctx,
+def List(ctx,
            start_account_id = None,
            limit = None):
     """Returns the entire list of accounts, with optional paging support."""
@@ -143,7 +143,7 @@ def ListAccounts(ctx,
 
 
 
-@cli.command('ModifyAccount', short_help="ModifyAccount")
+@cli.command('Modify', short_help="""Used to modify an existing account. When locking an account, any existing connections from that account are immediately terminated. When changing CHAP settings, any existing connections continue to be active, and the new CHAP values are only used on subsequent connection or reconnection. """)
 @click.option('--account_id',
               type=int,
               required=True,
@@ -161,7 +161,7 @@ def ListAccounts(ctx,
               required=False,
               help="""List of Name/Value pairs in JSON object format. """)
 @pass_context
-def ModifyAccount(ctx,
+def Modify(ctx,
            account_id,
            username = None,
            status = None,
@@ -188,13 +188,13 @@ def ModifyAccount(ctx,
 
 
 
-@cli.command('RemoveAccount', short_help="RemoveAccount")
+@cli.command('Remove', short_help="""Used to remove an existing account. All Volumes must be deleted and purged on the account before it can be removed. If volumes on the account are still pending deletion, RemoveAccount cannot be used until DeleteVolume to delete and purge the volumes. """)
 @click.option('--account_id',
               type=int,
               required=True,
               help="""AccountID for the account to remove. """)
 @pass_context
-def RemoveAccount(ctx,
+def Remove(ctx,
            account_id):
     """Used to remove an existing account."""
     """All Volumes must be deleted and purged on the account before it can be removed."""

@@ -23,9 +23,9 @@ from element import exceptions
 @click.group()
 @pass_context
 def cli(ctx):
-    """AddInitiatorsToVolumeAccessGroup AddVolumesToVolumeAccessGroup CreateVolumeAccessGroup DeleteVolumeAccessGroup GetVolumeAccessGroupEfficiency GetVolumeAccessGroupLunAssignments ListVolumeAccessGroups ModifyVolumeAccessGroup ModifyVolumeAccessGroupLunAssignments RemoveInitiatorsFromVolumeAccessGroup RemoveVolumesFromVolumeAccessGroup """
+    """AddInitiatorsTo AddVolumesTo Create Delete GetEfficiency GetLunAssignments List Modify ModifyLunAssignments RemoveInitiatorsFrom RemoveVolumesFrom """
 
-@cli.command('AddInitiatorsToVolumeAccessGroup', short_help="AddInitiatorsToVolumeAccessGroup")
+@cli.command('AddInitiatorsTo', short_help="""Add initiators to a volume access group. """)
 @click.option('--volume_access_group_id',
               type=int,
               required=True,
@@ -35,7 +35,7 @@ def cli(ctx):
               required=True,
               help="""List of initiators to add to the volume access group. """)
 @pass_context
-def AddInitiatorsToVolumeAccessGroup(ctx,
+def AddInitiatorsTo(ctx,
            volume_access_group_id,
            initiators):
     """Add initiators to a volume access group."""
@@ -51,7 +51,7 @@ def AddInitiatorsToVolumeAccessGroup(ctx,
 
 
 
-@cli.command('AddVolumesToVolumeAccessGroup', short_help="AddVolumesToVolumeAccessGroup")
+@cli.command('AddVolumesTo', short_help="""Add volumes to a volume access group. """)
 @click.option('--volume_access_group_id',
               type=int,
               required=True,
@@ -61,7 +61,7 @@ def AddInitiatorsToVolumeAccessGroup(ctx,
               required=True,
               help="""List of volumes to add to this volume access group. """)
 @pass_context
-def AddVolumesToVolumeAccessGroup(ctx,
+def AddVolumesTo(ctx,
            volume_access_group_id,
            volumes):
     """Add volumes to a volume access group."""
@@ -77,7 +77,7 @@ def AddVolumesToVolumeAccessGroup(ctx,
 
 
 
-@cli.command('CreateVolumeAccessGroup', short_help="CreateVolumeAccessGroup")
+@cli.command('Create', short_help="""Creates a new volume access group. The new volume access group must be given a name when it is created. Entering initiators and volumes are optional when creating a volume access group. Once the group is created volumes and initiator IQNs can be added. Any initiator IQN that is successfully added to the volume access group is able to access any volume in the group without CHAP authentication. """)
 @click.option('--name',
               type=str,
               required=True,
@@ -103,7 +103,7 @@ def AddVolumesToVolumeAccessGroup(ctx,
               required=False,
               help="""List of Name/Value pairs in JSON object format. """)
 @pass_context
-def CreateVolumeAccessGroup(ctx,
+def Create(ctx,
            name,
            initiators = None,
            volumes = None,
@@ -133,13 +133,13 @@ def CreateVolumeAccessGroup(ctx,
 
 
 
-@cli.command('DeleteVolumeAccessGroup', short_help="DeleteVolumeAccessGroup")
+@cli.command('Delete', short_help="""Delete a volume access group from the system. """)
 @click.option('--volume_access_group_id',
               type=int,
               required=True,
               help="""The ID of the volume access group to delete. """)
 @pass_context
-def DeleteVolumeAccessGroup(ctx,
+def Delete(ctx,
            volume_access_group_id):
     """Delete a volume access group from the system."""
     if ctx.element is None:
@@ -152,13 +152,13 @@ def DeleteVolumeAccessGroup(ctx,
 
 
 
-@cli.command('GetVolumeAccessGroupEfficiency', short_help="GetVolumeAccessGroupEfficiency")
+@cli.command('GetEfficiency', short_help="""GetVolumeAccessGroupEfficiency is used to retrieve efficiency information about a volume access group. Only the volume access group provided as parameters in this API method is used to compute the capacity. """)
 @click.option('--volume_access_group_id',
               type=int,
               required=True,
               help="""Specifies the volume access group for which capacity is computed. """)
 @pass_context
-def GetVolumeAccessGroupEfficiency(ctx,
+def GetEfficiency(ctx,
            volume_access_group_id):
     """GetVolumeAccessGroupEfficiency is used to retrieve efficiency information about a volume access group. Only the volume access group provided as parameters in this API method is used to compute the capacity."""
     if ctx.element is None:
@@ -171,13 +171,13 @@ def GetVolumeAccessGroupEfficiency(ctx,
 
 
 
-@cli.command('GetVolumeAccessGroupLunAssignments', short_help="GetVolumeAccessGroupLunAssignments")
+@cli.command('GetLunAssignments', short_help="""The GetVolumeAccessGroupLunAssignments is used to return information LUN mappings of a specified volume access group. """)
 @click.option('--volume_access_group_id',
               type=int,
               required=True,
               help="""Unique volume access group ID used to return information. """)
 @pass_context
-def GetVolumeAccessGroupLunAssignments(ctx,
+def GetLunAssignments(ctx,
            volume_access_group_id):
     """The GetVolumeAccessGroupLunAssignments is used to return information LUN mappings of a specified volume access group."""
     if ctx.element is None:
@@ -190,7 +190,7 @@ def GetVolumeAccessGroupLunAssignments(ctx,
 
 
 
-@cli.command('ListVolumeAccessGroups', short_help="ListVolumeAccessGroups")
+@cli.command('List', short_help="""ListVolumeAccessGroups is used to return information about the volume access groups that are currently in the system. """)
 @click.option('--start_volume_access_group_id',
               type=int,
               required=False,
@@ -200,7 +200,7 @@ def GetVolumeAccessGroupLunAssignments(ctx,
               required=False,
               help="""The maximum number of results to return. This can be useful for paging. """)
 @pass_context
-def ListVolumeAccessGroups(ctx,
+def List(ctx,
            start_volume_access_group_id = None,
            limit = None):
     """ListVolumeAccessGroups is used to return information about the volume access groups that are currently in the system."""
@@ -214,7 +214,7 @@ def ListVolumeAccessGroups(ctx,
 
 
 
-@cli.command('ModifyVolumeAccessGroup', short_help="ModifyVolumeAccessGroup")
+@cli.command('Modify', short_help="""Update initiators and add or remove volumes from a volume access group. A specified initiator or volume that duplicates an existing volume or initiator in a volume access group is left as-is. If a value is not specified for volumes or initiators, the current list of initiators and volumes are not changed. <br/><br/> Often, it is easier to use the convenience functions to modify initiators and volumes independently: <br/><br/> AddInitiatorsToVolumeAccessGroup<br/> RemoveInitiatorsFromVolumeAccessGroup<br/> AddVolumesToVolumeAccessGroup<br/> RemoveVolumesFromVolumeAccessGroup<br/> """)
 @click.option('--volume_access_group_id',
               type=int,
               required=True,
@@ -244,7 +244,7 @@ def ListVolumeAccessGroups(ctx,
               required=False,
               help="""List of Name/Value pairs in JSON object format. """)
 @pass_context
-def ModifyVolumeAccessGroup(ctx,
+def Modify(ctx,
            volume_access_group_id,
            virtual_network_id = None,
            virtual_network_tags = None,
@@ -280,7 +280,7 @@ def ModifyVolumeAccessGroup(ctx,
 
 
 
-@cli.command('ModifyVolumeAccessGroupLunAssignments', short_help="ModifyVolumeAccessGroupLunAssignments")
+@cli.command('ModifyLunAssignments', short_help="""The ModifytVolumeAccessGroupLunAssignments is used to define custom LUN assignments for specific volumes. Only LUN values set on the lunAssignments parameter will be changed in the volume access group. All other LUN assignments will remain unchanged. <br/><br/> LUN assignment values must be unique for volumes in a volume access group. An exception will be seen if LUN assignments are duplicated in a volume access group. However, the same LUN values can be used again in different volume access groups. <br/><br/> <b>Note:</b> Correct LUN values are 0 - 16383. An exception will be seen if an incorrect LUN value is passed. None of the specified LUN assignments will be modified if there is an exception. <br/><br/> <b>Caution:</b> If a LUN assignment is changed for a volume with active I/O, the I/O could be disrupted. Changes to the server configuration may be required in order to change volume LUN assignments. """)
 @click.option('--volume_access_group_id',
               type=int,
               required=True,
@@ -294,7 +294,7 @@ def ModifyVolumeAccessGroup(ctx,
               required=True,
               help="""Correct LUN values are 0 - 16383. An exception will be seen if an incorrect LUN value is passed. """)
 @pass_context
-def ModifyVolumeAccessGroupLunAssignments(ctx,
+def ModifyLunAssignments(ctx,
            volume_access_group_id,
            lun_assignment_volume_id,
            lun_assignment_lun):
@@ -323,7 +323,7 @@ def ModifyVolumeAccessGroupLunAssignments(ctx,
 
 
 
-@cli.command('RemoveInitiatorsFromVolumeAccessGroup', short_help="RemoveInitiatorsFromVolumeAccessGroup")
+@cli.command('RemoveInitiatorsFrom', short_help="""Remove initiators from a volume access group. """)
 @click.option('--volume_access_group_id',
               type=int,
               required=True,
@@ -333,7 +333,7 @@ def ModifyVolumeAccessGroupLunAssignments(ctx,
               required=True,
               help="""List of initiators to remove from the volume access group. """)
 @pass_context
-def RemoveInitiatorsFromVolumeAccessGroup(ctx,
+def RemoveInitiatorsFrom(ctx,
            volume_access_group_id,
            initiators):
     """Remove initiators from a volume access group."""
@@ -349,7 +349,7 @@ def RemoveInitiatorsFromVolumeAccessGroup(ctx,
 
 
 
-@cli.command('RemoveVolumesFromVolumeAccessGroup', short_help="RemoveVolumesFromVolumeAccessGroup")
+@cli.command('RemoveVolumesFrom', short_help="""Remove volumes from a volume access group. """)
 @click.option('--volume_access_group_id',
               type=int,
               required=True,
@@ -359,7 +359,7 @@ def RemoveInitiatorsFromVolumeAccessGroup(ctx,
               required=True,
               help="""List of volumes to remove from this volume access group. """)
 @pass_context
-def RemoveVolumesFromVolumeAccessGroup(ctx,
+def RemoveVolumesFrom(ctx,
            volume_access_group_id,
            volumes):
     """Remove volumes from a volume access group."""

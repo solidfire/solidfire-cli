@@ -22,9 +22,9 @@ from element import exceptions
 @click.group()
 @pass_context
 def cli(ctx):
-    """CreateBackupTarget GetBackupTarget ListBackupTargets ModifyBackupTarget RemoveBackupTarget """
+    """Create Get List Modify Remove """
 
-@cli.command('CreateBackupTarget', short_help="CreateBackupTarget")
+@cli.command('Create', short_help="""CreateBackupTarget allows you to create and store backup target information so that you do not need to re-enter it each time a backup is created. """)
 @click.option('--name',
               type=str,
               required=True,
@@ -34,7 +34,7 @@ def cli(ctx):
               required=False,
               help="""List of Name/Value pairs in JSON object format. """)
 @pass_context
-def CreateBackupTarget(ctx,
+def Create(ctx,
            name,
            attributes = None):
     """CreateBackupTarget allows you to create and store backup target information so that you do not need to re-enter it each time a backup is created."""
@@ -48,13 +48,13 @@ def CreateBackupTarget(ctx,
 
 
 
-@cli.command('GetBackupTarget', short_help="GetBackupTarget")
+@cli.command('Get', short_help="""GetBackupTarget allows you to return information about a specific backup target that has been created. """)
 @click.option('--backup_target_id',
               type=int,
               required=True,
               help="""Unique identifier assigned to the backup target. """)
 @pass_context
-def GetBackupTarget(ctx,
+def Get(ctx,
            backup_target_id):
     """GetBackupTarget allows you to return information about a specific backup target that has been created."""
     if ctx.element is None:
@@ -67,9 +67,9 @@ def GetBackupTarget(ctx,
 
 
 
-@cli.command('ListBackupTargets', short_help="ListBackupTargets")
+@cli.command('List', short_help="""You can use ListBackupTargets to retrieve information about all backup targets that have been created. """)
 @pass_context
-def ListBackupTargets(ctx):
+def List(ctx):
     """You can use ListBackupTargets to retrieve information about all backup targets that have been created."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
@@ -81,7 +81,7 @@ def ListBackupTargets(ctx):
 
 
 
-@cli.command('ModifyBackupTarget', short_help="ModifyBackupTarget")
+@cli.command('Modify', short_help="""ModifyBackupTarget is used to change attributes of a backup target. """)
 @click.option('--backup_target_id',
               type=int,
               required=True,
@@ -95,7 +95,7 @@ def ListBackupTargets(ctx):
               required=False,
               help="""List of Name/Value pairs in JSON object format. """)
 @pass_context
-def ModifyBackupTarget(ctx,
+def Modify(ctx,
            backup_target_id,
            name = None,
            attributes = None):
@@ -110,13 +110,13 @@ def ModifyBackupTarget(ctx,
 
 
 
-@cli.command('RemoveBackupTarget', short_help="RemoveBackupTarget")
+@cli.command('Remove', short_help="""RemoveBackupTarget allows you to delete backup targets. """)
 @click.option('--backup_target_id',
               type=int,
               required=True,
               help="""Unique target ID of the target to remove. """)
 @pass_context
-def RemoveBackupTarget(ctx,
+def Remove(ctx,
            backup_target_id):
     """RemoveBackupTarget allows you to delete backup targets."""
     if ctx.element is None:

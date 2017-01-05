@@ -24,7 +24,7 @@ from element import exceptions
 def cli(ctx):
     """GetIpmiConfig GetIpmiInfo """
 
-@cli.command('GetIpmiConfig', short_help="GetIpmiConfig")
+@cli.command('GetIpmiConfig', short_help="""GetIpmiConfig enables you to retrieve hardware sensor information from sensors that are in your node. """)
 @click.option('--chassis_type',
               type=str,
               required=False,
@@ -48,7 +48,7 @@ def GetIpmiConfig(ctx,
 
 
 
-@cli.command('GetIpmiInfo', short_help="GetIpmiInfo")
+@cli.command('GetIpmiInfo', short_help="""GetIpmiInfo allows you to display a detailed reporting of sensors (objects) for node fans, intake and exhaust temperatures, and power supplies  that are monitored by .  """)
 @click.option('--force',
               type=bool,
               required=True,

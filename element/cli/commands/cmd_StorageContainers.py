@@ -22,9 +22,9 @@ from element import exceptions
 @click.group()
 @pass_context
 def cli(ctx):
-    """CreateStorageContainer DeleteStorageContainers GetStorageContainerEfficiency ListStorageContainers ModifyStorageContainer """
+    """CreateStorageContainer Delete GetStorageContainerEfficiency List ModifyStorageContainer """
 
-@cli.command('CreateStorageContainer', short_help="CreateStorageContainer")
+@cli.command('CreateStorageContainer', short_help="""Creates a new VVols storage container. """)
 @click.option('--name',
               type=str,
               required=True,
@@ -53,13 +53,13 @@ def CreateStorageContainer(ctx,
 
 
 
-@cli.command('DeleteStorageContainers', short_help="DeleteStorageContainers")
+@cli.command('Delete', short_help="""Deletes a storage container from the system. """)
 @click.option('--storage_container_ids',
               type=str,
               required=True,
               help="""list of storageContainerID of the storage container to delete. """)
 @pass_context
-def DeleteStorageContainers(ctx,
+def Delete(ctx,
            storage_container_ids):
     """Deletes a storage container from the system."""
     if ctx.element is None:
@@ -74,7 +74,7 @@ def DeleteStorageContainers(ctx,
 
 
 
-@cli.command('GetStorageContainerEfficiency', short_help="GetStorageContainerEfficiency")
+@cli.command('GetStorageContainerEfficiency', short_help="""GetStorageContainerEfficiency enables you to retrieve efficiency information about a virtual volume storage container. """)
 @click.option('--storage_container_id',
               type=UUID,
               required=True,
@@ -93,13 +93,13 @@ def GetStorageContainerEfficiency(ctx,
 
 
 
-@cli.command('ListStorageContainers', short_help="ListStorageContainers")
+@cli.command('List', short_help="""Gets information for all storage containers currently in the system. """)
 @click.option('--storage_container_ids',
               type=str,
               required=False,
               help="""List of storage containers to get """)
 @pass_context
-def ListStorageContainers(ctx,
+def List(ctx,
            storage_container_ids = None):
     """Gets information for all storage containers currently in the system."""
     if ctx.element is None:
@@ -114,7 +114,7 @@ def ListStorageContainers(ctx,
 
 
 
-@cli.command('ModifyStorageContainer', short_help="ModifyStorageContainer")
+@cli.command('ModifyStorageContainer', short_help="""Modifies an existing storage container. """)
 @click.option('--storage_container_id',
               type=UUID,
               required=True,

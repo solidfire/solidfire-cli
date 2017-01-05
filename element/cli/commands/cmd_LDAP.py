@@ -25,7 +25,7 @@ from element import exceptions
 def cli(ctx):
     """AddLdapClusterAdmin DisableLdapAuthentication EnableLdapAuthentication GetLdapConfiguration TestLdapAuthentication """
 
-@cli.command('AddLdapClusterAdmin', short_help="AddLdapClusterAdmin")
+@cli.command('AddLdapClusterAdmin', short_help="""AddLdapClusterAdmin is used to add a new LDAP Cluster Admin. An LDAP Cluster Admin can be used to manage the cluster via the API and management tools. LDAP Cluster Admins are completely separate and unrelated to standard tenant accounts. <br/><br/> An LDAP group that has been defined in Active Directory can also be added using this API method. The access level that is given to the group will be passed to the individual users in the LDAP group. """)
 @click.option('--username',
               type=str,
               required=True,
@@ -63,7 +63,7 @@ def AddLdapClusterAdmin(ctx,
 
 
 
-@cli.command('DisableLdapAuthentication', short_help="DisableLdapAuthentication")
+@cli.command('DisableLdapAuthentication', short_help="""The DisableLdapAuthentication method is used disable LDAP authentication and remove all LDAP configuration settings. This call will not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no longer be able to log in. """)
 @pass_context
 def DisableLdapAuthentication(ctx):
     """The DisableLdapAuthentication method is used disable LDAP authentication and remove all LDAP configuration settings. This call will not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no longer be able to log in."""
@@ -77,7 +77,7 @@ def DisableLdapAuthentication(ctx):
 
 
 
-@cli.command('EnableLdapAuthentication', short_help="EnableLdapAuthentication")
+@cli.command('EnableLdapAuthentication', short_help="""The EnableLdapAuthentication method is used to configure an LDAP server connection to use for LDAP authentication to a SolidFire cluster. Users that are members on the LDAP server can then log in to a SolidFire storage system using their LDAP authentication userid and password. """)
 @click.option('--auth_type',
               type=str,
               required=False,
@@ -143,7 +143,7 @@ def EnableLdapAuthentication(ctx,
 
 
 
-@cli.command('GetLdapConfiguration', short_help="GetLdapConfiguration")
+@cli.command('GetLdapConfiguration', short_help="""The GetLdapConfiguration is used to get the LDAP configuration currently active on the cluster. """)
 @pass_context
 def GetLdapConfiguration(ctx):
     """The GetLdapConfiguration is used to get the LDAP configuration currently active on the cluster."""
@@ -157,7 +157,7 @@ def GetLdapConfiguration(ctx):
 
 
 
-@cli.command('TestLdapAuthentication', short_help="TestLdapAuthentication")
+@cli.command('TestLdapAuthentication', short_help="""The TestLdapAuthentication is used to verify the currently enabled LDAP authentication configuration settings are correct. If the configuration settings are correct, the API call returns a list of the groups the tested user is a member of. """)
 @click.option('--username',
               type=str,
               required=True,

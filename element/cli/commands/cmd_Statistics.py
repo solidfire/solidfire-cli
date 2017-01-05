@@ -24,7 +24,7 @@ from element import exceptions
 def cli(ctx):
     """GetCompleteStats GetHardwareInfo GetRawStats ListDriveStats ListVolumeStats ListVolumeStatsByVirtualVolume """
 
-@cli.command('GetCompleteStats', short_help="GetCompleteStats")
+@cli.command('GetCompleteStats', short_help="""The GetCompleteStats API method is used by SolidFire engineering to troubleshoot new features. The data returned from GetCompleteStats is not documented, changes frequently, and is not guaranteed to be accurate. It is not recommended to ever use GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster. The data returned from GetCompleteStats changes frequently, and is not guaranteed to accurately show performance from the system. It is not recommended to ever use GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster. """)
 @pass_context
 def GetCompleteStats(ctx):
     """The GetCompleteStats API method is used by SolidFire engineering to troubleshoot new features. The data returned from GetCompleteStats is not documented, changes frequently, and is not guaranteed to be accurate. It is not recommended to ever use GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster."""
@@ -39,7 +39,7 @@ def GetCompleteStats(ctx):
 
 
 
-@cli.command('GetHardwareInfo', short_help="GetHardwareInfo")
+@cli.command('GetHardwareInfo', short_help="""GetHardwareInfo allows you to return hardware information and status for a single node. This generally includes manufacturers, vendors, versions, drives, and other associated hardware identification information. """)
 @pass_context
 def GetHardwareInfo(ctx):
     """GetHardwareInfo allows you to return hardware information and status for a single node. This generally includes manufacturers, vendors, versions, drives, and other associated hardware identification information."""
@@ -53,7 +53,7 @@ def GetHardwareInfo(ctx):
 
 
 
-@cli.command('GetRawStats', short_help="GetRawStats")
+@cli.command('GetRawStats', short_help="""The GetRawStats call is used by SolidFire engineering to troubleshoot new features. The data returned from GetRawStats is not documented, it changes frequently, and is not guaranteed to be accurate. It is not recommended to ever use GetRawStats for collecting performance data or any other management integration with a SolidFire cluster. The data returned from GetRawStats changes frequently, and is not guaranteed to accurately show performance from the system. It is not recommended to ever use GetRawStats for collecting performance data or any other management integration with a SolidFire cluster. """)
 @pass_context
 def GetRawStats(ctx):
     """The GetRawStats call is used by SolidFire engineering to troubleshoot new features. The data returned from GetRawStats is not documented, it changes frequently, and is not guaranteed to be accurate. It is not recommended to ever use GetRawStats for collecting performance data or any other management integration with a SolidFire cluster."""
@@ -68,7 +68,7 @@ def GetRawStats(ctx):
 
 
 
-@cli.command('ListDriveStats', short_help="ListDriveStats")
+@cli.command('ListDriveStats', short_help="""ListDriveStats enables you to retrieve  high-level activity measurements for multiple drives in the cluster. By default, this method returns statistics for all drives in the cluster, and these measurements are cumulative from the addition of the drive to the cluster. Some values this method returns are specific to block drives, and some are specific to metadata drives. For more information on what data each drive type returns, see the response examples for the GetDriveStats method. """)
 @click.option('--drives',
               type=str,
               required=False,
@@ -89,7 +89,7 @@ def ListDriveStats(ctx,
 
 
 
-@cli.command('ListVolumeStats', short_help="ListVolumeStats")
+@cli.command('ListVolumeStats', short_help="""""")
 @click.option('--volume_ids',
               type=str,
               required=False,
@@ -109,7 +109,7 @@ def ListVolumeStats(ctx,
 
 
 
-@cli.command('ListVolumeStatsByVirtualVolume', short_help="ListVolumeStatsByVirtualVolume")
+@cli.command('ListVolumeStatsByVirtualVolume', short_help="""ListVolumeStatsByVirtualVolume enables you to list statistics for volumes, sorted by virtual volumes. """)
 @click.option('--virtual_volume_ids',
               type=str,
               required=False,
