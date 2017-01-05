@@ -51,4 +51,11 @@ def check_strange_inputs():
     # Now tear down the account.
     result = runner.invoke(cli.cli, ['-c','0','-j',"Account", "Remove", '--account_id', account.account_id])
 
+    # Now, to test a supercomplex parameter, we need to make a volume access group and set the attributes via json:
+    result = runner.invoke(cli.cli, ['-c','0','-j',"VolumeAccessGroup","Create","--name", "DISPOSABLE", '--attributes', '{\"blah\":\"blah\"}'])
+    volume_access_group = jsonpickle.decode(result.output)
+    assert volume_access_group.volume_access_group.attributes["blah"] == "blah"
+    result = runner.invoke(cli.cli, ['-c','0','-j',"VolumeAccessGroup", "Delete", '--volume_access_group_id', volume_access_group.volume_access_group_id])
+
+
 check_strange_inputs()
