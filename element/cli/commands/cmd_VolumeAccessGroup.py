@@ -214,7 +214,7 @@ def List(ctx,
 
 
 
-@cli.command('Modify', short_help="""Update initiators and add or remove volumes from a volume access group. A specified initiator or volume that duplicates an existing volume or initiator in a volume access group is left as-is. If a value is not specified for volumes or initiators, the current list of initiators and volumes are not changed. <br/><br/> Often, it is easier to use the convenience functions to modify initiators and volumes independently: <br/><br/> AddInitiatorsToVolumeAccessGroup<br/> RemoveInitiatorsFromVolumeAccessGroup<br/> AddVolumesToVolumeAccessGroup<br/> RemoveVolumesFromVolumeAccessGroup<br/> """)
+@cli.command('Modify', short_help="""Update initiators and add or remove volumes from a volume access group. A specified initiator or volume that duplicates an existing volume or initiator in a volume access group is left as-is. If a value is not specified for volumes or initiators, the current list of initiators and volumes are not changed.  Often, it is easier to use the convenience functions to modify initiators and volumes independently:  AddInitiatorsToVolumeAccessGroup RemoveInitiatorsFromVolumeAccessGroup AddVolumesToVolumeAccessGroup RemoveVolumesFromVolumeAccessGroup """)
 @click.option('--volume_access_group_id',
               type=int,
               required=True,
@@ -255,13 +255,13 @@ def Modify(ctx,
     """Update initiators and add or remove volumes from a volume access group."""
     """A specified initiator or volume that duplicates an existing volume or initiator in a volume access group is left as-is."""
     """If a value is not specified for volumes or initiators, the current list of initiators and volumes are not changed."""
-    """&lt;br/&gt;&lt;br/&gt;"""
+    """"""
     """Often, it is easier to use the convenience functions to modify initiators and volumes independently:"""
-    """&lt;br/&gt;&lt;br/&gt;"""
-    """AddInitiatorsToVolumeAccessGroup&lt;br/&gt;"""
-    """RemoveInitiatorsFromVolumeAccessGroup&lt;br/&gt;"""
-    """AddVolumesToVolumeAccessGroup&lt;br/&gt;"""
-    """RemoveVolumesFromVolumeAccessGroup&lt;br/&gt;"""
+    """"""
+    """AddInitiatorsToVolumeAccessGroup"""
+    """RemoveInitiatorsFromVolumeAccessGroup"""
+    """AddVolumesToVolumeAccessGroup"""
+    """RemoveVolumesFromVolumeAccessGroup"""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
@@ -280,7 +280,7 @@ def Modify(ctx,
 
 
 
-@cli.command('ModifyLunAssignments', short_help="""The ModifytVolumeAccessGroupLunAssignments is used to define custom LUN assignments for specific volumes. Only LUN values set on the lunAssignments parameter will be changed in the volume access group. All other LUN assignments will remain unchanged. <br/><br/> LUN assignment values must be unique for volumes in a volume access group. An exception will be seen if LUN assignments are duplicated in a volume access group. However, the same LUN values can be used again in different volume access groups. <br/><br/> <b>Note:</b> Correct LUN values are 0 - 16383. An exception will be seen if an incorrect LUN value is passed. None of the specified LUN assignments will be modified if there is an exception. <br/><br/> <b>Caution:</b> If a LUN assignment is changed for a volume with active I/O, the I/O could be disrupted. Changes to the server configuration may be required in order to change volume LUN assignments. """)
+@cli.command('ModifyLunAssignments', short_help="""The ModifytVolumeAccessGroupLunAssignments is used to define custom LUN assignments for specific volumes. Only LUN values set on the lunAssignments parameter will be changed in the volume access group. All other LUN assignments will remain unchanged.  LUN assignment values must be unique for volumes in a volume access group. An exception will be seen if LUN assignments are duplicated in a volume access group. However, the same LUN values can be used again in different volume access groups.  Note: Correct LUN values are 0 - 16383. An exception will be seen if an incorrect LUN value is passed. None of the specified LUN assignments will be modified if there is an exception.  Caution: If a LUN assignment is changed for a volume with active I/O, the I/O could be disrupted. Changes to the server configuration may be required in order to change volume LUN assignments. """)
 @click.option('--volume_access_group_id',
               type=int,
               required=True,
@@ -299,12 +299,12 @@ def ModifyLunAssignments(ctx,
            lun_assignment_volume_id,
            lun_assignment_lun):
     """The ModifytVolumeAccessGroupLunAssignments is used to define custom LUN assignments for specific volumes. Only LUN values set on the lunAssignments parameter will be changed in the volume access group. All other LUN assignments will remain unchanged."""
-    """&lt;br/&gt;&lt;br/&gt;"""
+    """"""
     """LUN assignment values must be unique for volumes in a volume access group. An exception will be seen if LUN assignments are duplicated in a volume access group. However, the same LUN values can be used again in different volume access groups."""
-    """&lt;br/&gt;&lt;br/&gt;"""
-    """&lt;b&gt;Note:&lt;/b&gt; Correct LUN values are 0 - 16383. An exception will be seen if an incorrect LUN value is passed. None of the specified LUN assignments will be modified if there is an exception."""
-    """&lt;br/&gt;&lt;br/&gt;"""
-    """&lt;b&gt;Caution:&lt;/b&gt; If a LUN assignment is changed for a volume with active I/O, the I/O could be disrupted. Changes to the server configuration may be required in order to change volume LUN assignments."""
+    """"""
+    """Note: Correct LUN values are 0 - 16383. An exception will be seen if an incorrect LUN value is passed. None of the specified LUN assignments will be modified if there is an exception."""
+    """"""
+    """Caution: If a LUN assignment is changed for a volume with active I/O, the I/O could be disrupted. Changes to the server configuration may be required in order to change volume LUN assignments."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 

@@ -49,6 +49,7 @@ def print_result(objs, as_json=False, depth=None, filter_tree=None):
     print_result_as_tree(objs_to_print, depth)
 
 def print_result_as_json(objs):
+    #print(jsonpickle.encode(objs))
     print(serializer.dumps(serializer.loads(jsonpickle.encode(objs)),indent=4))
 
 def get_result_as_tree(objs, depth=1, currentDepth=0, lastKey = ""):

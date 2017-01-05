@@ -26,7 +26,7 @@ from element import exceptions
 def cli(ctx):
     """Add List Modify Remove """
 
-@cli.command('Add', short_help="""AddVirtualNetwork is used to add a new virtual network to a cluster configuration. When a virtual network is added, an interface for each node is created and each will require a virtual network IP address. The number of IP addresses specified as a parameter for this API method must be equal to or greater than the number of nodes in the cluster. Virtual network addresses are bulk provisioned by SolidFire and assigned to individual nodes automatically. Virtual network addresses do not need to be assigned to nodes manually. <br/><br/> <b>Note:</b> The AddVirtualNetwork method is used only to create a new virtual network. If you want to make changes to a virtual network, please use the ModifyVirtualNetwork method. """)
+@cli.command('Add', short_help="""AddVirtualNetwork is used to add a new virtual network to a cluster configuration. When a virtual network is added, an interface for each node is created and each will require a virtual network IP address. The number of IP addresses specified as a parameter for this API method must be equal to or greater than the number of nodes in the cluster. Virtual network addresses are bulk provisioned by SolidFire and assigned to individual nodes automatically. Virtual network addresses do not need to be assigned to nodes manually.  Note: The AddVirtualNetwork method is used only to create a new virtual network. If you want to make changes to a virtual network, please use the ModifyVirtualNetwork method. """)
 @click.option('--virtual_network_tag',
               type=int,
               required=True,
@@ -75,8 +75,8 @@ def Add(ctx,
            namespace = None,
            attributes = None):
     """AddVirtualNetwork is used to add a new virtual network to a cluster configuration. When a virtual network is added, an interface for each node is created and each will require a virtual network IP address. The number of IP addresses specified as a parameter for this API method must be equal to or greater than the number of nodes in the cluster. Virtual network addresses are bulk provisioned by SolidFire and assigned to individual nodes automatically. Virtual network addresses do not need to be assigned to nodes manually."""
-    """&lt;br/&gt;&lt;br/&gt;"""
-    """&lt;b&gt;Note:&lt;/b&gt; The AddVirtualNetwork method is used only to create a new virtual network. If you want to make changes to a virtual network, please use the ModifyVirtualNetwork method."""
+    """"""
+    """Note: The AddVirtualNetwork method is used only to create a new virtual network. If you want to make changes to a virtual network, please use the ModifyVirtualNetwork method."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
@@ -135,7 +135,7 @@ def List(ctx,
 
 
 
-@cli.command('Modify', short_help="""ModifyVirtualNetwork is used to change various attributes of a VirtualNetwork object. This method can be used to add or remove address blocks, change the netmask IP, or modify the name or description of the virtual network. <br/><br/> <b>Note:</b> This method requires either the VirtualNetworkID or the VirtualNetworkTag as a parameter, but not both. """)
+@cli.command('Modify', short_help="""ModifyVirtualNetwork is used to change various attributes of a VirtualNetwork object. This method can be used to add or remove address blocks, change the netmask IP, or modify the name or description of the virtual network.  Note: This method requires either the VirtualNetworkID or the VirtualNetworkTag as a parameter, but not both. """)
 @click.option('--virtual_network_id',
               type=int,
               required=False,
@@ -189,8 +189,8 @@ def Modify(ctx,
            namespace = None,
            attributes = None):
     """ModifyVirtualNetwork is used to change various attributes of a VirtualNetwork object. This method can be used to add or remove address blocks, change the netmask IP, or modify the name or description of the virtual network."""
-    """&lt;br/&gt;&lt;br/&gt;"""
-    """&lt;b&gt;Note:&lt;/b&gt; This method requires either the VirtualNetworkID or the VirtualNetworkTag as a parameter, but not both."""
+    """"""
+    """Note: This method requires either the VirtualNetworkID or the VirtualNetworkTag as a parameter, but not both."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
@@ -209,7 +209,7 @@ def Modify(ctx,
 
 
 
-@cli.command('Remove', short_help="""RemoveVirtualNetwork is used to remove a previously added virtual network. <br/><br/> <b>Note:</b> This method requires either the VirtualNetworkID of the VirtualNetworkTag as a parameter, but not both. """)
+@cli.command('Remove', short_help="""RemoveVirtualNetwork is used to remove a previously added virtual network.  Note: This method requires either the VirtualNetworkID of the VirtualNetworkTag as a parameter, but not both. """)
 @click.option('--virtual_network_id',
               type=int,
               required=False,
@@ -223,8 +223,8 @@ def Remove(ctx,
            virtual_network_id = None,
            virtual_network_tag = None):
     """RemoveVirtualNetwork is used to remove a previously added virtual network."""
-    """&lt;br/&gt;&lt;br/&gt;"""
-    """&lt;b&gt;Note:&lt;/b&gt; This method requires either the VirtualNetworkID of the VirtualNetworkTag as a parameter, but not both."""
+    """"""
+    """Note: This method requires either the VirtualNetworkID of the VirtualNetworkTag as a parameter, but not both."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 

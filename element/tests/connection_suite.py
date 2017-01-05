@@ -30,7 +30,4 @@ def check_functionality_of_connection_suite():
     print("Remove is working")
     print("Functionality is good")
 
-def verify_table_formatting():
-
-
 check_functionality_of_connection_suite()

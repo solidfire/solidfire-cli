@@ -24,11 +24,11 @@ from element import exceptions
 def cli(ctx):
     """List ListUtilities ConnectEnsemble ConnectMvip ConnectSvip Ping """
 
-@cli.command('List', short_help="""The ListTests API method is used to return the tests that are available to run on a node. <br/><b>Note</b>: This method is available only through the per-node API endpoint 5.0 or later. """)
+@cli.command('List', short_help="""The ListTests API method is used to return the tests that are available to run on a node. Note: This method is available only through the per-node API endpoint 5.0 or later. """)
 @pass_context
 def List(ctx):
     """The ListTests API method is used to return the tests that are available to run on a node."""
-    """&lt;br/&gt;&lt;b&gt;Note&lt;/b&gt;: This method is available only through the per-node API endpoint 5.0 or later."""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
@@ -39,11 +39,11 @@ def List(ctx):
 
 
 
-@cli.command('ListUtilities', short_help="""The ListUtilities API method is used to return the tests that are available to run on a node. <br/><b>Note</b>: This method is available only through the per-node API endpoint 5.0 or later. """)
+@cli.command('ListUtilities', short_help="""The ListUtilities API method is used to return the tests that are available to run on a node. Note: This method is available only through the per-node API endpoint 5.0 or later. """)
 @pass_context
 def ListUtilities(ctx):
     """The ListUtilities API method is used to return the tests that are available to run on a node."""
-    """&lt;br/&gt;&lt;b&gt;Note&lt;/b&gt;: This method is available only through the per-node API endpoint 5.0 or later."""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
@@ -54,7 +54,7 @@ def ListUtilities(ctx):
 
 
 
-@cli.command('ConnectEnsemble', short_help="""The TestConnectEnsemble API method is used to verify connectivity with a sepcified database ensemble. By default it uses the ensemble for the cluster the node is associated with. Alternatively you can provide a different ensemble to test connectivity with. <br/><b>Note</b>: This method is available only through the per-node API endpoint 5.0 or later. """)
+@cli.command('ConnectEnsemble', short_help="""The TestConnectEnsemble API method is used to verify connectivity with a sepcified database ensemble. By default it uses the ensemble for the cluster the node is associated with. Alternatively you can provide a different ensemble to test connectivity with. Note: This method is available only through the per-node API endpoint 5.0 or later. """)
 @click.option('--ensemble',
               type=str,
               required=False,
@@ -63,7 +63,7 @@ def ListUtilities(ctx):
 def ConnectEnsemble(ctx,
            ensemble = None):
     """The TestConnectEnsemble API method is used to verify connectivity with a sepcified database ensemble. By default it uses the ensemble for the cluster the node is associated with. Alternatively you can provide a different ensemble to test connectivity with."""
-    """&lt;br/&gt;&lt;b&gt;Note&lt;/b&gt;: This method is available only through the per-node API endpoint 5.0 or later."""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
@@ -74,7 +74,7 @@ def ConnectEnsemble(ctx,
 
 
 
-@cli.command('ConnectMvip', short_help="""The TestConnectMvip API method is used to test the management connection to the cluster. The test pings the MVIP and executes a simple API method to verify connectivity. <br/><b>Note</b>: This method is available only through the per-node API endpoint 5.0 or later. """)
+@cli.command('ConnectMvip', short_help="""The TestConnectMvip API method is used to test the management connection to the cluster. The test pings the MVIP and executes a simple API method to verify connectivity. Note: This method is available only through the per-node API endpoint 5.0 or later. """)
 @click.option('--mvip',
               type=str,
               required=False,
@@ -83,7 +83,7 @@ def ConnectEnsemble(ctx,
 def ConnectMvip(ctx,
            mvip = None):
     """The TestConnectMvip API method is used to test the management connection to the cluster. The test pings the MVIP and executes a simple API method to verify connectivity."""
-    """&lt;br/&gt;&lt;b&gt;Note&lt;/b&gt;: This method is available only through the per-node API endpoint 5.0 or later."""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
@@ -94,7 +94,7 @@ def ConnectMvip(ctx,
 
 
 
-@cli.command('ConnectSvip', short_help="""The TestConnectSvip API method is used to test the storage connection to the cluster. The test pings the SVIP using ICMP packets and when successful connects as an iSCSI initiator. <br/><b>Note</b>: This method is available only through the per-node API endpoint 5.0 or later. """)
+@cli.command('ConnectSvip', short_help="""The TestConnectSvip API method is used to test the storage connection to the cluster. The test pings the SVIP using ICMP packets and when successful connects as an iSCSI initiator. Note: This method is available only through the per-node API endpoint 5.0 or later. """)
 @click.option('--svip',
               type=str,
               required=False,
@@ -103,7 +103,7 @@ def ConnectMvip(ctx,
 def ConnectSvip(ctx,
            svip = None):
     """The TestConnectSvip API method is used to test the storage connection to the cluster. The test pings the SVIP using ICMP packets and when successful connects as an iSCSI initiator."""
-    """&lt;br/&gt;&lt;b&gt;Note&lt;/b&gt;: This method is available only through the per-node API endpoint 5.0 or later."""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
@@ -114,7 +114,7 @@ def ConnectSvip(ctx,
 
 
 
-@cli.command('Ping', short_help="""The TestPing API method is used to validate the connection to all nodes in the cluster on both 1G and 10G interfaces using ICMP packets. The test uses the appropriate MTU sizes for each packet based on the MTU settings in the network configuration. <br/><b>Note</b>: This method is available only through the per-node API endpoint 5.0 or later. """)
+@cli.command('Ping', short_help="""The TestPing API method is used to validate the connection to all nodes in the cluster on both 1G and 10G interfaces using ICMP packets. The test uses the appropriate MTU sizes for each packet based on the MTU settings in the network configuration. Note: This method is available only through the per-node API endpoint 5.0 or later. """)
 @click.option('--attempts',
               type=int,
               required=False,
@@ -143,7 +143,7 @@ def Ping(ctx,
            packet_size = None,
            ping_timeout_msec = None):
     """The TestPing API method is used to validate the connection to all nodes in the cluster on both 1G and 10G interfaces using ICMP packets. The test uses the appropriate MTU sizes for each packet based on the MTU settings in the network configuration."""
-    """&lt;br/&gt;&lt;b&gt;Note&lt;/b&gt;: This method is available only through the per-node API endpoint 5.0 or later."""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 

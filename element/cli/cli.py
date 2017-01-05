@@ -192,7 +192,6 @@ def cli(ctx,
         ctx.json = json
         ctx.depth = depth
         ctx.filter_tree = filter_tree
-        print(type(ctx))
 
 if __name__ == '__main__':
     cli.main()

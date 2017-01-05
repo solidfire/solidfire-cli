@@ -66,7 +66,7 @@ def CancelGroupClone(ctx,
 
 
 
-@cli.command('CloneMultiple', short_help="""CloneMultipleVolumes is used to create a clone of a group of specified volumes. A consistent set of characteristics can be assigned to a group of multiple volume when they are cloned together. If groupSnapshotID is going to be used to clone the volumes in a group snapshot, the group snapshot must be created first using the CreateGroupSnapshot API method or the SolidFire Element WebUI. Using groupSnapshotID is optional when cloning multiple volumes. <br/><br/> <b>Note</b>: Cloning multiple volumes is allowed if cluster fullness is at stage 2 or 3. Clones are not created when cluster fullness is at stage 4 or 5. """)
+@cli.command('CloneMultiple', short_help="""CloneMultipleVolumes is used to create a clone of a group of specified volumes. A consistent set of characteristics can be assigned to a group of multiple volume when they are cloned together. If groupSnapshotID is going to be used to clone the volumes in a group snapshot, the group snapshot must be created first using the CreateGroupSnapshot API method or the SolidFire Element WebUI. Using groupSnapshotID is optional when cloning multiple volumes.  Note: Cloning multiple volumes is allowed if cluster fullness is at stage 2 or 3. Clones are not created when cluster fullness is at stage 4 or 5. """)
 @click.option('--clone_multiple_volume_params_volume_id',
               type=int,
               required=True,
@@ -116,8 +116,8 @@ def CloneMultiple(ctx,
            new_account_id = None):
     """CloneMultipleVolumes is used to create a clone of a group of specified volumes. A consistent set of characteristics can be assigned to a group of multiple volume when they are cloned together."""
     """If groupSnapshotID is going to be used to clone the volumes in a group snapshot, the group snapshot must be created first using the CreateGroupSnapshot API method or the SolidFire Element WebUI. Using groupSnapshotID is optional when cloning multiple volumes."""
-    """&lt;br/&gt;&lt;br/&gt;"""
-    """&lt;b&gt;Note&lt;/b&gt;: Cloning multiple volumes is allowed if cluster fullness is at stage 2 or 3. Clones are not created when cluster fullness is at stage 4 or 5."""
+    """"""
+    """Note: Cloning multiple volumes is allowed if cluster fullness is at stage 2 or 3. Clones are not created when cluster fullness is at stage 4 or 5."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
@@ -140,7 +140,7 @@ def CloneMultiple(ctx,
 
 
 
-@cli.command('Clone', short_help="""CloneVolume is used to create a copy of the volume. This method is asynchronous and may take a variable amount of time to complete. The cloning process begins immediately when the CloneVolume request is made and is representative of the state of the volume when the API method is issued. GetAsyncResults can be used to determine when the cloning process is complete and the new volume is available for connections. ListSyncJobs can be used to see the progress of creating the clone. <br/><br/> <b>Note</b>: The initial attributes and quality of service settings for the volume are inherited from the volume being cloned. If different settings are required, they can be changed via ModifyVolume. <br/><br/> <b>Note</b>: Cloned volumes do not inherit volume access group memberships from the source volume. """)
+@cli.command('Clone', short_help="""CloneVolume is used to create a copy of the volume. This method is asynchronous and may take a variable amount of time to complete. The cloning process begins immediately when the CloneVolume request is made and is representative of the state of the volume when the API method is issued. GetAsyncResults can be used to determine when the cloning process is complete and the new volume is available for connections. ListSyncJobs can be used to see the progress of creating the clone.  Note: The initial attributes and quality of service settings for the volume are inherited from the volume being cloned. If different settings are required, they can be changed via ModifyVolume.  Note: Cloned volumes do not inherit volume access group memberships from the source volume. """)
 @click.option('--volume_id',
               type=int,
               required=True,
@@ -183,11 +183,11 @@ def Clone(ctx,
     """The cloning process begins immediately when the CloneVolume request is made and is representative of the state of the volume when the API method is issued."""
     """GetAsyncResults can be used to determine when the cloning process is complete and the new volume is available for connections."""
     """ListSyncJobs can be used to see the progress of creating the clone."""
-    """&lt;br/&gt;&lt;br/&gt;"""
-    """&lt;b&gt;Note&lt;/b&gt;: The initial attributes and quality of service settings for the volume are inherited from the volume being cloned."""
+    """"""
+    """Note: The initial attributes and quality of service settings for the volume are inherited from the volume being cloned."""
     """If different settings are required, they can be changed via ModifyVolume."""
-    """&lt;br/&gt;&lt;br/&gt;"""
-    """&lt;b&gt;Note&lt;/b&gt;: Cloned volumes do not inherit volume access group memberships from the source volume."""
+    """"""
+    """Note: Cloned volumes do not inherit volume access group memberships from the source volume."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
@@ -295,7 +295,7 @@ def Create(ctx,
 
 
 
-@cli.command('Delete', short_help="""DeleteVolume marks an active volume for deletion. It is purged (permanently deleted) after the cleanup interval elapses. After making a request to delete a volume, any active iSCSI connections to the volume is immediately terminated and no further connections are allowed while the volume is in this state. It is not returned in target discovery requests. <br/><br/> Any snapshots of a volume that has been marked to delete are not affected. Snapshots are kept until the volume is purged from the system. <br/><br/> If a volume is marked for deletion, and it has a bulk volume read or bulk volume write operation in progress, the bulk volume operation is stopped. <br/><br/> If the volume you delete is paired with a volume, replication between the paired volumes is suspended and no data is transferred to it or from it while in a deleted state. The remote volume the deleted volume was paired with enters into a PausedMisconfigured state and data is no longer sent to it or from the deleted volume. Until the deleted volume is purged, it can be restored and data transfers resumes. If the deleted volume gets purged from the system, the volume it was paired with enters into a StoppedMisconfigured state and the volume pairing status is removed. The purged volume becomes permanently unavailable. """)
+@cli.command('Delete', short_help="""DeleteVolume marks an active volume for deletion. It is purged (permanently deleted) after the cleanup interval elapses. After making a request to delete a volume, any active iSCSI connections to the volume is immediately terminated and no further connections are allowed while the volume is in this state. It is not returned in target discovery requests.  Any snapshots of a volume that has been marked to delete are not affected. Snapshots are kept until the volume is purged from the system.  If a volume is marked for deletion, and it has a bulk volume read or bulk volume write operation in progress, the bulk volume operation is stopped.  If the volume you delete is paired with a volume, replication between the paired volumes is suspended and no data is transferred to it or from it while in a deleted state. The remote volume the deleted volume was paired with enters into a PausedMisconfigured state and data is no longer sent to it or from the deleted volume. Until the deleted volume is purged, it can be restored and data transfers resumes. If the deleted volume gets purged from the system, the volume it was paired with enters into a StoppedMisconfigured state and the volume pairing status is removed. The purged volume becomes permanently unavailable. """)
 @click.option('--volume_id',
               type=int,
               required=True,
@@ -307,12 +307,12 @@ def Delete(ctx,
     """It is purged (permanently deleted) after the cleanup interval elapses."""
     """After making a request to delete a volume, any active iSCSI connections to the volume is immediately terminated and no further connections are allowed while the volume is in this state."""
     """It is not returned in target discovery requests."""
-    """&lt;br/&gt;&lt;br/&gt;"""
+    """"""
     """Any snapshots of a volume that has been marked to delete are not affected."""
     """Snapshots are kept until the volume is purged from the system."""
-    """&lt;br/&gt;&lt;br/&gt;"""
+    """"""
     """If a volume is marked for deletion, and it has a bulk volume read or bulk volume write operation in progress, the bulk volume operation is stopped."""
-    """&lt;br/&gt;&lt;br/&gt;"""
+    """"""
     """If the volume you delete is paired with a volume, replication between the paired volumes is suspended and no data is transferred to it or from it while in a deleted state."""
     """The remote volume the deleted volume was paired with enters into a PausedMisconfigured state and data is no longer sent to it or from the deleted volume."""
     """Until the deleted volume is purged, it can be restored and data transfers resumes."""
@@ -363,7 +363,7 @@ def Delete(ctx,
 
 
 
-@cli.command('GetAsyncResult', short_help="""Used to retrieve the result of asynchronous method calls. Some method calls are long running and do not complete when the initial response is sent. To obtain the result of the method call, polling with GetAsyncResult is required. <br/><br/> GetAsyncResult returns the overall status of the operation (in progress, completed, or error) in a standard fashion, but the actual data returned for the operation depends on the original method call and the return data is documented with each method. <br/><br/> The result for a completed asynchronous method call can only be retrieved once. Once the final result has been returned, later attempts returns an error. """)
+@cli.command('GetAsyncResult', short_help="""Used to retrieve the result of asynchronous method calls. Some method calls are long running and do not complete when the initial response is sent. To obtain the result of the method call, polling with GetAsyncResult is required.  GetAsyncResult returns the overall status of the operation (in progress, completed, or error) in a standard fashion, but the actual data returned for the operation depends on the original method call and the return data is documented with each method.  The result for a completed asynchronous method call can only be retrieved once. Once the final result has been returned, later attempts returns an error. """)
 @click.option('--async_handle',
               type=int,
               required=True,
@@ -374,10 +374,10 @@ def GetAsyncResult(ctx,
     """Used to retrieve the result of asynchronous method calls."""
     """Some method calls are long running and do not complete when the initial response is sent."""
     """To obtain the result of the method call, polling with GetAsyncResult is required."""
-    """&lt;br/&gt;&lt;br/&gt;"""
+    """"""
     """GetAsyncResult returns the overall status of the operation (in progress, completed, or error) in a standard fashion,"""
     """but the actual data returned for the operation depends on the original method call and the return data is documented with each method."""
-    """&lt;br/&gt;&lt;br/&gt;"""
+    """"""
     """The result for a completed asynchronous method call can only be retrieved once."""
     """Once the final result has been returned, later attempts returns an error."""
     if ctx.element is None:
@@ -661,7 +661,7 @@ def ListStatsByAccessGroup(ctx,
 
 
 
-@cli.command('Modify', short_help="""ModifyVolume is used to modify settings on an existing volume. Modifications can be made to one volume at a time and changes take place immediately. If an optional parameter is left unspecified, the value will not be changed. <br/><br/> Extending the size of a volume that is being replicated should be done in an order. The target (Replication Target) volume should first be increased in size, then the source (Read/Write) volume can be resized. It is recommended that both the target and the source volumes be the same size. <br/><br/> <b>Note</b>: If you change access status to locked or target all existing iSCSI connections are terminated. """)
+@cli.command('Modify', short_help="""ModifyVolume is used to modify settings on an existing volume. Modifications can be made to one volume at a time and changes take place immediately. If an optional parameter is left unspecified, the value will not be changed.  Extending the size of a volume that is being replicated should be done in an order. The target (Replication Target) volume should first be increased in size, then the source (Read/Write) volume can be resized. It is recommended that both the target and the source volumes be the same size.  Note: If you change access status to locked or target all existing iSCSI connections are terminated. """)
 @click.option('--volume_id',
               type=int,
               required=True,
@@ -712,12 +712,12 @@ def Modify(ctx,
     """ModifyVolume is used to modify settings on an existing volume."""
     """Modifications can be made to one volume at a time and changes take place immediately."""
     """If an optional parameter is left unspecified, the value will not be changed."""
-    """&lt;br/&gt;&lt;br/&gt;"""
+    """"""
     """Extending the size of a volume that is being replicated should be done in an order."""
     """The target (Replication Target) volume should first be increased in size, then the source (Read/Write) volume can be resized."""
     """It is recommended that both the target and the source volumes be the same size."""
-    """&lt;br/&gt;&lt;br/&gt;"""
-    """&lt;b&gt;Note&lt;/b&gt;: If you change access status to locked or target all existing iSCSI connections are terminated."""
+    """"""
+    """Note: If you change access status to locked or target all existing iSCSI connections are terminated."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
@@ -910,7 +910,7 @@ def SetDefaultQoS(ctx,
 
 
 
-@cli.command('StartBulkRead', short_help="""StartBulkVolumeRead allows you to initialize a bulk volume read session on a specified volume. Only two bulk volume processes can run simultaneously on a volume. When you initialize the session, data is read from a SolidFire storage volume for the purposes of storing the data on an external backup source. The external data is accessed by a web server running on a SolidFire node. Communications and server interaction information for external data access is passed by a script running on the SolidFire storage system.<br/> <br/> At the start of a bulk volume read operation, a snapshot of the volume is made and the snapshot is deleted when the read has completed. You can also read a snapshot of the volume by entering the ID of the snapshot as a parameter. Reading a previous snapshot does not create a new snapshot of the volume, nor does the previous snapshot be deleted when the read completes.<br/> <br/> <b>Note</b>: This process creates a new snapshot if the ID of an existing snapshot is not provided. Snapshots can be created if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """)
+@cli.command('StartBulkRead', short_help="""StartBulkVolumeRead allows you to initialize a bulk volume read session on a specified volume. Only two bulk volume processes can run simultaneously on a volume. When you initialize the session, data is read from a SolidFire storage volume for the purposes of storing the data on an external backup source. The external data is accessed by a web server running on a SolidFire node. Communications and server interaction information for external data access is passed by a script running on the SolidFire storage system.  At the start of a bulk volume read operation, a snapshot of the volume is made and the snapshot is deleted when the read has completed. You can also read a snapshot of the volume by entering the ID of the snapshot as a parameter. Reading a previous snapshot does not create a new snapshot of the volume, nor does the previous snapshot be deleted when the read completes.  Note: This process creates a new snapshot if the ID of an existing snapshot is not provided. Snapshots can be created if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """)
 @click.option('--volume_id',
               type=int,
               required=True,
@@ -947,13 +947,13 @@ def StartBulkRead(ctx,
     """Only two bulk volume processes can run simultaneously on a volume."""
     """When you initialize the session, data is read from a SolidFire storage volume for the purposes of storing the data on an external backup source."""
     """The external data is accessed by a web server running on a SolidFire node."""
-    """Communications and server interaction information for external data access is passed by a script running on the SolidFire storage system.&lt;br/&gt;"""
-    """&lt;br/&gt;"""
+    """Communications and server interaction information for external data access is passed by a script running on the SolidFire storage system."""
+    """"""
     """At the start of a bulk volume read operation, a snapshot of the volume is made and the snapshot is deleted when the read has completed."""
     """You can also read a snapshot of the volume by entering the ID of the snapshot as a parameter."""
-    """Reading a previous snapshot does not create a new snapshot of the volume, nor does the previous snapshot be deleted when the read completes.&lt;br/&gt;"""
-    """&lt;br/&gt;"""
-    """&lt;b&gt;Note&lt;/b&gt;: This process creates a new snapshot if the ID of an existing snapshot is not provided."""
+    """Reading a previous snapshot does not create a new snapshot of the volume, nor does the previous snapshot be deleted when the read completes."""
+    """"""
+    """Note: This process creates a new snapshot if the ID of an existing snapshot is not provided."""
     """Snapshots can be created if cluster fullness is at stage 2 or 3."""
     """Snapshots are not created when cluster fullness is at stage 4 or 5."""
     if ctx.element is None:

@@ -1,0 +1,169 @@
+{
+    "py/object": "solidfire.models.ListAccountsResult",
+    "accounts": [
+        {
+            "volumes": [],
+            "status": "active",
+            "attributes": {},
+            "account_id": 1,
+            "py/object": "solidfire.models.Account",
+            "initiator_secret": {
+                "py/object": "solidfire.custom.models.CHAPSecret",
+                "secret": "GXt}9V7KgEXR^&Nk"
+            },
+            "target_secret": {
+                "py/object": "solidfire.custom.models.CHAPSecret",
+                "secret": "i*0m8,tXQi|7@2}R"
+            },
+            "username": "pester"
+        },
+        {
+            "volumes": [
+                2,
+                3,
+                4
+            ],
+            "status": "active",
+            "attributes": {},
+            "account_id": 2,
+            "py/object": "solidfire.models.Account",
+            "initiator_secret": {
+                "py/object": "solidfire.custom.models.CHAPSecret",
+                "secret": "8OR;7Ka8L0GWGMH;"
+            },
+            "target_secret": {
+                "py/object": "solidfire.custom.models.CHAPSecret",
+                "secret": "kc{LH']{:vbJZ,3;"
+            },
+            "username": "sra"
+        },
+        {
+            "volumes": [],
+            "status": "active",
+            "attributes": {},
+            "account_id": 10,
+            "py/object": "solidfire.models.Account",
+            "initiator_secret": {
+                "py/object": "solidfire.custom.models.CHAPSecret",
+                "secret": "p5hX2nbLNO{vX04f"
+            },
+            "target_secret": {
+                "py/object": "solidfire.custom.models.CHAPSecret",
+                "secret": "|m.aj8Q9J6K'ce)6"
+            },
+            "username": "name"
+        },
+        {
+            "volumes": [],
+            "status": "active",
+            "attributes": {},
+            "account_id": 13,
+            "py/object": "solidfire.models.Account",
+            "initiator_secret": {
+                "py/object": "solidfire.custom.models.CHAPSecret",
+                "secret": "c>9Y,H5/y2tgzo*>"
+            },
+            "target_secret": {
+                "py/object": "solidfire.custom.models.CHAPSecret",
+                "secret": "E2ztmT@ob.ZlTM>m"
+            },
+            "username": "Ariel"
+        },
+        {
+            "volumes": [],
+            "status": "active",
+            "attributes": {},
+            "account_id": 14,
+            "py/object": "solidfire.models.Account",
+            "initiator_secret": {
+                "py/object": "solidfire.custom.models.CHAPSecret",
+                "secret": "1,x|zj0,d']pj%I5"
+            },
+            "target_secret": {
+                "py/object": "solidfire.custom.models.CHAPSecret",
+                "secret": "70brFe0:0Sru;Cd^"
+            },
+            "username": "Ariel2"
+        },
+        {
+            "volumes": [],
+            "status": "active",
+            "attributes": {},
+            "account_id": 15,
+            "py/object": "solidfire.models.Account",
+            "initiator_secret": {
+                "py/object": "solidfire.custom.models.CHAPSecret",
+                "secret": "ji![a1$F/zrh0BuP"
+            },
+            "target_secret": {
+                "py/object": "solidfire.custom.models.CHAPSecret",
+                "secret": "U'2510d5j720cQZ,"
+            },
+            "username": "vcp"
+        },
+        {
+            "volumes": [],
+            "status": "active",
+            "attributes": {},
+            "account_id": 29,
+            "py/object": "solidfire.models.Account",
+            "initiator_secret": {
+                "py/object": "solidfire.custom.models.CHAPSecret",
+                "secret": "n3Dv0tAL5\"7}F0m%"
+            },
+            "target_secret": {
+                "py/object": "solidfire.custom.models.CHAPSecret",
+                "secret": "a%.U4Wi)];z',81x"
+            },
+            "username": "sdw"
+        },
+        {
+            "volumes": [],
+            "status": "active",
+            "attributes": {},
+            "account_id": 30,
+            "py/object": "solidfire.models.Account",
+            "initiator_secret": {
+                "py/object": "solidfire.custom.models.CHAPSecret",
+                "secret": "v3;X'f&3N9%Y]u*l"
+            },
+            "target_secret": {
+                "py/object": "solidfire.custom.models.CHAPSecret",
+                "secret": "({O1X7DAD02u8btu"
+            },
+            "username": "admin"
+        },
+        {
+            "volumes": [],
+            "status": "active",
+            "attributes": {},
+            "account_id": 31,
+            "py/object": "solidfire.models.Account",
+            "initiator_secret": {
+                "py/object": "solidfire.custom.models.CHAPSecret",
+                "secret": "ncD2H]Ddh/0\"TfZ:"
+            },
+            "target_secret": {
+                "py/object": "solidfire.custom.models.CHAPSecret",
+                "secret": "9vJ701qW(XDBK03v"
+            },
+            "username": "sdw2"
+        },
+        {
+            "volumes": [],
+            "status": "active",
+            "attributes": {},
+            "account_id": 34,
+            "py/object": "solidfire.models.Account",
+            "initiator_secret": {
+                "py/object": "solidfire.custom.models.CHAPSecret",
+                "secret": "solidfire1234"
+            },
+            "target_secret": {
+                "py/object": "solidfire.custom.models.CHAPSecret",
+                "secret": "1234solidfire"
+            },
+            "username": "1account"
+        }
+    ]
+}

@@ -127,7 +127,7 @@ def ModifyVolumePair(ctx,
 
 
 
-@cli.command('RemoveClusterPair', short_help="""You can use the RemoveClusterPair method to close the open connections between two paired clusters.<br/> <b>Note</b>: Before you remove a cluster pair, you must first remove all volume pairing to the clusters with the "RemoveVolumePair" API method. """)
+@cli.command('RemoveClusterPair', short_help="""You can use the RemoveClusterPair method to close the open connections between two paired clusters. Note: Before you remove a cluster pair, you must first remove all volume pairing to the clusters with the "RemoveVolumePair" API method. """)
 @click.option('--cluster_pair_id',
               type=int,
               required=True,
@@ -135,8 +135,8 @@ def ModifyVolumePair(ctx,
 @pass_context
 def RemoveClusterPair(ctx,
            cluster_pair_id):
-    """You can use the RemoveClusterPair method to close the open connections between two paired clusters.&lt;br/&gt;"""
-    """&lt;b&gt;Note&lt;/b&gt;: Before you remove a cluster pair, you must first remove all volume pairing to the clusters with the &quot;RemoveVolumePair&quot; API method."""
+    """You can use the RemoveClusterPair method to close the open connections between two paired clusters."""
+    """Note: Before you remove a cluster pair, you must first remove all volume pairing to the clusters with the &quot;RemoveVolumePair&quot; API method."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 

@@ -25,7 +25,7 @@ from element import exceptions
 def cli(ctx):
     """Add GetConfig GetHardwareInfo GetStats ListHardware List Remove Reset SecureErase Test """
 
-@cli.command('Add', short_help="""AddDrives is used to add one or more available drives to the cluster enabling the drives to host a portion of the cluster's data. When you add a node to the cluster or install new drives in an existing node, the new drives are marked as "available" and must be added via AddDrives before they can be utilized. Use the "ListDrives" method to display drives that are "available" to be added. When you add multiple drives, it is more efficient to add them in a single "AddDrives" method call rather than multiple individual methods with a single drive each. This reduces the amount of data balancing that must occur to stabilize the storage load on the cluster. <br/><br/> When you add a drive, the system automatically determines the "type" of drive it should be. <br/><br/> The method returns immediately. However, it may take some time for the data in the cluster to be rebalanced using the newly added drives. As the new drive(s) are syncing on the system, you can use the "ListSyncJobs" method to see how the drive(s) are being rebalanced and the progress of adding the new drive. """)
+@cli.command('Add', short_help="""AddDrives is used to add one or more available drives to the cluster enabling the drives to host a portion of the cluster's data. When you add a node to the cluster or install new drives in an existing node, the new drives are marked as "available" and must be added via AddDrives before they can be utilized. Use the "ListDrives" method to display drives that are "available" to be added. When you add multiple drives, it is more efficient to add them in a single "AddDrives" method call rather than multiple individual methods with a single drive each. This reduces the amount of data balancing that must occur to stabilize the storage load on the cluster.  When you add a drive, the system automatically determines the "type" of drive it should be.  The method returns immediately. However, it may take some time for the data in the cluster to be rebalanced using the newly added drives. As the new drive(s) are syncing on the system, you can use the "ListSyncJobs" method to see how the drive(s) are being rebalanced and the progress of adding the new drive. """)
 @click.option('--new_drive_drive_id',
               type=int,
               required=True,
@@ -38,9 +38,9 @@ def Add(ctx,
     """Use the &quot;ListDrives&quot; method to display drives that are &quot;available&quot; to be added."""
     """When you add multiple drives, it is more efficient to add them in a single &quot;AddDrives&quot; method call rather than multiple individual methods with a single drive each."""
     """This reduces the amount of data balancing that must occur to stabilize the storage load on the cluster."""
-    """&lt;br/&gt;&lt;br/&gt;"""
+    """"""
     """When you add a drive, the system automatically determines the &quot;type&quot; of drive it should be."""
-    """&lt;br/&gt;&lt;br/&gt;"""
+    """"""
     """The method returns immediately. However, it may take some time for the data in the cluster to be rebalanced using the newly added drives."""
     """As the new drive(s) are syncing on the system, you can use the &quot;ListSyncJobs&quot; method to see how the drive(s) are being rebalanced and the progress of adding the new drive."""
     if ctx.element is None:
@@ -60,12 +60,12 @@ def Add(ctx,
 
 
 
-@cli.command('GetConfig', short_help="""GetDriveConfig is used to display drive information for expected slice and block drive counts as well as the number of slices and block drives that are currently connected to the node. <br/><br/> <b>Note</b>: This method is available only through the per-node API endpoint 5.0 or later. """)
+@cli.command('GetConfig', short_help="""GetDriveConfig is used to display drive information for expected slice and block drive counts as well as the number of slices and block drives that are currently connected to the node.  Note: This method is available only through the per-node API endpoint 5.0 or later. """)
 @pass_context
 def GetConfig(ctx):
     """GetDriveConfig is used to display drive information for expected slice and block drive counts as well as the number of slices and block drives that are currently connected to the node."""
-    """&lt;br/&gt;&lt;br/&gt;"""
-    """&lt;b&gt;Note&lt;/b&gt;: This method is available only through the per-node API endpoint 5.0 or later."""
+    """"""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
@@ -149,7 +149,7 @@ def List(ctx):
 
 
 
-@cli.command('Remove', short_help="""You can use RemoveDrives to proactively remove drives that are part of the cluster. You may want to use this method when reducing cluster capacity or preparing to replace drives nearing the end of their service life. Any data on the drives is removed and migrated to other drives in the cluster before the drive is removed from the cluster. This is an asynchronous method. Depending on the total capacity of the drives being removed, it may take several minutes to migrate all of the data. Use the "GetAsyncResult" method to check the status of the remove operation. <br/><br/> When removing multiple drives, use a single "RemoveDrives" method call rather than multiple individual methods with a single drive each. This reduces the amount of data balancing that must occur to even stabilize the storage load on the cluster. <br/><br/> You can also remove drives with a "failed" status using "RemoveDrives". When you remove a drive with a "failed" status it is not returned to an "available" or "active" status. The drive is unavailable for use in the cluster. <br/><br/> Use the "ListDrives" method to obtain the driveIDs for the drives you want to remove. """)
+@cli.command('Remove', short_help="""You can use RemoveDrives to proactively remove drives that are part of the cluster. You may want to use this method when reducing cluster capacity or preparing to replace drives nearing the end of their service life. Any data on the drives is removed and migrated to other drives in the cluster before the drive is removed from the cluster. This is an asynchronous method. Depending on the total capacity of the drives being removed, it may take several minutes to migrate all of the data. Use the "GetAsyncResult" method to check the status of the remove operation.  When removing multiple drives, use a single "RemoveDrives" method call rather than multiple individual methods with a single drive each. This reduces the amount of data balancing that must occur to even stabilize the storage load on the cluster.  You can also remove drives with a "failed" status using "RemoveDrives". When you remove a drive with a "failed" status it is not returned to an "available" or "active" status. The drive is unavailable for use in the cluster.  Use the "ListDrives" method to obtain the driveIDs for the drives you want to remove. """)
 @click.option('--drives',
               type=str,
               required=True,
@@ -162,14 +162,14 @@ def Remove(ctx,
     """Any data on the drives is removed and migrated to other drives in the cluster before the drive is removed from the cluster. This is an asynchronous method."""
     """Depending on the total capacity of the drives being removed, it may take several minutes to migrate all of the data."""
     """Use the &quot;GetAsyncResult&quot; method to check the status of the remove operation."""
-    """&lt;br/&gt;&lt;br/&gt;"""
+    """"""
     """When removing multiple drives, use a single &quot;RemoveDrives&quot; method call rather than multiple individual methods with a single drive each."""
     """This reduces the amount of data balancing that must occur to even stabilize the storage load on the cluster."""
-    """&lt;br/&gt;&lt;br/&gt;"""
+    """"""
     """You can also remove drives with a &quot;failed&quot; status using &quot;RemoveDrives&quot;."""
     """When you remove a drive with a &quot;failed&quot; status it is not returned to an &quot;available&quot; or &quot;active&quot; status."""
     """The drive is unavailable for use in the cluster."""
-    """&lt;br/&gt;&lt;br/&gt;"""
+    """"""
     """Use the &quot;ListDrives&quot; method to obtain the driveIDs for the drives you want to remove."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
@@ -183,7 +183,7 @@ def Remove(ctx,
 
 
 
-@cli.command('Reset', short_help="""ResetDrives is used to pro-actively initialize drives and remove all data currently residing on the drive. The drive can then be reused in an existing node or used in an upgraded SolidFire node. This method requires the force=true parameter to be included in the method call. <br/><br/> <b>Note</b>: This method is available only through the per-node API endpoint 5.0 or later. """)
+@cli.command('Reset', short_help="""ResetDrives is used to pro-actively initialize drives and remove all data currently residing on the drive. The drive can then be reused in an existing node or used in an upgraded SolidFire node. This method requires the force=true parameter to be included in the method call.  Note: This method is available only through the per-node API endpoint 5.0 or later. """)
 @click.option('--drives',
               type=str,
               required=True,
@@ -197,8 +197,8 @@ def Reset(ctx,
            drives,
            force):
     """ResetDrives is used to pro-actively initialize drives and remove all data currently residing on the drive. The drive can then be reused in an existing node or used in an upgraded SolidFire node. This method requires the force=true parameter to be included in the method call."""
-    """&lt;br/&gt;&lt;br/&gt;"""
-    """&lt;b&gt;Note&lt;/b&gt;: This method is available only through the per-node API endpoint 5.0 or later."""
+    """"""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
@@ -209,7 +209,7 @@ def Reset(ctx,
 
 
 
-@cli.command('SecureErase', short_help="""SecureEraseDrives is used to remove any residual data from drives that have a status of "available." For example, when replacing a drive at its end-of-life that contained sensitive data. It uses a Security Erase Unit command to write a predetermined pattern to the drive and resets the encryption key on the drive. The method may take up to two minutes to complete, so it is an asynchronous method. The GetAsyncResult method can be used to check on the status of the secure erase operation. <br/><br/> Use the "ListDrives" method to obtain the driveIDs for the drives you want to secure erase. """)
+@cli.command('SecureErase', short_help="""SecureEraseDrives is used to remove any residual data from drives that have a status of "available." For example, when replacing a drive at its end-of-life that contained sensitive data. It uses a Security Erase Unit command to write a predetermined pattern to the drive and resets the encryption key on the drive. The method may take up to two minutes to complete, so it is an asynchronous method. The GetAsyncResult method can be used to check on the status of the secure erase operation.  Use the "ListDrives" method to obtain the driveIDs for the drives you want to secure erase. """)
 @click.option('--drives',
               type=str,
               required=True,
@@ -220,7 +220,7 @@ def SecureErase(ctx,
     """SecureEraseDrives is used to remove any residual data from drives that have a status of &quot;available.&quot; For example, when replacing a drive at its end-of-life that contained sensitive data."""
     """It uses a Security Erase Unit command to write a predetermined pattern to the drive and resets the encryption key on the drive. The method may take up to two minutes to complete, so it is an asynchronous method."""
     """The GetAsyncResult method can be used to check on the status of the secure erase operation."""
-    """&lt;br/&gt;&lt;br/&gt;"""
+    """"""
     """Use the &quot;ListDrives&quot; method to obtain the driveIDs for the drives you want to secure erase."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
@@ -234,7 +234,7 @@ def SecureErase(ctx,
 
 
 
-@cli.command('Test', short_help="""The TestDrives API method is used to run a hardware validation on all the drives on the node. Hardware failures on the drives are detected if present and they are reported in the results of the validation tests. <br/><br/> <b>Note</b>: This test takes approximately 10 minutes. <br/><br/> <b>Note</b>: This method is available only through the per-node API endpoint 5.0 or later. """)
+@cli.command('Test', short_help="""The TestDrives API method is used to run a hardware validation on all the drives on the node. Hardware failures on the drives are detected if present and they are reported in the results of the validation tests.  Note: This test takes approximately 10 minutes.  Note: This method is available only through the per-node API endpoint 5.0 or later. """)
 @click.option('--minutes',
               type=int,
               required=False,
@@ -243,10 +243,10 @@ def SecureErase(ctx,
 def Test(ctx,
            minutes = None):
     """The TestDrives API method is used to run a hardware validation on all the drives on the node. Hardware failures on the drives are detected if present and they are reported in the results of the validation tests."""
-    """&lt;br/&gt;&lt;br/&gt;"""
-    """&lt;b&gt;Note&lt;/b&gt;: This test takes approximately 10 minutes."""
-    """&lt;br/&gt;&lt;br/&gt;"""
-    """&lt;b&gt;Note&lt;/b&gt;: This method is available only through the per-node API endpoint 5.0 or later."""
+    """"""
+    """Note: This test takes approximately 10 minutes."""
+    """"""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 

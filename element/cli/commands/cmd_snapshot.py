@@ -26,7 +26,7 @@ from element import exceptions
 def cli(ctx):
     """CreateGroup CreateSchedule Create DeleteGroup Delete GetSchedule ListGroup ListSchedules List ModifyGroup ModifySchedule Modify RollbackToGroup RollbackTo """
 
-@cli.command('CreateGroup', short_help="""CreateGroupSnapshot is used to create a point-in-time copy of a group of volumes. The snapshot created can then be used later as a backup or rollback to ensure the data on the group of volumes is consistent for the point in time in which the snapshot was created. <br/><br/> <b>Note</b>: Creating a group snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """)
+@cli.command('CreateGroup', short_help="""CreateGroupSnapshot is used to create a point-in-time copy of a group of volumes. The snapshot created can then be used later as a backup or rollback to ensure the data on the group of volumes is consistent for the point in time in which the snapshot was created.  Note: Creating a group snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """)
 @click.option('--volumes',
               type=str,
               required=True,
@@ -56,8 +56,8 @@ def CreateGroup(ctx,
            attributes = None):
     """CreateGroupSnapshot is used to create a point-in-time copy of a group of volumes."""
     """The snapshot created can then be used later as a backup or rollback to ensure the data on the group of volumes is consistent for the point in time in which the snapshot was created."""
-    """&lt;br/&gt;&lt;br/&gt;"""
-    """&lt;b&gt;Note&lt;/b&gt;: Creating a group snapshot is allowed if cluster fullness is at stage 2 or 3."""
+    """"""
+    """Note: Creating a group snapshot is allowed if cluster fullness is at stage 2 or 3."""
     """Snapshots are not created when cluster fullness is at stage 4 or 5."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
@@ -71,7 +71,7 @@ def CreateGroup(ctx,
 
 
 
-@cli.command('CreateSchedule', short_help="""CreateSchedule is used to create a schedule that will autonomously make a snapshot of a volume at a defined interval.<br/> <br/> The snapshot created can be used later as a backup or rollback to ensure the data on a volume or group of volumes is consistent for the point in time in which the snapshot was created. <br/> <br/> <b>Note</b>: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """)
+@cli.command('CreateSchedule', short_help="""CreateSchedule is used to create a schedule that will autonomously make a snapshot of a volume at a defined interval.  The snapshot created can be used later as a backup or rollback to ensure the data on a volume or group of volumes is consistent for the point in time in which the snapshot was created.   Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """)
 @click.option('--schedule',
               type=str,
               required=True,
@@ -79,11 +79,11 @@ def CreateGroup(ctx,
 @pass_context
 def CreateSchedule(ctx,
            schedule):
-    """CreateSchedule is used to create a schedule that will autonomously make a snapshot of a volume at a defined interval.&lt;br/&gt;"""
-    """&lt;br/&gt;"""
-    """The snapshot created can be used later as a backup or rollback to ensure the data on a volume or group of volumes is consistent for the point in time in which the snapshot was created. &lt;br/&gt;"""
-    """&lt;br/&gt;"""
-    """&lt;b&gt;Note&lt;/b&gt;: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5."""
+    """CreateSchedule is used to create a schedule that will autonomously make a snapshot of a volume at a defined interval."""
+    """"""
+    """The snapshot created can be used later as a backup or rollback to ensure the data on a volume or group of volumes is consistent for the point in time in which the snapshot was created. """
+    """"""
+    """Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
@@ -95,7 +95,7 @@ def CreateSchedule(ctx,
 
 
 
-@cli.command('Create', short_help="""CreateSnapshot is used to create a point-in-time copy of a volume. A snapshot can be created from any volume or from an existing snapshot. <br/><br/> <b>Note</b>: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """)
+@cli.command('Create', short_help="""CreateSnapshot is used to create a point-in-time copy of a volume. A snapshot can be created from any volume or from an existing snapshot.  Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """)
 @click.option('--volume_id',
               type=int,
               required=True,
@@ -130,8 +130,8 @@ def Create(ctx,
            attributes = None):
     """CreateSnapshot is used to create a point-in-time copy of a volume."""
     """A snapshot can be created from any volume or from an existing snapshot."""
-    """&lt;br/&gt;&lt;br/&gt;"""
-    """&lt;b&gt;Note&lt;/b&gt;: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3."""
+    """"""
+    """Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3."""
     """Snapshots are not created when cluster fullness is at stage 4 or 5."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
@@ -291,7 +291,7 @@ def ModifyGroup(ctx,
 
 
 
-@cli.command('ModifySchedule', short_help="""ModifySchedule is used to change the intervals at which a scheduled snapshot occurs. This allows for adjustment to the snapshot frequency and retention.<br/> """)
+@cli.command('ModifySchedule', short_help="""ModifySchedule is used to change the intervals at which a scheduled snapshot occurs. This allows for adjustment to the snapshot frequency and retention. """)
 @click.option('--schedule',
               type=str,
               required=True,
@@ -299,7 +299,7 @@ def ModifyGroup(ctx,
 @pass_context
 def ModifySchedule(ctx,
            schedule):
-    """ModifySchedule is used to change the intervals at which a scheduled snapshot occurs. This allows for adjustment to the snapshot frequency and retention.&lt;br/&gt;"""
+    """ModifySchedule is used to change the intervals at which a scheduled snapshot occurs. This allows for adjustment to the snapshot frequency and retention."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
@@ -341,7 +341,7 @@ def Modify(ctx,
 
 
 
-@cli.command('RollbackToGroup', short_help="""RollbackToGroupSnapshot is used to roll back each individual volume in a snapshot group to a copy of their individual snapshots. <br/><br/> <b>Note</b>: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """)
+@cli.command('RollbackToGroup', short_help="""RollbackToGroupSnapshot is used to roll back each individual volume in a snapshot group to a copy of their individual snapshots.  Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """)
 @click.option('--group_snapshot_id',
               type=int,
               required=True,
@@ -365,8 +365,8 @@ def RollbackToGroup(ctx,
            name = None,
            attributes = None):
     """RollbackToGroupSnapshot is used to roll back each individual volume in a snapshot group to a copy of their individual snapshots."""
-    """&lt;br/&gt;&lt;br/&gt;"""
-    """&lt;b&gt;Note&lt;/b&gt;: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3."""
+    """"""
+    """Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3."""
     """Snapshots are not created when cluster fullness is at stage 4 or 5."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
@@ -378,7 +378,7 @@ def RollbackToGroup(ctx,
 
 
 
-@cli.command('RollbackTo', short_help="""RollbackToSnapshot is used to make an existing snapshot the "active" volume image. This method creates a new  snapshot from an existing snapshot. The new snapshot becomes "active" and the existing snapshot is preserved until  it is manually deleted. The previously "active" snapshot is deleted unless the parameter saveCurrentState is set with  a value of "true." <b>Note</b>: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """)
+@cli.command('RollbackTo', short_help="""RollbackToSnapshot is used to make an existing snapshot the "active" volume image. This method creates a new  snapshot from an existing snapshot. The new snapshot becomes "active" and the existing snapshot is preserved until  it is manually deleted. The previously "active" snapshot is deleted unless the parameter saveCurrentState is set with  a value of "true." Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """)
 @click.option('--volume_id',
               type=int,
               required=True,
@@ -410,7 +410,7 @@ def RollbackTo(ctx,
     """snapshot from an existing snapshot. The new snapshot becomes &quot;active&quot; and the existing snapshot is preserved until """
     """it is manually deleted. The previously &quot;active&quot; snapshot is deleted unless the parameter saveCurrentState is set with """
     """a value of &quot;true.&quot;"""
-    """&lt;b&gt;Note&lt;/b&gt;: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3."""
+    """Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3."""
     """Snapshots are not created when cluster fullness is at stage 4 or 5."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
