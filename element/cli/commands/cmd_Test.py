@@ -15,6 +15,7 @@ from element.solidfire_element_api import SolidFireRequestException
 from element import utils
 import jsonpickle
 import simplejson
+from solidfire.models import *
 from uuid import UUID
 from element import exceptions
 

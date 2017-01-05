@@ -15,7 +15,7 @@ from element.solidfire_element_api import SolidFireRequestException
 from element import utils
 import jsonpickle
 import simplejson
-from solidfire.models import LunAssignment
+from solidfire.models import *
 from uuid import UUID
 from element import exceptions
 
@@ -99,9 +99,9 @@ def AddVolumesTo(ctx,
               required=False,
               help="""The ID of the VLAN Virtual Network Tag to associate the volume access group with. """)
 @click.option('--attributes',
-              type=dict,
+              type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format. """)
+              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def Create(ctx,
            name,
@@ -127,6 +127,9 @@ def Create(ctx,
     virtual_network_id = parser.parse_array(virtual_network_id)
 
     virtual_network_tags = parser.parse_array(virtual_network_tags)
+    if(attributes is not None):
+        kwargsDict = simplejson.loads(attributes)
+        attributes = dict(**kwargsDict)
 
     CreateVolumeAccessGroupResult = ctx.element.create_volume_access_group(name=name, initiators=initiators, volumes=volumes, virtual_network_id=virtual_network_id, virtual_network_tags=virtual_network_tags, attributes=attributes)
     cli_utils.print_result(CreateVolumeAccessGroupResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
@@ -240,9 +243,9 @@ def List(ctx,
               required=False,
               help="""List of volumes to initially include in the volume access group. If unspecified, the access group's volumes will not be modified. """)
 @click.option('--attributes',
-              type=dict,
+              type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format. """)
+              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def Modify(ctx,
            volume_access_group_id,
@@ -274,6 +277,9 @@ def Modify(ctx,
     initiators = parser.parse_array(initiators)
 
     volumes = parser.parse_array(volumes)
+    if(attributes is not None):
+        kwargsDict = simplejson.loads(attributes)
+        attributes = dict(**kwargsDict)
 
     ModifyVolumeAccessGroupResult = ctx.element.modify_volume_access_group(volume_access_group_id=volume_access_group_id, virtual_network_id=virtual_network_id, virtual_network_tags=virtual_network_tags, name=name, initiators=initiators, volumes=volumes, attributes=attributes)
     cli_utils.print_result(ModifyVolumeAccessGroupResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
@@ -310,11 +316,13 @@ def ModifyLunAssignments(ctx,
 
 
 
-    kwargsDict = dict()
-    kwargsDict["volume_id"] = lun_assignment_volume_id
-    kwargsDict["lun"] = lun_assignment_lun
+    lun_assignments = None
+    if(volume_access_group_id is not None or lun_assignments is not None or False):
+        kwargsDict = dict()
+        kwargsDict["volume_id"] = lun_assignment_volume_id
+        kwargsDict["lun"] = lun_assignment_lun
 
-    lun_assignments = LunAssignment(**kwargsDict)
+        lun_assignments = LunAssignment(**kwargsDict)
 
     lun_assignments = parser.parse_array(lun_assignments)
 

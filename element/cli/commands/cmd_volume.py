@@ -15,10 +15,7 @@ from element.solidfire_element_api import SolidFireRequestException
 from element import utils
 import jsonpickle
 import simplejson
-from solidfire.models import CloneMultipleVolumeParams
-from solidfire.models import QoS
-from solidfire.models import QoS
-from solidfire.models import QoS
+from solidfire.models import *
 from uuid import UUID
 from element import exceptions
 
@@ -123,15 +120,17 @@ def CloneMultiple(ctx,
 
 
 
-    kwargsDict = dict()
-    kwargsDict["volume_id"] = clone_multiple_volume_params_volume_id
-    kwargsDict["access"] = clone_multiple_volume_params_access
-    kwargsDict["name"] = clone_multiple_volume_params_name
-    kwargsDict["new_account_id"] = clone_multiple_volume_params_new_account_id
-    kwargsDict["new_size"] = clone_multiple_volume_params_new_size
-    kwargsDict["attributes"] = clone_multiple_volume_params_attributes
+    volumes = None
+    if(volumes is not None or access is not None or group_snapshot_id is not None or new_account_id is not None or False):
+        kwargsDict = dict()
+        kwargsDict["volume_id"] = clone_multiple_volume_params_volume_id
+        kwargsDict["access"] = clone_multiple_volume_params_access
+        kwargsDict["name"] = clone_multiple_volume_params_name
+        kwargsDict["new_account_id"] = clone_multiple_volume_params_new_account_id
+        kwargsDict["new_size"] = clone_multiple_volume_params_new_size
+        kwargsDict["attributes"] = clone_multiple_volume_params_attributes
 
-    volumes = CloneMultipleVolumeParams(**kwargsDict)
+        volumes = CloneMultipleVolumeParams(**kwargsDict)
 
     volumes = parser.parse_array(volumes)
 
@@ -166,9 +165,9 @@ def CloneMultiple(ctx,
               required=False,
               help="""ID of the snapshot to use as the source of the clone. If unspecified, the clone will be created with a snapshot of the active volume. """)
 @click.option('--attributes',
-              type=dict,
+              type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format. """)
+              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def Clone(ctx,
            volume_id,
@@ -192,6 +191,9 @@ def Clone(ctx,
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
+    if(attributes is not None):
+        kwargsDict = simplejson.loads(attributes)
+        attributes = dict(**kwargsDict)
 
     CloneVolumeResult = ctx.element.clone_volume(volume_id=volume_id, name=name, new_account_id=new_account_id, new_size=new_size, access=access, snapshot_id=snapshot_id, attributes=attributes)
     cli_utils.print_result(CloneVolumeResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
@@ -261,9 +263,9 @@ def Copy(ctx,
               required=False,
               help="""The length of time burst IOPS is allowed. The value returned is represented in time units of seconds. <br/><b>Note</b>: this value is calculated by the system based on IOPS set for QoS. """)
 @click.option('--attributes',
-              type=dict,
+              type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format. """)
+              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def Create(ctx,
            name,
@@ -282,13 +284,18 @@ def Create(ctx,
 
 
 
-    kwargsDict = dict()
-    kwargsDict["min_iops"] = qos_min_iops
-    kwargsDict["max_iops"] = qos_max_iops
-    kwargsDict["burst_iops"] = qos_burst_iops
-    kwargsDict["burst_time"] = qos_burst_time
+    qos = None
+    if(name is not None or account_id is not None or total_size is not None or enable512e is not None or qos is not None or attributes is not None or False):
+        kwargsDict = dict()
+        kwargsDict["min_iops"] = qos_min_iops
+        kwargsDict["max_iops"] = qos_max_iops
+        kwargsDict["burst_iops"] = qos_burst_iops
+        kwargsDict["burst_time"] = qos_burst_time
 
-    qos = QoS(**kwargsDict)
+        qos = QoS(**kwargsDict)
+    if(attributes is not None):
+        kwargsDict = simplejson.loads(attributes)
+        attributes = dict(**kwargsDict)
 
     CreateVolumeResult = ctx.element.create_volume(name=name, account_id=account_id, total_size=total_size, enable512e=enable512e, qos=qos, attributes=attributes)
     cli_utils.print_result(CreateVolumeResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
@@ -695,9 +702,9 @@ def ListStatsByAccessGroup(ctx,
               required=False,
               help="""New size of the volume in bytes. Size is rounded up to the nearest 1MiB size. This parameter can only be used to *increase* the size of a volume. """)
 @click.option('--attributes',
-              type=dict,
+              type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format. """)
+              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def Modify(ctx,
            volume_id,
@@ -723,13 +730,18 @@ def Modify(ctx,
 
 
 
-    kwargsDict = dict()
-    kwargsDict["min_iops"] = qos_min_iops
-    kwargsDict["max_iops"] = qos_max_iops
-    kwargsDict["burst_iops"] = qos_burst_iops
-    kwargsDict["burst_time"] = qos_burst_time
+    qos = None
+    if(volume_id is not None or account_id is not None or access is not None or qos is not None or total_size is not None or attributes is not None or False):
+        kwargsDict = dict()
+        kwargsDict["min_iops"] = qos_min_iops
+        kwargsDict["max_iops"] = qos_max_iops
+        kwargsDict["burst_iops"] = qos_burst_iops
+        kwargsDict["burst_time"] = qos_burst_time
 
-    qos = QoS(**kwargsDict)
+        qos = QoS(**kwargsDict)
+    if(attributes is not None):
+        kwargsDict = simplejson.loads(attributes)
+        attributes = dict(**kwargsDict)
 
     ModifyVolumeResult = ctx.element.modify_volume(volume_id=volume_id, account_id=account_id, access=access, qos=qos, total_size=total_size, attributes=attributes)
     cli_utils.print_result(ModifyVolumeResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
@@ -770,9 +782,9 @@ def Modify(ctx,
               required=False,
               help="""New size of the volume in bytes. 1000000000 is equal to 1GB. Size is rounded up to the nearest 1MB in size. This parameter can only be used to increase the size of a volume. """)
 @click.option('--attributes',
-              type=dict,
+              type=str,
               required=False,
-              help="""""")
+              help="""Provide in json format: """)
 @pass_context
 def Modify(ctx,
            volume_ids,
@@ -792,13 +804,18 @@ def Modify(ctx,
 
     volume_ids = parser.parse_array(volume_ids)
 
-    kwargsDict = dict()
-    kwargsDict["min_iops"] = qos_min_iops
-    kwargsDict["max_iops"] = qos_max_iops
-    kwargsDict["burst_iops"] = qos_burst_iops
-    kwargsDict["burst_time"] = qos_burst_time
+    qos = None
+    if(volume_ids is not None or account_id is not None or access is not None or qos is not None or total_size is not None or attributes is not None or False):
+        kwargsDict = dict()
+        kwargsDict["min_iops"] = qos_min_iops
+        kwargsDict["max_iops"] = qos_max_iops
+        kwargsDict["burst_iops"] = qos_burst_iops
+        kwargsDict["burst_time"] = qos_burst_time
 
-    qos = QoS(**kwargsDict)
+        qos = QoS(**kwargsDict)
+    if(attributes is not None):
+        kwargsDict = simplejson.loads(attributes)
+        attributes = dict(**kwargsDict)
 
     ModifyVolumesResult = ctx.element.modify_volumes(volume_ids=volume_ids, account_id=account_id, access=access, qos=qos, total_size=total_size, attributes=attributes)
     cli_utils.print_result(ModifyVolumesResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
@@ -932,9 +949,9 @@ def SetDefaultQoS(ctx,
               required=False,
               help="""JSON parameters to pass to the script. """)
 @click.option('--attributes',
-              type=dict,
+              type=str,
               required=False,
-              help="""JSON attributes for the bulk volume job. """)
+              help="""Provide in json format: JSON attributes for the bulk volume job. """)
 @pass_context
 def StartBulkRead(ctx,
            volume_id,
@@ -960,6 +977,9 @@ def StartBulkRead(ctx,
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
+    if(attributes is not None):
+        kwargsDict = simplejson.loads(attributes)
+        attributes = dict(**kwargsDict)
 
     StartBulkVolumeReadResult = ctx.element.start_bulk_volume_read(volume_id=volume_id, format=format, snapshot_id=snapshot_id, script=script, script_parameters=script_parameters, attributes=attributes)
     cli_utils.print_result(StartBulkVolumeReadResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
@@ -984,9 +1004,9 @@ def StartBulkRead(ctx,
               required=False,
               help="""JSON parameters to pass to the script. """)
 @click.option('--attributes',
-              type=dict,
+              type=str,
               required=False,
-              help="""JSON attributes for the bulk volume job. """)
+              help="""Provide in json format: JSON attributes for the bulk volume job. """)
 @pass_context
 def StartBulkWrite(ctx,
            volume_id,
@@ -1003,6 +1023,9 @@ def StartBulkWrite(ctx,
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
+    if(attributes is not None):
+        kwargsDict = simplejson.loads(attributes)
+        attributes = dict(**kwargsDict)
 
     StartBulkVolumeWriteResult = ctx.element.start_bulk_volume_write(volume_id=volume_id, format=format, script=script, script_parameters=script_parameters, attributes=attributes)
     cli_utils.print_result(StartBulkVolumeWriteResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
@@ -1027,9 +1050,9 @@ def StartBulkWrite(ctx,
               required=False,
               help="""Returns the status of the bulk volume job when the job has completed. """)
 @click.option('--attributes',
-              type=dict,
+              type=str,
               required=False,
-              help="""JSON attributes  updates what is on the bulk volume job. """)
+              help="""Provide in json format: JSON attributes  updates what is on the bulk volume job. """)
 @pass_context
 def UpdateBulkStatus(ctx,
            key,
@@ -1042,6 +1065,9 @@ def UpdateBulkStatus(ctx,
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
+    if(attributes is not None):
+        kwargsDict = simplejson.loads(attributes)
+        attributes = dict(**kwargsDict)
 
     UpdateBulkVolumeStatusResult = ctx.element.update_bulk_volume_status(key=key, status=status, percent_complete=percent_complete, message=message, attributes=attributes)
     cli_utils.print_result(UpdateBulkVolumeStatusResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)

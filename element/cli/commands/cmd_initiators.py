@@ -15,8 +15,7 @@ from element.solidfire_element_api import SolidFireRequestException
 from element import utils
 import jsonpickle
 import simplejson
-from solidfire.models import CreateInitiator
-from solidfire.models import ModifyInitiator
+from solidfire.models import *
 from uuid import UUID
 from element import exceptions
 
@@ -56,13 +55,15 @@ def Create(ctx,
 
 
 
-    kwargsDict = dict()
-    kwargsDict["name"] = create_initiator_name
-    kwargsDict["alias"] = create_initiator_alias
-    kwargsDict["volume_access_group_id"] = create_initiator_volume_access_group_id
-    kwargsDict["attributes"] = create_initiator_attributes
+    initiators = None
+    if(initiators is not None or False):
+        kwargsDict = dict()
+        kwargsDict["name"] = create_initiator_name
+        kwargsDict["alias"] = create_initiator_alias
+        kwargsDict["volume_access_group_id"] = create_initiator_volume_access_group_id
+        kwargsDict["attributes"] = create_initiator_attributes
 
-    initiators = CreateInitiator(**kwargsDict)
+        initiators = CreateInitiator(**kwargsDict)
 
     initiators = parser.parse_array(initiators)
 
@@ -154,13 +155,15 @@ def Modify(ctx,
 
 
 
-    kwargsDict = dict()
-    kwargsDict["initiator_id"] = modify_initiator_initiator_id
-    kwargsDict["alias"] = modify_initiator_alias
-    kwargsDict["volume_access_group_id"] = modify_initiator_volume_access_group_id
-    kwargsDict["attributes"] = modify_initiator_attributes
+    initiators = None
+    if(initiators is not None or False):
+        kwargsDict = dict()
+        kwargsDict["initiator_id"] = modify_initiator_initiator_id
+        kwargsDict["alias"] = modify_initiator_alias
+        kwargsDict["volume_access_group_id"] = modify_initiator_volume_access_group_id
+        kwargsDict["attributes"] = modify_initiator_attributes
 
-    initiators = ModifyInitiator(**kwargsDict)
+        initiators = ModifyInitiator(**kwargsDict)
 
     initiators = parser.parse_array(initiators)
 

@@ -15,7 +15,7 @@ from element.solidfire_element_api import SolidFireRequestException
 from element import utils
 import jsonpickle
 import simplejson
-from solidfire.models import LoggingServer
+from solidfire.models import *
 from uuid import UUID
 from element import exceptions
 
@@ -91,11 +91,13 @@ def SetRemoteLoggingHosts(ctx,
 
 
 
-    kwargsDict = dict()
-    kwargsDict["host"] = logging_server_host
-    kwargsDict["port"] = logging_server_port
+    remote_hosts = None
+    if(remote_hosts is not None or False):
+        kwargsDict = dict()
+        kwargsDict["host"] = logging_server_host
+        kwargsDict["port"] = logging_server_port
 
-    remote_hosts = LoggingServer(**kwargsDict)
+        remote_hosts = LoggingServer(**kwargsDict)
 
     remote_hosts = parser.parse_array(remote_hosts)
 

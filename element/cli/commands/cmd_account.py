@@ -15,10 +15,7 @@ from element.solidfire_element_api import SolidFireRequestException
 from element import utils
 import jsonpickle
 import simplejson
-from solidfire.models import CHAPSecret
-from solidfire.models import CHAPSecret
-from solidfire.models import CHAPSecret
-from solidfire.models import CHAPSecret
+from solidfire.models import *
 from uuid import UUID
 from element import exceptions
 
@@ -33,13 +30,23 @@ def cli(ctx):
               type=str,
               required=True,
               help="""Unique username for this account. (May be 1 to 64 characters in length). """)
-@click.option('--attributes',
-              type=dict,
+@click.option('--initiator_secret',
+              type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format. """)
+              help="""CHAP secret to use for the initiator. Should be 12-16 characters long and impenetrable. The CHAP initiator secrets must be unique and cannot be the same as the target CHAP secret. <br/><br/> If not specified, a random secret is created. """)
+@click.option('--target_secret',
+              type=str,
+              required=False,
+              help="""CHAP secret to use for the target (mutual CHAP authentication). Should be 12-16 characters long and impenetrable. The CHAP target secrets must be unique and cannot be the same as the initiator CHAP secret. <br/><br/> If not specified, a random secret is created. """)
+@click.option('--attributes',
+              type=str,
+              required=False,
+              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def Add(ctx,
            username,
+           initiator_secret = None,
+           target_secret = None,
            attributes = None):
     """Used to add a new account to the system."""
     """New volumes can be created under the new account."""
@@ -48,14 +55,9 @@ def Add(ctx,
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
-
-    kwargsDict = dict()
-
-    initiator_secret = CHAPSecret(**kwargsDict)
-
-    kwargsDict = dict()
-
-    target_secret = CHAPSecret(**kwargsDict)
+    if(attributes is not None):
+        kwargsDict = simplejson.loads(attributes)
+        attributes = dict(**kwargsDict)
 
     AddAccountResult = ctx.element.add_account(username=username, initiator_secret=initiator_secret, target_secret=target_secret, attributes=attributes)
     cli_utils.print_result(AddAccountResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
@@ -156,15 +158,25 @@ def List(ctx,
               type=str,
               required=False,
               help="""Status of the account. """)
-@click.option('--attributes',
-              type=dict,
+@click.option('--initiator_secret',
+              type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format. """)
+              help="""CHAP secret to use for the initiator. Should be 12-16 characters long and impenetrable. """)
+@click.option('--target_secret',
+              type=str,
+              required=False,
+              help="""CHAP secret to use for the target (mutual CHAP authentication). Should be 12-16 characters long and impenetrable. """)
+@click.option('--attributes',
+              type=str,
+              required=False,
+              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def Modify(ctx,
            account_id,
            username = None,
            status = None,
+           initiator_secret = None,
+           target_secret = None,
            attributes = None):
     """Used to modify an existing account."""
     """When locking an account, any existing connections from that account are immediately terminated."""
@@ -174,14 +186,9 @@ def Modify(ctx,
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
-
-    kwargsDict = dict()
-
-    initiator_secret = CHAPSecret(**kwargsDict)
-
-    kwargsDict = dict()
-
-    target_secret = CHAPSecret(**kwargsDict)
+    if(attributes is not None):
+        kwargsDict = simplejson.loads(attributes)
+        attributes = dict(**kwargsDict)
 
     ModifyAccountResult = ctx.element.modify_account(account_id=account_id, username=username, status=status, initiator_secret=initiator_secret, target_secret=target_secret, attributes=attributes)
     cli_utils.print_result(ModifyAccountResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)

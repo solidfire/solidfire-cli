@@ -15,6 +15,7 @@ from element.solidfire_element_api import SolidFireRequestException
 from element import utils
 import jsonpickle
 import simplejson
+from solidfire.models import *
 from uuid import UUID
 from element import exceptions
 
@@ -26,11 +27,11 @@ def cli(ctx):
 
 @cli.command('CreateHost', short_help="""CreateVirtualVolumeHost creates a new ESX host. """)
 @click.option('--virtual_volume_host_id',
-              type=UUID,
+              type=str,
               required=True,
               help="""The GUID of the ESX host. """)
 @click.option('--cluster_id',
-              type=UUID,
+              type=str,
               required=True,
               help="""The GUID of the ESX Cluster. """)
 @click.option('--initiator_names',
@@ -46,7 +47,7 @@ def cli(ctx):
               required=False,
               help="""IP or DNS name for the host. """)
 @click.option('--calling_virtual_volume_host_id',
-              type=UUID,
+              type=str,
               required=False,
               help="""""")
 @pass_context
@@ -126,11 +127,11 @@ def GetCount(ctx):
 
 @cli.command('GetTaskUpdate', short_help="""GetVirtualVolumeTaskUpdate checks the status of a VVol Async Task. """)
 @click.option('--virtual_volume_task_id',
-              type=UUID,
+              type=str,
               required=True,
               help="""The UUID of the VVol Task. """)
 @click.option('--calling_virtual_volume_host_id',
-              type=UUID,
+              type=str,
               required=False,
               help="""""")
 @pass_context
@@ -150,11 +151,11 @@ def GetTaskUpdate(ctx,
 
 @cli.command('GetUnsharedChunks', short_help="""GetVirtualVolumeAllocatedBitmap scans a VVol segment and returns the number of  chunks not shared between two volumes. This call will return results in less  than 30 seconds. If the specified VVol and the base VVil are not related, an  error is thrown. If the offset/length combination is invalid or out fo range  an error is thrown. """)
 @click.option('--virtual_volume_id',
-              type=UUID,
+              type=str,
               required=True,
               help="""The ID of the Virtual Volume. """)
 @click.option('--base_virtual_volume_id',
-              type=UUID,
+              type=str,
               required=True,
               help="""The ID of the Virtual Volume to compare against. """)
 @click.option('--segment_start',
@@ -170,7 +171,7 @@ def GetTaskUpdate(ctx,
               required=True,
               help="""Number of bytes represented by one bit in the bitmap. """)
 @click.option('--calling_virtual_volume_host_id',
-              type=UUID,
+              type=str,
               required=False,
               help="""""")
 @pass_context
@@ -252,7 +253,7 @@ def ListHosts(ctx,
               required=False,
               help="""Possible values:true: Include information about the children of each VVOL in the response.false: Do not include information about the children of each VVOL in the response. """)
 @click.option('--start_virtual_volume_id',
-              type=UUID,
+              type=str,
               required=False,
               help="""The ID of the virtual volume at which to begin the list. """)
 @click.option('--virtual_volume_ids',
@@ -302,7 +303,7 @@ def ListTasks(ctx,
 
 @cli.command('PrepareVirtualSnapshot', short_help="""PrepareVirtualSnapshot is used to set up VMware Virtual Volume snapshot. """)
 @click.option('--virtual_volume_id',
-              type=UUID,
+              type=str,
               required=True,
               help="""The ID of the Virtual Volume to clone. """)
 @click.option('--name',
@@ -314,7 +315,7 @@ def ListTasks(ctx,
               required=False,
               help="""Will the snapshot be writable? """)
 @click.option('--calling_virtual_volume_host_id',
-              type=UUID,
+              type=str,
               required=False,
               help="""""")
 @pass_context

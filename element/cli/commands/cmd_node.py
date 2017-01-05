@@ -15,8 +15,7 @@ from element.solidfire_element_api import SolidFireRequestException
 from element import utils
 import jsonpickle
 import simplejson
-from solidfire.models import Config
-from solidfire.models import Network
+from solidfire.models import *
 from uuid import UUID
 from element import exceptions
 
@@ -265,8 +264,10 @@ def SetConfig(ctx,
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
-    kwargsDict = simplejson.loads(config)
-    config = Config(**kwargsDict)
+
+    if(config is not None):
+        kwargsDict = simplejson.loads(config)
+        config = Config(**kwargsDict)
 
     SetConfigResult = ctx.element.set_config(config=config)
     cli_utils.print_result(SetConfigResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
@@ -289,8 +290,10 @@ def SetNetworkConfig(ctx,
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
-    kwargsDict = simplejson.loads(network)
-    network = Network(**kwargsDict)
+
+    if(network is not None):
+        kwargsDict = simplejson.loads(network)
+        network = Network(**kwargsDict)
 
     SetNetworkConfigResult = ctx.element.set_network_config(network=network)
     cli_utils.print_result(SetNetworkConfigResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)

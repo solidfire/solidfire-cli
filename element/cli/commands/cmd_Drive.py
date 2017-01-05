@@ -15,7 +15,7 @@ from element.solidfire_element_api import SolidFireRequestException
 from element import utils
 import jsonpickle
 import simplejson
-from solidfire.models import NewDrive
+from solidfire.models import *
 from uuid import UUID
 from element import exceptions
 
@@ -48,10 +48,12 @@ def Add(ctx,
 
 
 
-    kwargsDict = dict()
-    kwargsDict["drive_id"] = new_drive_drive_id
+    drives = None
+    if(drives is not None or False):
+        kwargsDict = dict()
+        kwargsDict["drive_id"] = new_drive_drive_id
 
-    drives = NewDrive(**kwargsDict)
+        drives = NewDrive(**kwargsDict)
 
     drives = parser.parse_array(drives)
 

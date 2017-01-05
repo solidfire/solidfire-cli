@@ -15,8 +15,7 @@ from element.solidfire_element_api import SolidFireRequestException
 from element import utils
 import jsonpickle
 import simplejson
-from solidfire.models import Schedule
-from solidfire.models import Schedule
+from solidfire.models import *
 from uuid import UUID
 from element import exceptions
 
@@ -44,9 +43,9 @@ def cli(ctx):
               required=False,
               help="""The amount of time the snapshot will be retained. Enter in HH:mm:ss """)
 @click.option('--attributes',
-              type=dict,
+              type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format. """)
+              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def CreateGroup(ctx,
            volumes,
@@ -65,6 +64,9 @@ def CreateGroup(ctx,
 
 
     volumes = parser.parse_array(volumes)
+    if(attributes is not None):
+        kwargsDict = simplejson.loads(attributes)
+        attributes = dict(**kwargsDict)
 
     CreateGroupSnapshotResult = ctx.element.create_group_snapshot(volumes=volumes, name=name, enable_remote_replication=enable_remote_replication, retention=retention, attributes=attributes)
     cli_utils.print_result(CreateGroupSnapshotResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
@@ -87,8 +89,10 @@ def CreateSchedule(ctx,
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
-    kwargsDict = simplejson.loads(schedule)
-    schedule = Schedule(**kwargsDict)
+
+    if(schedule is not None):
+        kwargsDict = simplejson.loads(schedule)
+        schedule = Schedule(**kwargsDict)
 
     CreateScheduleResult = ctx.element.create_schedule(schedule=schedule)
     cli_utils.print_result(CreateScheduleResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
@@ -117,9 +121,9 @@ def CreateSchedule(ctx,
               required=False,
               help="""The amount of time the snapshot will be retained. Enter in HH:mm:ss """)
 @click.option('--attributes',
-              type=dict,
+              type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format. """)
+              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def Create(ctx,
            volume_id,
@@ -137,6 +141,9 @@ def Create(ctx,
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
+    if(attributes is not None):
+        kwargsDict = simplejson.loads(attributes)
+        attributes = dict(**kwargsDict)
 
     CreateSnapshotResult = ctx.element.create_snapshot(volume_id=volume_id, snapshot_id=snapshot_id, name=name, enable_remote_replication=enable_remote_replication, retention=retention, attributes=attributes)
     cli_utils.print_result(CreateSnapshotResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
@@ -303,8 +310,10 @@ def ModifySchedule(ctx,
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
-    kwargsDict = simplejson.loads(schedule)
-    schedule = Schedule(**kwargsDict)
+
+    if(schedule is not None):
+        kwargsDict = simplejson.loads(schedule)
+        schedule = Schedule(**kwargsDict)
 
     ModifyScheduleResult = ctx.element.modify_schedule(schedule=schedule)
     cli_utils.print_result(ModifyScheduleResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
@@ -355,9 +364,9 @@ def Modify(ctx,
               required=False,
               help="""Name for the snapshot. If no name is given, then the name of the snapshot being rolled back to is used with  "-copy" appended to the end of the name. """)
 @click.option('--attributes',
-              type=dict,
+              type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format """)
+              help="""Provide in json format: List of Name/Value pairs in JSON object format """)
 @pass_context
 def RollbackToGroup(ctx,
            group_snapshot_id,
@@ -372,6 +381,9 @@ def RollbackToGroup(ctx,
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
+    if(attributes is not None):
+        kwargsDict = simplejson.loads(attributes)
+        attributes = dict(**kwargsDict)
 
     CreateGroupSnapshotResult = ctx.element.rollback_to_group_snapshot(group_snapshot_id=group_snapshot_id, save_current_state=save_current_state, name=name, attributes=attributes)
     cli_utils.print_result(CreateGroupSnapshotResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
@@ -396,9 +408,9 @@ def RollbackToGroup(ctx,
               required=False,
               help="""Name for the snapshot. If no name is given, then the name of the snapshot being rolled back to is used with  "-copy" appended to the end of the name. """)
 @click.option('--attributes',
-              type=dict,
+              type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format """)
+              help="""Provide in json format: List of Name/Value pairs in JSON object format """)
 @pass_context
 def RollbackTo(ctx,
            volume_id,
@@ -416,6 +428,9 @@ def RollbackTo(ctx,
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
+    if(attributes is not None):
+        kwargsDict = simplejson.loads(attributes)
+        attributes = dict(**kwargsDict)
 
     CreateSnapshotResult = ctx.element.rollback_to_snapshot(volume_id=volume_id, snapshot_id=snapshot_id, save_current_state=save_current_state, name=name, attributes=attributes)
     cli_utils.print_result(CreateSnapshotResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)

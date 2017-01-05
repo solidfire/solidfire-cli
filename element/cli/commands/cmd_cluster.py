@@ -15,12 +15,7 @@ from element.solidfire_element_api import SolidFireRequestException
 from element import utils
 import jsonpickle
 import simplejson
-from solidfire.models import ClusterConfig
-from solidfire.models import SnmpNetwork
-from solidfire.models import SnmpV3UsmUser
-from solidfire.models import SnmpNetwork
-from solidfire.models import SnmpV3UsmUser
-from solidfire.models import SnmpTrapRecipient
+from solidfire.models import *
 from uuid import UUID
 from element import exceptions
 
@@ -48,9 +43,9 @@ def cli(ctx):
               required=False,
               help="""Indicate your acceptance of the End User License Agreement when creating this cluster admin. To accept the EULA, set this parameter to true. """)
 @click.option('--attributes',
-              type=dict,
+              type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format. """)
+              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def AddAdmin(ctx,
            username,
@@ -67,6 +62,9 @@ def AddAdmin(ctx,
 
 
     access = parser.parse_array(access)
+    if(attributes is not None):
+        kwargsDict = simplejson.loads(attributes)
+        attributes = dict(**kwargsDict)
 
     AddClusterAdminResult = ctx.element.add_cluster_admin(username=username, password=password, access=access, accept_eula=accept_eula, attributes=attributes)
     cli_utils.print_result(AddClusterAdminResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
@@ -122,9 +120,9 @@ def ClearFaults(ctx,
               required=True,
               help="""CIP/SIP addresses of the initial set of nodes making up the cluster. This node's IP must be in the list. """)
 @click.option('--attributes',
-              type=dict,
+              type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format. """)
+              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def Create(ctx,
            mvip,
@@ -144,6 +142,9 @@ def Create(ctx,
 
 
     nodes = parser.parse_array(nodes)
+    if(attributes is not None):
+        kwargsDict = simplejson.loads(attributes)
+        attributes = dict(**kwargsDict)
 
     CreateClusterResult = ctx.element.create_cluster(mvip=mvip, svip=svip, rep_count=rep_count, username=username, password=password, nodes=nodes, accept_eula=accept_eula, attributes=attributes)
     cli_utils.print_result(CreateClusterResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
@@ -619,9 +620,9 @@ def ListSyncJobs(ctx):
               required=False,
               help="""Controls which methods this Cluster Admin can use. For more details on the levels of access, see "Access Control" in the Element API Guide. """)
 @click.option('--attributes',
-              type=dict,
+              type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format. """)
+              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def ModifyAdmin(ctx,
            cluster_admin_id,
@@ -635,6 +636,9 @@ def ModifyAdmin(ctx,
 
 
     access = parser.parse_array(access)
+    if(attributes is not None):
+        kwargsDict = simplejson.loads(attributes)
+        attributes = dict(**kwargsDict)
 
     ModifyClusterAdminResult = ctx.element.modify_cluster_admin(cluster_admin_id=cluster_admin_id, password=password, access=access, attributes=attributes)
     cli_utils.print_result(ModifyClusterAdminResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
@@ -750,19 +754,21 @@ def SetConfig(ctx,
 
 
 
-    kwargsDict = dict()
-    kwargsDict["cipi"] = cluster_config_cipi
-    kwargsDict["cluster"] = cluster_config_cluster
-    kwargsDict["ensemble"] = cluster_config_ensemble
-    kwargsDict["mipi"] = cluster_config_mipi
-    kwargsDict["name"] = cluster_config_name
-    kwargsDict["node_id"] = cluster_config_node_id
-    kwargsDict["pending_node_id"] = cluster_config_pending_node_id
-    kwargsDict["role"] = cluster_config_role
-    kwargsDict["sipi"] = cluster_config_sipi
-    kwargsDict["state"] = cluster_config_state
+    cluster = None
+    if(cluster is not None or False):
+        kwargsDict = dict()
+        kwargsDict["cipi"] = cluster_config_cipi
+        kwargsDict["cluster"] = cluster_config_cluster
+        kwargsDict["ensemble"] = cluster_config_ensemble
+        kwargsDict["mipi"] = cluster_config_mipi
+        kwargsDict["name"] = cluster_config_name
+        kwargsDict["node_id"] = cluster_config_node_id
+        kwargsDict["pending_node_id"] = cluster_config_pending_node_id
+        kwargsDict["role"] = cluster_config_role
+        kwargsDict["sipi"] = cluster_config_sipi
+        kwargsDict["state"] = cluster_config_state
 
-    cluster = ClusterConfig(**kwargsDict)
+        cluster = ClusterConfig(**kwargsDict)
 
     SetClusterConfigResult = ctx.element.set_cluster_config(cluster=cluster)
     cli_utils.print_result(SetClusterConfigResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
@@ -849,24 +855,28 @@ def SetSnmpACL(ctx,
 
 
 
-    kwargsDict = dict()
-    kwargsDict["access"] = snmp_network_access
-    kwargsDict["cidr"] = snmp_network_cidr
-    kwargsDict["community"] = snmp_network_community
-    kwargsDict["network"] = snmp_network_network
+    networks = None
+    if(networks is not None or usm_users is not None or False):
+        kwargsDict = dict()
+        kwargsDict["access"] = snmp_network_access
+        kwargsDict["cidr"] = snmp_network_cidr
+        kwargsDict["community"] = snmp_network_community
+        kwargsDict["network"] = snmp_network_network
 
-    networks = SnmpNetwork(**kwargsDict)
+        networks = SnmpNetwork(**kwargsDict)
 
     networks = parser.parse_array(networks)
 
-    kwargsDict = dict()
-    kwargsDict["access"] = snmp_v3_usm_user_access
-    kwargsDict["name"] = snmp_v3_usm_user_name
-    kwargsDict["password"] = snmp_v3_usm_user_password
-    kwargsDict["passphrase"] = snmp_v3_usm_user_passphrase
-    kwargsDict["sec_level"] = snmp_v3_usm_user_sec_level
+    usm_users = None
+    if(networks is not None or usm_users is not None or False):
+        kwargsDict = dict()
+        kwargsDict["access"] = snmp_v3_usm_user_access
+        kwargsDict["name"] = snmp_v3_usm_user_name
+        kwargsDict["password"] = snmp_v3_usm_user_password
+        kwargsDict["passphrase"] = snmp_v3_usm_user_passphrase
+        kwargsDict["sec_level"] = snmp_v3_usm_user_sec_level
 
-    usm_users = SnmpV3UsmUser(**kwargsDict)
+        usm_users = SnmpV3UsmUser(**kwargsDict)
 
     usm_users = parser.parse_array(usm_users)
 
@@ -941,24 +951,28 @@ def SetSnmpInfo(ctx,
 
 
 
-    kwargsDict = dict()
-    kwargsDict["access"] = snmp_network_access
-    kwargsDict["cidr"] = snmp_network_cidr
-    kwargsDict["community"] = snmp_network_community
-    kwargsDict["network"] = snmp_network_network
+    networks = None
+    if(networks is not None or enabled is not None or snmp_v3_enabled is not None or usm_users is not None or False):
+        kwargsDict = dict()
+        kwargsDict["access"] = snmp_network_access
+        kwargsDict["cidr"] = snmp_network_cidr
+        kwargsDict["community"] = snmp_network_community
+        kwargsDict["network"] = snmp_network_network
 
-    networks = SnmpNetwork(**kwargsDict)
+        networks = SnmpNetwork(**kwargsDict)
 
     networks = parser.parse_array(networks)
 
-    kwargsDict = dict()
-    kwargsDict["access"] = snmp_v3_usm_user_access
-    kwargsDict["name"] = snmp_v3_usm_user_name
-    kwargsDict["password"] = snmp_v3_usm_user_password
-    kwargsDict["passphrase"] = snmp_v3_usm_user_passphrase
-    kwargsDict["sec_level"] = snmp_v3_usm_user_sec_level
+    usm_users = None
+    if(networks is not None or enabled is not None or snmp_v3_enabled is not None or usm_users is not None or False):
+        kwargsDict = dict()
+        kwargsDict["access"] = snmp_v3_usm_user_access
+        kwargsDict["name"] = snmp_v3_usm_user_name
+        kwargsDict["password"] = snmp_v3_usm_user_password
+        kwargsDict["passphrase"] = snmp_v3_usm_user_passphrase
+        kwargsDict["sec_level"] = snmp_v3_usm_user_sec_level
 
-    usm_users = SnmpV3UsmUser(**kwargsDict)
+        usm_users = SnmpV3UsmUser(**kwargsDict)
 
     usm_users = parser.parse_array(usm_users)
 
@@ -1006,12 +1020,14 @@ def SetSnmpTrapInfo(ctx,
 
 
 
-    kwargsDict = dict()
-    kwargsDict["host"] = snmp_trap_recipient_host
-    kwargsDict["community"] = snmp_trap_recipient_community
-    kwargsDict["port"] = snmp_trap_recipient_port
+    trap_recipients = None
+    if(trap_recipients is not None or cluster_fault_traps_enabled is not None or cluster_fault_resolved_traps_enabled is not None or cluster_event_traps_enabled is not None or False):
+        kwargsDict = dict()
+        kwargsDict["host"] = snmp_trap_recipient_host
+        kwargsDict["community"] = snmp_trap_recipient_community
+        kwargsDict["port"] = snmp_trap_recipient_port
 
-    trap_recipients = SnmpTrapRecipient(**kwargsDict)
+        trap_recipients = SnmpTrapRecipient(**kwargsDict)
 
     trap_recipients = parser.parse_array(trap_recipients)
 

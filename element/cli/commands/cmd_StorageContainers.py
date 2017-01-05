@@ -15,6 +15,7 @@ from element.solidfire_element_api import SolidFireRequestException
 from element import utils
 import jsonpickle
 import simplejson
+from solidfire.models import *
 from uuid import UUID
 from element import exceptions
 
@@ -76,7 +77,7 @@ def Delete(ctx,
 
 @cli.command('GetStorageContainerEfficiency', short_help="""GetStorageContainerEfficiency enables you to retrieve efficiency information about a virtual volume storage container. """)
 @click.option('--storage_container_id',
-              type=UUID,
+              type=str,
               required=True,
               help="""The ID of the storage container for which to retrieve efficiency information. """)
 @pass_context
@@ -116,7 +117,7 @@ def List(ctx,
 
 @cli.command('ModifyStorageContainer', short_help="""Modifies an existing storage container. """)
 @click.option('--storage_container_id',
-              type=UUID,
+              type=str,
               required=True,
               help="""""")
 @click.option('--initiator_secret',

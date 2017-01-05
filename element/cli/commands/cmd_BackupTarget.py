@@ -15,6 +15,7 @@ from element.solidfire_element_api import SolidFireRequestException
 from element import utils
 import jsonpickle
 import simplejson
+from solidfire.models import *
 from uuid import UUID
 from element import exceptions
 
@@ -30,9 +31,9 @@ def cli(ctx):
               required=True,
               help="""Name for the backup target. """)
 @click.option('--attributes',
-              type=dict,
+              type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format. """)
+              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def Create(ctx,
            name,
@@ -42,6 +43,9 @@ def Create(ctx,
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
+    if(attributes is not None):
+        kwargsDict = simplejson.loads(attributes)
+        attributes = dict(**kwargsDict)
 
     CreateBackupTargetResult = ctx.element.create_backup_target(name=name, attributes=attributes)
     cli_utils.print_result(CreateBackupTargetResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
@@ -91,9 +95,9 @@ def List(ctx):
               required=False,
               help="""Name for the backup target. """)
 @click.option('--attributes',
-              type=dict,
+              type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format. """)
+              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def Modify(ctx,
            backup_target_id,
@@ -104,6 +108,9 @@ def Modify(ctx,
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
+    if(attributes is not None):
+        kwargsDict = simplejson.loads(attributes)
+        attributes = dict(**kwargsDict)
 
     ModifyBackupTargetResult = ctx.element.modify_backup_target(backup_target_id=backup_target_id, name=name, attributes=attributes)
     cli_utils.print_result(ModifyBackupTargetResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)

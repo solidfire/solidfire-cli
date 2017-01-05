@@ -15,8 +15,7 @@ from element.solidfire_element_api import SolidFireRequestException
 from element import utils
 import jsonpickle
 import simplejson
-from solidfire.models import AddressBlock
-from solidfire.models import AddressBlock
+from solidfire.models import *
 from uuid import UUID
 from element import exceptions
 
@@ -60,9 +59,9 @@ def cli(ctx):
               required=False,
               help=""" """)
 @click.option('--attributes',
-              type=dict,
+              type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format. """)
+              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def Add(ctx,
            virtual_network_tag,
@@ -82,13 +81,18 @@ def Add(ctx,
 
 
 
-    kwargsDict = dict()
-    kwargsDict["start"] = address_block_start
-    kwargsDict["size"] = address_block_size
+    address_blocks = None
+    if(virtual_network_tag is not None or name is not None or address_blocks is not None or netmask is not None or svip is not None or gateway is not None or namespace is not None or attributes is not None or False):
+        kwargsDict = dict()
+        kwargsDict["start"] = address_block_start
+        kwargsDict["size"] = address_block_size
 
-    address_blocks = AddressBlock(**kwargsDict)
+        address_blocks = AddressBlock(**kwargsDict)
 
     address_blocks = parser.parse_array(address_blocks)
+    if(attributes is not None):
+        kwargsDict = simplejson.loads(attributes)
+        attributes = dict(**kwargsDict)
 
     AddVirtualNetworkResult = ctx.element.add_virtual_network(virtual_network_tag=virtual_network_tag, name=name, address_blocks=address_blocks, netmask=netmask, svip=svip, gateway=gateway, namespace=namespace, attributes=attributes)
     cli_utils.print_result(AddVirtualNetworkResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
@@ -173,9 +177,9 @@ def List(ctx,
               required=False,
               help=""" """)
 @click.option('--attributes',
-              type=dict,
+              type=str,
               required=False,
-              help="""A new list of Name/Value pairs in JSON object format. """)
+              help="""Provide in json format: A new list of Name/Value pairs in JSON object format. """)
 @pass_context
 def Modify(ctx,
            virtual_network_id = None,
@@ -196,13 +200,18 @@ def Modify(ctx,
 
 
 
-    kwargsDict = dict()
-    kwargsDict["start"] = address_block_start
-    kwargsDict["size"] = address_block_size
+    address_blocks = None
+    if(virtual_network_id is not None or virtual_network_tag is not None or name is not None or address_blocks is not None or netmask is not None or svip is not None or gateway is not None or namespace is not None or attributes is not None or False):
+        kwargsDict = dict()
+        kwargsDict["start"] = address_block_start
+        kwargsDict["size"] = address_block_size
 
-    address_blocks = AddressBlock(**kwargsDict)
+        address_blocks = AddressBlock(**kwargsDict)
 
     address_blocks = parser.parse_array(address_blocks)
+    if(attributes is not None):
+        kwargsDict = simplejson.loads(attributes)
+        attributes = dict(**kwargsDict)
 
     AddVirtualNetworkResult = ctx.element.modify_virtual_network(virtual_network_id=virtual_network_id, virtual_network_tag=virtual_network_tag, name=name, address_blocks=address_blocks, netmask=netmask, svip=svip, gateway=gateway, namespace=namespace, attributes=attributes)
     cli_utils.print_result(AddVirtualNetworkResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)

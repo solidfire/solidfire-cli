@@ -15,6 +15,7 @@ from element.solidfire_element_api import SolidFireRequestException
 from element import utils
 import jsonpickle
 import simplejson
+from solidfire.models import *
 from uuid import UUID
 from element import exceptions
 
@@ -30,9 +31,9 @@ def cli(ctx):
               required=True,
               help="""The name of the method to invoke. This is case sensitive. """)
 @click.option('--parameters',
-              type=dict,
+              type=str,
               required=False,
-              help="""An object, normally a dictionary or hashtable of the key/value pairs, to be passed as the params for the method being invoked. """)
+              help="""Provide in json format: An object, normally a dictionary or hashtable of the key/value pairs, to be passed as the params for the method being invoked. """)
 @pass_context
 def (ctx,
            method,
@@ -43,6 +44,9 @@ def (ctx,
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
+    if(parameters is not None):
+        kwargsDict = simplejson.loads(parameters)
+        parameters = dict(**kwargsDict)
 
     str = ctx.element.invoke_sfapi(method=method, parameters=parameters)
     cli_utils.print_result(str, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)

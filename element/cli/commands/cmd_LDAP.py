@@ -15,7 +15,7 @@ from element.solidfire_element_api import SolidFireRequestException
 from element import utils
 import jsonpickle
 import simplejson
-from solidfire.models import LdapConfiguration
+from solidfire.models import *
 from uuid import UUID
 from element import exceptions
 
@@ -39,9 +39,9 @@ def cli(ctx):
               required=False,
               help="""Indicate your acceptance of the End User License Agreement when creating this cluster admin. To accept the EULA, set this parameter to true. """)
 @click.option('--attributes',
-              type=dict,
+              type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format. """)
+              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def AddLdapClusterAdmin(ctx,
            username,
@@ -57,6 +57,9 @@ def AddLdapClusterAdmin(ctx,
 
 
     access = parser.parse_array(access)
+    if(attributes is not None):
+        kwargsDict = simplejson.loads(attributes)
+        attributes = dict(**kwargsDict)
 
     AddLdapClusterAdminResult = ctx.element.add_ldap_cluster_admin(username=username, access=access, accept_eula=accept_eula, attributes=attributes)
     cli_utils.print_result(AddLdapClusterAdminResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
@@ -226,19 +229,21 @@ def TestLdapAuthentication(ctx,
 
 
 
-    kwargsDict = dict()
-    kwargsDict["auth_type"] = ldap_configuration_auth_type
-    kwargsDict["enabled"] = ldap_configuration_enabled
-    kwargsDict["group_search_base_dn"] = ldap_configuration_group_search_base_dn
-    kwargsDict["group_search_custom_filter"] = ldap_configuration_group_search_custom_filter
-    kwargsDict["group_search_type"] = ldap_configuration_group_search_type
-    kwargsDict["search_bind_dn"] = ldap_configuration_search_bind_dn
-    kwargsDict["server_uris"] = ldap_configuration_server_uris
-    kwargsDict["user_dntemplate"] = ldap_configuration_user_dntemplate
-    kwargsDict["user_search_base_dn"] = ldap_configuration_user_search_base_dn
-    kwargsDict["user_search_filter"] = ldap_configuration_user_search_filter
+    ldap_configuration = None
+    if(username is not None or password is not None or ldap_configuration is not None or False):
+        kwargsDict = dict()
+        kwargsDict["auth_type"] = ldap_configuration_auth_type
+        kwargsDict["enabled"] = ldap_configuration_enabled
+        kwargsDict["group_search_base_dn"] = ldap_configuration_group_search_base_dn
+        kwargsDict["group_search_custom_filter"] = ldap_configuration_group_search_custom_filter
+        kwargsDict["group_search_type"] = ldap_configuration_group_search_type
+        kwargsDict["search_bind_dn"] = ldap_configuration_search_bind_dn
+        kwargsDict["server_uris"] = ldap_configuration_server_uris
+        kwargsDict["user_dntemplate"] = ldap_configuration_user_dntemplate
+        kwargsDict["user_search_base_dn"] = ldap_configuration_user_search_base_dn
+        kwargsDict["user_search_filter"] = ldap_configuration_user_search_filter
 
-    ldap_configuration = LdapConfiguration(**kwargsDict)
+        ldap_configuration = LdapConfiguration(**kwargsDict)
 
     TestLdapAuthenticationResult = ctx.element.test_ldap_authentication(username=username, password=password, ldap_configuration=ldap_configuration)
     cli_utils.print_result(TestLdapAuthenticationResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
