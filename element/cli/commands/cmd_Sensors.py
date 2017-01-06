@@ -23,7 +23,26 @@ from element import exceptions
 @click.group()
 @pass_context
 def cli(ctx):
-    """GetIpmiConfig GetIpmiInfo """
+    """GetIpmiInfo GetIpmiConfig """
+
+@cli.command('GetIpmiInfo', short_help="""GetIpmiInfo allows you to display a detailed reporting of sensors (objects) for node fans, intake and exhaust temperatures, and power supplies  that are monitored by .  """)
+@click.option('--force',
+              type=bool,
+              required=True,
+              help="""""")
+@pass_context
+def GetIpmiInfo(ctx,
+           force):
+    """GetIpmiInfo allows you to display a detailed reporting of sensors (objects) for node fans, intake and exhaust temperatures, and power supplies  that are monitored by . """
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+
+
+
+    GetIpmiInfoResult = ctx.element.get_ipmi_info(force=force)
+    cli_utils.print_result(GetIpmiInfoResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
 
 @cli.command('GetIpmiConfig', short_help="""GetIpmiConfig enables you to retrieve hardware sensor information from sensors that are in your node. """)
 @click.option('--chassis_type',
@@ -46,23 +65,4 @@ def GetIpmiConfig(ctx,
 
     GetIpmiConfigResult = ctx.element.get_ipmi_config(force=force, chassis_type=chassis_type)
     cli_utils.print_result(GetIpmiConfigResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('GetIpmiInfo', short_help="""GetIpmiInfo allows you to display a detailed reporting of sensors (objects) for node fans, intake and exhaust temperatures, and power supplies  that are monitored by .  """)
-@click.option('--force',
-              type=bool,
-              required=True,
-              help="""""")
-@pass_context
-def GetIpmiInfo(ctx,
-           force):
-    """GetIpmiInfo allows you to display a detailed reporting of sensors (objects) for node fans, intake and exhaust temperatures, and power supplies  that are monitored by . """
-    if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
-
-
-
-    GetIpmiInfoResult = ctx.element.get_ipmi_info(force=force)
-    cli_utils.print_result(GetIpmiInfoResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

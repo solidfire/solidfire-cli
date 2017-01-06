@@ -23,7 +23,121 @@ from element import exceptions
 @click.group()
 @pass_context
 def cli(ctx):
-    """CreateHost EnableFeature GetFeatureStatus GetCount GetTaskUpdate GetUnsharedChunks ListBindings ListHosts List ListTasks PrepareVirtualSnapshot """
+    """ListHosts GetUnsharedChunks GetTaskUpdate ListTasks CreateHost EnableFeature List ListBindings PrepareVirtualSnapshot GetCount GetFeatureStatus """
+
+@cli.command('ListHosts', short_help="""ListVirtualVolumeHosts returns a list of known ESX hosts. """)
+@click.option('--virtual_volume_host_ids',
+              type=str,
+              required=False,
+              help="""""")
+@pass_context
+def ListHosts(ctx,
+           virtual_volume_host_ids = None):
+    """ListVirtualVolumeHosts returns a list of known ESX hosts."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+
+
+
+    virtual_volume_host_ids = parser.parse_array(virtual_volume_host_ids)
+
+    ListVirtualVolumeHostsResult = ctx.element.list_virtual_volume_hosts(virtual_volume_host_ids=virtual_volume_host_ids)
+    cli_utils.print_result(ListVirtualVolumeHostsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetUnsharedChunks', short_help="""GetVirtualVolumeAllocatedBitmap scans a VVol segment and returns the number of  chunks not shared between two volumes. This call will return results in less  than 30 seconds. If the specified VVol and the base VVil are not related, an  error is thrown. If the offset/length combination is invalid or out fo range  an error is thrown. """)
+@click.option('--virtual_volume_id',
+              type=str,
+              required=True,
+              help="""The ID of the Virtual Volume. """)
+@click.option('--base_virtual_volume_id',
+              type=str,
+              required=True,
+              help="""The ID of the Virtual Volume to compare against. """)
+@click.option('--segment_start',
+              type=int,
+              required=True,
+              help="""Start Byte offset. """)
+@click.option('--segment_length',
+              type=int,
+              required=True,
+              help="""Length of the scan segment in bytes. """)
+@click.option('--chunk_size',
+              type=int,
+              required=True,
+              help="""Number of bytes represented by one bit in the bitmap. """)
+@click.option('--calling_virtual_volume_host_id',
+              type=str,
+              required=False,
+              help="""""")
+@pass_context
+def GetUnsharedChunks(ctx,
+           virtual_volume_id,
+           base_virtual_volume_id,
+           segment_start,
+           segment_length,
+           chunk_size,
+           calling_virtual_volume_host_id = None):
+    """GetVirtualVolumeAllocatedBitmap scans a VVol segment and returns the number of """
+    """chunks not shared between two volumes. This call will return results in less """
+    """than 30 seconds. If the specified VVol and the base VVil are not related, an """
+    """error is thrown. If the offset/length combination is invalid or out fo range """
+    """an error is thrown."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+
+
+
+    VirtualVolumeUnsharedChunkResult = ctx.element.get_virtual_volume_unshared_chunks(virtual_volume_id=virtual_volume_id, base_virtual_volume_id=base_virtual_volume_id, segment_start=segment_start, segment_length=segment_length, chunk_size=chunk_size, calling_virtual_volume_host_id=calling_virtual_volume_host_id)
+    cli_utils.print_result(VirtualVolumeUnsharedChunkResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetTaskUpdate', short_help="""GetVirtualVolumeTaskUpdate checks the status of a VVol Async Task. """)
+@click.option('--virtual_volume_task_id',
+              type=str,
+              required=True,
+              help="""The UUID of the VVol Task. """)
+@click.option('--calling_virtual_volume_host_id',
+              type=str,
+              required=False,
+              help="""""")
+@pass_context
+def GetTaskUpdate(ctx,
+           virtual_volume_task_id,
+           calling_virtual_volume_host_id = None):
+    """GetVirtualVolumeTaskUpdate checks the status of a VVol Async Task."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+
+
+
+    VirtualVolumeTaskResult = ctx.element.get_virtual_volume_task_update(virtual_volume_task_id=virtual_volume_task_id, calling_virtual_volume_host_id=calling_virtual_volume_host_id)
+    cli_utils.print_result(VirtualVolumeTaskResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('ListTasks', short_help="""ListVirtualVolumeTasks returns a list of VVol Async Tasks. """)
+@click.option('--virtual_volume_task_ids',
+              type=str,
+              required=False,
+              help="""""")
+@pass_context
+def ListTasks(ctx,
+           virtual_volume_task_ids = None):
+    """ListVirtualVolumeTasks returns a list of VVol Async Tasks."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+
+
+
+    virtual_volume_task_ids = parser.parse_array(virtual_volume_task_ids)
+
+    ListVirtualVolumeTasksResult = ctx.element.list_virtual_volume_tasks(virtual_volume_task_ids=virtual_volume_task_ids)
+    cli_utils.print_result(ListVirtualVolumeTasksResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
 
 @cli.command('CreateHost', short_help="""CreateVirtualVolumeHost creates a new ESX host. """)
 @click.option('--virtual_volume_host_id',
@@ -92,153 +206,6 @@ def EnableFeature(ctx,
 
 
 
-@cli.command('GetFeatureStatus', short_help="""GetFeatureStatus allows you to retrieve the status of a cluster feature. """)
-@click.option('--feature',
-              type=str,
-              required=False,
-              help="""Valid values: vvols: Find the status of the Virtual Volumes (VVOLs) cluster feature. """)
-@pass_context
-def GetFeatureStatus(ctx,
-           feature = None):
-    """GetFeatureStatus allows you to retrieve the status of a cluster feature."""
-    if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
-
-
-
-    GetFeatureStatusResult = ctx.element.get_feature_status(feature=feature)
-    cli_utils.print_result(GetFeatureStatusResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('GetCount', short_help="""Enables retrieval of the number of virtual volumes currently in the system. """)
-@pass_context
-def GetCount(ctx):
-    """Enables retrieval of the number of virtual volumes currently in the system."""
-    if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
-
-
-
-    GetVirtualVolumeCountResult = ctx.element.get_virtual_volume_count()
-    cli_utils.print_result(GetVirtualVolumeCountResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('GetTaskUpdate', short_help="""GetVirtualVolumeTaskUpdate checks the status of a VVol Async Task. """)
-@click.option('--virtual_volume_task_id',
-              type=str,
-              required=True,
-              help="""The UUID of the VVol Task. """)
-@click.option('--calling_virtual_volume_host_id',
-              type=str,
-              required=False,
-              help="""""")
-@pass_context
-def GetTaskUpdate(ctx,
-           virtual_volume_task_id,
-           calling_virtual_volume_host_id = None):
-    """GetVirtualVolumeTaskUpdate checks the status of a VVol Async Task."""
-    if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
-
-
-
-    VirtualVolumeTaskResult = ctx.element.get_virtual_volume_task_update(virtual_volume_task_id=virtual_volume_task_id, calling_virtual_volume_host_id=calling_virtual_volume_host_id)
-    cli_utils.print_result(VirtualVolumeTaskResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('GetUnsharedChunks', short_help="""GetVirtualVolumeAllocatedBitmap scans a VVol segment and returns the number of  chunks not shared between two volumes. This call will return results in less  than 30 seconds. If the specified VVol and the base VVil are not related, an  error is thrown. If the offset/length combination is invalid or out fo range  an error is thrown. """)
-@click.option('--virtual_volume_id',
-              type=str,
-              required=True,
-              help="""The ID of the Virtual Volume. """)
-@click.option('--base_virtual_volume_id',
-              type=str,
-              required=True,
-              help="""The ID of the Virtual Volume to compare against. """)
-@click.option('--segment_start',
-              type=int,
-              required=True,
-              help="""Start Byte offset. """)
-@click.option('--segment_length',
-              type=int,
-              required=True,
-              help="""Length of the scan segment in bytes. """)
-@click.option('--chunk_size',
-              type=int,
-              required=True,
-              help="""Number of bytes represented by one bit in the bitmap. """)
-@click.option('--calling_virtual_volume_host_id',
-              type=str,
-              required=False,
-              help="""""")
-@pass_context
-def GetUnsharedChunks(ctx,
-           virtual_volume_id,
-           base_virtual_volume_id,
-           segment_start,
-           segment_length,
-           chunk_size,
-           calling_virtual_volume_host_id = None):
-    """GetVirtualVolumeAllocatedBitmap scans a VVol segment and returns the number of """
-    """chunks not shared between two volumes. This call will return results in less """
-    """than 30 seconds. If the specified VVol and the base VVil are not related, an """
-    """error is thrown. If the offset/length combination is invalid or out fo range """
-    """an error is thrown."""
-    if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
-
-
-
-    VirtualVolumeUnsharedChunkResult = ctx.element.get_virtual_volume_unshared_chunks(virtual_volume_id=virtual_volume_id, base_virtual_volume_id=base_virtual_volume_id, segment_start=segment_start, segment_length=segment_length, chunk_size=chunk_size, calling_virtual_volume_host_id=calling_virtual_volume_host_id)
-    cli_utils.print_result(VirtualVolumeUnsharedChunkResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('ListBindings', short_help="""ListVirtualVolumeBindings returns a list of VVol bindings. """)
-@click.option('--virtual_volume_binding_ids',
-              type=str,
-              required=False,
-              help="""""")
-@pass_context
-def ListBindings(ctx,
-           virtual_volume_binding_ids = None):
-    """ListVirtualVolumeBindings returns a list of VVol bindings."""
-    if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
-
-
-
-    virtual_volume_binding_ids = parser.parse_array(virtual_volume_binding_ids)
-
-    ListVirtualVolumeBindingsResult = ctx.element.list_virtual_volume_bindings(virtual_volume_binding_ids=virtual_volume_binding_ids)
-    cli_utils.print_result(ListVirtualVolumeBindingsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('ListHosts', short_help="""ListVirtualVolumeHosts returns a list of known ESX hosts. """)
-@click.option('--virtual_volume_host_ids',
-              type=str,
-              required=False,
-              help="""""")
-@pass_context
-def ListHosts(ctx,
-           virtual_volume_host_ids = None):
-    """ListVirtualVolumeHosts returns a list of known ESX hosts."""
-    if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
-
-
-
-    virtual_volume_host_ids = parser.parse_array(virtual_volume_host_ids)
-
-    ListVirtualVolumeHostsResult = ctx.element.list_virtual_volume_hosts(virtual_volume_host_ids=virtual_volume_host_ids)
-    cli_utils.print_result(ListVirtualVolumeHostsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
 @cli.command('List', short_help="""ListVirtualVolumes enables you to list the virtual volumes currently in the system. You can use this method to list all virtual volumes, or only list a subset. """)
 @click.option('--details',
               type=bool,
@@ -280,24 +247,24 @@ def List(ctx,
 
 
 
-@cli.command('ListTasks', short_help="""ListVirtualVolumeTasks returns a list of VVol Async Tasks. """)
-@click.option('--virtual_volume_task_ids',
+@cli.command('ListBindings', short_help="""ListVirtualVolumeBindings returns a list of VVol bindings. """)
+@click.option('--virtual_volume_binding_ids',
               type=str,
               required=False,
               help="""""")
 @pass_context
-def ListTasks(ctx,
-           virtual_volume_task_ids = None):
-    """ListVirtualVolumeTasks returns a list of VVol Async Tasks."""
+def ListBindings(ctx,
+           virtual_volume_binding_ids = None):
+    """ListVirtualVolumeBindings returns a list of VVol bindings."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
-    virtual_volume_task_ids = parser.parse_array(virtual_volume_task_ids)
+    virtual_volume_binding_ids = parser.parse_array(virtual_volume_binding_ids)
 
-    ListVirtualVolumeTasksResult = ctx.element.list_virtual_volume_tasks(virtual_volume_task_ids=virtual_volume_task_ids)
-    cli_utils.print_result(ListVirtualVolumeTasksResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ListVirtualVolumeBindingsResult = ctx.element.list_virtual_volume_bindings(virtual_volume_binding_ids=virtual_volume_binding_ids)
+    cli_utils.print_result(ListVirtualVolumeBindingsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -332,4 +299,37 @@ def PrepareVirtualSnapshot(ctx,
 
     PrepareVirtualSnapshotResult = ctx.element.prepare_virtual_snapshot(virtual_volume_id=virtual_volume_id, name=name, writable_snapshot=writable_snapshot, calling_virtual_volume_host_id=calling_virtual_volume_host_id)
     cli_utils.print_result(PrepareVirtualSnapshotResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetCount', short_help="""Enables retrieval of the number of virtual volumes currently in the system. """)
+@pass_context
+def GetCount(ctx):
+    """Enables retrieval of the number of virtual volumes currently in the system."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+
+
+
+    GetVirtualVolumeCountResult = ctx.element.get_virtual_volume_count()
+    cli_utils.print_result(GetVirtualVolumeCountResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetFeatureStatus', short_help="""GetFeatureStatus allows you to retrieve the status of a cluster feature. """)
+@click.option('--feature',
+              type=str,
+              required=False,
+              help="""Valid values: vvols: Find the status of the Virtual Volumes (VVOLs) cluster feature. """)
+@pass_context
+def GetFeatureStatus(ctx,
+           feature = None):
+    """GetFeatureStatus allows you to retrieve the status of a cluster feature."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+
+
+
+    GetFeatureStatusResult = ctx.element.get_feature_status(feature=feature)
+    cli_utils.print_result(GetFeatureStatusResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

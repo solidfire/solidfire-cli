@@ -23,103 +23,7 @@ from element import exceptions
 @click.group()
 @pass_context
 def cli(ctx):
-    """Add GetByID GetByName GetEfficiency List Modify Remove """
-
-@cli.command('Add', short_help="""Used to add a new account to the system. New volumes can be created under the new account. The CHAP settings specified for the account applies to all volumes owned by the account. """)
-@click.option('--username',
-              type=str,
-              required=True,
-              help="""Unique username for this account. (May be 1 to 64 characters in length). """)
-@click.option('--initiator_secret',
-              type=str,
-              required=False,
-              help="""CHAP secret to use for the initiator. Should be 12-16 characters long and impenetrable. The CHAP initiator secrets must be unique and cannot be the same as the target CHAP secret. <br/><br/> If not specified, a random secret is created. """)
-@click.option('--target_secret',
-              type=str,
-              required=False,
-              help="""CHAP secret to use for the target (mutual CHAP authentication). Should be 12-16 characters long and impenetrable. The CHAP target secrets must be unique and cannot be the same as the initiator CHAP secret. <br/><br/> If not specified, a random secret is created. """)
-@click.option('--attributes',
-              type=str,
-              required=False,
-              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
-@pass_context
-def Add(ctx,
-           username,
-           initiator_secret = None,
-           target_secret = None,
-           attributes = None):
-    """Used to add a new account to the system."""
-    """New volumes can be created under the new account."""
-    """The CHAP settings specified for the account applies to all volumes owned by the account."""
-    if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
-
-
-    if(attributes is not None):
-        kwargsDict = simplejson.loads(attributes)
-        attributes = dict(**kwargsDict)
-
-    AddAccountResult = ctx.element.add_account(username=username, initiator_secret=initiator_secret, target_secret=target_secret, attributes=attributes)
-    cli_utils.print_result(AddAccountResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('GetByID', short_help="""Returns details about an account, given its AccountID. """)
-@click.option('--account_id',
-              type=int,
-              required=True,
-              help="""Specifies the account for which details are gathered. """)
-@pass_context
-def GetByID(ctx,
-           account_id):
-    """Returns details about an account, given its AccountID."""
-    if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
-
-
-
-    GetAccountResult = ctx.element.get_account_by_id(account_id=account_id)
-    cli_utils.print_result(GetAccountResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('GetByName', short_help="""Returns details about an account, given its Username. """)
-@click.option('--username',
-              type=str,
-              required=True,
-              help="""Username for the account. """)
-@pass_context
-def GetByName(ctx,
-           username):
-    """Returns details about an account, given its Username."""
-    if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
-
-
-
-    GetAccountResult = ctx.element.get_account_by_name(username=username)
-    cli_utils.print_result(GetAccountResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('GetEfficiency', short_help="""GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity. """)
-@click.option('--account_id',
-              type=int,
-              required=True,
-              help="""Specifies the volume account for which capacity is computed. """)
-@pass_context
-def GetEfficiency(ctx,
-           account_id):
-    """GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity."""
-    if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
-
-
-
-    GetEfficiencyResult = ctx.element.get_account_efficiency(account_id=account_id)
-    cli_utils.print_result(GetEfficiencyResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
+    """List GetEfficiency Modify Remove GetByName Add GetByID """
 
 @cli.command('List', short_help="""Returns the entire list of accounts, with optional paging support. """)
 @click.option('--start_account_id',
@@ -142,6 +46,25 @@ def List(ctx,
 
     ListAccountsResult = ctx.element.list_accounts(start_account_id=start_account_id, limit=limit)
     cli_utils.print_result(ListAccountsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetEfficiency', short_help="""GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity. """)
+@click.option('--account_id',
+              type=int,
+              required=True,
+              help="""Specifies the volume account for which capacity is computed. """)
+@pass_context
+def GetEfficiency(ctx,
+           account_id):
+    """GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+
+
+
+    GetEfficiencyResult = ctx.element.get_account_efficiency(account_id=account_id)
+    cli_utils.print_result(GetEfficiencyResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -213,4 +136,81 @@ def Remove(ctx,
 
     RemoveAccountResult = ctx.element.remove_account(account_id=account_id)
     cli_utils.print_result(RemoveAccountResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetByName', short_help="""Returns details about an account, given its Username. """)
+@click.option('--username',
+              type=str,
+              required=True,
+              help="""Username for the account. """)
+@pass_context
+def GetByName(ctx,
+           username):
+    """Returns details about an account, given its Username."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+
+
+
+    GetAccountResult = ctx.element.get_account_by_name(username=username)
+    cli_utils.print_result(GetAccountResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('Add', short_help="""Used to add a new account to the system. New volumes can be created under the new account. The CHAP settings specified for the account applies to all volumes owned by the account. """)
+@click.option('--username',
+              type=str,
+              required=True,
+              help="""Unique username for this account. (May be 1 to 64 characters in length). """)
+@click.option('--initiator_secret',
+              type=str,
+              required=False,
+              help="""CHAP secret to use for the initiator. Should be 12-16 characters long and impenetrable. The CHAP initiator secrets must be unique and cannot be the same as the target CHAP secret. <br/><br/> If not specified, a random secret is created. """)
+@click.option('--target_secret',
+              type=str,
+              required=False,
+              help="""CHAP secret to use for the target (mutual CHAP authentication). Should be 12-16 characters long and impenetrable. The CHAP target secrets must be unique and cannot be the same as the initiator CHAP secret. <br/><br/> If not specified, a random secret is created. """)
+@click.option('--attributes',
+              type=str,
+              required=False,
+              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
+@pass_context
+def Add(ctx,
+           username,
+           initiator_secret = None,
+           target_secret = None,
+           attributes = None):
+    """Used to add a new account to the system."""
+    """New volumes can be created under the new account."""
+    """The CHAP settings specified for the account applies to all volumes owned by the account."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+
+
+    if(attributes is not None):
+        kwargsDict = simplejson.loads(attributes)
+        attributes = dict(**kwargsDict)
+
+    AddAccountResult = ctx.element.add_account(username=username, initiator_secret=initiator_secret, target_secret=target_secret, attributes=attributes)
+    cli_utils.print_result(AddAccountResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetByID', short_help="""Returns details about an account, given its AccountID. """)
+@click.option('--account_id',
+              type=int,
+              required=True,
+              help="""Specifies the account for which details are gathered. """)
+@pass_context
+def GetByID(ctx,
+           account_id):
+    """Returns details about an account, given its AccountID."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+
+
+
+    GetAccountResult = ctx.element.get_account_by_id(account_id=account_id)
+    cli_utils.print_result(GetAccountResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

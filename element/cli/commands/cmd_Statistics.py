@@ -23,7 +23,7 @@ from element import exceptions
 @click.group()
 @pass_context
 def cli(ctx):
-    """GetCompleteStats GetHardwareInfo GetRawStats ListDriveStats ListVolumeStats ListVolumeStatsByVirtualVolume """
+    """GetCompleteStats GetHardwareInfo GetRawStats ListVolumeStatsByVirtualVolume ListVolumeStats ListDriveStats """
 
 @cli.command('GetCompleteStats', short_help="""The GetCompleteStats API method is used by SolidFire engineering to troubleshoot new features. The data returned from GetCompleteStats is not documented, changes frequently, and is not guaranteed to be accurate. It is not recommended to ever use GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster. The data returned from GetCompleteStats changes frequently, and is not guaranteed to accurately show performance from the system. It is not recommended to ever use GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster. """)
 @pass_context
@@ -69,24 +69,24 @@ def GetRawStats(ctx):
 
 
 
-@cli.command('ListDriveStats', short_help="""ListDriveStats enables you to retrieve  high-level activity measurements for multiple drives in the cluster. By default, this method returns statistics for all drives in the cluster, and these measurements are cumulative from the addition of the drive to the cluster. Some values this method returns are specific to block drives, and some are specific to metadata drives. For more information on what data each drive type returns, see the response examples for the GetDriveStats method. """)
-@click.option('--drives',
+@cli.command('ListVolumeStatsByVirtualVolume', short_help="""ListVolumeStatsByVirtualVolume enables you to list statistics for volumes, sorted by virtual volumes. """)
+@click.option('--virtual_volume_ids',
               type=str,
               required=False,
-              help="""Optional list of DriveIDs for which to return drive statistics. If you omit this parameter, measurements for all drives are returned. """)
+              help="""A list of virtual volume  IDs for which to retrieve information. If you specify this parameter, the method returns information about only these virtual volumes. """)
 @pass_context
-def ListDriveStats(ctx,
-           drives = None):
-    """ListDriveStats enables you to retrieve  high-level activity measurements for multiple drives in the cluster. By default, this method returns statistics for all drives in the cluster, and these measurements are cumulative from the addition of the drive to the cluster. Some values this method returns are specific to block drives, and some are specific to metadata drives. For more information on what data each drive type returns, see the response examples for the GetDriveStats method."""
+def ListVolumeStatsByVirtualVolume(ctx,
+           virtual_volume_ids = None):
+    """ListVolumeStatsByVirtualVolume enables you to list statistics for volumes, sorted by virtual volumes."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
-    drives = parser.parse_array(drives)
+    virtual_volume_ids = parser.parse_array(virtual_volume_ids)
 
-    ListDriveStatsResult = ctx.element.list_drive_stats(drives=drives)
-    cli_utils.print_result(ListDriveStatsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ListVolumeStatsByVirtualVolumeResult = ctx.element.list_volume_stats_by_virtual_volume(virtual_volume_ids=virtual_volume_ids)
+    cli_utils.print_result(ListVolumeStatsByVirtualVolumeResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -110,22 +110,22 @@ def ListVolumeStats(ctx,
 
 
 
-@cli.command('ListVolumeStatsByVirtualVolume', short_help="""ListVolumeStatsByVirtualVolume enables you to list statistics for volumes, sorted by virtual volumes. """)
-@click.option('--virtual_volume_ids',
+@cli.command('ListDriveStats', short_help="""ListDriveStats enables you to retrieve  high-level activity measurements for multiple drives in the cluster. By default, this method returns statistics for all drives in the cluster, and these measurements are cumulative from the addition of the drive to the cluster. Some values this method returns are specific to block drives, and some are specific to metadata drives. For more information on what data each drive type returns, see the response examples for the GetDriveStats method. """)
+@click.option('--drives',
               type=str,
               required=False,
-              help="""A list of virtual volume  IDs for which to retrieve information. If you specify this parameter, the method returns information about only these virtual volumes. """)
+              help="""Optional list of DriveIDs for which to return drive statistics. If you omit this parameter, measurements for all drives are returned. """)
 @pass_context
-def ListVolumeStatsByVirtualVolume(ctx,
-           virtual_volume_ids = None):
-    """ListVolumeStatsByVirtualVolume enables you to list statistics for volumes, sorted by virtual volumes."""
+def ListDriveStats(ctx,
+           drives = None):
+    """ListDriveStats enables you to retrieve  high-level activity measurements for multiple drives in the cluster. By default, this method returns statistics for all drives in the cluster, and these measurements are cumulative from the addition of the drive to the cluster. Some values this method returns are specific to block drives, and some are specific to metadata drives. For more information on what data each drive type returns, see the response examples for the GetDriveStats method."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
-    virtual_volume_ids = parser.parse_array(virtual_volume_ids)
+    drives = parser.parse_array(drives)
 
-    ListVolumeStatsByVirtualVolumeResult = ctx.element.list_volume_stats_by_virtual_volume(virtual_volume_ids=virtual_volume_ids)
-    cli_utils.print_result(ListVolumeStatsByVirtualVolumeResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ListDriveStatsResult = ctx.element.list_drive_stats(drives=drives)
+    cli_utils.print_result(ListDriveStatsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

@@ -23,7 +23,7 @@ from element import exceptions
 @click.group()
 @pass_context
 def cli(ctx):
-    """AddLdapClusterAdmin DisableLdapAuthentication EnableLdapAuthentication GetLdapConfiguration TestLdapAuthentication """
+    """AddLdapClusterAdmin TestLdapAuthentication DisableLdapAuthentication EnableLdapAuthentication GetLdapConfiguration """
 
 @cli.command('AddLdapClusterAdmin', short_help="""AddLdapClusterAdmin is used to add a new LDAP Cluster Admin. An LDAP Cluster Admin can be used to manage the cluster via the API and management tools. LDAP Cluster Admins are completely separate and unrelated to standard tenant accounts.  An LDAP group that has been defined in Active Directory can also be added using this API method. The access level that is given to the group will be passed to the individual users in the LDAP group. """)
 @click.option('--username',
@@ -63,6 +63,96 @@ def AddLdapClusterAdmin(ctx,
 
     AddLdapClusterAdminResult = ctx.element.add_ldap_cluster_admin(username=username, access=access, accept_eula=accept_eula, attributes=attributes)
     cli_utils.print_result(AddLdapClusterAdminResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('TestLdapAuthentication', short_help="""The TestLdapAuthentication is used to verify the currently enabled LDAP authentication configuration settings are correct. If the configuration settings are correct, the API call returns a list of the groups the tested user is a member of. """)
+@click.option('--username',
+              type=str,
+              required=True,
+              help="""The username to be tested. """)
+@click.option('--password',
+              type=str,
+              required=True,
+              help="""The password for the username to be tester. """)
+@click.option('--ldap_configuration_auth_type',
+              type=str,
+              required=True,
+              help="""Identifies which user authentcation method will be used. <br/> Valid values:<br/> <b>DirectBind</b><br/> <b>SearchAndBind</b> """)
+@click.option('--ldap_configuration_enabled',
+              type=bool,
+              required=True,
+              help="""Identifies whether or not the system is enabled for LDAP. <br/> Valid values:<br/> <b>true</b><br/> <b>false</b> """)
+@click.option('--ldap_configuration_group_search_base_dn',
+              type=str,
+              required=True,
+              help="""The base DN of the tree to start the group search (will do a subtree search from here). """)
+@click.option('--ldap_configuration_group_search_custom_filter',
+              type=str,
+              required=True,
+              help="""The custom search filter used. """)
+@click.option('--ldap_configuration_group_search_type',
+              type=str,
+              required=True,
+              help="""Controls the default group search filter used, can be one of the following:<br/> <b>NoGroups</b>: No group support.<br/> <b>ActiveDirectory</b>: Nested membership of all of a user's AD groups.<br/> <b>MemberDN</b>: MemberDN style groups (single-level). """)
+@click.option('--ldap_configuration_search_bind_dn',
+              type=str,
+              required=True,
+              help="""A fully qualified DN to log in with to perform an LDAP search for the user (needs read access to the LDAP directory). """)
+@click.option('--ldap_configuration_server_uris',
+              type=str,
+              required=True,
+              help="""A comma-separated list of LDAP server URIs (examples: "ldap://1.2.3.4" and ldaps://1.2.3.4:123") """)
+@click.option('--ldap_configuration_user_dntemplate',
+              type=str,
+              required=True,
+              help="""A string that is used to form a fully qualified user DN. """)
+@click.option('--ldap_configuration_user_search_base_dn',
+              type=str,
+              required=True,
+              help="""The base DN of the tree used to start the search (will do a subtree search from here). """)
+@click.option('--ldap_configuration_user_search_filter',
+              type=str,
+              required=True,
+              help="""The LDAP filter used. """)
+@pass_context
+def TestLdapAuthentication(ctx,
+           username,
+           password,
+           ldap_configuration_auth_type = None,
+           ldap_configuration_enabled = None,
+           ldap_configuration_group_search_base_dn = None,
+           ldap_configuration_group_search_custom_filter = None,
+           ldap_configuration_group_search_type = None,
+           ldap_configuration_search_bind_dn = None,
+           ldap_configuration_server_uris = None,
+           ldap_configuration_user_dntemplate = None,
+           ldap_configuration_user_search_base_dn = None,
+           ldap_configuration_user_search_filter = None):
+    """The TestLdapAuthentication is used to verify the currently enabled LDAP authentication configuration settings are correct. If the configuration settings are correct, the API call returns a list of the groups the tested user is a member of."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+
+
+
+    ldap_configuration = None
+    if(username is not None or password is not None or ldap_configuration is not None or False):
+        kwargsDict = dict()
+        kwargsDict["auth_type"] = ldap_configuration_auth_type
+        kwargsDict["enabled"] = ldap_configuration_enabled
+        kwargsDict["group_search_base_dn"] = ldap_configuration_group_search_base_dn
+        kwargsDict["group_search_custom_filter"] = ldap_configuration_group_search_custom_filter
+        kwargsDict["group_search_type"] = ldap_configuration_group_search_type
+        kwargsDict["search_bind_dn"] = ldap_configuration_search_bind_dn
+        kwargsDict["server_uris"] = ldap_configuration_server_uris
+        kwargsDict["user_dntemplate"] = ldap_configuration_user_dntemplate
+        kwargsDict["user_search_base_dn"] = ldap_configuration_user_search_base_dn
+        kwargsDict["user_search_filter"] = ldap_configuration_user_search_filter
+
+        ldap_configuration = LdapConfiguration(**kwargsDict)
+
+    TestLdapAuthenticationResult = ctx.element.test_ldap_authentication(username=username, password=password, ldap_configuration=ldap_configuration)
+    cli_utils.print_result(TestLdapAuthenticationResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -157,94 +247,4 @@ def GetLdapConfiguration(ctx):
 
     GetLdapConfigurationResult = ctx.element.get_ldap_configuration()
     cli_utils.print_result(GetLdapConfigurationResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('TestLdapAuthentication', short_help="""The TestLdapAuthentication is used to verify the currently enabled LDAP authentication configuration settings are correct. If the configuration settings are correct, the API call returns a list of the groups the tested user is a member of. """)
-@click.option('--username',
-              type=str,
-              required=True,
-              help="""The username to be tested. """)
-@click.option('--password',
-              type=str,
-              required=True,
-              help="""The password for the username to be tester. """)
-@click.option('--ldap_configuration_auth_type',
-              type=str,
-              required=True,
-              help="""Identifies which user authentcation method will be used. <br/> Valid values:<br/> <b>DirectBind</b><br/> <b>SearchAndBind</b> """)
-@click.option('--ldap_configuration_enabled',
-              type=bool,
-              required=True,
-              help="""Identifies whether or not the system is enabled for LDAP. <br/> Valid values:<br/> <b>true</b><br/> <b>false</b> """)
-@click.option('--ldap_configuration_group_search_base_dn',
-              type=str,
-              required=True,
-              help="""The base DN of the tree to start the group search (will do a subtree search from here). """)
-@click.option('--ldap_configuration_group_search_custom_filter',
-              type=str,
-              required=True,
-              help="""The custom search filter used. """)
-@click.option('--ldap_configuration_group_search_type',
-              type=str,
-              required=True,
-              help="""Controls the default group search filter used, can be one of the following:<br/> <b>NoGroups</b>: No group support.<br/> <b>ActiveDirectory</b>: Nested membership of all of a user's AD groups.<br/> <b>MemberDN</b>: MemberDN style groups (single-level). """)
-@click.option('--ldap_configuration_search_bind_dn',
-              type=str,
-              required=True,
-              help="""A fully qualified DN to log in with to perform an LDAP search for the user (needs read access to the LDAP directory). """)
-@click.option('--ldap_configuration_server_uris',
-              type=str,
-              required=True,
-              help="""A comma-separated list of LDAP server URIs (examples: "ldap://1.2.3.4" and ldaps://1.2.3.4:123") """)
-@click.option('--ldap_configuration_user_dntemplate',
-              type=str,
-              required=True,
-              help="""A string that is used to form a fully qualified user DN. """)
-@click.option('--ldap_configuration_user_search_base_dn',
-              type=str,
-              required=True,
-              help="""The base DN of the tree used to start the search (will do a subtree search from here). """)
-@click.option('--ldap_configuration_user_search_filter',
-              type=str,
-              required=True,
-              help="""The LDAP filter used. """)
-@pass_context
-def TestLdapAuthentication(ctx,
-           username,
-           password,
-           ldap_configuration_auth_type = None,
-           ldap_configuration_enabled = None,
-           ldap_configuration_group_search_base_dn = None,
-           ldap_configuration_group_search_custom_filter = None,
-           ldap_configuration_group_search_type = None,
-           ldap_configuration_search_bind_dn = None,
-           ldap_configuration_server_uris = None,
-           ldap_configuration_user_dntemplate = None,
-           ldap_configuration_user_search_base_dn = None,
-           ldap_configuration_user_search_filter = None):
-    """The TestLdapAuthentication is used to verify the currently enabled LDAP authentication configuration settings are correct. If the configuration settings are correct, the API call returns a list of the groups the tested user is a member of."""
-    if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
-
-
-
-    ldap_configuration = None
-    if(username is not None or password is not None or ldap_configuration is not None or False):
-        kwargsDict = dict()
-        kwargsDict["auth_type"] = ldap_configuration_auth_type
-        kwargsDict["enabled"] = ldap_configuration_enabled
-        kwargsDict["group_search_base_dn"] = ldap_configuration_group_search_base_dn
-        kwargsDict["group_search_custom_filter"] = ldap_configuration_group_search_custom_filter
-        kwargsDict["group_search_type"] = ldap_configuration_group_search_type
-        kwargsDict["search_bind_dn"] = ldap_configuration_search_bind_dn
-        kwargsDict["server_uris"] = ldap_configuration_server_uris
-        kwargsDict["user_dntemplate"] = ldap_configuration_user_dntemplate
-        kwargsDict["user_search_base_dn"] = ldap_configuration_user_search_base_dn
-        kwargsDict["user_search_filter"] = ldap_configuration_user_search_filter
-
-        ldap_configuration = LdapConfiguration(**kwargsDict)
-
-    TestLdapAuthenticationResult = ctx.element.test_ldap_authentication(username=username, password=password, ldap_configuration=ldap_configuration)
-    cli_utils.print_result(TestLdapAuthenticationResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

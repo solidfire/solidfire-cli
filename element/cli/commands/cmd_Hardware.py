@@ -23,7 +23,40 @@ from element import exceptions
 @click.group()
 @pass_context
 def cli(ctx):
-    """GetClusterInfo GetConfig GetNodeInfo GetNvramInfo """
+    """GetNvramInfo GetNodeInfo GetClusterInfo GetConfig """
+
+@cli.command('GetNvramInfo', short_help="""GetNvramInfo allows you to retrieve information from each node about the NVRAM card.   """)
+@pass_context
+def GetNvramInfo(ctx):
+    """GetNvramInfo allows you to retrieve information from each node about the NVRAM card.  """
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+
+
+
+    GetNvramInfoResult = ctx.element.get_nvram_info()
+    cli_utils.print_result(GetNvramInfoResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetNodeInfo', short_help="""GetNodeHardwareInfo is used to return all the hardware info and status for the node specified. This generally includes manufacturers, vendors, versions, and other associated hardware identification information. """)
+@click.option('--node_id',
+              type=int,
+              required=True,
+              help="""The ID of the node for which hardware information is being requested.  Information about a  node is returned if a   node is specified. """)
+@pass_context
+def GetNodeInfo(ctx,
+           node_id):
+    """GetNodeHardwareInfo is used to return all the hardware info and status for the node specified. This generally includes manufacturers, vendors, versions, and other associated hardware identification information."""
+    if ctx.element is None:
+         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+
+
+
+    GetNodeHardwareInfoResult = ctx.element.get_node_hardware_info(node_id=node_id)
+    cli_utils.print_result(GetNodeHardwareInfoResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
 
 @cli.command('GetClusterInfo', short_help="""You can use the GetClusterHardwareInfo method to retrieve the hardware status and information for all Fibre Channel nodes, iSCSI nodes and drives in the cluster. This generally includes manufacturers, vendors, versions, and other associated hardware identification information. """)
 @click.option('--type',
@@ -55,37 +88,4 @@ def GetConfig(ctx):
 
     GetHardwareConfigResult = ctx.element.get_hardware_config()
     cli_utils.print_result(GetHardwareConfigResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('GetNodeInfo', short_help="""GetNodeHardwareInfo is used to return all the hardware info and status for the node specified. This generally includes manufacturers, vendors, versions, and other associated hardware identification information. """)
-@click.option('--node_id',
-              type=int,
-              required=True,
-              help="""The ID of the node for which hardware information is being requested.  Information about a  node is returned if a   node is specified. """)
-@pass_context
-def GetNodeInfo(ctx,
-           node_id):
-    """GetNodeHardwareInfo is used to return all the hardware info and status for the node specified. This generally includes manufacturers, vendors, versions, and other associated hardware identification information."""
-    if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
-
-
-
-    GetNodeHardwareInfoResult = ctx.element.get_node_hardware_info(node_id=node_id)
-    cli_utils.print_result(GetNodeHardwareInfoResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('GetNvramInfo', short_help="""GetNvramInfo allows you to retrieve information from each node about the NVRAM card.   """)
-@pass_context
-def GetNvramInfo(ctx):
-    """GetNvramInfo allows you to retrieve information from each node about the NVRAM card.  """
-    if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
-
-
-
-    GetNvramInfoResult = ctx.element.get_nvram_info()
-    cli_utils.print_result(GetNvramInfoResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
