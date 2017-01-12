@@ -18,6 +18,7 @@ import simplejson
 from solidfire.models import *
 from uuid import UUID
 from element import exceptions
+from solidfire import common
 
 
 @click.group()
@@ -30,10 +31,20 @@ def cli(ctx):
 def List(ctx):
     """List the services in the cluster."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    ListServicesResult = ctx.element.list_services()
-    cli_utils.print_result(ListServicesResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("")
+    try:
+        ListServicesResult = ctx.element.list_services()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ListServicesResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

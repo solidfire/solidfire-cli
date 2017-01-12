@@ -18,6 +18,7 @@ import simplejson
 from solidfire.models import *
 from uuid import UUID
 from element import exceptions
+from solidfire import common
 
 
 @click.group()
@@ -37,12 +38,22 @@ def List(ctx,
     """If protocolEndpointIDs isn't specified all protocol endpoints"""
     """are returned. Else the supplied protocolEndpointIDs are."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
     protocol_endpoint_ids = parser.parse_array(protocol_endpoint_ids)
 
-    ListProtocolEndpointsResult = ctx.element.list_protocol_endpoints(protocol_endpoint_ids=protocol_endpoint_ids)
-    cli_utils.print_result(ListProtocolEndpointsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""protocol_endpoint_ids = """+str(protocol_endpoint_ids)+"""";"""+"")
+    try:
+        ListProtocolEndpointsResult = ctx.element.list_protocol_endpoints(protocol_endpoint_ids=protocol_endpoint_ids)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ListProtocolEndpointsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

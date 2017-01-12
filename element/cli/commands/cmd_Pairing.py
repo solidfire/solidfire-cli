@@ -18,6 +18,7 @@ import simplejson
 from solidfire.models import *
 from uuid import UUID
 from element import exceptions
+from solidfire import common
 
 
 @click.group()
@@ -36,12 +37,22 @@ def CompleteCluster(ctx,
     """The CompleteClusterPairing method is the second step in the cluster pairing process."""
     """Use this method with the encoded key received from the &quot;StartClusterPairing&quot; API method to complete the cluster pairing process."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    CompleteClusterPairingResult = ctx.element.complete_cluster_pairing(cluster_pairing_key=cluster_pairing_key)
-    cli_utils.print_result(CompleteClusterPairingResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""cluster_pairing_key = """+str(cluster_pairing_key)+"""";"""+"")
+    try:
+        CompleteClusterPairingResult = ctx.element.complete_cluster_pairing(cluster_pairing_key=cluster_pairing_key)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(CompleteClusterPairingResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -60,12 +71,22 @@ def CompleteVolume(ctx,
            volume_id):
     """CompleteVolumePairing is used to complete the pairing of two volumes."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    CompleteVolumePairingResult = ctx.element.complete_volume_pairing(volume_pairing_key=volume_pairing_key, volume_id=volume_id)
-    cli_utils.print_result(CompleteVolumePairingResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""volume_pairing_key = """+str(volume_pairing_key)+"""";"""+"""volume_id = """+str(volume_id)+"""";"""+"")
+    try:
+        CompleteVolumePairingResult = ctx.element.complete_volume_pairing(volume_pairing_key=volume_pairing_key, volume_id=volume_id)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(CompleteVolumePairingResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -75,12 +96,22 @@ def ListClusterPairs(ctx):
     """ListClusterPairs is used to list all of the clusters a cluster is paired with."""
     """This method returns information about active and pending cluster pairings, such as statistics about the current pairing as well as the connectivity and latency (in milliseconds) of the cluster pairing."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    ListClusterPairsResult = ctx.element.list_cluster_pairs()
-    cli_utils.print_result(ListClusterPairsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("")
+    try:
+        ListClusterPairsResult = ctx.element.list_cluster_pairs()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ListClusterPairsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -96,12 +127,22 @@ def RemoveVolumePair(ctx,
     """When the volume pairing information is removed, data is no longer replicated to or from the volume."""
     """This method should be run on both the source and target volumes that are paired together."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    RemoveVolumePairResult = ctx.element.remove_volume_pair(volume_id=volume_id)
-    cli_utils.print_result(RemoveVolumePairResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""volume_id = """+str(volume_id)+"""";"""+"")
+    try:
+        RemoveVolumePairResult = ctx.element.remove_volume_pair(volume_id=volume_id)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(RemoveVolumePairResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -121,12 +162,22 @@ def StartVolume(ctx,
     """StartVolumePairing is used to create an encoded key from a volume that is used to pair with another volume."""
     """The key that this method creates is used in the &quot;CompleteVolumePairing&quot; API method to establish a volume pairing."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    StartVolumePairingResult = ctx.element.start_volume_pairing(volume_id=volume_id, mode=mode)
-    cli_utils.print_result(StartVolumePairingResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""volume_id = """+str(volume_id)+"""";"""+"""mode = """+str(mode)+"""";"""+"")
+    try:
+        StartVolumePairingResult = ctx.element.start_volume_pairing(volume_id=volume_id, mode=mode)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(StartVolumePairingResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -136,12 +187,22 @@ def ListActivePairedVolumes(ctx):
     """ListActivePairedVolumes is used to list all of the active volumes paired with a volume."""
     """Volumes listed in the return for this method include volumes with active and pending pairings."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    ListActivePairedVolumesResult = ctx.element.list_active_paired_volumes()
-    cli_utils.print_result(ListActivePairedVolumesResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("")
+    try:
+        ListActivePairedVolumesResult = ctx.element.list_active_paired_volumes()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ListActivePairedVolumesResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -165,12 +226,22 @@ def ModifyVolumePair(ctx,
            mode = None):
     """ModifyVolumePair is used to pause or restart replication between a pair of volumes."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    ModifyVolumePairResult = ctx.element.modify_volume_pair(volume_id=volume_id, paused_manual=paused_manual, mode=mode)
-    cli_utils.print_result(ModifyVolumePairResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""volume_id = """+str(volume_id)+"""";"""+"""paused_manual = """+str(paused_manual)+"""";"""+"""mode = """+str(mode)+"""";"""+"")
+    try:
+        ModifyVolumePairResult = ctx.element.modify_volume_pair(volume_id=volume_id, paused_manual=paused_manual, mode=mode)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ModifyVolumePairResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -181,12 +252,22 @@ def StartCluster(ctx):
     """The key created from this API method is used in the &quot;CompleteClusterPairing&quot; API method to establish a cluster pairing."""
     """You can pair a cluster with a maximum of four other SolidFire clusters."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    StartClusterPairingResult = ctx.element.start_cluster_pairing()
-    cli_utils.print_result(StartClusterPairingResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("")
+    try:
+        StartClusterPairingResult = ctx.element.start_cluster_pairing()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(StartClusterPairingResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -201,10 +282,20 @@ def RemoveClusterPair(ctx,
     """You can use the RemoveClusterPair method to close the open connections between two paired clusters."""
     """Note: Before you remove a cluster pair, you must first remove all volume pairing to the clusters with the &quot;RemoveVolumePair&quot; API method."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    RemoveClusterPairResult = ctx.element.remove_cluster_pair(cluster_pair_id=cluster_pair_id)
-    cli_utils.print_result(RemoveClusterPairResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""cluster_pair_id = """+str(cluster_pair_id)+"""";"""+"")
+    try:
+        RemoveClusterPairResult = ctx.element.remove_cluster_pair(cluster_pair_id=cluster_pair_id)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(RemoveClusterPairResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

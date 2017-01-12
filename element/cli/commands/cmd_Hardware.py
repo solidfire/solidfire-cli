@@ -18,6 +18,7 @@ import simplejson
 from solidfire.models import *
 from uuid import UUID
 from element import exceptions
+from solidfire import common
 
 
 @click.group()
@@ -30,12 +31,22 @@ def cli(ctx):
 def GetNvramInfo(ctx):
     """GetNvramInfo allows you to retrieve information from each node about the NVRAM card.  """
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    GetNvramInfoResult = ctx.element.get_nvram_info()
-    cli_utils.print_result(GetNvramInfoResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("")
+    try:
+        GetNvramInfoResult = ctx.element.get_nvram_info()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(GetNvramInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -49,12 +60,22 @@ def GetNodeInfo(ctx,
            node_id):
     """GetNodeHardwareInfo is used to return all the hardware info and status for the node specified. This generally includes manufacturers, vendors, versions, and other associated hardware identification information."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    GetNodeHardwareInfoResult = ctx.element.get_node_hardware_info(node_id=node_id)
-    cli_utils.print_result(GetNodeHardwareInfoResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""node_id = """+str(node_id)+"""";"""+"")
+    try:
+        GetNodeHardwareInfoResult = ctx.element.get_node_hardware_info(node_id=node_id)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(GetNodeHardwareInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -68,12 +89,22 @@ def GetClusterInfo(ctx,
            type = None):
     """You can use the GetClusterHardwareInfo method to retrieve the hardware status and information for all Fibre Channel nodes, iSCSI nodes and drives in the cluster. This generally includes manufacturers, vendors, versions, and other associated hardware identification information."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    GetClusterHardwareInfoResult = ctx.element.get_cluster_hardware_info(type=type)
-    cli_utils.print_result(GetClusterHardwareInfoResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""type = """+str(type)+"""";"""+"")
+    try:
+        GetClusterHardwareInfoResult = ctx.element.get_cluster_hardware_info(type=type)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(GetClusterHardwareInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -82,10 +113,20 @@ def GetClusterInfo(ctx,
 def GetConfig(ctx):
     """GetHardwareConfig enables you to display the hardware configuration information for a node. NOTE: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    GetHardwareConfigResult = ctx.element.get_hardware_config()
-    cli_utils.print_result(GetHardwareConfigResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("")
+    try:
+        GetHardwareConfigResult = ctx.element.get_hardware_config()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(GetHardwareConfigResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

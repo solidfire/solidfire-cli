@@ -18,6 +18,7 @@ import simplejson
 from solidfire.models import *
 from uuid import UUID
 from element import exceptions
+from solidfire import common
 
 
 @click.group()
@@ -56,12 +57,22 @@ def Ping(ctx,
     """The TestPing API method is used to validate the connection to all nodes in the cluster on both 1G and 10G interfaces using ICMP packets. The test uses the appropriate MTU sizes for each packet based on the MTU settings in the network configuration."""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    TestPingResult = ctx.element.test_ping(attempts=attempts, hosts=hosts, total_timeout_sec=total_timeout_sec, packet_size=packet_size, ping_timeout_msec=ping_timeout_msec)
-    cli_utils.print_result(TestPingResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""attempts = """+str(attempts)+"""";"""+"""hosts = """+str(hosts)+"""";"""+"""total_timeout_sec = """+str(total_timeout_sec)+"""";"""+"""packet_size = """+str(packet_size)+"""";"""+"""ping_timeout_msec = """+str(ping_timeout_msec)+"""";"""+"")
+    try:
+        TestPingResult = ctx.element.test_ping(attempts=attempts, hosts=hosts, total_timeout_sec=total_timeout_sec, packet_size=packet_size, ping_timeout_msec=ping_timeout_msec)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(TestPingResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -71,12 +82,22 @@ def List(ctx):
     """The ListTests API method is used to return the tests that are available to run on a node."""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    ListTestsResult = ctx.element.list_tests()
-    cli_utils.print_result(ListTestsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("")
+    try:
+        ListTestsResult = ctx.element.list_tests()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ListTestsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -91,12 +112,22 @@ def ConnectMvip(ctx,
     """The TestConnectMvip API method is used to test the management connection to the cluster. The test pings the MVIP and executes a simple API method to verify connectivity."""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    TestConnectMvipResult = ctx.element.test_connect_mvip(mvip=mvip)
-    cli_utils.print_result(TestConnectMvipResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""mvip = """+str(mvip)+"""";"""+"")
+    try:
+        TestConnectMvipResult = ctx.element.test_connect_mvip(mvip=mvip)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(TestConnectMvipResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -106,12 +137,22 @@ def ListUtilities(ctx):
     """The ListUtilities API method is used to return the tests that are available to run on a node."""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    ListUtilitiesResult = ctx.element.list_utilities()
-    cli_utils.print_result(ListUtilitiesResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("")
+    try:
+        ListUtilitiesResult = ctx.element.list_utilities()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ListUtilitiesResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -126,12 +167,22 @@ def ConnectEnsemble(ctx,
     """The TestConnectEnsemble API method is used to verify connectivity with a sepcified database ensemble. By default it uses the ensemble for the cluster the node is associated with. Alternatively you can provide a different ensemble to test connectivity with."""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    TestConnectEnsembleResult = ctx.element.test_connect_ensemble(ensemble=ensemble)
-    cli_utils.print_result(TestConnectEnsembleResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""ensemble = """+str(ensemble)+"""";"""+"")
+    try:
+        TestConnectEnsembleResult = ctx.element.test_connect_ensemble(ensemble=ensemble)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(TestConnectEnsembleResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -146,10 +197,20 @@ def ConnectSvip(ctx,
     """The TestConnectSvip API method is used to test the storage connection to the cluster. The test pings the SVIP using ICMP packets and when successful connects as an iSCSI initiator."""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    TestConnectSvipResult = ctx.element.test_connect_svip(svip=svip)
-    cli_utils.print_result(TestConnectSvipResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""svip = """+str(svip)+"""";"""+"")
+    try:
+        TestConnectSvipResult = ctx.element.test_connect_svip(svip=svip)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(TestConnectSvipResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

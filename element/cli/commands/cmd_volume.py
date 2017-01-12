@@ -18,6 +18,7 @@ import simplejson
 from solidfire.models import *
 from uuid import UUID
 from element import exceptions
+from solidfire import common
 
 
 @click.group()
@@ -31,12 +32,22 @@ def ListStatsBy(ctx):
     """ListVolumeStatsByVolume returns high-level activity measurements for every volume, by volume."""
     """Values are cumulative from the creation of the volume."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    ListVolumeStatsByVolumeResult = ctx.element.list_volume_stats_by_volume()
-    cli_utils.print_result(ListVolumeStatsByVolumeResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("")
+    try:
+        ListVolumeStatsByVolumeResult = ctx.element.list_volume_stats_by_volume()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ListVolumeStatsByVolumeResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -51,12 +62,22 @@ def GetEfficiency(ctx,
     """GetVolumeEfficiency is used to retrieve information about a volume."""
     """Only the volume given as a parameter in this API method is used to compute the capacity."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    GetVolumeEfficiencyResult = ctx.element.get_volume_efficiency(volume_id=volume_id)
-    cli_utils.print_result(GetVolumeEfficiencyResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""volume_id = """+str(volume_id)+"""";"""+"")
+    try:
+        GetVolumeEfficiencyResult = ctx.element.get_volume_efficiency(volume_id=volume_id)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(GetVolumeEfficiencyResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -70,12 +91,22 @@ def CancelClone(ctx,
            clone_id):
     """Cancels a currently running clone operation. This method does not return anything."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    CancelCloneResult = ctx.element.cancel_clone(clone_id=clone_id)
-    cli_utils.print_result(CancelCloneResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""clone_id = """+str(clone_id)+"""";"""+"")
+    try:
+        CancelCloneResult = ctx.element.cancel_clone(clone_id=clone_id)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(CancelCloneResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -99,12 +130,22 @@ def ListForAccount(ctx,
            limit = None):
     """ListVolumesForAccount returns the list of active AND (pending) deleted volumes for an account."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    ListVolumesForAccountResult = ctx.element.list_volumes_for_account(account_id=account_id, start_volume_id=start_volume_id, limit=limit)
-    cli_utils.print_result(ListVolumesForAccountResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""account_id = """+str(account_id)+"""";"""+"""start_volume_id = """+str(start_volume_id)+"""";"""+"""limit = """+str(limit)+"""";"""+"")
+    try:
+        ListVolumesForAccountResult = ctx.element.list_volumes_for_account(account_id=account_id, start_volume_id=start_volume_id, limit=limit)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ListVolumesForAccountResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -124,12 +165,22 @@ def ListActive(ctx,
     """ListActiveVolumes is used to return the list of active volumes currently in the system."""
     """The list of volumes is returned sorted in VolumeID order and can be returned in multiple parts (pages)."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    ListActiveVolumesResult = ctx.element.list_active_volumes(start_volume_id=start_volume_id, limit=limit)
-    cli_utils.print_result(ListActiveVolumesResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""start_volume_id = """+str(start_volume_id)+"""";"""+"""limit = """+str(limit)+"""";"""+"")
+    try:
+        ListActiveVolumesResult = ctx.element.list_active_volumes(start_volume_id=start_volume_id, limit=limit)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ListActiveVolumesResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -143,12 +194,22 @@ def CancelGroupClone(ctx,
            group_clone_id):
     """CancelGroupClone enables you to stop an ongoing CloneMultipleVolumes process for a group of clones. When you cancel a group clone operation, the system completes and removes the operation's associated asyncHandle. This method does not return anything."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    CancelGroupCloneResult = ctx.element.cancel_group_clone(group_clone_id=group_clone_id)
-    cli_utils.print_result(CancelGroupCloneResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""group_clone_id = """+str(group_clone_id)+"""";"""+"")
+    try:
+        CancelGroupCloneResult = ctx.element.cancel_group_clone(group_clone_id=group_clone_id)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(CancelGroupCloneResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -164,12 +225,22 @@ def PurgeDeleted(ctx,
     """A volume must be deleted using DeleteVolume before it can be purged."""
     """Volumes are purged automatically after a period of time, so usage of this method is not typically required."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    PurgeDeletedVolumeResult = ctx.element.purge_deleted_volume(volume_id=volume_id)
-    cli_utils.print_result(PurgeDeletedVolumeResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""volume_id = """+str(volume_id)+"""";"""+"")
+    try:
+        PurgeDeletedVolumeResult = ctx.element.purge_deleted_volume(volume_id=volume_id)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(PurgeDeletedVolumeResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -178,12 +249,22 @@ def PurgeDeleted(ctx,
 def ListBulkJobs(ctx):
     """ListBulkVolumeJobs is used to return information about each bulk volume read or write operation that is occurring in the system."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    ListBulkVolumeJobsResult = ctx.element.list_bulk_volume_jobs()
-    cli_utils.print_result(ListBulkVolumeJobsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("")
+    try:
+        ListBulkVolumeJobsResult = ctx.element.list_bulk_volume_jobs()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ListBulkVolumeJobsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -236,15 +317,25 @@ def Clone(ctx,
     """"""
     """Note: Cloned volumes do not inherit volume access group memberships from the source volume."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
     if(attributes is not None):
         kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    CloneVolumeResult = ctx.element.clone_volume(volume_id=volume_id, name=name, new_account_id=new_account_id, new_size=new_size, access=access, snapshot_id=snapshot_id, attributes=attributes)
-    cli_utils.print_result(CloneVolumeResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""volume_id = """+str(volume_id)+"""";"""+"""name = """+str(name)+"""";"""+"""new_account_id = """+str(new_account_id)+"""";"""+"""new_size = """+str(new_size)+"""";"""+"""access = """+str(access)+"""";"""+"""snapshot_id = """+str(snapshot_id)+"""";"""+"""attributes = """+str(attributes)+"""";"""+"")
+    try:
+        CloneVolumeResult = ctx.element.clone_volume(volume_id=volume_id, name=name, new_account_id=new_account_id, new_size=new_size, access=access, snapshot_id=snapshot_id, attributes=attributes)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(CloneVolumeResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -306,7 +397,8 @@ def Modify(ctx,
     """"""
     """Note: If you change access status to locked or target all existing iSCSI connections are terminated."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
@@ -323,8 +415,17 @@ def Modify(ctx,
         kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    ModifyVolumeResult = ctx.element.modify_volume(volume_id=volume_id, account_id=account_id, access=access, qos=qos, total_size=total_size, attributes=attributes)
-    cli_utils.print_result(ModifyVolumeResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""volume_id = """+str(volume_id)+"""";"""+"""account_id = """+str(account_id)+"""";"""+"""access = """+str(access)+"""";"""+"""qos = """+str(qos)+"""";"""+"""total_size = """+str(total_size)+"""";"""+"""attributes = """+str(attributes)+"""";"""+"")
+    try:
+        ModifyVolumeResult = ctx.element.modify_volume(volume_id=volume_id, account_id=account_id, access=access, qos=qos, total_size=total_size, attributes=attributes)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ModifyVolumeResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -381,7 +482,8 @@ def CloneMultiple(ctx,
     """"""
     """Note: Cloning multiple volumes is allowed if cluster fullness is at stage 2 or 3. Clones are not created when cluster fullness is at stage 4 or 5."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
@@ -399,8 +501,17 @@ def CloneMultiple(ctx,
 
     volumes = parser.parse_array(volumes)
 
-    CloneMultipleVolumesResult = ctx.element.clone_multiple_volumes(volumes=volumes, access=access, group_snapshot_id=group_snapshot_id, new_account_id=new_account_id)
-    cli_utils.print_result(CloneMultipleVolumesResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""volumes = """+str(volumes)+"""";"""+"""access = """+str(access)+"""";"""+"""group_snapshot_id = """+str(group_snapshot_id)+"""";"""+"""new_account_id = """+str(new_account_id)+"""";"""+"")
+    try:
+        CloneMultipleVolumesResult = ctx.element.clone_multiple_volumes(volumes=volumes, access=access, group_snapshot_id=group_snapshot_id, new_account_id=new_account_id)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(CloneMultipleVolumesResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -438,15 +549,25 @@ def StartBulkWrite(ctx,
     """The external data is accessed by a web server running on a SolidFire node."""
     """Communications and server interaction information for external data access is passed by a script running on the SolidFire storage system."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
     if(attributes is not None):
         kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    StartBulkVolumeWriteResult = ctx.element.start_bulk_volume_write(volume_id=volume_id, format=format, script=script, script_parameters=script_parameters, attributes=attributes)
-    cli_utils.print_result(StartBulkVolumeWriteResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""volume_id = """+str(volume_id)+"""";"""+"""format = """+str(format)+"""";"""+"""script = """+str(script)+"""";"""+"""script_parameters = """+str(script_parameters)+"""";"""+"""attributes = """+str(attributes)+"""";"""+"")
+    try:
+        StartBulkVolumeWriteResult = ctx.element.start_bulk_volume_write(volume_id=volume_id, format=format, script=script, script_parameters=script_parameters, attributes=attributes)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(StartBulkVolumeWriteResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -497,15 +618,25 @@ def StartBulkRead(ctx,
     """Snapshots can be created if cluster fullness is at stage 2 or 3."""
     """Snapshots are not created when cluster fullness is at stage 4 or 5."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
     if(attributes is not None):
         kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    StartBulkVolumeReadResult = ctx.element.start_bulk_volume_read(volume_id=volume_id, format=format, snapshot_id=snapshot_id, script=script, script_parameters=script_parameters, attributes=attributes)
-    cli_utils.print_result(StartBulkVolumeReadResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""volume_id = """+str(volume_id)+"""";"""+"""format = """+str(format)+"""";"""+"""snapshot_id = """+str(snapshot_id)+"""";"""+"""script = """+str(script)+"""";"""+"""script_parameters = """+str(script_parameters)+"""";"""+"""attributes = """+str(attributes)+"""";"""+"")
+    try:
+        StartBulkVolumeReadResult = ctx.element.start_bulk_volume_read(volume_id=volume_id, format=format, snapshot_id=snapshot_id, script=script, script_parameters=script_parameters, attributes=attributes)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(StartBulkVolumeReadResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -529,12 +660,22 @@ def Copy(ctx,
            snapshot_id = None):
     """Copies one volume to another."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    CopyVolumeResult = ctx.element.copy_volume(volume_id=volume_id, dst_volume_id=dst_volume_id, snapshot_id=snapshot_id)
-    cli_utils.print_result(CopyVolumeResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""volume_id = """+str(volume_id)+"""";"""+"""dst_volume_id = """+str(dst_volume_id)+"""";"""+"""snapshot_id = """+str(snapshot_id)+"""";"""+"")
+    try:
+        CopyVolumeResult = ctx.element.copy_volume(volume_id=volume_id, dst_volume_id=dst_volume_id, snapshot_id=snapshot_id)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(CopyVolumeResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -589,7 +730,8 @@ def Create(ctx,
     """CreateVolume is used to create a new (empty) volume on the cluster."""
     """When the volume is created successfully it is available for connection via iSCSI."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
@@ -606,8 +748,17 @@ def Create(ctx,
         kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    CreateVolumeResult = ctx.element.create_volume(name=name, account_id=account_id, total_size=total_size, enable512e=enable512e, qos=qos, attributes=attributes)
-    cli_utils.print_result(CreateVolumeResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""name = """+str(name)+"""";"""+"""account_id = """+str(account_id)+"""";"""+"""total_size = """+str(total_size)+"""";"""+"""enable512e = """+str(enable512e)+"""";"""+"""qos = """+str(qos)+"""";"""+"""attributes = """+str(attributes)+"""";"""+"")
+    try:
+        CreateVolumeResult = ctx.element.create_volume(name=name, account_id=account_id, total_size=total_size, enable512e=enable512e, qos=qos, attributes=attributes)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(CreateVolumeResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -647,7 +798,8 @@ def List(ctx,
     """The ListVolumes method is used to return a list of volumes that are in a cluster."""
     """You can specify the volumes you want to return in the list by using the available parameters."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
@@ -655,8 +807,17 @@ def List(ctx,
 
     volume_ids = parser.parse_array(volume_ids)
 
-    ListVolumesResult = ctx.element.list_volumes(start_volume_id=start_volume_id, limit=limit, volume_status=volume_status, accounts=accounts, is_paired=is_paired, volume_ids=volume_ids)
-    cli_utils.print_result(ListVolumesResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""start_volume_id = """+str(start_volume_id)+"""";"""+"""limit = """+str(limit)+"""";"""+"""volume_status = """+str(volume_status)+"""";"""+"""accounts = """+str(accounts)+"""";"""+"""is_paired = """+str(is_paired)+"""";"""+"""volume_ids = """+str(volume_ids)+"""";"""+"")
+    try:
+        ListVolumesResult = ctx.element.list_volumes(start_volume_id=start_volume_id, limit=limit, volume_status=volume_status, accounts=accounts, is_paired=is_paired, volume_ids=volume_ids)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ListVolumesResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -690,15 +851,25 @@ def UpdateBulkStatus(ctx,
            attributes = None):
     """You can use UpdateBulkVolumeStatus in a script to return to the SolidFire system the status of a bulk volume job that you have started with the &quot;StartBulkVolumeRead&quot; or &quot;StartBulkVolumeWrite&quot; methods."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
     if(attributes is not None):
         kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    UpdateBulkVolumeStatusResult = ctx.element.update_bulk_volume_status(key=key, status=status, percent_complete=percent_complete, message=message, attributes=attributes)
-    cli_utils.print_result(UpdateBulkVolumeStatusResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""key = """+str(key)+"""";"""+"""status = """+str(status)+"""";"""+"""percent_complete = """+str(percent_complete)+"""";"""+"""message = """+str(message)+"""";"""+"""attributes = """+str(attributes)+"""";"""+"")
+    try:
+        UpdateBulkVolumeStatusResult = ctx.element.update_bulk_volume_status(key=key, status=status, percent_complete=percent_complete, message=message, attributes=attributes)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(UpdateBulkVolumeStatusResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -708,12 +879,22 @@ def ListStatsByAccount(ctx):
     """ListVolumeStatsByAccount returns high-level activity measurements for every account."""
     """Values are summed from all the volumes owned by the account."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    ListVolumeStatsByAccountResult = ctx.element.list_volume_stats_by_account()
-    cli_utils.print_result(ListVolumeStatsByAccountResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("")
+    try:
+        ListVolumeStatsByAccountResult = ctx.element.list_volume_stats_by_account()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ListVolumeStatsByAccountResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -728,12 +909,22 @@ def RestoreDeleted(ctx,
     """RestoreDeletedVolume marks a deleted volume as active again."""
     """This action makes the volume immediately available for iSCSI connection."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    RestoreDeletedVolumeResult = ctx.element.restore_deleted_volume(volume_id=volume_id)
-    cli_utils.print_result(RestoreDeletedVolumeResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""volume_id = """+str(volume_id)+"""";"""+"")
+    try:
+        RestoreDeletedVolumeResult = ctx.element.restore_deleted_volume(volume_id=volume_id)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(RestoreDeletedVolumeResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -742,12 +933,22 @@ def RestoreDeleted(ctx,
 def ListDeleted(ctx):
     """ListDeletedVolumes is used to return the entire list of volumes that have been marked for deletion and is purged from the system."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    ListDeletedVolumesResult = ctx.element.list_deleted_volumes()
-    cli_utils.print_result(ListDeletedVolumesResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("")
+    try:
+        ListDeletedVolumesResult = ctx.element.list_deleted_volumes()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ListDeletedVolumesResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -769,12 +970,22 @@ def GetAsyncResult(ctx,
     """The result for a completed asynchronous method call can only be retrieved once."""
     """Once the final result has been returned, later attempts returns an error."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    GetAsyncResultResult = ctx.element.get_async_result(async_handle=async_handle)
-    cli_utils.print_result(GetAsyncResultResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""async_handle = """+str(async_handle)+"""";"""+"")
+    try:
+        GetAsyncResultResult = ctx.element.get_async_result(async_handle=async_handle)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(GetAsyncResultResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -802,12 +1013,22 @@ def Delete(ctx,
     """If the deleted volume gets purged from the system, the volume it was paired with enters into a StoppedMisconfigured state and the volume pairing status is removed."""
     """The purged volume becomes permanently unavailable."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    DeleteVolumeResult = ctx.element.delete_volume(volume_id=volume_id)
-    cli_utils.print_result(DeleteVolumeResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""volume_id = """+str(volume_id)+"""";"""+"")
+    try:
+        DeleteVolumeResult = ctx.element.delete_volume(volume_id=volume_id)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(DeleteVolumeResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -821,14 +1042,24 @@ def ListAsyncResults(ctx,
            async_result_types = None):
     """You can use ListAsyncResults to list the results of all currently running and completed asynchronous methods on the system. Querying asynchronous results with ListAsyncResults does not cause completed asyncHandles to expire; you can use GetAsyncResult to query any of the asyncHandles returned by ListAsyncResults."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
     async_result_types = parser.parse_array(async_result_types)
 
-    ListAsyncResultsResult = ctx.element.list_async_results(async_result_types=async_result_types)
-    cli_utils.print_result(ListAsyncResultsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""async_result_types = """+str(async_result_types)+"""";"""+"")
+    try:
+        ListAsyncResultsResult = ctx.element.list_async_results(async_result_types=async_result_types)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ListAsyncResultsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -842,14 +1073,24 @@ def ListStatsByAccessGroup(ctx,
            volume_access_groups = None):
     """ListVolumeStatsByVolumeAccessGroup is used to get total activity measurements for all of the volumes that are a member of the specified volume access group(s)."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
     volume_access_groups = parser.parse_array(volume_access_groups)
 
-    ListVolumeStatsByVolumeAccessGroupResult = ctx.element.list_volume_stats_by_volume_access_group(volume_access_groups=volume_access_groups)
-    cli_utils.print_result(ListVolumeStatsByVolumeAccessGroupResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""volume_access_groups = """+str(volume_access_groups)+"""";"""+"")
+    try:
+        ListVolumeStatsByVolumeAccessGroupResult = ctx.element.list_volume_stats_by_volume_access_group(volume_access_groups=volume_access_groups)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ListVolumeStatsByVolumeAccessGroupResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -873,12 +1114,22 @@ def SetDefaultQoS(ctx,
            burst_iops = None):
     """SetDefaultQoS enables you to configure the default Quality of Service (QoS) values (measured in inputs and outputs per second, or IOPS) for all volumes not yet created."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    SetDefaultQoSResult = ctx.element.set_default_qos(min_iops=min_iops, max_iops=max_iops, burst_iops=burst_iops)
-    cli_utils.print_result(SetDefaultQoSResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""min_iops = """+str(min_iops)+"""";"""+"""max_iops = """+str(max_iops)+"""";"""+"""burst_iops = """+str(burst_iops)+"""";"""+"")
+    try:
+        SetDefaultQoSResult = ctx.element.set_default_qos(min_iops=min_iops, max_iops=max_iops, burst_iops=burst_iops)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(SetDefaultQoSResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -887,12 +1138,22 @@ def SetDefaultQoS(ctx,
 def GetDefaultQoS(ctx):
     """GetDefaultQoS is used to retrieve the default QoS values that are set for a volume if QoS is not supplied."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    VolumeQOS = ctx.element.get_default_qos()
-    cli_utils.print_result(VolumeQOS, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("")
+    try:
+        VolumeQOS = ctx.element.get_default_qos()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(VolumeQOS, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -907,12 +1168,22 @@ def GetStats(ctx,
     """GetVolumeStats is used to retrieve high-level activity measurements for a single volume."""
     """Values are cumulative from the creation of the volume."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    GetVolumeStatsResult = ctx.element.get_volume_stats(volume_id=volume_id)
-    cli_utils.print_result(GetVolumeStatsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""volume_id = """+str(volume_id)+"""";"""+"")
+    try:
+        GetVolumeStatsResult = ctx.element.get_volume_stats(volume_id=volume_id)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(GetVolumeStatsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -921,10 +1192,20 @@ def GetStats(ctx,
 def GetCount(ctx):
     """GetVolumeCount enables you to retrieve the number of volumes currently in the system."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    GetVolumeCountResult = ctx.element.get_volume_count()
-    cli_utils.print_result(GetVolumeCountResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("")
+    try:
+        GetVolumeCountResult = ctx.element.get_volume_count()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(GetVolumeCountResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

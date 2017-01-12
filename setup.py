@@ -39,7 +39,6 @@ setup(
 		'setuptools',
         'simplejson',
         'jsonpickle >= 0.9.3',
-        'click_log>=0.1.8',
     ],
     tests_require=[
         'mock',

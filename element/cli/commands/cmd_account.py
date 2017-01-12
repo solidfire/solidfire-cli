@@ -18,6 +18,7 @@ import simplejson
 from solidfire.models import *
 from uuid import UUID
 from element import exceptions
+from solidfire import common
 
 
 @click.group()
@@ -40,12 +41,22 @@ def List(ctx,
            limit = None):
     """Returns the entire list of accounts, with optional paging support."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    ListAccountsResult = ctx.element.list_accounts(start_account_id=start_account_id, limit=limit)
-    cli_utils.print_result(ListAccountsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""start_account_id = """+str(start_account_id)+"""";"""+"""limit = """+str(limit)+"""";"""+"")
+    try:
+        ListAccountsResult = ctx.element.list_accounts(start_account_id=start_account_id, limit=limit)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ListAccountsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -59,12 +70,22 @@ def GetEfficiency(ctx,
            account_id):
     """GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    GetEfficiencyResult = ctx.element.get_account_efficiency(account_id=account_id)
-    cli_utils.print_result(GetEfficiencyResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""account_id = """+str(account_id)+"""";"""+"")
+    try:
+        GetEfficiencyResult = ctx.element.get_account_efficiency(account_id=account_id)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(GetEfficiencyResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -106,15 +127,25 @@ def Modify(ctx,
     """When changing CHAP settings, any existing connections continue to be active,"""
     """and the new CHAP values are only used on subsequent connection or reconnection."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
     if(attributes is not None):
         kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    ModifyAccountResult = ctx.element.modify_account(account_id=account_id, username=username, status=status, initiator_secret=initiator_secret, target_secret=target_secret, attributes=attributes)
-    cli_utils.print_result(ModifyAccountResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""account_id = """+str(account_id)+"""";"""+"""username = """+str(username)+"""";"""+"""status = """+str(status)+"""";"""+"""initiator_secret = """+str(initiator_secret)+"""";"""+"""target_secret = """+str(target_secret)+"""";"""+"""attributes = """+str(attributes)+"""";"""+"")
+    try:
+        ModifyAccountResult = ctx.element.modify_account(account_id=account_id, username=username, status=status, initiator_secret=initiator_secret, target_secret=target_secret, attributes=attributes)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ModifyAccountResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -130,12 +161,22 @@ def Remove(ctx,
     """All Volumes must be deleted and purged on the account before it can be removed."""
     """If volumes on the account are still pending deletion, RemoveAccount cannot be used until DeleteVolume to delete and purge the volumes."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    RemoveAccountResult = ctx.element.remove_account(account_id=account_id)
-    cli_utils.print_result(RemoveAccountResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""account_id = """+str(account_id)+"""";"""+"")
+    try:
+        RemoveAccountResult = ctx.element.remove_account(account_id=account_id)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(RemoveAccountResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -149,12 +190,22 @@ def GetByName(ctx,
            username):
     """Returns details about an account, given its Username."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    GetAccountResult = ctx.element.get_account_by_name(username=username)
-    cli_utils.print_result(GetAccountResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""username = """+str(username)+"""";"""+"")
+    try:
+        GetAccountResult = ctx.element.get_account_by_name(username=username)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(GetAccountResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -185,15 +236,25 @@ def Add(ctx,
     """New volumes can be created under the new account."""
     """The CHAP settings specified for the account applies to all volumes owned by the account."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
     if(attributes is not None):
         kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    AddAccountResult = ctx.element.add_account(username=username, initiator_secret=initiator_secret, target_secret=target_secret, attributes=attributes)
-    cli_utils.print_result(AddAccountResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""username = """+str(username)+"""";"""+"""initiator_secret = """+str(initiator_secret)+"""";"""+"""target_secret = """+str(target_secret)+"""";"""+"""attributes = """+str(attributes)+"""";"""+"")
+    try:
+        AddAccountResult = ctx.element.add_account(username=username, initiator_secret=initiator_secret, target_secret=target_secret, attributes=attributes)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(AddAccountResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -207,10 +268,20 @@ def GetByID(ctx,
            account_id):
     """Returns details about an account, given its AccountID."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    GetAccountResult = ctx.element.get_account_by_id(account_id=account_id)
-    cli_utils.print_result(GetAccountResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""account_id = """+str(account_id)+"""";"""+"")
+    try:
+        GetAccountResult = ctx.element.get_account_by_id(account_id=account_id)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(GetAccountResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

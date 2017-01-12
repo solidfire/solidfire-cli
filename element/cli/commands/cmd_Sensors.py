@@ -18,6 +18,7 @@ import simplejson
 from solidfire.models import *
 from uuid import UUID
 from element import exceptions
+from solidfire import common
 
 
 @click.group()
@@ -35,12 +36,22 @@ def GetIpmiInfo(ctx,
            force):
     """GetIpmiInfo allows you to display a detailed reporting of sensors (objects) for node fans, intake and exhaust temperatures, and power supplies  that are monitored by . """
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    GetIpmiInfoResult = ctx.element.get_ipmi_info(force=force)
-    cli_utils.print_result(GetIpmiInfoResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""force = """+str(force)+"""";"""+"")
+    try:
+        GetIpmiInfoResult = ctx.element.get_ipmi_info(force=force)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(GetIpmiInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -59,10 +70,20 @@ def GetIpmiConfig(ctx,
            chassis_type = None):
     """GetIpmiConfig enables you to retrieve hardware sensor information from sensors that are in your node."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    GetIpmiConfigResult = ctx.element.get_ipmi_config(force=force, chassis_type=chassis_type)
-    cli_utils.print_result(GetIpmiConfigResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""chassis_type = """+str(chassis_type)+"""";"""+"""force = """+str(force)+"""";"""+"")
+    try:
+        GetIpmiConfigResult = ctx.element.get_ipmi_config(force=force, chassis_type=chassis_type)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(GetIpmiConfigResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

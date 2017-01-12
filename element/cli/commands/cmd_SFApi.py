@@ -18,6 +18,7 @@ import simplejson
 from solidfire.models import *
 from uuid import UUID
 from element import exceptions
+from solidfire import common
 
 
 @click.group()
@@ -41,13 +42,23 @@ def Invoke(ctx,
     """This will invoke any API method supported by the SolidFire API for the version and port the connection is using."""
     """Returns a nested hashtable of key/value pairs that contain the result of the invoked method."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
     if(parameters is not None):
         kwargsDict = simplejson.loads(parameters)
         parameters = dict(**kwargsDict)
 
-    str = ctx.element.invoke_sfapi(method=method, parameters=parameters)
-    cli_utils.print_result(str, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""method = """+str(method)+"""";"""+"""parameters = """+str(parameters)+"""";"""+"")
+    try:
+        str = ctx.element.invoke_sfapi(method=method, parameters=parameters)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(str, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

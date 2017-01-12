@@ -18,6 +18,7 @@ import simplejson
 from solidfire.models import *
 from uuid import UUID
 from element import exceptions
+from solidfire import common
 
 
 @click.group()
@@ -35,12 +36,22 @@ def ListGroup(ctx,
            volume_id = None):
     """ListGroupSnapshots is used to return information about all group snapshots that have been created."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    ListGroupSnapshotsResult = ctx.element.list_group_snapshots(volume_id=volume_id)
-    cli_utils.print_result(ListGroupSnapshotsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""volume_id = """+str(volume_id)+"""";"""+"")
+    try:
+        ListGroupSnapshotsResult = ctx.element.list_group_snapshots(volume_id=volume_id)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ListGroupSnapshotsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -64,12 +75,22 @@ def ModifyGroup(ctx,
            enable_remote_replication = None):
     """ModifyGroupSnapshot is used to change the attributes currently assigned to a group snapshot."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    ModifyGroupSnapshotResult = ctx.element.modify_group_snapshot(group_snapshot_id=group_snapshot_id, expiration_time=expiration_time, enable_remote_replication=enable_remote_replication)
-    cli_utils.print_result(ModifyGroupSnapshotResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""group_snapshot_id = """+str(group_snapshot_id)+"""";"""+"""expiration_time = """+str(expiration_time)+"""";"""+"""enable_remote_replication = """+str(enable_remote_replication)+"""";"""+"")
+    try:
+        ModifyGroupSnapshotResult = ctx.element.modify_group_snapshot(group_snapshot_id=group_snapshot_id, expiration_time=expiration_time, enable_remote_replication=enable_remote_replication)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ModifyGroupSnapshotResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -94,12 +115,22 @@ def Modify(ctx,
     """ModifySnapshot is used to change the attributes currently assigned to a snapshot."""
     """Use this API method to enable the snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    ModifySnapshotResult = ctx.element.modify_snapshot(snapshot_id=snapshot_id, expiration_time=expiration_time, enable_remote_replication=enable_remote_replication)
-    cli_utils.print_result(ModifySnapshotResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""snapshot_id = """+str(snapshot_id)+"""";"""+"""expiration_time = """+str(expiration_time)+"""";"""+"""enable_remote_replication = """+str(enable_remote_replication)+"""";"""+"")
+    try:
+        ModifySnapshotResult = ctx.element.modify_snapshot(snapshot_id=snapshot_id, expiration_time=expiration_time, enable_remote_replication=enable_remote_replication)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ModifySnapshotResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -142,15 +173,25 @@ def Create(ctx,
     """Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3."""
     """Snapshots are not created when cluster fullness is at stage 4 or 5."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
     if(attributes is not None):
         kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    CreateSnapshotResult = ctx.element.create_snapshot(volume_id=volume_id, snapshot_id=snapshot_id, name=name, enable_remote_replication=enable_remote_replication, retention=retention, attributes=attributes)
-    cli_utils.print_result(CreateSnapshotResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""volume_id = """+str(volume_id)+"""";"""+"""snapshot_id = """+str(snapshot_id)+"""";"""+"""name = """+str(name)+"""";"""+"""enable_remote_replication = """+str(enable_remote_replication)+"""";"""+"""retention = """+str(retention)+"""";"""+"""attributes = """+str(attributes)+"""";"""+"")
+    try:
+        CreateSnapshotResult = ctx.element.create_snapshot(volume_id=volume_id, snapshot_id=snapshot_id, name=name, enable_remote_replication=enable_remote_replication, retention=retention, attributes=attributes)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(CreateSnapshotResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -164,12 +205,22 @@ def List(ctx,
            volume_id = None):
     """ListSnapshots is used to return the attributes of each snapshot taken on the volume."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    ListSnapshotsResult = ctx.element.list_snapshots(volume_id=volume_id)
-    cli_utils.print_result(ListSnapshotsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""volume_id = """+str(volume_id)+"""";"""+"")
+    try:
+        ListSnapshotsResult = ctx.element.list_snapshots(volume_id=volume_id)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ListSnapshotsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -187,15 +238,25 @@ def CreateSchedule(ctx,
     """"""
     """Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
     if(schedule is not None):
         kwargsDict = simplejson.loads(schedule)
         schedule = Schedule(**kwargsDict)
 
-    CreateScheduleResult = ctx.element.create_schedule(schedule=schedule)
-    cli_utils.print_result(CreateScheduleResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""schedule = """+str(schedule)+"""";"""+"")
+    try:
+        CreateScheduleResult = ctx.element.create_schedule(schedule=schedule)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(CreateScheduleResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -216,12 +277,22 @@ def DeleteGroup(ctx,
     """The saveMembers parameter can be used to preserve all the snapshots that"""
     """were made for the volumes in the group but the group association will be removed."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    DeleteGroupSnapshotResult = ctx.element.delete_group_snapshot(group_snapshot_id=group_snapshot_id, save_members=save_members)
-    cli_utils.print_result(DeleteGroupSnapshotResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""group_snapshot_id = """+str(group_snapshot_id)+"""";"""+"""save_members = """+str(save_members)+"""";"""+"")
+    try:
+        DeleteGroupSnapshotResult = ctx.element.delete_group_snapshot(group_snapshot_id=group_snapshot_id, save_members=save_members)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(DeleteGroupSnapshotResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -235,12 +306,22 @@ def GetSchedule(ctx,
            schedule_id):
     """GetSchedule is used to return information about a scheduled snapshot that has been created. You can see information about a specified schedule if there are many snapshot schedules in the system. You can include more than one schedule with this method by specifying additional scheduleIDs to the parameter."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    GetScheduleResult = ctx.element.get_schedule(schedule_id=schedule_id)
-    cli_utils.print_result(GetScheduleResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""schedule_id = """+str(schedule_id)+"""";"""+"")
+    try:
+        GetScheduleResult = ctx.element.get_schedule(schedule_id=schedule_id)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(GetScheduleResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -272,15 +353,25 @@ def RollbackToGroup(ctx,
     """Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3."""
     """Snapshots are not created when cluster fullness is at stage 4 or 5."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
     if(attributes is not None):
         kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    CreateGroupSnapshotResult = ctx.element.rollback_to_group_snapshot(group_snapshot_id=group_snapshot_id, save_current_state=save_current_state, name=name, attributes=attributes)
-    cli_utils.print_result(CreateGroupSnapshotResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""group_snapshot_id = """+str(group_snapshot_id)+"""";"""+"""save_current_state = """+str(save_current_state)+"""";"""+"""name = """+str(name)+"""";"""+"""attributes = """+str(attributes)+"""";"""+"")
+    try:
+        CreateGroupSnapshotResult = ctx.element.rollback_to_group_snapshot(group_snapshot_id=group_snapshot_id, save_current_state=save_current_state, name=name, attributes=attributes)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(CreateGroupSnapshotResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -319,15 +410,25 @@ def RollbackTo(ctx,
     """Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3."""
     """Snapshots are not created when cluster fullness is at stage 4 or 5."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
     if(attributes is not None):
         kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    CreateSnapshotResult = ctx.element.rollback_to_snapshot(volume_id=volume_id, snapshot_id=snapshot_id, save_current_state=save_current_state, name=name, attributes=attributes)
-    cli_utils.print_result(CreateSnapshotResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""volume_id = """+str(volume_id)+"""";"""+"""snapshot_id = """+str(snapshot_id)+"""";"""+"""save_current_state = """+str(save_current_state)+"""";"""+"""name = """+str(name)+"""";"""+"""attributes = """+str(attributes)+"""";"""+"")
+    try:
+        CreateSnapshotResult = ctx.element.rollback_to_snapshot(volume_id=volume_id, snapshot_id=snapshot_id, save_current_state=save_current_state, name=name, attributes=attributes)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(CreateSnapshotResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -365,7 +466,8 @@ def CreateGroup(ctx,
     """Note: Creating a group snapshot is allowed if cluster fullness is at stage 2 or 3."""
     """Snapshots are not created when cluster fullness is at stage 4 or 5."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
@@ -374,8 +476,17 @@ def CreateGroup(ctx,
         kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    CreateGroupSnapshotResult = ctx.element.create_group_snapshot(volumes=volumes, name=name, enable_remote_replication=enable_remote_replication, retention=retention, attributes=attributes)
-    cli_utils.print_result(CreateGroupSnapshotResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""volumes = """+str(volumes)+"""";"""+"""name = """+str(name)+"""";"""+"""enable_remote_replication = """+str(enable_remote_replication)+"""";"""+"""retention = """+str(retention)+"""";"""+"""attributes = """+str(attributes)+"""";"""+"")
+    try:
+        CreateGroupSnapshotResult = ctx.element.create_group_snapshot(volumes=volumes, name=name, enable_remote_replication=enable_remote_replication, retention=retention, attributes=attributes)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(CreateGroupSnapshotResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -389,15 +500,25 @@ def ModifySchedule(ctx,
            schedule):
     """ModifySchedule is used to change the intervals at which a scheduled snapshot occurs. This allows for adjustment to the snapshot frequency and retention."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
     if(schedule is not None):
         kwargsDict = simplejson.loads(schedule)
         schedule = Schedule(**kwargsDict)
 
-    ModifyScheduleResult = ctx.element.modify_schedule(schedule=schedule)
-    cli_utils.print_result(ModifyScheduleResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""schedule = """+str(schedule)+"""";"""+"")
+    try:
+        ModifyScheduleResult = ctx.element.modify_schedule(schedule=schedule)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ModifyScheduleResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -406,12 +527,22 @@ def ModifySchedule(ctx,
 def ListSchedules(ctx):
     """ListSchedule is used to return information about all scheduled snapshots that have been created."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    ListSchedulesResult = ctx.element.list_schedules()
-    cli_utils.print_result(ListSchedulesResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("")
+    try:
+        ListSchedulesResult = ctx.element.list_schedules()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ListSchedulesResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -428,10 +559,20 @@ def Delete(ctx,
     """You must rollback and make another snapshot &quot;active&quot; before the current snapshot can be deleted."""
     """To rollback a snapshot, use RollbackToSnapshot."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    DeleteSnapshotResult = ctx.element.delete_snapshot(snapshot_id=snapshot_id)
-    cli_utils.print_result(DeleteSnapshotResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""snapshot_id = """+str(snapshot_id)+"""";"""+"")
+    try:
+        DeleteSnapshotResult = ctx.element.delete_snapshot(snapshot_id=snapshot_id)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(DeleteSnapshotResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

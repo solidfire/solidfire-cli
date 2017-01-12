@@ -20,7 +20,7 @@ def kv_string_to_dict(kv_string):
         kvs = item.split('=')
         new_dict[kvs[0]] = kvs[1]
 
-def print_result(objs, as_json=False, depth=None, filter_tree=None):
+def print_result(objs, log, as_json=False, depth=None, filter_tree=None):
     # There are 3 acceptable parameter sets to provide:
     # 1. json=True, depth=None, filter_tree=None
     # 2. json=False, depth=#, filter_tree=None
@@ -28,7 +28,7 @@ def print_result(objs, as_json=False, depth=None, filter_tree=None):
 
     # Error case
     if as_json and (depth is not None or filter_tree is not None):
-        raise SolidFireUsageException("If you choose to print it as json, do not provide a depth or filter. Those are for printing it as a tree.")
+        log.error("If you choose to print it as json, do not provide a depth or filter. Those are for printing it as a tree.")
 
     # If json is true, we print it as json and return:
     if as_json == True:

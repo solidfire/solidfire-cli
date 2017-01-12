@@ -18,6 +18,7 @@ import simplejson
 from solidfire.models import *
 from uuid import UUID
 from element import exceptions
+from solidfire import common
 
 
 @click.group()
@@ -35,12 +36,22 @@ def SetInfo(ctx,
            timeout):
     """SetLoginSessionInfo is used to set the period of time a log in authentication is valid. After the log in period elapses without activity on the system the authentication will expire. New log in credentials will be required for continued access to the cluster once the timeout period has elapsed."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    SetLoginSessionInfoResult = ctx.element.set_login_session_info(timeout=timeout)
-    cli_utils.print_result(SetLoginSessionInfoResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""timeout = """+str(timeout)+"""";"""+"")
+    try:
+        SetLoginSessionInfoResult = ctx.element.set_login_session_info(timeout=timeout)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(SetLoginSessionInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -49,12 +60,22 @@ def SetInfo(ctx,
 def GetRemoteLoggingHosts(ctx):
     """GetRemoteLoggingHosts is used to retrieve the current list of log servers."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    GetRemoteLoggingHostsResult = ctx.element.get_remote_logging_hosts()
-    cli_utils.print_result(GetRemoteLoggingHostsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("")
+    try:
+        GetRemoteLoggingHostsResult = ctx.element.get_remote_logging_hosts()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(GetRemoteLoggingHostsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -73,7 +94,8 @@ def SetRemoteLoggingHosts(ctx,
            logging_server_port):
     """RemoteLoggingHosts is used to configure remote logging from the nodes in the storage cluster to a centralized log server or servers. Remote logging is performed over TCP using the default port 514. This API does not add to the existing logging hosts. Rather, it replaces what currently exists with new values specified by this API method. You can use the GetRemoteLoggingHosts to determine what the current logging hosts are and then use the SetRemoteLoggingHosts to set the desired list of current and new logging hosts."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
@@ -87,8 +109,17 @@ def SetRemoteLoggingHosts(ctx,
 
     remote_hosts = parser.parse_array(remote_hosts)
 
-    SetRemoteLoggingHostsResult = ctx.element.set_remote_logging_hosts(remote_hosts=remote_hosts)
-    cli_utils.print_result(SetRemoteLoggingHostsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""remote_hosts = """+str(remote_hosts)+"""";"""+"")
+    try:
+        SetRemoteLoggingHostsResult = ctx.element.set_remote_logging_hosts(remote_hosts=remote_hosts)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(SetRemoteLoggingHostsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -97,10 +128,20 @@ def SetRemoteLoggingHosts(ctx,
 def GetInfo(ctx):
     """GetLoginSessionInfo is used to return the period of time a log in authentication is valid for both log in shells and the TUI."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    GetLoginSessionInfoResult = ctx.element.get_login_session_info()
-    cli_utils.print_result(GetLoginSessionInfoResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("")
+    try:
+        GetLoginSessionInfoResult = ctx.element.get_login_session_info()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(GetLoginSessionInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

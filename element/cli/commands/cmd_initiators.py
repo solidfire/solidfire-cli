@@ -18,6 +18,7 @@ import simplejson
 from solidfire.models import *
 from uuid import UUID
 from element import exceptions
+from solidfire import common
 
 
 @click.group()
@@ -51,7 +52,8 @@ def Modify(ctx,
     """ModifyInitiators enables you to change the attributes of an existing initiator. You cannot change the name of an existing initiator. If you need to change the name of an initiator, delete the existing initiator with DeleteInitiators and create a new one with CreateInitiators."""
     """If ModifyInitiators fails to change one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible)."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
@@ -67,8 +69,17 @@ def Modify(ctx,
 
     initiators = parser.parse_array(initiators)
 
-    ModifyInitiatorsResult = ctx.element.modify_initiators(initiators=initiators)
-    cli_utils.print_result(ModifyInitiatorsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""initiators = """+str(initiators)+"""";"""+"")
+    try:
+        ModifyInitiatorsResult = ctx.element.modify_initiators(initiators=initiators)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ModifyInitiatorsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -98,7 +109,8 @@ def Create(ctx,
     """CreateInitiators enables you to create multiple new initiator IQNs or World Wide Port Names (WWPNs) and optionally assign them aliases and attributes. When you use CreateInitiators to create new initiators, you can also add them to volume access groups."""
     """If CreateInitiators fails to create one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible)."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
@@ -114,8 +126,17 @@ def Create(ctx,
 
     initiators = parser.parse_array(initiators)
 
-    CreateInitiatorsResult = ctx.element.create_initiators(initiators=initiators)
-    cli_utils.print_result(CreateInitiatorsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""initiators = """+str(initiators)+"""";"""+"")
+    try:
+        CreateInitiatorsResult = ctx.element.create_initiators(initiators=initiators)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(CreateInitiatorsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -139,14 +160,24 @@ def List(ctx,
            initiators = None):
     """ListInitiators enables you to list initiator IQNs or World Wide Port Names (WWPNs)."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
     initiators = parser.parse_array(initiators)
 
-    ListInitiatorsResult = ctx.element.list_initiators(start_initiator_id=start_initiator_id, limit=limit, initiators=initiators)
-    cli_utils.print_result(ListInitiatorsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""start_initiator_id = """+str(start_initiator_id)+"""";"""+"""limit = """+str(limit)+"""";"""+"""initiators = """+str(initiators)+"""";"""+"")
+    try:
+        ListInitiatorsResult = ctx.element.list_initiators(start_initiator_id=start_initiator_id, limit=limit, initiators=initiators)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ListInitiatorsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -161,12 +192,22 @@ def Delete(ctx,
     """DeleteInitiators enables you to delete one or more initiators from the system (and from any associated volumes or volume access groups)."""
     """If DeleteInitiators fails to delete one of the initiators provided in the parameter, the system returns an error and does not delete any initiators (no partial completion is possible)."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
     initiators = parser.parse_array(initiators)
 
-    DeleteInitiatorsResult = ctx.element.delete_initiators(initiators=initiators)
-    cli_utils.print_result(DeleteInitiatorsResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""initiators = """+str(initiators)+"""";"""+"")
+    try:
+        DeleteInitiatorsResult = ctx.element.delete_initiators(initiators=initiators)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(DeleteInitiatorsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

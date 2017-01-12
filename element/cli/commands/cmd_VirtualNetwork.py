@@ -18,6 +18,7 @@ import simplejson
 from solidfire.models import *
 from uuid import UUID
 from element import exceptions
+from solidfire import common
 
 
 @click.group()
@@ -82,7 +83,8 @@ def Modify(ctx,
     """"""
     """Note: This method requires either the VirtualNetworkID or the VirtualNetworkTag as a parameter, but not both."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
@@ -99,8 +101,17 @@ def Modify(ctx,
         kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    AddVirtualNetworkResult = ctx.element.modify_virtual_network(virtual_network_id=virtual_network_id, virtual_network_tag=virtual_network_tag, name=name, address_blocks=address_blocks, netmask=netmask, svip=svip, gateway=gateway, namespace=namespace, attributes=attributes)
-    cli_utils.print_result(AddVirtualNetworkResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""virtual_network_id = """+str(virtual_network_id)+"""";"""+"""virtual_network_tag = """+str(virtual_network_tag)+"""";"""+"""name = """+str(name)+"""";"""+"""address_blocks = """+str(address_blocks)+"""";"""+"""netmask = """+str(netmask)+"""";"""+"""svip = """+str(svip)+"""";"""+"""gateway = """+str(gateway)+"""";"""+"""namespace = """+str(namespace)+"""";"""+"""attributes = """+str(attributes)+"""";"""+"")
+    try:
+        AddVirtualNetworkResult = ctx.element.modify_virtual_network(virtual_network_id=virtual_network_id, virtual_network_tag=virtual_network_tag, name=name, address_blocks=address_blocks, netmask=netmask, svip=svip, gateway=gateway, namespace=namespace, attributes=attributes)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(AddVirtualNetworkResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -156,7 +167,8 @@ def Add(ctx,
     """"""
     """Note: The AddVirtualNetwork method is used only to create a new virtual network. If you want to make changes to a virtual network, please use the ModifyVirtualNetwork method."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
@@ -173,8 +185,17 @@ def Add(ctx,
         kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    AddVirtualNetworkResult = ctx.element.add_virtual_network(virtual_network_tag=virtual_network_tag, name=name, address_blocks=address_blocks, netmask=netmask, svip=svip, gateway=gateway, namespace=namespace, attributes=attributes)
-    cli_utils.print_result(AddVirtualNetworkResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""virtual_network_tag = """+str(virtual_network_tag)+"""";"""+"""name = """+str(name)+"""";"""+"""address_blocks = """+str(address_blocks)+"""";"""+"""netmask = """+str(netmask)+"""";"""+"""svip = """+str(svip)+"""";"""+"""gateway = """+str(gateway)+"""";"""+"""namespace = """+str(namespace)+"""";"""+"""attributes = """+str(attributes)+"""";"""+"")
+    try:
+        AddVirtualNetworkResult = ctx.element.add_virtual_network(virtual_network_tag=virtual_network_tag, name=name, address_blocks=address_blocks, netmask=netmask, svip=svip, gateway=gateway, namespace=namespace, attributes=attributes)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(AddVirtualNetworkResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -205,7 +226,8 @@ def List(ctx,
     """"""
     """This method does not require any parameters to be passed. But, one or more VirtualNetworkIDs or VirtualNetworkTags can be passed in order to filter the results."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
@@ -213,8 +235,17 @@ def List(ctx,
 
     virtual_network_tags = parser.parse_array(virtual_network_tags)
 
-    ListVirtualNetworksResult = ctx.element.list_virtual_networks(virtual_network_id=virtual_network_id, virtual_network_tag=virtual_network_tag, virtual_network_ids=virtual_network_ids, virtual_network_tags=virtual_network_tags)
-    cli_utils.print_result(ListVirtualNetworksResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""virtual_network_id = """+str(virtual_network_id)+"""";"""+"""virtual_network_tag = """+str(virtual_network_tag)+"""";"""+"""virtual_network_ids = """+str(virtual_network_ids)+"""";"""+"""virtual_network_tags = """+str(virtual_network_tags)+"""";"""+"")
+    try:
+        ListVirtualNetworksResult = ctx.element.list_virtual_networks(virtual_network_id=virtual_network_id, virtual_network_tag=virtual_network_tag, virtual_network_ids=virtual_network_ids, virtual_network_tags=virtual_network_tags)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ListVirtualNetworksResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -235,10 +266,20 @@ def Remove(ctx,
     """"""
     """Note: This method requires either the VirtualNetworkID of the VirtualNetworkTag as a parameter, but not both."""
     if ctx.element is None:
-         raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
 
 
 
-    RemoveVirtualNetworkResult = ctx.element.remove_virtual_network(virtual_network_id=virtual_network_id, virtual_network_tag=virtual_network_tag)
-    cli_utils.print_result(RemoveVirtualNetworkResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ctx.logger.info("""virtual_network_id = """+str(virtual_network_id)+"""";"""+"""virtual_network_tag = """+str(virtual_network_tag)+"""";"""+"")
+    try:
+        RemoveVirtualNetworkResult = ctx.element.remove_virtual_network(virtual_network_id=virtual_network_id, virtual_network_tag=virtual_network_tag)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(RemoveVirtualNetworkResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

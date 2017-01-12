@@ -1,7 +1,6 @@
 import logging
 import logging.config
 import click_log
-logger = logging.getLogger(__name__)
 import os
 import sys
 import click
@@ -30,6 +29,7 @@ if sys.stdout.isatty():
 class Context(object):
 
     def __init__(self):
+        self.logger = None
         self.verbose = False
         self.home = os.getcwd()
         self.connections = dict()
@@ -123,8 +123,6 @@ class SolidFireCLI(click.MultiCommand):
               help="Set the debug level",
               type=click.Choice(sorted([str(key) for key
                                         in DEBUG_LOGGING_MAP.keys()])))
-@click_log.simple_verbosity_option()
-@click_log.init(__name__)
 @pass_context
 def cli(ctx,
         mvip=None,
@@ -149,6 +147,8 @@ def cli(ctx,
         level=logging.WARNING,
         format=('%(levelname)s in %(filename)s@%(lineno)s: %(message)s'))
     ctx.verbose = verbose
+    LOG.setLevel(DEBUG_LOGGING_MAP[int(debug)])
+    ctx.logger = LOG
 
     connections_dirty = False
     cfg = None
@@ -168,16 +168,18 @@ def cli(ctx,
         ctx.element = ElementFactory.create(cfg["mvip"],cfg["login"],cfg["password"],port=cfg["port"])
     # If someone accidentally passed in an argument, but didn't specify everything, throw an error.
     elif mvip or login or password:
-        raise exceptions.SolidFireConnectionException("In order to manually connect, please provide mvip, login, AND password")
+        LOG.error("In order to manually connect, please provide mvip, login, AND password")
     else:
         if(connectionindex is not None):
             cfg = connections[connectionindex]
         elif(connectionname is not None):
             filteredCfg = [connection for connection in connections if connection["name"] == connectionname]
             if(len(filteredCfg) > 1):
-                raise exceptions.SolidFireUsageException("Your connections.csv file has become corrupted. There are two connections of the same name.")
+                LOG.error("Your connections.csv file has become corrupted. There are two connections of the same name.")
+                exit()
             if(len(filteredCfg) < 1):
-                raise exceptions.SolidFireUsageException("Could not find a connection named "+connectionname)
+                LOG.error("Could not find a connection named "+connectionname)
+                exit()
             cfg = filteredCfg[0]
     if cfg is not None:
         cfg["port"] = int(cfg["port"])
