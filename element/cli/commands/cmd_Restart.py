@@ -103,19 +103,26 @@ def ResetNode(ctx,
 
 
 @cli.command('Shutdown', short_help="""The Shutdown API method enables you to restart or shutdown a node that has not yet been added to a cluster. To use this method, login in to the MIP for the pending node and enter the "shutdown" method with either the "restart" or "halt" options in the following table. """)
-@click.option('--option',
+@click.option('--nodes',
               type=str,
               required=True,
+              help="""List of NodeIDs for the nodes to be shutdown. """)
+@click.option('--option',
+              type=str,
+              required=False,
               help="""Action to take for the node shutdown:restart: Restarts the node.halt: Performs full power-off of the node. """)
 @pass_context
 def Shutdown(ctx,
-           option):
+           nodes,
+           option = None):
     """The Shutdown API method enables you to restart or shutdown a node that has not yet been added to a cluster. To use this method, login in to the MIP for the pending node and enter the &quot;shutdown&quot; method with either the &quot;restart&quot; or &quot;halt&quot; options in the following table."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
-    ShutdownResult = ctx.element.shutdown(option=option)
+    nodes = parser.parse_array(nodes)
+
+    ShutdownResult = ctx.element.shutdown(nodes=nodes, option=option)
     cli_utils.print_result(ShutdownResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

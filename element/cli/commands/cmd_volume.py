@@ -152,38 +152,24 @@ def CancelGroupClone(ctx,
 
 
 
-@cli.command('PurgeDeleted', short_help="""PurgeDeletedVolumes immediately and permanently purges volumes that have been deleted; you can use this method to purge up to 500 volumes at one time. You must delete volumes using DeleteVolumes before they can be purged. Volumes are purged by the system automatically after a period of time, so usage of this method is not typically required. """)
-@click.option('--volume_ids',
-              type=str,
-              required=False,
-              help="""A list of volumeIDs of volumes to be purged from the system. """)
-@click.option('--account_ids',
-              type=str,
-              required=False,
-              help="""A list of accountIDs. All of the volumes from all of the specified accounts are purged from the system. """)
-@click.option('--volume_access_group_ids',
-              type=str,
-              required=False,
-              help="""A list of volumeAccessGroupIDs. All of the volumes from all of the specified Volume Access Groups are purged from the system. """)
+@cli.command('PurgeDeleted', short_help="""PurgeDeletedVolume immediately and permanently purges a volume which has been deleted. A volume must be deleted using DeleteVolume before it can be purged. Volumes are purged automatically after a period of time, so usage of this method is not typically required. """)
+@click.option('--volume_id',
+              type=int,
+              required=True,
+              help="""The ID of the volume to purge. """)
 @pass_context
 def PurgeDeleted(ctx,
-           volume_ids = None,
-           account_ids = None,
-           volume_access_group_ids = None):
-    """PurgeDeletedVolumes immediately and permanently purges volumes that have been deleted; you can use this method to purge up to 500 volumes at one time. You must delete volumes using DeleteVolumes before they can be purged. Volumes are purged by the system automatically after a period of time, so usage of this method is not typically required."""
+           volume_id):
+    """PurgeDeletedVolume immediately and permanently purges a volume which has been deleted."""
+    """A volume must be deleted using DeleteVolume before it can be purged."""
+    """Volumes are purged automatically after a period of time, so usage of this method is not typically required."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
-    volume_ids = parser.parse_array(volume_ids)
-
-    account_ids = parser.parse_array(account_ids)
-
-    volume_access_group_ids = parser.parse_array(volume_access_group_ids)
-
-    PurgeDeletedVolumesResult = ctx.element.purge_deleted_volumes(volume_ids=volume_ids, account_ids=account_ids, volume_access_group_ids=volume_access_group_ids)
-    cli_utils.print_result(PurgeDeletedVolumesResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    PurgeDeletedVolumeResult = ctx.element.purge_deleted_volume(volume_id=volume_id)
+    cli_utils.print_result(PurgeDeletedVolumeResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -262,11 +248,11 @@ def Clone(ctx,
 
 
 
-@cli.command('Modify', short_help="""ModifyVolumes allows you to configure up to 500 existing volumes at one time. Changes take place immediately. If ModifyVolumes fails to modify any of the specified volumes, none of the specified volumes are changed.If you do not specify QoS values when you modify volumes, the QoS values for each volume remain unchanged. You can retrieve default QoS values for a newly created volume by running the GetDefaultQoS method.When you need to increase the size of volumes that are being replicated, do so in the following order to prevent replication errors:Increase the size of the "Replication Target" volume.Increase the size of the source or "Read / Write" volume. recommends that both the target and source volumes be the same size.NOTE: If you change access status to locked or replicationTarget all existing iSCSI connections are terminated. """)
-@click.option('--volume_ids',
-              type=str,
+@cli.command('Modify', short_help="""ModifyVolume is used to modify settings on an existing volume. Modifications can be made to one volume at a time and changes take place immediately. If an optional parameter is left unspecified, the value will not be changed.  Extending the size of a volume that is being replicated should be done in an order. The target (Replication Target) volume should first be increased in size, then the source (Read/Write) volume can be resized. It is recommended that both the target and the source volumes be the same size.  Note: If you change access status to locked or target all existing iSCSI connections are terminated. """)
+@click.option('--volume_id',
+              type=int,
               required=True,
-              help="""A list of volumeIDs for the volumes to be modified. """)
+              help="""VolumeID for the volume to be modified. """)
 @click.option('--account_id',
               type=int,
               required=False,
@@ -274,7 +260,7 @@ def Clone(ctx,
 @click.option('--access',
               type=str,
               required=False,
-              help="""Access allowed for the volume. Possible values:readOnly: Only read operations are allowed.readWrite: Reads and writes are allowed.locked: No reads or writes are allowed.If not specified, the access value does not change.replicationTarget: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked.If a value is not specified, the access value does not change.  """)
+              help="""Access allowed for the volume. <br/><b>readOnly</b>: Only read operations are allowed. <br/><b>readWrite</b>: Reads and writes are allowed. <br/><b>locked</b>: No reads or writes are allowed. <br/><b>replicationTarget</b>: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked. <br/><br/> If unspecified, the access settings of the clone will be the same as the source. """)
 @click.option('--qos_min_iops',
               type=int,
               required=False,
@@ -294,14 +280,14 @@ def Clone(ctx,
 @click.option('--total_size',
               type=int,
               required=False,
-              help="""New size of the volume in bytes. 1000000000 is equal to 1GB. Size is rounded up to the nearest 1MB in size. This parameter can only be used to increase the size of a volume. """)
+              help="""New size of the volume in bytes. Size is rounded up to the nearest 1MiB size. This parameter can only be used to *increase* the size of a volume. """)
 @click.option('--attributes',
               type=str,
               required=False,
-              help="""Provide in json format: """)
+              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def Modify(ctx,
-           volume_ids,
+           volume_id,
            account_id = None,
            access = None,
            qos_min_iops = None,
@@ -310,16 +296,22 @@ def Modify(ctx,
            qos_burst_time = None,
            total_size = None,
            attributes = None):
-    """ModifyVolumes allows you to configure up to 500 existing volumes at one time. Changes take place immediately. If ModifyVolumes fails to modify any of the specified volumes, none of the specified volumes are changed.If you do not specify QoS values when you modify volumes, the QoS values for each volume remain unchanged. You can retrieve default QoS values for a newly created volume by running the GetDefaultQoS method.When you need to increase the size of volumes that are being replicated, do so in the following order to prevent replication errors:Increase the size of the &quot;Replication Target&quot; volume.Increase the size of the source or &quot;Read / Write&quot; volume. recommends that both the target and source volumes be the same size.NOTE: If you change access status to locked or replicationTarget all existing iSCSI connections are terminated."""
+    """ModifyVolume is used to modify settings on an existing volume."""
+    """Modifications can be made to one volume at a time and changes take place immediately."""
+    """If an optional parameter is left unspecified, the value will not be changed."""
+    """"""
+    """Extending the size of a volume that is being replicated should be done in an order."""
+    """The target (Replication Target) volume should first be increased in size, then the source (Read/Write) volume can be resized."""
+    """It is recommended that both the target and the source volumes be the same size."""
+    """"""
+    """Note: If you change access status to locked or target all existing iSCSI connections are terminated."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
-    volume_ids = parser.parse_array(volume_ids)
-
     qos = None
-    if(volume_ids is not None or account_id is not None or access is not None or qos is not None or total_size is not None or attributes is not None or False):
+    if(volume_id is not None or account_id is not None or access is not None or qos is not None or total_size is not None or attributes is not None or False):
         kwargsDict = dict()
         kwargsDict["min_iops"] = qos_min_iops
         kwargsDict["max_iops"] = qos_max_iops
@@ -331,8 +323,8 @@ def Modify(ctx,
         kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    ModifyVolumesResult = ctx.element.modify_volumes(volume_ids=volume_ids, account_id=account_id, access=access, qos=qos, total_size=total_size, attributes=attributes)
-    cli_utils.print_result(ModifyVolumesResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    ModifyVolumeResult = ctx.element.modify_volume(volume_id=volume_id, account_id=account_id, access=access, qos=qos, total_size=total_size, attributes=attributes)
+    cli_utils.print_result(ModifyVolumeResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -786,38 +778,36 @@ def GetAsyncResult(ctx,
 
 
 
-@cli.command('Delete', short_help="""DeleteVolumes marks multiple (up to 500) active volumes for deletion. Once marked, the volumes are purged (permanently deleted) after the cleanup interval elapses.The cleanup interval can be set in the SetClusterSettings method. For more information on using this method, see SetClusterSettings on page 1. After making a request to delete volumes, any active iSCSI connections to the volumes are immediately terminated and no further connections are allowed while the volumes are in this state. A marked volume is not returned in target discovery requests. Any snapshots of a volume that has been marked for deletion are not affected. Snapshots are kept until the volume is purged from the system. If a volume is marked for deletion and has a bulk volume read or bulk volume write operation in progress, the bulk volume read or write operation is stopped. If the volumes you delete are paired with a volume, replication between the paired volumes is suspended and no data is transferred to them or from them while in a deleted state. The remote volumes the deleted volumes were paired with enter into a PausedMisconfigured state and data is no longer sent to them or from the deleted volumes. Until the deleted volumes are purged, they can be restored and data transfers resume. If the deleted volumes are purged from the system, the volumes they were paired with enter into a StoppedMisconfigured state and the volume pairing status is removed. The purged volumes become permanently unavailable. """)
-@click.option('--account_ids',
-              type=str,
-              required=False,
-              help="""A list of account IDs. All volumes from these accounts are deleted from the system.  """)
-@click.option('--volume_access_group_ids',
-              type=str,
-              required=False,
-              help="""A list of volume access group IDs. All of the volumes from all of the volume access groups you specify in this list are deleted from the system. """)
-@click.option('--volume_ids',
-              type=str,
-              required=False,
-              help="""The list of IDs of the volumes to delete from the system. """)
+@cli.command('Delete', short_help="""DeleteVolume marks an active volume for deletion. It is purged (permanently deleted) after the cleanup interval elapses. After making a request to delete a volume, any active iSCSI connections to the volume is immediately terminated and no further connections are allowed while the volume is in this state. It is not returned in target discovery requests.  Any snapshots of a volume that has been marked to delete are not affected. Snapshots are kept until the volume is purged from the system.  If a volume is marked for deletion, and it has a bulk volume read or bulk volume write operation in progress, the bulk volume operation is stopped.  If the volume you delete is paired with a volume, replication between the paired volumes is suspended and no data is transferred to it or from it while in a deleted state. The remote volume the deleted volume was paired with enters into a PausedMisconfigured state and data is no longer sent to it or from the deleted volume. Until the deleted volume is purged, it can be restored and data transfers resumes. If the deleted volume gets purged from the system, the volume it was paired with enters into a StoppedMisconfigured state and the volume pairing status is removed. The purged volume becomes permanently unavailable. """)
+@click.option('--volume_id',
+              type=int,
+              required=True,
+              help="""The ID of the volume to delete. """)
 @pass_context
 def Delete(ctx,
-           account_ids = None,
-           volume_access_group_ids = None,
-           volume_ids = None):
-    """DeleteVolumes marks multiple (up to 500) active volumes for deletion. Once marked, the volumes are purged (permanently deleted) after the cleanup interval elapses.The cleanup interval can be set in the SetClusterSettings method. For more information on using this method, see SetClusterSettings on page 1. After making a request to delete volumes, any active iSCSI connections to the volumes are immediately terminated and no further connections are allowed while the volumes are in this state. A marked volume is not returned in target discovery requests. Any snapshots of a volume that has been marked for deletion are not affected. Snapshots are kept until the volume is purged from the system. If a volume is marked for deletion and has a bulk volume read or bulk volume write operation in progress, the bulk volume read or write operation is stopped. If the volumes you delete are paired with a volume, replication between the paired volumes is suspended and no data is transferred to them or from them while in a deleted state. The remote volumes the deleted volumes were paired with enter into a PausedMisconfigured state and data is no longer sent to them or from the deleted volumes. Until the deleted volumes are purged, they can be restored and data transfers resume. If the deleted volumes are purged from the system, the volumes they were paired with enter into a StoppedMisconfigured state and the volume pairing status is removed. The purged volumes become permanently unavailable."""
+           volume_id):
+    """DeleteVolume marks an active volume for deletion."""
+    """It is purged (permanently deleted) after the cleanup interval elapses."""
+    """After making a request to delete a volume, any active iSCSI connections to the volume is immediately terminated and no further connections are allowed while the volume is in this state."""
+    """It is not returned in target discovery requests."""
+    """"""
+    """Any snapshots of a volume that has been marked to delete are not affected."""
+    """Snapshots are kept until the volume is purged from the system."""
+    """"""
+    """If a volume is marked for deletion, and it has a bulk volume read or bulk volume write operation in progress, the bulk volume operation is stopped."""
+    """"""
+    """If the volume you delete is paired with a volume, replication between the paired volumes is suspended and no data is transferred to it or from it while in a deleted state."""
+    """The remote volume the deleted volume was paired with enters into a PausedMisconfigured state and data is no longer sent to it or from the deleted volume."""
+    """Until the deleted volume is purged, it can be restored and data transfers resumes."""
+    """If the deleted volume gets purged from the system, the volume it was paired with enters into a StoppedMisconfigured state and the volume pairing status is removed."""
+    """The purged volume becomes permanently unavailable."""
     if ctx.element is None:
          raise exceptions.SolidFireUsageException("You must establish at least one connection and specify which you intend to use.")
 
 
 
-    account_ids = parser.parse_array(account_ids)
-
-    volume_access_group_ids = parser.parse_array(volume_access_group_ids)
-
-    volume_ids = parser.parse_array(volume_ids)
-
-    DeleteVolumesResult = ctx.element.delete_volumes(account_ids=account_ids, volume_access_group_ids=volume_access_group_ids, volume_ids=volume_ids)
-    cli_utils.print_result(DeleteVolumesResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    DeleteVolumeResult = ctx.element.delete_volume(volume_id=volume_id)
+    cli_utils.print_result(DeleteVolumeResult, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 

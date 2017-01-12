@@ -1,5 +1,7 @@
 import logging
 import logging.config
+import click_log
+logger = logging.getLogger(__name__)
 import os
 import sys
 import click
@@ -121,10 +123,8 @@ class SolidFireCLI(click.MultiCommand):
               help="Set the debug level",
               type=click.Choice(sorted([str(key) for key
                                         in DEBUG_LOGGING_MAP.keys()])))
-@click.option('--verbose', '-v',
-              help="Provide extra output info",
-              type=click.IntRange(0, 3, clamp=True),
-              count=True)
+@click_log.simple_verbosity_option()
+@click_log.init(__name__)
 @pass_context
 def cli(ctx,
         mvip=None,
