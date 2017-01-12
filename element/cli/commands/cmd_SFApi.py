@@ -50,7 +50,7 @@ def Invoke(ctx,
         kwargsDict = simplejson.loads(parameters)
         parameters = dict(**kwargsDict)
 
-    ctx.logger.info("""method = """+str(method)+"""";"""+"""parameters = """+str(parameters)+"""";"""+"")
+    ctx.logger.info("""method = """+str(method)+""";"""+"""parameters = """+str(parameters)+""";"""+"")
     try:
         str = ctx.element.invoke_sfapi(method=method, parameters=parameters)
     except common.ApiServerError as e:

@@ -46,7 +46,7 @@ def List(ctx,
 
 
 
-    ctx.logger.info("""start_account_id = """+str(start_account_id)+"""";"""+"""limit = """+str(limit)+"""";"""+"")
+    ctx.logger.info("""start_account_id = """+str(start_account_id)+""";"""+"""limit = """+str(limit)+""";"""+"")
     try:
         ListAccountsResult = ctx.element.list_accounts(start_account_id=start_account_id, limit=limit)
     except common.ApiServerError as e:
@@ -75,7 +75,7 @@ def GetEfficiency(ctx,
 
 
 
-    ctx.logger.info("""account_id = """+str(account_id)+"""";"""+"")
+    ctx.logger.info("""account_id = """+str(account_id)+""";"""+"")
     try:
         GetEfficiencyResult = ctx.element.get_account_efficiency(account_id=account_id)
     except common.ApiServerError as e:
@@ -135,7 +135,7 @@ def Modify(ctx,
         kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    ctx.logger.info("""account_id = """+str(account_id)+"""";"""+"""username = """+str(username)+"""";"""+"""status = """+str(status)+"""";"""+"""initiator_secret = """+str(initiator_secret)+"""";"""+"""target_secret = """+str(target_secret)+"""";"""+"""attributes = """+str(attributes)+"""";"""+"")
+    ctx.logger.info("""account_id = """+str(account_id)+""";"""+"""username = """+str(username)+""";"""+"""status = """+str(status)+""";"""+"""initiator_secret = """+str(initiator_secret)+""";"""+"""target_secret = """+str(target_secret)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
         ModifyAccountResult = ctx.element.modify_account(account_id=account_id, username=username, status=status, initiator_secret=initiator_secret, target_secret=target_secret, attributes=attributes)
     except common.ApiServerError as e:
@@ -166,7 +166,7 @@ def Remove(ctx,
 
 
 
-    ctx.logger.info("""account_id = """+str(account_id)+"""";"""+"")
+    ctx.logger.info("""account_id = """+str(account_id)+""";"""+"")
     try:
         RemoveAccountResult = ctx.element.remove_account(account_id=account_id)
     except common.ApiServerError as e:
@@ -195,7 +195,7 @@ def GetByName(ctx,
 
 
 
-    ctx.logger.info("""username = """+str(username)+"""";"""+"")
+    ctx.logger.info("""username = """+str(username)+""";"""+"")
     try:
         GetAccountResult = ctx.element.get_account_by_name(username=username)
     except common.ApiServerError as e:
@@ -244,7 +244,7 @@ def Add(ctx,
         kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    ctx.logger.info("""username = """+str(username)+"""";"""+"""initiator_secret = """+str(initiator_secret)+"""";"""+"""target_secret = """+str(target_secret)+"""";"""+"""attributes = """+str(attributes)+"""";"""+"")
+    ctx.logger.info("""username = """+str(username)+""";"""+"""initiator_secret = """+str(initiator_secret)+""";"""+"""target_secret = """+str(target_secret)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
         AddAccountResult = ctx.element.add_account(username=username, initiator_secret=initiator_secret, target_secret=target_secret, attributes=attributes)
     except common.ApiServerError as e:
@@ -273,7 +273,7 @@ def GetByID(ctx,
 
 
 
-    ctx.logger.info("""account_id = """+str(account_id)+"""";"""+"")
+    ctx.logger.info("""account_id = """+str(account_id)+""";"""+"")
     try:
         GetAccountResult = ctx.element.get_account_by_id(account_id=account_id)
     except common.ApiServerError as e:

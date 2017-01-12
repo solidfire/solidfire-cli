@@ -101,7 +101,7 @@ def Modify(ctx,
         kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    ctx.logger.info("""virtual_network_id = """+str(virtual_network_id)+"""";"""+"""virtual_network_tag = """+str(virtual_network_tag)+"""";"""+"""name = """+str(name)+"""";"""+"""address_blocks = """+str(address_blocks)+"""";"""+"""netmask = """+str(netmask)+"""";"""+"""svip = """+str(svip)+"""";"""+"""gateway = """+str(gateway)+"""";"""+"""namespace = """+str(namespace)+"""";"""+"""attributes = """+str(attributes)+"""";"""+"")
+    ctx.logger.info("""virtual_network_id = """+str(virtual_network_id)+""";"""+"""virtual_network_tag = """+str(virtual_network_tag)+""";"""+"""name = """+str(name)+""";"""+"""address_blocks = """+str(address_blocks)+""";"""+"""netmask = """+str(netmask)+""";"""+"""svip = """+str(svip)+""";"""+"""gateway = """+str(gateway)+""";"""+"""namespace = """+str(namespace)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
         AddVirtualNetworkResult = ctx.element.modify_virtual_network(virtual_network_id=virtual_network_id, virtual_network_tag=virtual_network_tag, name=name, address_blocks=address_blocks, netmask=netmask, svip=svip, gateway=gateway, namespace=namespace, attributes=attributes)
     except common.ApiServerError as e:
@@ -185,7 +185,7 @@ def Add(ctx,
         kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    ctx.logger.info("""virtual_network_tag = """+str(virtual_network_tag)+"""";"""+"""name = """+str(name)+"""";"""+"""address_blocks = """+str(address_blocks)+"""";"""+"""netmask = """+str(netmask)+"""";"""+"""svip = """+str(svip)+"""";"""+"""gateway = """+str(gateway)+"""";"""+"""namespace = """+str(namespace)+"""";"""+"""attributes = """+str(attributes)+"""";"""+"")
+    ctx.logger.info("""virtual_network_tag = """+str(virtual_network_tag)+""";"""+"""name = """+str(name)+""";"""+"""address_blocks = """+str(address_blocks)+""";"""+"""netmask = """+str(netmask)+""";"""+"""svip = """+str(svip)+""";"""+"""gateway = """+str(gateway)+""";"""+"""namespace = """+str(namespace)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
         AddVirtualNetworkResult = ctx.element.add_virtual_network(virtual_network_tag=virtual_network_tag, name=name, address_blocks=address_blocks, netmask=netmask, svip=svip, gateway=gateway, namespace=namespace, attributes=attributes)
     except common.ApiServerError as e:
@@ -235,7 +235,7 @@ def List(ctx,
 
     virtual_network_tags = parser.parse_array(virtual_network_tags)
 
-    ctx.logger.info("""virtual_network_id = """+str(virtual_network_id)+"""";"""+"""virtual_network_tag = """+str(virtual_network_tag)+"""";"""+"""virtual_network_ids = """+str(virtual_network_ids)+"""";"""+"""virtual_network_tags = """+str(virtual_network_tags)+"""";"""+"")
+    ctx.logger.info("""virtual_network_id = """+str(virtual_network_id)+""";"""+"""virtual_network_tag = """+str(virtual_network_tag)+""";"""+"""virtual_network_ids = """+str(virtual_network_ids)+""";"""+"""virtual_network_tags = """+str(virtual_network_tags)+""";"""+"")
     try:
         ListVirtualNetworksResult = ctx.element.list_virtual_networks(virtual_network_id=virtual_network_id, virtual_network_tag=virtual_network_tag, virtual_network_ids=virtual_network_ids, virtual_network_tags=virtual_network_tags)
     except common.ApiServerError as e:
@@ -271,7 +271,7 @@ def Remove(ctx,
 
 
 
-    ctx.logger.info("""virtual_network_id = """+str(virtual_network_id)+"""";"""+"""virtual_network_tag = """+str(virtual_network_tag)+"""";"""+"")
+    ctx.logger.info("""virtual_network_id = """+str(virtual_network_id)+""";"""+"""virtual_network_tag = """+str(virtual_network_tag)+""";"""+"")
     try:
         RemoveVirtualNetworkResult = ctx.element.remove_virtual_network(virtual_network_id=virtual_network_id, virtual_network_tag=virtual_network_tag)
     except common.ApiServerError as e:

@@ -29,5 +29,6 @@ def check_tree_generator():
     ) == collections.Counter(
         treeDepth5.split("\n")
     )
+    print("Tree generator is working.")
 
 check_tree_generator()

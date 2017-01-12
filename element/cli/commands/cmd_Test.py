@@ -62,7 +62,7 @@ def Ping(ctx,
 
 
 
-    ctx.logger.info("""attempts = """+str(attempts)+"""";"""+"""hosts = """+str(hosts)+"""";"""+"""total_timeout_sec = """+str(total_timeout_sec)+"""";"""+"""packet_size = """+str(packet_size)+"""";"""+"""ping_timeout_msec = """+str(ping_timeout_msec)+"""";"""+"")
+    ctx.logger.info("""attempts = """+str(attempts)+""";"""+"""hosts = """+str(hosts)+""";"""+"""total_timeout_sec = """+str(total_timeout_sec)+""";"""+"""packet_size = """+str(packet_size)+""";"""+"""ping_timeout_msec = """+str(ping_timeout_msec)+""";"""+"")
     try:
         TestPingResult = ctx.element.test_ping(attempts=attempts, hosts=hosts, total_timeout_sec=total_timeout_sec, packet_size=packet_size, ping_timeout_msec=ping_timeout_msec)
     except common.ApiServerError as e:
@@ -117,7 +117,7 @@ def ConnectMvip(ctx,
 
 
 
-    ctx.logger.info("""mvip = """+str(mvip)+"""";"""+"")
+    ctx.logger.info("""mvip = """+str(mvip)+""";"""+"")
     try:
         TestConnectMvipResult = ctx.element.test_connect_mvip(mvip=mvip)
     except common.ApiServerError as e:
@@ -172,7 +172,7 @@ def ConnectEnsemble(ctx,
 
 
 
-    ctx.logger.info("""ensemble = """+str(ensemble)+"""";"""+"")
+    ctx.logger.info("""ensemble = """+str(ensemble)+""";"""+"")
     try:
         TestConnectEnsembleResult = ctx.element.test_connect_ensemble(ensemble=ensemble)
     except common.ApiServerError as e:
@@ -202,7 +202,7 @@ def ConnectSvip(ctx,
 
 
 
-    ctx.logger.info("""svip = """+str(svip)+"""";"""+"")
+    ctx.logger.info("""svip = """+str(svip)+""";"""+"")
     try:
         TestConnectSvipResult = ctx.element.test_connect_svip(svip=svip)
     except common.ApiServerError as e:

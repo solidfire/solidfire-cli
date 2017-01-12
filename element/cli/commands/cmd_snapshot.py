@@ -41,7 +41,7 @@ def ListGroup(ctx,
 
 
 
-    ctx.logger.info("""volume_id = """+str(volume_id)+"""";"""+"")
+    ctx.logger.info("""volume_id = """+str(volume_id)+""";"""+"")
     try:
         ListGroupSnapshotsResult = ctx.element.list_group_snapshots(volume_id=volume_id)
     except common.ApiServerError as e:
@@ -80,7 +80,7 @@ def ModifyGroup(ctx,
 
 
 
-    ctx.logger.info("""group_snapshot_id = """+str(group_snapshot_id)+"""";"""+"""expiration_time = """+str(expiration_time)+"""";"""+"""enable_remote_replication = """+str(enable_remote_replication)+"""";"""+"")
+    ctx.logger.info("""group_snapshot_id = """+str(group_snapshot_id)+""";"""+"""expiration_time = """+str(expiration_time)+""";"""+"""enable_remote_replication = """+str(enable_remote_replication)+""";"""+"")
     try:
         ModifyGroupSnapshotResult = ctx.element.modify_group_snapshot(group_snapshot_id=group_snapshot_id, expiration_time=expiration_time, enable_remote_replication=enable_remote_replication)
     except common.ApiServerError as e:
@@ -120,7 +120,7 @@ def Modify(ctx,
 
 
 
-    ctx.logger.info("""snapshot_id = """+str(snapshot_id)+"""";"""+"""expiration_time = """+str(expiration_time)+"""";"""+"""enable_remote_replication = """+str(enable_remote_replication)+"""";"""+"")
+    ctx.logger.info("""snapshot_id = """+str(snapshot_id)+""";"""+"""expiration_time = """+str(expiration_time)+""";"""+"""enable_remote_replication = """+str(enable_remote_replication)+""";"""+"")
     try:
         ModifySnapshotResult = ctx.element.modify_snapshot(snapshot_id=snapshot_id, expiration_time=expiration_time, enable_remote_replication=enable_remote_replication)
     except common.ApiServerError as e:
@@ -181,7 +181,7 @@ def Create(ctx,
         kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    ctx.logger.info("""volume_id = """+str(volume_id)+"""";"""+"""snapshot_id = """+str(snapshot_id)+"""";"""+"""name = """+str(name)+"""";"""+"""enable_remote_replication = """+str(enable_remote_replication)+"""";"""+"""retention = """+str(retention)+"""";"""+"""attributes = """+str(attributes)+"""";"""+"")
+    ctx.logger.info("""volume_id = """+str(volume_id)+""";"""+"""snapshot_id = """+str(snapshot_id)+""";"""+"""name = """+str(name)+""";"""+"""enable_remote_replication = """+str(enable_remote_replication)+""";"""+"""retention = """+str(retention)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
         CreateSnapshotResult = ctx.element.create_snapshot(volume_id=volume_id, snapshot_id=snapshot_id, name=name, enable_remote_replication=enable_remote_replication, retention=retention, attributes=attributes)
     except common.ApiServerError as e:
@@ -210,7 +210,7 @@ def List(ctx,
 
 
 
-    ctx.logger.info("""volume_id = """+str(volume_id)+"""";"""+"")
+    ctx.logger.info("""volume_id = """+str(volume_id)+""";"""+"")
     try:
         ListSnapshotsResult = ctx.element.list_snapshots(volume_id=volume_id)
     except common.ApiServerError as e:
@@ -246,7 +246,7 @@ def CreateSchedule(ctx,
         kwargsDict = simplejson.loads(schedule)
         schedule = Schedule(**kwargsDict)
 
-    ctx.logger.info("""schedule = """+str(schedule)+"""";"""+"")
+    ctx.logger.info("""schedule = """+str(schedule)+""";"""+"")
     try:
         CreateScheduleResult = ctx.element.create_schedule(schedule=schedule)
     except common.ApiServerError as e:
@@ -282,7 +282,7 @@ def DeleteGroup(ctx,
 
 
 
-    ctx.logger.info("""group_snapshot_id = """+str(group_snapshot_id)+"""";"""+"""save_members = """+str(save_members)+"""";"""+"")
+    ctx.logger.info("""group_snapshot_id = """+str(group_snapshot_id)+""";"""+"""save_members = """+str(save_members)+""";"""+"")
     try:
         DeleteGroupSnapshotResult = ctx.element.delete_group_snapshot(group_snapshot_id=group_snapshot_id, save_members=save_members)
     except common.ApiServerError as e:
@@ -311,7 +311,7 @@ def GetSchedule(ctx,
 
 
 
-    ctx.logger.info("""schedule_id = """+str(schedule_id)+"""";"""+"")
+    ctx.logger.info("""schedule_id = """+str(schedule_id)+""";"""+"")
     try:
         GetScheduleResult = ctx.element.get_schedule(schedule_id=schedule_id)
     except common.ApiServerError as e:
@@ -361,7 +361,7 @@ def RollbackToGroup(ctx,
         kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    ctx.logger.info("""group_snapshot_id = """+str(group_snapshot_id)+"""";"""+"""save_current_state = """+str(save_current_state)+"""";"""+"""name = """+str(name)+"""";"""+"""attributes = """+str(attributes)+"""";"""+"")
+    ctx.logger.info("""group_snapshot_id = """+str(group_snapshot_id)+""";"""+"""save_current_state = """+str(save_current_state)+""";"""+"""name = """+str(name)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
         CreateGroupSnapshotResult = ctx.element.rollback_to_group_snapshot(group_snapshot_id=group_snapshot_id, save_current_state=save_current_state, name=name, attributes=attributes)
     except common.ApiServerError as e:
@@ -418,7 +418,7 @@ def RollbackTo(ctx,
         kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    ctx.logger.info("""volume_id = """+str(volume_id)+"""";"""+"""snapshot_id = """+str(snapshot_id)+"""";"""+"""save_current_state = """+str(save_current_state)+"""";"""+"""name = """+str(name)+"""";"""+"""attributes = """+str(attributes)+"""";"""+"")
+    ctx.logger.info("""volume_id = """+str(volume_id)+""";"""+"""snapshot_id = """+str(snapshot_id)+""";"""+"""save_current_state = """+str(save_current_state)+""";"""+"""name = """+str(name)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
         CreateSnapshotResult = ctx.element.rollback_to_snapshot(volume_id=volume_id, snapshot_id=snapshot_id, save_current_state=save_current_state, name=name, attributes=attributes)
     except common.ApiServerError as e:
@@ -476,7 +476,7 @@ def CreateGroup(ctx,
         kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    ctx.logger.info("""volumes = """+str(volumes)+"""";"""+"""name = """+str(name)+"""";"""+"""enable_remote_replication = """+str(enable_remote_replication)+"""";"""+"""retention = """+str(retention)+"""";"""+"""attributes = """+str(attributes)+"""";"""+"")
+    ctx.logger.info("""volumes = """+str(volumes)+""";"""+"""name = """+str(name)+""";"""+"""enable_remote_replication = """+str(enable_remote_replication)+""";"""+"""retention = """+str(retention)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
         CreateGroupSnapshotResult = ctx.element.create_group_snapshot(volumes=volumes, name=name, enable_remote_replication=enable_remote_replication, retention=retention, attributes=attributes)
     except common.ApiServerError as e:
@@ -508,7 +508,7 @@ def ModifySchedule(ctx,
         kwargsDict = simplejson.loads(schedule)
         schedule = Schedule(**kwargsDict)
 
-    ctx.logger.info("""schedule = """+str(schedule)+"""";"""+"")
+    ctx.logger.info("""schedule = """+str(schedule)+""";"""+"")
     try:
         ModifyScheduleResult = ctx.element.modify_schedule(schedule=schedule)
     except common.ApiServerError as e:
@@ -564,7 +564,7 @@ def Delete(ctx,
 
 
 
-    ctx.logger.info("""snapshot_id = """+str(snapshot_id)+"""";"""+"")
+    ctx.logger.info("""snapshot_id = """+str(snapshot_id)+""";"""+"")
     try:
         DeleteSnapshotResult = ctx.element.delete_snapshot(snapshot_id=snapshot_id)
     except common.ApiServerError as e:

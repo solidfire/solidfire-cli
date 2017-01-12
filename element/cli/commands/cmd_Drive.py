@@ -48,7 +48,7 @@ def Reset(ctx,
 
 
 
-    ctx.logger.info("""drives = """+str(drives)+"""";"""+"""force = """+str(force)+"""";"""+"")
+    ctx.logger.info("""drives = """+str(drives)+""";"""+"""force = """+str(force)+""";"""+"")
     try:
         ResetDrivesResult = ctx.element.reset_drives(drives=drives, force=force)
     except common.ApiServerError as e:
@@ -83,7 +83,7 @@ def SecureErase(ctx,
 
     drives = parser.parse_array(drives)
 
-    ctx.logger.info("""drives = """+str(drives)+"""";"""+"")
+    ctx.logger.info("""drives = """+str(drives)+""";"""+"")
     try:
         AsyncHandleResult = ctx.element.secure_erase_drives(drives=drives)
     except common.ApiServerError as e:
@@ -152,7 +152,7 @@ def Remove(ctx,
 
     drives = parser.parse_array(drives)
 
-    ctx.logger.info("""drives = """+str(drives)+"""";"""+"")
+    ctx.logger.info("""drives = """+str(drives)+""";"""+"")
     try:
         AsyncHandleResult = ctx.element.remove_drives(drives=drives)
     except common.ApiServerError as e:
@@ -181,7 +181,7 @@ def GetHardwareInfo(ctx,
 
 
 
-    ctx.logger.info("""drive_id = """+str(drive_id)+"""";"""+"")
+    ctx.logger.info("""drive_id = """+str(drive_id)+""";"""+"")
     try:
         GetDriveHardwareInfoResult = ctx.element.get_drive_hardware_info(drive_id=drive_id)
     except common.ApiServerError as e:
@@ -228,7 +228,7 @@ def Add(ctx,
 
     drives = parser.parse_array(drives)
 
-    ctx.logger.info("""drives = """+str(drives)+"""";"""+"")
+    ctx.logger.info("""drives = """+str(drives)+""";"""+"")
     try:
         AddDrivesResult = ctx.element.add_drives(drives=drives)
     except common.ApiServerError as e:
@@ -258,7 +258,7 @@ def GetStats(ctx,
 
 
 
-    ctx.logger.info("""drive_id = """+str(drive_id)+"""";"""+"")
+    ctx.logger.info("""drive_id = """+str(drive_id)+""";"""+"")
     try:
         GetDriveStatsResult = ctx.element.get_drive_stats(drive_id=drive_id)
     except common.ApiServerError as e:
@@ -317,7 +317,7 @@ def Test(ctx,
 
 
 
-    ctx.logger.info("""minutes = """+str(minutes)+"""";"""+"")
+    ctx.logger.info("""minutes = """+str(minutes)+""";"""+"")
     try:
         TestDrivesResult = ctx.element.test_drives(minutes=minutes)
     except common.ApiServerError as e:
@@ -346,7 +346,7 @@ def ListHardware(ctx,
 
 
 
-    ctx.logger.info("""force = """+str(force)+"""";"""+"")
+    ctx.logger.info("""force = """+str(force)+""";"""+"")
     try:
         ListDriveHardwareResult = ctx.element.list_drive_hardware(force=force)
     except common.ApiServerError as e:

@@ -81,7 +81,7 @@ def ListFaults(ctx,
 
 
 
-    ctx.logger.info("""exceptions = """+str(exceptions)+"""";"""+"""best_practices = """+str(best_practices)+"""";"""+"""update = """+str(update)+"""";"""+"""fault_types = """+str(fault_types)+"""";"""+"")
+    ctx.logger.info("""exceptions = """+str(exceptions)+""";"""+"""best_practices = """+str(best_practices)+""";"""+"""update = """+str(update)+""";"""+"""fault_types = """+str(fault_types)+""";"""+"")
     try:
         ListClusterFaultsResult = ctx.element.list_cluster_faults(exceptions=exceptions, best_practices=best_practices, update=update, fault_types=fault_types)
     except common.ApiServerError as e:
@@ -176,7 +176,7 @@ def Create(ctx,
         kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    ctx.logger.info("""accept_eula = """+str(accept_eula)+"""";"""+"""mvip = """+str(mvip)+"""";"""+"""svip = """+str(svip)+"""";"""+"""rep_count = """+str(rep_count)+"""";"""+"""username = """+str(username)+"""";"""+"""password = """+str(password)+"""";"""+"""nodes = """+str(nodes)+"""";"""+"""attributes = """+str(attributes)+"""";"""+"")
+    ctx.logger.info("""accept_eula = """+str(accept_eula)+""";"""+"""mvip = """+str(mvip)+""";"""+"""svip = """+str(svip)+""";"""+"""rep_count = """+str(rep_count)+""";"""+"""username = """+str(username)+""";"""+"""password = """+str(password)+""";"""+"""nodes = """+str(nodes)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
         CreateClusterResult = ctx.element.create_cluster(mvip=mvip, svip=svip, rep_count=rep_count, username=username, password=password, nodes=nodes, accept_eula=accept_eula, attributes=attributes)
     except common.ApiServerError as e:
@@ -282,7 +282,7 @@ def SetSnmpInfo(ctx,
 
     usm_users = parser.parse_array(usm_users)
 
-    ctx.logger.info("""networks = """+str(networks)+"""";"""+"""enabled = """+str(enabled)+"""";"""+"""snmp_v3_enabled = """+str(snmp_v3_enabled)+"""";"""+"""usm_users = """+str(usm_users)+"""";"""+"")
+    ctx.logger.info("""networks = """+str(networks)+""";"""+"""enabled = """+str(enabled)+""";"""+"""snmp_v3_enabled = """+str(snmp_v3_enabled)+""";"""+"""usm_users = """+str(usm_users)+""";"""+"")
     try:
         SetSnmpInfoResult = ctx.element.set_snmp_info(networks=networks, enabled=enabled, snmp_v3_enabled=snmp_v3_enabled, usm_users=usm_users)
     except common.ApiServerError as e:
@@ -318,7 +318,7 @@ def SetNtpInfo(ctx,
 
     servers = parser.parse_array(servers)
 
-    ctx.logger.info("""servers = """+str(servers)+"""";"""+"""broadcastclient = """+str(broadcastclient)+"""";"""+"")
+    ctx.logger.info("""servers = """+str(servers)+""";"""+"""broadcastclient = """+str(broadcastclient)+""";"""+"")
     try:
         SetNtpInfoResult = ctx.element.set_ntp_info(servers=servers, broadcastclient=broadcastclient)
     except common.ApiServerError as e:
@@ -410,7 +410,7 @@ def SetConfig(ctx,
 
         cluster = ClusterConfig(**kwargsDict)
 
-    ctx.logger.info("""cluster = """+str(cluster)+"""";"""+"")
+    ctx.logger.info("""cluster = """+str(cluster)+""";"""+"")
     try:
         SetClusterConfigResult = ctx.element.set_cluster_config(cluster=cluster)
     except common.ApiServerError as e:
@@ -525,7 +525,7 @@ def SetSnmpTrapInfo(ctx,
 
     trap_recipients = parser.parse_array(trap_recipients)
 
-    ctx.logger.info("""trap_recipients = """+str(trap_recipients)+"""";"""+"""cluster_fault_traps_enabled = """+str(cluster_fault_traps_enabled)+"""";"""+"""cluster_fault_resolved_traps_enabled = """+str(cluster_fault_resolved_traps_enabled)+"""";"""+"""cluster_event_traps_enabled = """+str(cluster_event_traps_enabled)+"""";"""+"")
+    ctx.logger.info("""trap_recipients = """+str(trap_recipients)+""";"""+"""cluster_fault_traps_enabled = """+str(cluster_fault_traps_enabled)+""";"""+"""cluster_fault_resolved_traps_enabled = """+str(cluster_fault_resolved_traps_enabled)+""";"""+"""cluster_event_traps_enabled = """+str(cluster_event_traps_enabled)+""";"""+"")
     try:
         SetSnmpTrapInfoResult = ctx.element.set_snmp_trap_info(trap_recipients=trap_recipients, cluster_fault_traps_enabled=cluster_fault_traps_enabled, cluster_fault_resolved_traps_enabled=cluster_fault_resolved_traps_enabled, cluster_event_traps_enabled=cluster_event_traps_enabled)
     except common.ApiServerError as e:
@@ -612,7 +612,7 @@ def CreateSupportBundle(ctx,
 
 
 
-    ctx.logger.info("""bundle_name = """+str(bundle_name)+"""";"""+"""extra_args = """+str(extra_args)+"""";"""+"""timeout_sec = """+str(timeout_sec)+"""";"""+"")
+    ctx.logger.info("""bundle_name = """+str(bundle_name)+""";"""+"""extra_args = """+str(extra_args)+""";"""+"""timeout_sec = """+str(timeout_sec)+""";"""+"")
     try:
         CreateSupportBundleResult = ctx.element.create_support_bundle(bundle_name=bundle_name, extra_args=extra_args, timeout_sec=timeout_sec)
     except common.ApiServerError as e:
@@ -668,7 +668,7 @@ def AddAdmin(ctx,
         kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    ctx.logger.info("""username = """+str(username)+"""";"""+"""password = """+str(password)+"""";"""+"""access = """+str(access)+"""";"""+"""accept_eula = """+str(accept_eula)+"""";"""+"""attributes = """+str(attributes)+"""";"""+"")
+    ctx.logger.info("""username = """+str(username)+""";"""+"""password = """+str(password)+""";"""+"""access = """+str(access)+""";"""+"""accept_eula = """+str(accept_eula)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
         AddClusterAdminResult = ctx.element.add_cluster_admin(username=username, password=password, access=access, accept_eula=accept_eula, attributes=attributes)
     except common.ApiServerError as e:
@@ -817,7 +817,7 @@ def ModifyAdmin(ctx,
         kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    ctx.logger.info("""cluster_admin_id = """+str(cluster_admin_id)+"""";"""+"""password = """+str(password)+"""";"""+"""access = """+str(access)+"""";"""+"""attributes = """+str(attributes)+"""";"""+"")
+    ctx.logger.info("""cluster_admin_id = """+str(cluster_admin_id)+""";"""+"""password = """+str(password)+""";"""+"""access = """+str(access)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
         ModifyClusterAdminResult = ctx.element.modify_cluster_admin(cluster_admin_id=cluster_admin_id, password=password, access=access, attributes=attributes)
     except common.ApiServerError as e:
@@ -936,7 +936,7 @@ def SetSnmpACL(ctx,
 
     usm_users = parser.parse_array(usm_users)
 
-    ctx.logger.info("""networks = """+str(networks)+"""";"""+"""usm_users = """+str(usm_users)+"""";"""+"")
+    ctx.logger.info("""networks = """+str(networks)+""";"""+"""usm_users = """+str(usm_users)+""";"""+"")
     try:
         SetSnmpACLResult = ctx.element.set_snmp_acl(networks=networks, usm_users=usm_users)
     except common.ApiServerError as e:
@@ -1112,7 +1112,7 @@ def ClearFaults(ctx,
 
 
 
-    ctx.logger.info("""fault_types = """+str(fault_types)+"""";"""+"")
+    ctx.logger.info("""fault_types = """+str(fault_types)+""";"""+"")
     try:
         ClearClusterFaultsResult = ctx.element.clear_cluster_faults(fault_types=fault_types)
     except common.ApiServerError as e:
@@ -1141,7 +1141,7 @@ def GetState(ctx,
 
 
 
-    ctx.logger.info("""force = """+str(force)+"""";"""+"")
+    ctx.logger.info("""force = """+str(force)+""";"""+"")
     try:
         GetClusterStateResult = ctx.element.get_cluster_state(force=force)
     except common.ApiServerError as e:
@@ -1244,7 +1244,7 @@ def EnableSnmp(ctx,
 
 
 
-    ctx.logger.info("""snmp_v3_enabled = """+str(snmp_v3_enabled)+"""";"""+"")
+    ctx.logger.info("""snmp_v3_enabled = """+str(snmp_v3_enabled)+""";"""+"")
     try:
         EnableSnmpResult = ctx.element.enable_snmp(snmp_v3_enabled=snmp_v3_enabled)
     except common.ApiServerError as e:
@@ -1336,7 +1336,7 @@ def ListEvents(ctx,
 
 
 
-    ctx.logger.info("""max_events = """+str(max_events)+"""";"""+"""start_event_id = """+str(start_event_id)+"""";"""+"""end_event_id = """+str(end_event_id)+"""";"""+"""event_queue_type = """+str(event_queue_type)+"""";"""+"")
+    ctx.logger.info("""max_events = """+str(max_events)+""";"""+"""start_event_id = """+str(start_event_id)+""";"""+"""end_event_id = """+str(end_event_id)+""";"""+"""event_queue_type = """+str(event_queue_type)+""";"""+"")
     try:
         ListEventsResult = ctx.element.list_events(max_events=max_events, start_event_id=start_event_id, end_event_id=end_event_id, event_queue_type=event_queue_type)
     except common.ApiServerError as e:
@@ -1388,7 +1388,7 @@ def RemoveAdmin(ctx,
 
 
 
-    ctx.logger.info("""cluster_admin_id = """+str(cluster_admin_id)+"""";"""+"")
+    ctx.logger.info("""cluster_admin_id = """+str(cluster_admin_id)+""";"""+"")
     try:
         RemoveClusterAdminResult = ctx.element.remove_cluster_admin(cluster_admin_id=cluster_admin_id)
     except common.ApiServerError as e:
@@ -1427,7 +1427,7 @@ def ModifyFullThreshold(ctx,
 
 
 
-    ctx.logger.info("""stage2_aware_threshold = """+str(stage2_aware_threshold)+"""";"""+"""stage3_block_threshold_percent = """+str(stage3_block_threshold_percent)+"""";"""+"""max_metadata_over_provision_factor = """+str(max_metadata_over_provision_factor)+"""";"""+"")
+    ctx.logger.info("""stage2_aware_threshold = """+str(stage2_aware_threshold)+""";"""+"""stage3_block_threshold_percent = """+str(stage3_block_threshold_percent)+""";"""+"""max_metadata_over_provision_factor = """+str(max_metadata_over_provision_factor)+""";"""+"")
     try:
         ModifyClusterFullThresholdResult = ctx.element.modify_cluster_full_threshold(stage2_aware_threshold=stage2_aware_threshold, stage3_block_threshold_percent=stage3_block_threshold_percent, max_metadata_over_provision_factor=max_metadata_over_provision_factor)
     except common.ApiServerError as e:

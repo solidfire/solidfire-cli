@@ -65,7 +65,7 @@ def GetNodeInfo(ctx,
 
 
 
-    ctx.logger.info("""node_id = """+str(node_id)+"""";"""+"")
+    ctx.logger.info("""node_id = """+str(node_id)+""";"""+"")
     try:
         GetNodeHardwareInfoResult = ctx.element.get_node_hardware_info(node_id=node_id)
     except common.ApiServerError as e:
@@ -94,7 +94,7 @@ def GetClusterInfo(ctx,
 
 
 
-    ctx.logger.info("""type = """+str(type)+"""";"""+"")
+    ctx.logger.info("""type = """+str(type)+""";"""+"")
     try:
         GetClusterHardwareInfoResult = ctx.element.get_cluster_hardware_info(type=type)
     except common.ApiServerError as e:

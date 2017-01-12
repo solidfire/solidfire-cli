@@ -63,7 +63,7 @@ def AddLdapClusterAdmin(ctx,
         kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    ctx.logger.info("""username = """+str(username)+"""";"""+"""access = """+str(access)+"""";"""+"""accept_eula = """+str(accept_eula)+"""";"""+"""attributes = """+str(attributes)+"""";"""+"")
+    ctx.logger.info("""username = """+str(username)+""";"""+"""access = """+str(access)+""";"""+"""accept_eula = """+str(accept_eula)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
         AddLdapClusterAdminResult = ctx.element.add_ldap_cluster_admin(username=username, access=access, accept_eula=accept_eula, attributes=attributes)
     except common.ApiServerError as e:
@@ -163,7 +163,7 @@ def TestLdapAuthentication(ctx,
 
         ldap_configuration = LdapConfiguration(**kwargsDict)
 
-    ctx.logger.info("""username = """+str(username)+"""";"""+"""password = """+str(password)+"""";"""+"""ldap_configuration = """+str(ldap_configuration)+"""";"""+"")
+    ctx.logger.info("""username = """+str(username)+""";"""+"""password = """+str(password)+""";"""+"""ldap_configuration = """+str(ldap_configuration)+""";"""+"")
     try:
         TestLdapAuthenticationResult = ctx.element.test_ldap_authentication(username=username, password=password, ldap_configuration=ldap_configuration)
     except common.ApiServerError as e:
@@ -263,7 +263,7 @@ def EnableLdapAuthentication(ctx,
 
     server_uris = parser.parse_array(server_uris)
 
-    ctx.logger.info("""auth_type = """+str(auth_type)+"""";"""+"""group_search_base_dn = """+str(group_search_base_dn)+"""";"""+"""group_search_custom_filter = """+str(group_search_custom_filter)+"""";"""+"""group_search_type = """+str(group_search_type)+"""";"""+"""search_bind_dn = """+str(search_bind_dn)+"""";"""+"""search_bind_password = """+str(search_bind_password)+"""";"""+"""server_uris = """+str(server_uris)+"""";"""+"""user_dntemplate = """+str(user_dntemplate)+"""";"""+"""user_search_base_dn = """+str(user_search_base_dn)+"""";"""+"""user_search_filter = """+str(user_search_filter)+"""";"""+"")
+    ctx.logger.info("""auth_type = """+str(auth_type)+""";"""+"""group_search_base_dn = """+str(group_search_base_dn)+""";"""+"""group_search_custom_filter = """+str(group_search_custom_filter)+""";"""+"""group_search_type = """+str(group_search_type)+""";"""+"""search_bind_dn = """+str(search_bind_dn)+""";"""+"""search_bind_password = """+str(search_bind_password)+""";"""+"""server_uris = """+str(server_uris)+""";"""+"""user_dntemplate = """+str(user_dntemplate)+""";"""+"""user_search_base_dn = """+str(user_search_base_dn)+""";"""+"""user_search_filter = """+str(user_search_filter)+""";"""+"")
     try:
         EnableLdapAuthenticationResult = ctx.element.enable_ldap_authentication(server_uris=server_uris, auth_type=auth_type, group_search_base_dn=group_search_base_dn, group_search_custom_filter=group_search_custom_filter, group_search_type=group_search_type, search_bind_dn=search_bind_dn, search_bind_password=search_bind_password, user_dntemplate=user_dntemplate, user_search_base_dn=user_search_base_dn, user_search_filter=user_search_filter)
     except common.ApiServerError as e:

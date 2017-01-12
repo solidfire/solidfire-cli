@@ -51,7 +51,7 @@ def ModifyStorageContainer(ctx,
 
 
 
-    ctx.logger.info("""storage_container_id = """+str(storage_container_id)+"""";"""+"""initiator_secret = """+str(initiator_secret)+"""";"""+"""target_secret = """+str(target_secret)+"""";"""+"")
+    ctx.logger.info("""storage_container_id = """+str(storage_container_id)+""";"""+"""initiator_secret = """+str(initiator_secret)+""";"""+"""target_secret = """+str(target_secret)+""";"""+"")
     try:
         ModifyStorageContainerResult = ctx.element.modify_storage_container(storage_container_id=storage_container_id, initiator_secret=initiator_secret, target_secret=target_secret)
     except common.ApiServerError as e:
@@ -82,7 +82,7 @@ def List(ctx,
 
     storage_container_ids = parser.parse_array(storage_container_ids)
 
-    ctx.logger.info("""storage_container_ids = """+str(storage_container_ids)+"""";"""+"")
+    ctx.logger.info("""storage_container_ids = """+str(storage_container_ids)+""";"""+"")
     try:
         ListStorageContainersResult = ctx.element.list_storage_containers(storage_container_ids=storage_container_ids)
     except common.ApiServerError as e:
@@ -111,7 +111,7 @@ def GetStorageContainerEfficiency(ctx,
 
 
 
-    ctx.logger.info("""storage_container_id = """+str(storage_container_id)+"""";"""+"")
+    ctx.logger.info("""storage_container_id = """+str(storage_container_id)+""";"""+"")
     try:
         GetStorageContainerEfficiencyResult = ctx.element.get_storage_container_efficiency(storage_container_id=storage_container_id)
     except common.ApiServerError as e:
@@ -150,7 +150,7 @@ def CreateStorageContainer(ctx,
 
 
 
-    ctx.logger.info("""name = """+str(name)+"""";"""+"""initiator_secret = """+str(initiator_secret)+"""";"""+"""target_secret = """+str(target_secret)+"""";"""+"")
+    ctx.logger.info("""name = """+str(name)+""";"""+"""initiator_secret = """+str(initiator_secret)+""";"""+"""target_secret = """+str(target_secret)+""";"""+"")
     try:
         CreateStorageContainerResult = ctx.element.create_storage_container(name=name, initiator_secret=initiator_secret, target_secret=target_secret)
     except common.ApiServerError as e:
@@ -181,7 +181,7 @@ def Delete(ctx,
 
     storage_container_ids = parser.parse_array(storage_container_ids)
 
-    ctx.logger.info("""storage_container_ids = """+str(storage_container_ids)+"""";"""+"")
+    ctx.logger.info("""storage_container_ids = """+str(storage_container_ids)+""";"""+"")
     try:
         DeleteStorageContainerResult = ctx.element.delete_storage_containers(storage_container_ids=storage_container_ids)
     except common.ApiServerError as e:

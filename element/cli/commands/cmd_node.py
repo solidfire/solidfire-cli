@@ -48,7 +48,7 @@ def SetNetworkConfig(ctx,
         kwargsDict = simplejson.loads(network)
         network = Network(**kwargsDict)
 
-    ctx.logger.info("""network = """+str(network)+"""";"""+"")
+    ctx.logger.info("""network = """+str(network)+""";"""+"")
     try:
         SetNetworkConfigResult = ctx.element.set_network_config(network=network)
     except common.ApiServerError as e:
@@ -81,7 +81,7 @@ def Remove(ctx,
 
     nodes = parser.parse_array(nodes)
 
-    ctx.logger.info("""nodes = """+str(nodes)+"""";"""+"")
+    ctx.logger.info("""nodes = """+str(nodes)+""";"""+"")
     try:
         RemoveNodesResult = ctx.element.remove_nodes(nodes=nodes)
     except common.ApiServerError as e:
@@ -135,7 +135,7 @@ def GetOrigin(ctx,
 
 
 
-    ctx.logger.info("""force = """+str(force)+"""";"""+"")
+    ctx.logger.info("""force = """+str(force)+""";"""+"")
     try:
         GetOriginResult = ctx.element.get_origin(force=force)
     except common.ApiServerError as e:
@@ -245,7 +245,7 @@ def SetConfig(ctx,
         kwargsDict = simplejson.loads(config)
         config = Config(**kwargsDict)
 
-    ctx.logger.info("""config = """+str(config)+"""";"""+"")
+    ctx.logger.info("""config = """+str(config)+""";"""+"")
     try:
         SetConfigResult = ctx.element.set_config(config=config)
     except common.ApiServerError as e:
@@ -284,7 +284,7 @@ def Add(ctx,
 
     pending_nodes = parser.parse_array(pending_nodes)
 
-    ctx.logger.info("""pending_nodes = """+str(pending_nodes)+"""";"""+"")
+    ctx.logger.info("""pending_nodes = """+str(pending_nodes)+""";"""+"")
     try:
         AddNodesResult = ctx.element.add_nodes(pending_nodes=pending_nodes)
     except common.ApiServerError as e:
@@ -363,7 +363,7 @@ def GetStats(ctx,
 
 
 
-    ctx.logger.info("""node_id = """+str(node_id)+"""";"""+"")
+    ctx.logger.info("""node_id = """+str(node_id)+""";"""+"")
     try:
         GetNodeStatsResult = ctx.element.get_node_stats(node_id=node_id)
     except common.ApiServerError as e:

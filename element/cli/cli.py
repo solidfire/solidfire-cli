@@ -119,7 +119,7 @@ class SolidFireCLI(click.MultiCommand):
               help="To filter the fields that will be displayed in a tree, use this parameter. Supply fields in a comma separated list of keypaths. For example, to filter accounts list, if I wanted only the username and status, I could supply 'accounts.username,accounts.status'.")
 @click.option('--debug',
               required=False,
-              default=None,
+              default="1",
               help="Set the debug level",
               type=click.Choice(sorted([str(key) for key
                                         in DEBUG_LOGGING_MAP.keys()])))

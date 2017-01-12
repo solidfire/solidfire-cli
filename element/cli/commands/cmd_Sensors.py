@@ -41,7 +41,7 @@ def GetIpmiInfo(ctx,
 
 
 
-    ctx.logger.info("""force = """+str(force)+"""";"""+"")
+    ctx.logger.info("""force = """+str(force)+""";"""+"")
     try:
         GetIpmiInfoResult = ctx.element.get_ipmi_info(force=force)
     except common.ApiServerError as e:
@@ -75,7 +75,7 @@ def GetIpmiConfig(ctx,
 
 
 
-    ctx.logger.info("""chassis_type = """+str(chassis_type)+"""";"""+"""force = """+str(force)+"""";"""+"")
+    ctx.logger.info("""chassis_type = """+str(chassis_type)+""";"""+"""force = """+str(force)+""";"""+"")
     try:
         GetIpmiConfigResult = ctx.element.get_ipmi_config(force=force, chassis_type=chassis_type)
     except common.ApiServerError as e:

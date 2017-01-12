@@ -45,7 +45,7 @@ def List(ctx,
 
     protocol_endpoint_ids = parser.parse_array(protocol_endpoint_ids)
 
-    ctx.logger.info("""protocol_endpoint_ids = """+str(protocol_endpoint_ids)+"""";"""+"")
+    ctx.logger.info("""protocol_endpoint_ids = """+str(protocol_endpoint_ids)+""";"""+"")
     try:
         ListProtocolEndpointsResult = ctx.element.list_protocol_endpoints(protocol_endpoint_ids=protocol_endpoint_ids)
     except common.ApiServerError as e:

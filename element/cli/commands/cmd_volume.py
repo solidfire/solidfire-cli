@@ -67,7 +67,7 @@ def GetEfficiency(ctx,
 
 
 
-    ctx.logger.info("""volume_id = """+str(volume_id)+"""";"""+"")
+    ctx.logger.info("""volume_id = """+str(volume_id)+""";"""+"")
     try:
         GetVolumeEfficiencyResult = ctx.element.get_volume_efficiency(volume_id=volume_id)
     except common.ApiServerError as e:
@@ -96,7 +96,7 @@ def CancelClone(ctx,
 
 
 
-    ctx.logger.info("""clone_id = """+str(clone_id)+"""";"""+"")
+    ctx.logger.info("""clone_id = """+str(clone_id)+""";"""+"")
     try:
         CancelCloneResult = ctx.element.cancel_clone(clone_id=clone_id)
     except common.ApiServerError as e:
@@ -135,7 +135,7 @@ def ListForAccount(ctx,
 
 
 
-    ctx.logger.info("""account_id = """+str(account_id)+"""";"""+"""start_volume_id = """+str(start_volume_id)+"""";"""+"""limit = """+str(limit)+"""";"""+"")
+    ctx.logger.info("""account_id = """+str(account_id)+""";"""+"""start_volume_id = """+str(start_volume_id)+""";"""+"""limit = """+str(limit)+""";"""+"")
     try:
         ListVolumesForAccountResult = ctx.element.list_volumes_for_account(account_id=account_id, start_volume_id=start_volume_id, limit=limit)
     except common.ApiServerError as e:
@@ -170,7 +170,7 @@ def ListActive(ctx,
 
 
 
-    ctx.logger.info("""start_volume_id = """+str(start_volume_id)+"""";"""+"""limit = """+str(limit)+"""";"""+"")
+    ctx.logger.info("""start_volume_id = """+str(start_volume_id)+""";"""+"""limit = """+str(limit)+""";"""+"")
     try:
         ListActiveVolumesResult = ctx.element.list_active_volumes(start_volume_id=start_volume_id, limit=limit)
     except common.ApiServerError as e:
@@ -199,7 +199,7 @@ def CancelGroupClone(ctx,
 
 
 
-    ctx.logger.info("""group_clone_id = """+str(group_clone_id)+"""";"""+"")
+    ctx.logger.info("""group_clone_id = """+str(group_clone_id)+""";"""+"")
     try:
         CancelGroupCloneResult = ctx.element.cancel_group_clone(group_clone_id=group_clone_id)
     except common.ApiServerError as e:
@@ -230,7 +230,7 @@ def PurgeDeleted(ctx,
 
 
 
-    ctx.logger.info("""volume_id = """+str(volume_id)+"""";"""+"")
+    ctx.logger.info("""volume_id = """+str(volume_id)+""";"""+"")
     try:
         PurgeDeletedVolumeResult = ctx.element.purge_deleted_volume(volume_id=volume_id)
     except common.ApiServerError as e:
@@ -325,7 +325,7 @@ def Clone(ctx,
         kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    ctx.logger.info("""volume_id = """+str(volume_id)+"""";"""+"""name = """+str(name)+"""";"""+"""new_account_id = """+str(new_account_id)+"""";"""+"""new_size = """+str(new_size)+"""";"""+"""access = """+str(access)+"""";"""+"""snapshot_id = """+str(snapshot_id)+"""";"""+"""attributes = """+str(attributes)+"""";"""+"")
+    ctx.logger.info("""volume_id = """+str(volume_id)+""";"""+"""name = """+str(name)+""";"""+"""new_account_id = """+str(new_account_id)+""";"""+"""new_size = """+str(new_size)+""";"""+"""access = """+str(access)+""";"""+"""snapshot_id = """+str(snapshot_id)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
         CloneVolumeResult = ctx.element.clone_volume(volume_id=volume_id, name=name, new_account_id=new_account_id, new_size=new_size, access=access, snapshot_id=snapshot_id, attributes=attributes)
     except common.ApiServerError as e:
@@ -415,7 +415,7 @@ def Modify(ctx,
         kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    ctx.logger.info("""volume_id = """+str(volume_id)+"""";"""+"""account_id = """+str(account_id)+"""";"""+"""access = """+str(access)+"""";"""+"""qos = """+str(qos)+"""";"""+"""total_size = """+str(total_size)+"""";"""+"""attributes = """+str(attributes)+"""";"""+"")
+    ctx.logger.info("""volume_id = """+str(volume_id)+""";"""+"""account_id = """+str(account_id)+""";"""+"""access = """+str(access)+""";"""+"""qos = """+str(qos)+""";"""+"""total_size = """+str(total_size)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
         ModifyVolumeResult = ctx.element.modify_volume(volume_id=volume_id, account_id=account_id, access=access, qos=qos, total_size=total_size, attributes=attributes)
     except common.ApiServerError as e:
@@ -501,7 +501,7 @@ def CloneMultiple(ctx,
 
     volumes = parser.parse_array(volumes)
 
-    ctx.logger.info("""volumes = """+str(volumes)+"""";"""+"""access = """+str(access)+"""";"""+"""group_snapshot_id = """+str(group_snapshot_id)+"""";"""+"""new_account_id = """+str(new_account_id)+"""";"""+"")
+    ctx.logger.info("""volumes = """+str(volumes)+""";"""+"""access = """+str(access)+""";"""+"""group_snapshot_id = """+str(group_snapshot_id)+""";"""+"""new_account_id = """+str(new_account_id)+""";"""+"")
     try:
         CloneMultipleVolumesResult = ctx.element.clone_multiple_volumes(volumes=volumes, access=access, group_snapshot_id=group_snapshot_id, new_account_id=new_account_id)
     except common.ApiServerError as e:
@@ -557,7 +557,7 @@ def StartBulkWrite(ctx,
         kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    ctx.logger.info("""volume_id = """+str(volume_id)+"""";"""+"""format = """+str(format)+"""";"""+"""script = """+str(script)+"""";"""+"""script_parameters = """+str(script_parameters)+"""";"""+"""attributes = """+str(attributes)+"""";"""+"")
+    ctx.logger.info("""volume_id = """+str(volume_id)+""";"""+"""format = """+str(format)+""";"""+"""script = """+str(script)+""";"""+"""script_parameters = """+str(script_parameters)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
         StartBulkVolumeWriteResult = ctx.element.start_bulk_volume_write(volume_id=volume_id, format=format, script=script, script_parameters=script_parameters, attributes=attributes)
     except common.ApiServerError as e:
@@ -626,7 +626,7 @@ def StartBulkRead(ctx,
         kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    ctx.logger.info("""volume_id = """+str(volume_id)+"""";"""+"""format = """+str(format)+"""";"""+"""snapshot_id = """+str(snapshot_id)+"""";"""+"""script = """+str(script)+"""";"""+"""script_parameters = """+str(script_parameters)+"""";"""+"""attributes = """+str(attributes)+"""";"""+"")
+    ctx.logger.info("""volume_id = """+str(volume_id)+""";"""+"""format = """+str(format)+""";"""+"""snapshot_id = """+str(snapshot_id)+""";"""+"""script = """+str(script)+""";"""+"""script_parameters = """+str(script_parameters)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
         StartBulkVolumeReadResult = ctx.element.start_bulk_volume_read(volume_id=volume_id, format=format, snapshot_id=snapshot_id, script=script, script_parameters=script_parameters, attributes=attributes)
     except common.ApiServerError as e:
@@ -665,7 +665,7 @@ def Copy(ctx,
 
 
 
-    ctx.logger.info("""volume_id = """+str(volume_id)+"""";"""+"""dst_volume_id = """+str(dst_volume_id)+"""";"""+"""snapshot_id = """+str(snapshot_id)+"""";"""+"")
+    ctx.logger.info("""volume_id = """+str(volume_id)+""";"""+"""dst_volume_id = """+str(dst_volume_id)+""";"""+"""snapshot_id = """+str(snapshot_id)+""";"""+"")
     try:
         CopyVolumeResult = ctx.element.copy_volume(volume_id=volume_id, dst_volume_id=dst_volume_id, snapshot_id=snapshot_id)
     except common.ApiServerError as e:
@@ -748,7 +748,7 @@ def Create(ctx,
         kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    ctx.logger.info("""name = """+str(name)+"""";"""+"""account_id = """+str(account_id)+"""";"""+"""total_size = """+str(total_size)+"""";"""+"""enable512e = """+str(enable512e)+"""";"""+"""qos = """+str(qos)+"""";"""+"""attributes = """+str(attributes)+"""";"""+"")
+    ctx.logger.info("""name = """+str(name)+""";"""+"""account_id = """+str(account_id)+""";"""+"""total_size = """+str(total_size)+""";"""+"""enable512e = """+str(enable512e)+""";"""+"""qos = """+str(qos)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
         CreateVolumeResult = ctx.element.create_volume(name=name, account_id=account_id, total_size=total_size, enable512e=enable512e, qos=qos, attributes=attributes)
     except common.ApiServerError as e:
@@ -807,7 +807,7 @@ def List(ctx,
 
     volume_ids = parser.parse_array(volume_ids)
 
-    ctx.logger.info("""start_volume_id = """+str(start_volume_id)+"""";"""+"""limit = """+str(limit)+"""";"""+"""volume_status = """+str(volume_status)+"""";"""+"""accounts = """+str(accounts)+"""";"""+"""is_paired = """+str(is_paired)+"""";"""+"""volume_ids = """+str(volume_ids)+"""";"""+"")
+    ctx.logger.info("""start_volume_id = """+str(start_volume_id)+""";"""+"""limit = """+str(limit)+""";"""+"""volume_status = """+str(volume_status)+""";"""+"""accounts = """+str(accounts)+""";"""+"""is_paired = """+str(is_paired)+""";"""+"""volume_ids = """+str(volume_ids)+""";"""+"")
     try:
         ListVolumesResult = ctx.element.list_volumes(start_volume_id=start_volume_id, limit=limit, volume_status=volume_status, accounts=accounts, is_paired=is_paired, volume_ids=volume_ids)
     except common.ApiServerError as e:
@@ -859,7 +859,7 @@ def UpdateBulkStatus(ctx,
         kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    ctx.logger.info("""key = """+str(key)+"""";"""+"""status = """+str(status)+"""";"""+"""percent_complete = """+str(percent_complete)+"""";"""+"""message = """+str(message)+"""";"""+"""attributes = """+str(attributes)+"""";"""+"")
+    ctx.logger.info("""key = """+str(key)+""";"""+"""status = """+str(status)+""";"""+"""percent_complete = """+str(percent_complete)+""";"""+"""message = """+str(message)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
         UpdateBulkVolumeStatusResult = ctx.element.update_bulk_volume_status(key=key, status=status, percent_complete=percent_complete, message=message, attributes=attributes)
     except common.ApiServerError as e:
@@ -914,7 +914,7 @@ def RestoreDeleted(ctx,
 
 
 
-    ctx.logger.info("""volume_id = """+str(volume_id)+"""";"""+"")
+    ctx.logger.info("""volume_id = """+str(volume_id)+""";"""+"")
     try:
         RestoreDeletedVolumeResult = ctx.element.restore_deleted_volume(volume_id=volume_id)
     except common.ApiServerError as e:
@@ -975,7 +975,7 @@ def GetAsyncResult(ctx,
 
 
 
-    ctx.logger.info("""async_handle = """+str(async_handle)+"""";"""+"")
+    ctx.logger.info("""async_handle = """+str(async_handle)+""";"""+"")
     try:
         GetAsyncResultResult = ctx.element.get_async_result(async_handle=async_handle)
     except common.ApiServerError as e:
@@ -1018,7 +1018,7 @@ def Delete(ctx,
 
 
 
-    ctx.logger.info("""volume_id = """+str(volume_id)+"""";"""+"")
+    ctx.logger.info("""volume_id = """+str(volume_id)+""";"""+"")
     try:
         DeleteVolumeResult = ctx.element.delete_volume(volume_id=volume_id)
     except common.ApiServerError as e:
@@ -1049,7 +1049,7 @@ def ListAsyncResults(ctx,
 
     async_result_types = parser.parse_array(async_result_types)
 
-    ctx.logger.info("""async_result_types = """+str(async_result_types)+"""";"""+"")
+    ctx.logger.info("""async_result_types = """+str(async_result_types)+""";"""+"")
     try:
         ListAsyncResultsResult = ctx.element.list_async_results(async_result_types=async_result_types)
     except common.ApiServerError as e:
@@ -1080,7 +1080,7 @@ def ListStatsByAccessGroup(ctx,
 
     volume_access_groups = parser.parse_array(volume_access_groups)
 
-    ctx.logger.info("""volume_access_groups = """+str(volume_access_groups)+"""";"""+"")
+    ctx.logger.info("""volume_access_groups = """+str(volume_access_groups)+""";"""+"")
     try:
         ListVolumeStatsByVolumeAccessGroupResult = ctx.element.list_volume_stats_by_volume_access_group(volume_access_groups=volume_access_groups)
     except common.ApiServerError as e:
@@ -1119,7 +1119,7 @@ def SetDefaultQoS(ctx,
 
 
 
-    ctx.logger.info("""min_iops = """+str(min_iops)+"""";"""+"""max_iops = """+str(max_iops)+"""";"""+"""burst_iops = """+str(burst_iops)+"""";"""+"")
+    ctx.logger.info("""min_iops = """+str(min_iops)+""";"""+"""max_iops = """+str(max_iops)+""";"""+"""burst_iops = """+str(burst_iops)+""";"""+"")
     try:
         SetDefaultQoSResult = ctx.element.set_default_qos(min_iops=min_iops, max_iops=max_iops, burst_iops=burst_iops)
     except common.ApiServerError as e:
@@ -1173,7 +1173,7 @@ def GetStats(ctx,
 
 
 
-    ctx.logger.info("""volume_id = """+str(volume_id)+"""";"""+"")
+    ctx.logger.info("""volume_id = """+str(volume_id)+""";"""+"")
     try:
         GetVolumeStatsResult = ctx.element.get_volume_stats(volume_id=volume_id)
     except common.ApiServerError as e:

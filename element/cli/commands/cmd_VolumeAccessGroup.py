@@ -48,7 +48,7 @@ def RemoveVolumesFrom(ctx,
 
     volumes = parser.parse_array(volumes)
 
-    ctx.logger.info("""volume_access_group_id = """+str(volume_access_group_id)+"""";"""+"""volumes = """+str(volumes)+"""";"""+"")
+    ctx.logger.info("""volume_access_group_id = """+str(volume_access_group_id)+""";"""+"""volumes = """+str(volumes)+""";"""+"")
     try:
         ModifyVolumeAccessGroupResult = ctx.element.remove_volumes_from_volume_access_group(volume_access_group_id=volume_access_group_id, volumes=volumes)
     except common.ApiServerError as e:
@@ -127,7 +127,7 @@ def Modify(ctx,
         kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    ctx.logger.info("""volume_access_group_id = """+str(volume_access_group_id)+"""";"""+"""virtual_network_id = """+str(virtual_network_id)+"""";"""+"""virtual_network_tags = """+str(virtual_network_tags)+"""";"""+"""name = """+str(name)+"""";"""+"""initiators = """+str(initiators)+"""";"""+"""volumes = """+str(volumes)+"""";"""+"""attributes = """+str(attributes)+"""";"""+"")
+    ctx.logger.info("""volume_access_group_id = """+str(volume_access_group_id)+""";"""+"""virtual_network_id = """+str(virtual_network_id)+""";"""+"""virtual_network_tags = """+str(virtual_network_tags)+""";"""+"""name = """+str(name)+""";"""+"""initiators = """+str(initiators)+""";"""+"""volumes = """+str(volumes)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
         ModifyVolumeAccessGroupResult = ctx.element.modify_volume_access_group(volume_access_group_id=volume_access_group_id, virtual_network_id=virtual_network_id, virtual_network_tags=virtual_network_tags, name=name, initiators=initiators, volumes=volumes, attributes=attributes)
     except common.ApiServerError as e:
@@ -196,7 +196,7 @@ def Create(ctx,
         kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    ctx.logger.info("""name = """+str(name)+"""";"""+"""initiators = """+str(initiators)+"""";"""+"""volumes = """+str(volumes)+"""";"""+"""virtual_network_id = """+str(virtual_network_id)+"""";"""+"""virtual_network_tags = """+str(virtual_network_tags)+"""";"""+"""attributes = """+str(attributes)+"""";"""+"")
+    ctx.logger.info("""name = """+str(name)+""";"""+"""initiators = """+str(initiators)+""";"""+"""volumes = """+str(volumes)+""";"""+"""virtual_network_id = """+str(virtual_network_id)+""";"""+"""virtual_network_tags = """+str(virtual_network_tags)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
         CreateVolumeAccessGroupResult = ctx.element.create_volume_access_group(name=name, initiators=initiators, volumes=volumes, virtual_network_id=virtual_network_id, virtual_network_tags=virtual_network_tags, attributes=attributes)
     except common.ApiServerError as e:
@@ -251,7 +251,7 @@ def ModifyLunAssignments(ctx,
 
     lun_assignments = parser.parse_array(lun_assignments)
 
-    ctx.logger.info("""volume_access_group_id = """+str(volume_access_group_id)+"""";"""+"""lun_assignments = """+str(lun_assignments)+"""";"""+"")
+    ctx.logger.info("""volume_access_group_id = """+str(volume_access_group_id)+""";"""+"""lun_assignments = """+str(lun_assignments)+""";"""+"")
     try:
         ModifyVolumeAccessGroupLunAssignmentsResult = ctx.element.modify_volume_access_group_lun_assignments(volume_access_group_id=volume_access_group_id, lun_assignments=lun_assignments)
     except common.ApiServerError as e:
@@ -285,7 +285,7 @@ def List(ctx,
 
 
 
-    ctx.logger.info("""start_volume_access_group_id = """+str(start_volume_access_group_id)+"""";"""+"""limit = """+str(limit)+"""";"""+"")
+    ctx.logger.info("""start_volume_access_group_id = """+str(start_volume_access_group_id)+""";"""+"""limit = """+str(limit)+""";"""+"")
     try:
         ListVolumeAccessGroupsResult = ctx.element.list_volume_access_groups(start_volume_access_group_id=start_volume_access_group_id, limit=limit)
     except common.ApiServerError as e:
@@ -321,7 +321,7 @@ def AddInitiatorsTo(ctx,
 
     initiators = parser.parse_array(initiators)
 
-    ctx.logger.info("""volume_access_group_id = """+str(volume_access_group_id)+"""";"""+"""initiators = """+str(initiators)+"""";"""+"")
+    ctx.logger.info("""volume_access_group_id = """+str(volume_access_group_id)+""";"""+"""initiators = """+str(initiators)+""";"""+"")
     try:
         ModifyVolumeAccessGroupResult = ctx.element.add_initiators_to_volume_access_group(volume_access_group_id=volume_access_group_id, initiators=initiators)
     except common.ApiServerError as e:
@@ -350,7 +350,7 @@ def GetLunAssignments(ctx,
 
 
 
-    ctx.logger.info("""volume_access_group_id = """+str(volume_access_group_id)+"""";"""+"")
+    ctx.logger.info("""volume_access_group_id = """+str(volume_access_group_id)+""";"""+"")
     try:
         GetVolumeAccessGroupLunAssignmentsResult = ctx.element.get_volume_access_group_lun_assignments(volume_access_group_id=volume_access_group_id)
     except common.ApiServerError as e:
@@ -386,7 +386,7 @@ def AddVolumesTo(ctx,
 
     volumes = parser.parse_array(volumes)
 
-    ctx.logger.info("""volume_access_group_id = """+str(volume_access_group_id)+"""";"""+"""volumes = """+str(volumes)+"""";"""+"")
+    ctx.logger.info("""volume_access_group_id = """+str(volume_access_group_id)+""";"""+"""volumes = """+str(volumes)+""";"""+"")
     try:
         ModifyVolumeAccessGroupResult = ctx.element.add_volumes_to_volume_access_group(volume_access_group_id=volume_access_group_id, volumes=volumes)
     except common.ApiServerError as e:
@@ -422,7 +422,7 @@ def RemoveInitiatorsFrom(ctx,
 
     initiators = parser.parse_array(initiators)
 
-    ctx.logger.info("""volume_access_group_id = """+str(volume_access_group_id)+"""";"""+"""initiators = """+str(initiators)+"""";"""+"")
+    ctx.logger.info("""volume_access_group_id = """+str(volume_access_group_id)+""";"""+"""initiators = """+str(initiators)+""";"""+"")
     try:
         ModifyVolumeAccessGroupResult = ctx.element.remove_initiators_from_volume_access_group(volume_access_group_id=volume_access_group_id, initiators=initiators)
     except common.ApiServerError as e:
@@ -451,7 +451,7 @@ def GetEfficiency(ctx,
 
 
 
-    ctx.logger.info("""volume_access_group_id = """+str(volume_access_group_id)+"""";"""+"")
+    ctx.logger.info("""volume_access_group_id = """+str(volume_access_group_id)+""";"""+"")
     try:
         GetEfficiencyResult = ctx.element.get_volume_access_group_efficiency(volume_access_group_id=volume_access_group_id)
     except common.ApiServerError as e:
@@ -480,7 +480,7 @@ def Delete(ctx,
 
 
 
-    ctx.logger.info("""volume_access_group_id = """+str(volume_access_group_id)+"""";"""+"")
+    ctx.logger.info("""volume_access_group_id = """+str(volume_access_group_id)+""";"""+"")
     try:
         DeleteVolumeAccessGroupResult = ctx.element.delete_volume_access_group(volume_access_group_id=volume_access_group_id)
     except common.ApiServerError as e:

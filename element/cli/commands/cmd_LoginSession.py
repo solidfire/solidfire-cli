@@ -41,7 +41,7 @@ def SetInfo(ctx,
 
 
 
-    ctx.logger.info("""timeout = """+str(timeout)+"""";"""+"")
+    ctx.logger.info("""timeout = """+str(timeout)+""";"""+"")
     try:
         SetLoginSessionInfoResult = ctx.element.set_login_session_info(timeout=timeout)
     except common.ApiServerError as e:
@@ -109,7 +109,7 @@ def SetRemoteLoggingHosts(ctx,
 
     remote_hosts = parser.parse_array(remote_hosts)
 
-    ctx.logger.info("""remote_hosts = """+str(remote_hosts)+"""";"""+"")
+    ctx.logger.info("""remote_hosts = """+str(remote_hosts)+""";"""+"")
     try:
         SetRemoteLoggingHostsResult = ctx.element.set_remote_logging_hosts(remote_hosts=remote_hosts)
     except common.ApiServerError as e:

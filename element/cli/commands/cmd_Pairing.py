@@ -42,7 +42,7 @@ def CompleteCluster(ctx,
 
 
 
-    ctx.logger.info("""cluster_pairing_key = """+str(cluster_pairing_key)+"""";"""+"")
+    ctx.logger.info("""cluster_pairing_key = """+str(cluster_pairing_key)+""";"""+"")
     try:
         CompleteClusterPairingResult = ctx.element.complete_cluster_pairing(cluster_pairing_key=cluster_pairing_key)
     except common.ApiServerError as e:
@@ -76,7 +76,7 @@ def CompleteVolume(ctx,
 
 
 
-    ctx.logger.info("""volume_pairing_key = """+str(volume_pairing_key)+"""";"""+"""volume_id = """+str(volume_id)+"""";"""+"")
+    ctx.logger.info("""volume_pairing_key = """+str(volume_pairing_key)+""";"""+"""volume_id = """+str(volume_id)+""";"""+"")
     try:
         CompleteVolumePairingResult = ctx.element.complete_volume_pairing(volume_pairing_key=volume_pairing_key, volume_id=volume_id)
     except common.ApiServerError as e:
@@ -132,7 +132,7 @@ def RemoveVolumePair(ctx,
 
 
 
-    ctx.logger.info("""volume_id = """+str(volume_id)+"""";"""+"")
+    ctx.logger.info("""volume_id = """+str(volume_id)+""";"""+"")
     try:
         RemoveVolumePairResult = ctx.element.remove_volume_pair(volume_id=volume_id)
     except common.ApiServerError as e:
@@ -167,7 +167,7 @@ def StartVolume(ctx,
 
 
 
-    ctx.logger.info("""volume_id = """+str(volume_id)+"""";"""+"""mode = """+str(mode)+"""";"""+"")
+    ctx.logger.info("""volume_id = """+str(volume_id)+""";"""+"""mode = """+str(mode)+""";"""+"")
     try:
         StartVolumePairingResult = ctx.element.start_volume_pairing(volume_id=volume_id, mode=mode)
     except common.ApiServerError as e:
@@ -231,7 +231,7 @@ def ModifyVolumePair(ctx,
 
 
 
-    ctx.logger.info("""volume_id = """+str(volume_id)+"""";"""+"""paused_manual = """+str(paused_manual)+"""";"""+"""mode = """+str(mode)+"""";"""+"")
+    ctx.logger.info("""volume_id = """+str(volume_id)+""";"""+"""paused_manual = """+str(paused_manual)+""";"""+"""mode = """+str(mode)+""";"""+"")
     try:
         ModifyVolumePairResult = ctx.element.modify_volume_pair(volume_id=volume_id, paused_manual=paused_manual, mode=mode)
     except common.ApiServerError as e:
@@ -287,7 +287,7 @@ def RemoveClusterPair(ctx,
 
 
 
-    ctx.logger.info("""cluster_pair_id = """+str(cluster_pair_id)+"""";"""+"")
+    ctx.logger.info("""cluster_pair_id = """+str(cluster_pair_id)+""";"""+"")
     try:
         RemoveClusterPairResult = ctx.element.remove_cluster_pair(cluster_pair_id=cluster_pair_id)
     except common.ApiServerError as e:

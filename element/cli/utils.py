@@ -29,6 +29,7 @@ def print_result(objs, log, as_json=False, depth=None, filter_tree=None):
     # Error case
     if as_json and (depth is not None or filter_tree is not None):
         log.error("If you choose to print it as json, do not provide a depth or filter. Those are for printing it as a tree.")
+        exit()
 
     # If json is true, we print it as json and return:
     if as_json == True:

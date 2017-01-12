@@ -54,7 +54,7 @@ def Modify(ctx,
         kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    ctx.logger.info("""backup_target_id = """+str(backup_target_id)+"""";"""+"""name = """+str(name)+"""";"""+"""attributes = """+str(attributes)+"""";"""+"")
+    ctx.logger.info("""backup_target_id = """+str(backup_target_id)+""";"""+"""name = """+str(name)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
         ModifyBackupTargetResult = ctx.element.modify_backup_target(backup_target_id=backup_target_id, name=name, attributes=attributes)
     except common.ApiServerError as e:
@@ -91,7 +91,7 @@ def Create(ctx,
         kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    ctx.logger.info("""name = """+str(name)+"""";"""+"""attributes = """+str(attributes)+"""";"""+"")
+    ctx.logger.info("""name = """+str(name)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
         CreateBackupTargetResult = ctx.element.create_backup_target(name=name, attributes=attributes)
     except common.ApiServerError as e:
@@ -144,7 +144,7 @@ def Remove(ctx,
 
 
 
-    ctx.logger.info("""backup_target_id = """+str(backup_target_id)+"""";"""+"")
+    ctx.logger.info("""backup_target_id = """+str(backup_target_id)+""";"""+"")
     try:
         RemoveBackupTargetResult = ctx.element.remove_backup_target(backup_target_id=backup_target_id)
     except common.ApiServerError as e:
@@ -173,7 +173,7 @@ def Get(ctx,
 
 
 
-    ctx.logger.info("""backup_target_id = """+str(backup_target_id)+"""";"""+"")
+    ctx.logger.info("""backup_target_id = """+str(backup_target_id)+""";"""+"")
     try:
         GetBackupTargetResult = ctx.element.get_backup_target(backup_target_id=backup_target_id)
     except common.ApiServerError as e:

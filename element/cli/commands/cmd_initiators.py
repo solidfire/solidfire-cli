@@ -69,7 +69,7 @@ def Modify(ctx,
 
     initiators = parser.parse_array(initiators)
 
-    ctx.logger.info("""initiators = """+str(initiators)+"""";"""+"")
+    ctx.logger.info("""initiators = """+str(initiators)+""";"""+"")
     try:
         ModifyInitiatorsResult = ctx.element.modify_initiators(initiators=initiators)
     except common.ApiServerError as e:
@@ -126,7 +126,7 @@ def Create(ctx,
 
     initiators = parser.parse_array(initiators)
 
-    ctx.logger.info("""initiators = """+str(initiators)+"""";"""+"")
+    ctx.logger.info("""initiators = """+str(initiators)+""";"""+"")
     try:
         CreateInitiatorsResult = ctx.element.create_initiators(initiators=initiators)
     except common.ApiServerError as e:
@@ -167,7 +167,7 @@ def List(ctx,
 
     initiators = parser.parse_array(initiators)
 
-    ctx.logger.info("""start_initiator_id = """+str(start_initiator_id)+"""";"""+"""limit = """+str(limit)+"""";"""+"""initiators = """+str(initiators)+"""";"""+"")
+    ctx.logger.info("""start_initiator_id = """+str(start_initiator_id)+""";"""+"""limit = """+str(limit)+""";"""+"""initiators = """+str(initiators)+""";"""+"")
     try:
         ListInitiatorsResult = ctx.element.list_initiators(start_initiator_id=start_initiator_id, limit=limit, initiators=initiators)
     except common.ApiServerError as e:
@@ -199,7 +199,7 @@ def Delete(ctx,
 
     initiators = parser.parse_array(initiators)
 
-    ctx.logger.info("""initiators = """+str(initiators)+"""";"""+"")
+    ctx.logger.info("""initiators = """+str(initiators)+""";"""+"")
     try:
         DeleteInitiatorsResult = ctx.element.delete_initiators(initiators=initiators)
     except common.ApiServerError as e:

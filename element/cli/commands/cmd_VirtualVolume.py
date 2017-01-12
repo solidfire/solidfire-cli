@@ -43,7 +43,7 @@ def ListHosts(ctx,
 
     virtual_volume_host_ids = parser.parse_array(virtual_volume_host_ids)
 
-    ctx.logger.info("""virtual_volume_host_ids = """+str(virtual_volume_host_ids)+"""";"""+"")
+    ctx.logger.info("""virtual_volume_host_ids = """+str(virtual_volume_host_ids)+""";"""+"")
     try:
         ListVirtualVolumeHostsResult = ctx.element.list_virtual_volume_hosts(virtual_volume_host_ids=virtual_volume_host_ids)
     except common.ApiServerError as e:
@@ -101,7 +101,7 @@ def GetUnsharedChunks(ctx,
 
 
 
-    ctx.logger.info("""virtual_volume_id = """+str(virtual_volume_id)+"""";"""+"""base_virtual_volume_id = """+str(base_virtual_volume_id)+"""";"""+"""segment_start = """+str(segment_start)+"""";"""+"""segment_length = """+str(segment_length)+"""";"""+"""chunk_size = """+str(chunk_size)+"""";"""+"""calling_virtual_volume_host_id = """+str(calling_virtual_volume_host_id)+"""";"""+"")
+    ctx.logger.info("""virtual_volume_id = """+str(virtual_volume_id)+""";"""+"""base_virtual_volume_id = """+str(base_virtual_volume_id)+""";"""+"""segment_start = """+str(segment_start)+""";"""+"""segment_length = """+str(segment_length)+""";"""+"""chunk_size = """+str(chunk_size)+""";"""+"""calling_virtual_volume_host_id = """+str(calling_virtual_volume_host_id)+""";"""+"")
     try:
         VirtualVolumeUnsharedChunkResult = ctx.element.get_virtual_volume_unshared_chunks(virtual_volume_id=virtual_volume_id, base_virtual_volume_id=base_virtual_volume_id, segment_start=segment_start, segment_length=segment_length, chunk_size=chunk_size, calling_virtual_volume_host_id=calling_virtual_volume_host_id)
     except common.ApiServerError as e:
@@ -135,7 +135,7 @@ def GetTaskUpdate(ctx,
 
 
 
-    ctx.logger.info("""virtual_volume_task_id = """+str(virtual_volume_task_id)+"""";"""+"""calling_virtual_volume_host_id = """+str(calling_virtual_volume_host_id)+"""";"""+"")
+    ctx.logger.info("""virtual_volume_task_id = """+str(virtual_volume_task_id)+""";"""+"""calling_virtual_volume_host_id = """+str(calling_virtual_volume_host_id)+""";"""+"")
     try:
         VirtualVolumeTaskResult = ctx.element.get_virtual_volume_task_update(virtual_volume_task_id=virtual_volume_task_id, calling_virtual_volume_host_id=calling_virtual_volume_host_id)
     except common.ApiServerError as e:
@@ -166,7 +166,7 @@ def ListTasks(ctx,
 
     virtual_volume_task_ids = parser.parse_array(virtual_volume_task_ids)
 
-    ctx.logger.info("""virtual_volume_task_ids = """+str(virtual_volume_task_ids)+"""";"""+"")
+    ctx.logger.info("""virtual_volume_task_ids = """+str(virtual_volume_task_ids)+""";"""+"")
     try:
         ListVirtualVolumeTasksResult = ctx.element.list_virtual_volume_tasks(virtual_volume_task_ids=virtual_volume_task_ids)
     except common.ApiServerError as e:
@@ -224,7 +224,7 @@ def CreateHost(ctx,
 
     visible_protocol_endpoint_ids = parser.parse_array(visible_protocol_endpoint_ids)
 
-    ctx.logger.info("""virtual_volume_host_id = """+str(virtual_volume_host_id)+"""";"""+"""cluster_id = """+str(cluster_id)+"""";"""+"""initiator_names = """+str(initiator_names)+"""";"""+"""visible_protocol_endpoint_ids = """+str(visible_protocol_endpoint_ids)+"""";"""+"""host_address = """+str(host_address)+"""";"""+"""calling_virtual_volume_host_id = """+str(calling_virtual_volume_host_id)+"""";"""+"")
+    ctx.logger.info("""virtual_volume_host_id = """+str(virtual_volume_host_id)+""";"""+"""cluster_id = """+str(cluster_id)+""";"""+"""initiator_names = """+str(initiator_names)+""";"""+"""visible_protocol_endpoint_ids = """+str(visible_protocol_endpoint_ids)+""";"""+"""host_address = """+str(host_address)+""";"""+"""calling_virtual_volume_host_id = """+str(calling_virtual_volume_host_id)+""";"""+"")
     try:
         VirtualVolumeNullResult = ctx.element.create_virtual_volume_host(virtual_volume_host_id=virtual_volume_host_id, cluster_id=cluster_id, initiator_names=initiator_names, visible_protocol_endpoint_ids=visible_protocol_endpoint_ids, host_address=host_address, calling_virtual_volume_host_id=calling_virtual_volume_host_id)
     except common.ApiServerError as e:
@@ -253,7 +253,7 @@ def EnableFeature(ctx,
 
 
 
-    ctx.logger.info("""feature = """+str(feature)+"""";"""+"")
+    ctx.logger.info("""feature = """+str(feature)+""";"""+"")
     try:
         EnableFeatureResult = ctx.element.enable_feature(feature=feature)
     except common.ApiServerError as e:
@@ -304,7 +304,7 @@ def List(ctx,
 
     virtual_volume_ids = parser.parse_array(virtual_volume_ids)
 
-    ctx.logger.info("""details = """+str(details)+"""";"""+"""limit = """+str(limit)+"""";"""+"""recursive = """+str(recursive)+"""";"""+"""start_virtual_volume_id = """+str(start_virtual_volume_id)+"""";"""+"""virtual_volume_ids = """+str(virtual_volume_ids)+"""";"""+"")
+    ctx.logger.info("""details = """+str(details)+""";"""+"""limit = """+str(limit)+""";"""+"""recursive = """+str(recursive)+""";"""+"""start_virtual_volume_id = """+str(start_virtual_volume_id)+""";"""+"""virtual_volume_ids = """+str(virtual_volume_ids)+""";"""+"")
     try:
         ListVirtualVolumesResult = ctx.element.list_virtual_volumes(details=details, limit=limit, recursive=recursive, start_virtual_volume_id=start_virtual_volume_id, virtual_volume_ids=virtual_volume_ids)
     except common.ApiServerError as e:
@@ -335,7 +335,7 @@ def ListBindings(ctx,
 
     virtual_volume_binding_ids = parser.parse_array(virtual_volume_binding_ids)
 
-    ctx.logger.info("""virtual_volume_binding_ids = """+str(virtual_volume_binding_ids)+"""";"""+"")
+    ctx.logger.info("""virtual_volume_binding_ids = """+str(virtual_volume_binding_ids)+""";"""+"")
     try:
         ListVirtualVolumeBindingsResult = ctx.element.list_virtual_volume_bindings(virtual_volume_binding_ids=virtual_volume_binding_ids)
     except common.ApiServerError as e:
@@ -379,7 +379,7 @@ def PrepareVirtualSnapshot(ctx,
 
 
 
-    ctx.logger.info("""virtual_volume_id = """+str(virtual_volume_id)+"""";"""+"""name = """+str(name)+"""";"""+"""writable_snapshot = """+str(writable_snapshot)+"""";"""+"""calling_virtual_volume_host_id = """+str(calling_virtual_volume_host_id)+"""";"""+"")
+    ctx.logger.info("""virtual_volume_id = """+str(virtual_volume_id)+""";"""+"""name = """+str(name)+""";"""+"""writable_snapshot = """+str(writable_snapshot)+""";"""+"""calling_virtual_volume_host_id = """+str(calling_virtual_volume_host_id)+""";"""+"")
     try:
         PrepareVirtualSnapshotResult = ctx.element.prepare_virtual_snapshot(virtual_volume_id=virtual_volume_id, name=name, writable_snapshot=writable_snapshot, calling_virtual_volume_host_id=calling_virtual_volume_host_id)
     except common.ApiServerError as e:
@@ -432,7 +432,7 @@ def GetFeatureStatus(ctx,
 
 
 
-    ctx.logger.info("""feature = """+str(feature)+"""";"""+"")
+    ctx.logger.info("""feature = """+str(feature)+""";"""+"")
     try:
         GetFeatureStatusResult = ctx.element.get_feature_status(feature=feature)
     except common.ApiServerError as e:

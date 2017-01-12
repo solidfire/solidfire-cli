@@ -117,7 +117,7 @@ def ListVolumeStatsByVirtualVolume(ctx,
 
     virtual_volume_ids = parser.parse_array(virtual_volume_ids)
 
-    ctx.logger.info("""virtual_volume_ids = """+str(virtual_volume_ids)+"""";"""+"")
+    ctx.logger.info("""virtual_volume_ids = """+str(virtual_volume_ids)+""";"""+"")
     try:
         ListVolumeStatsByVirtualVolumeResult = ctx.element.list_volume_stats_by_virtual_volume(virtual_volume_ids=virtual_volume_ids)
     except common.ApiServerError as e:
@@ -147,7 +147,7 @@ def ListVolumeStats(ctx,
 
     volume_ids = parser.parse_array(volume_ids)
 
-    ctx.logger.info("""volume_ids = """+str(volume_ids)+"""";"""+"")
+    ctx.logger.info("""volume_ids = """+str(volume_ids)+""";"""+"")
     try:
         ListVolumeStatsResult = ctx.element.list_volume_stats(volume_ids=volume_ids)
     except common.ApiServerError as e:
@@ -178,7 +178,7 @@ def ListDriveStats(ctx,
 
     drives = parser.parse_array(drives)
 
-    ctx.logger.info("""drives = """+str(drives)+"""";"""+"")
+    ctx.logger.info("""drives = """+str(drives)+""";"""+"")
     try:
         ListDriveStatsResult = ctx.element.list_drive_stats(drives=drives)
     except common.ApiServerError as e:

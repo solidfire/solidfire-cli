@@ -51,7 +51,7 @@ def Services(ctx,
 
 
 
-    ctx.logger.info("""force = """+str(force)+"""";"""+"""service = """+str(service)+"""";"""+"""action = """+str(action)+"""";"""+"")
+    ctx.logger.info("""force = """+str(force)+""";"""+"""service = """+str(service)+""";"""+"""action = """+str(action)+""";"""+"")
     try:
         dict = ctx.element.restart_services(force=force, service=service, action=action)
     except common.ApiServerError as e:
@@ -80,7 +80,7 @@ def Networking(ctx,
 
 
 
-    ctx.logger.info("""force = """+str(force)+"""";"""+"")
+    ctx.logger.info("""force = """+str(force)+""";"""+"")
     try:
         dict = ctx.element.restart_networking(force=force)
     except common.ApiServerError as e:
@@ -119,7 +119,7 @@ def ResetNode(ctx,
 
 
 
-    ctx.logger.info("""build = """+str(build)+"""";"""+"""force = """+str(force)+"""";"""+"""option = """+str(option)+"""";"""+"")
+    ctx.logger.info("""build = """+str(build)+""";"""+"""force = """+str(force)+""";"""+"""option = """+str(option)+""";"""+"")
     try:
         ResetNodeResult = ctx.element.reset_node(build=build, force=force, option=option)
     except common.ApiServerError as e:
@@ -155,7 +155,7 @@ def Shutdown(ctx,
 
     nodes = parser.parse_array(nodes)
 
-    ctx.logger.info("""nodes = """+str(nodes)+"""";"""+"""option = """+str(option)+"""";"""+"")
+    ctx.logger.info("""nodes = """+str(nodes)+""";"""+"""option = """+str(option)+""";"""+"")
     try:
         ShutdownResult = ctx.element.shutdown(nodes=nodes, option=option)
     except common.ApiServerError as e:
