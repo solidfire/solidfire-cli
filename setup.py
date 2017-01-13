@@ -23,7 +23,7 @@ setup(
     packages=find_packages(exclude=["element.tests"]),
     license='MIT',
     zip_safe=False,
-    url='git@bitbucket.org:solidfire/solidfire-cli.git',
+    url='https://github.com/solidfire/Python-CLI.git',
     entry_points={
         'console_scripts': [
             'sfcli=element.cli.cli:cli',
