@@ -3,7 +3,7 @@ from click.testing import CliRunner
 from element.cli import cli
 import os
 import csv
-from unittest.mock import MagicMock
+from pkg_resources import Requirement, resource_filename
 
 # For the connection commands we set it up so that the sdk returns a fake connection.
 def check_functionality_of_connection_suite():
@@ -12,7 +12,7 @@ def check_functionality_of_connection_suite():
     result = runner.invoke(cli.cli, ['--mvip', "10.117.61.44", "--login", "admin", "--password", "admin", "--name", "b","Connection", "PushConnection"])
     # Next, verify that it happened by opening up the csv file and checking.
 
-    connectionsCsvLocation = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "..", "connections.csv")
+    connectionsCsvLocation = resource_filename(Requirement.parse("sfcli"), "connections.csv")
     with open(connectionsCsvLocation) as connectionFile:
         connections = list(csv.DictReader(connectionFile, delimiter=','))
 

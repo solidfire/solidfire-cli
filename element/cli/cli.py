@@ -1,14 +1,10 @@
 import logging
 import logging.config
-import click_log
 import os
 import sys
 import click
 import csv
-from solidfire.factory import ElementFactory
-
-from element import solidfire_element_api as api
-from element import exceptions
+from pkg_resources import Requirement, resource_filename
 
 from solidfire.factory import ElementFactory
 
@@ -141,21 +137,27 @@ def cli(ctx,
     # NOTE(jdg): This method is actually our console entry point,
     # if/when we introduce a v2 of the shell and client, we may
     # need to define a new entry point one level up that parses
-    # out what version we want to use
+    # out what version we want to uses
     ctx.debug = debug
     logging.basicConfig(
         level=logging.WARNING,
         format=('%(levelname)s in %(filename)s@%(lineno)s: %(message)s'))
-    ctx.verbose = verbose
     LOG.setLevel(DEBUG_LOGGING_MAP[int(debug)])
     ctx.logger = LOG
+
+    library_log = logging.getLogger('solidfire.Element').setLevel(logging.CRITICAL)
+
+    ctx.verbose = verbose
 
     connections_dirty = False
     cfg = None
 
-    connectionsCsvLocation = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "..", "connections.csv")
-    with open(connectionsCsvLocation) as connectionFile:
-        connections = list(csv.DictReader(connectionFile, delimiter=','))
+    connectionsCsvLocation = resource_filename(Requirement.parse("sfcli"), "connections.csv")
+    if os.path.exists(connectionsCsvLocation):
+        with open(connectionsCsvLocation) as connectionFile:
+            connections = list(csv.DictReader(connectionFile, delimiter=','))
+    else:
+        connections = []
 
     # Arguments take precedence regardless of env settings
     if mvip and login and password:
@@ -185,11 +187,9 @@ def cli(ctx,
         cfg["port"] = int(cfg["port"])
         # Finaly, we need to establish our connection via elementfactory:
         ctx.element = ElementFactory.create(cfg["mvip"],cfg["login"],cfg["password"],9.0,port=cfg["port"])
-        ctx.client = api.SolidFireAPI(endpoint_dict=cfg)
 
          # TODO(jdg): Use the client to query the cluster for the supported version
         ctx.sfapi_endpoint_version = 7
-        ctx.element = ElementFactory.create(cfg["mvip"],cfg["login"],cfg["password"],port=cfg["port"])
         ctx.cfg = cfg
         ctx.json = json
         ctx.depth = depth

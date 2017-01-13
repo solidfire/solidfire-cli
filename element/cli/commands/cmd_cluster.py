@@ -11,7 +11,6 @@ import click
 from element.cli import utils as cli_utils
 from element.cli import parser
 from element.cli.cli import pass_context
-from element.solidfire_element_api import SolidFireRequestException
 from element import utils
 import jsonpickle
 import simplejson

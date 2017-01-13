@@ -14,19 +14,19 @@ else:
     LONG_DESCRIPTION = DESCRIPTION
 
 setup(
-    name='solidfire-python',
+    name='solidfire-cli',
     version='0.0.1',
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
     author='SolidFire, Inc.',
     author_email='ariel.hoffman@solidfire.com, adam.haid@solidfire.com',
-    packages=["element.cli"]+find_packages(exclude=["element.tests"]),
+    packages=find_packages(exclude=["element.tests"]),
     license='MIT',
     zip_safe=False,
     url='git@bitbucket.org:solidfire/solidfire-cli.git',
     entry_points={
         'console_scripts': [
-            'sfcli= element.cli.cli:cli',
+            'sfcli=element.cli.cli:cli',
         ],
     },
     install_requires=[

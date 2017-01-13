@@ -9,8 +9,7 @@ import os
 import csv
 from element.cli.cli import pass_context
 from element import exceptions
-
-
+from pkg_resources import Requirement, resource_filename
 
 @click.group()
 @pass_context
@@ -23,7 +22,7 @@ def PushConnection(ctx):
     if(ctx.cfg.get("name", "") is None):
         raise exceptions.SolidFireUsageException("In order to push a connection, please provide a connection name.")
 
-    connectionsCsvLocation = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "..", "..", "connections.csv")
+    connectionsCsvLocation = resource_filename(Requirement.parse("sfcli"), "connections.csv")
     with open(connectionsCsvLocation) as connectionFile:
         connections = list(csv.DictReader(connectionFile, delimiter=','))
 
@@ -50,7 +49,7 @@ def RemoveConnection(ctx, name=None, index=None):
         raise exceptions.SolidFireUsageException("You must provide either the name or the index. Not both.")
     if name is None and index is None:
         raise exceptions.SolidFireUsageException("You must provide either the name or the index of the connection to remove.")
-    connectionsCsvLocation = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "..", "..", "connections.csv")
+    connectionsCsvLocation = resource_filename(Requirement.parse("sfcli"), "connections.csv")
     with open(connectionsCsvLocation) as connectionFile:
         connections = list(csv.DictReader(connectionFile, delimiter=','))
 
