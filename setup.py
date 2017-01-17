@@ -37,7 +37,7 @@ setup(
 		'setuptools',
         'simplejson',
         'jsonpickle >= 0.9.3',
-		'solidfire-sdk-python'
+		'solidfire-sdk-python >= 1.2'
     ],
     tests_require=[
         'mock',
