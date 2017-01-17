@@ -99,7 +99,7 @@ def SecureErase(ctx,
 @cli.command('List', short_help="""ListDrives allows you to retrieve the list of the drives that exist in the cluster's active nodes. This method returns drives that have been added as volume metadata or block drives as well as drives that have not been added and are available. """)
 @pass_context
 def List(ctx):
-    """ListDrives allows you to retrieve the list of the drives that exist in the cluster's active nodes."""
+    """ListDrives allows you to retrieve the list of the drives that exist in the cluster&#x27;s active nodes."""
     """This method returns drives that have been added as volume metadata or block drives as well as drives that have not been added and are available."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
@@ -202,7 +202,7 @@ def GetHardwareInfo(ctx,
 @pass_context
 def Add(ctx,
            new_drive_drive_id):
-    """AddDrives is used to add one or more available drives to the cluster enabling the drives to host a portion of the cluster's data."""
+    """AddDrives is used to add one or more available drives to the cluster enabling the drives to host a portion of the cluster&#x27;s data."""
     """When you add a node to the cluster or install new drives in an existing node, the new drives are marked as &quot;available&quot; and must be added via AddDrives before they can be utilized."""
     """Use the &quot;ListDrives&quot; method to display drives that are &quot;available&quot; to be added."""
     """When you add multiple drives, it is more efficient to add them in a single &quot;AddDrives&quot; method call rather than multiple individual methods with a single drive each."""

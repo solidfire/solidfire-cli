@@ -34,7 +34,7 @@ def cli(ctx):
 def List(ctx,
            protocol_endpoint_ids = None):
     """Gets protocol endpoints in the system"""
-    """If protocolEndpointIDs isn't specified all protocol endpoints"""
+    """If protocolEndpointIDs isn&#x27;t specified all protocol endpoints"""
     """are returned. Else the supplied protocolEndpointIDs are."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
