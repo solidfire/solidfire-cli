@@ -31,7 +31,6 @@ setup(
     },
     install_requires=[
         'click >= 5',
-        'prompt_toolkit',
 		'future',
 		'setuptools',
         'simplejson',
