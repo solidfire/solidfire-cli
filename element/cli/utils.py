@@ -1,17 +1,6 @@
-import prettytable
 from element.exceptions import *
 import jsonpickle
 import json as serializer
-
-import six
-
-
-def print_dict(d, property="Property"):
-    pt = prettytable.PrettyTable([property, 'Value'], caching=False)
-    pt.aligns = ['l', 'l']
-    [pt.add_row(list(r)) for r in six.iteritems(d)]
-    print(pt.get_string(sortby=property))
-
 
 def kv_string_to_dict(kv_string):
     new_dict = {}

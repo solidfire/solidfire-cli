@@ -30,7 +30,6 @@ setup(
         ],
     },
     install_requires=[
-        'six >= 1.7.0',
         'click >= 5',
         'prompt_toolkit',
 		'future',
