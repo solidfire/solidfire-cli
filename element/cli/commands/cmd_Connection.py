@@ -22,7 +22,7 @@ def PushConnection(ctx):
     if(ctx.cfg.get("name", "") is None):
         raise exceptions.SolidFireUsageException("In order to push a connection, please provide a connection name.")
 
-    connectionsCsvLocation = resource_filename(Requirement.parse("sfcli"), "connections.csv")
+    connectionsCsvLocation = resource_filename(Requirement.parse("solidfire-cli"), "connections.csv")
     with open(connectionsCsvLocation) as connectionFile:
         connections = list(csv.DictReader(connectionFile, delimiter=','))
 
@@ -49,7 +49,7 @@ def RemoveConnection(ctx, name=None, index=None):
         raise exceptions.SolidFireUsageException("You must provide either the name or the index. Not both.")
     if name is None and index is None:
         raise exceptions.SolidFireUsageException("You must provide either the name or the index of the connection to remove.")
-    connectionsCsvLocation = resource_filename(Requirement.parse("sfcli"), "connections.csv")
+    connectionsCsvLocation = resource_filename(Requirement.parse("solidfire-cli"), "connections.csv")
     with open(connectionsCsvLocation) as connectionFile:
         connections = list(csv.DictReader(connectionFile, delimiter=','))
 

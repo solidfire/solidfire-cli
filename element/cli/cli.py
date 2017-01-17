@@ -152,7 +152,7 @@ def cli(ctx,
     connections_dirty = False
     cfg = None
 
-    connectionsCsvLocation = resource_filename(Requirement.parse("sfcli"), "connections.csv")
+    connectionsCsvLocation = resource_filename(Requirement.parse("solidfire-cli"), "connections.csv")
     if os.path.exists(connectionsCsvLocation):
         with open(connectionsCsvLocation) as connectionFile:
             connections = list(csv.DictReader(connectionFile, delimiter=','))

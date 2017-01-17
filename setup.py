@@ -31,6 +31,7 @@ setup(
     },
     install_requires=[
         'six >= 1.7.0',
+		'solidfire',
         'prettytable >= 0.7.0',
         'click >= 5',
         'requests >= 2.7.0',
@@ -39,6 +40,7 @@ setup(
 		'setuptools',
         'simplejson',
         'jsonpickle >= 0.9.3',
+		'solidfire-sdk-python'
     ],
     tests_require=[
         'mock',
