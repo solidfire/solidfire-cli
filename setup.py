@@ -31,10 +31,7 @@ setup(
     },
     install_requires=[
         'six >= 1.7.0',
-		'solidfire',
-        'prettytable >= 0.7.0',
         'click >= 5',
-        'requests >= 2.7.0',
         'prompt_toolkit',
 		'future',
 		'setuptools',
