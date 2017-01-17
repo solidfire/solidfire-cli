@@ -23,7 +23,7 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """RemoveVolumesFrom Modify Create ModifyLunAssignments List AddInitiatorsTo GetLunAssignments AddVolumesTo RemoveInitiatorsFrom GetEfficiency Delete """
+    """RemoveVolumesFrom Create ModifyLunAssignments List Modify AddInitiatorsTo GetLunAssignments AddVolumesTo RemoveInitiatorsFrom GetEfficiency Delete """
 
 @cli.command('RemoveVolumesFrom', short_help="""Remove volumes from a volume access group. """)
 @click.option('--volume_access_group_id',
@@ -50,85 +50,6 @@ def RemoveVolumesFrom(ctx,
     ctx.logger.info("""volume_access_group_id = """+str(volume_access_group_id)+""";"""+"""volumes = """+str(volumes)+""";"""+"")
     try:
         ModifyVolumeAccessGroupResult = ctx.element.remove_volumes_from_volume_access_group(volume_access_group_id=volume_access_group_id, volumes=volumes)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(ModifyVolumeAccessGroupResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('Modify', short_help="""Update initiators and add or remove volumes from a volume access group. A specified initiator or volume that duplicates an existing volume or initiator in a volume access group is left as-is. If a value is not specified for volumes or initiators, the current list of initiators and volumes are not changed.  Often, it is easier to use the convenience functions to modify initiators and volumes independently:  AddInitiatorsToVolumeAccessGroup RemoveInitiatorsFromVolumeAccessGroup AddVolumesToVolumeAccessGroup RemoveVolumesFromVolumeAccessGroup """)
-@click.option('--volume_access_group_id',
-              type=int,
-              required=True,
-              help="""The ID of the volume access group to modify. """)
-@click.option('--virtual_network_id',
-              type=str,
-              required=False,
-              help="""The ID of the SolidFire Virtual Network ID to associate the volume access group with. """)
-@click.option('--virtual_network_tags',
-              type=str,
-              required=False,
-              help="""The ID of the VLAN Virtual Network Tag to associate the volume access group with. """)
-@click.option('--name',
-              type=str,
-              required=False,
-              help="""Name of the volume access group. It is not required to be unique, but recommended. """)
-@click.option('--initiators',
-              type=str,
-              required=False,
-              help="""List of initiators to include in the volume access group. If unspecified, the access group's configured initiators will not be modified. """)
-@click.option('--volumes',
-              type=str,
-              required=False,
-              help="""List of volumes to initially include in the volume access group. If unspecified, the access group's volumes will not be modified. """)
-@click.option('--attributes',
-              type=str,
-              required=False,
-              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
-@pass_context
-def Modify(ctx,
-           volume_access_group_id,
-           virtual_network_id = None,
-           virtual_network_tags = None,
-           name = None,
-           initiators = None,
-           volumes = None,
-           attributes = None):
-    """Update initiators and add or remove volumes from a volume access group."""
-    """A specified initiator or volume that duplicates an existing volume or initiator in a volume access group is left as-is."""
-    """If a value is not specified for volumes or initiators, the current list of initiators and volumes are not changed."""
-    """"""
-    """Often, it is easier to use the convenience functions to modify initiators and volumes independently:"""
-    """"""
-    """AddInitiatorsToVolumeAccessGroup"""
-    """RemoveInitiatorsFromVolumeAccessGroup"""
-    """AddVolumesToVolumeAccessGroup"""
-    """RemoveVolumesFromVolumeAccessGroup"""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    virtual_network_id = parser.parse_array(virtual_network_id)
-
-    virtual_network_tags = parser.parse_array(virtual_network_tags)
-
-    initiators = parser.parse_array(initiators)
-
-    volumes = parser.parse_array(volumes)
-    if(attributes is not None):
-        kwargsDict = simplejson.loads(attributes)
-        attributes = dict(**kwargsDict)
-
-    ctx.logger.info("""volume_access_group_id = """+str(volume_access_group_id)+""";"""+"""virtual_network_id = """+str(virtual_network_id)+""";"""+"""virtual_network_tags = """+str(virtual_network_tags)+""";"""+"""name = """+str(name)+""";"""+"""initiators = """+str(initiators)+""";"""+"""volumes = """+str(volumes)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
-    try:
-        ModifyVolumeAccessGroupResult = ctx.element.modify_volume_access_group(volume_access_group_id=volume_access_group_id, virtual_network_id=virtual_network_id, virtual_network_tags=virtual_network_tags, name=name, initiators=initiators, volumes=volumes, attributes=attributes)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -295,6 +216,85 @@ def List(ctx,
         exit()
 
     cli_utils.print_result(ListVolumeAccessGroupsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('Modify', short_help="""Update initiators and add or remove volumes from a volume access group. A specified initiator or volume that duplicates an existing volume or initiator in a volume access group is left as-is. If a value is not specified for volumes or initiators, the current list of initiators and volumes are not changed.  Often, it is easier to use the convenience functions to modify initiators and volumes independently:  AddInitiatorsToVolumeAccessGroup RemoveInitiatorsFromVolumeAccessGroup AddVolumesToVolumeAccessGroup RemoveVolumesFromVolumeAccessGroup """)
+@click.option('--volume_access_group_id',
+              type=int,
+              required=True,
+              help="""The ID of the volume access group to modify. """)
+@click.option('--virtual_network_id',
+              type=str,
+              required=False,
+              help="""The ID of the SolidFire Virtual Network ID to associate the volume access group with. """)
+@click.option('--virtual_network_tags',
+              type=str,
+              required=False,
+              help="""The ID of the VLAN Virtual Network Tag to associate the volume access group with. """)
+@click.option('--name',
+              type=str,
+              required=False,
+              help="""Name of the volume access group. It is not required to be unique, but recommended. """)
+@click.option('--initiators',
+              type=str,
+              required=False,
+              help="""List of initiators to include in the volume access group. If unspecified, the access group's configured initiators will not be modified. """)
+@click.option('--volumes',
+              type=str,
+              required=False,
+              help="""List of volumes to initially include in the volume access group. If unspecified, the access group's volumes will not be modified. """)
+@click.option('--attributes',
+              type=str,
+              required=False,
+              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
+@pass_context
+def Modify(ctx,
+           volume_access_group_id,
+           virtual_network_id = None,
+           virtual_network_tags = None,
+           name = None,
+           initiators = None,
+           volumes = None,
+           attributes = None):
+    """Update initiators and add or remove volumes from a volume access group."""
+    """A specified initiator or volume that duplicates an existing volume or initiator in a volume access group is left as-is."""
+    """If a value is not specified for volumes or initiators, the current list of initiators and volumes are not changed."""
+    """"""
+    """Often, it is easier to use the convenience functions to modify initiators and volumes independently:"""
+    """"""
+    """AddInitiatorsToVolumeAccessGroup"""
+    """RemoveInitiatorsFromVolumeAccessGroup"""
+    """AddVolumesToVolumeAccessGroup"""
+    """RemoveVolumesFromVolumeAccessGroup"""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    virtual_network_id = parser.parse_array(virtual_network_id)
+
+    virtual_network_tags = parser.parse_array(virtual_network_tags)
+
+    initiators = parser.parse_array(initiators)
+
+    volumes = parser.parse_array(volumes)
+    if(attributes is not None):
+        kwargsDict = simplejson.loads(attributes)
+        attributes = dict(**kwargsDict)
+
+    ctx.logger.info("""volume_access_group_id = """+str(volume_access_group_id)+""";"""+"""virtual_network_id = """+str(virtual_network_id)+""";"""+"""virtual_network_tags = """+str(virtual_network_tags)+""";"""+"""name = """+str(name)+""";"""+"""initiators = """+str(initiators)+""";"""+"""volumes = """+str(volumes)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
+    try:
+        ModifyVolumeAccessGroupResult = ctx.element.modify_volume_access_group(volume_access_group_id=volume_access_group_id, virtual_network_id=virtual_network_id, virtual_network_tags=virtual_network_tags, name=name, initiators=initiators, volumes=volumes, attributes=attributes)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ModifyVolumeAccessGroupResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
