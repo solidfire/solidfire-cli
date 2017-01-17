@@ -23,7 +23,7 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """ListStatsBy Create CloneMultiple ListForAccount ListActive CancelGroupClone PurgeDeleted ListBulkJobs Clone Modify CancelClone StartBulkWrite StartBulkRead Copy GetEfficiency List UpdateBulkStatus ListStatsByAccount RestoreDeleted ListDeleted GetAsyncResult Delete ListAsyncResults ListStatsByAccessGroup SetDefaultQoS GetDefaultQoS GetStats GetCount """
+    """ListStatsBy GetEfficiency CancelClone ListForAccount ListActive CancelGroupClone PurgeDeleted ListBulkJobs Clone Modify CloneMultiple StartBulkWrite StartBulkRead Copy Create List UpdateBulkStatus ListStatsByAccount RestoreDeleted ListDeleted GetAsyncResult Delete ListAsyncResults ListStatsByAccessGroup SetDefaultQoS GetDefaultQoS GetStats GetCount """
 
 @cli.command('ListStatsBy', short_help="""ListVolumeStatsByVolume returns high-level activity measurements for every volume, by volume. Values are cumulative from the creation of the volume. """)
 @pass_context
@@ -50,78 +50,25 @@ def ListStatsBy(ctx):
 
 
 
-@cli.command('Create', short_help="""CreateVolume is used to create a new (empty) volume on the cluster. When the volume is created successfully it is available for connection via iSCSI. """)
-@click.option('--name',
-              type=str,
-              required=True,
-              help="""Name of the volume. Not required to be unique, but it is recommended. May be 1 to 64 characters in length. """)
-@click.option('--account_id',
+@cli.command('GetEfficiency', short_help="""GetVolumeEfficiency is used to retrieve information about a volume. Only the volume given as a parameter in this API method is used to compute the capacity. """)
+@click.option('--volume_id',
               type=int,
               required=True,
-              help="""AccountID for the owner of this volume. """)
-@click.option('--total_size',
-              type=int,
-              required=True,
-              help="""Total size of the volume, in bytes. Size is rounded up to the nearest 1MB size. """)
-@click.option('--enable512e',
-              type=bool,
-              required=True,
-              help="""Should the volume provides 512-byte sector emulation? """)
-@click.option('--qos_min_iops',
-              type=int,
-              required=False,
-              help="""Desired minimum 4KB IOPS to guarantee. The allowed IOPS will only drop below this level if all volumes have been capped at their minimum IOPS value and there is still insufficient performance capacity. """)
-@click.option('--qos_max_iops',
-              type=int,
-              required=False,
-              help="""Desired maximum 4KB IOPS allowed over an extended period of time. """)
-@click.option('--qos_burst_iops',
-              type=int,
-              required=False,
-              help="""Maximum "peak" 4KB IOPS allowed for short periods of time. Allows for bursts of I/O activity over the normal max IOPS value. """)
-@click.option('--qos_burst_time',
-              type=int,
-              required=False,
-              help="""The length of time burst IOPS is allowed. The value returned is represented in time units of seconds. <br/><b>Note</b>: this value is calculated by the system based on IOPS set for QoS. """)
-@click.option('--attributes',
-              type=str,
-              required=False,
-              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
+              help="""Specifies the volume for which capacity is computed. """)
 @pass_context
-def Create(ctx,
-           name,
-           account_id,
-           total_size,
-           enable512e,
-           qos_min_iops = None,
-           qos_max_iops = None,
-           qos_burst_iops = None,
-           qos_burst_time = None,
-           attributes = None):
-    """CreateVolume is used to create a new (empty) volume on the cluster."""
-    """When the volume is created successfully it is available for connection via iSCSI."""
+def GetEfficiency(ctx,
+           volume_id):
+    """GetVolumeEfficiency is used to retrieve information about a volume."""
+    """Only the volume given as a parameter in this API method is used to compute the capacity."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
-    qos = None
-    if(name is not None or account_id is not None or total_size is not None or enable512e is not None or qos is not None or attributes is not None or False):
-        kwargsDict = dict()
-        kwargsDict["min_iops"] = qos_min_iops
-        kwargsDict["max_iops"] = qos_max_iops
-        kwargsDict["burst_iops"] = qos_burst_iops
-        kwargsDict["burst_time"] = qos_burst_time
-
-        qos = QoS(**kwargsDict)
-    if(attributes is not None):
-        kwargsDict = simplejson.loads(attributes)
-        attributes = dict(**kwargsDict)
-
-    ctx.logger.info("""name = """+str(name)+""";"""+"""account_id = """+str(account_id)+""";"""+"""total_size = """+str(total_size)+""";"""+"""enable512e = """+str(enable512e)+""";"""+"""qos = """+str(qos)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
+    ctx.logger.info("""volume_id = """+str(volume_id)+""";"""+"")
     try:
-        CreateVolumeResult = ctx.element.create_volume(name=name, account_id=account_id, total_size=total_size, enable512e=enable512e, qos=qos, attributes=attributes)
+        GetVolumeEfficiencyResult = ctx.element.get_volume_efficiency(volume_id=volume_id)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -129,85 +76,28 @@ def Create(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(CreateVolumeResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(GetVolumeEfficiencyResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
-@cli.command('CloneMultiple', short_help="""CloneMultipleVolumes is used to create a clone of a group of specified volumes. A consistent set of characteristics can be assigned to a group of multiple volume when they are cloned together. If groupSnapshotID is going to be used to clone the volumes in a group snapshot, the group snapshot must be created first using the CreateGroupSnapshot API method or the SolidFire Element WebUI. Using groupSnapshotID is optional when cloning multiple volumes.  Note: Cloning multiple volumes is allowed if cluster fullness is at stage 2 or 3. Clones are not created when cluster fullness is at stage 4 or 5. """)
-@click.option('--clone_multiple_volume_params_volume_id',
+@cli.command('CancelClone', short_help="""Cancels a currently running clone operation. This method does not return anything. """)
+@click.option('--clone_id',
               type=int,
               required=True,
-              help="""Required parameter for "volumes" array: volumeID. """)
-@click.option('--clone_multiple_volume_params_access',
-              type=str,
-              required=False,
-              help="""Access settings for the new volume. <br/><b>readOnly</b>: Only read operations are allowed. <br/><b>readWrite</b>: Reads and writes are allowed. <br/><b>locked</b>: No reads or writes are allowed. <br/><b>replicationTarget</b>: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked. <br/><br/> If unspecified, the access settings of the clone will be the same as the source. """)
-@click.option('--clone_multiple_volume_params_name',
-              type=str,
-              required=False,
-              help="""New name for the clone. """)
-@click.option('--clone_multiple_volume_params_new_account_id',
-              type=int,
-              required=False,
-              help="""Account ID for the new volume. """)
-@click.option('--clone_multiple_volume_params_new_size',
-              type=int,
-              required=False,
-              help="""New size Total size of the volume, in bytes. Size is rounded up to the nearest 1MB size. """)
-@click.option('--clone_multiple_volume_params_attributes',
-              type=dict,
-              required=False,
-              help="""List of Name/Value pairs in JSON object format. """)
-@click.option('--access',
-              type=str,
-              required=False,
-              help="""New default access method for the new volumes if not overridden by information passed in the volumes array. <br/><b>readOnly</b>: Only read operations are allowed. <br/><b>readWrite</b>: Reads and writes are allowed. <br/><b>locked</b>: No reads or writes are allowed. <br/><b>replicationTarget</b>: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked. <br/><br/> If unspecified, the access settings of the clone will be the same as the source. """)
-@click.option('--group_snapshot_id',
-              type=int,
-              required=False,
-              help="""ID of the group snapshot to use as a basis for the clone. """)
-@click.option('--new_account_id',
-              type=int,
-              required=False,
-              help="""New account ID for the volumes if not overridden by information passed in the volumes array. """)
+              help="""""")
 @pass_context
-def CloneMultiple(ctx,
-           clone_multiple_volume_params_volume_id,
-           clone_multiple_volume_params_access = None,
-           clone_multiple_volume_params_name = None,
-           clone_multiple_volume_params_new_account_id = None,
-           clone_multiple_volume_params_new_size = None,
-           clone_multiple_volume_params_attributes = None,
-           access = None,
-           group_snapshot_id = None,
-           new_account_id = None):
-    """CloneMultipleVolumes is used to create a clone of a group of specified volumes. A consistent set of characteristics can be assigned to a group of multiple volume when they are cloned together."""
-    """If groupSnapshotID is going to be used to clone the volumes in a group snapshot, the group snapshot must be created first using the CreateGroupSnapshot API method or the SolidFire Element WebUI. Using groupSnapshotID is optional when cloning multiple volumes."""
-    """"""
-    """Note: Cloning multiple volumes is allowed if cluster fullness is at stage 2 or 3. Clones are not created when cluster fullness is at stage 4 or 5."""
+def CancelClone(ctx,
+           clone_id):
+    """Cancels a currently running clone operation. This method does not return anything."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
-    volumes = None
-    if(volumes is not None or access is not None or group_snapshot_id is not None or new_account_id is not None or False):
-        kwargsDict = dict()
-        kwargsDict["volume_id"] = clone_multiple_volume_params_volume_id
-        kwargsDict["access"] = clone_multiple_volume_params_access
-        kwargsDict["name"] = clone_multiple_volume_params_name
-        kwargsDict["new_account_id"] = clone_multiple_volume_params_new_account_id
-        kwargsDict["new_size"] = clone_multiple_volume_params_new_size
-        kwargsDict["attributes"] = clone_multiple_volume_params_attributes
-
-        volumes = CloneMultipleVolumeParams(**kwargsDict)
-
-    volumes = parser.parse_array(volumes)
-
-    ctx.logger.info("""volumes = """+str(volumes)+""";"""+"""access = """+str(access)+""";"""+"""group_snapshot_id = """+str(group_snapshot_id)+""";"""+"""new_account_id = """+str(new_account_id)+""";"""+"")
+    ctx.logger.info("""clone_id = """+str(clone_id)+""";"""+"")
     try:
-        CloneMultipleVolumesResult = ctx.element.clone_multiple_volumes(volumes=volumes, access=access, group_snapshot_id=group_snapshot_id, new_account_id=new_account_id)
+        CancelCloneResult = ctx.element.cancel_clone(clone_id=clone_id)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -215,7 +105,7 @@ def CloneMultiple(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(CloneMultipleVolumesResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(CancelCloneResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -538,24 +428,81 @@ def Modify(ctx,
 
 
 
-@cli.command('CancelClone', short_help="""Cancels a currently running clone operation. This method does not return anything. """)
-@click.option('--clone_id',
+@cli.command('CloneMultiple', short_help="""CloneMultipleVolumes is used to create a clone of a group of specified volumes. A consistent set of characteristics can be assigned to a group of multiple volume when they are cloned together. If groupSnapshotID is going to be used to clone the volumes in a group snapshot, the group snapshot must be created first using the CreateGroupSnapshot API method or the SolidFire Element WebUI. Using groupSnapshotID is optional when cloning multiple volumes.  Note: Cloning multiple volumes is allowed if cluster fullness is at stage 2 or 3. Clones are not created when cluster fullness is at stage 4 or 5. """)
+@click.option('--clone_multiple_volume_params_volume_id',
               type=int,
               required=True,
-              help="""""")
+              help="""Required parameter for "volumes" array: volumeID. """)
+@click.option('--clone_multiple_volume_params_access',
+              type=str,
+              required=False,
+              help="""Access settings for the new volume. <br/><b>readOnly</b>: Only read operations are allowed. <br/><b>readWrite</b>: Reads and writes are allowed. <br/><b>locked</b>: No reads or writes are allowed. <br/><b>replicationTarget</b>: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked. <br/><br/> If unspecified, the access settings of the clone will be the same as the source. """)
+@click.option('--clone_multiple_volume_params_name',
+              type=str,
+              required=False,
+              help="""New name for the clone. """)
+@click.option('--clone_multiple_volume_params_new_account_id',
+              type=int,
+              required=False,
+              help="""Account ID for the new volume. """)
+@click.option('--clone_multiple_volume_params_new_size',
+              type=int,
+              required=False,
+              help="""New size Total size of the volume, in bytes. Size is rounded up to the nearest 1MB size. """)
+@click.option('--clone_multiple_volume_params_attributes',
+              type=dict,
+              required=False,
+              help="""List of Name/Value pairs in JSON object format. """)
+@click.option('--access',
+              type=str,
+              required=False,
+              help="""New default access method for the new volumes if not overridden by information passed in the volumes array. <br/><b>readOnly</b>: Only read operations are allowed. <br/><b>readWrite</b>: Reads and writes are allowed. <br/><b>locked</b>: No reads or writes are allowed. <br/><b>replicationTarget</b>: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked. <br/><br/> If unspecified, the access settings of the clone will be the same as the source. """)
+@click.option('--group_snapshot_id',
+              type=int,
+              required=False,
+              help="""ID of the group snapshot to use as a basis for the clone. """)
+@click.option('--new_account_id',
+              type=int,
+              required=False,
+              help="""New account ID for the volumes if not overridden by information passed in the volumes array. """)
 @pass_context
-def CancelClone(ctx,
-           clone_id):
-    """Cancels a currently running clone operation. This method does not return anything."""
+def CloneMultiple(ctx,
+           clone_multiple_volume_params_volume_id,
+           clone_multiple_volume_params_access = None,
+           clone_multiple_volume_params_name = None,
+           clone_multiple_volume_params_new_account_id = None,
+           clone_multiple_volume_params_new_size = None,
+           clone_multiple_volume_params_attributes = None,
+           access = None,
+           group_snapshot_id = None,
+           new_account_id = None):
+    """CloneMultipleVolumes is used to create a clone of a group of specified volumes. A consistent set of characteristics can be assigned to a group of multiple volume when they are cloned together."""
+    """If groupSnapshotID is going to be used to clone the volumes in a group snapshot, the group snapshot must be created first using the CreateGroupSnapshot API method or the SolidFire Element WebUI. Using groupSnapshotID is optional when cloning multiple volumes."""
+    """"""
+    """Note: Cloning multiple volumes is allowed if cluster fullness is at stage 2 or 3. Clones are not created when cluster fullness is at stage 4 or 5."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
-    ctx.logger.info("""clone_id = """+str(clone_id)+""";"""+"")
+    volumes = None
+    if(volumes is not None or access is not None or group_snapshot_id is not None or new_account_id is not None or False):
+        kwargsDict = dict()
+        kwargsDict["volume_id"] = clone_multiple_volume_params_volume_id
+        kwargsDict["access"] = clone_multiple_volume_params_access
+        kwargsDict["name"] = clone_multiple_volume_params_name
+        kwargsDict["new_account_id"] = clone_multiple_volume_params_new_account_id
+        kwargsDict["new_size"] = clone_multiple_volume_params_new_size
+        kwargsDict["attributes"] = clone_multiple_volume_params_attributes
+
+        volumes = CloneMultipleVolumeParams(**kwargsDict)
+
+    volumes = parser.parse_array(volumes)
+
+    ctx.logger.info("""volumes = """+str(volumes)+""";"""+"""access = """+str(access)+""";"""+"""group_snapshot_id = """+str(group_snapshot_id)+""";"""+"""new_account_id = """+str(new_account_id)+""";"""+"")
     try:
-        CancelCloneResult = ctx.element.cancel_clone(clone_id=clone_id)
+        CloneMultipleVolumesResult = ctx.element.clone_multiple_volumes(volumes=volumes, access=access, group_snapshot_id=group_snapshot_id, new_account_id=new_account_id)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -563,7 +510,7 @@ def CancelClone(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(CancelCloneResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(CloneMultipleVolumesResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -731,25 +678,78 @@ def Copy(ctx,
 
 
 
-@cli.command('GetEfficiency', short_help="""GetVolumeEfficiency is used to retrieve information about a volume. Only the volume given as a parameter in this API method is used to compute the capacity. """)
-@click.option('--volume_id',
+@cli.command('Create', short_help="""CreateVolume is used to create a new (empty) volume on the cluster. When the volume is created successfully it is available for connection via iSCSI. """)
+@click.option('--name',
+              type=str,
+              required=True,
+              help="""Name of the volume. Not required to be unique, but it is recommended. May be 1 to 64 characters in length. """)
+@click.option('--account_id',
               type=int,
               required=True,
-              help="""Specifies the volume for which capacity is computed. """)
+              help="""AccountID for the owner of this volume. """)
+@click.option('--total_size',
+              type=int,
+              required=True,
+              help="""Total size of the volume, in bytes. Size is rounded up to the nearest 1MB size. """)
+@click.option('--enable512e',
+              type=bool,
+              required=True,
+              help="""Should the volume provides 512-byte sector emulation? """)
+@click.option('--qos_min_iops',
+              type=int,
+              required=False,
+              help="""Desired minimum 4KB IOPS to guarantee. The allowed IOPS will only drop below this level if all volumes have been capped at their minimum IOPS value and there is still insufficient performance capacity. """)
+@click.option('--qos_max_iops',
+              type=int,
+              required=False,
+              help="""Desired maximum 4KB IOPS allowed over an extended period of time. """)
+@click.option('--qos_burst_iops',
+              type=int,
+              required=False,
+              help="""Maximum "peak" 4KB IOPS allowed for short periods of time. Allows for bursts of I/O activity over the normal max IOPS value. """)
+@click.option('--qos_burst_time',
+              type=int,
+              required=False,
+              help="""The length of time burst IOPS is allowed. The value returned is represented in time units of seconds. <br/><b>Note</b>: this value is calculated by the system based on IOPS set for QoS. """)
+@click.option('--attributes',
+              type=str,
+              required=False,
+              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
-def GetEfficiency(ctx,
-           volume_id):
-    """GetVolumeEfficiency is used to retrieve information about a volume."""
-    """Only the volume given as a parameter in this API method is used to compute the capacity."""
+def Create(ctx,
+           name,
+           account_id,
+           total_size,
+           enable512e,
+           qos_min_iops = None,
+           qos_max_iops = None,
+           qos_burst_iops = None,
+           qos_burst_time = None,
+           attributes = None):
+    """CreateVolume is used to create a new (empty) volume on the cluster."""
+    """When the volume is created successfully it is available for connection via iSCSI."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
-    ctx.logger.info("""volume_id = """+str(volume_id)+""";"""+"")
+    qos = None
+    if(name is not None or account_id is not None or total_size is not None or enable512e is not None or qos is not None or attributes is not None or False):
+        kwargsDict = dict()
+        kwargsDict["min_iops"] = qos_min_iops
+        kwargsDict["max_iops"] = qos_max_iops
+        kwargsDict["burst_iops"] = qos_burst_iops
+        kwargsDict["burst_time"] = qos_burst_time
+
+        qos = QoS(**kwargsDict)
+    if(attributes is not None):
+        kwargsDict = simplejson.loads(attributes)
+        attributes = dict(**kwargsDict)
+
+    ctx.logger.info("""name = """+str(name)+""";"""+"""account_id = """+str(account_id)+""";"""+"""total_size = """+str(total_size)+""";"""+"""enable512e = """+str(enable512e)+""";"""+"""qos = """+str(qos)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        GetVolumeEfficiencyResult = ctx.element.get_volume_efficiency(volume_id=volume_id)
+        CreateVolumeResult = ctx.element.create_volume(name=name, account_id=account_id, total_size=total_size, enable512e=enable512e, qos=qos, attributes=attributes)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -757,7 +757,7 @@ def GetEfficiency(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(GetVolumeEfficiencyResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(CreateVolumeResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
