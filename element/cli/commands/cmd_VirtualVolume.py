@@ -23,7 +23,7 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """ListHosts GetUnsharedChunks GetTaskUpdate ListTasks CreateHost EnableFeature List ListBindings PrepareVirtualSnapshot GetCount GetFeatureStatus """
+    """ListHosts GetUnsharedChunks GetTaskUpdate ListTasks CreateHost GetFeatureStatus List ListBindings PrepareVirtualSnapshot GetCount EnableFeature """
 
 @cli.command('ListHosts', short_help="""ListVirtualVolumeHosts returns a list of known ESX hosts. """)
 @click.option('--virtual_volume_host_ids',
@@ -237,15 +237,15 @@ def CreateHost(ctx,
 
 
 
-@cli.command('EnableFeature', short_help="""EnableFeature allows you to enable cluster features that are disabled by default. """)
+@cli.command('GetFeatureStatus', short_help="""GetFeatureStatus allows you to retrieve the status of a cluster feature. """)
 @click.option('--feature',
               type=str,
-              required=True,
-              help="""Valid values: vvols: Enable the Virtual Volumes (VVOLs) cluster feature. """)
+              required=False,
+              help="""Valid values: vvols: Find the status of the Virtual Volumes (VVOLs) cluster feature. """)
 @pass_context
-def EnableFeature(ctx,
-           feature):
-    """EnableFeature allows you to enable cluster features that are disabled by default."""
+def GetFeatureStatus(ctx,
+           feature = None):
+    """GetFeatureStatus allows you to retrieve the status of a cluster feature."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -254,7 +254,7 @@ def EnableFeature(ctx,
 
     ctx.logger.info("""feature = """+str(feature)+""";"""+"")
     try:
-        EnableFeatureResult = ctx.element.enable_feature(feature=feature)
+        GetFeatureStatusResult = ctx.element.get_feature_status(feature=feature)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -262,7 +262,7 @@ def EnableFeature(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(EnableFeatureResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(GetFeatureStatusResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -416,15 +416,15 @@ def GetCount(ctx):
 
 
 
-@cli.command('GetFeatureStatus', short_help="""GetFeatureStatus allows you to retrieve the status of a cluster feature. """)
+@cli.command('EnableFeature', short_help="""EnableFeature allows you to enable cluster features that are disabled by default. """)
 @click.option('--feature',
               type=str,
-              required=False,
-              help="""Valid values: vvols: Find the status of the Virtual Volumes (VVOLs) cluster feature. """)
+              required=True,
+              help="""Valid values: vvols: Enable the Virtual Volumes (VVOLs) cluster feature. """)
 @pass_context
-def GetFeatureStatus(ctx,
-           feature = None):
-    """GetFeatureStatus allows you to retrieve the status of a cluster feature."""
+def EnableFeature(ctx,
+           feature):
+    """EnableFeature allows you to enable cluster features that are disabled by default."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -433,7 +433,7 @@ def GetFeatureStatus(ctx,
 
     ctx.logger.info("""feature = """+str(feature)+""";"""+"")
     try:
-        GetFeatureStatusResult = ctx.element.get_feature_status(feature=feature)
+        EnableFeatureResult = ctx.element.enable_feature(feature=feature)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -441,5 +441,5 @@ def GetFeatureStatus(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(GetFeatureStatusResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(EnableFeatureResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

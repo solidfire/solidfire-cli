@@ -23,7 +23,7 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """GetSnmpACL ListFaults GetInfo Create SetSnmpInfo SetNtpInfo SetConfig GetMasterNodeID GetConfig SetSnmpTrapInfo GetFullThreshold SnmpSendTestTraps CreateSupportBundle AddAdmin GetSnmpState GetSnmpInfo GetNtpInfo ListSyncJobs ModifyAdmin GetVersionInfo SetSnmpACL GetLimits GetAPI GetCapacity EnableEncryptionAtRest DisableSnmp DeleteAllSupportBundles ClearFaults GetState ListAdmins GetCurrentAdmin DisableEncryptionAtRest EnableSnmp GetStats GetSnmpTrapInfo ListEvents GetSystemStatus RemoveAdmin ModifyFullThreshold """
+    """GetSnmpACL ListFaults GetInfo Create SetSnmpInfo SetNtpInfo SetConfig GetMasterNodeID GetConfig SetSnmpTrapInfo GetFullThreshold SnmpSendTestTraps CreateSupportBundle AddAdmin GetSnmpState GetSnmpInfo GetNtpInfo ListSyncJobs ModifyAdmin GetVersionInfo SetSnmpACL GetLimits GetAPI GetCapacity ModifyFullThreshold DisableSnmp DeleteAllSupportBundles ClearFaults GetState ListAdmins GetCurrentAdmin DisableEncryptionAtRest EnableSnmp GetStats GetSnmpTrapInfo ListEvents GetSystemStatus RemoveAdmin EnableEncryptionAtRest """
 
 @cli.command('GetSnmpACL', short_help="""GetSnmpACL is used to return the current SNMP access permissions on the cluster nodes. """)
 @pass_context
@@ -65,7 +65,7 @@ def GetSnmpACL(ctx):
 @click.option('--fault_types',
               type=str,
               required=False,
-              help="""Determines the types of faults returned: current: List active, unresolved faults. <b>resolved</b>: List faults that were previously detected and resolved. <b>all</b>: (Default) List both current and resolved faults. You can see the fault status in the 'resolved' field of the Cluster Fault object. """)
+              help="""Determines the types of faults returned: current: List active, unresolved faults. resolved: List faults that were previously detected and resolved. all: (Default) List both current and resolved faults. You can see the fault status in the 'resolved' field of the Cluster Fault object. """)
 @pass_context
 def ListFaults(ctx,
            exceptions = None,
@@ -193,7 +193,7 @@ def Create(ctx,
 @click.option('--snmp_network_access',
               type=str,
               required=True,
-              help="""<br/><b>ro</b>: read-only access.* <br/><b>rw</b>: for read-write access. <br/><b>rosys</b>: for read-only access to a restricted set of system information *SolidFire recommends that all networks other than the default "localhost" be set to "ro" access, because all SolidFire MIB objects are read-only. """)
+              help="""ro: read-only access.* rw: for read-write access. rosys: for read-only access to a restricted set of system information *SolidFire recommends that all networks other than the default "localhost" be set to "ro" access, because all SolidFire MIB objects are read-only. """)
 @click.option('--snmp_network_cidr',
               type=int,
               required=True,
@@ -217,7 +217,7 @@ def Create(ctx,
 @click.option('--snmp_v3_usm_user_access',
               type=str,
               required=True,
-              help="""<br/><b>rouser</b>: read-only access.* <br/><b>rwuser</b>: for read-write access. <br/><b>rosys</b>: for read-only access to a restricted set of system information *SolidFire recommends that all USM users be set to "rouser" access, because all SolidFire MIB objects are read-only. """)
+              help="""rouser: read-only access.* rwuser: for read-write access. rosys: for read-only access to a restricted set of system information *SolidFire recommends that all USM users be set to "rouser" access, because all SolidFire MIB objects are read-only. """)
 @click.option('--snmp_v3_usm_user_name',
               type=str,
               required=True,
@@ -233,7 +233,7 @@ def Create(ctx,
 @click.option('--snmp_v3_usm_user_sec_level',
               type=str,
               required=True,
-              help="""<br/><b>noauth</b>: No password or passphrase is required. <br/><b>auth</b>: A password is required for user access. <br/><b>priv</b>: A password and passphrase is required for user access. """)
+              help="""noauth: No password or passphrase is required. auth: A password is required for user access. priv: A password and passphrase is required for user access. """)
 @pass_context
 def SetSnmpInfo(ctx,
            snmp_network_access = None,
@@ -859,7 +859,7 @@ def GetVersionInfo(ctx):
 @click.option('--snmp_network_access',
               type=str,
               required=True,
-              help="""<br/><b>ro</b>: read-only access.* <br/><b>rw</b>: for read-write access. <br/><b>rosys</b>: for read-only access to a restricted set of system information *SolidFire recommends that all networks other than the default "localhost" be set to "ro" access, because all SolidFire MIB objects are read-only. """)
+              help="""ro: read-only access.* rw: for read-write access. rosys: for read-only access to a restricted set of system information *SolidFire recommends that all networks other than the default "localhost" be set to "ro" access, because all SolidFire MIB objects are read-only. """)
 @click.option('--snmp_network_cidr',
               type=int,
               required=True,
@@ -875,7 +875,7 @@ def GetVersionInfo(ctx):
 @click.option('--snmp_v3_usm_user_access',
               type=str,
               required=True,
-              help="""<br/><b>rouser</b>: read-only access.* <br/><b>rwuser</b>: for read-write access. <br/><b>rosys</b>: for read-only access to a restricted set of system information *SolidFire recommends that all USM users be set to "rouser" access, because all SolidFire MIB objects are read-only. """)
+              help="""rouser: read-only access.* rwuser: for read-write access. rosys: for read-only access to a restricted set of system information *SolidFire recommends that all USM users be set to "rouser" access, because all SolidFire MIB objects are read-only. """)
 @click.option('--snmp_v3_usm_user_name',
               type=str,
               required=True,
@@ -891,7 +891,7 @@ def GetVersionInfo(ctx):
 @click.option('--snmp_v3_usm_user_sec_level',
               type=str,
               required=True,
-              help="""<br/><b>noauth</b>: No password or passphrase is required. <br/><b>auth</b>: A password is required for user access. <br/><b>priv</b>: A password and passphrase is required for user access. """)
+              help="""noauth: No password or passphrase is required. auth: A password is required for user access. priv: A password and passphrase is required for user access. """)
 @pass_context
 def SetSnmpACL(ctx,
            snmp_network_access,
@@ -1022,21 +1022,34 @@ def GetCapacity(ctx):
 
 
 
-@cli.command('EnableEncryptionAtRest', short_help="""The EnableEncryptionAtRest method is used to enable the Advanced Encryption Standard (AES) 256-bit encryption at rest on the cluster so that the cluster can manage the encryption key used for the drives on each node. This feature is not enabled by default. Enabling this operation allows the cluster to automatically manage encryption keys internally for the drives on each node in the cluster. Nodes do not store the keys to unlock drives and the keys are never passed over the network. Two nodes participating in a cluster are required to access the key to disable encryption on a drive. The encryption management does not affect performance or efficiency on the cluster. If an encryption-enabled drive or node is removed from the cluster with the API, all data is secure erased and any data left on the drive cannot be read or accessed. Enabling or disabling encryption should be performed when the cluster is running and in a healthy state. Encryption can be enabled or disabled at your discretion and can be performed as often as you need. Note: This process is asynchronous and returns a response before encryption is enabled. The GetClusterInfo method can be used to poll the system to see when the process has completed. """)
+@cli.command('ModifyFullThreshold', short_help="""ModifyClusterFullThreshold is used to change the level at which an event is generated when the storage cluster approaches the capacity utilization requested. The number entered in this setting is used to indicate the number of node failures the system is required to recover from. For example, on a 10 node cluster, if you want to be alerted when the system cannot recover from 3 nodes failures, enter the value of "3". When this number is reached, a message alert is sent to the Event Log in the Cluster Management Console. """)
+@click.option('--stage2_aware_threshold',
+              type=int,
+              required=False,
+              help="""Number of nodes worth of capacity remaining on the cluster that triggers a notification. """)
+@click.option('--stage3_block_threshold_percent',
+              type=int,
+              required=False,
+              help="""Percent below "Error" state to raise a cluster "Warning" alert. """)
+@click.option('--max_metadata_over_provision_factor',
+              type=int,
+              required=False,
+              help="""A value representative of the number of times metadata space can be over provisioned relative to the amount of space available. For example, if there was enough metadata space to store 100 TiB of volumes and this number was set to 5, then 500 TiB worth of volumes could be created. """)
 @pass_context
-def EnableEncryptionAtRest(ctx):
-    """The EnableEncryptionAtRest method is used to enable the Advanced Encryption Standard (AES) 256-bit encryption at rest on the cluster so that the cluster can manage the encryption key used for the drives on each node. This feature is not enabled by default. Enabling this operation allows the cluster to automatically manage encryption keys internally for the drives on each node in the cluster. Nodes do not store the keys to unlock drives and the keys are never passed over the network. Two nodes participating in a cluster are required to access the key to disable encryption on a drive. The encryption management does not affect performance or efficiency on the cluster. If an encryption-enabled drive or node is removed from the cluster with the API, all data is secure erased and any data left on the drive cannot be read or accessed."""
-    """Enabling or disabling encryption should be performed when the cluster is running and in a healthy state. Encryption can be enabled or disabled at your discretion and can be performed as often as you need."""
-    """Note: This process is asynchronous and returns a response before encryption is enabled. The GetClusterInfo method can be used to poll the system to see when the process has completed."""
+def ModifyFullThreshold(ctx,
+           stage2_aware_threshold = None,
+           stage3_block_threshold_percent = None,
+           max_metadata_over_provision_factor = None):
+    """ModifyClusterFullThreshold is used to change the level at which an event is generated when the storage cluster approaches the capacity utilization requested. The number entered in this setting is used to indicate the number of node failures the system is required to recover from. For example, on a 10 node cluster, if you want to be alerted when the system cannot recover from 3 nodes failures, enter the value of &quot;3&quot;. When this number is reached, a message alert is sent to the Event Log in the Cluster Management Console."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
-    ctx.logger.info("")
+    ctx.logger.info("""stage2_aware_threshold = """+str(stage2_aware_threshold)+""";"""+"""stage3_block_threshold_percent = """+str(stage3_block_threshold_percent)+""";"""+"""max_metadata_over_provision_factor = """+str(max_metadata_over_provision_factor)+""";"""+"")
     try:
-        EnableEncryptionAtRestResult = ctx.element.enable_encryption_at_rest()
+        ModifyClusterFullThresholdResult = ctx.element.modify_cluster_full_threshold(stage2_aware_threshold=stage2_aware_threshold, stage3_block_threshold_percent=stage3_block_threshold_percent, max_metadata_over_provision_factor=max_metadata_over_provision_factor)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1044,7 +1057,7 @@ def EnableEncryptionAtRest(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(EnableEncryptionAtRestResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(ModifyClusterFullThresholdResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1100,7 +1113,7 @@ def DeleteAllSupportBundles(ctx):
 @click.option('--fault_types',
               type=str,
               required=False,
-              help="""Determines the types of faults cleared:<br/> <b>current</b>: Faults that are currently detected and have not been resolved.<br/> <b>resolved</b>: Faults that were previously detected and resolved.<br/> <b>all</b>: Both current and resolved faults are cleared. The fault status can be determined by the "resolved" field of the fault object. """)
+              help="""Determines the types of faults cleared: current: Faults that are currently detected and have not been resolved. resolved: Faults that were previously detected and resolved. all: Both current and resolved faults are cleared. The fault status can be determined by the "resolved" field of the fault object. """)
 @pass_context
 def ClearFaults(ctx,
            fault_types = None):
@@ -1401,34 +1414,21 @@ def RemoveAdmin(ctx,
 
 
 
-@cli.command('ModifyFullThreshold', short_help="""ModifyClusterFullThreshold is used to change the level at which an event is generated when the storage cluster approaches the capacity utilization requested. The number entered in this setting is used to indicate the number of node failures the system is required to recover from. For example, on a 10 node cluster, if you want to be alerted when the system cannot recover from 3 nodes failures, enter the value of "3". When this number is reached, a message alert is sent to the Event Log in the Cluster Management Console. """)
-@click.option('--stage2_aware_threshold',
-              type=int,
-              required=False,
-              help="""Number of nodes worth of capacity remaining on the cluster that triggers a notification. """)
-@click.option('--stage3_block_threshold_percent',
-              type=int,
-              required=False,
-              help="""Percent below "Error" state to raise a cluster "Warning" alert. """)
-@click.option('--max_metadata_over_provision_factor',
-              type=int,
-              required=False,
-              help="""A value representative of the number of times metadata space can be over provisioned relative to the amount of space available. For example, if there was enough metadata space to store 100 TiB of volumes and this number was set to 5, then 500 TiB worth of volumes could be created. """)
+@cli.command('EnableEncryptionAtRest', short_help="""The EnableEncryptionAtRest method is used to enable the Advanced Encryption Standard (AES) 256-bit encryption at rest on the cluster so that the cluster can manage the encryption key used for the drives on each node. This feature is not enabled by default. Enabling this operation allows the cluster to automatically manage encryption keys internally for the drives on each node in the cluster. Nodes do not store the keys to unlock drives and the keys are never passed over the network. Two nodes participating in a cluster are required to access the key to disable encryption on a drive. The encryption management does not affect performance or efficiency on the cluster. If an encryption-enabled drive or node is removed from the cluster with the API, all data is secure erased and any data left on the drive cannot be read or accessed. Enabling or disabling encryption should be performed when the cluster is running and in a healthy state. Encryption can be enabled or disabled at your discretion and can be performed as often as you need. Note: This process is asynchronous and returns a response before encryption is enabled. The GetClusterInfo method can be used to poll the system to see when the process has completed. """)
 @pass_context
-def ModifyFullThreshold(ctx,
-           stage2_aware_threshold = None,
-           stage3_block_threshold_percent = None,
-           max_metadata_over_provision_factor = None):
-    """ModifyClusterFullThreshold is used to change the level at which an event is generated when the storage cluster approaches the capacity utilization requested. The number entered in this setting is used to indicate the number of node failures the system is required to recover from. For example, on a 10 node cluster, if you want to be alerted when the system cannot recover from 3 nodes failures, enter the value of &quot;3&quot;. When this number is reached, a message alert is sent to the Event Log in the Cluster Management Console."""
+def EnableEncryptionAtRest(ctx):
+    """The EnableEncryptionAtRest method is used to enable the Advanced Encryption Standard (AES) 256-bit encryption at rest on the cluster so that the cluster can manage the encryption key used for the drives on each node. This feature is not enabled by default. Enabling this operation allows the cluster to automatically manage encryption keys internally for the drives on each node in the cluster. Nodes do not store the keys to unlock drives and the keys are never passed over the network. Two nodes participating in a cluster are required to access the key to disable encryption on a drive. The encryption management does not affect performance or efficiency on the cluster. If an encryption-enabled drive or node is removed from the cluster with the API, all data is secure erased and any data left on the drive cannot be read or accessed."""
+    """Enabling or disabling encryption should be performed when the cluster is running and in a healthy state. Encryption can be enabled or disabled at your discretion and can be performed as often as you need."""
+    """Note: This process is asynchronous and returns a response before encryption is enabled. The GetClusterInfo method can be used to poll the system to see when the process has completed."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
-    ctx.logger.info("""stage2_aware_threshold = """+str(stage2_aware_threshold)+""";"""+"""stage3_block_threshold_percent = """+str(stage3_block_threshold_percent)+""";"""+"""max_metadata_over_provision_factor = """+str(max_metadata_over_provision_factor)+""";"""+"")
+    ctx.logger.info("")
     try:
-        ModifyClusterFullThresholdResult = ctx.element.modify_cluster_full_threshold(stage2_aware_threshold=stage2_aware_threshold, stage3_block_threshold_percent=stage3_block_threshold_percent, max_metadata_over_provision_factor=max_metadata_over_provision_factor)
+        EnableEncryptionAtRestResult = ctx.element.enable_encryption_at_rest()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1436,5 +1436,5 @@ def ModifyFullThreshold(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(ModifyClusterFullThresholdResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(EnableEncryptionAtRestResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

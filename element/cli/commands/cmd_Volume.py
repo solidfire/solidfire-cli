@@ -287,7 +287,7 @@ def ListBulkJobs(ctx):
 @click.option('--access',
               type=str,
               required=False,
-              help="""Access settings for the new volume. <br/><b>readOnly</b>: Only read operations are allowed. <br/><b>readWrite</b>: Reads and writes are allowed. <br/><b>locked</b>: No reads or writes are allowed. <br/><b>replicationTarget</b>: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked. <br/><br/> If unspecified, the access settings of the clone will be the same as the source. """)
+              help="""Access settings for the new volume. readOnly: Only read operations are allowed. readWrite: Reads and writes are allowed. locked: No reads or writes are allowed. replicationTarget: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked.  If unspecified, the access settings of the clone will be the same as the source. """)
 @click.option('--snapshot_id',
               type=int,
               required=False,
@@ -350,7 +350,7 @@ def Clone(ctx,
 @click.option('--access',
               type=str,
               required=False,
-              help="""Access allowed for the volume. <br/><b>readOnly</b>: Only read operations are allowed. <br/><b>readWrite</b>: Reads and writes are allowed. <br/><b>locked</b>: No reads or writes are allowed. <br/><b>replicationTarget</b>: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked. <br/><br/> If unspecified, the access settings of the clone will be the same as the source. """)
+              help="""Access allowed for the volume. readOnly: Only read operations are allowed. readWrite: Reads and writes are allowed. locked: No reads or writes are allowed. replicationTarget: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked.  If unspecified, the access settings of the clone will be the same as the source. """)
 @click.option('--qos_min_iops',
               type=int,
               required=False,
@@ -366,7 +366,7 @@ def Clone(ctx,
 @click.option('--qos_burst_time',
               type=int,
               required=False,
-              help="""The length of time burst IOPS is allowed. The value returned is represented in time units of seconds. <br/><b>Note</b>: this value is calculated by the system based on IOPS set for QoS. """)
+              help="""The length of time burst IOPS is allowed. The value returned is represented in time units of seconds. Note: this value is calculated by the system based on IOPS set for QoS. """)
 @click.option('--total_size',
               type=int,
               required=False,
@@ -436,7 +436,7 @@ def Modify(ctx,
 @click.option('--clone_multiple_volume_params_access',
               type=str,
               required=False,
-              help="""Access settings for the new volume. <br/><b>readOnly</b>: Only read operations are allowed. <br/><b>readWrite</b>: Reads and writes are allowed. <br/><b>locked</b>: No reads or writes are allowed. <br/><b>replicationTarget</b>: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked. <br/><br/> If unspecified, the access settings of the clone will be the same as the source. """)
+              help="""Access settings for the new volume. readOnly: Only read operations are allowed. readWrite: Reads and writes are allowed. locked: No reads or writes are allowed. replicationTarget: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked.  If unspecified, the access settings of the clone will be the same as the source. """)
 @click.option('--clone_multiple_volume_params_name',
               type=str,
               required=False,
@@ -456,7 +456,7 @@ def Modify(ctx,
 @click.option('--access',
               type=str,
               required=False,
-              help="""New default access method for the new volumes if not overridden by information passed in the volumes array. <br/><b>readOnly</b>: Only read operations are allowed. <br/><b>readWrite</b>: Reads and writes are allowed. <br/><b>locked</b>: No reads or writes are allowed. <br/><b>replicationTarget</b>: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked. <br/><br/> If unspecified, the access settings of the clone will be the same as the source. """)
+              help="""New default access method for the new volumes if not overridden by information passed in the volumes array. readOnly: Only read operations are allowed. readWrite: Reads and writes are allowed. locked: No reads or writes are allowed. replicationTarget: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked.  If unspecified, the access settings of the clone will be the same as the source. """)
 @click.option('--group_snapshot_id',
               type=int,
               required=False,
@@ -522,7 +522,7 @@ def CloneMultiple(ctx,
 @click.option('--format',
               type=str,
               required=True,
-              help="""The format of the volume data. Can be either: <br/><b>uncompressed</b>: every byte of the volume is returned without any compression. <br/><b>native</b>: opaque data is returned that is smaller and more efficiently stored and written on a subsequent bulk volume write """)
+              help="""The format of the volume data. Can be either: uncompressed: every byte of the volume is returned without any compression. native: opaque data is returned that is smaller and more efficiently stored and written on a subsequent bulk volume write """)
 @click.option('--script',
               type=str,
               required=False,
@@ -578,7 +578,7 @@ def StartBulkWrite(ctx,
 @click.option('--format',
               type=str,
               required=True,
-              help="""The format of the volume data. Can be either: <br/><b>uncompressed</b>: every byte of the volume is returned without any compression. <br/><b>native</b>: opaque data is returned that is smaller and more efficiently stored and written on a subsequent bulk volume write. """)
+              help="""The format of the volume data. Can be either: uncompressed: every byte of the volume is returned without any compression. native: opaque data is returned that is smaller and more efficiently stored and written on a subsequent bulk volume write. """)
 @click.option('--snapshot_id',
               type=int,
               required=False,
@@ -710,7 +710,7 @@ def Copy(ctx,
 @click.option('--qos_burst_time',
               type=int,
               required=False,
-              help="""The length of time burst IOPS is allowed. The value returned is represented in time units of seconds. <br/><b>Note</b>: this value is calculated by the system based on IOPS set for QoS. """)
+              help="""The length of time burst IOPS is allowed. The value returned is represented in time units of seconds. Note: this value is calculated by the system based on IOPS set for QoS. """)
 @click.option('--attributes',
               type=str,
               required=False,
@@ -828,7 +828,7 @@ def List(ctx,
 @click.option('--status',
               type=str,
               required=True,
-              help="""The SolidFire system sets the status of the given bulk volume job.<br/> Possible values:<br/> <br/><b>running</b>: jobs that are still active. <br/><b>complete</b>: jobs that are done. failed - jobs that have failed. <br/><b>failed</b>: jobs that have failed. """)
+              help="""The SolidFire system sets the status of the given bulk volume job. Possible values: running: jobs that are still active. complete: jobs that are done. failed - jobs that have failed. failed: jobs that have failed. """)
 @click.option('--percent_complete',
               type=str,
               required=False,

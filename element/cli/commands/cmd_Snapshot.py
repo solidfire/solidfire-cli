@@ -66,7 +66,7 @@ def ListGroup(ctx,
 @click.option('--enable_remote_replication',
               type=bool,
               required=False,
-              help="""Use to enable the snapshot created to be replicated to a remote SolidFire cluster. Possible values: <br/><b>true</b>: the snapshot will be replicated to remote storage. <br/><b>false</b>: Default. No replication. """)
+              help="""Use to enable the snapshot created to be replicated to a remote SolidFire cluster. Possible values: true: the snapshot will be replicated to remote storage. false: Default. No replication. """)
 @pass_context
 def ModifyGroup(ctx,
            group_snapshot_id,
@@ -105,7 +105,7 @@ def ModifyGroup(ctx,
 @click.option('--enable_remote_replication',
               type=bool,
               required=False,
-              help="""Use to enable the snapshot created to be replicated to a remote SolidFire cluster. Possible values: <br/><b>true</b>: the snapshot will be replicated to remote storage. <br/><b>false</b>: Default. No replication. """)
+              help="""Use to enable the snapshot created to be replicated to a remote SolidFire cluster. Possible values: true: the snapshot will be replicated to remote storage. false: Default. No replication. """)
 @pass_context
 def Modify(ctx,
            snapshot_id,
@@ -227,7 +227,7 @@ def List(ctx,
 @click.option('--schedule',
               type=str,
               required=True,
-              help="""Provide in json format: The "Schedule" object will be used to create a new schedule.<br/> Do not set ScheduleID property, it will be ignored.<br/> Frequency property must be of type that inherits from Frequency. Valid types are:<br/> DaysOfMonthFrequency<br/> DaysOrWeekFrequency<br/> TimeIntervalFrequency """)
+              help="""Provide in json format: The "Schedule" object will be used to create a new schedule. Do not set ScheduleID property, it will be ignored. Frequency property must be of type that inherits from Frequency. Valid types are: DaysOfMonthFrequency DaysOrWeekFrequency TimeIntervalFrequency """)
 @pass_context
 def CreateSchedule(ctx,
            schedule):
@@ -267,7 +267,7 @@ def CreateSchedule(ctx,
 @click.option('--save_members',
               type=bool,
               required=True,
-              help="""<br/><b>true</b>: Snapshots are kept, but group association is removed. <br/><b>false</b>: The group and snapshots are deleted. """)
+              help="""true: Snapshots are kept, but group association is removed. false: The group and snapshots are deleted. """)
 @pass_context
 def DeleteGroup(ctx,
            group_snapshot_id,
@@ -332,7 +332,7 @@ def GetSchedule(ctx,
 @click.option('--save_current_state',
               type=bool,
               required=True,
-              help="""<br/><b>true</b>: The previous active volume image is kept. <br/><b>false</b>: (default) The previous active volume image is deleted. """)
+              help="""true: The previous active volume image is kept. false: (default) The previous active volume image is deleted. """)
 @click.option('--name',
               type=str,
               required=False,
@@ -386,7 +386,7 @@ def RollbackToGroup(ctx,
 @click.option('--save_current_state',
               type=bool,
               required=True,
-              help="""<br/><b>true</b>: The previous active volume image is kept. <br/><b>false</b>: (default) The previous active volume image is deleted. """)
+              help="""true: The previous active volume image is kept. false: (default) The previous active volume image is deleted. """)
 @click.option('--name',
               type=str,
               required=False,
@@ -493,7 +493,7 @@ def CreateGroup(ctx,
 @click.option('--schedule',
               type=str,
               required=True,
-              help="""Provide in json format: The "Schedule" object will be used to modify an existing schedule.<br/> The ScheduleID property is required.<br/> Frequency property must be of type that inherits from Frequency. Valid types are:<br/> DaysOfMonthFrequency<br/> DaysOrWeekFrequency<br/> TimeIntervalFrequency """)
+              help="""Provide in json format: The "Schedule" object will be used to modify an existing schedule. The ScheduleID property is required. Frequency property must be of type that inherits from Frequency. Valid types are: DaysOfMonthFrequency DaysOrWeekFrequency TimeIntervalFrequency """)
 @pass_context
 def ModifySchedule(ctx,
            schedule):

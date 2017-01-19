@@ -23,7 +23,7 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """AddLdapClusterAdmin TestLdapAuthentication DisableLdapAuthentication EnableLdapAuthentication GetLdapConfiguration """
+    """AddLdapClusterAdmin DisableLdapAuthentication TestLdapAuthentication EnableLdapAuthentication GetLdapConfiguration """
 
 @cli.command('AddLdapClusterAdmin', short_help="""AddLdapClusterAdmin is used to add a new LDAP Cluster Admin. An LDAP Cluster Admin can be used to manage the cluster via the API and management tools. LDAP Cluster Admins are completely separate and unrelated to standard tenant accounts.  An LDAP group that has been defined in Active Directory can also be added using this API method. The access level that is given to the group will be passed to the individual users in the LDAP group. """)
 @click.option('--username',
@@ -76,6 +76,30 @@ def AddLdapClusterAdmin(ctx,
 
 
 
+@cli.command('DisableLdapAuthentication', short_help="""The DisableLdapAuthentication method is used disable LDAP authentication and remove all LDAP configuration settings. This call will not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no longer be able to log in. """)
+@pass_context
+def DisableLdapAuthentication(ctx):
+    """The DisableLdapAuthentication method is used disable LDAP authentication and remove all LDAP configuration settings. This call will not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no longer be able to log in."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("")
+    try:
+        DisableLdapAuthenticationResult = ctx.element.disable_ldap_authentication()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(DisableLdapAuthenticationResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
 @cli.command('TestLdapAuthentication', short_help="""The TestLdapAuthentication is used to verify the currently enabled LDAP authentication configuration settings are correct. If the configuration settings are correct, the API call returns a list of the groups the tested user is a member of. """)
 @click.option('--username',
               type=str,
@@ -88,11 +112,11 @@ def AddLdapClusterAdmin(ctx,
 @click.option('--ldap_configuration_auth_type',
               type=str,
               required=True,
-              help="""Identifies which user authentcation method will be used. <br/> Valid values:<br/> <b>DirectBind</b><br/> <b>SearchAndBind</b> """)
+              help="""Identifies which user authentcation method will be used.  Valid values: DirectBind SearchAndBind """)
 @click.option('--ldap_configuration_enabled',
               type=bool,
               required=True,
-              help="""Identifies whether or not the system is enabled for LDAP. <br/> Valid values:<br/> <b>true</b><br/> <b>false</b> """)
+              help="""Identifies whether or not the system is enabled for LDAP.  Valid values: true false """)
 @click.option('--ldap_configuration_group_search_base_dn',
               type=str,
               required=True,
@@ -104,7 +128,7 @@ def AddLdapClusterAdmin(ctx,
 @click.option('--ldap_configuration_group_search_type',
               type=str,
               required=True,
-              help="""Controls the default group search filter used, can be one of the following:<br/> <b>NoGroups</b>: No group support.<br/> <b>ActiveDirectory</b>: Nested membership of all of a user's AD groups.<br/> <b>MemberDN</b>: MemberDN style groups (single-level). """)
+              help="""Controls the default group search filter used, can be one of the following: NoGroups: No group support. ActiveDirectory: Nested membership of all of a user's AD groups. MemberDN: MemberDN style groups (single-level). """)
 @click.option('--ldap_configuration_search_bind_dn',
               type=str,
               required=True,
@@ -176,35 +200,11 @@ def TestLdapAuthentication(ctx,
 
 
 
-@cli.command('DisableLdapAuthentication', short_help="""The DisableLdapAuthentication method is used disable LDAP authentication and remove all LDAP configuration settings. This call will not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no longer be able to log in. """)
-@pass_context
-def DisableLdapAuthentication(ctx):
-    """The DisableLdapAuthentication method is used disable LDAP authentication and remove all LDAP configuration settings. This call will not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no longer be able to log in."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("")
-    try:
-        DisableLdapAuthenticationResult = ctx.element.disable_ldap_authentication()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(DisableLdapAuthenticationResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
 @cli.command('EnableLdapAuthentication', short_help="""The EnableLdapAuthentication method is used to configure an LDAP server connection to use for LDAP authentication to a SolidFire cluster. Users that are members on the LDAP server can then log in to a SolidFire storage system using their LDAP authentication userid and password. """)
 @click.option('--auth_type',
               type=str,
               required=False,
-              help="""Identifies which user authentcation method will be used. <br/> Must be one of the following:<br/> <b>DirectBind</b><br/> <b>SearchAndBind</b> (default) """)
+              help="""Identifies which user authentcation method will be used.  Must be one of the following: DirectBind SearchAndBind (default) """)
 @click.option('--group_search_base_dn',
               type=str,
               required=False,
@@ -212,19 +212,19 @@ def DisableLdapAuthentication(ctx):
 @click.option('--group_search_custom_filter',
               type=str,
               required=False,
-              help="""REQUIRED for CustomFilter<br/> For use with the CustomFilter search type, an LDAP filter to use to return the DNs of a user's groups.<br/> The string can have placeholder text of %USERNAME% and %USERDN% to be replaced with their username and full userDN as needed. """)
+              help="""REQUIRED for CustomFilter For use with the CustomFilter search type, an LDAP filter to use to return the DNs of a user's groups. The string can have placeholder text of %USERNAME% and %USERDN% to be replaced with their username and full userDN as needed. """)
 @click.option('--group_search_type',
               type=str,
               required=False,
-              help="""Controls the default group search filter used, can be one of the following:<br/> <b>NoGroups</b>: No group support.<br/> <b>ActiveDirectory</b>: (default) Nested membership of all of a user's AD groups.<br/> <b>MemberDN</b>: MemberDN style groups (single-level). """)
+              help="""Controls the default group search filter used, can be one of the following: NoGroups: No group support. ActiveDirectory: (default) Nested membership of all of a user's AD groups. MemberDN: MemberDN style groups (single-level). """)
 @click.option('--search_bind_dn',
               type=str,
               required=False,
-              help="""REQUIRED for SearchAndBind<br/> A fully qualified DN to log in with to perform an LDAP search for the user (needs read access to the LDAP directory). """)
+              help="""REQUIRED for SearchAndBind A fully qualified DN to log in with to perform an LDAP search for the user (needs read access to the LDAP directory). """)
 @click.option('--search_bind_password',
               type=str,
               required=False,
-              help="""REQUIRED for SearchAndBind<br/> The password for the searchBindDN account used for searching. """)
+              help="""REQUIRED for SearchAndBind The password for the searchBindDN account used for searching. """)
 @click.option('--server_uris',
               type=str,
               required=True,
@@ -232,7 +232,7 @@ def DisableLdapAuthentication(ctx):
 @click.option('--user_dntemplate',
               type=str,
               required=False,
-              help="""REQUIRED for DirectBind<br/> A string that is used to form a fully qualified user DN.<br/> The string should have the placeholder text "%USERNAME%" which will be replaced with the username of the authenticating user. """)
+              help="""REQUIRED for DirectBind A string that is used to form a fully qualified user DN. The string should have the placeholder text "%USERNAME%" which will be replaced with the username of the authenticating user. """)
 @click.option('--user_search_base_dn',
               type=str,
               required=False,
@@ -240,7 +240,7 @@ def DisableLdapAuthentication(ctx):
 @click.option('--user_search_filter',
               type=str,
               required=False,
-              help="""REQUIRED for SearchAndBind.<br/> The LDAP filter to use.<br/> The string should have the placeholder text "%USERNAME%" which will be replaced with the username of the authenticating user.<br/> Example: (&(objectClass=person) (sAMAccountName=%USERNAME%)) will use the sAMAccountName field in Active Directory to match the nusername entered at cluster login. """)
+              help="""REQUIRED for SearchAndBind. The LDAP filter to use. The string should have the placeholder text "%USERNAME%" which will be replaced with the username of the authenticating user. Example: (&(objectClass=person) (sAMAccountName=%USERNAME%)) will use the sAMAccountName field in Active Directory to match the nusername entered at cluster login. """)
 @pass_context
 def EnableLdapAuthentication(ctx,
            server_uris,

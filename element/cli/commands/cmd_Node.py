@@ -23,7 +23,7 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """SetNetworkConfig Remove ListPending GetOrigin ListPendingActive GetPendingOperation ListStats SetConfig Add ListAll GetNetworkConfig GetStats GetConfig ListActive GetBootstrapConfig """
+    """SetNetworkConfig GetBootstrapConfig Remove ListPending GetOrigin ListPendingActive GetPendingOperation ListStats Add SetConfig GetNetworkConfig GetStats GetConfig ListActive ListAll """
 
 @cli.command('SetNetworkConfig', short_help="""The "SetNetworkConfig" method is used to set the network configuration for a node. To see the states in which these objects can be modified, see "Network Object for 1G and 10G Interfaces" on page 109 of the Element API. To display the current network settings for a node, run the "GetNetworkConfig" method.  WARNING! Changing the "bond-mode" on a node can cause a temporary loss of network connectivity. Caution should be taken when using this method.  Note: This method is available only through the per-node API endpoint 5.0 or later. """)
 @click.option('--network',
@@ -58,6 +58,30 @@ def SetNetworkConfig(ctx,
         exit()
 
     cli_utils.print_result(SetNetworkConfigResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetBootstrapConfig', short_help="""GetBootstrapConfig returns the cluster name and node name from the bootstrap configuration file. This API method should be performed on an individual node before it has been configured into a cluster. The resulting information from this method is used in the Cluster Configuration UI when the cluster is eventually created. """)
+@pass_context
+def GetBootstrapConfig(ctx):
+    """GetBootstrapConfig returns the cluster name and node name from the bootstrap configuration file. This API method should be performed on an individual node before it has been configured into a cluster. The resulting information from this method is used in the Cluster Configuration UI when the cluster is eventually created."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("")
+    try:
+        GetBootstrapConfigResult = ctx.element.get_bootstrap_config()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(GetBootstrapConfigResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -222,42 +246,6 @@ def ListStats(ctx):
 
 
 
-@cli.command('SetConfig', short_help="""The SetConfig API method is used to set all the configuration information for the node. This includes the same information available via calls to SetClusterConfig and SetNetworkConfig in one API method.  Warning! Changing the 'bond-mode' on a node can cause a temporary loss of network connectivity. Caution should be taken when using this method.  Note: This method is available only through the per-node API endpoint 5.0 or later. """)
-@click.option('--config',
-              type=str,
-              required=True,
-              help="""Provide in json format: Objects that you want changed for the cluster interface settings. """)
-@pass_context
-def SetConfig(ctx,
-           config):
-    """The SetConfig API method is used to set all the configuration information for the node. This includes the same information available via calls to SetClusterConfig and SetNetworkConfig in one API method."""
-    """"""
-    """Warning! Changing the &#x27;bond-mode&#x27; on a node can cause a temporary loss of network connectivity. Caution should be taken when using this method."""
-    """"""
-    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-    if(config is not None):
-        kwargsDict = simplejson.loads(config)
-        config = Config(**kwargsDict)
-
-    ctx.logger.info("""config = """+str(config)+""";"""+"")
-    try:
-        SetConfigResult = ctx.element.set_config(config=config)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(SetConfigResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
 @cli.command('Add', short_help="""AddNodes is used to add one or more new nodes to the cluster. When a node is not configured and starts up for the first time you are prompted to configure the node. Once a node is configured it is registered as a "pending node" with the cluster.  Adding a node to a cluster that has been set up for virtual networking will require a sufficient number of virtual storage IP addresses to allocate a virtual IP to the new node. If there are no virtual IP addresses available for the new node, the AddNode operation will not complete successfully. Use the "ModifyVirtualNetwork" method to add more storage IP addresses to your virtual network.  The software version on each node in a cluster must be compatible. Run the "ListAllNodes" API to see what versions of software are currently running on the cluster nodes. For an explanation of software version compatibility, see "Node Versioning and Compatibility" in the Element API guide.  Once a node has been added, the drives on the node are made available and can then be added via the "AddDrives" method to increase the storage capacity of the cluster.  Note: It may take several seconds after adding a new Node for it to start up and register the drives as being available. """)
 @click.option('--pending_nodes',
               type=str,
@@ -297,19 +285,31 @@ def Add(ctx,
 
 
 
-@cli.command('ListAll', short_help="""ListAllNodes enables you to retrieve a list of active and pending nodes in the cluster. """)
+@cli.command('SetConfig', short_help="""The SetConfig API method is used to set all the configuration information for the node. This includes the same information available via calls to SetClusterConfig and SetNetworkConfig in one API method.  Warning! Changing the 'bond-mode' on a node can cause a temporary loss of network connectivity. Caution should be taken when using this method.  Note: This method is available only through the per-node API endpoint 5.0 or later. """)
+@click.option('--config',
+              type=str,
+              required=True,
+              help="""Provide in json format: Objects that you want changed for the cluster interface settings. """)
 @pass_context
-def ListAll(ctx):
-    """ListAllNodes enables you to retrieve a list of active and pending nodes in the cluster."""
+def SetConfig(ctx,
+           config):
+    """The SetConfig API method is used to set all the configuration information for the node. This includes the same information available via calls to SetClusterConfig and SetNetworkConfig in one API method."""
+    """"""
+    """Warning! Changing the &#x27;bond-mode&#x27; on a node can cause a temporary loss of network connectivity. Caution should be taken when using this method."""
+    """"""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
+    if(config is not None):
+        kwargsDict = simplejson.loads(config)
+        config = Config(**kwargsDict)
 
-    ctx.logger.info("")
+    ctx.logger.info("""config = """+str(config)+""";"""+"")
     try:
-        ListAllNodesResult = ctx.element.list_all_nodes()
+        SetConfigResult = ctx.element.set_config(config=config)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -317,7 +317,7 @@ def ListAll(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(ListAllNodesResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(SetConfigResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -426,10 +426,10 @@ def ListActive(ctx):
 
 
 
-@cli.command('GetBootstrapConfig', short_help="""GetBootstrapConfig returns the cluster name and node name from the bootstrap configuration file. This API method should be performed on an individual node before it has been configured into a cluster. The resulting information from this method is used in the Cluster Configuration UI when the cluster is eventually created. """)
+@cli.command('ListAll', short_help="""ListAllNodes enables you to retrieve a list of active and pending nodes in the cluster. """)
 @pass_context
-def GetBootstrapConfig(ctx):
-    """GetBootstrapConfig returns the cluster name and node name from the bootstrap configuration file. This API method should be performed on an individual node before it has been configured into a cluster. The resulting information from this method is used in the Cluster Configuration UI when the cluster is eventually created."""
+def ListAll(ctx):
+    """ListAllNodes enables you to retrieve a list of active and pending nodes in the cluster."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -438,7 +438,7 @@ def GetBootstrapConfig(ctx):
 
     ctx.logger.info("")
     try:
-        GetBootstrapConfigResult = ctx.element.get_bootstrap_config()
+        ListAllNodesResult = ctx.element.list_all_nodes()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -446,5 +446,5 @@ def GetBootstrapConfig(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(GetBootstrapConfigResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(ListAllNodesResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
