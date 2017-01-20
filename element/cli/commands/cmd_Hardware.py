@@ -23,31 +23,7 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """GetNvramInfo GetNodeInfo GetClusterInfo GetConfig """
-
-@cli.command('GetNvramInfo', short_help="""GetNvramInfo allows you to retrieve information from each node about the NVRAM card.   """)
-@pass_context
-def GetNvramInfo(ctx):
-    """GetNvramInfo allows you to retrieve information from each node about the NVRAM card.  """
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("")
-    try:
-        GetNvramInfoResult = ctx.element.get_nvram_info()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(GetNvramInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
+    """GetNodeInfo GetClusterInfo GetNvramInfo GetConfig """
 
 @cli.command('GetNodeInfo', short_help="""GetNodeHardwareInfo is used to return all the hardware info and status for the node specified. This generally includes manufacturers, vendors, versions, and other associated hardware identification information. """)
 @click.option('--node_id',
@@ -104,6 +80,30 @@ def GetClusterInfo(ctx,
         exit()
 
     cli_utils.print_result(GetClusterHardwareInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetNvramInfo', short_help="""GetNvramInfo allows you to retrieve information from each node about the NVRAM card.   """)
+@pass_context
+def GetNvramInfo(ctx):
+    """GetNvramInfo allows you to retrieve information from each node about the NVRAM card.  """
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("")
+    try:
+        GetNvramInfoResult = ctx.element.get_nvram_info()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(GetNvramInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 

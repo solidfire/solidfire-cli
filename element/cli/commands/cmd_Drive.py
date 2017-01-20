@@ -23,33 +23,26 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """Reset SecureErase List Remove GetHardwareInfo Add GetStats GetConfig Test ListHardware """
+    """ListHardware List GetConfig GetStats Test GetHardwareInfo Add SecureErase Reset Remove """
 
-@cli.command('Reset', short_help="""ResetDrives is used to pro-actively initialize drives and remove all data currently residing on the drive. The drive can then be reused in an existing node or used in an upgraded SolidFire node. This method requires the force=true parameter to be included in the method call.  Note: This method is available only through the per-node API endpoint 5.0 or later. """)
-@click.option('--drives',
-              type=str,
-              required=True,
-              help="""List of device names (not driveIDs) to reset. """)
+@cli.command('ListHardware', short_help="""ListDriveHardware returns all the drives connected to a node. Use this method on the cluster to return drive hardware information for all the drives on all nodes. """)
 @click.option('--force',
               type=bool,
               required=True,
-              help="""The "force" parameter must be included on this method to successfully reset a drive. """)
+              help="""To run this command, the force parameter must be set to true. """)
 @pass_context
-def Reset(ctx,
-           drives,
+def ListHardware(ctx,
            force):
-    """ResetDrives is used to pro-actively initialize drives and remove all data currently residing on the drive. The drive can then be reused in an existing node or used in an upgraded SolidFire node. This method requires the force=true parameter to be included in the method call."""
-    """"""
-    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
+    """ListDriveHardware returns all the drives connected to a node. Use this method on the cluster to return drive hardware information for all the drives on all nodes."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
-    ctx.logger.info("""drives = """+str(drives)+""";"""+"""force = """+str(force)+""";"""+"")
+    ctx.logger.info("""force = """+str(force)+""";"""+"")
     try:
-        ResetDrivesResult = ctx.element.reset_drives(drives=drives, force=force)
+        ListDriveHardwareResult = ctx.element.list_drive_hardware(force=force)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -57,42 +50,7 @@ def Reset(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(ResetDrivesResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('SecureErase', short_help="""SecureEraseDrives is used to remove any residual data from drives that have a status of "available." For example, when replacing a drive at its end-of-life that contained sensitive data. It uses a Security Erase Unit command to write a predetermined pattern to the drive and resets the encryption key on the drive. The method may take up to two minutes to complete, so it is an asynchronous method. The GetAsyncResult method can be used to check on the status of the secure erase operation.  Use the "ListDrives" method to obtain the driveIDs for the drives you want to secure erase. """)
-@click.option('--drives',
-              type=str,
-              required=True,
-              help="""List of driveIDs to secure erase. """)
-@pass_context
-def SecureErase(ctx,
-           drives):
-    """SecureEraseDrives is used to remove any residual data from drives that have a status of &quot;available.&quot; For example, when replacing a drive at its end-of-life that contained sensitive data."""
-    """It uses a Security Erase Unit command to write a predetermined pattern to the drive and resets the encryption key on the drive. The method may take up to two minutes to complete, so it is an asynchronous method."""
-    """The GetAsyncResult method can be used to check on the status of the secure erase operation."""
-    """"""
-    """Use the &quot;ListDrives&quot; method to obtain the driveIDs for the drives you want to secure erase."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    drives = parser.parse_array(drives)
-
-    ctx.logger.info("""drives = """+str(drives)+""";"""+"")
-    try:
-        AsyncHandleResult = ctx.element.secure_erase_drives(drives=drives)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(AsyncHandleResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(ListDriveHardwareResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -121,39 +79,21 @@ def List(ctx):
 
 
 
-@cli.command('Remove', short_help="""You can use RemoveDrives to proactively remove drives that are part of the cluster. You may want to use this method when reducing cluster capacity or preparing to replace drives nearing the end of their service life. Any data on the drives is removed and migrated to other drives in the cluster before the drive is removed from the cluster. This is an asynchronous method. Depending on the total capacity of the drives being removed, it may take several minutes to migrate all of the data. Use the "GetAsyncResult" method to check the status of the remove operation.  When removing multiple drives, use a single "RemoveDrives" method call rather than multiple individual methods with a single drive each. This reduces the amount of data balancing that must occur to even stabilize the storage load on the cluster.  You can also remove drives with a "failed" status using "RemoveDrives". When you remove a drive with a "failed" status it is not returned to an "available" or "active" status. The drive is unavailable for use in the cluster.  Use the "ListDrives" method to obtain the driveIDs for the drives you want to remove. """)
-@click.option('--drives',
-              type=str,
-              required=True,
-              help="""List of driveIDs to remove from the cluster. """)
+@cli.command('GetConfig', short_help="""GetDriveConfig is used to display drive information for expected slice and block drive counts as well as the number of slices and block drives that are currently connected to the node.  Note: This method is available only through the per-node API endpoint 5.0 or later. """)
 @pass_context
-def Remove(ctx,
-           drives):
-    """You can use RemoveDrives to proactively remove drives that are part of the cluster."""
-    """You may want to use this method when reducing cluster capacity or preparing to replace drives nearing the end of their service life."""
-    """Any data on the drives is removed and migrated to other drives in the cluster before the drive is removed from the cluster. This is an asynchronous method."""
-    """Depending on the total capacity of the drives being removed, it may take several minutes to migrate all of the data."""
-    """Use the &quot;GetAsyncResult&quot; method to check the status of the remove operation."""
+def GetConfig(ctx):
+    """GetDriveConfig is used to display drive information for expected slice and block drive counts as well as the number of slices and block drives that are currently connected to the node."""
     """"""
-    """When removing multiple drives, use a single &quot;RemoveDrives&quot; method call rather than multiple individual methods with a single drive each."""
-    """This reduces the amount of data balancing that must occur to even stabilize the storage load on the cluster."""
-    """"""
-    """You can also remove drives with a &quot;failed&quot; status using &quot;RemoveDrives&quot;."""
-    """When you remove a drive with a &quot;failed&quot; status it is not returned to an &quot;available&quot; or &quot;active&quot; status."""
-    """The drive is unavailable for use in the cluster."""
-    """"""
-    """Use the &quot;ListDrives&quot; method to obtain the driveIDs for the drives you want to remove."""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
-    drives = parser.parse_array(drives)
-
-    ctx.logger.info("""drives = """+str(drives)+""";"""+"")
+    ctx.logger.info("")
     try:
-        AsyncHandleResult = ctx.element.remove_drives(drives=drives)
+        GetDriveConfigResult = ctx.element.get_drive_config()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -161,7 +101,70 @@ def Remove(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(AsyncHandleResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(GetDriveConfigResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetStats', short_help="""GetDriveStats return high-level activity measurements for a single drive. Values are cumulative from the addition of the drive to the cluster. Some values are specific to Block Drives. Statistical data may not be returned for both block and metadata drives when running this method. For more information on which drive type returns which data, see Response Example (Block Drive) and Response Example (Volume Metadata Drive) in the SolidFire API guide. """)
+@click.option('--drive_id',
+              type=int,
+              required=True,
+              help="""Specifies the drive for which statistics are gathered. """)
+@pass_context
+def GetStats(ctx,
+           drive_id):
+    """GetDriveStats return high-level activity measurements for a single drive. Values are cumulative from the addition of the drive to the cluster. Some values are specific to Block Drives. Statistical data may not be returned for both block and metadata drives when running this method."""
+    """For more information on which drive type returns which data, see Response Example (Block Drive) and Response Example (Volume Metadata Drive) in the SolidFire API guide."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("""drive_id = """+str(drive_id)+""";"""+"")
+    try:
+        GetDriveStatsResult = ctx.element.get_drive_stats(drive_id=drive_id)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(GetDriveStatsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('Test', short_help="""The TestDrives API method is used to run a hardware validation on all the drives on the node. Hardware failures on the drives are detected if present and they are reported in the results of the validation tests.  Note: This test takes approximately 10 minutes.  Note: This method is available only through the per-node API endpoint 5.0 or later. """)
+@click.option('--minutes',
+              type=int,
+              required=False,
+              help="""The number of minutes to run the test can be specified. """)
+@pass_context
+def Test(ctx,
+           minutes = None):
+    """The TestDrives API method is used to run a hardware validation on all the drives on the node. Hardware failures on the drives are detected if present and they are reported in the results of the validation tests."""
+    """"""
+    """Note: This test takes approximately 10 minutes."""
+    """"""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("""minutes = """+str(minutes)+""";"""+"")
+    try:
+        TestDrivesResult = ctx.element.test_drives(minutes=minutes)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(TestDrivesResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -241,25 +244,30 @@ def Add(ctx,
 
 
 
-@cli.command('GetStats', short_help="""GetDriveStats return high-level activity measurements for a single drive. Values are cumulative from the addition of the drive to the cluster. Some values are specific to Block Drives. Statistical data may not be returned for both block and metadata drives when running this method. For more information on which drive type returns which data, see Response Example (Block Drive) and Response Example (Volume Metadata Drive) in the SolidFire API guide. """)
-@click.option('--drive_id',
-              type=int,
+@cli.command('SecureErase', short_help="""SecureEraseDrives is used to remove any residual data from drives that have a status of "available." For example, when replacing a drive at its end-of-life that contained sensitive data. It uses a Security Erase Unit command to write a predetermined pattern to the drive and resets the encryption key on the drive. The method may take up to two minutes to complete, so it is an asynchronous method. The GetAsyncResult method can be used to check on the status of the secure erase operation.  Use the "ListDrives" method to obtain the driveIDs for the drives you want to secure erase. """)
+@click.option('--drives',
+              type=str,
               required=True,
-              help="""Specifies the drive for which statistics are gathered. """)
+              help="""List of driveIDs to secure erase. """)
 @pass_context
-def GetStats(ctx,
-           drive_id):
-    """GetDriveStats return high-level activity measurements for a single drive. Values are cumulative from the addition of the drive to the cluster. Some values are specific to Block Drives. Statistical data may not be returned for both block and metadata drives when running this method."""
-    """For more information on which drive type returns which data, see Response Example (Block Drive) and Response Example (Volume Metadata Drive) in the SolidFire API guide."""
+def SecureErase(ctx,
+           drives):
+    """SecureEraseDrives is used to remove any residual data from drives that have a status of &quot;available.&quot; For example, when replacing a drive at its end-of-life that contained sensitive data."""
+    """It uses a Security Erase Unit command to write a predetermined pattern to the drive and resets the encryption key on the drive. The method may take up to two minutes to complete, so it is an asynchronous method."""
+    """The GetAsyncResult method can be used to check on the status of the secure erase operation."""
+    """"""
+    """Use the &quot;ListDrives&quot; method to obtain the driveIDs for the drives you want to secure erase."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
-    ctx.logger.info("""drive_id = """+str(drive_id)+""";"""+"")
+    drives = parser.parse_array(drives)
+
+    ctx.logger.info("""drives = """+str(drives)+""";"""+"")
     try:
-        GetDriveStatsResult = ctx.element.get_drive_stats(drive_id=drive_id)
+        AsyncHandleResult = ctx.element.secure_erase_drives(drives=drives)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -267,87 +275,35 @@ def GetStats(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(GetDriveStatsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(AsyncHandleResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
-@cli.command('GetConfig', short_help="""GetDriveConfig is used to display drive information for expected slice and block drive counts as well as the number of slices and block drives that are currently connected to the node.  Note: This method is available only through the per-node API endpoint 5.0 or later. """)
-@pass_context
-def GetConfig(ctx):
-    """GetDriveConfig is used to display drive information for expected slice and block drive counts as well as the number of slices and block drives that are currently connected to the node."""
-    """"""
-    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("")
-    try:
-        GetDriveConfigResult = ctx.element.get_drive_config()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(GetDriveConfigResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('Test', short_help="""The TestDrives API method is used to run a hardware validation on all the drives on the node. Hardware failures on the drives are detected if present and they are reported in the results of the validation tests.  Note: This test takes approximately 10 minutes.  Note: This method is available only through the per-node API endpoint 5.0 or later. """)
-@click.option('--minutes',
-              type=int,
-              required=False,
-              help="""The number of minutes to run the test can be specified. """)
-@pass_context
-def Test(ctx,
-           minutes = None):
-    """The TestDrives API method is used to run a hardware validation on all the drives on the node. Hardware failures on the drives are detected if present and they are reported in the results of the validation tests."""
-    """"""
-    """Note: This test takes approximately 10 minutes."""
-    """"""
-    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("""minutes = """+str(minutes)+""";"""+"")
-    try:
-        TestDrivesResult = ctx.element.test_drives(minutes=minutes)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(TestDrivesResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('ListHardware', short_help="""ListDriveHardware returns all the drives connected to a node. Use this method on the cluster to return drive hardware information for all the drives on all nodes. """)
+@cli.command('Reset', short_help="""ResetDrives is used to pro-actively initialize drives and remove all data currently residing on the drive. The drive can then be reused in an existing node or used in an upgraded SolidFire node. This method requires the force=true parameter to be included in the method call.  Note: This method is available only through the per-node API endpoint 5.0 or later. """)
+@click.option('--drives',
+              type=str,
+              required=True,
+              help="""List of device names (not driveIDs) to reset. """)
 @click.option('--force',
               type=bool,
               required=True,
-              help="""To run this command, the force parameter must be set to true. """)
+              help="""The "force" parameter must be included on this method to successfully reset a drive. """)
 @pass_context
-def ListHardware(ctx,
+def Reset(ctx,
+           drives,
            force):
-    """ListDriveHardware returns all the drives connected to a node. Use this method on the cluster to return drive hardware information for all the drives on all nodes."""
+    """ResetDrives is used to pro-actively initialize drives and remove all data currently residing on the drive. The drive can then be reused in an existing node or used in an upgraded SolidFire node. This method requires the force=true parameter to be included in the method call."""
+    """"""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
-    ctx.logger.info("""force = """+str(force)+""";"""+"")
+    ctx.logger.info("""drives = """+str(drives)+""";"""+"""force = """+str(force)+""";"""+"")
     try:
-        ListDriveHardwareResult = ctx.element.list_drive_hardware(force=force)
+        ResetDrivesResult = ctx.element.reset_drives(drives=drives, force=force)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -355,5 +311,49 @@ def ListHardware(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(ListDriveHardwareResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(ResetDrivesResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('Remove', short_help="""You can use RemoveDrives to proactively remove drives that are part of the cluster. You may want to use this method when reducing cluster capacity or preparing to replace drives nearing the end of their service life. Any data on the drives is removed and migrated to other drives in the cluster before the drive is removed from the cluster. This is an asynchronous method. Depending on the total capacity of the drives being removed, it may take several minutes to migrate all of the data. Use the "GetAsyncResult" method to check the status of the remove operation.  When removing multiple drives, use a single "RemoveDrives" method call rather than multiple individual methods with a single drive each. This reduces the amount of data balancing that must occur to even stabilize the storage load on the cluster.  You can also remove drives with a "failed" status using "RemoveDrives". When you remove a drive with a "failed" status it is not returned to an "available" or "active" status. The drive is unavailable for use in the cluster.  Use the "ListDrives" method to obtain the driveIDs for the drives you want to remove. """)
+@click.option('--drives',
+              type=str,
+              required=True,
+              help="""List of driveIDs to remove from the cluster. """)
+@pass_context
+def Remove(ctx,
+           drives):
+    """You can use RemoveDrives to proactively remove drives that are part of the cluster."""
+    """You may want to use this method when reducing cluster capacity or preparing to replace drives nearing the end of their service life."""
+    """Any data on the drives is removed and migrated to other drives in the cluster before the drive is removed from the cluster. This is an asynchronous method."""
+    """Depending on the total capacity of the drives being removed, it may take several minutes to migrate all of the data."""
+    """Use the &quot;GetAsyncResult&quot; method to check the status of the remove operation."""
+    """"""
+    """When removing multiple drives, use a single &quot;RemoveDrives&quot; method call rather than multiple individual methods with a single drive each."""
+    """This reduces the amount of data balancing that must occur to even stabilize the storage load on the cluster."""
+    """"""
+    """You can also remove drives with a &quot;failed&quot; status using &quot;RemoveDrives&quot;."""
+    """When you remove a drive with a &quot;failed&quot; status it is not returned to an &quot;available&quot; or &quot;active&quot; status."""
+    """The drive is unavailable for use in the cluster."""
+    """"""
+    """Use the &quot;ListDrives&quot; method to obtain the driveIDs for the drives you want to remove."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    drives = parser.parse_array(drives)
+
+    ctx.logger.info("""drives = """+str(drives)+""";"""+"")
+    try:
+        AsyncHandleResult = ctx.element.remove_drives(drives=drives)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(AsyncHandleResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

@@ -23,49 +23,7 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """Modify Create List Remove Get """
-
-@cli.command('Modify', short_help="""ModifyBackupTarget is used to change attributes of a backup target. """)
-@click.option('--backup_target_id',
-              type=int,
-              required=True,
-              help="""Unique identifier assigned to the backup target. """)
-@click.option('--name',
-              type=str,
-              required=False,
-              help="""Name for the backup target. """)
-@click.option('--attributes',
-              type=str,
-              required=False,
-              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
-@pass_context
-def Modify(ctx,
-           backup_target_id,
-           name = None,
-           attributes = None):
-    """ModifyBackupTarget is used to change attributes of a backup target."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-    if(attributes is not None):
-        kwargsDict = simplejson.loads(attributes)
-        attributes = dict(**kwargsDict)
-
-    ctx.logger.info("""backup_target_id = """+str(backup_target_id)+""";"""+"""name = """+str(name)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
-    try:
-        ModifyBackupTargetResult = ctx.element.modify_backup_target(backup_target_id=backup_target_id, name=name, attributes=attributes)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(ModifyBackupTargetResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
+    """Create List Get Modify Remove """
 
 @cli.command('Create', short_help="""CreateBackupTarget allows you to create and store backup target information so that you do not need to re-enter it each time a backup is created. """)
 @click.option('--name',
@@ -128,35 +86,6 @@ def List(ctx):
 
 
 
-@cli.command('Remove', short_help="""RemoveBackupTarget allows you to delete backup targets. """)
-@click.option('--backup_target_id',
-              type=int,
-              required=True,
-              help="""Unique target ID of the target to remove. """)
-@pass_context
-def Remove(ctx,
-           backup_target_id):
-    """RemoveBackupTarget allows you to delete backup targets."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("""backup_target_id = """+str(backup_target_id)+""";"""+"")
-    try:
-        RemoveBackupTargetResult = ctx.element.remove_backup_target(backup_target_id=backup_target_id)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(RemoveBackupTargetResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
 @cli.command('Get', short_help="""GetBackupTarget allows you to return information about a specific backup target that has been created. """)
 @click.option('--backup_target_id',
               type=int,
@@ -183,4 +112,75 @@ def Get(ctx,
         exit()
 
     cli_utils.print_result(GetBackupTargetResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('Modify', short_help="""ModifyBackupTarget is used to change attributes of a backup target. """)
+@click.option('--backup_target_id',
+              type=int,
+              required=True,
+              help="""Unique identifier assigned to the backup target. """)
+@click.option('--name',
+              type=str,
+              required=False,
+              help="""Name for the backup target. """)
+@click.option('--attributes',
+              type=str,
+              required=False,
+              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
+@pass_context
+def Modify(ctx,
+           backup_target_id,
+           name = None,
+           attributes = None):
+    """ModifyBackupTarget is used to change attributes of a backup target."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+    if(attributes is not None):
+        kwargsDict = simplejson.loads(attributes)
+        attributes = dict(**kwargsDict)
+
+    ctx.logger.info("""backup_target_id = """+str(backup_target_id)+""";"""+"""name = """+str(name)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
+    try:
+        ModifyBackupTargetResult = ctx.element.modify_backup_target(backup_target_id=backup_target_id, name=name, attributes=attributes)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ModifyBackupTargetResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('Remove', short_help="""RemoveBackupTarget allows you to delete backup targets. """)
+@click.option('--backup_target_id',
+              type=int,
+              required=True,
+              help="""Unique target ID of the target to remove. """)
+@pass_context
+def Remove(ctx,
+           backup_target_id):
+    """RemoveBackupTarget allows you to delete backup targets."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("""backup_target_id = """+str(backup_target_id)+""";"""+"")
+    try:
+        RemoveBackupTargetResult = ctx.element.remove_backup_target(backup_target_id=backup_target_id)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(RemoveBackupTargetResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

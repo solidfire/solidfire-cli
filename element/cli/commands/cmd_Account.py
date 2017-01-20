@@ -23,7 +23,7 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """List GetEfficiency Modify Remove GetByName Add GetByID """
+    """List GetByID Modify GetEfficiency Remove Add GetByName """
 
 @cli.command('List', short_help="""Returns the entire list of accounts, with optional paging support. """)
 @click.option('--start_account_id',
@@ -59,15 +59,15 @@ def List(ctx,
 
 
 
-@cli.command('GetEfficiency', short_help="""GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity. """)
+@cli.command('GetByID', short_help="""Returns details about an account, given its AccountID. """)
 @click.option('--account_id',
               type=int,
               required=True,
-              help="""Specifies the volume account for which capacity is computed. """)
+              help="""Specifies the account for which details are gathered. """)
 @pass_context
-def GetEfficiency(ctx,
+def GetByID(ctx,
            account_id):
-    """GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity."""
+    """Returns details about an account, given its AccountID."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -76,7 +76,7 @@ def GetEfficiency(ctx,
 
     ctx.logger.info("""account_id = """+str(account_id)+""";"""+"")
     try:
-        GetEfficiencyResult = ctx.element.get_account_efficiency(account_id=account_id)
+        GetAccountResult = ctx.element.get_account_by_id(account_id=account_id)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -84,7 +84,7 @@ def GetEfficiency(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(GetEfficiencyResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(GetAccountResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -148,6 +148,35 @@ def Modify(ctx,
 
 
 
+@cli.command('GetEfficiency', short_help="""GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity. """)
+@click.option('--account_id',
+              type=int,
+              required=True,
+              help="""Specifies the volume account for which capacity is computed. """)
+@pass_context
+def GetEfficiency(ctx,
+           account_id):
+    """GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("""account_id = """+str(account_id)+""";"""+"")
+    try:
+        GetEfficiencyResult = ctx.element.get_account_efficiency(account_id=account_id)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(GetEfficiencyResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
 @cli.command('Remove', short_help="""Used to remove an existing account. All Volumes must be deleted and purged on the account before it can be removed. If volumes on the account are still pending deletion, RemoveAccount cannot be used until DeleteVolume to delete and purge the volumes. """)
 @click.option('--account_id',
               type=int,
@@ -176,35 +205,6 @@ def Remove(ctx,
         exit()
 
     cli_utils.print_result(RemoveAccountResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('GetByName', short_help="""Returns details about an account, given its Username. """)
-@click.option('--username',
-              type=str,
-              required=True,
-              help="""Username for the account. """)
-@pass_context
-def GetByName(ctx,
-           username):
-    """Returns details about an account, given its Username."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("""username = """+str(username)+""";"""+"")
-    try:
-        GetAccountResult = ctx.element.get_account_by_name(username=username)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(GetAccountResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -257,24 +257,24 @@ def Add(ctx,
 
 
 
-@cli.command('GetByID', short_help="""Returns details about an account, given its AccountID. """)
-@click.option('--account_id',
-              type=int,
+@cli.command('GetByName', short_help="""Returns details about an account, given its Username. """)
+@click.option('--username',
+              type=str,
               required=True,
-              help="""Specifies the account for which details are gathered. """)
+              help="""Username for the account. """)
 @pass_context
-def GetByID(ctx,
-           account_id):
-    """Returns details about an account, given its AccountID."""
+def GetByName(ctx,
+           username):
+    """Returns details about an account, given its Username."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
-    ctx.logger.info("""account_id = """+str(account_id)+""";"""+"")
+    ctx.logger.info("""username = """+str(username)+""";"""+"")
     try:
-        GetAccountResult = ctx.element.get_account_by_id(account_id=account_id)
+        GetAccountResult = ctx.element.get_account_by_name(username=username)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()

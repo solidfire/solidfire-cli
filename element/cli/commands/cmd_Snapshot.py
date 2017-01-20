@@ -23,65 +23,33 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """ListGroup ModifyGroup Modify Create List CreateSchedule DeleteGroup GetSchedule RollbackToGroup RollbackTo CreateGroup ModifySchedule ListSchedules Delete """
+    """DeleteGroup ModifySchedule Modify ModifyGroup Create ListSchedules List GetSchedule CreateSchedule CreateGroup ListGroup Delete RollbackTo RollbackToGroup """
 
-@cli.command('ListGroup', short_help="""ListGroupSnapshots is used to return information about all group snapshots that have been created. """)
-@click.option('--volume_id',
-              type=int,
-              required=False,
-              help="""An array of unique volume IDs to query. If this parameter is not specified, all group snapshots on the cluster will be included. """)
-@pass_context
-def ListGroup(ctx,
-           volume_id = None):
-    """ListGroupSnapshots is used to return information about all group snapshots that have been created."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("""volume_id = """+str(volume_id)+""";"""+"")
-    try:
-        ListGroupSnapshotsResult = ctx.element.list_group_snapshots(volume_id=volume_id)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(ListGroupSnapshotsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('ModifyGroup', short_help="""ModifyGroupSnapshot is used to change the attributes currently assigned to a group snapshot. """)
+@cli.command('DeleteGroup', short_help="""DeleteGroupSnapshot is used to delete a group snapshot. The saveMembers parameter can be used to preserve all the snapshots that were made for the volumes in the group but the group association will be removed. """)
 @click.option('--group_snapshot_id',
               type=int,
               required=True,
-              help="""ID of the snapshot. """)
-@click.option('--expiration_time',
-              type=str,
-              required=False,
-              help="""Use to set the time when the snapshot should be removed. """)
-@click.option('--enable_remote_replication',
+              help="""Unique ID of the group snapshot. """)
+@click.option('--save_members',
               type=bool,
-              required=False,
-              help="""Use to enable the snapshot created to be replicated to a remote SolidFire cluster. Possible values: true: the snapshot will be replicated to remote storage. false: Default. No replication. """)
+              required=True,
+              help="""true: Snapshots are kept, but group association is removed. false: The group and snapshots are deleted. """)
 @pass_context
-def ModifyGroup(ctx,
+def DeleteGroup(ctx,
            group_snapshot_id,
-           expiration_time = None,
-           enable_remote_replication = None):
-    """ModifyGroupSnapshot is used to change the attributes currently assigned to a group snapshot."""
+           save_members):
+    """DeleteGroupSnapshot is used to delete a group snapshot."""
+    """The saveMembers parameter can be used to preserve all the snapshots that"""
+    """were made for the volumes in the group but the group association will be removed."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
-    ctx.logger.info("""group_snapshot_id = """+str(group_snapshot_id)+""";"""+"""expiration_time = """+str(expiration_time)+""";"""+"""enable_remote_replication = """+str(enable_remote_replication)+""";"""+"")
+    ctx.logger.info("""group_snapshot_id = """+str(group_snapshot_id)+""";"""+"""save_members = """+str(save_members)+""";"""+"")
     try:
-        ModifyGroupSnapshotResult = ctx.element.modify_group_snapshot(group_snapshot_id=group_snapshot_id, expiration_time=expiration_time, enable_remote_replication=enable_remote_replication)
+        DeleteGroupSnapshotResult = ctx.element.delete_group_snapshot(group_snapshot_id=group_snapshot_id, save_members=save_members)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -89,7 +57,39 @@ def ModifyGroup(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(ModifyGroupSnapshotResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(DeleteGroupSnapshotResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('ModifySchedule', short_help="""ModifySchedule is used to change the intervals at which a scheduled snapshot occurs. This allows for adjustment to the snapshot frequency and retention. """)
+@click.option('--schedule',
+              type=str,
+              required=True,
+              help="""Provide in json format: The "Schedule" object will be used to modify an existing schedule. The ScheduleID property is required. Frequency property must be of type that inherits from Frequency. Valid types are: DaysOfMonthFrequency DaysOrWeekFrequency TimeIntervalFrequency """)
+@pass_context
+def ModifySchedule(ctx,
+           schedule):
+    """ModifySchedule is used to change the intervals at which a scheduled snapshot occurs. This allows for adjustment to the snapshot frequency and retention."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+    if(schedule is not None):
+        kwargsDict = simplejson.loads(schedule)
+        schedule = Schedule(**kwargsDict)
+
+    ctx.logger.info("""schedule = """+str(schedule)+""";"""+"")
+    try:
+        ModifyScheduleResult = ctx.element.modify_schedule(schedule=schedule)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ModifyScheduleResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -130,6 +130,45 @@ def Modify(ctx,
         exit()
 
     cli_utils.print_result(ModifySnapshotResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('ModifyGroup', short_help="""ModifyGroupSnapshot is used to change the attributes currently assigned to a group snapshot. """)
+@click.option('--group_snapshot_id',
+              type=int,
+              required=True,
+              help="""ID of the snapshot. """)
+@click.option('--expiration_time',
+              type=str,
+              required=False,
+              help="""Use to set the time when the snapshot should be removed. """)
+@click.option('--enable_remote_replication',
+              type=bool,
+              required=False,
+              help="""Use to enable the snapshot created to be replicated to a remote SolidFire cluster. Possible values: true: the snapshot will be replicated to remote storage. false: Default. No replication. """)
+@pass_context
+def ModifyGroup(ctx,
+           group_snapshot_id,
+           expiration_time = None,
+           enable_remote_replication = None):
+    """ModifyGroupSnapshot is used to change the attributes currently assigned to a group snapshot."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("""group_snapshot_id = """+str(group_snapshot_id)+""";"""+"""expiration_time = """+str(expiration_time)+""";"""+"""enable_remote_replication = """+str(enable_remote_replication)+""";"""+"")
+    try:
+        ModifyGroupSnapshotResult = ctx.element.modify_group_snapshot(group_snapshot_id=group_snapshot_id, expiration_time=expiration_time, enable_remote_replication=enable_remote_replication)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ModifyGroupSnapshotResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -194,6 +233,30 @@ def Create(ctx,
 
 
 
+@cli.command('ListSchedules', short_help="""ListSchedule is used to return information about all scheduled snapshots that have been created. """)
+@pass_context
+def ListSchedules(ctx):
+    """ListSchedule is used to return information about all scheduled snapshots that have been created."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("")
+    try:
+        ListSchedulesResult = ctx.element.list_schedules()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ListSchedulesResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
 @cli.command('List', short_help="""ListSnapshots is used to return the attributes of each snapshot taken on the volume. """)
 @click.option('--volume_id',
               type=int,
@@ -220,6 +283,35 @@ def List(ctx,
         exit()
 
     cli_utils.print_result(ListSnapshotsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetSchedule', short_help="""GetSchedule is used to return information about a scheduled snapshot that has been created. You can see information about a specified schedule if there are many snapshot schedules in the system. You can include more than one schedule with this method by specifying additional scheduleIDs to the parameter. """)
+@click.option('--schedule_id',
+              type=int,
+              required=True,
+              help="""Unique ID of the schedule or multiple schedules to display """)
+@pass_context
+def GetSchedule(ctx,
+           schedule_id):
+    """GetSchedule is used to return information about a scheduled snapshot that has been created. You can see information about a specified schedule if there are many snapshot schedules in the system. You can include more than one schedule with this method by specifying additional scheduleIDs to the parameter."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("""schedule_id = """+str(schedule_id)+""";"""+"")
+    try:
+        GetScheduleResult = ctx.element.get_schedule(schedule_id=schedule_id)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(GetScheduleResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -256,178 +348,6 @@ def CreateSchedule(ctx,
         exit()
 
     cli_utils.print_result(CreateScheduleResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('DeleteGroup', short_help="""DeleteGroupSnapshot is used to delete a group snapshot. The saveMembers parameter can be used to preserve all the snapshots that were made for the volumes in the group but the group association will be removed. """)
-@click.option('--group_snapshot_id',
-              type=int,
-              required=True,
-              help="""Unique ID of the group snapshot. """)
-@click.option('--save_members',
-              type=bool,
-              required=True,
-              help="""true: Snapshots are kept, but group association is removed. false: The group and snapshots are deleted. """)
-@pass_context
-def DeleteGroup(ctx,
-           group_snapshot_id,
-           save_members):
-    """DeleteGroupSnapshot is used to delete a group snapshot."""
-    """The saveMembers parameter can be used to preserve all the snapshots that"""
-    """were made for the volumes in the group but the group association will be removed."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("""group_snapshot_id = """+str(group_snapshot_id)+""";"""+"""save_members = """+str(save_members)+""";"""+"")
-    try:
-        DeleteGroupSnapshotResult = ctx.element.delete_group_snapshot(group_snapshot_id=group_snapshot_id, save_members=save_members)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(DeleteGroupSnapshotResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('GetSchedule', short_help="""GetSchedule is used to return information about a scheduled snapshot that has been created. You can see information about a specified schedule if there are many snapshot schedules in the system. You can include more than one schedule with this method by specifying additional scheduleIDs to the parameter. """)
-@click.option('--schedule_id',
-              type=int,
-              required=True,
-              help="""Unique ID of the schedule or multiple schedules to display """)
-@pass_context
-def GetSchedule(ctx,
-           schedule_id):
-    """GetSchedule is used to return information about a scheduled snapshot that has been created. You can see information about a specified schedule if there are many snapshot schedules in the system. You can include more than one schedule with this method by specifying additional scheduleIDs to the parameter."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("""schedule_id = """+str(schedule_id)+""";"""+"")
-    try:
-        GetScheduleResult = ctx.element.get_schedule(schedule_id=schedule_id)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(GetScheduleResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('RollbackToGroup', short_help="""RollbackToGroupSnapshot is used to roll back each individual volume in a snapshot group to a copy of their individual snapshots.  Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """)
-@click.option('--group_snapshot_id',
-              type=int,
-              required=True,
-              help="""Unique ID of the group snapshot. """)
-@click.option('--save_current_state',
-              type=bool,
-              required=True,
-              help="""true: The previous active volume image is kept. false: (default) The previous active volume image is deleted. """)
-@click.option('--name',
-              type=str,
-              required=False,
-              help="""Name for the snapshot. If no name is given, then the name of the snapshot being rolled back to is used with  "-copy" appended to the end of the name. """)
-@click.option('--attributes',
-              type=str,
-              required=False,
-              help="""Provide in json format: List of Name/Value pairs in JSON object format """)
-@pass_context
-def RollbackToGroup(ctx,
-           group_snapshot_id,
-           save_current_state,
-           name = None,
-           attributes = None):
-    """RollbackToGroupSnapshot is used to roll back each individual volume in a snapshot group to a copy of their individual snapshots."""
-    """"""
-    """Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3."""
-    """Snapshots are not created when cluster fullness is at stage 4 or 5."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-    if(attributes is not None):
-        kwargsDict = simplejson.loads(attributes)
-        attributes = dict(**kwargsDict)
-
-    ctx.logger.info("""group_snapshot_id = """+str(group_snapshot_id)+""";"""+"""save_current_state = """+str(save_current_state)+""";"""+"""name = """+str(name)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
-    try:
-        CreateGroupSnapshotResult = ctx.element.rollback_to_group_snapshot(group_snapshot_id=group_snapshot_id, save_current_state=save_current_state, name=name, attributes=attributes)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(CreateGroupSnapshotResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('RollbackTo', short_help="""RollbackToSnapshot is used to make an existing snapshot the "active" volume image. This method creates a new  snapshot from an existing snapshot. The new snapshot becomes "active" and the existing snapshot is preserved until  it is manually deleted. The previously "active" snapshot is deleted unless the parameter saveCurrentState is set with  a value of "true." Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """)
-@click.option('--volume_id',
-              type=int,
-              required=True,
-              help="""VolumeID for the volume. """)
-@click.option('--snapshot_id',
-              type=int,
-              required=True,
-              help="""ID of a previously created snapshot on the given volume. """)
-@click.option('--save_current_state',
-              type=bool,
-              required=True,
-              help="""true: The previous active volume image is kept. false: (default) The previous active volume image is deleted. """)
-@click.option('--name',
-              type=str,
-              required=False,
-              help="""Name for the snapshot. If no name is given, then the name of the snapshot being rolled back to is used with  "-copy" appended to the end of the name. """)
-@click.option('--attributes',
-              type=str,
-              required=False,
-              help="""Provide in json format: List of Name/Value pairs in JSON object format """)
-@pass_context
-def RollbackTo(ctx,
-           volume_id,
-           snapshot_id,
-           save_current_state,
-           name = None,
-           attributes = None):
-    """RollbackToSnapshot is used to make an existing snapshot the &quot;active&quot; volume image. This method creates a new """
-    """snapshot from an existing snapshot. The new snapshot becomes &quot;active&quot; and the existing snapshot is preserved until """
-    """it is manually deleted. The previously &quot;active&quot; snapshot is deleted unless the parameter saveCurrentState is set with """
-    """a value of &quot;true.&quot;"""
-    """Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3."""
-    """Snapshots are not created when cluster fullness is at stage 4 or 5."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-    if(attributes is not None):
-        kwargsDict = simplejson.loads(attributes)
-        attributes = dict(**kwargsDict)
-
-    ctx.logger.info("""volume_id = """+str(volume_id)+""";"""+"""snapshot_id = """+str(snapshot_id)+""";"""+"""save_current_state = """+str(save_current_state)+""";"""+"""name = """+str(name)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
-    try:
-        CreateSnapshotResult = ctx.element.rollback_to_snapshot(volume_id=volume_id, snapshot_id=snapshot_id, save_current_state=save_current_state, name=name, attributes=attributes)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(CreateSnapshotResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -489,27 +409,24 @@ def CreateGroup(ctx,
 
 
 
-@cli.command('ModifySchedule', short_help="""ModifySchedule is used to change the intervals at which a scheduled snapshot occurs. This allows for adjustment to the snapshot frequency and retention. """)
-@click.option('--schedule',
-              type=str,
-              required=True,
-              help="""Provide in json format: The "Schedule" object will be used to modify an existing schedule. The ScheduleID property is required. Frequency property must be of type that inherits from Frequency. Valid types are: DaysOfMonthFrequency DaysOrWeekFrequency TimeIntervalFrequency """)
+@cli.command('ListGroup', short_help="""ListGroupSnapshots is used to return information about all group snapshots that have been created. """)
+@click.option('--volume_id',
+              type=int,
+              required=False,
+              help="""An array of unique volume IDs to query. If this parameter is not specified, all group snapshots on the cluster will be included. """)
 @pass_context
-def ModifySchedule(ctx,
-           schedule):
-    """ModifySchedule is used to change the intervals at which a scheduled snapshot occurs. This allows for adjustment to the snapshot frequency and retention."""
+def ListGroup(ctx,
+           volume_id = None):
+    """ListGroupSnapshots is used to return information about all group snapshots that have been created."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
-    if(schedule is not None):
-        kwargsDict = simplejson.loads(schedule)
-        schedule = Schedule(**kwargsDict)
 
-    ctx.logger.info("""schedule = """+str(schedule)+""";"""+"")
+    ctx.logger.info("""volume_id = """+str(volume_id)+""";"""+"")
     try:
-        ModifyScheduleResult = ctx.element.modify_schedule(schedule=schedule)
+        ListGroupSnapshotsResult = ctx.element.list_group_snapshots(volume_id=volume_id)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -517,31 +434,7 @@ def ModifySchedule(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(ModifyScheduleResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('ListSchedules', short_help="""ListSchedule is used to return information about all scheduled snapshots that have been created. """)
-@pass_context
-def ListSchedules(ctx):
-    """ListSchedule is used to return information about all scheduled snapshots that have been created."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("")
-    try:
-        ListSchedulesResult = ctx.element.list_schedules()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(ListSchedulesResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(ListGroupSnapshotsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -574,4 +467,111 @@ def Delete(ctx,
         exit()
 
     cli_utils.print_result(DeleteSnapshotResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('RollbackTo', short_help="""RollbackToSnapshot is used to make an existing snapshot the "active" volume image. This method creates a new  snapshot from an existing snapshot. The new snapshot becomes "active" and the existing snapshot is preserved until  it is manually deleted. The previously "active" snapshot is deleted unless the parameter saveCurrentState is set with  a value of "true." Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """)
+@click.option('--volume_id',
+              type=int,
+              required=True,
+              help="""VolumeID for the volume. """)
+@click.option('--snapshot_id',
+              type=int,
+              required=True,
+              help="""ID of a previously created snapshot on the given volume. """)
+@click.option('--save_current_state',
+              type=bool,
+              required=True,
+              help="""true: The previous active volume image is kept. false: (default) The previous active volume image is deleted. """)
+@click.option('--name',
+              type=str,
+              required=False,
+              help="""Name for the snapshot. If no name is given, then the name of the snapshot being rolled back to is used with  "-copy" appended to the end of the name. """)
+@click.option('--attributes',
+              type=str,
+              required=False,
+              help="""Provide in json format: List of Name/Value pairs in JSON object format """)
+@pass_context
+def RollbackTo(ctx,
+           volume_id,
+           snapshot_id,
+           save_current_state,
+           name = None,
+           attributes = None):
+    """RollbackToSnapshot is used to make an existing snapshot the &quot;active&quot; volume image. This method creates a new """
+    """snapshot from an existing snapshot. The new snapshot becomes &quot;active&quot; and the existing snapshot is preserved until """
+    """it is manually deleted. The previously &quot;active&quot; snapshot is deleted unless the parameter saveCurrentState is set with """
+    """a value of &quot;true.&quot;"""
+    """Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3."""
+    """Snapshots are not created when cluster fullness is at stage 4 or 5."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+    if(attributes is not None):
+        kwargsDict = simplejson.loads(attributes)
+        attributes = dict(**kwargsDict)
+
+    ctx.logger.info("""volume_id = """+str(volume_id)+""";"""+"""snapshot_id = """+str(snapshot_id)+""";"""+"""save_current_state = """+str(save_current_state)+""";"""+"""name = """+str(name)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
+    try:
+        CreateSnapshotResult = ctx.element.rollback_to_snapshot(volume_id=volume_id, snapshot_id=snapshot_id, save_current_state=save_current_state, name=name, attributes=attributes)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(CreateSnapshotResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('RollbackToGroup', short_help="""RollbackToGroupSnapshot is used to roll back each individual volume in a snapshot group to a copy of their individual snapshots.  Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """)
+@click.option('--group_snapshot_id',
+              type=int,
+              required=True,
+              help="""Unique ID of the group snapshot. """)
+@click.option('--save_current_state',
+              type=bool,
+              required=True,
+              help="""true: The previous active volume image is kept. false: (default) The previous active volume image is deleted. """)
+@click.option('--name',
+              type=str,
+              required=False,
+              help="""Name for the snapshot. If no name is given, then the name of the snapshot being rolled back to is used with  "-copy" appended to the end of the name. """)
+@click.option('--attributes',
+              type=str,
+              required=False,
+              help="""Provide in json format: List of Name/Value pairs in JSON object format """)
+@pass_context
+def RollbackToGroup(ctx,
+           group_snapshot_id,
+           save_current_state,
+           name = None,
+           attributes = None):
+    """RollbackToGroupSnapshot is used to roll back each individual volume in a snapshot group to a copy of their individual snapshots."""
+    """"""
+    """Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3."""
+    """Snapshots are not created when cluster fullness is at stage 4 or 5."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+    if(attributes is not None):
+        kwargsDict = simplejson.loads(attributes)
+        attributes = dict(**kwargsDict)
+
+    ctx.logger.info("""group_snapshot_id = """+str(group_snapshot_id)+""";"""+"""save_current_state = """+str(save_current_state)+""";"""+"""name = """+str(name)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
+    try:
+        CreateGroupSnapshotResult = ctx.element.rollback_to_group_snapshot(group_snapshot_id=group_snapshot_id, save_current_state=save_current_state, name=name, attributes=attributes)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(CreateGroupSnapshotResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
