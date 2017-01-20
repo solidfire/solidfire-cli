@@ -23,32 +23,7 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """ListUtilities List ConnectMvip ConnectSvip ConnectEnsemble Ping """
-
-@cli.command('ListUtilities', short_help="""The ListUtilities API method is used to return the tests that are available to run on a node. Note: This method is available only through the per-node API endpoint 5.0 or later. """)
-@pass_context
-def ListUtilities(ctx):
-    """The ListUtilities API method is used to return the tests that are available to run on a node."""
-    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("")
-    try:
-        ListUtilitiesResult = ctx.element.list_utilities()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(ListUtilitiesResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
+    """List ConnectMvip ConnectSvip ListUtilities Ping ConnectEnsemble """
 
 @cli.command('List', short_help="""The ListTests API method is used to return the tests that are available to run on a node. Note: This method is available only through the per-node API endpoint 5.0 or later. """)
 @pass_context
@@ -135,15 +110,10 @@ def ConnectSvip(ctx,
 
 
 
-@cli.command('ConnectEnsemble', short_help="""The TestConnectEnsemble API method is used to verify connectivity with a sepcified database ensemble. By default it uses the ensemble for the cluster the node is associated with. Alternatively you can provide a different ensemble to test connectivity with. Note: This method is available only through the per-node API endpoint 5.0 or later. """)
-@click.option('--ensemble',
-              type=str,
-              required=False,
-              help="""A comma-separated list of ensemble node CIPs for connectivity testing """)
+@cli.command('ListUtilities', short_help="""The ListUtilities API method is used to return the tests that are available to run on a node. Note: This method is available only through the per-node API endpoint 5.0 or later. """)
 @pass_context
-def ConnectEnsemble(ctx,
-           ensemble = None):
-    """The TestConnectEnsemble API method is used to verify connectivity with a sepcified database ensemble. By default it uses the ensemble for the cluster the node is associated with. Alternatively you can provide a different ensemble to test connectivity with."""
+def ListUtilities(ctx):
+    """The ListUtilities API method is used to return the tests that are available to run on a node."""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
@@ -151,9 +121,9 @@ def ConnectEnsemble(ctx,
 
 
 
-    ctx.logger.info("""ensemble = """+str(ensemble)+""";"""+"")
+    ctx.logger.info("")
     try:
-        TestConnectEnsembleResult = ctx.element.test_connect_ensemble(ensemble=ensemble)
+        ListUtilitiesResult = ctx.element.list_utilities()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -161,7 +131,7 @@ def ConnectEnsemble(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(TestConnectEnsembleResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(ListUtilitiesResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -212,4 +182,34 @@ def Ping(ctx,
         exit()
 
     cli_utils.print_result(TestPingResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('ConnectEnsemble', short_help="""The TestConnectEnsemble API method is used to verify connectivity with a sepcified database ensemble. By default it uses the ensemble for the cluster the node is associated with. Alternatively you can provide a different ensemble to test connectivity with. Note: This method is available only through the per-node API endpoint 5.0 or later. """)
+@click.option('--ensemble',
+              type=str,
+              required=False,
+              help="""A comma-separated list of ensemble node CIPs for connectivity testing """)
+@pass_context
+def ConnectEnsemble(ctx,
+           ensemble = None):
+    """The TestConnectEnsemble API method is used to verify connectivity with a sepcified database ensemble. By default it uses the ensemble for the cluster the node is associated with. Alternatively you can provide a different ensemble to test connectivity with."""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("""ensemble = """+str(ensemble)+""";"""+"")
+    try:
+        TestConnectEnsembleResult = ctx.element.test_connect_ensemble(ensemble=ensemble)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(TestConnectEnsembleResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

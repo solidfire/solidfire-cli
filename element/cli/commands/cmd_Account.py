@@ -23,70 +23,7 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """List GetByID Modify GetEfficiency Remove Add GetByName """
-
-@cli.command('List', short_help="""Returns the entire list of accounts, with optional paging support. """)
-@click.option('--start_account_id',
-              type=int,
-              required=False,
-              help="""Starting AccountID to return. If no Account exists with this AccountID, the next Account by AccountID order is used as the start of the list. To page through the list, pass the AccountID of the last Account in the previous response + 1 """)
-@click.option('--limit',
-              type=int,
-              required=False,
-              help="""Maximum number of AccountInfo objects to return. """)
-@pass_context
-def List(ctx,
-           start_account_id = None,
-           limit = None):
-    """Returns the entire list of accounts, with optional paging support."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("""start_account_id = """+str(start_account_id)+""";"""+"""limit = """+str(limit)+""";"""+"")
-    try:
-        ListAccountsResult = ctx.element.list_accounts(start_account_id=start_account_id, limit=limit)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(ListAccountsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('GetByID', short_help="""Returns details about an account, given its AccountID. """)
-@click.option('--account_id',
-              type=int,
-              required=True,
-              help="""Specifies the account for which details are gathered. """)
-@pass_context
-def GetByID(ctx,
-           account_id):
-    """Returns details about an account, given its AccountID."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("""account_id = """+str(account_id)+""";"""+"")
-    try:
-        GetAccountResult = ctx.element.get_account_by_id(account_id=account_id)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(GetAccountResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
+    """Modify List GetByName Remove Add GetByID GetEfficiency """
 
 @cli.command('Modify', short_help="""Used to modify an existing account. When locking an account, any existing connections from that account are immediately terminated. When changing CHAP settings, any existing connections continue to be active, and the new CHAP values are only used on subsequent connection or reconnection. """)
 @click.option('--account_id',
@@ -148,24 +85,29 @@ def Modify(ctx,
 
 
 
-@cli.command('GetEfficiency', short_help="""GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity. """)
-@click.option('--account_id',
+@cli.command('List', short_help="""Returns the entire list of accounts, with optional paging support. """)
+@click.option('--start_account_id',
               type=int,
-              required=True,
-              help="""Specifies the volume account for which capacity is computed. """)
+              required=False,
+              help="""Starting AccountID to return. If no Account exists with this AccountID, the next Account by AccountID order is used as the start of the list. To page through the list, pass the AccountID of the last Account in the previous response + 1 """)
+@click.option('--limit',
+              type=int,
+              required=False,
+              help="""Maximum number of AccountInfo objects to return. """)
 @pass_context
-def GetEfficiency(ctx,
-           account_id):
-    """GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity."""
+def List(ctx,
+           start_account_id = None,
+           limit = None):
+    """Returns the entire list of accounts, with optional paging support."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
-    ctx.logger.info("""account_id = """+str(account_id)+""";"""+"")
+    ctx.logger.info("""start_account_id = """+str(start_account_id)+""";"""+"""limit = """+str(limit)+""";"""+"")
     try:
-        GetEfficiencyResult = ctx.element.get_account_efficiency(account_id=account_id)
+        ListAccountsResult = ctx.element.list_accounts(start_account_id=start_account_id, limit=limit)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -173,7 +115,36 @@ def GetEfficiency(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(GetEfficiencyResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(ListAccountsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetByName', short_help="""Returns details about an account, given its Username. """)
+@click.option('--username',
+              type=str,
+              required=True,
+              help="""Username for the account. """)
+@pass_context
+def GetByName(ctx,
+           username):
+    """Returns details about an account, given its Username."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("""username = """+str(username)+""";"""+"")
+    try:
+        GetAccountResult = ctx.element.get_account_by_name(username=username)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(GetAccountResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -257,24 +228,24 @@ def Add(ctx,
 
 
 
-@cli.command('GetByName', short_help="""Returns details about an account, given its Username. """)
-@click.option('--username',
-              type=str,
+@cli.command('GetByID', short_help="""Returns details about an account, given its AccountID. """)
+@click.option('--account_id',
+              type=int,
               required=True,
-              help="""Username for the account. """)
+              help="""Specifies the account for which details are gathered. """)
 @pass_context
-def GetByName(ctx,
-           username):
-    """Returns details about an account, given its Username."""
+def GetByID(ctx,
+           account_id):
+    """Returns details about an account, given its AccountID."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
-    ctx.logger.info("""username = """+str(username)+""";"""+"")
+    ctx.logger.info("""account_id = """+str(account_id)+""";"""+"")
     try:
-        GetAccountResult = ctx.element.get_account_by_name(username=username)
+        GetAccountResult = ctx.element.get_account_by_id(account_id=account_id)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -283,4 +254,33 @@ def GetByName(ctx,
         exit()
 
     cli_utils.print_result(GetAccountResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetEfficiency', short_help="""GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity. """)
+@click.option('--account_id',
+              type=int,
+              required=True,
+              help="""Specifies the volume account for which capacity is computed. """)
+@pass_context
+def GetEfficiency(ctx,
+           account_id):
+    """GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("""account_id = """+str(account_id)+""";"""+"")
+    try:
+        GetEfficiencyResult = ctx.element.get_account_efficiency(account_id=account_id)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(GetEfficiencyResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

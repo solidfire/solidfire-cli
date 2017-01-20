@@ -23,26 +23,21 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """SetInfo SetRemoteLoggingHosts GetRemoteLoggingHosts GetInfo """
+    """GetInfo SetRemoteLoggingHosts SetInfo GetRemoteLoggingHosts """
 
-@cli.command('SetInfo', short_help="""SetLoginSessionInfo is used to set the period of time a log in authentication is valid. After the log in period elapses without activity on the system the authentication will expire. New log in credentials will be required for continued access to the cluster once the timeout period has elapsed. """)
-@click.option('--timeout',
-              type=str,
-              required=True,
-              help="""Cluster authentication expiration period. Formatted in HH:mm:ss. For example: 01:30:00, 00:90:00, and 00:00:5400 can all be used to equal a 90 minute timeout period. Default is 30 minutes. """)
+@cli.command('GetInfo', short_help="""GetLoginSessionInfo is used to return the period of time a log in authentication is valid for both log in shells and the TUI. """)
 @pass_context
-def SetInfo(ctx,
-           timeout):
-    """SetLoginSessionInfo is used to set the period of time a log in authentication is valid. After the log in period elapses without activity on the system the authentication will expire. New log in credentials will be required for continued access to the cluster once the timeout period has elapsed."""
+def GetInfo(ctx):
+    """GetLoginSessionInfo is used to return the period of time a log in authentication is valid for both log in shells and the TUI."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
-    ctx.logger.info("""timeout = """+str(timeout)+""";"""+"")
+    ctx.logger.info("")
     try:
-        SetLoginSessionInfoResult = ctx.element.set_login_session_info(timeout=timeout)
+        GetLoginSessionInfoResult = ctx.element.get_login_session_info()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -50,7 +45,7 @@ def SetInfo(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(SetLoginSessionInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(GetLoginSessionInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -98,6 +93,35 @@ def SetRemoteLoggingHosts(ctx,
 
 
 
+@cli.command('SetInfo', short_help="""SetLoginSessionInfo is used to set the period of time a log in authentication is valid. After the log in period elapses without activity on the system the authentication will expire. New log in credentials will be required for continued access to the cluster once the timeout period has elapsed. """)
+@click.option('--timeout',
+              type=str,
+              required=True,
+              help="""Cluster authentication expiration period. Formatted in HH:mm:ss. For example: 01:30:00, 00:90:00, and 00:00:5400 can all be used to equal a 90 minute timeout period. Default is 30 minutes. """)
+@pass_context
+def SetInfo(ctx,
+           timeout):
+    """SetLoginSessionInfo is used to set the period of time a log in authentication is valid. After the log in period elapses without activity on the system the authentication will expire. New log in credentials will be required for continued access to the cluster once the timeout period has elapsed."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("""timeout = """+str(timeout)+""";"""+"")
+    try:
+        SetLoginSessionInfoResult = ctx.element.set_login_session_info(timeout=timeout)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(SetLoginSessionInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
 @cli.command('GetRemoteLoggingHosts', short_help="""GetRemoteLoggingHosts is used to retrieve the current list of log servers. """)
 @pass_context
 def GetRemoteLoggingHosts(ctx):
@@ -119,28 +143,4 @@ def GetRemoteLoggingHosts(ctx):
         exit()
 
     cli_utils.print_result(GetRemoteLoggingHostsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('GetInfo', short_help="""GetLoginSessionInfo is used to return the period of time a log in authentication is valid for both log in shells and the TUI. """)
-@pass_context
-def GetInfo(ctx):
-    """GetLoginSessionInfo is used to return the period of time a log in authentication is valid for both log in shells and the TUI."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("")
-    try:
-        GetLoginSessionInfoResult = ctx.element.get_login_session_info()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(GetLoginSessionInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

@@ -23,26 +23,21 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """GetNodeInfo GetClusterInfo GetNvramInfo GetConfig """
+    """GetNvramInfo GetClusterInfo GetNodeInfo GetConfig """
 
-@cli.command('GetNodeInfo', short_help="""GetNodeHardwareInfo is used to return all the hardware info and status for the node specified. This generally includes manufacturers, vendors, versions, and other associated hardware identification information. """)
-@click.option('--node_id',
-              type=int,
-              required=True,
-              help="""The ID of the node for which hardware information is being requested.  Information about a  node is returned if a   node is specified. """)
+@cli.command('GetNvramInfo', short_help="""GetNvramInfo allows you to retrieve information from each node about the NVRAM card.   """)
 @pass_context
-def GetNodeInfo(ctx,
-           node_id):
-    """GetNodeHardwareInfo is used to return all the hardware info and status for the node specified. This generally includes manufacturers, vendors, versions, and other associated hardware identification information."""
+def GetNvramInfo(ctx):
+    """GetNvramInfo allows you to retrieve information from each node about the NVRAM card.  """
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
-    ctx.logger.info("""node_id = """+str(node_id)+""";"""+"")
+    ctx.logger.info("")
     try:
-        GetNodeHardwareInfoResult = ctx.element.get_node_hardware_info(node_id=node_id)
+        GetNvramInfoResult = ctx.element.get_nvram_info()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -50,7 +45,7 @@ def GetNodeInfo(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(GetNodeHardwareInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(GetNvramInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -83,19 +78,24 @@ def GetClusterInfo(ctx,
 
 
 
-@cli.command('GetNvramInfo', short_help="""GetNvramInfo allows you to retrieve information from each node about the NVRAM card.   """)
+@cli.command('GetNodeInfo', short_help="""GetNodeHardwareInfo is used to return all the hardware info and status for the node specified. This generally includes manufacturers, vendors, versions, and other associated hardware identification information. """)
+@click.option('--node_id',
+              type=int,
+              required=True,
+              help="""The ID of the node for which hardware information is being requested.  Information about a  node is returned if a   node is specified. """)
 @pass_context
-def GetNvramInfo(ctx):
-    """GetNvramInfo allows you to retrieve information from each node about the NVRAM card.  """
+def GetNodeInfo(ctx,
+           node_id):
+    """GetNodeHardwareInfo is used to return all the hardware info and status for the node specified. This generally includes manufacturers, vendors, versions, and other associated hardware identification information."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
-    ctx.logger.info("")
+    ctx.logger.info("""node_id = """+str(node_id)+""";"""+"")
     try:
-        GetNvramInfoResult = ctx.element.get_nvram_info()
+        GetNodeHardwareInfoResult = ctx.element.get_node_hardware_info(node_id=node_id)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -103,7 +103,7 @@ def GetNvramInfo(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(GetNvramInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(GetNodeHardwareInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 

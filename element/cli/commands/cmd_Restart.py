@@ -23,7 +23,43 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """ResetNode Services Networking Shutdown """
+    """Shutdown ResetNode Services Networking """
+
+@cli.command('Shutdown', short_help="""The Shutdown API method enables you to restart or shutdown a node that has not yet been added to a cluster. To use this method, login in to the MIP for the pending node and enter the "shutdown" method with either the "restart" or "halt" options in the following table. """)
+@click.option('--nodes',
+              type=str,
+              required=True,
+              help="""List of NodeIDs for the nodes to be shutdown. """)
+@click.option('--option',
+              type=str,
+              required=False,
+              help="""Action to take for the node shutdown:restart: Restarts the node.halt: Performs full power-off of the node. """)
+@pass_context
+def Shutdown(ctx,
+           nodes,
+           option = None):
+    """The Shutdown API method enables you to restart or shutdown a node that has not yet been added to a cluster. To use this method, login in to the MIP for the pending node and enter the &quot;shutdown&quot; method with either the &quot;restart&quot; or &quot;halt&quot; options in the following table."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    nodes = parser.parse_array(nodes)
+
+    ctx.logger.info("""nodes = """+str(nodes)+""";"""+"""option = """+str(option)+""";"""+"")
+    try:
+        ShutdownResult = ctx.element.shutdown(nodes=nodes, option=option)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ShutdownResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
 
 @cli.command('ResetNode', short_help="""Allows you to reset a node to the SolidFire factory settings. All data will be deleted from the node when you call this method. A node participating in a cluster cannot be reset. """)
 @click.option('--build',
@@ -129,40 +165,4 @@ def Networking(ctx,
         exit()
 
     cli_utils.print_result(dict, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('Shutdown', short_help="""The Shutdown API method enables you to restart or shutdown a node that has not yet been added to a cluster. To use this method, login in to the MIP for the pending node and enter the "shutdown" method with either the "restart" or "halt" options in the following table. """)
-@click.option('--nodes',
-              type=str,
-              required=True,
-              help="""List of NodeIDs for the nodes to be shutdown. """)
-@click.option('--option',
-              type=str,
-              required=False,
-              help="""Action to take for the node shutdown:restart: Restarts the node.halt: Performs full power-off of the node. """)
-@pass_context
-def Shutdown(ctx,
-           nodes,
-           option = None):
-    """The Shutdown API method enables you to restart or shutdown a node that has not yet been added to a cluster. To use this method, login in to the MIP for the pending node and enter the &quot;shutdown&quot; method with either the &quot;restart&quot; or &quot;halt&quot; options in the following table."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    nodes = parser.parse_array(nodes)
-
-    ctx.logger.info("""nodes = """+str(nodes)+""";"""+"""option = """+str(option)+""";"""+"")
-    try:
-        ShutdownResult = ctx.element.shutdown(nodes=nodes, option=option)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(ShutdownResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
