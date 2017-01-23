@@ -23,7 +23,7 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """GetCompleteStats GetHardwareInfo GetRawStats ListVolumeStats ListDriveStats ListVolumeStatsByVirtualVolume """
+    """GetCompleteStats GetHardwareInfo GetRawStats ListVolumeStatsByVirtualVolume ListVolumeStats ListDriveStats """
 
 @cli.command('GetCompleteStats', short_help="""The GetCompleteStats API method is used by SolidFire engineering to troubleshoot new features. The data returned from GetCompleteStats is not documented, changes frequently, and is not guaranteed to be accurate. It is not recommended to ever use GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster. The data returned from GetCompleteStats changes frequently, and is not guaranteed to accurately show performance from the system. It is not recommended to ever use GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster. """)
 @pass_context
@@ -99,6 +99,37 @@ def GetRawStats(ctx):
 
 
 
+@cli.command('ListVolumeStatsByVirtualVolume', short_help="""ListVolumeStatsByVirtualVolume enables you to list statistics for volumes, sorted by virtual volumes. """)
+@click.option('--virtual_volume_ids',
+              type=str,
+              required=False,
+              help="""A list of virtual volume  IDs for which to retrieve information. If you specify this parameter, the method returns information about only these virtual volumes. """)
+@pass_context
+def ListVolumeStatsByVirtualVolume(ctx,
+           virtual_volume_ids = None):
+    """ListVolumeStatsByVirtualVolume enables you to list statistics for volumes, sorted by virtual volumes."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    virtual_volume_ids = parser.parse_array(virtual_volume_ids)
+
+    ctx.logger.info("""virtual_volume_ids = """+str(virtual_volume_ids)+""";"""+"")
+    try:
+        ListVolumeStatsByVirtualVolumeResult = ctx.element.list_volume_stats_by_virtual_volume(virtual_volume_ids=virtual_volume_ids)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ListVolumeStatsByVirtualVolumeResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
 @cli.command('ListVolumeStats', short_help="""""")
 @click.option('--volume_ids',
               type=str,
@@ -157,35 +188,4 @@ def ListDriveStats(ctx,
         exit()
 
     cli_utils.print_result(ListDriveStatsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('ListVolumeStatsByVirtualVolume', short_help="""ListVolumeStatsByVirtualVolume enables you to list statistics for volumes, sorted by virtual volumes. """)
-@click.option('--virtual_volume_ids',
-              type=str,
-              required=False,
-              help="""A list of virtual volume  IDs for which to retrieve information. If you specify this parameter, the method returns information about only these virtual volumes. """)
-@pass_context
-def ListVolumeStatsByVirtualVolume(ctx,
-           virtual_volume_ids = None):
-    """ListVolumeStatsByVirtualVolume enables you to list statistics for volumes, sorted by virtual volumes."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    virtual_volume_ids = parser.parse_array(virtual_volume_ids)
-
-    ctx.logger.info("""virtual_volume_ids = """+str(virtual_volume_ids)+""";"""+"")
-    try:
-        ListVolumeStatsByVirtualVolumeResult = ctx.element.list_volume_stats_by_virtual_volume(virtual_volume_ids=virtual_volume_ids)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(ListVolumeStatsByVirtualVolumeResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

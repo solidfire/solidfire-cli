@@ -23,14 +23,48 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """GetConfig ListPendingActive Add GetStats GetNetworkConfig ListStats GetOrigin SetConfig GetBootstrapConfig ListPending ListAll Remove ListActive SetNetworkConfig GetPendingOperation """
+    """SetNetworkConfig GetBootstrapConfig Remove ListPending GetOrigin ListPendingActive GetPendingOperation ListStats Add SetConfig GetNetworkConfig GetStats GetConfig ListActive ListAll """
 
-@cli.command('GetConfig', short_help="""The GetConfig API method is used to retrieve all the configuration information for the node. This one API method includes the same information available in both "GetClusterConfig" and "GetNetworkConfig" methods.  Note: This method is available only through the per-node API endpoint 5.0 or later. """)
+@cli.command('SetNetworkConfig', short_help="""The "SetNetworkConfig" method is used to set the network configuration for a node. To see the states in which these objects can be modified, see "Network Object for 1G and 10G Interfaces" on page 109 of the Element API. To display the current network settings for a node, run the "GetNetworkConfig" method.  WARNING! Changing the "bond-mode" on a node can cause a temporary loss of network connectivity. Caution should be taken when using this method.  Note: This method is available only through the per-node API endpoint 5.0 or later. """)
+@click.option('--network',
+              type=str,
+              required=True,
+              help="""Provide in json format: Objects that will be changed for the node network settings. """)
 @pass_context
-def GetConfig(ctx):
-    """The GetConfig API method is used to retrieve all the configuration information for the node. This one API method includes the same information available in both &quot;GetClusterConfig&quot; and &quot;GetNetworkConfig&quot; methods."""
+def SetNetworkConfig(ctx,
+           network):
+    """The &quot;SetNetworkConfig&quot; method is used to set the network configuration for a node. To see the states in which these objects can be modified, see &quot;Network Object for 1G and 10G Interfaces&quot; on page 109 of the Element API. To display the current network settings for a node, run the &quot;GetNetworkConfig&quot; method."""
+    """"""
+    """WARNING! Changing the &quot;bond-mode&quot; on a node can cause a temporary loss of network connectivity. Caution should be taken when using this method."""
     """"""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+    if(network is not None):
+        kwargsDict = simplejson.loads(network)
+        network = Network(**kwargsDict)
+
+    ctx.logger.info("""network = """+str(network)+""";"""+"")
+    try:
+        SetNetworkConfigResult = ctx.element.set_network_config(network=network)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(SetNetworkConfigResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetBootstrapConfig', short_help="""GetBootstrapConfig returns the cluster name and node name from the bootstrap configuration file. This API method should be performed on an individual node before it has been configured into a cluster. The resulting information from this method is used in the Cluster Configuration UI when the cluster is eventually created. """)
+@pass_context
+def GetBootstrapConfig(ctx):
+    """GetBootstrapConfig returns the cluster name and node name from the bootstrap configuration file. This API method should be performed on an individual node before it has been configured into a cluster. The resulting information from this method is used in the Cluster Configuration UI when the cluster is eventually created."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -39,7 +73,7 @@ def GetConfig(ctx):
 
     ctx.logger.info("")
     try:
-        GetConfigResult = ctx.element.get_config()
+        GetBootstrapConfigResult = ctx.element.get_bootstrap_config()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -47,7 +81,94 @@ def GetConfig(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(GetConfigResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(GetBootstrapConfigResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('Remove', short_help="""RemoveNodes is used to remove one or more nodes that should no longer participate in the cluster. Before removing a node, all drives it contains must first be removed with "RemoveDrives" method. A node cannot be removed until the RemoveDrives process has completed and all data has been migrated away from the node.  Once removed, a node registers itself as a pending node and can be added again, or shut down which removes it from the "Pending Node" list. """)
+@click.option('--nodes',
+              type=str,
+              required=True,
+              help="""List of NodeIDs for the nodes to be removed. """)
+@pass_context
+def Remove(ctx,
+           nodes):
+    """RemoveNodes is used to remove one or more nodes that should no longer participate in the cluster. Before removing a node, all drives it contains must first be removed with &quot;RemoveDrives&quot; method. A node cannot be removed until the RemoveDrives process has completed and all data has been migrated away from the node."""
+    """"""
+    """Once removed, a node registers itself as a pending node and can be added again, or shut down which removes it from the &quot;Pending Node&quot; list."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    nodes = parser.parse_array(nodes)
+
+    ctx.logger.info("""nodes = """+str(nodes)+""";"""+"")
+    try:
+        RemoveNodesResult = ctx.element.remove_nodes(nodes=nodes)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(RemoveNodesResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('ListPending', short_help="""Gets the list of pending nodes. Pending nodes are running and configured to join the cluster, but have not been added via the AddNodes method. """)
+@pass_context
+def ListPending(ctx):
+    """Gets the list of pending nodes."""
+    """Pending nodes are running and configured to join the cluster, but have not been added via the AddNodes method."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("")
+    try:
+        ListPendingNodesResult = ctx.element.list_pending_nodes()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ListPendingNodesResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetOrigin', short_help="""GetOrigin enables you to retrieve the origination certificate for where the node was built.NOTE: The GetOrigin method may return "null" if there is no origination certification. """)
+@click.option('--force',
+              type=bool,
+              required=True,
+              help="""""")
+@pass_context
+def GetOrigin(ctx,
+           force):
+    """GetOrigin enables you to retrieve the origination certificate for where the node was built.NOTE: The GetOrigin method may return &quot;null&quot; if there is no origination certification."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("""force = """+str(force)+""";"""+"")
+    try:
+        GetOriginResult = ctx.element.get_origin(force=force)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(GetOriginResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -72,6 +193,56 @@ def ListPendingActive(ctx):
         exit()
 
     cli_utils.print_result(ListPendingActiveNodesResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetPendingOperation', short_help="""GetPendingOperation is used to detect an operation on a node that is currently in progress. This method can also be used to report back when an operation has completed.  Note: This method is available only through the per-node API endpoint 5.0 or later. """)
+@pass_context
+def GetPendingOperation(ctx):
+    """GetPendingOperation is used to detect an operation on a node that is currently in progress. This method can also be used to report back when an operation has completed."""
+    """"""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("")
+    try:
+        GetPendingOperationResult = ctx.element.get_pending_operation()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(GetPendingOperationResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('ListStats', short_help="""ListNodeStats is used to return the high-level activity measurements for all nodes in a cluster. """)
+@pass_context
+def ListStats(ctx):
+    """ListNodeStats is used to return the high-level activity measurements for all nodes in a cluster."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("")
+    try:
+        ListNodeStatsResult = ctx.element.list_node_stats()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ListNodeStatsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -114,114 +285,6 @@ def Add(ctx,
 
 
 
-@cli.command('GetStats', short_help="""GetNodeStats is used to return the high-level activity measurements for a single node. """)
-@click.option('--node_id',
-              type=int,
-              required=True,
-              help="""Specifies the node for which statistics are gathered. """)
-@pass_context
-def GetStats(ctx,
-           node_id):
-    """GetNodeStats is used to return the high-level activity measurements for a single node."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("""node_id = """+str(node_id)+""";"""+"")
-    try:
-        GetNodeStatsResult = ctx.element.get_node_stats(node_id=node_id)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(GetNodeStatsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('GetNetworkConfig', short_help="""The GetNetworkConfig API method is used to display the network configuration information for a node.  Note: This method is available only through the per-node API endpoint 5.0 or later. """)
-@pass_context
-def GetNetworkConfig(ctx):
-    """The GetNetworkConfig API method is used to display the network configuration information for a node."""
-    """"""
-    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("")
-    try:
-        GetNetworkConfigResult = ctx.element.get_network_config()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(GetNetworkConfigResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('ListStats', short_help="""ListNodeStats is used to return the high-level activity measurements for all nodes in a cluster. """)
-@pass_context
-def ListStats(ctx):
-    """ListNodeStats is used to return the high-level activity measurements for all nodes in a cluster."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("")
-    try:
-        ListNodeStatsResult = ctx.element.list_node_stats()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(ListNodeStatsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('GetOrigin', short_help="""GetOrigin enables you to retrieve the origination certificate for where the node was built.NOTE: The GetOrigin method may return "null" if there is no origination certification. """)
-@click.option('--force',
-              type=bool,
-              required=True,
-              help="""""")
-@pass_context
-def GetOrigin(ctx,
-           force):
-    """GetOrigin enables you to retrieve the origination certificate for where the node was built.NOTE: The GetOrigin method may return &quot;null&quot; if there is no origination certification."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("""force = """+str(force)+""";"""+"")
-    try:
-        GetOriginResult = ctx.element.get_origin(force=force)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(GetOriginResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
 @cli.command('SetConfig', short_help="""The SetConfig API method is used to set all the configuration information for the node. This includes the same information available via calls to SetClusterConfig and SetNetworkConfig in one API method.  Warning! Changing the 'bond-mode' on a node can cause a temporary loss of network connectivity. Caution should be taken when using this method.  Note: This method is available only through the per-node API endpoint 5.0 or later. """)
 @click.option('--config',
               type=str,
@@ -258,101 +321,21 @@ def SetConfig(ctx,
 
 
 
-@cli.command('GetBootstrapConfig', short_help="""GetBootstrapConfig returns the cluster name and node name from the bootstrap configuration file. This API method should be performed on an individual node before it has been configured into a cluster. The resulting information from this method is used in the Cluster Configuration UI when the cluster is eventually created. """)
+@cli.command('GetNetworkConfig', short_help="""The GetNetworkConfig API method is used to display the network configuration information for a node.  Note: This method is available only through the per-node API endpoint 5.0 or later. """)
 @pass_context
-def GetBootstrapConfig(ctx):
-    """GetBootstrapConfig returns the cluster name and node name from the bootstrap configuration file. This API method should be performed on an individual node before it has been configured into a cluster. The resulting information from this method is used in the Cluster Configuration UI when the cluster is eventually created."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("")
-    try:
-        GetBootstrapConfigResult = ctx.element.get_bootstrap_config()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(GetBootstrapConfigResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('ListPending', short_help="""Gets the list of pending nodes. Pending nodes are running and configured to join the cluster, but have not been added via the AddNodes method. """)
-@pass_context
-def ListPending(ctx):
-    """Gets the list of pending nodes."""
-    """Pending nodes are running and configured to join the cluster, but have not been added via the AddNodes method."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("")
-    try:
-        ListPendingNodesResult = ctx.element.list_pending_nodes()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(ListPendingNodesResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('ListAll', short_help="""ListAllNodes enables you to retrieve a list of active and pending nodes in the cluster. """)
-@pass_context
-def ListAll(ctx):
-    """ListAllNodes enables you to retrieve a list of active and pending nodes in the cluster."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("")
-    try:
-        ListAllNodesResult = ctx.element.list_all_nodes()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(ListAllNodesResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('Remove', short_help="""RemoveNodes is used to remove one or more nodes that should no longer participate in the cluster. Before removing a node, all drives it contains must first be removed with "RemoveDrives" method. A node cannot be removed until the RemoveDrives process has completed and all data has been migrated away from the node.  Once removed, a node registers itself as a pending node and can be added again, or shut down which removes it from the "Pending Node" list. """)
-@click.option('--nodes',
-              type=str,
-              required=True,
-              help="""List of NodeIDs for the nodes to be removed. """)
-@pass_context
-def Remove(ctx,
-           nodes):
-    """RemoveNodes is used to remove one or more nodes that should no longer participate in the cluster. Before removing a node, all drives it contains must first be removed with &quot;RemoveDrives&quot; method. A node cannot be removed until the RemoveDrives process has completed and all data has been migrated away from the node."""
+def GetNetworkConfig(ctx):
+    """The GetNetworkConfig API method is used to display the network configuration information for a node."""
     """"""
-    """Once removed, a node registers itself as a pending node and can be added again, or shut down which removes it from the &quot;Pending Node&quot; list."""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
-    nodes = parser.parse_array(nodes)
-
-    ctx.logger.info("""nodes = """+str(nodes)+""";"""+"")
+    ctx.logger.info("")
     try:
-        RemoveNodesResult = ctx.element.remove_nodes(nodes=nodes)
+        GetNetworkConfigResult = ctx.element.get_network_config()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -360,7 +343,62 @@ def Remove(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(RemoveNodesResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(GetNetworkConfigResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetStats', short_help="""GetNodeStats is used to return the high-level activity measurements for a single node. """)
+@click.option('--node_id',
+              type=int,
+              required=True,
+              help="""Specifies the node for which statistics are gathered. """)
+@pass_context
+def GetStats(ctx,
+           node_id):
+    """GetNodeStats is used to return the high-level activity measurements for a single node."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("""node_id = """+str(node_id)+""";"""+"")
+    try:
+        GetNodeStatsResult = ctx.element.get_node_stats(node_id=node_id)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(GetNodeStatsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetConfig', short_help="""The GetConfig API method is used to retrieve all the configuration information for the node. This one API method includes the same information available in both "GetClusterConfig" and "GetNetworkConfig" methods.  Note: This method is available only through the per-node API endpoint 5.0 or later. """)
+@pass_context
+def GetConfig(ctx):
+    """The GetConfig API method is used to retrieve all the configuration information for the node. This one API method includes the same information available in both &quot;GetClusterConfig&quot; and &quot;GetNetworkConfig&quot; methods."""
+    """"""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("")
+    try:
+        GetConfigResult = ctx.element.get_config()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(GetConfigResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -388,48 +426,10 @@ def ListActive(ctx):
 
 
 
-@cli.command('SetNetworkConfig', short_help="""The "SetNetworkConfig" method is used to set the network configuration for a node. To see the states in which these objects can be modified, see "Network Object for 1G and 10G Interfaces" on page 109 of the Element API. To display the current network settings for a node, run the "GetNetworkConfig" method.  WARNING! Changing the "bond-mode" on a node can cause a temporary loss of network connectivity. Caution should be taken when using this method.  Note: This method is available only through the per-node API endpoint 5.0 or later. """)
-@click.option('--network',
-              type=str,
-              required=True,
-              help="""Provide in json format: Objects that will be changed for the node network settings. """)
+@cli.command('ListAll', short_help="""ListAllNodes enables you to retrieve a list of active and pending nodes in the cluster. """)
 @pass_context
-def SetNetworkConfig(ctx,
-           network):
-    """The &quot;SetNetworkConfig&quot; method is used to set the network configuration for a node. To see the states in which these objects can be modified, see &quot;Network Object for 1G and 10G Interfaces&quot; on page 109 of the Element API. To display the current network settings for a node, run the &quot;GetNetworkConfig&quot; method."""
-    """"""
-    """WARNING! Changing the &quot;bond-mode&quot; on a node can cause a temporary loss of network connectivity. Caution should be taken when using this method."""
-    """"""
-    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-    if(network is not None):
-        kwargsDict = simplejson.loads(network)
-        network = Network(**kwargsDict)
-
-    ctx.logger.info("""network = """+str(network)+""";"""+"")
-    try:
-        SetNetworkConfigResult = ctx.element.set_network_config(network=network)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(SetNetworkConfigResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('GetPendingOperation', short_help="""GetPendingOperation is used to detect an operation on a node that is currently in progress. This method can also be used to report back when an operation has completed.  Note: This method is available only through the per-node API endpoint 5.0 or later. """)
-@pass_context
-def GetPendingOperation(ctx):
-    """GetPendingOperation is used to detect an operation on a node that is currently in progress. This method can also be used to report back when an operation has completed."""
-    """"""
-    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
+def ListAll(ctx):
+    """ListAllNodes enables you to retrieve a list of active and pending nodes in the cluster."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -438,7 +438,7 @@ def GetPendingOperation(ctx):
 
     ctx.logger.info("")
     try:
-        GetPendingOperationResult = ctx.element.get_pending_operation()
+        ListAllNodesResult = ctx.element.list_all_nodes()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -446,5 +446,5 @@ def GetPendingOperation(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(GetPendingOperationResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(ListAllNodesResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
