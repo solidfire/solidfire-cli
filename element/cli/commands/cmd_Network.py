@@ -23,31 +23,7 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """ListInterfaces ListNodeFibreChannelPortInfo ListFibreChannelSessions ListFibreChannelPortInfo ListISCSISessions """
-
-@cli.command('ListInterfaces', short_help="""The ListNetworkInterfaces API method is used to return information about each network interface on a node. The API method is intended for use on individual nodes.  """)
-@pass_context
-def ListInterfaces(ctx):
-    """The ListNetworkInterfaces API method is used to return information about each network interface on a node. The API method is intended for use on individual nodes. """
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("")
-    try:
-        ListNetworkInterfacesResult = ctx.element.list_network_interfaces()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(ListNetworkInterfacesResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
+    """ListNodeFibreChannelPortInfo ListInterfaces ListISCSISessions ListFibreChannelPortInfo ListFibreChannelSessions """
 
 @cli.command('ListNodeFibreChannelPortInfo', short_help="""The ListNodeFibreChannelPortInfo is used to return information about the Fibre Channel ports. The API method is intended for use on individual nodes; userid and password is required for access to individual Fibre Channel nodes. """)
 @pass_context
@@ -73,10 +49,10 @@ def ListNodeFibreChannelPortInfo(ctx):
 
 
 
-@cli.command('ListFibreChannelSessions', short_help="""The ListFibreChannelSessions is used to return information about the active Fibre Channel sessions on a cluster. """)
+@cli.command('ListInterfaces', short_help="""The ListNetworkInterfaces API method is used to return information about each network interface on a node. The API method is intended for use on individual nodes.  """)
 @pass_context
-def ListFibreChannelSessions(ctx):
-    """The ListFibreChannelSessions is used to return information about the active Fibre Channel sessions on a cluster."""
+def ListInterfaces(ctx):
+    """The ListNetworkInterfaces API method is used to return information about each network interface on a node. The API method is intended for use on individual nodes. """
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -85,7 +61,7 @@ def ListFibreChannelSessions(ctx):
 
     ctx.logger.info("")
     try:
-        ListFibreChannelSessionsResult = ctx.element.list_fibre_channel_sessions()
+        ListNetworkInterfacesResult = ctx.element.list_network_interfaces()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -93,7 +69,31 @@ def ListFibreChannelSessions(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(ListFibreChannelSessionsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(ListNetworkInterfacesResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('ListISCSISessions', short_help="""ListISCSISessions is used to return iSCSI connection information for volumes in the cluster. """)
+@pass_context
+def ListISCSISessions(ctx):
+    """ListISCSISessions is used to return iSCSI connection information for volumes in the cluster."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("")
+    try:
+        ListISCSISessionsResult = ctx.element.list_iscsisessions()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ListISCSISessionsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -121,10 +121,10 @@ def ListFibreChannelPortInfo(ctx):
 
 
 
-@cli.command('ListISCSISessions', short_help="""ListISCSISessions is used to return iSCSI connection information for volumes in the cluster. """)
+@cli.command('ListFibreChannelSessions', short_help="""The ListFibreChannelSessions is used to return information about the active Fibre Channel sessions on a cluster. """)
 @pass_context
-def ListISCSISessions(ctx):
-    """ListISCSISessions is used to return iSCSI connection information for volumes in the cluster."""
+def ListFibreChannelSessions(ctx):
+    """The ListFibreChannelSessions is used to return information about the active Fibre Channel sessions on a cluster."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -133,7 +133,7 @@ def ListISCSISessions(ctx):
 
     ctx.logger.info("")
     try:
-        ListISCSISessionsResult = ctx.element.list_iscsisessions()
+        ListFibreChannelSessionsResult = ctx.element.list_fibre_channel_sessions()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -141,5 +141,5 @@ def ListISCSISessions(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(ListISCSISessionsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(ListFibreChannelSessionsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

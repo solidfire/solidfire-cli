@@ -69,9 +69,9 @@ class SolidFireCLI(click.MultiCommand):
             import_string = (
                 "element.cli.commands.cmd_%s" % (name))
             mod = __import__(import_string, None, None, ['cli'])
-        except ImportError:
+        except ImportError as e:
             print(import_string+" failed.")
-            raise ImportError
+            print(e.__str__())
             return
         return mod.cli
 

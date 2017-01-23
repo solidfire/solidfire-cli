@@ -16,11 +16,11 @@ from pkg_resources import Requirement, resource_filename
 def cli(ctx):
     """Connection management"""
 
-@cli.command('PushConnection', short_help="Pushes the connection onto connection.csv to save for later use.")
+@cli.command('Push', short_help="Pushes the connection onto connection.csv to save for later use.")
 @pass_context
-def PushConnection(ctx):
+def Push(ctx):
     if(ctx.cfg.get("name", "") is None):
-        raise exceptions.SolidFireUsageException("In order to push a connection, please provide a connection name.")
+        ctx.logger.error("Please provide a connection name.")
 
     connectionsCsvLocation = resource_filename(Requirement.parse("solidfire-cli"), "connections.csv")
     with open(connectionsCsvLocation) as connectionFile:
@@ -34,7 +34,7 @@ def PushConnection(ctx):
             if connection is not None:
                 w.writerow(connection)
 
-@cli.command('RemoveConnection', short_help="Removes a given connection")
+@cli.command('Remove', short_help="Removes a given connection")
 @click.option('--name', '-n',
               type=str,
               required=False,
@@ -44,7 +44,7 @@ def PushConnection(ctx):
               required=False,
               help="""The index of the connection you wish to remove - 0 is the oldest, 1 is the second oldest, and -1 is the newest.""")
 @pass_context
-def RemoveConnection(ctx, name=None, index=None):
+def Remove(ctx, name=None, index=None):
     if name is not None and index is not None:
         raise exceptions.SolidFireUsageException("You must provide either the name or the index. Not both.")
     if name is None and index is None:

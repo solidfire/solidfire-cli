@@ -23,12 +23,12 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """GetInfo SetRemoteLoggingHosts SetInfo GetRemoteLoggingHosts """
+    """GetRemoteLoggingHosts SetRemoteLoggingHosts SetInfo GetInfo """
 
-@cli.command('GetInfo', short_help="""GetLoginSessionInfo is used to return the period of time a log in authentication is valid for both log in shells and the TUI. """)
+@cli.command('GetRemoteLoggingHosts', short_help="""GetRemoteLoggingHosts is used to retrieve the current list of log servers. """)
 @pass_context
-def GetInfo(ctx):
-    """GetLoginSessionInfo is used to return the period of time a log in authentication is valid for both log in shells and the TUI."""
+def GetRemoteLoggingHosts(ctx):
+    """GetRemoteLoggingHosts is used to retrieve the current list of log servers."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -37,7 +37,7 @@ def GetInfo(ctx):
 
     ctx.logger.info("")
     try:
-        GetLoginSessionInfoResult = ctx.element.get_login_session_info()
+        GetRemoteLoggingHostsResult = ctx.element.get_remote_logging_hosts()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -45,7 +45,7 @@ def GetInfo(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(GetLoginSessionInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(GetRemoteLoggingHostsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -122,10 +122,10 @@ def SetInfo(ctx,
 
 
 
-@cli.command('GetRemoteLoggingHosts', short_help="""GetRemoteLoggingHosts is used to retrieve the current list of log servers. """)
+@cli.command('GetInfo', short_help="""GetLoginSessionInfo is used to return the period of time a log in authentication is valid for both log in shells and the TUI. """)
 @pass_context
-def GetRemoteLoggingHosts(ctx):
-    """GetRemoteLoggingHosts is used to retrieve the current list of log servers."""
+def GetInfo(ctx):
+    """GetLoginSessionInfo is used to return the period of time a log in authentication is valid for both log in shells and the TUI."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -134,7 +134,7 @@ def GetRemoteLoggingHosts(ctx):
 
     ctx.logger.info("")
     try:
-        GetRemoteLoggingHostsResult = ctx.element.get_remote_logging_hosts()
+        GetLoginSessionInfoResult = ctx.element.get_login_session_info()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -142,5 +142,5 @@ def GetRemoteLoggingHosts(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(GetRemoteLoggingHostsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(GetLoginSessionInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

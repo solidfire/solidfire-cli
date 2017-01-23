@@ -23,7 +23,31 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """List GetTaskUpdate ListBindings CreateHost GetFeatureStatus ListHosts GetUnsharedChunks PrepareVirtualSnapshot ListTasks GetCount EnableFeature """
+    """GetCount List CreateHost ListBindings EnableFeature GetFeatureStatus ListHosts ListTasks PrepareVirtualSnapshot GetTaskUpdate GetUnsharedChunks """
+
+@cli.command('GetCount', short_help="""Enables retrieval of the number of virtual volumes currently in the system. """)
+@pass_context
+def GetCount(ctx):
+    """Enables retrieval of the number of virtual volumes currently in the system."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("")
+    try:
+        GetVirtualVolumeCountResult = ctx.element.get_virtual_volume_count()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(GetVirtualVolumeCountResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
 
 @cli.command('List', short_help="""ListVirtualVolumes enables you to list the virtual volumes currently in the system. You can use this method to list all virtual volumes, or only list a subset. """)
 @click.option('--details',
@@ -73,71 +97,6 @@ def List(ctx,
         exit()
 
     cli_utils.print_result(ListVirtualVolumesResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('GetTaskUpdate', short_help="""GetVirtualVolumeTaskUpdate checks the status of a VVol Async Task. """)
-@click.option('--virtual_volume_task_id',
-              type=str,
-              required=True,
-              help="""The UUID of the VVol Task. """)
-@click.option('--calling_virtual_volume_host_id',
-              type=str,
-              required=False,
-              help="""""")
-@pass_context
-def GetTaskUpdate(ctx,
-           virtual_volume_task_id,
-           calling_virtual_volume_host_id = None):
-    """GetVirtualVolumeTaskUpdate checks the status of a VVol Async Task."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("""virtual_volume_task_id = """+str(virtual_volume_task_id)+""";"""+"""calling_virtual_volume_host_id = """+str(calling_virtual_volume_host_id)+""";"""+"")
-    try:
-        VirtualVolumeTaskResult = ctx.element.get_virtual_volume_task_update(virtual_volume_task_id=virtual_volume_task_id, calling_virtual_volume_host_id=calling_virtual_volume_host_id)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(VirtualVolumeTaskResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('ListBindings', short_help="""ListVirtualVolumeBindings returns a list of VVol bindings. """)
-@click.option('--virtual_volume_binding_ids',
-              type=str,
-              required=False,
-              help="""""")
-@pass_context
-def ListBindings(ctx,
-           virtual_volume_binding_ids = None):
-    """ListVirtualVolumeBindings returns a list of VVol bindings."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    virtual_volume_binding_ids = parser.parse_array(virtual_volume_binding_ids)
-
-    ctx.logger.info("""virtual_volume_binding_ids = """+str(virtual_volume_binding_ids)+""";"""+"")
-    try:
-        ListVirtualVolumeBindingsResult = ctx.element.list_virtual_volume_bindings(virtual_volume_binding_ids=virtual_volume_binding_ids)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(ListVirtualVolumeBindingsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -196,6 +155,66 @@ def CreateHost(ctx,
         exit()
 
     cli_utils.print_result(VirtualVolumeNullResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('ListBindings', short_help="""ListVirtualVolumeBindings returns a list of VVol bindings. """)
+@click.option('--virtual_volume_binding_ids',
+              type=str,
+              required=False,
+              help="""""")
+@pass_context
+def ListBindings(ctx,
+           virtual_volume_binding_ids = None):
+    """ListVirtualVolumeBindings returns a list of VVol bindings."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    virtual_volume_binding_ids = parser.parse_array(virtual_volume_binding_ids)
+
+    ctx.logger.info("""virtual_volume_binding_ids = """+str(virtual_volume_binding_ids)+""";"""+"")
+    try:
+        ListVirtualVolumeBindingsResult = ctx.element.list_virtual_volume_bindings(virtual_volume_binding_ids=virtual_volume_binding_ids)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ListVirtualVolumeBindingsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('EnableFeature', short_help="""EnableFeature allows you to enable cluster features that are disabled by default. """)
+@click.option('--feature',
+              type=str,
+              required=True,
+              help="""Valid values: vvols: Enable the Virtual Volumes (VVOLs) cluster feature. """)
+@pass_context
+def EnableFeature(ctx,
+           feature):
+    """EnableFeature allows you to enable cluster features that are disabled by default."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("""feature = """+str(feature)+""";"""+"")
+    try:
+        EnableFeatureResult = ctx.element.enable_feature(feature=feature)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(EnableFeatureResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -259,6 +278,115 @@ def ListHosts(ctx,
 
 
 
+@cli.command('ListTasks', short_help="""ListVirtualVolumeTasks returns a list of VVol Async Tasks. """)
+@click.option('--virtual_volume_task_ids',
+              type=str,
+              required=False,
+              help="""""")
+@pass_context
+def ListTasks(ctx,
+           virtual_volume_task_ids = None):
+    """ListVirtualVolumeTasks returns a list of VVol Async Tasks."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    virtual_volume_task_ids = parser.parse_array(virtual_volume_task_ids)
+
+    ctx.logger.info("""virtual_volume_task_ids = """+str(virtual_volume_task_ids)+""";"""+"")
+    try:
+        ListVirtualVolumeTasksResult = ctx.element.list_virtual_volume_tasks(virtual_volume_task_ids=virtual_volume_task_ids)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ListVirtualVolumeTasksResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('PrepareVirtualSnapshot', short_help="""PrepareVirtualSnapshot is used to set up VMware Virtual Volume snapshot. """)
+@click.option('--virtual_volume_id',
+              type=str,
+              required=True,
+              help="""The ID of the Virtual Volume to clone. """)
+@click.option('--name',
+              type=str,
+              required=False,
+              help="""The name for the newly-created volume. """)
+@click.option('--writable_snapshot',
+              type=bool,
+              required=False,
+              help="""Will the snapshot be writable? """)
+@click.option('--calling_virtual_volume_host_id',
+              type=str,
+              required=False,
+              help="""""")
+@pass_context
+def PrepareVirtualSnapshot(ctx,
+           virtual_volume_id,
+           name = None,
+           writable_snapshot = None,
+           calling_virtual_volume_host_id = None):
+    """PrepareVirtualSnapshot is used to set up VMware Virtual Volume snapshot."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("""virtual_volume_id = """+str(virtual_volume_id)+""";"""+"""name = """+str(name)+""";"""+"""writable_snapshot = """+str(writable_snapshot)+""";"""+"""calling_virtual_volume_host_id = """+str(calling_virtual_volume_host_id)+""";"""+"")
+    try:
+        PrepareVirtualSnapshotResult = ctx.element.prepare_virtual_snapshot(virtual_volume_id=virtual_volume_id, name=name, writable_snapshot=writable_snapshot, calling_virtual_volume_host_id=calling_virtual_volume_host_id)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(PrepareVirtualSnapshotResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetTaskUpdate', short_help="""GetVirtualVolumeTaskUpdate checks the status of a VVol Async Task. """)
+@click.option('--virtual_volume_task_id',
+              type=str,
+              required=True,
+              help="""The UUID of the VVol Task. """)
+@click.option('--calling_virtual_volume_host_id',
+              type=str,
+              required=False,
+              help="""""")
+@pass_context
+def GetTaskUpdate(ctx,
+           virtual_volume_task_id,
+           calling_virtual_volume_host_id = None):
+    """GetVirtualVolumeTaskUpdate checks the status of a VVol Async Task."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("""virtual_volume_task_id = """+str(virtual_volume_task_id)+""";"""+"""calling_virtual_volume_host_id = """+str(calling_virtual_volume_host_id)+""";"""+"")
+    try:
+        VirtualVolumeTaskResult = ctx.element.get_virtual_volume_task_update(virtual_volume_task_id=virtual_volume_task_id, calling_virtual_volume_host_id=calling_virtual_volume_host_id)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(VirtualVolumeTaskResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
 @cli.command('GetUnsharedChunks', short_help="""GetVirtualVolumeAllocatedBitmap scans a VVol segment and returns the number of  chunks not shared between two volumes. This call will return results in less  than 30 seconds. If the specified VVol and the base VVil are not related, an  error is thrown. If the offset/length combination is invalid or out fo range  an error is thrown. """)
 @click.option('--virtual_volume_id',
               type=str,
@@ -314,132 +442,4 @@ def GetUnsharedChunks(ctx,
         exit()
 
     cli_utils.print_result(VirtualVolumeUnsharedChunkResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('PrepareVirtualSnapshot', short_help="""PrepareVirtualSnapshot is used to set up VMware Virtual Volume snapshot. """)
-@click.option('--virtual_volume_id',
-              type=str,
-              required=True,
-              help="""The ID of the Virtual Volume to clone. """)
-@click.option('--name',
-              type=str,
-              required=False,
-              help="""The name for the newly-created volume. """)
-@click.option('--writable_snapshot',
-              type=bool,
-              required=False,
-              help="""Will the snapshot be writable? """)
-@click.option('--calling_virtual_volume_host_id',
-              type=str,
-              required=False,
-              help="""""")
-@pass_context
-def PrepareVirtualSnapshot(ctx,
-           virtual_volume_id,
-           name = None,
-           writable_snapshot = None,
-           calling_virtual_volume_host_id = None):
-    """PrepareVirtualSnapshot is used to set up VMware Virtual Volume snapshot."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("""virtual_volume_id = """+str(virtual_volume_id)+""";"""+"""name = """+str(name)+""";"""+"""writable_snapshot = """+str(writable_snapshot)+""";"""+"""calling_virtual_volume_host_id = """+str(calling_virtual_volume_host_id)+""";"""+"")
-    try:
-        PrepareVirtualSnapshotResult = ctx.element.prepare_virtual_snapshot(virtual_volume_id=virtual_volume_id, name=name, writable_snapshot=writable_snapshot, calling_virtual_volume_host_id=calling_virtual_volume_host_id)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(PrepareVirtualSnapshotResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('ListTasks', short_help="""ListVirtualVolumeTasks returns a list of VVol Async Tasks. """)
-@click.option('--virtual_volume_task_ids',
-              type=str,
-              required=False,
-              help="""""")
-@pass_context
-def ListTasks(ctx,
-           virtual_volume_task_ids = None):
-    """ListVirtualVolumeTasks returns a list of VVol Async Tasks."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    virtual_volume_task_ids = parser.parse_array(virtual_volume_task_ids)
-
-    ctx.logger.info("""virtual_volume_task_ids = """+str(virtual_volume_task_ids)+""";"""+"")
-    try:
-        ListVirtualVolumeTasksResult = ctx.element.list_virtual_volume_tasks(virtual_volume_task_ids=virtual_volume_task_ids)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(ListVirtualVolumeTasksResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('GetCount', short_help="""Enables retrieval of the number of virtual volumes currently in the system. """)
-@pass_context
-def GetCount(ctx):
-    """Enables retrieval of the number of virtual volumes currently in the system."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("")
-    try:
-        GetVirtualVolumeCountResult = ctx.element.get_virtual_volume_count()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(GetVirtualVolumeCountResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('EnableFeature', short_help="""EnableFeature allows you to enable cluster features that are disabled by default. """)
-@click.option('--feature',
-              type=str,
-              required=True,
-              help="""Valid values: vvols: Enable the Virtual Volumes (VVOLs) cluster feature. """)
-@pass_context
-def EnableFeature(ctx,
-           feature):
-    """EnableFeature allows you to enable cluster features that are disabled by default."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("""feature = """+str(feature)+""";"""+"")
-    try:
-        EnableFeatureResult = ctx.element.enable_feature(feature=feature)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(EnableFeatureResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

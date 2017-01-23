@@ -23,7 +23,7 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """Create List Delete Modify """
+    """Create Delete Modify List """
 
 @cli.command('Create', short_help="""CreateInitiators enables you to create multiple new initiator IQNs or World Wide Port Names (WWPNs) and optionally assign them aliases and attributes. When you use CreateInitiators to create new initiators, you can also add them to volume access groups. If CreateInitiators fails to create one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible). """)
 @click.option('--create_initiator_name',
@@ -79,47 +79,6 @@ def Create(ctx,
         exit()
 
     cli_utils.print_result(CreateInitiatorsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('List', short_help="""ListInitiators enables you to list initiator IQNs or World Wide Port Names (WWPNs). """)
-@click.option('--start_initiator_id',
-              type=int,
-              required=False,
-              help="""The initiator ID at which to begin the listing. You can supply this parameter or the "initiators" parameter, but not both. """)
-@click.option('--limit',
-              type=int,
-              required=False,
-              help="""The maximum number of initiator objects to return. """)
-@click.option('--initiators',
-              type=str,
-              required=False,
-              help="""A list of initiator IDs to retrieve. You can supply this parameter or the "startInitiatorID" parameter, but not both. """)
-@pass_context
-def List(ctx,
-           start_initiator_id = None,
-           limit = None,
-           initiators = None):
-    """ListInitiators enables you to list initiator IQNs or World Wide Port Names (WWPNs)."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    initiators = parser.parse_array(initiators)
-
-    ctx.logger.info("""start_initiator_id = """+str(start_initiator_id)+""";"""+"""limit = """+str(limit)+""";"""+"""initiators = """+str(initiators)+""";"""+"")
-    try:
-        ListInitiatorsResult = ctx.element.list_initiators(start_initiator_id=start_initiator_id, limit=limit, initiators=initiators)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(ListInitiatorsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -209,4 +168,45 @@ def Modify(ctx,
         exit()
 
     cli_utils.print_result(ModifyInitiatorsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('List', short_help="""ListInitiators enables you to list initiator IQNs or World Wide Port Names (WWPNs). """)
+@click.option('--start_initiator_id',
+              type=int,
+              required=False,
+              help="""The initiator ID at which to begin the listing. You can supply this parameter or the "initiators" parameter, but not both. """)
+@click.option('--limit',
+              type=int,
+              required=False,
+              help="""The maximum number of initiator objects to return. """)
+@click.option('--initiators',
+              type=str,
+              required=False,
+              help="""A list of initiator IDs to retrieve. You can supply this parameter or the "startInitiatorID" parameter, but not both. """)
+@pass_context
+def List(ctx,
+           start_initiator_id = None,
+           limit = None,
+           initiators = None):
+    """ListInitiators enables you to list initiator IQNs or World Wide Port Names (WWPNs)."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    initiators = parser.parse_array(initiators)
+
+    ctx.logger.info("""start_initiator_id = """+str(start_initiator_id)+""";"""+"""limit = """+str(limit)+""";"""+"""initiators = """+str(initiators)+""";"""+"")
+    try:
+        ListInitiatorsResult = ctx.element.list_initiators(start_initiator_id=start_initiator_id, limit=limit, initiators=initiators)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ListInitiatorsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
