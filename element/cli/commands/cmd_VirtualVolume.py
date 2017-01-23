@@ -23,7 +23,7 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """ListHosts GetUnsharedChunks GetTaskUpdate ListTasks CreateHost GetFeatureStatus List ListBindings PrepareVirtualSnapshot GetCount EnableFeature """
+    """ListHosts ListTasks GetFeatureStatus List ListBindings GetCount EnableFeature """
 
 @cli.command('ListHosts', short_help="""ListVirtualVolumeHosts returns a list of known ESX hosts. """)
 @click.option('--virtual_volume_host_ids',
@@ -56,98 +56,6 @@ def ListHosts(ctx,
 
 
 
-@cli.command('GetUnsharedChunks', short_help="""GetVirtualVolumeAllocatedBitmap scans a VVol segment and returns the number of  chunks not shared between two volumes. This call will return results in less  than 30 seconds. If the specified VVol and the base VVil are not related, an  error is thrown. If the offset/length combination is invalid or out fo range  an error is thrown. """)
-@click.option('--virtual_volume_id',
-              type=str,
-              required=True,
-              help="""The ID of the Virtual Volume. """)
-@click.option('--base_virtual_volume_id',
-              type=str,
-              required=True,
-              help="""The ID of the Virtual Volume to compare against. """)
-@click.option('--segment_start',
-              type=int,
-              required=True,
-              help="""Start Byte offset. """)
-@click.option('--segment_length',
-              type=int,
-              required=True,
-              help="""Length of the scan segment in bytes. """)
-@click.option('--chunk_size',
-              type=int,
-              required=True,
-              help="""Number of bytes represented by one bit in the bitmap. """)
-@click.option('--calling_virtual_volume_host_id',
-              type=str,
-              required=False,
-              help="""""")
-@pass_context
-def GetUnsharedChunks(ctx,
-           virtual_volume_id,
-           base_virtual_volume_id,
-           segment_start,
-           segment_length,
-           chunk_size,
-           calling_virtual_volume_host_id = None):
-    """GetVirtualVolumeAllocatedBitmap scans a VVol segment and returns the number of """
-    """chunks not shared between two volumes. This call will return results in less """
-    """than 30 seconds. If the specified VVol and the base VVil are not related, an """
-    """error is thrown. If the offset/length combination is invalid or out fo range """
-    """an error is thrown."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("""virtual_volume_id = """+str(virtual_volume_id)+""";"""+"""base_virtual_volume_id = """+str(base_virtual_volume_id)+""";"""+"""segment_start = """+str(segment_start)+""";"""+"""segment_length = """+str(segment_length)+""";"""+"""chunk_size = """+str(chunk_size)+""";"""+"""calling_virtual_volume_host_id = """+str(calling_virtual_volume_host_id)+""";"""+"")
-    try:
-        VirtualVolumeUnsharedChunkResult = ctx.element.get_virtual_volume_unshared_chunks(virtual_volume_id=virtual_volume_id, base_virtual_volume_id=base_virtual_volume_id, segment_start=segment_start, segment_length=segment_length, chunk_size=chunk_size, calling_virtual_volume_host_id=calling_virtual_volume_host_id)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(VirtualVolumeUnsharedChunkResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('GetTaskUpdate', short_help="""GetVirtualVolumeTaskUpdate checks the status of a VVol Async Task. """)
-@click.option('--virtual_volume_task_id',
-              type=str,
-              required=True,
-              help="""The UUID of the VVol Task. """)
-@click.option('--calling_virtual_volume_host_id',
-              type=str,
-              required=False,
-              help="""""")
-@pass_context
-def GetTaskUpdate(ctx,
-           virtual_volume_task_id,
-           calling_virtual_volume_host_id = None):
-    """GetVirtualVolumeTaskUpdate checks the status of a VVol Async Task."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("""virtual_volume_task_id = """+str(virtual_volume_task_id)+""";"""+"""calling_virtual_volume_host_id = """+str(calling_virtual_volume_host_id)+""";"""+"")
-    try:
-        VirtualVolumeTaskResult = ctx.element.get_virtual_volume_task_update(virtual_volume_task_id=virtual_volume_task_id, calling_virtual_volume_host_id=calling_virtual_volume_host_id)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(VirtualVolumeTaskResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
 @cli.command('ListTasks', short_help="""ListVirtualVolumeTasks returns a list of VVol Async Tasks. """)
 @click.option('--virtual_volume_task_ids',
               type=str,
@@ -176,64 +84,6 @@ def ListTasks(ctx,
         exit()
 
     cli_utils.print_result(ListVirtualVolumeTasksResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('CreateHost', short_help="""CreateVirtualVolumeHost creates a new ESX host. """)
-@click.option('--virtual_volume_host_id',
-              type=str,
-              required=True,
-              help="""The GUID of the ESX host. """)
-@click.option('--cluster_id',
-              type=str,
-              required=True,
-              help="""The GUID of the ESX Cluster. """)
-@click.option('--initiator_names',
-              type=str,
-              required=False,
-              help="""""")
-@click.option('--visible_protocol_endpoint_ids',
-              type=str,
-              required=False,
-              help="""A list of PEs the host is aware of. """)
-@click.option('--host_address',
-              type=str,
-              required=False,
-              help="""IP or DNS name for the host. """)
-@click.option('--calling_virtual_volume_host_id',
-              type=str,
-              required=False,
-              help="""""")
-@pass_context
-def CreateHost(ctx,
-           virtual_volume_host_id,
-           cluster_id,
-           initiator_names = None,
-           visible_protocol_endpoint_ids = None,
-           host_address = None,
-           calling_virtual_volume_host_id = None):
-    """CreateVirtualVolumeHost creates a new ESX host."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    initiator_names = parser.parse_array(initiator_names)
-
-    visible_protocol_endpoint_ids = parser.parse_array(visible_protocol_endpoint_ids)
-
-    ctx.logger.info("""virtual_volume_host_id = """+str(virtual_volume_host_id)+""";"""+"""cluster_id = """+str(cluster_id)+""";"""+"""initiator_names = """+str(initiator_names)+""";"""+"""visible_protocol_endpoint_ids = """+str(visible_protocol_endpoint_ids)+""";"""+"""host_address = """+str(host_address)+""";"""+"""calling_virtual_volume_host_id = """+str(calling_virtual_volume_host_id)+""";"""+"")
-    try:
-        VirtualVolumeNullResult = ctx.element.create_virtual_volume_host(virtual_volume_host_id=virtual_volume_host_id, cluster_id=cluster_id, initiator_names=initiator_names, visible_protocol_endpoint_ids=visible_protocol_endpoint_ids, host_address=host_address, calling_virtual_volume_host_id=calling_virtual_volume_host_id)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(VirtualVolumeNullResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -345,50 +195,6 @@ def ListBindings(ctx,
         exit()
 
     cli_utils.print_result(ListVirtualVolumeBindingsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('PrepareVirtualSnapshot', short_help="""PrepareVirtualSnapshot is used to set up VMware Virtual Volume snapshot. """)
-@click.option('--virtual_volume_id',
-              type=str,
-              required=True,
-              help="""The ID of the Virtual Volume to clone. """)
-@click.option('--name',
-              type=str,
-              required=False,
-              help="""The name for the newly-created volume. """)
-@click.option('--writable_snapshot',
-              type=bool,
-              required=False,
-              help="""Will the snapshot be writable? """)
-@click.option('--calling_virtual_volume_host_id',
-              type=str,
-              required=False,
-              help="""""")
-@pass_context
-def PrepareVirtualSnapshot(ctx,
-           virtual_volume_id,
-           name = None,
-           writable_snapshot = None,
-           calling_virtual_volume_host_id = None):
-    """PrepareVirtualSnapshot is used to set up VMware Virtual Volume snapshot."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("""virtual_volume_id = """+str(virtual_volume_id)+""";"""+"""name = """+str(name)+""";"""+"""writable_snapshot = """+str(writable_snapshot)+""";"""+"""calling_virtual_volume_host_id = """+str(calling_virtual_volume_host_id)+""";"""+"")
-    try:
-        PrepareVirtualSnapshotResult = ctx.element.prepare_virtual_snapshot(virtual_volume_id=virtual_volume_id, name=name, writable_snapshot=writable_snapshot, calling_virtual_volume_host_id=calling_virtual_volume_host_id)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(PrepareVirtualSnapshotResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
