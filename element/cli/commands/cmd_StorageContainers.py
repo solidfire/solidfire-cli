@@ -23,11 +23,46 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-<<<<<<< HEAD
-    """ModifyStorageContainer List GetStorageContainerEfficiency CreateStorageContainer Delete """
-=======
-    """ModifyStorageContainer CreateStorageContainer GetStorageContainerEfficiency Delete List """
->>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
+    """CreateStorageContainer ModifyStorageContainer GetStorageContainerEfficiency List Delete """
+
+@cli.command('CreateStorageContainer', short_help="""Creates a new VVols storage container. """)
+@click.option('--name',
+              type=str,
+              required=True,
+              help="""Name of the storage container. """)
+@click.option('--initiator_secret',
+              type=str,
+              required=False,
+              help="""The secret for CHAP authentication for the initiator """)
+@click.option('--target_secret',
+              type=str,
+              required=False,
+              help="""The secret for CHAP authentication for the target """)
+@pass_context
+def CreateStorageContainer(ctx,
+           name,
+           initiator_secret = None,
+           target_secret = None):
+    """Creates a new VVols storage container."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("""name = """+str(name)+""";"""+"""initiator_secret = """+str(initiator_secret)+""";"""+"""target_secret = """+str(target_secret)+""";"""+"")
+    try:
+        CreateStorageContainerResult = ctx.element.create_storage_container(name=name, initiator_secret=initiator_secret, target_secret=target_secret)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(CreateStorageContainerResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
 
 @cli.command('ModifyStorageContainer', short_help="""Modifies an existing storage container. """)
 @click.option('--storage_container_id',
@@ -64,70 +99,7 @@ def ModifyStorageContainer(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-<<<<<<< HEAD
-    cli_utils.print_result(ModifyStorageContainerResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('List', short_help="""Gets information for all storage containers currently in the system. """)
-@click.option('--storage_container_ids',
-              type=str,
-              required=False,
-              help="""List of storage containers to get """)
-@pass_context
-def List(ctx,
-           storage_container_ids = None):
-    """Gets information for all storage containers currently in the system."""
-=======
     cli_utils.print_result(ModifyStorageContainerResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('CreateStorageContainer', short_help="""Creates a new VVols storage container. """)
-@click.option('--name',
-              type=str,
-              required=True,
-              help="""Name of the storage container. """)
-@click.option('--initiator_secret',
-              type=str,
-              required=False,
-              help="""The secret for CHAP authentication for the initiator """)
-@click.option('--target_secret',
-              type=str,
-              required=False,
-              help="""The secret for CHAP authentication for the target """)
-@pass_context
-def CreateStorageContainer(ctx,
-           name,
-           initiator_secret = None,
-           target_secret = None):
-    """Creates a new VVols storage container."""
->>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("""name = """+str(name)+""";"""+"""initiator_secret = """+str(initiator_secret)+""";"""+"""target_secret = """+str(target_secret)+""";"""+"")
-    try:
-<<<<<<< HEAD
-        ListStorageContainersResult = ctx.element.list_storage_containers(storage_container_ids=storage_container_ids)
-=======
-        CreateStorageContainerResult = ctx.element.create_storage_container(name=name, initiator_secret=initiator_secret, target_secret=target_secret)
->>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-<<<<<<< HEAD
-    cli_utils.print_result(ListStorageContainersResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-=======
-    cli_utils.print_result(CreateStorageContainerResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
->>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
 
 
 
@@ -156,86 +128,19 @@ def GetStorageContainerEfficiency(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-<<<<<<< HEAD
-    cli_utils.print_result(GetStorageContainerEfficiencyResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('CreateStorageContainer', short_help="""Creates a new VVols storage container. """)
-@click.option('--name',
-              type=str,
-              required=True,
-              help="""Name of the storage container. """)
-@click.option('--initiator_secret',
-              type=str,
-              required=False,
-              help="""The secret for CHAP authentication for the initiator """)
-@click.option('--target_secret',
-              type=str,
-              required=False,
-              help="""The secret for CHAP authentication for the target """)
-@pass_context
-def CreateStorageContainer(ctx,
-           name,
-           initiator_secret = None,
-           target_secret = None):
-    """Creates a new VVols storage container."""
-=======
     cli_utils.print_result(GetStorageContainerEfficiencyResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
-@cli.command('Delete', short_help="""Deletes a storage container from the system. """)
+@cli.command('List', short_help="""Gets information for all storage containers currently in the system. """)
 @click.option('--storage_container_ids',
               type=str,
-              required=True,
-              help="""list of storageContainerID of the storage container to delete. """)
+              required=False,
+              help="""List of storage containers to get """)
 @pass_context
-def Delete(ctx,
-           storage_container_ids):
-    """Deletes a storage container from the system."""
->>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-<<<<<<< HEAD
-    ctx.logger.info("""name = """+str(name)+""";"""+"""initiator_secret = """+str(initiator_secret)+""";"""+"""target_secret = """+str(target_secret)+""";"""+"")
-    try:
-        CreateStorageContainerResult = ctx.element.create_storage_container(name=name, initiator_secret=initiator_secret, target_secret=target_secret)
-=======
-    storage_container_ids = parser.parse_array(storage_container_ids)
-
-    ctx.logger.info("""storage_container_ids = """+str(storage_container_ids)+""";"""+"")
-    try:
-        DeleteStorageContainerResult = ctx.element.delete_storage_containers(storage_container_ids=storage_container_ids)
->>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-<<<<<<< HEAD
-    cli_utils.print_result(CreateStorageContainerResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-=======
-    cli_utils.print_result(DeleteStorageContainerResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
->>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
-
-
-
-@cli.command('Delete', short_help="""Deletes a storage container from the system. """)
-@click.option('--storage_container_ids',
-              type=str,
-              required=True,
-              help="""list of storageContainerID of the storage container to delete. """)
-@pass_context
-def Delete(ctx,
-           storage_container_ids):
-    """Deletes a storage container from the system."""
+def List(ctx,
+           storage_container_ids = None):
+    """Gets information for all storage containers currently in the system."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -246,7 +151,7 @@ def Delete(ctx,
 
     ctx.logger.info("""storage_container_ids = """+str(storage_container_ids)+""";"""+"")
     try:
-        DeleteStorageContainerResult = ctx.element.delete_storage_containers(storage_container_ids=storage_container_ids)
+        ListStorageContainersResult = ctx.element.list_storage_containers(storage_container_ids=storage_container_ids)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -254,9 +159,36 @@ def Delete(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-<<<<<<< HEAD
-    cli_utils.print_result(DeleteStorageContainerResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-=======
     cli_utils.print_result(ListStorageContainersResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
->>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
+
+
+
+@cli.command('Delete', short_help="""Deletes a storage container from the system. """)
+@click.option('--storage_container_ids',
+              type=str,
+              required=True,
+              help="""list of storageContainerID of the storage container to delete. """)
+@pass_context
+def Delete(ctx,
+           storage_container_ids):
+    """Deletes a storage container from the system."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    storage_container_ids = parser.parse_array(storage_container_ids)
+
+    ctx.logger.info("""storage_container_ids = """+str(storage_container_ids)+""";"""+"")
+    try:
+        DeleteStorageContainerResult = ctx.element.delete_storage_containers(storage_container_ids=storage_container_ids)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(DeleteStorageContainerResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

@@ -23,8 +23,31 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-<<<<<<< HEAD
-    """SetInfo GetRemoteLoggingHosts SetRemoteLoggingHosts GetInfo """
+    """GetInfo SetInfo GetRemoteLoggingHosts SetRemoteLoggingHosts """
+
+@cli.command('GetInfo', short_help="""GetLoginSessionInfo is used to return the period of time a log in authentication is valid for both log in shells and the TUI. """)
+@pass_context
+def GetInfo(ctx):
+    """GetLoginSessionInfo is used to return the period of time a log in authentication is valid for both log in shells and the TUI."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("")
+    try:
+        GetLoginSessionInfoResult = ctx.element.get_login_session_info()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(GetLoginSessionInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
 
 @cli.command('SetInfo', short_help="""SetLoginSessionInfo is used to set the period of time a log in authentication is valid. After the log in period elapses without activity on the system the authentication will expire. New log in credentials will be required for continued access to the cluster once the timeout period has elapsed. """)
 @click.option('--timeout',
@@ -35,29 +58,15 @@ def cli(ctx):
 def SetInfo(ctx,
            timeout):
     """SetLoginSessionInfo is used to set the period of time a log in authentication is valid. After the log in period elapses without activity on the system the authentication will expire. New log in credentials will be required for continued access to the cluster once the timeout period has elapsed."""
-=======
-    """GetInfo GetRemoteLoggingHosts SetRemoteLoggingHosts SetInfo """
-
-@cli.command('GetInfo', short_help="""GetLoginSessionInfo is used to return the period of time a log in authentication is valid for both log in shells and the TUI. """)
-@pass_context
-def GetInfo(ctx):
-    """GetLoginSessionInfo is used to return the period of time a log in authentication is valid for both log in shells and the TUI."""
->>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
-<<<<<<< HEAD
     ctx.logger.info("""timeout = """+str(timeout)+""";"""+"")
     try:
         SetLoginSessionInfoResult = ctx.element.set_login_session_info(timeout=timeout)
-=======
-    ctx.logger.info("")
-    try:
-        GetLoginSessionInfoResult = ctx.element.get_login_session_info()
->>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -65,11 +74,7 @@ def GetInfo(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-<<<<<<< HEAD
-    cli_utils.print_result(SetLoginSessionInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-=======
-    cli_utils.print_result(GetLoginSessionInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
->>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
+    cli_utils.print_result(SetLoginSessionInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -138,50 +143,4 @@ def SetRemoteLoggingHosts(ctx,
         exit()
 
     cli_utils.print_result(SetRemoteLoggingHostsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-<<<<<<< HEAD
-@cli.command('GetInfo', short_help="""GetLoginSessionInfo is used to return the period of time a log in authentication is valid for both log in shells and the TUI. """)
-@pass_context
-def GetInfo(ctx):
-    """GetLoginSessionInfo is used to return the period of time a log in authentication is valid for both log in shells and the TUI."""
-=======
-@cli.command('SetInfo', short_help="""SetLoginSessionInfo is used to set the period of time a log in authentication is valid. After the log in period elapses without activity on the system the authentication will expire. New log in credentials will be required for continued access to the cluster once the timeout period has elapsed. """)
-@click.option('--timeout',
-              type=str,
-              required=True,
-              help="""Cluster authentication expiration period. Formatted in HH:mm:ss. For example: 01:30:00, 00:90:00, and 00:00:5400 can all be used to equal a 90 minute timeout period. Default is 30 minutes. """)
-@pass_context
-def SetInfo(ctx,
-           timeout):
-    """SetLoginSessionInfo is used to set the period of time a log in authentication is valid. After the log in period elapses without activity on the system the authentication will expire. New log in credentials will be required for continued access to the cluster once the timeout period has elapsed."""
->>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-<<<<<<< HEAD
-    ctx.logger.info("")
-    try:
-        GetLoginSessionInfoResult = ctx.element.get_login_session_info()
-=======
-    ctx.logger.info("""timeout = """+str(timeout)+""";"""+"")
-    try:
-        SetLoginSessionInfoResult = ctx.element.set_login_session_info(timeout=timeout)
->>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-<<<<<<< HEAD
-    cli_utils.print_result(GetLoginSessionInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-=======
-    cli_utils.print_result(SetLoginSessionInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
->>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
 

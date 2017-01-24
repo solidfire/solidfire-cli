@@ -64,10 +64,7 @@ def remove_pickling(nestedDict, filteredDict):
             filteredDict.append(type(nestedDict[i])())
             filteredDict[i] = remove_pickling(nestedDict[i], filteredDict[i])
         return filteredDict
-    if type(nestedDict) is str:
-        return nestedDict
-    if nestedDict is None:
-        return nestedDict
+    return nestedDict
 
 def get_result_as_tree(objs, depth=1, currentDepth=0, lastKey = ""):
     stringToReturn = ""
