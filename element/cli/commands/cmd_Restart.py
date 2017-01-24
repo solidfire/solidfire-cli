@@ -23,6 +23,7 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
+<<<<<<< HEAD
     """Services Networking ResetNode Shutdown """
 
 @cli.command('Services', short_help="""The RestartServices API method is used to restart the  Element services on a node.Caution: This method causes temporary node services interruption. Exercise caution when using this method. """)
@@ -44,25 +45,8 @@ def Services(ctx,
            service = None,
            action = None):
     """The RestartServices API method is used to restart the  Element services on a node.Caution: This method causes temporary node services interruption. Exercise caution when using this method."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("""force = """+str(force)+""";"""+"""service = """+str(service)+""";"""+"""action = """+str(action)+""";"""+"")
-    try:
-        dict = ctx.element.restart_services(force=force, service=service, action=action)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(dict, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
+=======
+    """Networking ResetNode Services Shutdown """
 
 @cli.command('Networking', short_help="""The RestartNetworking API method is used to restart the networking services on a node.WARNING! This method restarts all networking services on a node, causing temporary loss of networking connectivity. Exercise caution when using this method. """)
 @click.option('--force',
@@ -73,15 +57,22 @@ def Services(ctx,
 def Networking(ctx,
            force):
     """The RestartNetworking API method is used to restart the networking services on a node.WARNING! This method restarts all networking services on a node, causing temporary loss of networking connectivity. Exercise caution when using this method."""
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
+<<<<<<< HEAD
+    ctx.logger.info("""force = """+str(force)+""";"""+"""service = """+str(service)+""";"""+"""action = """+str(action)+""";"""+"")
+    try:
+        dict = ctx.element.restart_services(force=force, service=service, action=action)
+=======
     ctx.logger.info("""force = """+str(force)+""";"""+"")
     try:
         dict = ctx.element.restart_networking(force=force)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -89,7 +80,11 @@ def Networking(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
     cli_utils.print_result(dict, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+=======
+    cli_utils.print_result(dict, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
 
 
 
@@ -128,7 +123,50 @@ def ResetNode(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
+    cli_utils.print_result(ResetNodeResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('ResetNode', short_help="""Allows you to reset a node to the SolidFire factory settings. All data will be deleted from the node when you call this method. A node participating in a cluster cannot be reset. """)
+@click.option('--build',
+              type=str,
+              required=True,
+              help="""Used to specify the URL to a remote Element software image to which the node will be reset. """)
+@click.option('--force',
+              type=bool,
+              required=True,
+              help="""The force parameter must be included in order to successfully reset the node. """)
+@click.option('--option',
+              type=str,
+              required=True,
+              help="""Used to enter specifications for running the reset operation. """)
+@pass_context
+def ResetNode(ctx,
+           build,
+           force,
+           option):
+    """Allows you to reset a node to the SolidFire factory settings. All data will be deleted from the node when you call this method. A node participating in a cluster cannot be reset."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("""build = """+str(build)+""";"""+"""force = """+str(force)+""";"""+"""option = """+str(option)+""";"""+"")
+    try:
+        ResetNodeResult = ctx.element.reset_node(build=build, force=force, option=option)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+<<<<<<< HEAD
     cli_utils.print_result(ResetNodeResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+=======
+    cli_utils.print_result(dict, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
 
 
 
@@ -164,5 +202,9 @@ def Shutdown(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
     cli_utils.print_result(ShutdownResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+=======
+    cli_utils.print_result(ShutdownResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
 

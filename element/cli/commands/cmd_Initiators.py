@@ -23,6 +23,7 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
+<<<<<<< HEAD
     """Modify Create List Delete """
 
 @cli.command('Modify', short_help="""ModifyInitiators enables you to change the attributes of an existing initiator. You cannot change the name of an existing initiator. If you need to change the name of an initiator, delete the existing initiator with DeleteInitiators and create a new one with CreateInitiators. If ModifyInitiators fails to change one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible). """)
@@ -81,6 +82,106 @@ def Modify(ctx,
     cli_utils.print_result(ModifyInitiatorsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
+=======
+    """Delete Modify Create List """
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
+
+@cli.command('Create', short_help="""CreateInitiators enables you to create multiple new initiator IQNs or World Wide Port Names (WWPNs) and optionally assign them aliases and attributes. When you use CreateInitiators to create new initiators, you can also add them to volume access groups. If CreateInitiators fails to create one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible). """)
+@click.option('--create_initiator_name',
+              type=str,
+              required=True,
+<<<<<<< HEAD
+              help="""(Required) The name of the initiator (IQN or WWPN) to create. (String) """)
+@click.option('--create_initiator_alias',
+=======
+              help="""An array of IDs of initiators to delete. """)
+@pass_context
+def Delete(ctx,
+           initiators):
+    """DeleteInitiators enables you to delete one or more initiators from the system (and from any associated volumes or volume access groups)."""
+    """If DeleteInitiators fails to delete one of the initiators provided in the parameter, the system returns an error and does not delete any initiators (no partial completion is possible)."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    initiators = parser.parse_array(initiators)
+
+    ctx.logger.info("""initiators = """+str(initiators)+""";"""+"")
+    try:
+        DeleteInitiatorsResult = ctx.element.delete_initiators(initiators=initiators)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(DeleteInitiatorsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('Modify', short_help="""ModifyInitiators enables you to change the attributes of an existing initiator. You cannot change the name of an existing initiator. If you need to change the name of an initiator, delete the existing initiator with DeleteInitiators and create a new one with CreateInitiators. If ModifyInitiators fails to change one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible). """)
+@click.option('--modify_initiator_initiator_id',
+              type=int,
+              required=True,
+              help="""(Required) The numeric ID of the initiator to modify. (Integer) """)
+@click.option('--modify_initiator_alias',
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
+              type=str,
+              required=False,
+              help="""(Optional) The friendly name to assign to this initiator. (String) """)
+@click.option('--create_initiator_volume_access_group_id',
+              type=int,
+              required=False,
+              help="""(Optional) The ID of the volume access group into to which this newly created initiator will be added. (Integer) """)
+@click.option('--create_initiator_attributes',
+              type=dict,
+              required=False,
+              help="""(Optional) A set of JSON attributes assigned to this initiator. (JSON Object) """)
+@pass_context
+def Create(ctx,
+           create_initiator_name,
+           create_initiator_alias = None,
+           create_initiator_volume_access_group_id = None,
+           create_initiator_attributes = None):
+    """CreateInitiators enables you to create multiple new initiator IQNs or World Wide Port Names (WWPNs) and optionally assign them aliases and attributes. When you use CreateInitiators to create new initiators, you can also add them to volume access groups."""
+    """If CreateInitiators fails to create one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible)."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    initiators = None
+    if(initiators is not None or False):
+        kwargsDict = dict()
+        kwargsDict["name"] = create_initiator_name
+        kwargsDict["alias"] = create_initiator_alias
+        kwargsDict["volume_access_group_id"] = create_initiator_volume_access_group_id
+        kwargsDict["attributes"] = create_initiator_attributes
+
+        initiators = CreateInitiator(**kwargsDict)
+
+    initiators = parser.parse_array(initiators)
+
+    ctx.logger.info("""initiators = """+str(initiators)+""";"""+"")
+    try:
+        CreateInitiatorsResult = ctx.element.create_initiators(initiators=initiators)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+<<<<<<< HEAD
+    cli_utils.print_result(CreateInitiatorsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+=======
+    cli_utils.print_result(ModifyInitiatorsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
 
 @cli.command('Create', short_help="""CreateInitiators enables you to create multiple new initiator IQNs or World Wide Port Names (WWPNs) and optionally assign them aliases and attributes. When you use CreateInitiators to create new initiators, you can also add them to volume access groups. If CreateInitiators fails to create one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible). """)
 @click.option('--create_initiator_name',
@@ -135,7 +236,8 @@ def Create(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(CreateInitiatorsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(CreateInitiatorsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
 
 
 
@@ -176,7 +278,7 @@ def List(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(ListInitiatorsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(ListInitiatorsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 

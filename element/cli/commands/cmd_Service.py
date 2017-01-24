@@ -45,5 +45,5 @@ def List(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(ListServicesResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(ListServicesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

@@ -23,7 +23,53 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
+<<<<<<< HEAD
     """GetNvramInfo GetNodeInfo GetClusterInfo GetConfig """
+
+@cli.command('GetNvramInfo', short_help="""GetNvramInfo allows you to retrieve information from each node about the NVRAM card.   """)
+@pass_context
+def GetNvramInfo(ctx):
+    """GetNvramInfo allows you to retrieve information from each node about the NVRAM card.  """
+=======
+    """GetClusterInfo GetNvramInfo GetNodeInfo GetConfig """
+
+@cli.command('GetClusterInfo', short_help="""You can use the GetClusterHardwareInfo method to retrieve the hardware status and information for all Fibre Channel nodes, iSCSI nodes and drives in the cluster. This generally includes manufacturers, vendors, versions, and other associated hardware identification information. """)
+@click.option('--type',
+              type=str,
+              required=False,
+              help="""Include only a certain type of hardware information in the response. Can be one of the following:drives: List only drive information in the response.nodes: List only node information in the response.all: Include both drive and node information in the response.If this parameter is omitted, a type of "all" is assumed. """)
+@pass_context
+def GetClusterInfo(ctx,
+           type = None):
+    """You can use the GetClusterHardwareInfo method to retrieve the hardware status and information for all Fibre Channel nodes, iSCSI nodes and drives in the cluster. This generally includes manufacturers, vendors, versions, and other associated hardware identification information."""
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("""type = """+str(type)+""";"""+"")
+    try:
+<<<<<<< HEAD
+        GetNvramInfoResult = ctx.element.get_nvram_info()
+=======
+        GetClusterHardwareInfoResult = ctx.element.get_cluster_hardware_info(type=type)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+<<<<<<< HEAD
+    cli_utils.print_result(GetNvramInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+=======
+    cli_utils.print_result(GetClusterHardwareInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
+
+
 
 @cli.command('GetNvramInfo', short_help="""GetNvramInfo allows you to retrieve information from each node about the NVRAM card.   """)
 @pass_context
@@ -45,7 +91,7 @@ def GetNvramInfo(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(GetNvramInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(GetNvramInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -74,36 +120,7 @@ def GetNodeInfo(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(GetNodeHardwareInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('GetClusterInfo', short_help="""You can use the GetClusterHardwareInfo method to retrieve the hardware status and information for all Fibre Channel nodes, iSCSI nodes and drives in the cluster. This generally includes manufacturers, vendors, versions, and other associated hardware identification information. """)
-@click.option('--type',
-              type=str,
-              required=False,
-              help="""Include only a certain type of hardware information in the response. Can be one of the following:drives: List only drive information in the response.nodes: List only node information in the response.all: Include both drive and node information in the response.If this parameter is omitted, a type of "all" is assumed. """)
-@pass_context
-def GetClusterInfo(ctx,
-           type = None):
-    """You can use the GetClusterHardwareInfo method to retrieve the hardware status and information for all Fibre Channel nodes, iSCSI nodes and drives in the cluster. This generally includes manufacturers, vendors, versions, and other associated hardware identification information."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("""type = """+str(type)+""";"""+"")
-    try:
-        GetClusterHardwareInfoResult = ctx.element.get_cluster_hardware_info(type=type)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(GetClusterHardwareInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(GetNodeHardwareInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -127,5 +144,9 @@ def GetConfig(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
     cli_utils.print_result(GetHardwareConfigResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+=======
+    cli_utils.print_result(GetHardwareConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
 

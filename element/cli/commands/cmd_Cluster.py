@@ -23,6 +23,7 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
+<<<<<<< HEAD
     """GetSnmpACL ListFaults GetInfo Create GetConfig SetNtpInfo GetMasterNodeID SetSnmpInfo SetSnmpTrapInfo GetFullThreshold SnmpSendTestTraps CreateSupportBundle AddAdmin GetSnmpState SetConfig GetNtpInfo ListSyncJobs ModifyAdmin GetVersionInfo SetSnmpACL GetLimits GetAPI GetSnmpInfo EnableSnmp ModifyFullThreshold DisableSnmp DeleteAllSupportBundles ClearFaults GetState ListAdmins GetCurrentAdmin DisableEncryptionAtRest GetCapacity GetStats GetSnmpTrapInfo ListEvents GetSystemStatus RemoveAdmin EnableEncryptionAtRest """
 
 @cli.command('GetSnmpACL', short_help="""GetSnmpACL is used to return the current SNMP access permissions on the cluster nodes. """)
@@ -195,6 +196,14 @@ def GetConfig(ctx):
     """The GetClusterConfig API method is used to return information about the cluster configuration this node uses to communicate with the cluster it is a part of."""
     """"""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
+=======
+    """SnmpSendTestTraps ClearFaults GetLimits SetSnmpInfo ModifyAdmin GetVersionInfo GetAPI DeleteAllSupportBundles GetConfig ListAdmins GetStats ModifyFullThreshold EnableSnmp GetMasterNodeID SetSnmpTrapInfo EnableEncryptionAtRest GetSnmpInfo CreateSupportBundle GetSnmpTrapInfo GetSystemStatus GetCurrentAdmin Create GetSnmpACL ListFaults GetNtpInfo AddAdmin SetSnmpACL DisableEncryptionAtRest SetConfig GetCapacity SetNtpInfo GetInfo GetSnmpState GetFullThreshold RemoveAdmin ListEvents DisableSnmp ListSyncJobs GetState """
+
+@cli.command('SnmpSendTestTraps', short_help="""SnmpSendTestTraps enables you to test SNMP functionality for a cluster. This method instructs the cluster to send test SNMP traps to the currently configured SNMP manager. """)
+@pass_context
+def SnmpSendTestTraps(ctx):
+    """SnmpSendTestTraps enables you to test SNMP functionality for a cluster. This method instructs the cluster to send test SNMP traps to the currently configured SNMP manager."""
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -203,7 +212,11 @@ def GetConfig(ctx):
 
     ctx.logger.info("")
     try:
+<<<<<<< HEAD
         GetClusterConfigResult = ctx.element.get_cluster_config()
+=======
+        SnmpSendTestTrapsResult = ctx.element.snmp_send_test_traps()
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -211,6 +224,7 @@ def GetConfig(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
     cli_utils.print_result(GetClusterConfigResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
@@ -229,17 +243,38 @@ def SetNtpInfo(ctx,
            servers,
            broadcastclient = None):
     """SetNtpInfo is used to configure the NTP on cluster nodes. The values set with this interface apply to all nodes in the cluster. The nodes can only be configured as a server where a host is selected to administrate the networking and/or a broadcast client where each host sends each message to each peer."""
+=======
+    cli_utils.print_result(SnmpSendTestTrapsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('ClearFaults', short_help="""ClearClusterFaults is used to clear information about both current faults that are resolved as well as faults that were previously detected and resolved can be cleared. """)
+@click.option('--fault_types',
+              type=str,
+              required=False,
+              help="""Determines the types of faults cleared: current: Faults that are currently detected and have not been resolved. resolved: Faults that were previously detected and resolved. all: Both current and resolved faults are cleared. The fault status can be determined by the "resolved" field of the fault object. """)
+@pass_context
+def ClearFaults(ctx,
+           fault_types = None):
+    """ClearClusterFaults is used to clear information about both current faults that are resolved as well as faults that were previously detected and resolved can be cleared."""
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
+<<<<<<< HEAD
     servers = parser.parse_array(servers)
 
     ctx.logger.info("""servers = """+str(servers)+""";"""+"""broadcastclient = """+str(broadcastclient)+""";"""+"")
     try:
         SetNtpInfoResult = ctx.element.set_ntp_info(servers=servers, broadcastclient=broadcastclient)
+=======
+    ctx.logger.info("""fault_types = """+str(fault_types)+""";"""+"")
+    try:
+        ClearClusterFaultsResult = ctx.element.clear_cluster_faults(fault_types=fault_types)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -247,6 +282,7 @@ def SetNtpInfo(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
     cli_utils.print_result(SetNtpInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
@@ -255,6 +291,16 @@ def SetNtpInfo(ctx,
 @pass_context
 def GetMasterNodeID(ctx):
     """GetClusterMasterNodeID is used to return the ID of the node that can perform cluster-wide administration tasks and holds the storage virtual IP (SVIP) and management virtual IP (MVIP)."""
+=======
+    cli_utils.print_result(ClearClusterFaultsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetLimits', short_help="""GetLimits enables you to retrieve the limit values set by the API. These values might change between releases of  Element, but do not change without an update to the system. Knowing the limit values set by the API can be useful when writing API scripts for user-facing tools.NOTE: The GetLimits method returns the limits for the current software version regardless of the API endpoint version used to pass the method. """)
+@pass_context
+def GetLimits(ctx):
+    """GetLimits enables you to retrieve the limit values set by the API. These values might change between releases of  Element, but do not change without an update to the system. Knowing the limit values set by the API can be useful when writing API scripts for user-facing tools.NOTE: The GetLimits method returns the limits for the current software version regardless of the API endpoint version used to pass the method."""
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -263,7 +309,11 @@ def GetMasterNodeID(ctx):
 
     ctx.logger.info("")
     try:
+<<<<<<< HEAD
         GetClusterMasterNodeIDResult = ctx.element.get_cluster_master_node_id()
+=======
+        GetLimitsResult = ctx.element.get_limits()
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -271,7 +321,11 @@ def GetMasterNodeID(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
     cli_utils.print_result(GetClusterMasterNodeIDResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+=======
+    cli_utils.print_result(GetLimitsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
 
 
 
@@ -377,10 +431,11 @@ def SetSnmpInfo(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(SetSnmpInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(SetSnmpInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
+<<<<<<< HEAD
 @cli.command('SetSnmpTrapInfo', short_help="""SetSnmpTrapInfo is used to enable and disable the generation of SolidFire SNMP notifications (traps) and to specify the set of network host computers that are to receive the notifications. The values passed with each SetSnmpTrapInfo method replaces all values set in any previous method to SetSnmpTrapInfo. """)
 @click.option('--snmp_trap_recipient_host',
               type=str,
@@ -415,12 +470,39 @@ def SetSnmpTrapInfo(ctx,
            snmp_trap_recipient_community,
            snmp_trap_recipient_port):
     """SetSnmpTrapInfo is used to enable and disable the generation of SolidFire SNMP notifications (traps) and to specify the set of network host computers that are to receive the notifications. The values passed with each SetSnmpTrapInfo method replaces all values set in any previous method to SetSnmpTrapInfo."""
+=======
+@cli.command('ModifyAdmin', short_help="""ModifyClusterAdmin is used to change the settings for a Cluster Admin or LDAP Cluster Admin. Access for the administrator Cluster Admin account cannot be changed. """)
+@click.option('--cluster_admin_id',
+              type=int,
+              required=True,
+              help="""ClusterAdminID for the Cluster Admin or LDAP Cluster Admin to modify. """)
+@click.option('--password',
+              type=str,
+              required=False,
+              help="""Password used to authenticate this Cluster Admin. """)
+@click.option('--access',
+              type=str,
+              required=False,
+              help="""Controls which methods this Cluster Admin can use. For more details on the levels of access, see "Access Control" in the Element API Guide. """)
+@click.option('--attributes',
+              type=str,
+              required=False,
+              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
+@pass_context
+def ModifyAdmin(ctx,
+           cluster_admin_id,
+           password = None,
+           access = None,
+           attributes = None):
+    """ModifyClusterAdmin is used to change the settings for a Cluster Admin or LDAP Cluster Admin. Access for the administrator Cluster Admin account cannot be changed."""
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
+<<<<<<< HEAD
     trap_recipients = None
     if(trap_recipients is not None or cluster_fault_traps_enabled is not None or cluster_fault_resolved_traps_enabled is not None or cluster_event_traps_enabled is not None or False):
         kwargsDict = dict()
@@ -435,6 +517,16 @@ def SetSnmpTrapInfo(ctx,
     ctx.logger.info("""trap_recipients = """+str(trap_recipients)+""";"""+"""cluster_fault_traps_enabled = """+str(cluster_fault_traps_enabled)+""";"""+"""cluster_fault_resolved_traps_enabled = """+str(cluster_fault_resolved_traps_enabled)+""";"""+"""cluster_event_traps_enabled = """+str(cluster_event_traps_enabled)+""";"""+"")
     try:
         SetSnmpTrapInfoResult = ctx.element.set_snmp_trap_info(trap_recipients=trap_recipients, cluster_fault_traps_enabled=cluster_fault_traps_enabled, cluster_fault_resolved_traps_enabled=cluster_fault_resolved_traps_enabled, cluster_event_traps_enabled=cluster_event_traps_enabled)
+=======
+    access = parser.parse_array(access)
+    if(attributes is not None):
+        kwargsDict = simplejson.loads(attributes)
+        attributes = dict(**kwargsDict)
+
+    ctx.logger.info("""cluster_admin_id = """+str(cluster_admin_id)+""";"""+"""password = """+str(password)+""";"""+"""access = """+str(access)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
+    try:
+        ModifyClusterAdminResult = ctx.element.modify_cluster_admin(cluster_admin_id=cluster_admin_id, password=password, access=access, attributes=attributes)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -442,6 +534,7 @@ def SetSnmpTrapInfo(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
     cli_utils.print_result(SetSnmpTrapInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
@@ -450,6 +543,17 @@ def SetSnmpTrapInfo(ctx,
 @pass_context
 def GetFullThreshold(ctx):
     """GetClusterFullThreshold is used to view the stages set for cluster fullness levels. All levels are returned when this method is entered."""
+=======
+    cli_utils.print_result(ModifyClusterAdminResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetVersionInfo', short_help="""Return information about the Element software version running on each node in the cluster. Information about the nodes that are currently in the process of upgrading software is also returned. """)
+@pass_context
+def GetVersionInfo(ctx):
+    """Return information about the Element software version running on each node in the cluster."""
+    """Information about the nodes that are currently in the process of upgrading software is also returned."""
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -458,7 +562,11 @@ def GetFullThreshold(ctx):
 
     ctx.logger.info("")
     try:
+<<<<<<< HEAD
         GetClusterFullThresholdResult = ctx.element.get_cluster_full_threshold()
+=======
+        GetClusterVersionInfoResult = ctx.element.get_cluster_version_info()
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -466,7 +574,11 @@ def GetFullThreshold(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
     cli_utils.print_result(GetClusterFullThresholdResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+=======
+    cli_utils.print_result(GetClusterVersionInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
 
 
 
@@ -490,6 +602,7 @@ def SnmpSendTestTraps(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
     cli_utils.print_result(SnmpSendTestTrapsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
@@ -513,88 +626,15 @@ def CreateSupportBundle(ctx,
            extra_args = None,
            timeout_sec = None):
     """CreateSupportBundle is used to create a support bundle file under the node&#x27;s directory. When the bundle has been successfully created, the bundle is stored on the node as a tar.gz file."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
+=======
+    cli_utils.print_result(GetAPIResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
-    ctx.logger.info("""bundle_name = """+str(bundle_name)+""";"""+"""extra_args = """+str(extra_args)+""";"""+"""timeout_sec = """+str(timeout_sec)+""";"""+"")
-    try:
-        CreateSupportBundleResult = ctx.element.create_support_bundle(bundle_name=bundle_name, extra_args=extra_args, timeout_sec=timeout_sec)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(CreateSupportBundleResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('AddAdmin', short_help="""AddClusterAdmin adds a new Cluster Admin. A Cluster Admin can be used to manage the cluster via the API and management tools. Cluster Admins are completely separate and unrelated to standard tenant accounts.  Each Cluster Admin can be restricted to a sub-set of the API. SolidFire recommends using multiple Cluster Admins for different users and applications. Each Cluster Admin should be given the minimal permissions necessary to reduce the potential impact of credential compromise. """)
-@click.option('--username',
-              type=str,
-              required=True,
-              help="""Unique username for this Cluster Admin. """)
-@click.option('--password',
-              type=str,
-              required=True,
-              help="""Password used to authenticate this Cluster Admin. """)
-@click.option('--access',
-              type=str,
-              required=True,
-              help="""Controls which methods this Cluster Admin can use. For more details on the levels of access, see "Access Control" in the Element API Guide. """)
-@click.option('--accept_eula',
-              type=bool,
-              required=False,
-              help="""Indicate your acceptance of the End User License Agreement when creating this cluster admin. To accept the EULA, set this parameter to true. """)
-@click.option('--attributes',
-              type=str,
-              required=False,
-              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
+@cli.command('DeleteAllSupportBundles', short_help="""DeleteAllSupportBundles is used to delete all support bundles generated with the CreateSupportBundle API method. """)
 @pass_context
-def AddAdmin(ctx,
-           username,
-           password,
-           access,
-           accept_eula = None,
-           attributes = None):
-    """AddClusterAdmin adds a new Cluster Admin. A Cluster Admin can be used to manage the cluster via the API and management tools. Cluster Admins are completely separate and unrelated to standard tenant accounts."""
-    """"""
-    """Each Cluster Admin can be restricted to a sub-set of the API. SolidFire recommends using multiple Cluster Admins for different users and applications. Each Cluster Admin should be given the minimal permissions necessary to reduce the potential impact of credential compromise."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    access = parser.parse_array(access)
-    if(attributes is not None):
-        kwargsDict = simplejson.loads(attributes)
-        attributes = dict(**kwargsDict)
-
-    ctx.logger.info("""username = """+str(username)+""";"""+"""password = """+str(password)+""";"""+"""access = """+str(access)+""";"""+"""accept_eula = """+str(accept_eula)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
-    try:
-        AddClusterAdminResult = ctx.element.add_cluster_admin(username=username, password=password, access=access, accept_eula=accept_eula, attributes=attributes)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(AddClusterAdminResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('GetSnmpState', short_help="""GetSnmpState is used to return the current state of the SNMP feature.  Note: GetSnmpState is new for Element OS 8. Please use this method and SetSnmpACL to migrate your SNMP functionality in the future. """)
-@pass_context
-def GetSnmpState(ctx):
-    """GetSnmpState is used to return the current state of the SNMP feature."""
-    """"""
-    """Note: GetSnmpState is new for Element OS 8. Please use this method and SetSnmpACL to migrate your SNMP functionality in the future."""
+def DeleteAllSupportBundles(ctx):
+    """DeleteAllSupportBundles is used to delete all support bundles generated with the CreateSupportBundle API method."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -603,7 +643,7 @@ def GetSnmpState(ctx):
 
     ctx.logger.info("")
     try:
-        GetSnmpStateResult = ctx.element.get_snmp_state()
+        DeleteAllSupportBundlesResult = ctx.element.delete_all_support_bundles()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -611,6 +651,173 @@ def GetSnmpState(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
+    cli_utils.print_result(DeleteAllSupportBundlesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetConfig', short_help="""The GetClusterConfig API method is used to return information about the cluster configuration this node uses to communicate with the cluster it is a part of.  Note: This method is available only through the per-node API endpoint 5.0 or later. """)
+@pass_context
+def GetConfig(ctx):
+    """The GetClusterConfig API method is used to return information about the cluster configuration this node uses to communicate with the cluster it is a part of."""
+    """"""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+<<<<<<< HEAD
+    ctx.logger.info("""bundle_name = """+str(bundle_name)+""";"""+"""extra_args = """+str(extra_args)+""";"""+"""timeout_sec = """+str(timeout_sec)+""";"""+"")
+    try:
+        CreateSupportBundleResult = ctx.element.create_support_bundle(bundle_name=bundle_name, extra_args=extra_args, timeout_sec=timeout_sec)
+=======
+    ctx.logger.info("")
+    try:
+        GetClusterConfigResult = ctx.element.get_cluster_config()
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+<<<<<<< HEAD
+    cli_utils.print_result(CreateSupportBundleResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+=======
+    cli_utils.print_result(GetClusterConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
+
+
+
+@cli.command('ListAdmins', short_help="""ListClusterAdmins returns the list of all cluster administrators for the cluster. There can be several cluster administrators that have different levels of permissions. There can be only one primary cluster administrator in the system. The primary Cluster Admin is the administrator that was created when the cluster was created. LDAP administrators can also be created when setting up an LDAP system on the cluster. """)
+@pass_context
+def ListAdmins(ctx):
+    """ListClusterAdmins returns the list of all cluster administrators for the cluster. There can be several cluster administrators that have different levels of permissions. There can be only one primary cluster administrator in the system. The primary Cluster Admin is the administrator that was created when the cluster was created. LDAP administrators can also be created when setting up an LDAP system on the cluster."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("")
+    try:
+        ListClusterAdminsResult = ctx.element.list_cluster_admins()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ListClusterAdminsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+<<<<<<< HEAD
+@cli.command('GetSnmpState', short_help="""GetSnmpState is used to return the current state of the SNMP feature.  Note: GetSnmpState is new for Element OS 8. Please use this method and SetSnmpACL to migrate your SNMP functionality in the future. """)
+@pass_context
+def GetSnmpState(ctx):
+    """GetSnmpState is used to return the current state of the SNMP feature."""
+    """"""
+    """Note: GetSnmpState is new for Element OS 8. Please use this method and SetSnmpACL to migrate your SNMP functionality in the future."""
+=======
+@cli.command('GetStats', short_help="""GetClusterStats is used to return high-level activity measurements for the cluster. Values returned are cumulative from the creation of the cluster. """)
+@pass_context
+def GetStats(ctx):
+    """GetClusterStats is used to return high-level activity measurements for the cluster. Values returned are cumulative from the creation of the cluster."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("")
+    try:
+        GetClusterStatsResult = ctx.element.get_cluster_stats()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(GetClusterStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('ModifyFullThreshold', short_help="""ModifyClusterFullThreshold is used to change the level at which an event is generated when the storage cluster approaches the capacity utilization requested. The number entered in this setting is used to indicate the number of node failures the system is required to recover from. For example, on a 10 node cluster, if you want to be alerted when the system cannot recover from 3 nodes failures, enter the value of "3". When this number is reached, a message alert is sent to the Event Log in the Cluster Management Console. """)
+@click.option('--stage2_aware_threshold',
+              type=int,
+              required=False,
+              help="""Number of nodes worth of capacity remaining on the cluster that triggers a notification. """)
+@click.option('--stage3_block_threshold_percent',
+              type=int,
+              required=False,
+              help="""Percent below "Error" state to raise a cluster "Warning" alert. """)
+@click.option('--max_metadata_over_provision_factor',
+              type=int,
+              required=False,
+              help="""A value representative of the number of times metadata space can be over provisioned relative to the amount of space available. For example, if there was enough metadata space to store 100 TiB of volumes and this number was set to 5, then 500 TiB worth of volumes could be created. """)
+@pass_context
+def ModifyFullThreshold(ctx,
+           stage2_aware_threshold = None,
+           stage3_block_threshold_percent = None,
+           max_metadata_over_provision_factor = None):
+    """ModifyClusterFullThreshold is used to change the level at which an event is generated when the storage cluster approaches the capacity utilization requested. The number entered in this setting is used to indicate the number of node failures the system is required to recover from. For example, on a 10 node cluster, if you want to be alerted when the system cannot recover from 3 nodes failures, enter the value of &quot;3&quot;. When this number is reached, a message alert is sent to the Event Log in the Cluster Management Console."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("""stage2_aware_threshold = """+str(stage2_aware_threshold)+""";"""+"""stage3_block_threshold_percent = """+str(stage3_block_threshold_percent)+""";"""+"""max_metadata_over_provision_factor = """+str(max_metadata_over_provision_factor)+""";"""+"")
+    try:
+        ModifyClusterFullThresholdResult = ctx.element.modify_cluster_full_threshold(stage2_aware_threshold=stage2_aware_threshold, stage3_block_threshold_percent=stage3_block_threshold_percent, max_metadata_over_provision_factor=max_metadata_over_provision_factor)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ModifyClusterFullThresholdResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('EnableSnmp', short_help="""EnableSnmp is used to enable SNMP on the cluster nodes. The values set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to EnableSnmp. """)
+@click.option('--snmp_v3_enabled',
+              type=bool,
+              required=True,
+              help="""If set to "true", then SNMP v3 is enabled on each node in the cluster. If set to "false", then SNMP v2 is enabled. """)
+@pass_context
+def EnableSnmp(ctx,
+           snmp_v3_enabled):
+    """EnableSnmp is used to enable SNMP on the cluster nodes. The values set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to EnableSnmp."""
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("""snmp_v3_enabled = """+str(snmp_v3_enabled)+""";"""+"")
+    try:
+<<<<<<< HEAD
+        GetSnmpStateResult = ctx.element.get_snmp_state()
+=======
+        EnableSnmpResult = ctx.element.enable_snmp(snmp_v3_enabled=snmp_v3_enabled)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+<<<<<<< HEAD
     cli_utils.print_result(GetSnmpStateResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
@@ -671,12 +878,23 @@ def SetConfig(ctx,
     """The SetClusterConfig API method is used to set the configuration this node uses to communicate with the cluster it is associated with. To see the states in which these objects can be modified see Cluster Object on page 109. To display the current cluster interface settings for a node, run the GetClusterConfig API method."""
     """"""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
+=======
+    cli_utils.print_result(EnableSnmpResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetMasterNodeID', short_help="""GetClusterMasterNodeID is used to return the ID of the node that can perform cluster-wide administration tasks and holds the storage virtual IP (SVIP) and management virtual IP (MVIP). """)
+@pass_context
+def GetMasterNodeID(ctx):
+    """GetClusterMasterNodeID is used to return the ID of the node that can perform cluster-wide administration tasks and holds the storage virtual IP (SVIP) and management virtual IP (MVIP)."""
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
+<<<<<<< HEAD
     cluster = None
     if(cluster is not None or False):
         kwargsDict = dict()
@@ -696,6 +914,11 @@ def SetConfig(ctx,
     ctx.logger.info("""cluster = """+str(cluster)+""";"""+"")
     try:
         SetClusterConfigResult = ctx.element.set_cluster_config(cluster=cluster)
+=======
+    ctx.logger.info("")
+    try:
+        GetClusterMasterNodeIDResult = ctx.element.get_cluster_master_node_id()
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -703,6 +926,7 @@ def SetConfig(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
     cli_utils.print_result(SetClusterConfigResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
@@ -711,30 +935,91 @@ def SetConfig(ctx,
 @pass_context
 def GetNtpInfo(ctx):
     """GetNtpInfo is used to return the current network time protocol (NTP) configuration information."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
+=======
+    cli_utils.print_result(GetClusterMasterNodeIDResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
-    ctx.logger.info("")
-    try:
-        GetNtpInfoResult = ctx.element.get_ntp_info()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(GetNtpInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('ListSyncJobs', short_help="""ListSyncJobs is used to return information about synchronization jobs that are running on a SolidFire cluster. Synchronization jobs that are returned with this method are, "slice," "clone" and "remote." """)
+@cli.command('SetSnmpTrapInfo', short_help="""SetSnmpTrapInfo is used to enable and disable the generation of SolidFire SNMP notifications (traps) and to specify the set of network host computers that are to receive the notifications. The values passed with each SetSnmpTrapInfo method replaces all values set in any previous method to SetSnmpTrapInfo. """)
+@click.option('--snmp_trap_recipient_host',
+              type=str,
+              required=True,
+              help="""The IP address or host name of the target network management station. """)
+@click.option('--snmp_trap_recipient_community',
+              type=str,
+              required=True,
+              help="""SNMP community string. """)
+@click.option('--snmp_trap_recipient_port',
+              type=int,
+              required=True,
+              help="""The UDP port number on the host where the trap is to be sent. Valid range is 1 - 65535. 0 (zero) is not a valid port number. Default is 162. """)
+@click.option('--cluster_fault_traps_enabled',
+              type=bool,
+              required=True,
+              help="""If "true", when a cluster fault is logged a corresponding solidFireClusterFaultNotification is sent to the configured list of trap recipients. """)
+@click.option('--cluster_fault_resolved_traps_enabled',
+              type=bool,
+              required=True,
+              help="""If "true", when a cluster fault is logged a corresponding solidFireClusterFaultResolvedNotification is sent to the configured list of trap recipients. """)
+@click.option('--cluster_event_traps_enabled',
+              type=bool,
+              required=True,
+              help="""If "true", when a cluster fault is logged a corresponding solidFireClusterEventNotification is sent to the configured list of trap recipients. """)
 @pass_context
-def ListSyncJobs(ctx):
-    """ListSyncJobs is used to return information about synchronization jobs that are running on a SolidFire cluster. Synchronization jobs that are returned with this method are, &quot;slice,&quot; &quot;clone&quot; and &quot;remote.&quot;"""
+def SetSnmpTrapInfo(ctx,
+           cluster_fault_traps_enabled,
+           cluster_fault_resolved_traps_enabled,
+           cluster_event_traps_enabled,
+           snmp_trap_recipient_host,
+           snmp_trap_recipient_community,
+           snmp_trap_recipient_port):
+    """SetSnmpTrapInfo is used to enable and disable the generation of SolidFire SNMP notifications (traps) and to specify the set of network host computers that are to receive the notifications. The values passed with each SetSnmpTrapInfo method replaces all values set in any previous method to SetSnmpTrapInfo."""
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    trap_recipients = None
+    if(trap_recipients is not None or cluster_fault_traps_enabled is not None or cluster_fault_resolved_traps_enabled is not None or cluster_event_traps_enabled is not None or False):
+        kwargsDict = dict()
+        kwargsDict["host"] = snmp_trap_recipient_host
+        kwargsDict["community"] = snmp_trap_recipient_community
+        kwargsDict["port"] = snmp_trap_recipient_port
+
+        trap_recipients = SnmpTrapRecipient(**kwargsDict)
+
+    trap_recipients = parser.parse_array(trap_recipients)
+
+    ctx.logger.info("""trap_recipients = """+str(trap_recipients)+""";"""+"""cluster_fault_traps_enabled = """+str(cluster_fault_traps_enabled)+""";"""+"""cluster_fault_resolved_traps_enabled = """+str(cluster_fault_resolved_traps_enabled)+""";"""+"""cluster_event_traps_enabled = """+str(cluster_event_traps_enabled)+""";"""+"")
+    try:
+<<<<<<< HEAD
+        GetNtpInfoResult = ctx.element.get_ntp_info()
+=======
+        SetSnmpTrapInfoResult = ctx.element.set_snmp_trap_info(trap_recipients=trap_recipients, cluster_fault_traps_enabled=cluster_fault_traps_enabled, cluster_fault_resolved_traps_enabled=cluster_fault_resolved_traps_enabled, cluster_event_traps_enabled=cluster_event_traps_enabled)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+<<<<<<< HEAD
+    cli_utils.print_result(GetNtpInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+=======
+    cli_utils.print_result(SetSnmpTrapInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
+
+
+
+@cli.command('EnableEncryptionAtRest', short_help="""The EnableEncryptionAtRest method is used to enable the Advanced Encryption Standard (AES) 256-bit encryption at rest on the cluster so that the cluster can manage the encryption key used for the drives on each node. This feature is not enabled by default. Enabling this operation allows the cluster to automatically manage encryption keys internally for the drives on each node in the cluster. Nodes do not store the keys to unlock drives and the keys are never passed over the network. Two nodes participating in a cluster are required to access the key to disable encryption on a drive. The encryption management does not affect performance or efficiency on the cluster. If an encryption-enabled drive or node is removed from the cluster with the API, all data is secure erased and any data left on the drive cannot be read or accessed. Enabling or disabling encryption should be performed when the cluster is running and in a healthy state. Encryption can be enabled or disabled at your discretion and can be performed as often as you need. Note: This process is asynchronous and returns a response before encryption is enabled. The GetClusterInfo method can be used to poll the system to see when the process has completed. """)
+@pass_context
+def EnableEncryptionAtRest(ctx):
+    """The EnableEncryptionAtRest method is used to enable the Advanced Encryption Standard (AES) 256-bit encryption at rest on the cluster so that the cluster can manage the encryption key used for the drives on each node. This feature is not enabled by default. Enabling this operation allows the cluster to automatically manage encryption keys internally for the drives on each node in the cluster. Nodes do not store the keys to unlock drives and the keys are never passed over the network. Two nodes participating in a cluster are required to access the key to disable encryption on a drive. The encryption management does not affect performance or efficiency on the cluster. If an encryption-enabled drive or node is removed from the cluster with the API, all data is secure erased and any data left on the drive cannot be read or accessed."""
+    """Enabling or disabling encryption should be performed when the cluster is running and in a healthy state. Encryption can be enabled or disabled at your discretion and can be performed as often as you need."""
+    """Note: This process is asynchronous and returns a response before encryption is enabled. The GetClusterInfo method can be used to poll the system to see when the process has completed."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -743,7 +1028,7 @@ def ListSyncJobs(ctx):
 
     ctx.logger.info("")
     try:
-        ListSyncJobsResult = ctx.element.list_sync_jobs()
+        EnableEncryptionAtRestResult = ctx.element.enable_encryption_at_rest()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -751,10 +1036,11 @@ def ListSyncJobs(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(ListSyncJobsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(EnableEncryptionAtRestResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
+<<<<<<< HEAD
 @cli.command('ModifyAdmin', short_help="""ModifyClusterAdmin is used to change the settings for a Cluster Admin or LDAP Cluster Admin. Access for the administrator Cluster Admin account cannot be changed. """)
 @click.option('--cluster_admin_id',
               type=int,
@@ -779,12 +1065,60 @@ def ModifyAdmin(ctx,
            access = None,
            attributes = None):
     """ModifyClusterAdmin is used to change the settings for a Cluster Admin or LDAP Cluster Admin. Access for the administrator Cluster Admin account cannot be changed."""
+=======
+@cli.command('GetSnmpInfo', short_help="""GetSnmpInfo is used to return the current simple network management protocol (SNMP) configuration information.  Note: GetSnmpInfo will be available for Element OS 8 and prior releases. It will be deprecated after Element OS 8. There are two new SNMP API methods that you should migrate over to. They are GetSnmpState and GetSnmpACL. Please see details in this document for their descriptions and usage. """)
+@pass_context
+def GetSnmpInfo(ctx):
+    """GetSnmpInfo is used to return the current simple network management protocol (SNMP) configuration information."""
+    """"""
+    """Note: GetSnmpInfo will be available for Element OS 8 and prior releases. It will be deprecated after Element OS 8. There are two new SNMP API methods that you should migrate over to. They are GetSnmpState and GetSnmpACL. Please see details in this document for their descriptions and usage."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
+    ctx.logger.info("")
+    try:
+        GetSnmpInfoResult = ctx.element.get_snmp_info()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(GetSnmpInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('CreateSupportBundle', short_help="""CreateSupportBundle is used to create a support bundle file under the node's directory. When the bundle has been successfully created, the bundle is stored on the node as a tar.gz file. """)
+@click.option('--bundle_name',
+              type=str,
+              required=False,
+              help="""Unique name for each support bundle created. If no name is provided, then 'supportbundle' and the node name is used as a file name. """)
+@click.option('--extra_args',
+              type=str,
+              required=False,
+              help="""This parameter is fed to the sf_make_support_bundle script. Should be used only at the request of SolidFire Support. """)
+@click.option('--timeout_sec',
+              type=int,
+              required=False,
+              help="""The number of seconds to let the support bundle script run before timing out and stopping. Default is 1500 seconds. """)
+@pass_context
+def CreateSupportBundle(ctx,
+           bundle_name = None,
+           extra_args = None,
+           timeout_sec = None):
+    """CreateSupportBundle is used to create a support bundle file under the node&#x27;s directory. When the bundle has been successfully created, the bundle is stored on the node as a tar.gz file."""
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+<<<<<<< HEAD
     access = parser.parse_array(access)
     if(attributes is not None):
         kwargsDict = simplejson.loads(attributes)
@@ -793,6 +1127,11 @@ def ModifyAdmin(ctx,
     ctx.logger.info("""cluster_admin_id = """+str(cluster_admin_id)+""";"""+"""password = """+str(password)+""";"""+"""access = """+str(access)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
         ModifyClusterAdminResult = ctx.element.modify_cluster_admin(cluster_admin_id=cluster_admin_id, password=password, access=access, attributes=attributes)
+=======
+    ctx.logger.info("""bundle_name = """+str(bundle_name)+""";"""+"""extra_args = """+str(extra_args)+""";"""+"""timeout_sec = """+str(timeout_sec)+""";"""+"")
+    try:
+        CreateSupportBundleResult = ctx.element.create_support_bundle(bundle_name=bundle_name, extra_args=extra_args, timeout_sec=timeout_sec)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -800,6 +1139,7 @@ def ModifyAdmin(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
     cli_utils.print_result(ModifyClusterAdminResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
@@ -809,6 +1149,16 @@ def ModifyAdmin(ctx,
 def GetVersionInfo(ctx):
     """Return information about the Element software version running on each node in the cluster."""
     """Information about the nodes that are currently in the process of upgrading software is also returned."""
+=======
+    cli_utils.print_result(CreateSupportBundleResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetSnmpTrapInfo', short_help="""GetSnmpTrapInfo is used to return current SNMP trap configuration information. """)
+@pass_context
+def GetSnmpTrapInfo(ctx):
+    """GetSnmpTrapInfo is used to return current SNMP trap configuration information."""
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -817,7 +1167,11 @@ def GetVersionInfo(ctx):
 
     ctx.logger.info("")
     try:
+<<<<<<< HEAD
         GetClusterVersionInfoResult = ctx.element.get_cluster_version_info()
+=======
+        GetSnmpTrapInfoResult = ctx.element.get_snmp_trap_info()
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -825,7 +1179,422 @@ def GetVersionInfo(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
     cli_utils.print_result(GetClusterVersionInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+=======
+    cli_utils.print_result(GetSnmpTrapInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
+
+
+
+@cli.command('GetSystemStatus', short_help="""""")
+@pass_context
+def GetSystemStatus(ctx):
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("")
+    try:
+        GetSystemStatusResult = ctx.element.get_system_status()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(GetSystemStatusResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetCurrentAdmin', short_help="""GetCurrentClusterAdmin returns information for the current primary cluster administrator. The primary Cluster Admin was ncreated when the cluster was created. """)
+@pass_context
+def GetCurrentAdmin(ctx):
+    """GetCurrentClusterAdmin returns information for the current primary cluster administrator. The primary Cluster Admin was ncreated when the cluster was created."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("")
+    try:
+        GetCurrentClusterAdminResult = ctx.element.get_current_cluster_admin()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(GetCurrentClusterAdminResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('Create', short_help="""The CreateCluster method is used to initialize the node in a cluster that has ownership of the "mvip" and "svip" addresses. Each new cluster is initialized using the MIP of the first node in the cluster. This method also automatically adds all the nodes being configured into the cluster. The method is used only once each time a new cluster is initialized.  Note: You need to log into the node that is used as the master node for the cluster. Once logged in, run the GetBootstrapConfig method on the node to get the IP addresses for the rest of the nodes that you want to include in the cluster. Then run the CreateCluster method. """)
+@click.option('--accept_eula',
+              type=bool,
+              required=False,
+              help="""Indicate your acceptance of the End User License Agreement when creating this cluster. To accept the EULA, set this parameter to true. """)
+@click.option('--mvip',
+              type=str,
+              required=True,
+              help="""Floating (virtual) IP address for the cluster on the management network. """)
+@click.option('--svip',
+              type=str,
+              required=True,
+              help="""Floating (virtual) IP address for the cluster on the storage (iSCSI) network. """)
+@click.option('--rep_count',
+              type=int,
+              required=True,
+              help="""Number of replicas of each piece of data to store in the cluster. Valid value is "2". """)
+@click.option('--username',
+              type=str,
+              required=True,
+              help="""User name for the cluster admin. """)
+@click.option('--password',
+              type=str,
+              required=True,
+              help="""Initial password for the cluster admin account. """)
+@click.option('--nodes',
+              type=str,
+              required=True,
+              help="""CIP/SIP addresses of the initial set of nodes making up the cluster. This node's IP must be in the list. """)
+@click.option('--attributes',
+              type=str,
+              required=False,
+              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
+@pass_context
+def Create(ctx,
+           mvip,
+           svip,
+           rep_count,
+           username,
+           password,
+           nodes,
+           accept_eula = None,
+           attributes = None):
+    """The CreateCluster method is used to initialize the node in a cluster that has ownership of the &quot;mvip&quot; and &quot;svip&quot; addresses. Each new cluster is initialized using the MIP of the first node in the cluster. This method also automatically adds all the nodes being configured into the cluster. The method is used only once each time a new cluster is initialized."""
+    """"""
+    """Note: You need to log into the node that is used as the master node for the cluster. Once logged in, run the GetBootstrapConfig method on the node to get the IP addresses for the rest of the nodes that you want to include in the cluster. Then run the CreateCluster method."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    nodes = parser.parse_array(nodes)
+    if(attributes is not None):
+        kwargsDict = simplejson.loads(attributes)
+        attributes = dict(**kwargsDict)
+
+    ctx.logger.info("""accept_eula = """+str(accept_eula)+""";"""+"""mvip = """+str(mvip)+""";"""+"""svip = """+str(svip)+""";"""+"""rep_count = """+str(rep_count)+""";"""+"""username = """+str(username)+""";"""+"""password = """+str(password)+""";"""+"""nodes = """+str(nodes)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
+    try:
+        CreateClusterResult = ctx.element.create_cluster(mvip=mvip, svip=svip, rep_count=rep_count, username=username, password=password, nodes=nodes, accept_eula=accept_eula, attributes=attributes)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(CreateClusterResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetSnmpACL', short_help="""GetSnmpACL is used to return the current SNMP access permissions on the cluster nodes. """)
+@pass_context
+def GetSnmpACL(ctx):
+    """GetSnmpACL is used to return the current SNMP access permissions on the cluster nodes."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("")
+    try:
+        GetSnmpACLResult = ctx.element.get_snmp_acl()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(GetSnmpACLResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+<<<<<<< HEAD
+@cli.command('GetLimits', short_help="""GetLimits enables you to retrieve the limit values set by the API. These values might change between releases of  Element, but do not change without an update to the system. Knowing the limit values set by the API can be useful when writing API scripts for user-facing tools.NOTE: The GetLimits method returns the limits for the current software version regardless of the API endpoint version used to pass the method. """)
+@pass_context
+def GetLimits(ctx):
+    """GetLimits enables you to retrieve the limit values set by the API. These values might change between releases of  Element, but do not change without an update to the system. Knowing the limit values set by the API can be useful when writing API scripts for user-facing tools.NOTE: The GetLimits method returns the limits for the current software version regardless of the API endpoint version used to pass the method."""
+=======
+@cli.command('ListFaults', short_help="""ListClusterFaults is used to retrieve information about any faults detected on the cluster. With this method, both current and resolved faults can be retrieved. The system caches faults every 30 seconds. """)
+@click.option('--exceptions',
+              type=bool,
+              required=False,
+              help="""""")
+@click.option('--best_practices',
+              type=bool,
+              required=False,
+              help="""Include faults triggered by sub-optimal system configuration. Possible values: true, false """)
+@click.option('--update',
+              type=bool,
+              required=False,
+              help="""""")
+@click.option('--fault_types',
+              type=str,
+              required=False,
+              help="""Determines the types of faults returned: current: List active, unresolved faults. resolved: List faults that were previously detected and resolved. all: (Default) List both current and resolved faults. You can see the fault status in the 'resolved' field of the Cluster Fault object. """)
+@pass_context
+def ListFaults(ctx,
+           exceptions = None,
+           best_practices = None,
+           update = None,
+           fault_types = None):
+    """ListClusterFaults is used to retrieve information about any faults detected on the cluster."""
+    """With this method, both current and resolved faults can be retrieved. The system caches faults every 30 seconds."""
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+<<<<<<< HEAD
+    ctx.logger.info("")
+    try:
+        GetLimitsResult = ctx.element.get_limits()
+=======
+    ctx.logger.info("""exceptions = """+str(exceptions)+""";"""+"""best_practices = """+str(best_practices)+""";"""+"""update = """+str(update)+""";"""+"""fault_types = """+str(fault_types)+""";"""+"")
+    try:
+        ListClusterFaultsResult = ctx.element.list_cluster_faults(exceptions=exceptions, best_practices=best_practices, update=update, fault_types=fault_types)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+<<<<<<< HEAD
+    cli_utils.print_result(GetLimitsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetAPI', short_help="""Retrieves the current version of the API and a list of all supported versions. """)
+@pass_context
+def GetAPI(ctx):
+    """Retrieves the current version of the API and a list of all supported versions."""
+=======
+    cli_utils.print_result(ListClusterFaultsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetNtpInfo', short_help="""GetNtpInfo is used to return the current network time protocol (NTP) configuration information. """)
+@pass_context
+def GetNtpInfo(ctx):
+    """GetNtpInfo is used to return the current network time protocol (NTP) configuration information."""
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("")
+    try:
+<<<<<<< HEAD
+        GetAPIResult = ctx.element.get_api()
+=======
+        GetNtpInfoResult = ctx.element.get_ntp_info()
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+<<<<<<< HEAD
+    cli_utils.print_result(GetAPIResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetSnmpInfo', short_help="""GetSnmpInfo is used to return the current simple network management protocol (SNMP) configuration information.  Note: GetSnmpInfo will be available for Element OS 8 and prior releases. It will be deprecated after Element OS 8. There are two new SNMP API methods that you should migrate over to. They are GetSnmpState and GetSnmpACL. Please see details in this document for their descriptions and usage. """)
+@pass_context
+def GetSnmpInfo(ctx):
+    """GetSnmpInfo is used to return the current simple network management protocol (SNMP) configuration information."""
+    """"""
+    """Note: GetSnmpInfo will be available for Element OS 8 and prior releases. It will be deprecated after Element OS 8. There are two new SNMP API methods that you should migrate over to. They are GetSnmpState and GetSnmpACL. Please see details in this document for their descriptions and usage."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("")
+    try:
+        GetSnmpInfoResult = ctx.element.get_snmp_info()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(GetSnmpInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('EnableSnmp', short_help="""EnableSnmp is used to enable SNMP on the cluster nodes. The values set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to EnableSnmp. """)
+@click.option('--snmp_v3_enabled',
+              type=bool,
+              required=True,
+              help="""If set to "true", then SNMP v3 is enabled on each node in the cluster. If set to "false", then SNMP v2 is enabled. """)
+@pass_context
+def EnableSnmp(ctx,
+           snmp_v3_enabled):
+    """EnableSnmp is used to enable SNMP on the cluster nodes. The values set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to EnableSnmp."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("""snmp_v3_enabled = """+str(snmp_v3_enabled)+""";"""+"")
+    try:
+        EnableSnmpResult = ctx.element.enable_snmp(snmp_v3_enabled=snmp_v3_enabled)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(EnableSnmpResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('ModifyFullThreshold', short_help="""ModifyClusterFullThreshold is used to change the level at which an event is generated when the storage cluster approaches the capacity utilization requested. The number entered in this setting is used to indicate the number of node failures the system is required to recover from. For example, on a 10 node cluster, if you want to be alerted when the system cannot recover from 3 nodes failures, enter the value of "3". When this number is reached, a message alert is sent to the Event Log in the Cluster Management Console. """)
+@click.option('--stage2_aware_threshold',
+              type=int,
+              required=False,
+              help="""Number of nodes worth of capacity remaining on the cluster that triggers a notification. """)
+@click.option('--stage3_block_threshold_percent',
+              type=int,
+              required=False,
+              help="""Percent below "Error" state to raise a cluster "Warning" alert. """)
+@click.option('--max_metadata_over_provision_factor',
+              type=int,
+=======
+    cli_utils.print_result(GetNtpInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('AddAdmin', short_help="""AddClusterAdmin adds a new Cluster Admin. A Cluster Admin can be used to manage the cluster via the API and management tools. Cluster Admins are completely separate and unrelated to standard tenant accounts.  Each Cluster Admin can be restricted to a sub-set of the API. SolidFire recommends using multiple Cluster Admins for different users and applications. Each Cluster Admin should be given the minimal permissions necessary to reduce the potential impact of credential compromise. """)
+@click.option('--username',
+              type=str,
+              required=True,
+              help="""Unique username for this Cluster Admin. """)
+@click.option('--password',
+              type=str,
+              required=True,
+              help="""Password used to authenticate this Cluster Admin. """)
+@click.option('--access',
+              type=str,
+              required=True,
+              help="""Controls which methods this Cluster Admin can use. For more details on the levels of access, see "Access Control" in the Element API Guide. """)
+@click.option('--accept_eula',
+              type=bool,
+              required=False,
+              help="""Indicate your acceptance of the End User License Agreement when creating this cluster admin. To accept the EULA, set this parameter to true. """)
+@click.option('--attributes',
+              type=str,
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
+              required=False,
+              help="""A value representative of the number of times metadata space can be over provisioned relative to the amount of space available. For example, if there was enough metadata space to store 100 TiB of volumes and this number was set to 5, then 500 TiB worth of volumes could be created. """)
+@pass_context
+<<<<<<< HEAD
+def ModifyFullThreshold(ctx,
+           stage2_aware_threshold = None,
+           stage3_block_threshold_percent = None,
+           max_metadata_over_provision_factor = None):
+    """ModifyClusterFullThreshold is used to change the level at which an event is generated when the storage cluster approaches the capacity utilization requested. The number entered in this setting is used to indicate the number of node failures the system is required to recover from. For example, on a 10 node cluster, if you want to be alerted when the system cannot recover from 3 nodes failures, enter the value of &quot;3&quot;. When this number is reached, a message alert is sent to the Event Log in the Cluster Management Console."""
+=======
+def AddAdmin(ctx,
+           username,
+           password,
+           access,
+           accept_eula = None,
+           attributes = None):
+    """AddClusterAdmin adds a new Cluster Admin. A Cluster Admin can be used to manage the cluster via the API and management tools. Cluster Admins are completely separate and unrelated to standard tenant accounts."""
+    """"""
+    """Each Cluster Admin can be restricted to a sub-set of the API. SolidFire recommends using multiple Cluster Admins for different users and applications. Each Cluster Admin should be given the minimal permissions necessary to reduce the potential impact of credential compromise."""
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("""stage2_aware_threshold = """+str(stage2_aware_threshold)+""";"""+"""stage3_block_threshold_percent = """+str(stage3_block_threshold_percent)+""";"""+"""max_metadata_over_provision_factor = """+str(max_metadata_over_provision_factor)+""";"""+"")
+    try:
+        ModifyClusterFullThresholdResult = ctx.element.modify_cluster_full_threshold(stage2_aware_threshold=stage2_aware_threshold, stage3_block_threshold_percent=stage3_block_threshold_percent, max_metadata_over_provision_factor=max_metadata_over_provision_factor)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+<<<<<<< HEAD
+    cli_utils.print_result(ModifyClusterFullThresholdResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('DisableSnmp', short_help="""DisableSnmp is used to disable SNMP on the cluster nodes. """)
+@pass_context
+def DisableSnmp(ctx):
+    """DisableSnmp is used to disable SNMP on the cluster nodes."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("")
+    try:
+        DisableSnmpResult = ctx.element.disable_snmp()
+=======
+    ctx.logger.info("""username = """+str(username)+""";"""+"""password = """+str(password)+""";"""+"""access = """+str(access)+""";"""+"""accept_eula = """+str(accept_eula)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
+    try:
+        AddClusterAdminResult = ctx.element.add_cluster_admin(username=username, password=password, access=access, accept_eula=accept_eula, attributes=attributes)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+<<<<<<< HEAD
+    cli_utils.print_result(DisableSnmpResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('DeleteAllSupportBundles', short_help="""DeleteAllSupportBundles is used to delete all support bundles generated with the CreateSupportBundle API method. """)
+@pass_context
+def DeleteAllSupportBundles(ctx):
+    """DeleteAllSupportBundles is used to delete all support bundles generated with the CreateSupportBundle API method."""
+=======
+    cli_utils.print_result(AddClusterAdminResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -919,14 +1688,17 @@ def SetSnmpACL(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(SetSnmpACLResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(SetSnmpACLResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
-@cli.command('GetLimits', short_help="""GetLimits enables you to retrieve the limit values set by the API. These values might change between releases of  Element, but do not change without an update to the system. Knowing the limit values set by the API can be useful when writing API scripts for user-facing tools.NOTE: The GetLimits method returns the limits for the current software version regardless of the API endpoint version used to pass the method. """)
+@cli.command('DisableEncryptionAtRest', short_help="""The DisableEncryptionAtRest method enables you to remove the encryption that was previously applied to the cluster using the EnableEncryptionAtRest method. This disable method is asynchronous and returns a response before encryption is disabled. You can use the GetClusterInfo method to poll the system to see when the process has completed. """)
 @pass_context
-def GetLimits(ctx):
-    """GetLimits enables you to retrieve the limit values set by the API. These values might change between releases of  Element, but do not change without an update to the system. Knowing the limit values set by the API can be useful when writing API scripts for user-facing tools.NOTE: The GetLimits method returns the limits for the current software version regardless of the API endpoint version used to pass the method."""
+def DisableEncryptionAtRest(ctx):
+    """The DisableEncryptionAtRest method enables you to remove the encryption that was previously applied to the cluster using the EnableEncryptionAtRest method."""
+    """This disable method is asynchronous and returns a response before encryption is disabled."""
+    """You can use the GetClusterInfo method to poll the system to see when the process has completed."""
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -935,173 +1707,11 @@ def GetLimits(ctx):
 
     ctx.logger.info("")
     try:
-        GetLimitsResult = ctx.element.get_limits()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(GetLimitsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('GetAPI', short_help="""Retrieves the current version of the API and a list of all supported versions. """)
-@pass_context
-def GetAPI(ctx):
-    """Retrieves the current version of the API and a list of all supported versions."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("")
-    try:
-        GetAPIResult = ctx.element.get_api()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(GetAPIResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('GetSnmpInfo', short_help="""GetSnmpInfo is used to return the current simple network management protocol (SNMP) configuration information.  Note: GetSnmpInfo will be available for Element OS 8 and prior releases. It will be deprecated after Element OS 8. There are two new SNMP API methods that you should migrate over to. They are GetSnmpState and GetSnmpACL. Please see details in this document for their descriptions and usage. """)
-@pass_context
-def GetSnmpInfo(ctx):
-    """GetSnmpInfo is used to return the current simple network management protocol (SNMP) configuration information."""
-    """"""
-    """Note: GetSnmpInfo will be available for Element OS 8 and prior releases. It will be deprecated after Element OS 8. There are two new SNMP API methods that you should migrate over to. They are GetSnmpState and GetSnmpACL. Please see details in this document for their descriptions and usage."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("")
-    try:
-        GetSnmpInfoResult = ctx.element.get_snmp_info()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(GetSnmpInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('EnableSnmp', short_help="""EnableSnmp is used to enable SNMP on the cluster nodes. The values set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to EnableSnmp. """)
-@click.option('--snmp_v3_enabled',
-              type=bool,
-              required=True,
-              help="""If set to "true", then SNMP v3 is enabled on each node in the cluster. If set to "false", then SNMP v2 is enabled. """)
-@pass_context
-def EnableSnmp(ctx,
-           snmp_v3_enabled):
-    """EnableSnmp is used to enable SNMP on the cluster nodes. The values set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to EnableSnmp."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("""snmp_v3_enabled = """+str(snmp_v3_enabled)+""";"""+"")
-    try:
-        EnableSnmpResult = ctx.element.enable_snmp(snmp_v3_enabled=snmp_v3_enabled)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(EnableSnmpResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('ModifyFullThreshold', short_help="""ModifyClusterFullThreshold is used to change the level at which an event is generated when the storage cluster approaches the capacity utilization requested. The number entered in this setting is used to indicate the number of node failures the system is required to recover from. For example, on a 10 node cluster, if you want to be alerted when the system cannot recover from 3 nodes failures, enter the value of "3". When this number is reached, a message alert is sent to the Event Log in the Cluster Management Console. """)
-@click.option('--stage2_aware_threshold',
-              type=int,
-              required=False,
-              help="""Number of nodes worth of capacity remaining on the cluster that triggers a notification. """)
-@click.option('--stage3_block_threshold_percent',
-              type=int,
-              required=False,
-              help="""Percent below "Error" state to raise a cluster "Warning" alert. """)
-@click.option('--max_metadata_over_provision_factor',
-              type=int,
-              required=False,
-              help="""A value representative of the number of times metadata space can be over provisioned relative to the amount of space available. For example, if there was enough metadata space to store 100 TiB of volumes and this number was set to 5, then 500 TiB worth of volumes could be created. """)
-@pass_context
-def ModifyFullThreshold(ctx,
-           stage2_aware_threshold = None,
-           stage3_block_threshold_percent = None,
-           max_metadata_over_provision_factor = None):
-    """ModifyClusterFullThreshold is used to change the level at which an event is generated when the storage cluster approaches the capacity utilization requested. The number entered in this setting is used to indicate the number of node failures the system is required to recover from. For example, on a 10 node cluster, if you want to be alerted when the system cannot recover from 3 nodes failures, enter the value of &quot;3&quot;. When this number is reached, a message alert is sent to the Event Log in the Cluster Management Console."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("""stage2_aware_threshold = """+str(stage2_aware_threshold)+""";"""+"""stage3_block_threshold_percent = """+str(stage3_block_threshold_percent)+""";"""+"""max_metadata_over_provision_factor = """+str(max_metadata_over_provision_factor)+""";"""+"")
-    try:
-        ModifyClusterFullThresholdResult = ctx.element.modify_cluster_full_threshold(stage2_aware_threshold=stage2_aware_threshold, stage3_block_threshold_percent=stage3_block_threshold_percent, max_metadata_over_provision_factor=max_metadata_over_provision_factor)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(ModifyClusterFullThresholdResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('DisableSnmp', short_help="""DisableSnmp is used to disable SNMP on the cluster nodes. """)
-@pass_context
-def DisableSnmp(ctx):
-    """DisableSnmp is used to disable SNMP on the cluster nodes."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("")
-    try:
-        DisableSnmpResult = ctx.element.disable_snmp()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(DisableSnmpResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('DeleteAllSupportBundles', short_help="""DeleteAllSupportBundles is used to delete all support bundles generated with the CreateSupportBundle API method. """)
-@pass_context
-def DeleteAllSupportBundles(ctx):
-    """DeleteAllSupportBundles is used to delete all support bundles generated with the CreateSupportBundle API method."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("")
-    try:
+<<<<<<< HEAD
         DeleteAllSupportBundlesResult = ctx.element.delete_all_support_bundles()
+=======
+        DisableEncryptionAtRestResult = ctx.element.disable_encryption_at_rest()
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1109,6 +1719,7 @@ def DeleteAllSupportBundles(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
     cli_utils.print_result(DeleteAllSupportBundlesResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
@@ -1122,15 +1733,99 @@ def DeleteAllSupportBundles(ctx):
 def ClearFaults(ctx,
            fault_types = None):
     """ClearClusterFaults is used to clear information about both current faults that are resolved as well as faults that were previously detected and resolved can be cleared."""
+=======
+    cli_utils.print_result(DisableEncryptionAtRestResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('SetConfig', short_help="""The SetClusterConfig API method is used to set the configuration this node uses to communicate with the cluster it is associated with. To see the states in which these objects can be modified see Cluster Object on page 109. To display the current cluster interface settings for a node, run the GetClusterConfig API method.  Note: This method is available only through the per-node API endpoint 5.0 or later. """)
+@click.option('--cluster_config_cipi',
+              type=str,
+              required=False,
+              help="""Network interface used for cluster communication. """)
+@click.option('--cluster_config_cluster',
+              type=str,
+              required=False,
+              help="""Unique cluster name. """)
+@click.option('--cluster_config_ensemble',
+              type=str,
+              required=False,
+              help="""Nodes that are participating in the cluster. """)
+@click.option('--cluster_config_mipi',
+              type=str,
+              required=False,
+              help="""Network interface used for node management. """)
+@click.option('--cluster_config_name',
+              type=str,
+              required=False,
+              help="""Unique cluster name. """)
+@click.option('--cluster_config_node_id',
+              type=int,
+              required=False,
+              help="""""")
+@click.option('--cluster_config_pending_node_id',
+              type=int,
+              required=False,
+              help="""""")
+@click.option('--cluster_config_role',
+              type=str,
+              required=False,
+              help="""Identifies the role of the node """)
+@click.option('--cluster_config_sipi',
+              type=str,
+              required=False,
+              help="""Network interface used for storage. """)
+@click.option('--cluster_config_state',
+              type=str,
+              required=False,
+              help="""""")
+@pass_context
+def SetConfig(ctx,
+           cluster_config_cipi = None,
+           cluster_config_cluster = None,
+           cluster_config_ensemble = None,
+           cluster_config_mipi = None,
+           cluster_config_name = None,
+           cluster_config_node_id = None,
+           cluster_config_pending_node_id = None,
+           cluster_config_role = None,
+           cluster_config_sipi = None,
+           cluster_config_state = None):
+    """The SetClusterConfig API method is used to set the configuration this node uses to communicate with the cluster it is associated with. To see the states in which these objects can be modified see Cluster Object on page 109. To display the current cluster interface settings for a node, run the GetClusterConfig API method."""
+    """"""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
+<<<<<<< HEAD
     ctx.logger.info("""fault_types = """+str(fault_types)+""";"""+"")
     try:
         ClearClusterFaultsResult = ctx.element.clear_cluster_faults(fault_types=fault_types)
+=======
+    cluster = None
+    if(cluster is not None or False):
+        kwargsDict = dict()
+        kwargsDict["cipi"] = cluster_config_cipi
+        kwargsDict["cluster"] = cluster_config_cluster
+        kwargsDict["ensemble"] = cluster_config_ensemble
+        kwargsDict["mipi"] = cluster_config_mipi
+        kwargsDict["name"] = cluster_config_name
+        kwargsDict["node_id"] = cluster_config_node_id
+        kwargsDict["pending_node_id"] = cluster_config_pending_node_id
+        kwargsDict["role"] = cluster_config_role
+        kwargsDict["sipi"] = cluster_config_sipi
+        kwargsDict["state"] = cluster_config_state
+
+        cluster = ClusterConfig(**kwargsDict)
+
+    ctx.logger.info("""cluster = """+str(cluster)+""";"""+"")
+    try:
+        SetClusterConfigResult = ctx.element.set_cluster_config(cluster=cluster)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1138,6 +1833,7 @@ def ClearFaults(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
     cli_utils.print_result(ClearClusterFaultsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
@@ -1151,97 +1847,8 @@ def ClearFaults(ctx,
 def GetState(ctx,
            force):
     """The GetClusterState method is used to indicate if a node is part of a cluster or not. The three states are: Available: Node has not been configured with a cluster name.Pending: Node is pending for a specific named cluster and can be added.Active: Node is active and a member of a cluster and may not be added to another cluster."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("""force = """+str(force)+""";"""+"")
-    try:
-        GetClusterStateResult = ctx.element.get_cluster_state(force=force)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(GetClusterStateResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('ListAdmins', short_help="""ListClusterAdmins returns the list of all cluster administrators for the cluster. There can be several cluster administrators that have different levels of permissions. There can be only one primary cluster administrator in the system. The primary Cluster Admin is the administrator that was created when the cluster was created. LDAP administrators can also be created when setting up an LDAP system on the cluster. """)
-@pass_context
-def ListAdmins(ctx):
-    """ListClusterAdmins returns the list of all cluster administrators for the cluster. There can be several cluster administrators that have different levels of permissions. There can be only one primary cluster administrator in the system. The primary Cluster Admin is the administrator that was created when the cluster was created. LDAP administrators can also be created when setting up an LDAP system on the cluster."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("")
-    try:
-        ListClusterAdminsResult = ctx.element.list_cluster_admins()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(ListClusterAdminsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('GetCurrentAdmin', short_help="""GetCurrentClusterAdmin returns information for the current primary cluster administrator. The primary Cluster Admin was ncreated when the cluster was created. """)
-@pass_context
-def GetCurrentAdmin(ctx):
-    """GetCurrentClusterAdmin returns information for the current primary cluster administrator. The primary Cluster Admin was ncreated when the cluster was created."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("")
-    try:
-        GetCurrentClusterAdminResult = ctx.element.get_current_cluster_admin()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(GetCurrentClusterAdminResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('DisableEncryptionAtRest', short_help="""The DisableEncryptionAtRest method enables you to remove the encryption that was previously applied to the cluster using the EnableEncryptionAtRest method. This disable method is asynchronous and returns a response before encryption is disabled. You can use the GetClusterInfo method to poll the system to see when the process has completed. """)
-@pass_context
-def DisableEncryptionAtRest(ctx):
-    """The DisableEncryptionAtRest method enables you to remove the encryption that was previously applied to the cluster using the EnableEncryptionAtRest method."""
-    """This disable method is asynchronous and returns a response before encryption is disabled."""
-    """You can use the GetClusterInfo method to poll the system to see when the process has completed."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("")
-    try:
-        DisableEncryptionAtRestResult = ctx.element.disable_encryption_at_rest()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(DisableEncryptionAtRestResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+=======
+    cli_utils.print_result(SetClusterConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1250,6 +1857,99 @@ def DisableEncryptionAtRest(ctx):
 def GetCapacity(ctx):
     """Return the high-level capacity measurements for an entire cluster."""
     """The fields returned from this method can be used to calculate the efficiency rates that are displayed in the Element User Interface."""
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("""force = """+str(force)+""";"""+"")
+    try:
+<<<<<<< HEAD
+        GetClusterStateResult = ctx.element.get_cluster_state(force=force)
+=======
+        GetClusterCapacityResult = ctx.element.get_cluster_capacity()
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+<<<<<<< HEAD
+    cli_utils.print_result(GetClusterStateResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('ListAdmins', short_help="""ListClusterAdmins returns the list of all cluster administrators for the cluster. There can be several cluster administrators that have different levels of permissions. There can be only one primary cluster administrator in the system. The primary Cluster Admin is the administrator that was created when the cluster was created. LDAP administrators can also be created when setting up an LDAP system on the cluster. """)
+@pass_context
+def ListAdmins(ctx):
+    """ListClusterAdmins returns the list of all cluster administrators for the cluster. There can be several cluster administrators that have different levels of permissions. There can be only one primary cluster administrator in the system. The primary Cluster Admin is the administrator that was created when the cluster was created. LDAP administrators can also be created when setting up an LDAP system on the cluster."""
+=======
+    cli_utils.print_result(GetClusterCapacityResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('SetNtpInfo', short_help="""SetNtpInfo is used to configure the NTP on cluster nodes. The values set with this interface apply to all nodes in the cluster. The nodes can only be configured as a server where a host is selected to administrate the networking and/or a broadcast client where each host sends each message to each peer. """)
+@click.option('--servers',
+              type=str,
+              required=True,
+              help="""List of NTP servers to add to each node's NTP configuration. """)
+@click.option('--broadcastclient',
+              type=bool,
+              required=False,
+              help="""Enable every node in the cluster as a broadcase client. """)
+@pass_context
+def SetNtpInfo(ctx,
+           servers,
+           broadcastclient = None):
+    """SetNtpInfo is used to configure the NTP on cluster nodes. The values set with this interface apply to all nodes in the cluster. The nodes can only be configured as a server where a host is selected to administrate the networking and/or a broadcast client where each host sends each message to each peer."""
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+<<<<<<< HEAD
+    ctx.logger.info("")
+    try:
+        ListClusterAdminsResult = ctx.element.list_cluster_admins()
+=======
+    servers = parser.parse_array(servers)
+
+    ctx.logger.info("""servers = """+str(servers)+""";"""+"""broadcastclient = """+str(broadcastclient)+""";"""+"")
+    try:
+        SetNtpInfoResult = ctx.element.set_ntp_info(servers=servers, broadcastclient=broadcastclient)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+<<<<<<< HEAD
+    cli_utils.print_result(ListClusterAdminsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetCurrentAdmin', short_help="""GetCurrentClusterAdmin returns information for the current primary cluster administrator. The primary Cluster Admin was ncreated when the cluster was created. """)
+@pass_context
+def GetCurrentAdmin(ctx):
+    """GetCurrentClusterAdmin returns information for the current primary cluster administrator. The primary Cluster Admin was ncreated when the cluster was created."""
+=======
+    cli_utils.print_result(SetNtpInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetInfo', short_help="""Return configuration information about the cluster. """)
+@pass_context
+def GetInfo(ctx):
+    """Return configuration information about the cluster."""
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -1258,7 +1958,11 @@ def GetCapacity(ctx):
 
     ctx.logger.info("")
     try:
-        GetClusterCapacityResult = ctx.element.get_cluster_capacity()
+<<<<<<< HEAD
+        GetCurrentClusterAdminResult = ctx.element.get_current_cluster_admin()
+=======
+        GetClusterInfoResult = ctx.element.get_cluster_info()
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1266,6 +1970,73 @@ def GetCapacity(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
+    cli_utils.print_result(GetCurrentClusterAdminResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+=======
+    cli_utils.print_result(GetClusterInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
+
+
+
+@cli.command('GetSnmpState', short_help="""GetSnmpState is used to return the current state of the SNMP feature.  Note: GetSnmpState is new for Element OS 8. Please use this method and SetSnmpACL to migrate your SNMP functionality in the future. """)
+@pass_context
+def GetSnmpState(ctx):
+    """GetSnmpState is used to return the current state of the SNMP feature."""
+    """"""
+    """Note: GetSnmpState is new for Element OS 8. Please use this method and SetSnmpACL to migrate your SNMP functionality in the future."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("")
+    try:
+        GetSnmpStateResult = ctx.element.get_snmp_state()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(GetSnmpStateResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+<<<<<<< HEAD
+@cli.command('GetCapacity', short_help="""Return the high-level capacity measurements for an entire cluster. The fields returned from this method can be used to calculate the efficiency rates that are displayed in the Element User Interface. """)
+@pass_context
+def GetCapacity(ctx):
+    """Return the high-level capacity measurements for an entire cluster."""
+    """The fields returned from this method can be used to calculate the efficiency rates that are displayed in the Element User Interface."""
+=======
+@cli.command('GetFullThreshold', short_help="""GetClusterFullThreshold is used to view the stages set for cluster fullness levels. All levels are returned when this method is entered. """)
+@pass_context
+def GetFullThreshold(ctx):
+    """GetClusterFullThreshold is used to view the stages set for cluster fullness levels. All levels are returned when this method is entered."""
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("")
+    try:
+<<<<<<< HEAD
+        GetClusterCapacityResult = ctx.element.get_cluster_capacity()
+=======
+        GetClusterFullThresholdResult = ctx.element.get_cluster_full_threshold()
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+<<<<<<< HEAD
     cli_utils.print_result(GetClusterCapacityResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
@@ -1274,15 +2045,34 @@ def GetCapacity(ctx):
 @pass_context
 def GetStats(ctx):
     """GetClusterStats is used to return high-level activity measurements for the cluster. Values returned are cumulative from the creation of the cluster."""
+=======
+    cli_utils.print_result(GetClusterFullThresholdResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('RemoveAdmin', short_help="""RemoveClusterAdmin is used to remove a Cluster Admin. The "admin" Cluster Admin cannot be removed. """)
+@click.option('--cluster_admin_id',
+              type=int,
+              required=True,
+              help="""ClusterAdminID for the Cluster Admin to remove. """)
+@pass_context
+def RemoveAdmin(ctx,
+           cluster_admin_id):
+    """RemoveClusterAdmin is used to remove a Cluster Admin. The &quot;admin&quot; Cluster Admin cannot be removed."""
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
-    ctx.logger.info("")
+    ctx.logger.info("""cluster_admin_id = """+str(cluster_admin_id)+""";"""+"")
     try:
+<<<<<<< HEAD
         GetClusterStatsResult = ctx.element.get_cluster_stats()
+=======
+        RemoveClusterAdminResult = ctx.element.remove_cluster_admin(cluster_admin_id=cluster_admin_id)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1290,6 +2080,7 @@ def GetStats(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
     cli_utils.print_result(GetClusterStatsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
@@ -1298,15 +2089,49 @@ def GetStats(ctx):
 @pass_context
 def GetSnmpTrapInfo(ctx):
     """GetSnmpTrapInfo is used to return current SNMP trap configuration information."""
+=======
+    cli_utils.print_result(RemoveClusterAdminResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('ListEvents', short_help="""ListEvents returns events detected on the cluster, sorted from oldest to newest. """)
+@click.option('--max_events',
+              type=int,
+              required=False,
+              help="""Specifies the maximum number of events to return. """)
+@click.option('--start_event_id',
+              type=int,
+              required=False,
+              help="""Identifies the beginning of a range of events to return. """)
+@click.option('--end_event_id',
+              type=int,
+              required=False,
+              help="""Identifies the end of a range of events to return. """)
+@click.option('--event_queue_type',
+              type=str,
+              required=False,
+              help="""""")
+@pass_context
+def ListEvents(ctx,
+           max_events = None,
+           start_event_id = None,
+           end_event_id = None,
+           event_queue_type = None):
+    """ListEvents returns events detected on the cluster, sorted from oldest to newest."""
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
-    ctx.logger.info("")
+    ctx.logger.info("""max_events = """+str(max_events)+""";"""+"""start_event_id = """+str(start_event_id)+""";"""+"""end_event_id = """+str(end_event_id)+""";"""+"""event_queue_type = """+str(event_queue_type)+""";"""+"")
     try:
+<<<<<<< HEAD
         GetSnmpTrapInfoResult = ctx.element.get_snmp_trap_info()
+=======
+        ListEventsResult = ctx.element.list_events(max_events=max_events, start_event_id=start_event_id, end_event_id=end_event_id, event_queue_type=event_queue_type)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1314,6 +2139,7 @@ def GetSnmpTrapInfo(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
     cli_utils.print_result(GetSnmpTrapInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
@@ -1342,15 +2168,31 @@ def ListEvents(ctx,
            end_event_id = None,
            event_queue_type = None):
     """ListEvents returns events detected on the cluster, sorted from oldest to newest."""
+=======
+    cli_utils.print_result(ListEventsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('DisableSnmp', short_help="""DisableSnmp is used to disable SNMP on the cluster nodes. """)
+@pass_context
+def DisableSnmp(ctx):
+    """DisableSnmp is used to disable SNMP on the cluster nodes."""
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
+<<<<<<< HEAD
     ctx.logger.info("""max_events = """+str(max_events)+""";"""+"""start_event_id = """+str(start_event_id)+""";"""+"""end_event_id = """+str(end_event_id)+""";"""+"""event_queue_type = """+str(event_queue_type)+""";"""+"")
     try:
         ListEventsResult = ctx.element.list_events(max_events=max_events, start_event_id=start_event_id, end_event_id=end_event_id, event_queue_type=event_queue_type)
+=======
+    ctx.logger.info("")
+    try:
+        DisableSnmpResult = ctx.element.disable_snmp()
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1358,6 +2200,7 @@ def ListEvents(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
     cli_utils.print_result(ListEventsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
@@ -1365,6 +2208,16 @@ def ListEvents(ctx,
 @cli.command('GetSystemStatus', short_help="""""")
 @pass_context
 def GetSystemStatus(ctx):
+=======
+    cli_utils.print_result(DisableSnmpResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('ListSyncJobs', short_help="""ListSyncJobs is used to return information about synchronization jobs that are running on a SolidFire cluster. Synchronization jobs that are returned with this method are, "slice," "clone" and "remote." """)
+@pass_context
+def ListSyncJobs(ctx):
+    """ListSyncJobs is used to return information about synchronization jobs that are running on a SolidFire cluster. Synchronization jobs that are returned with this method are, &quot;slice,&quot; &quot;clone&quot; and &quot;remote.&quot;"""
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -1372,6 +2225,7 @@ def GetSystemStatus(ctx):
 
 
     ctx.logger.info("")
+<<<<<<< HEAD
     try:
         GetSystemStatusResult = ctx.element.get_system_status()
     except common.ApiServerError as e:
@@ -1403,6 +2257,10 @@ def RemoveAdmin(ctx,
     ctx.logger.info("""cluster_admin_id = """+str(cluster_admin_id)+""";"""+"")
     try:
         RemoveClusterAdminResult = ctx.element.remove_cluster_admin(cluster_admin_id=cluster_admin_id)
+=======
+    try:
+        ListSyncJobsResult = ctx.element.list_sync_jobs()
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1410,6 +2268,7 @@ def RemoveAdmin(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
     cli_utils.print_result(RemoveClusterAdminResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
@@ -1420,15 +2279,34 @@ def EnableEncryptionAtRest(ctx):
     """The EnableEncryptionAtRest method is used to enable the Advanced Encryption Standard (AES) 256-bit encryption at rest on the cluster so that the cluster can manage the encryption key used for the drives on each node. This feature is not enabled by default. Enabling this operation allows the cluster to automatically manage encryption keys internally for the drives on each node in the cluster. Nodes do not store the keys to unlock drives and the keys are never passed over the network. Two nodes participating in a cluster are required to access the key to disable encryption on a drive. The encryption management does not affect performance or efficiency on the cluster. If an encryption-enabled drive or node is removed from the cluster with the API, all data is secure erased and any data left on the drive cannot be read or accessed."""
     """Enabling or disabling encryption should be performed when the cluster is running and in a healthy state. Encryption can be enabled or disabled at your discretion and can be performed as often as you need."""
     """Note: This process is asynchronous and returns a response before encryption is enabled. The GetClusterInfo method can be used to poll the system to see when the process has completed."""
+=======
+    cli_utils.print_result(ListSyncJobsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetState', short_help="""The GetClusterState method is used to indicate if a node is part of a cluster or not. The three states are: Available: Node has not been configured with a cluster name.Pending: Node is pending for a specific named cluster and can be added.Active: Node is active and a member of a cluster and may not be added to another cluster. """)
+@click.option('--force',
+              type=bool,
+              required=True,
+              help="""To run this command, the force parameter must be set to true. """)
+@pass_context
+def GetState(ctx,
+           force):
+    """The GetClusterState method is used to indicate if a node is part of a cluster or not. The three states are: Available: Node has not been configured with a cluster name.Pending: Node is pending for a specific named cluster and can be added.Active: Node is active and a member of a cluster and may not be added to another cluster."""
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
-    ctx.logger.info("")
+    ctx.logger.info("""force = """+str(force)+""";"""+"")
     try:
+<<<<<<< HEAD
         EnableEncryptionAtRestResult = ctx.element.enable_encryption_at_rest()
+=======
+        GetClusterStateResult = ctx.element.get_cluster_state(force=force)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1436,5 +2314,9 @@ def EnableEncryptionAtRest(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
     cli_utils.print_result(EnableEncryptionAtRestResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+=======
+    cli_utils.print_result(GetClusterStateResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
 

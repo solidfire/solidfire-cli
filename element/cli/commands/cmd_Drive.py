@@ -23,6 +23,7 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
+<<<<<<< HEAD
     """Reset SecureErase List Remove GetHardwareInfo Add GetStats GetConfig Test ListHardware """
 
 @cli.command('Reset', short_help="""ResetDrives is used to pro-actively initialize drives and remove all data currently residing on the drive. The drive can then be reused in an existing node or used in an upgraded SolidFire node. This method requires the force=true parameter to be included in the method call.  Note: This method is available only through the per-node API endpoint 5.0 or later. """)
@@ -39,6 +40,21 @@ def Reset(ctx,
            drives,
            force):
     """ResetDrives is used to pro-actively initialize drives and remove all data currently residing on the drive. The drive can then be reused in an existing node or used in an upgraded SolidFire node. This method requires the force=true parameter to be included in the method call."""
+=======
+    """Test GetHardwareInfo SecureErase List GetConfig Add ListHardware Reset GetStats Remove """
+
+@cli.command('Test', short_help="""The TestDrives API method is used to run a hardware validation on all the drives on the node. Hardware failures on the drives are detected if present and they are reported in the results of the validation tests.  Note: This test takes approximately 10 minutes.  Note: This method is available only through the per-node API endpoint 5.0 or later. """)
+@click.option('--minutes',
+              type=int,
+              required=False,
+              help="""The number of minutes to run the test can be specified. """)
+@pass_context
+def Test(ctx,
+           minutes = None):
+    """The TestDrives API method is used to run a hardware validation on all the drives on the node. Hardware failures on the drives are detected if present and they are reported in the results of the validation tests."""
+    """"""
+    """Note: This test takes approximately 10 minutes."""
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     """"""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
@@ -47,9 +63,15 @@ def Reset(ctx,
 
 
 
+<<<<<<< HEAD
     ctx.logger.info("""drives = """+str(drives)+""";"""+"""force = """+str(force)+""";"""+"")
     try:
         ResetDrivesResult = ctx.element.reset_drives(drives=drives, force=force)
+=======
+    ctx.logger.info("""minutes = """+str(minutes)+""";"""+"")
+    try:
+        TestDrivesResult = ctx.element.test_drives(minutes=minutes)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -57,6 +79,7 @@ def Reset(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
     cli_utils.print_result(ResetDrivesResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
@@ -74,17 +97,38 @@ def SecureErase(ctx,
     """The GetAsyncResult method can be used to check on the status of the secure erase operation."""
     """"""
     """Use the &quot;ListDrives&quot; method to obtain the driveIDs for the drives you want to secure erase."""
+=======
+    cli_utils.print_result(TestDrivesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetHardwareInfo', short_help="""GetDriveHardwareInfo returns all the hardware info for the given drive. This generally includes manufacturers, vendors, versions, and other associated hardware identification information. """)
+@click.option('--drive_id',
+              type=int,
+              required=True,
+              help="""DriveID for the drive information requested. DriveIDs can be obtained via the "ListDrives" method. """)
+@pass_context
+def GetHardwareInfo(ctx,
+           drive_id):
+    """GetDriveHardwareInfo returns all the hardware info for the given drive. This generally includes manufacturers, vendors, versions, and other associated hardware identification information."""
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
+<<<<<<< HEAD
     drives = parser.parse_array(drives)
 
     ctx.logger.info("""drives = """+str(drives)+""";"""+"")
     try:
         AsyncHandleResult = ctx.element.secure_erase_drives(drives=drives)
+=======
+    ctx.logger.info("""drive_id = """+str(drive_id)+""";"""+"")
+    try:
+        GetDriveHardwareInfoResult = ctx.element.get_drive_hardware_info(drive_id=drive_id)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -92,6 +136,7 @@ def SecureErase(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
     cli_utils.print_result(AsyncHandleResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
@@ -143,6 +188,25 @@ def Remove(ctx,
     """The drive is unavailable for use in the cluster."""
     """"""
     """Use the &quot;ListDrives&quot; method to obtain the driveIDs for the drives you want to remove."""
+=======
+    cli_utils.print_result(GetDriveHardwareInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('SecureErase', short_help="""SecureEraseDrives is used to remove any residual data from drives that have a status of "available." For example, when replacing a drive at its end-of-life that contained sensitive data. It uses a Security Erase Unit command to write a predetermined pattern to the drive and resets the encryption key on the drive. The method may take up to two minutes to complete, so it is an asynchronous method. The GetAsyncResult method can be used to check on the status of the secure erase operation.  Use the "ListDrives" method to obtain the driveIDs for the drives you want to secure erase. """)
+@click.option('--drives',
+              type=str,
+              required=True,
+              help="""List of driveIDs to secure erase. """)
+@pass_context
+def SecureErase(ctx,
+           drives):
+    """SecureEraseDrives is used to remove any residual data from drives that have a status of &quot;available.&quot; For example, when replacing a drive at its end-of-life that contained sensitive data."""
+    """It uses a Security Erase Unit command to write a predetermined pattern to the drive and resets the encryption key on the drive. The method may take up to two minutes to complete, so it is an asynchronous method."""
+    """The GetAsyncResult method can be used to check on the status of the secure erase operation."""
+    """"""
+    """Use the &quot;ListDrives&quot; method to obtain the driveIDs for the drives you want to secure erase."""
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -153,7 +217,11 @@ def Remove(ctx,
 
     ctx.logger.info("""drives = """+str(drives)+""";"""+"")
     try:
+<<<<<<< HEAD
         AsyncHandleResult = ctx.element.remove_drives(drives=drives)
+=======
+        AsyncHandleResult = ctx.element.secure_erase_drives(drives=drives)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -161,6 +229,7 @@ def Remove(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
     cli_utils.print_result(AsyncHandleResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
@@ -174,15 +243,25 @@ def Remove(ctx,
 def GetHardwareInfo(ctx,
            drive_id):
     """GetDriveHardwareInfo returns all the hardware info for the given drive. This generally includes manufacturers, vendors, versions, and other associated hardware identification information."""
+=======
+    cli_utils.print_result(AsyncHandleResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('List', short_help="""ListDrives allows you to retrieve the list of the drives that exist in the cluster's active nodes. This method returns drives that have been added as volume metadata or block drives as well as drives that have not been added and are available. """)
+@pass_context
+def List(ctx):
+    """ListDrives allows you to retrieve the list of the drives that exist in the cluster&#x27;s active nodes."""
+    """This method returns drives that have been added as volume metadata or block drives as well as drives that have not been added and are available."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
-    ctx.logger.info("""drive_id = """+str(drive_id)+""";"""+"")
+    ctx.logger.info("")
     try:
-        GetDriveHardwareInfoResult = ctx.element.get_drive_hardware_info(drive_id=drive_id)
+        ListDrivesResult = ctx.element.list_drives()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -190,7 +269,44 @@ def GetHardwareInfo(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
+    cli_utils.print_result(ListDrivesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetConfig', short_help="""GetDriveConfig is used to display drive information for expected slice and block drive counts as well as the number of slices and block drives that are currently connected to the node.  Note: This method is available only through the per-node API endpoint 5.0 or later. """)
+@pass_context
+def GetConfig(ctx):
+    """GetDriveConfig is used to display drive information for expected slice and block drive counts as well as the number of slices and block drives that are currently connected to the node."""
+    """"""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+<<<<<<< HEAD
+    ctx.logger.info("""drive_id = """+str(drive_id)+""";"""+"")
+    try:
+        GetDriveHardwareInfoResult = ctx.element.get_drive_hardware_info(drive_id=drive_id)
+=======
+    ctx.logger.info("")
+    try:
+        GetDriveConfigResult = ctx.element.get_drive_config()
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+<<<<<<< HEAD
     cli_utils.print_result(GetDriveHardwareInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+=======
+    cli_utils.print_result(GetDriveConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
 
 
 
@@ -237,10 +353,11 @@ def Add(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(AddDrivesResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(AddDrivesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
+<<<<<<< HEAD
 @cli.command('GetStats', short_help="""GetDriveStats return high-level activity measurements for a single drive. Values are cumulative from the addition of the drive to the cluster. Some values are specific to Block Drives. Statistical data may not be returned for both block and metadata drives when running this method. For more information on which drive type returns which data, see Response Example (Block Drive) and Response Example (Volume Metadata Drive) in the SolidFire API guide. """)
 @click.option('--drive_id',
               type=int,
@@ -275,6 +392,51 @@ def GetStats(ctx,
 @pass_context
 def GetConfig(ctx):
     """GetDriveConfig is used to display drive information for expected slice and block drive counts as well as the number of slices and block drives that are currently connected to the node."""
+=======
+@cli.command('ListHardware', short_help="""ListDriveHardware returns all the drives connected to a node. Use this method on the cluster to return drive hardware information for all the drives on all nodes. """)
+@click.option('--force',
+              type=bool,
+              required=True,
+              help="""To run this command, the force parameter must be set to true. """)
+@pass_context
+def ListHardware(ctx,
+           force):
+    """ListDriveHardware returns all the drives connected to a node. Use this method on the cluster to return drive hardware information for all the drives on all nodes."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("""force = """+str(force)+""";"""+"")
+    try:
+        ListDriveHardwareResult = ctx.element.list_drive_hardware(force=force)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(ListDriveHardwareResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('Reset', short_help="""ResetDrives is used to pro-actively initialize drives and remove all data currently residing on the drive. The drive can then be reused in an existing node or used in an upgraded SolidFire node. This method requires the force=true parameter to be included in the method call.  Note: This method is available only through the per-node API endpoint 5.0 or later. """)
+@click.option('--drives',
+              type=str,
+              required=True,
+              help="""List of device names (not driveIDs) to reset. """)
+@click.option('--force',
+              type=bool,
+              required=True,
+              help="""The "force" parameter must be included on this method to successfully reset a drive. """)
+@pass_context
+def Reset(ctx,
+           drives,
+           force):
+    """ResetDrives is used to pro-actively initialize drives and remove all data currently residing on the drive. The drive can then be reused in an existing node or used in an upgraded SolidFire node. This method requires the force=true parameter to be included in the method call."""
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     """"""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
@@ -283,9 +445,13 @@ def GetConfig(ctx):
 
 
 
-    ctx.logger.info("")
+    ctx.logger.info("""drives = """+str(drives)+""";"""+"""force = """+str(force)+""";"""+"")
     try:
+<<<<<<< HEAD
         GetDriveConfigResult = ctx.element.get_drive_config()
+=======
+        ResetDrivesResult = ctx.element.reset_drives(drives=drives, force=force)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -293,6 +459,7 @@ def GetConfig(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
     cli_utils.print_result(GetDriveConfigResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
@@ -310,15 +477,37 @@ def Test(ctx,
     """Note: This test takes approximately 10 minutes."""
     """"""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
+=======
+    cli_utils.print_result(ResetDrivesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetStats', short_help="""GetDriveStats return high-level activity measurements for a single drive. Values are cumulative from the addition of the drive to the cluster. Some values are specific to Block Drives. Statistical data may not be returned for both block and metadata drives when running this method. For more information on which drive type returns which data, see Response Example (Block Drive) and Response Example (Volume Metadata Drive) in the SolidFire API guide. """)
+@click.option('--drive_id',
+              type=int,
+              required=True,
+              help="""Specifies the drive for which statistics are gathered. """)
+@pass_context
+def GetStats(ctx,
+           drive_id):
+    """GetDriveStats return high-level activity measurements for a single drive. Values are cumulative from the addition of the drive to the cluster. Some values are specific to Block Drives. Statistical data may not be returned for both block and metadata drives when running this method."""
+    """For more information on which drive type returns which data, see Response Example (Block Drive) and Response Example (Volume Metadata Drive) in the SolidFire API guide."""
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
+<<<<<<< HEAD
     ctx.logger.info("""minutes = """+str(minutes)+""";"""+"")
     try:
         TestDrivesResult = ctx.element.test_drives(minutes=minutes)
+=======
+    ctx.logger.info("""drive_id = """+str(drive_id)+""";"""+"")
+    try:
+        GetDriveStatsResult = ctx.element.get_drive_stats(drive_id=drive_id)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -326,7 +515,11 @@ def Test(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
     cli_utils.print_result(TestDrivesResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+=======
+    cli_utils.print_result(GetDriveStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
 
 
 
@@ -355,5 +548,9 @@ def ListHardware(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
     cli_utils.print_result(ListDriveHardwareResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+=======
+    cli_utils.print_result(AsyncHandleResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
 

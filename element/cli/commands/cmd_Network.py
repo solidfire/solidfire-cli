@@ -23,7 +23,11 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
+<<<<<<< HEAD
     """ListNodeFibreChannelPortInfo ListFibreChannelSessions ListFibreChannelPortInfo ListISCSISessions ListInterfaces """
+=======
+    """ListNodeFibreChannelPortInfo ListInterfaces ListFibreChannelSessions ListISCSISessions ListFibreChannelPortInfo """
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
 
 @cli.command('ListNodeFibreChannelPortInfo', short_help="""The ListNodeFibreChannelPortInfo is used to return information about the Fibre Channel ports. The API method is intended for use on individual nodes; userid and password is required for access to individual Fibre Channel nodes. """)
 @pass_context
@@ -45,7 +49,7 @@ def ListNodeFibreChannelPortInfo(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(ListNodeFibreChannelPortInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(ListNodeFibreChannelPortInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -69,6 +73,7 @@ def ListFibreChannelSessions(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
     cli_utils.print_result(ListFibreChannelSessionsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
@@ -77,6 +82,16 @@ def ListFibreChannelSessions(ctx):
 @pass_context
 def ListFibreChannelPortInfo(ctx):
     """The ListFibreChannelPortInfo is used to return information about the Fibre Channel ports. The API method is intended for use on individual nodes; userid and password is required for access to individual Fibre Channel nodes."""
+=======
+    cli_utils.print_result(ListNetworkInterfacesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('ListFibreChannelSessions', short_help="""The ListFibreChannelSessions is used to return information about the active Fibre Channel sessions on a cluster. """)
+@pass_context
+def ListFibreChannelSessions(ctx):
+    """The ListFibreChannelSessions is used to return information about the active Fibre Channel sessions on a cluster."""
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -85,7 +100,11 @@ def ListFibreChannelPortInfo(ctx):
 
     ctx.logger.info("")
     try:
+<<<<<<< HEAD
         ListFibreChannelPortInfoResult = ctx.element.list_fibre_channel_port_info()
+=======
+        ListFibreChannelSessionsResult = ctx.element.list_fibre_channel_sessions()
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -93,7 +112,11 @@ def ListFibreChannelPortInfo(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
     cli_utils.print_result(ListFibreChannelPortInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+=======
+    cli_utils.print_result(ListFibreChannelSessionsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
 
 
 
@@ -117,6 +140,7 @@ def ListISCSISessions(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
     cli_utils.print_result(ListISCSISessionsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
@@ -125,6 +149,16 @@ def ListISCSISessions(ctx):
 @pass_context
 def ListInterfaces(ctx):
     """The ListNetworkInterfaces API method is used to return information about each network interface on a node. The API method is intended for use on individual nodes. """
+=======
+    cli_utils.print_result(ListISCSISessionsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('ListFibreChannelPortInfo', short_help="""The ListFibreChannelPortInfo is used to return information about the Fibre Channel ports. The API method is intended for use on individual nodes; userid and password is required for access to individual Fibre Channel nodes. """)
+@pass_context
+def ListFibreChannelPortInfo(ctx):
+    """The ListFibreChannelPortInfo is used to return information about the Fibre Channel ports. The API method is intended for use on individual nodes; userid and password is required for access to individual Fibre Channel nodes."""
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -133,7 +167,11 @@ def ListInterfaces(ctx):
 
     ctx.logger.info("")
     try:
+<<<<<<< HEAD
         ListNetworkInterfacesResult = ctx.element.list_network_interfaces()
+=======
+        ListFibreChannelPortInfoResult = ctx.element.list_fibre_channel_port_info()
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -141,5 +179,9 @@ def ListInterfaces(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
     cli_utils.print_result(ListNetworkInterfacesResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+=======
+    cli_utils.print_result(ListFibreChannelPortInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
 

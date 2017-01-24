@@ -23,6 +23,7 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
+<<<<<<< HEAD
     """List GetEfficiency Modify Remove GetByName Add GetByID """
 
 @cli.command('List', short_help="""Returns the entire list of accounts, with optional paging support. """)
@@ -68,15 +69,32 @@ def List(ctx,
 def GetEfficiency(ctx,
            account_id):
     """GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity."""
+=======
+    """GetByName Modify List GetEfficiency GetByID Add Remove """
+
+@cli.command('GetByName', short_help="""Returns details about an account, given its Username. """)
+@click.option('--username',
+              type=str,
+              required=True,
+              help="""Username for the account. """)
+@pass_context
+def GetByName(ctx,
+           username):
+    """Returns details about an account, given its Username."""
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
-    ctx.logger.info("""account_id = """+str(account_id)+""";"""+"")
+    ctx.logger.info("""username = """+str(username)+""";"""+"")
     try:
+<<<<<<< HEAD
         GetEfficiencyResult = ctx.element.get_account_efficiency(account_id=account_id)
+=======
+        GetAccountResult = ctx.element.get_account_by_name(username=username)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -84,7 +102,11 @@ def GetEfficiency(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
     cli_utils.print_result(GetEfficiencyResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+=======
+    cli_utils.print_result(GetAccountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
 
 
 
@@ -144,7 +166,11 @@ def Modify(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
     cli_utils.print_result(ModifyAccountResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+=======
+    cli_utils.print_result(ModifyAccountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
 
 
 
@@ -175,7 +201,11 @@ def Remove(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
     cli_utils.print_result(RemoveAccountResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+=======
+    cli_utils.print_result(ListAccountsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
 
 
 
@@ -204,10 +234,46 @@ def GetByName(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
     cli_utils.print_result(GetAccountResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
+=======
+    cli_utils.print_result(GetEfficiencyResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('GetByID', short_help="""Returns details about an account, given its AccountID. """)
+@click.option('--account_id',
+              type=int,
+              required=True,
+              help="""Specifies the account for which details are gathered. """)
+@pass_context
+def GetByID(ctx,
+           account_id):
+    """Returns details about an account, given its AccountID."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("""account_id = """+str(account_id)+""";"""+"")
+    try:
+        GetAccountResult = ctx.element.get_account_by_id(account_id=account_id)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(GetAccountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
 @cli.command('Add', short_help="""Used to add a new account to the system. New volumes can be created under the new account. The CHAP settings specified for the account applies to all volumes owned by the account. """)
 @click.option('--username',
               type=str,
@@ -253,7 +319,11 @@ def Add(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
     cli_utils.print_result(AddAccountResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+=======
+    cli_utils.print_result(AddAccountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
 
 
 
@@ -282,5 +352,9 @@ def GetByID(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
     cli_utils.print_result(GetAccountResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+=======
+    cli_utils.print_result(RemoveAccountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+>>>>>>> Adds non-pickle json functionality so that set-networkconfig can use get-networkconfig's output.
 
