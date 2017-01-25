@@ -42,7 +42,7 @@ def GetIpmiInfo(ctx,
 
     ctx.logger.info("""force = """+str(force)+""";"""+"")
     try:
-        _GetIpmiInfoResult = ctx.element.get_ipmi_info(force=force)
+        GetIpmiInfoResult = ctx.element.get_ipmi_info(force=force)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -50,7 +50,7 @@ def GetIpmiInfo(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_GetIpmiInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(GetIpmiInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -76,7 +76,7 @@ def GetIpmiConfig(ctx,
 
     ctx.logger.info("""chassis_type = """+str(chassis_type)+""";"""+"""force = """+str(force)+""";"""+"")
     try:
-        _GetIpmiConfigResult = ctx.element.get_ipmi_config(force=force, chassis_type=chassis_type)
+        GetIpmiConfigResult = ctx.element.get_ipmi_config(force=force, chassis_type=chassis_type)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -84,5 +84,5 @@ def GetIpmiConfig(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_GetIpmiConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(GetIpmiConfigResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

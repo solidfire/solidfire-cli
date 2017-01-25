@@ -15,7 +15,7 @@ else:
 
 setup(
     name='solidfire-cli',
-    version='0.0.1',
+    version='0.0.1.30',
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
     author='SolidFire, Inc.',
@@ -23,24 +23,19 @@ setup(
     packages=find_packages(exclude=["element.tests"]),
     license='MIT',
     zip_safe=False,
-    url='https://github.com/solidfire/Python-CLI.git',
+    url='https://github.com/solidfire/Python-CLI/tree/release0.0',
     entry_points={
         'console_scripts': [
             'sfcli=element.cli.cli:cli',
         ],
     },
     install_requires=[
-        'six >= 1.7.0',
-		'solidfire',
-        'prettytable >= 0.7.0',
         'click >= 5',
-        'requests >= 2.7.0',
-        'prompt_toolkit',
 		'future',
 		'setuptools',
         'simplejson',
         'jsonpickle >= 0.9.3',
-		'solidfire-sdk-python'
+		'solidfire-sdk-python >= 1.2'
     ],
     tests_require=[
         'mock',

@@ -23,46 +23,7 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """Services Networking ResetNode Shutdown """
-
-@cli.command('Services', short_help="""The RestartServices API method is used to restart the  Element services on a node.Caution: This method causes temporary node services interruption. Exercise caution when using this method. """)
-@click.option('--force',
-              type=bool,
-              required=True,
-              help="""The "force" parameter must be included on this method to successfully restart services on a node.    """)
-@click.option('--service',
-              type=str,
-              required=False,
-              help="""Service name to be restarted. """)
-@click.option('--action',
-              type=str,
-              required=False,
-              help="""Action to perform on the service (start, stop, restart). """)
-@pass_context
-def Services(ctx,
-           force,
-           service = None,
-           action = None):
-    """The RestartServices API method is used to restart the  Element services on a node.Caution: This method causes temporary node services interruption. Exercise caution when using this method."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("""force = """+str(force)+""";"""+"""service = """+str(service)+""";"""+"""action = """+str(action)+""";"""+"")
-    try:
-        dict = ctx.element.restart_services(force=force, service=service, action=action)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(dict, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
+    """Networking ResetNode Services Shutdown """
 
 @cli.command('Networking', short_help="""The RestartNetworking API method is used to restart the networking services on a node.WARNING! This method restarts all networking services on a node, causing temporary loss of networking connectivity. Exercise caution when using this method. """)
 @click.option('--force',
@@ -81,7 +42,7 @@ def Networking(ctx,
 
     ctx.logger.info("""force = """+str(force)+""";"""+"")
     try:
-        dict = ctx.element.restart_networking(force=force)
+        _dict = ctx.element.restart_networking(force=force)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -89,7 +50,7 @@ def Networking(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(dict, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_dict, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -120,7 +81,7 @@ def ResetNode(ctx,
 
     ctx.logger.info("""build = """+str(build)+""";"""+"""force = """+str(force)+""";"""+"""option = """+str(option)+""";"""+"")
     try:
-        ResetNodeResult = ctx.element.reset_node(build=build, force=force, option=option)
+        _ResetNodeResult = ctx.element.reset_node(build=build, force=force, option=option)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -128,7 +89,46 @@ def ResetNode(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(ResetNodeResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_ResetNodeResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('Services', short_help="""The RestartServices API method is used to restart the  Element services on a node.Caution: This method causes temporary node services interruption. Exercise caution when using this method. """)
+@click.option('--force',
+              type=bool,
+              required=True,
+              help="""The "force" parameter must be included on this method to successfully restart services on a node.    """)
+@click.option('--service',
+              type=str,
+              required=False,
+              help="""Service name to be restarted. """)
+@click.option('--action',
+              type=str,
+              required=False,
+              help="""Action to perform on the service (start, stop, restart). """)
+@pass_context
+def Services(ctx,
+           force,
+           service = None,
+           action = None):
+    """The RestartServices API method is used to restart the  Element services on a node.Caution: This method causes temporary node services interruption. Exercise caution when using this method."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("""force = """+str(force)+""";"""+"""service = """+str(service)+""";"""+"""action = """+str(action)+""";"""+"")
+    try:
+        _dict = ctx.element.restart_services(force=force, service=service, action=action)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_dict, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -156,7 +156,7 @@ def Shutdown(ctx,
 
     ctx.logger.info("""nodes = """+str(nodes)+""";"""+"""option = """+str(option)+""";"""+"")
     try:
-        ShutdownResult = ctx.element.shutdown(nodes=nodes, option=option)
+        _ShutdownResult = ctx.element.shutdown(nodes=nodes, option=option)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -164,5 +164,5 @@ def Shutdown(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(ShutdownResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_ShutdownResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

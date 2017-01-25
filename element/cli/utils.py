@@ -1,17 +1,6 @@
-import prettytable
 from element.exceptions import *
 import jsonpickle
 import json as serializer
-
-import six
-
-
-def print_dict(d, property="Property"):
-    pt = prettytable.PrettyTable([property, 'Value'], caching=False)
-    pt.aligns = ['l', 'l']
-    [pt.add_row(list(r)) for r in six.iteritems(d)]
-    print(pt.get_string(sortby=property))
-
 
 def kv_string_to_dict(kv_string):
     new_dict = {}
@@ -20,7 +9,7 @@ def kv_string_to_dict(kv_string):
         kvs = item.split('=')
         new_dict[kvs[0]] = kvs[1]
 
-def print_result(objs, log, as_json=False, depth=None, filter_tree=None):
+def print_result(objs, log, as_json=False, as_pickle=False, depth=None, filter_tree=None):
     # There are 3 acceptable parameter sets to provide:
     # 1. json=True, depth=None, filter_tree=None
     # 2. json=False, depth=#, filter_tree=None
@@ -32,8 +21,8 @@ def print_result(objs, log, as_json=False, depth=None, filter_tree=None):
         exit()
 
     # If json is true, we print it as json and return:
-    if as_json == True:
-        print_result_as_json(objs)
+    if as_json == True or as_pickle == True:
+        print_result_as_json(objs, as_pickle)
         return
 
     # If we have a filter, apply it.
@@ -49,9 +38,33 @@ def print_result(objs, log, as_json=False, depth=None, filter_tree=None):
     # Next, print the tree to the appropriate depth
     print_result_as_tree(objs_to_print, depth)
 
-def print_result_as_json(objs):
+def print_result_as_json(objs, pickle=False):
     #print(jsonpickle.encode(objs))
-    print(serializer.dumps(serializer.loads(jsonpickle.encode(objs)),indent=4))
+    nestedDict = serializer.loads(jsonpickle.encode(objs))
+    filteredDict = dict()
+    if(pickle==False):
+        remove_pickling(nestedDict, filteredDict)
+    else:
+        filteredDict = nestedDict
+    print(serializer.dumps(filteredDict,indent=4))
+
+def remove_pickling(nestedDict, filteredDict):
+    if type(nestedDict) is dict:
+        #foreach key, if list, recurse, if dict, recurse, if string recurse unless py/obj is key.
+        for key in nestedDict:
+            if key == "py/object":
+                continue
+            else:
+                filteredDict[key] = type(nestedDict[key])()
+                filteredDict[key] = remove_pickling(nestedDict[key], filteredDict[key])
+        return filteredDict
+    if type(nestedDict) is list:
+        # foreach item
+        for i in range(len(nestedDict)):
+            filteredDict.append(type(nestedDict[i])())
+            filteredDict[i] = remove_pickling(nestedDict[i], filteredDict[i])
+        return filteredDict
+    return nestedDict
 
 def get_result_as_tree(objs, depth=1, currentDepth=0, lastKey = ""):
     stringToReturn = ""

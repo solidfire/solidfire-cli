@@ -32,6 +32,7 @@ class Context(object):
         self.element = None
         self.depth = None
         self.json = None
+        self.pickle = None
         self.filter_tree = None
         self.table = None
 
@@ -69,7 +70,9 @@ class SolidFireCLI(click.MultiCommand):
             import_string = (
                 "element.cli.commands.cmd_%s" % (name))
             mod = __import__(import_string, None, None, ['cli'])
-        except ImportError:
+        except ImportError as e:
+            print(import_string+" failed.")
+            print(e.__str__())
             return
         return mod.cli
 
@@ -105,6 +108,10 @@ class SolidFireCLI(click.MultiCommand):
               is_flag=True,
               required=False,
               help="To print the full output in json format, use this flag")
+@click.option('--pickle', '-p',
+              is_flag=True,
+              required=False,
+              help="To print the full output in a pickled json format, use this flag.")
 @click.option('--depth', '-d',
               type=int,
               required=False,
@@ -128,6 +135,7 @@ def cli(ctx,
         connectionindex=None,
         connectionname=None,
         json=None,
+        pickle=None,
         depth=None,
         filter_tree=None,
         debug=0,
@@ -192,6 +200,7 @@ def cli(ctx,
         ctx.sfapi_endpoint_version = 7
         ctx.cfg = cfg
         ctx.json = json
+        ctx.pickle = pickle
         ctx.depth = depth
         ctx.filter_tree = filter_tree
 

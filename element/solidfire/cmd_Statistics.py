@@ -38,7 +38,7 @@ def GetCompleteStats(ctx):
 
     ctx.logger.info("")
     try:
-        _str = ctx.element.get_complete_stats()
+        str = ctx.element.get_complete_stats()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -46,7 +46,7 @@ def GetCompleteStats(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_str, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(str, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -62,7 +62,7 @@ def GetHardwareInfo(ctx):
 
     ctx.logger.info("")
     try:
-        _GetHardwareInfoResult = ctx.element.get_hardware_info()
+        GetHardwareInfoResult = ctx.element.get_hardware_info()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -70,7 +70,7 @@ def GetHardwareInfo(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_GetHardwareInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(GetHardwareInfoResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -87,7 +87,7 @@ def GetRawStats(ctx):
 
     ctx.logger.info("")
     try:
-        _str = ctx.element.get_raw_stats()
+        str = ctx.element.get_raw_stats()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -95,7 +95,7 @@ def GetRawStats(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_str, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(str, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -118,7 +118,7 @@ def ListVolumeStatsByVirtualVolume(ctx,
 
     ctx.logger.info("""virtual_volume_ids = """+str(virtual_volume_ids)+""";"""+"")
     try:
-        _ListVolumeStatsByVirtualVolumeResult = ctx.element.list_volume_stats_by_virtual_volume(virtual_volume_ids=virtual_volume_ids)
+        ListVolumeStatsByVirtualVolumeResult = ctx.element.list_volume_stats_by_virtual_volume(virtual_volume_ids=virtual_volume_ids)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -126,7 +126,7 @@ def ListVolumeStatsByVirtualVolume(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_ListVolumeStatsByVirtualVolumeResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(ListVolumeStatsByVirtualVolumeResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -148,7 +148,7 @@ def ListVolumeStats(ctx,
 
     ctx.logger.info("""volume_ids = """+str(volume_ids)+""";"""+"")
     try:
-        _ListVolumeStatsResult = ctx.element.list_volume_stats(volume_ids=volume_ids)
+        ListVolumeStatsResult = ctx.element.list_volume_stats(volume_ids=volume_ids)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -156,7 +156,7 @@ def ListVolumeStats(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_ListVolumeStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(ListVolumeStatsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -179,7 +179,7 @@ def ListDriveStats(ctx,
 
     ctx.logger.info("""drives = """+str(drives)+""";"""+"")
     try:
-        _ListDriveStatsResult = ctx.element.list_drive_stats(drives=drives)
+        ListDriveStatsResult = ctx.element.list_drive_stats(drives=drives)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -187,5 +187,5 @@ def ListDriveStats(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_ListDriveStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(ListDriveStatsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

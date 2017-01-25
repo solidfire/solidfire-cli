@@ -46,7 +46,7 @@ def List(ctx,
 
     ctx.logger.info("""protocol_endpoint_ids = """+str(protocol_endpoint_ids)+""";"""+"")
     try:
-        _ListProtocolEndpointsResult = ctx.element.list_protocol_endpoints(protocol_endpoint_ids=protocol_endpoint_ids)
+        ListProtocolEndpointsResult = ctx.element.list_protocol_endpoints(protocol_endpoint_ids=protocol_endpoint_ids)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -54,5 +54,5 @@ def List(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_ListProtocolEndpointsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(ListProtocolEndpointsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
