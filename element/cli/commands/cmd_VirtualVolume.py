@@ -15,6 +15,7 @@ from element import utils
 import jsonpickle
 import simplejson
 from solidfire.models import *
+from solidfire.custom.models import *
 from uuid import UUID
 from element import exceptions
 from solidfire import common
@@ -23,7 +24,93 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """EnableFeature GetFeatureStatus ListTasks GetCount List ListHosts ListBindings """
+    """GetCount ListTasks ListHosts EnableFeature GetFeatureStatus List ListBindings """
+
+@cli.command('GetCount', short_help="""Enables retrieval of the number of virtual volumes currently in the system. """)
+@pass_context
+def GetCount(ctx):
+    """Enables retrieval of the number of virtual volumes currently in the system."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("")
+    try:
+        _GetVirtualVolumeCountResult = ctx.element.get_virtual_volume_count()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_GetVirtualVolumeCountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('ListTasks', short_help="""ListVirtualVolumeTasks returns a list of VVol Async Tasks. """)
+@click.option('--virtual_volume_task_ids',
+              type=str,
+              required=False,
+              help="""""")
+@pass_context
+def ListTasks(ctx,
+           virtual_volume_task_ids = None):
+    """ListVirtualVolumeTasks returns a list of VVol Async Tasks."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    virtual_volume_task_ids = parser.parse_array(virtual_volume_task_ids)
+
+    ctx.logger.info("""virtual_volume_task_ids = """+str(virtual_volume_task_ids)+""";"""+"")
+    try:
+        _ListVirtualVolumeTasksResult = ctx.element.list_virtual_volume_tasks(virtual_volume_task_ids=virtual_volume_task_ids)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_ListVirtualVolumeTasksResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('ListHosts', short_help="""ListVirtualVolumeHosts returns a list of known ESX hosts. """)
+@click.option('--virtual_volume_host_ids',
+              type=str,
+              required=False,
+              help="""""")
+@pass_context
+def ListHosts(ctx,
+           virtual_volume_host_ids = None):
+    """ListVirtualVolumeHosts returns a list of known ESX hosts."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    virtual_volume_host_ids = parser.parse_array(virtual_volume_host_ids)
+
+    ctx.logger.info("""virtual_volume_host_ids = """+str(virtual_volume_host_ids)+""";"""+"")
+    try:
+        _ListVirtualVolumeHostsResult = ctx.element.list_virtual_volume_hosts(virtual_volume_host_ids=virtual_volume_host_ids)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_ListVirtualVolumeHostsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
 
 @cli.command('EnableFeature', short_help="""EnableFeature allows you to enable cluster features that are disabled by default. """)
 @click.option('--feature',
@@ -83,61 +170,6 @@ def GetFeatureStatus(ctx,
 
 
 
-@cli.command('ListTasks', short_help="""ListVirtualVolumeTasks returns a list of VVol Async Tasks. """)
-@click.option('--virtual_volume_task_ids',
-              type=str,
-              required=False,
-              help="""""")
-@pass_context
-def ListTasks(ctx,
-           virtual_volume_task_ids = None):
-    """ListVirtualVolumeTasks returns a list of VVol Async Tasks."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    virtual_volume_task_ids = parser.parse_array(virtual_volume_task_ids)
-
-    ctx.logger.info("""virtual_volume_task_ids = """+str(virtual_volume_task_ids)+""";"""+"")
-    try:
-        _ListVirtualVolumeTasksResult = ctx.element.list_virtual_volume_tasks(virtual_volume_task_ids=virtual_volume_task_ids)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_ListVirtualVolumeTasksResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('GetCount', short_help="""Enables retrieval of the number of virtual volumes currently in the system. """)
-@pass_context
-def GetCount(ctx):
-    """Enables retrieval of the number of virtual volumes currently in the system."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("")
-    try:
-        _GetVirtualVolumeCountResult = ctx.element.get_virtual_volume_count()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_GetVirtualVolumeCountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
 @cli.command('List', short_help="""ListVirtualVolumes enables you to list the virtual volumes currently in the system. You can use this method to list all virtual volumes, or only list a subset. """)
 @click.option('--details',
               type=bool,
@@ -186,37 +218,6 @@ def List(ctx,
         exit()
 
     cli_utils.print_result(_ListVirtualVolumesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('ListHosts', short_help="""ListVirtualVolumeHosts returns a list of known ESX hosts. """)
-@click.option('--virtual_volume_host_ids',
-              type=str,
-              required=False,
-              help="""""")
-@pass_context
-def ListHosts(ctx,
-           virtual_volume_host_ids = None):
-    """ListVirtualVolumeHosts returns a list of known ESX hosts."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    virtual_volume_host_ids = parser.parse_array(virtual_volume_host_ids)
-
-    ctx.logger.info("""virtual_volume_host_ids = """+str(virtual_volume_host_ids)+""";"""+"")
-    try:
-        _ListVirtualVolumeHostsResult = ctx.element.list_virtual_volume_hosts(virtual_volume_host_ids=virtual_volume_host_ids)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_ListVirtualVolumeHostsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 

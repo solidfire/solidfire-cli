@@ -15,6 +15,7 @@ from element import utils
 import jsonpickle
 import simplejson
 from solidfire.models import *
+from solidfire.custom.models import *
 from uuid import UUID
 from element import exceptions
 from solidfire import common
@@ -23,7 +24,31 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """GetNvramInfo GetClusterInfo GetConfig GetNodeInfo """
+    """GetConfig GetNvramInfo GetClusterInfo GetNodeInfo """
+
+@cli.command('GetConfig', short_help="""GetHardwareConfig enables you to display the hardware configuration information for a node. NOTE: This method is available only through the per-node API endpoint 5.0 or later. """)
+@pass_context
+def GetConfig(ctx):
+    """GetHardwareConfig enables you to display the hardware configuration information for a node. NOTE: This method is available only through the per-node API endpoint 5.0 or later."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("")
+    try:
+        _GetHardwareConfigResult = ctx.element.get_hardware_config()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_GetHardwareConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
 
 @cli.command('GetNvramInfo', short_help="""GetNvramInfo allows you to retrieve information from each node about the NVRAM card.   """)
 @pass_context
@@ -75,30 +100,6 @@ def GetClusterInfo(ctx,
         exit()
 
     cli_utils.print_result(_GetClusterHardwareInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('GetConfig', short_help="""GetHardwareConfig enables you to display the hardware configuration information for a node. NOTE: This method is available only through the per-node API endpoint 5.0 or later. """)
-@pass_context
-def GetConfig(ctx):
-    """GetHardwareConfig enables you to display the hardware configuration information for a node. NOTE: This method is available only through the per-node API endpoint 5.0 or later."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("")
-    try:
-        _GetHardwareConfigResult = ctx.element.get_hardware_config()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_GetHardwareConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 

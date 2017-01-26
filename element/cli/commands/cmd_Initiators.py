@@ -15,6 +15,7 @@ from element import utils
 import jsonpickle
 import simplejson
 from solidfire.models import *
+from solidfire.custom.models import *
 from uuid import UUID
 from element import exceptions
 from solidfire import common
@@ -23,48 +24,7 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """List Delete Modify Create """
-
-@cli.command('List', short_help="""ListInitiators enables you to list initiator IQNs or World Wide Port Names (WWPNs). """)
-@click.option('--start_initiator_id',
-              type=int,
-              required=False,
-              help="""The initiator ID at which to begin the listing. You can supply this parameter or the "initiators" parameter, but not both. """)
-@click.option('--limit',
-              type=int,
-              required=False,
-              help="""The maximum number of initiator objects to return. """)
-@click.option('--initiators',
-              type=str,
-              required=False,
-              help="""A list of initiator IDs to retrieve. You can supply this parameter or the "startInitiatorID" parameter, but not both. """)
-@pass_context
-def List(ctx,
-           start_initiator_id = None,
-           limit = None,
-           initiators = None):
-    """ListInitiators enables you to list initiator IQNs or World Wide Port Names (WWPNs)."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    initiators = parser.parse_array(initiators)
-
-    ctx.logger.info("""start_initiator_id = """+str(start_initiator_id)+""";"""+"""limit = """+str(limit)+""";"""+"""initiators = """+str(initiators)+""";"""+"")
-    try:
-        _ListInitiatorsResult = ctx.element.list_initiators(start_initiator_id=start_initiator_id, limit=limit, initiators=initiators)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_ListInitiatorsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
+    """Delete Create Modify List """
 
 @cli.command('Delete', short_help="""DeleteInitiators enables you to delete one or more initiators from the system (and from any associated volumes or volume access groups). If DeleteInitiators fails to delete one of the initiators provided in the parameter, the system returns an error and does not delete any initiators (no partial completion is possible). """)
 @click.option('--initiators',
@@ -95,6 +55,63 @@ def Delete(ctx,
         exit()
 
     cli_utils.print_result(_DeleteInitiatorsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('Create', short_help="""CreateInitiators enables you to create multiple new initiator IQNs or World Wide Port Names (WWPNs) and optionally assign them aliases and attributes. When you use CreateInitiators to create new initiators, you can also add them to volume access groups. If CreateInitiators fails to create one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible). """)
+@click.option('--create_initiator_name',
+              type=str,
+              required=True,
+              help="""(Required) The name of the initiator (IQN or WWPN) to create. (String) """)
+@click.option('--create_initiator_alias',
+              type=str,
+              required=False,
+              help="""(Optional) The friendly name to assign to this initiator. (String) """)
+@click.option('--create_initiator_volume_access_group_id',
+              type=int,
+              required=False,
+              help="""(Optional) The ID of the volume access group into to which this newly created initiator will be added. (Integer) """)
+@click.option('--create_initiator_attributes',
+              type=dict,
+              required=False,
+              help="""(Optional) A set of JSON attributes assigned to this initiator. (JSON Object) """)
+@pass_context
+def Create(ctx,
+           create_initiator_name,
+           create_initiator_alias = None,
+           create_initiator_volume_access_group_id = None,
+           create_initiator_attributes = None):
+    """CreateInitiators enables you to create multiple new initiator IQNs or World Wide Port Names (WWPNs) and optionally assign them aliases and attributes. When you use CreateInitiators to create new initiators, you can also add them to volume access groups."""
+    """If CreateInitiators fails to create one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible)."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    initiators = None
+    if(initiators is not None or False):
+        kwargsDict = dict()
+        kwargsDict["name"] = create_initiator_name
+        kwargsDict["alias"] = create_initiator_alias
+        kwargsDict["volume_access_group_id"] = create_initiator_volume_access_group_id
+        kwargsDict["attributes"] = create_initiator_attributes
+
+        initiators = CreateInitiator(**kwargsDict)
+
+    initiators = parser.parse_array(initiators)
+
+    ctx.logger.info("""initiators = """+str(initiators)+""";"""+"")
+    try:
+        _CreateInitiatorsResult = ctx.element.create_initiators(initiators=initiators)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_CreateInitiatorsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -155,52 +172,36 @@ def Modify(ctx,
 
 
 
-@cli.command('Create', short_help="""CreateInitiators enables you to create multiple new initiator IQNs or World Wide Port Names (WWPNs) and optionally assign them aliases and attributes. When you use CreateInitiators to create new initiators, you can also add them to volume access groups. If CreateInitiators fails to create one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible). """)
-@click.option('--create_initiator_name',
-              type=str,
-              required=True,
-              help="""(Required) The name of the initiator (IQN or WWPN) to create. (String) """)
-@click.option('--create_initiator_alias',
-              type=str,
-              required=False,
-              help="""(Optional) The friendly name to assign to this initiator. (String) """)
-@click.option('--create_initiator_volume_access_group_id',
+@cli.command('List', short_help="""ListInitiators enables you to list initiator IQNs or World Wide Port Names (WWPNs). """)
+@click.option('--start_initiator_id',
               type=int,
               required=False,
-              help="""(Optional) The ID of the volume access group into to which this newly created initiator will be added. (Integer) """)
-@click.option('--create_initiator_attributes',
-              type=dict,
+              help="""The initiator ID at which to begin the listing. You can supply this parameter or the "initiators" parameter, but not both. """)
+@click.option('--limit',
+              type=int,
               required=False,
-              help="""(Optional) A set of JSON attributes assigned to this initiator. (JSON Object) """)
+              help="""The maximum number of initiator objects to return. """)
+@click.option('--initiators',
+              type=str,
+              required=False,
+              help="""A list of initiator IDs to retrieve. You can supply this parameter or the "startInitiatorID" parameter, but not both. """)
 @pass_context
-def Create(ctx,
-           create_initiator_name,
-           create_initiator_alias = None,
-           create_initiator_volume_access_group_id = None,
-           create_initiator_attributes = None):
-    """CreateInitiators enables you to create multiple new initiator IQNs or World Wide Port Names (WWPNs) and optionally assign them aliases and attributes. When you use CreateInitiators to create new initiators, you can also add them to volume access groups."""
-    """If CreateInitiators fails to create one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible)."""
+def List(ctx,
+           start_initiator_id = None,
+           limit = None,
+           initiators = None):
+    """ListInitiators enables you to list initiator IQNs or World Wide Port Names (WWPNs)."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
-    initiators = None
-    if(initiators is not None or False):
-        kwargsDict = dict()
-        kwargsDict["name"] = create_initiator_name
-        kwargsDict["alias"] = create_initiator_alias
-        kwargsDict["volume_access_group_id"] = create_initiator_volume_access_group_id
-        kwargsDict["attributes"] = create_initiator_attributes
-
-        initiators = CreateInitiator(**kwargsDict)
-
     initiators = parser.parse_array(initiators)
 
-    ctx.logger.info("""initiators = """+str(initiators)+""";"""+"")
+    ctx.logger.info("""start_initiator_id = """+str(start_initiator_id)+""";"""+"""limit = """+str(limit)+""";"""+"""initiators = """+str(initiators)+""";"""+"")
     try:
-        _CreateInitiatorsResult = ctx.element.create_initiators(initiators=initiators)
+        _ListInitiatorsResult = ctx.element.list_initiators(start_initiator_id=start_initiator_id, limit=limit, initiators=initiators)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -208,5 +209,5 @@ def Create(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_CreateInitiatorsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_ListInitiatorsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

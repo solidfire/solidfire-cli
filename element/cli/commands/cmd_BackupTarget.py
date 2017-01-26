@@ -15,6 +15,7 @@ from element import utils
 import jsonpickle
 import simplejson
 from solidfire.models import *
+from solidfire.custom.models import *
 from uuid import UUID
 from element import exceptions
 from solidfire import common
@@ -23,21 +24,34 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """List Remove Get Modify Create """
+    """Create Remove List Get Modify """
 
-@cli.command('List', short_help="""You can use ListBackupTargets to retrieve information about all backup targets that have been created. """)
+@cli.command('Create', short_help="""CreateBackupTarget allows you to create and store backup target information so that you do not need to re-enter it each time a backup is created. """)
+@click.option('--name',
+              type=str,
+              required=True,
+              help="""Name for the backup target. """)
+@click.option('--attributes',
+              type=str,
+              required=False,
+              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
-def List(ctx):
-    """You can use ListBackupTargets to retrieve information about all backup targets that have been created."""
+def Create(ctx,
+           name,
+           attributes = None):
+    """CreateBackupTarget allows you to create and store backup target information so that you do not need to re-enter it each time a backup is created."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
+    if(attributes is not None):
+        kwargsDict = simplejson.loads(attributes)
+        attributes = dict(**kwargsDict)
 
-    ctx.logger.info("")
+    ctx.logger.info("""name = """+str(name)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _ListBackupTargetsResult = ctx.element.list_backup_targets()
+        _CreateBackupTargetResult = ctx.element.create_backup_target(name=name, attributes=attributes)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -45,7 +59,7 @@ def List(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_ListBackupTargetsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_CreateBackupTargetResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -75,6 +89,30 @@ def Remove(ctx,
         exit()
 
     cli_utils.print_result(_RemoveBackupTargetResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('List', short_help="""You can use ListBackupTargets to retrieve information about all backup targets that have been created. """)
+@pass_context
+def List(ctx):
+    """You can use ListBackupTargets to retrieve information about all backup targets that have been created."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("")
+    try:
+        _ListBackupTargetsResult = ctx.element.list_backup_targets()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_ListBackupTargetsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -146,41 +184,4 @@ def Modify(ctx,
         exit()
 
     cli_utils.print_result(_ModifyBackupTargetResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('Create', short_help="""CreateBackupTarget allows you to create and store backup target information so that you do not need to re-enter it each time a backup is created. """)
-@click.option('--name',
-              type=str,
-              required=True,
-              help="""Name for the backup target. """)
-@click.option('--attributes',
-              type=str,
-              required=False,
-              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
-@pass_context
-def Create(ctx,
-           name,
-           attributes = None):
-    """CreateBackupTarget allows you to create and store backup target information so that you do not need to re-enter it each time a backup is created."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-    if(attributes is not None):
-        kwargsDict = simplejson.loads(attributes)
-        attributes = dict(**kwargsDict)
-
-    ctx.logger.info("""name = """+str(name)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
-    try:
-        _CreateBackupTargetResult = ctx.element.create_backup_target(name=name, attributes=attributes)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_CreateBackupTargetResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

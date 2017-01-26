@@ -15,6 +15,7 @@ from element import utils
 import jsonpickle
 import simplejson
 from solidfire.models import *
+from solidfire.custom.models import *
 from uuid import UUID
 from element import exceptions
 from solidfire import common
@@ -23,7 +24,43 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """Add Remove Modify List """
+    """Remove Add List Modify """
+
+@cli.command('Remove', short_help="""RemoveVirtualNetwork is used to remove a previously added virtual network.  Note: This method requires either the VirtualNetworkID of the VirtualNetworkTag as a parameter, but not both. """)
+@click.option('--virtual_network_id',
+              type=int,
+              required=False,
+              help="""Network ID that identifies the virtual network to remove. """)
+@click.option('--virtual_network_tag',
+              type=int,
+              required=False,
+              help="""Network Tag that identifies the virtual network to remove. """)
+@pass_context
+def Remove(ctx,
+           virtual_network_id = None,
+           virtual_network_tag = None):
+    """RemoveVirtualNetwork is used to remove a previously added virtual network."""
+    """"""
+    """Note: This method requires either the VirtualNetworkID of the VirtualNetworkTag as a parameter, but not both."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("""virtual_network_id = """+str(virtual_network_id)+""";"""+"""virtual_network_tag = """+str(virtual_network_tag)+""";"""+"")
+    try:
+        _RemoveVirtualNetworkResult = ctx.element.remove_virtual_network(virtual_network_id=virtual_network_id, virtual_network_tag=virtual_network_tag)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_RemoveVirtualNetworkResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
 
 @cli.command('Add', short_help="""AddVirtualNetwork is used to add a new virtual network to a cluster configuration. When a virtual network is added, an interface for each node is created and each will require a virtual network IP address. The number of IP addresses specified as a parameter for this API method must be equal to or greater than the number of nodes in the cluster. Virtual network addresses are bulk provisioned by SolidFire and assigned to individual nodes automatically. Virtual network addresses do not need to be assigned to nodes manually.  Note: The AddVirtualNetwork method is used only to create a new virtual network. If you want to make changes to a virtual network, please use the ModifyVirtualNetwork method. """)
 @click.option('--virtual_network_tag',
@@ -109,31 +146,45 @@ def Add(ctx,
 
 
 
-@cli.command('Remove', short_help="""RemoveVirtualNetwork is used to remove a previously added virtual network.  Note: This method requires either the VirtualNetworkID of the VirtualNetworkTag as a parameter, but not both. """)
+@cli.command('List', short_help="""ListVirtualNetworks is used to get a list of all the configured virtual networks for the cluster. This method can be used to verify the virtual network settings in the cluster.  This method does not require any parameters to be passed. But, one or more VirtualNetworkIDs or VirtualNetworkTags can be passed in order to filter the results. """)
 @click.option('--virtual_network_id',
               type=int,
               required=False,
-              help="""Network ID that identifies the virtual network to remove. """)
+              help="""Network ID to filter the list for a single virtual network """)
 @click.option('--virtual_network_tag',
               type=int,
               required=False,
-              help="""Network Tag that identifies the virtual network to remove. """)
+              help="""Network Tag to filter the list for a single virtual network """)
+@click.option('--virtual_network_ids',
+              type=str,
+              required=False,
+              help="""NetworkIDs to include in the list. """)
+@click.option('--virtual_network_tags',
+              type=str,
+              required=False,
+              help="""Network Tags to include in the list. """)
 @pass_context
-def Remove(ctx,
+def List(ctx,
            virtual_network_id = None,
-           virtual_network_tag = None):
-    """RemoveVirtualNetwork is used to remove a previously added virtual network."""
+           virtual_network_tag = None,
+           virtual_network_ids = None,
+           virtual_network_tags = None):
+    """ListVirtualNetworks is used to get a list of all the configured virtual networks for the cluster. This method can be used to verify the virtual network settings in the cluster."""
     """"""
-    """Note: This method requires either the VirtualNetworkID of the VirtualNetworkTag as a parameter, but not both."""
+    """This method does not require any parameters to be passed. But, one or more VirtualNetworkIDs or VirtualNetworkTags can be passed in order to filter the results."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
-    ctx.logger.info("""virtual_network_id = """+str(virtual_network_id)+""";"""+"""virtual_network_tag = """+str(virtual_network_tag)+""";"""+"")
+    virtual_network_ids = parser.parse_array(virtual_network_ids)
+
+    virtual_network_tags = parser.parse_array(virtual_network_tags)
+
+    ctx.logger.info("""virtual_network_id = """+str(virtual_network_id)+""";"""+"""virtual_network_tag = """+str(virtual_network_tag)+""";"""+"""virtual_network_ids = """+str(virtual_network_ids)+""";"""+"""virtual_network_tags = """+str(virtual_network_tags)+""";"""+"")
     try:
-        _RemoveVirtualNetworkResult = ctx.element.remove_virtual_network(virtual_network_id=virtual_network_id, virtual_network_tag=virtual_network_tag)
+        _ListVirtualNetworksResult = ctx.element.list_virtual_networks(virtual_network_id=virtual_network_id, virtual_network_tag=virtual_network_tag, virtual_network_ids=virtual_network_ids, virtual_network_tags=virtual_network_tags)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -141,7 +192,7 @@ def Remove(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_RemoveVirtualNetworkResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_ListVirtualNetworksResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -231,54 +282,4 @@ def Modify(ctx,
         exit()
 
     cli_utils.print_result(_AddVirtualNetworkResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('List', short_help="""ListVirtualNetworks is used to get a list of all the configured virtual networks for the cluster. This method can be used to verify the virtual network settings in the cluster.  This method does not require any parameters to be passed. But, one or more VirtualNetworkIDs or VirtualNetworkTags can be passed in order to filter the results. """)
-@click.option('--virtual_network_id',
-              type=int,
-              required=False,
-              help="""Network ID to filter the list for a single virtual network """)
-@click.option('--virtual_network_tag',
-              type=int,
-              required=False,
-              help="""Network Tag to filter the list for a single virtual network """)
-@click.option('--virtual_network_ids',
-              type=str,
-              required=False,
-              help="""NetworkIDs to include in the list. """)
-@click.option('--virtual_network_tags',
-              type=str,
-              required=False,
-              help="""Network Tags to include in the list. """)
-@pass_context
-def List(ctx,
-           virtual_network_id = None,
-           virtual_network_tag = None,
-           virtual_network_ids = None,
-           virtual_network_tags = None):
-    """ListVirtualNetworks is used to get a list of all the configured virtual networks for the cluster. This method can be used to verify the virtual network settings in the cluster."""
-    """"""
-    """This method does not require any parameters to be passed. But, one or more VirtualNetworkIDs or VirtualNetworkTags can be passed in order to filter the results."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    virtual_network_ids = parser.parse_array(virtual_network_ids)
-
-    virtual_network_tags = parser.parse_array(virtual_network_tags)
-
-    ctx.logger.info("""virtual_network_id = """+str(virtual_network_id)+""";"""+"""virtual_network_tag = """+str(virtual_network_tag)+""";"""+"""virtual_network_ids = """+str(virtual_network_ids)+""";"""+"""virtual_network_tags = """+str(virtual_network_tags)+""";"""+"")
-    try:
-        _ListVirtualNetworksResult = ctx.element.list_virtual_networks(virtual_network_id=virtual_network_id, virtual_network_tag=virtual_network_tag, virtual_network_ids=virtual_network_ids, virtual_network_tags=virtual_network_tags)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_ListVirtualNetworksResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

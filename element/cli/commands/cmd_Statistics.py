@@ -15,6 +15,7 @@ from element import utils
 import jsonpickle
 import simplejson
 from solidfire.models import *
+from solidfire.custom.models import *
 from uuid import UUID
 from element import exceptions
 from solidfire import common
@@ -23,22 +24,27 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """GetCompleteStats GetHardwareInfo GetRawStats ListVolumeStatsByVirtualVolume ListVolumeStats ListDriveStats """
+    """ListVolumeStats GetHardwareInfo ListDriveStats GetRawStats ListVolumeStatsByVirtualVolume GetCompleteStats """
 
-@cli.command('GetCompleteStats', short_help="""The GetCompleteStats API method is used by SolidFire engineering to troubleshoot new features. The data returned from GetCompleteStats is not documented, changes frequently, and is not guaranteed to be accurate. It is not recommended to ever use GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster. The data returned from GetCompleteStats changes frequently, and is not guaranteed to accurately show performance from the system. It is not recommended to ever use GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster. """)
+@cli.command('ListVolumeStats', short_help="""""")
+@click.option('--volume_ids',
+              type=str,
+              required=False,
+              help="""""")
 @pass_context
-def GetCompleteStats(ctx):
-    """The GetCompleteStats API method is used by SolidFire engineering to troubleshoot new features. The data returned from GetCompleteStats is not documented, changes frequently, and is not guaranteed to be accurate. It is not recommended to ever use GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster."""
-    """The data returned from GetCompleteStats changes frequently, and is not guaranteed to accurately show performance from the system. It is not recommended to ever use GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster."""
+def ListVolumeStats(ctx,
+           volume_ids = None):
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
-    ctx.logger.info("")
+    volume_ids = parser.parse_array(volume_ids)
+
+    ctx.logger.info("""volume_ids = """+str(volume_ids)+""";"""+"")
     try:
-        _str = ctx.element.get_complete_stats()
+        _ListVolumeStatsResult = ctx.element.list_volume_stats(volume_ids=volume_ids)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -46,7 +52,7 @@ def GetCompleteStats(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_str, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_ListVolumeStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -71,6 +77,37 @@ def GetHardwareInfo(ctx):
         exit()
 
     cli_utils.print_result(_GetHardwareInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('ListDriveStats', short_help="""ListDriveStats enables you to retrieve  high-level activity measurements for multiple drives in the cluster. By default, this method returns statistics for all drives in the cluster, and these measurements are cumulative from the addition of the drive to the cluster. Some values this method returns are specific to block drives, and some are specific to metadata drives. For more information on what data each drive type returns, see the response examples for the GetDriveStats method. """)
+@click.option('--drives',
+              type=str,
+              required=False,
+              help="""Optional list of DriveIDs for which to return drive statistics. If you omit this parameter, measurements for all drives are returned. """)
+@pass_context
+def ListDriveStats(ctx,
+           drives = None):
+    """ListDriveStats enables you to retrieve  high-level activity measurements for multiple drives in the cluster. By default, this method returns statistics for all drives in the cluster, and these measurements are cumulative from the addition of the drive to the cluster. Some values this method returns are specific to block drives, and some are specific to metadata drives. For more information on what data each drive type returns, see the response examples for the GetDriveStats method."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    drives = parser.parse_array(drives)
+
+    ctx.logger.info("""drives = """+str(drives)+""";"""+"")
+    try:
+        _ListDriveStatsResult = ctx.element.list_drive_stats(drives=drives)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_ListDriveStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -130,25 +167,20 @@ def ListVolumeStatsByVirtualVolume(ctx,
 
 
 
-@cli.command('ListVolumeStats', short_help="""""")
-@click.option('--volume_ids',
-              type=str,
-              required=False,
-              help="""""")
+@cli.command('GetCompleteStats', short_help="""The GetCompleteStats API method is used by SolidFire engineering to troubleshoot new features. The data returned from GetCompleteStats is not documented, changes frequently, and is not guaranteed to be accurate. It is not recommended to ever use GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster. The data returned from GetCompleteStats changes frequently, and is not guaranteed to accurately show performance from the system. It is not recommended to ever use GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster. """)
 @pass_context
-def ListVolumeStats(ctx,
-           volume_ids = None):
+def GetCompleteStats(ctx):
+    """The GetCompleteStats API method is used by SolidFire engineering to troubleshoot new features. The data returned from GetCompleteStats is not documented, changes frequently, and is not guaranteed to be accurate. It is not recommended to ever use GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster."""
+    """The data returned from GetCompleteStats changes frequently, and is not guaranteed to accurately show performance from the system. It is not recommended to ever use GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
-    volume_ids = parser.parse_array(volume_ids)
-
-    ctx.logger.info("""volume_ids = """+str(volume_ids)+""";"""+"")
+    ctx.logger.info("")
     try:
-        _ListVolumeStatsResult = ctx.element.list_volume_stats(volume_ids=volume_ids)
+        _str = ctx.element.get_complete_stats()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -156,36 +188,5 @@ def ListVolumeStats(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_ListVolumeStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('ListDriveStats', short_help="""ListDriveStats enables you to retrieve  high-level activity measurements for multiple drives in the cluster. By default, this method returns statistics for all drives in the cluster, and these measurements are cumulative from the addition of the drive to the cluster. Some values this method returns are specific to block drives, and some are specific to metadata drives. For more information on what data each drive type returns, see the response examples for the GetDriveStats method. """)
-@click.option('--drives',
-              type=str,
-              required=False,
-              help="""Optional list of DriveIDs for which to return drive statistics. If you omit this parameter, measurements for all drives are returned. """)
-@pass_context
-def ListDriveStats(ctx,
-           drives = None):
-    """ListDriveStats enables you to retrieve  high-level activity measurements for multiple drives in the cluster. By default, this method returns statistics for all drives in the cluster, and these measurements are cumulative from the addition of the drive to the cluster. Some values this method returns are specific to block drives, and some are specific to metadata drives. For more information on what data each drive type returns, see the response examples for the GetDriveStats method."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    drives = parser.parse_array(drives)
-
-    ctx.logger.info("""drives = """+str(drives)+""";"""+"")
-    try:
-        _ListDriveStatsResult = ctx.element.list_drive_stats(drives=drives)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_ListDriveStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_str, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
