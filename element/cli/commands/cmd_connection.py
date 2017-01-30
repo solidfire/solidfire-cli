@@ -24,7 +24,7 @@ def push(ctx):
     # First, attempt to establish the connection. If that's not possible,
     # throw the error.
     try:
-        ctx.element = ElementFactory.create(ctx.cfg["mvip"],ctx.cfg["login"],ctx.cfg["password"],ctx.cfg["version"],port=ctx.cfg["port"])
+        ctx.element = ElementFactory.create(ctx.cfg["mvip"],ctx.cfg["username"],ctx.cfg["password"],ctx.cfg["version"],port=ctx.cfg["port"])
     except Exception as e:
         ctx.logger.error(e.__str__())
     if(ctx.cfg.get("name", "") is None):
@@ -87,14 +87,14 @@ def prune(ctx):
     connections = cli_utils.get_connections()
     goodConnections = []
     for connection in connections:
-        if not all (k in connection.keys() for k in ["mvip", "login", "password", "version", "port", "name"]):
+        if not all (k in connection.keys() for k in ["mvip", "username", "password", "version", "port", "name"]):
             print("Removing connection, ")
             cli_utils.print_result(connection, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-            print("Connection info did not contain the following fields: mvip, login, password, version, port, and url")
+            print("Connection info did not contain the following fields: mvip, username, password, version, port, and url")
             print()
             continue
         try:
-            ElementFactory.create(connection["mvip"],connection["login"],connection["password"],version=connection["version"],port=connection["port"])
+            ElementFactory.create(connection["mvip"],connection["username"],connection["password"],version=connection["version"],port=connection["port"])
             goodConnections += [connection]
         except Exception as e:
             print("Removing connection, ")

@@ -83,9 +83,9 @@ class SolidFireCLI(click.MultiCommand):
               default=None,
               help="SolidFire MVIP",
               required=False)
-@click.option('--login', '-l',
+@click.option('--username', '-u',
               default=None,
-              help="SolidFire Cluster login",
+              help="SolidFire Cluster username",
               required=False)
 @click.option('--password', '-p',
               default=None,
@@ -139,7 +139,7 @@ class SolidFireCLI(click.MultiCommand):
 @pass_context
 def cli(ctx,
         mvip=None,
-        login=None,
+        username=None,
         password=None,
         name=None,
         verifyssl=False,
@@ -180,23 +180,23 @@ def cli(ctx,
         connections = []
 
     # Arguments take precedence regardless of env settings
-    if mvip and login and password:
+    if mvip and username and password:
         cfg = {'mvip': mvip,
-               'login': login,
+               'username': username,
                'password': password,
                'name': name,
                'port': 443,
                'url': 'https://%s:%s' % (mvip, 443),
                'version': version}
         try:
-            ctx.element = ElementFactory.create(cfg["mvip"],cfg["login"],cfg["password"],port=cfg["port"],version=version,verify_ssl=verifyssl)
+            ctx.element = ElementFactory.create(cfg["mvip"],cfg["username"],cfg["password"],port=cfg["port"],version=version,verify_ssl=verifyssl)
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
 
     # If someone accidentally passed in an argument, but didn't specify everything, throw an error.
-    elif mvip or login or password:
-        LOG.error("In order to manually connect, please provide mvip, login, AND password")
+    elif mvip or username or password:
+        LOG.error("In order to manually connect, please provide mvip, username, AND password")
     else:
         if(connectionindex is not None):
             cfg = connections[connectionindex]
@@ -215,9 +215,10 @@ def cli(ctx,
         if cfg is not None:
             # Finaly, we need to establish our connection via elementfactory:
             try:
-                ctx.element = Element(cfg["mvip"], cfg["login"], cfg["password"], cfg["version"], verifyssl)
+                ctx.element = Element(cfg["mvip"], cfg["username"], cfg["password"], cfg["version"], verifyssl)
             except:
-                ctx.logger.error("The config is corrupt. Run 'sfcli connection prune' to remove the broken connection.")
+                ctx.logger.error("The connection is corrupt. Run 'sfcli connection prune' to remove the broken connection.")
+                ctx.logger.error(cfg)
 
     # The only time it is none is when we're asking for help. If that's not what we're doing, we catch it later.
     if cfg is not None:
