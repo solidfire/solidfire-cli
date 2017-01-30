@@ -24,17 +24,37 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """connectsvip list listutilities connectensemble connectmvip ping """
+    """ping connectensemble connectmvip list listutilities connectsvip """
 
-@cli.command('connectsvip', short_help="""The TestConnectSvip API method is used to test the storage connection to the cluster. The test pings the SVIP using ICMP packets and when successful connects as an iSCSI initiator. Note: This method is available only through the per-node API endpoint 5.0 or later. """)
-@click.option('--svip',
+@cli.command('ping', short_help="""The TestPing API method is used to validate the connection to all nodes in the cluster on both 1G and 10G interfaces using ICMP packets. The test uses the appropriate MTU sizes for each packet based on the MTU settings in the network configuration. Note: This method is available only through the per-node API endpoint 5.0 or later. """)
+@click.option('--attempts',
+              type=int,
+              required=False,
+              help="""Specifies the number of times the system should repeat the test ping. Default is 5. """)
+@click.option('--hosts',
               type=str,
               required=False,
-              help="""Optionally, use to test the storage connection of a different SVIP. This is not needed to test the connection to the target cluster. """)
+              help="""Specify address or hostnames of devices to ping. """)
+@click.option('--totaltimeoutsec',
+              type=int,
+              required=False,
+              help="""Specifies the length of time the ping should wait for a system response before issuing the next ping attempt or ending the process. """)
+@click.option('--packetsize',
+              type=int,
+              required=False,
+              help="""Specify the number of bytes to send in the ICMP packet sent to each IP. Number be less than the maximum MTU specified in the network configuration. """)
+@click.option('--pingtimeoutmsec',
+              type=int,
+              required=False,
+              help="""Specify the number of milliseconds to wait for each individual ping response. Default is 500ms. """)
 @pass_context
-def connectsvip(ctx,
-           svip = None):
-    """The TestConnectSvip API method is used to test the storage connection to the cluster. The test pings the SVIP using ICMP packets and when successful connects as an iSCSI initiator."""
+def ping(ctx,
+           attempts = None,
+           hosts = None,
+           totaltimeoutsec = None,
+           packetsize = None,
+           pingtimeoutmsec = None):
+    """The TestPing API method is used to validate the connection to all nodes in the cluster on both 1G and 10G interfaces using ICMP packets. The test uses the appropriate MTU sizes for each packet based on the MTU settings in the network configuration."""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
@@ -42,9 +62,9 @@ def connectsvip(ctx,
 
 
 
-    ctx.logger.info("""svip = """+str(svip)+""";"""+"")
+    ctx.logger.info("""attempts = """+str(attempts)+""";"""+"""hosts = """+str(hosts)+""";"""+"""totaltimeoutsec = """+str(totaltimeoutsec)+""";"""+"""packetsize = """+str(packetsize)+""";"""+"""pingtimeoutmsec = """+str(pingtimeoutmsec)+""";"""+"")
     try:
-        _TestConnectSvipResult = ctx.element.test_connect_svip(svip=svip)
+        _TestPingResult = ctx.element.test_ping(attempts=attempts, hosts=hosts, total_timeout_sec=totaltimeoutsec, packet_size=packetsize, ping_timeout_msec=pingtimeoutmsec)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -52,57 +72,7 @@ def connectsvip(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_TestConnectSvipResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('list', short_help="""The ListTests API method is used to return the tests that are available to run on a node. Note: This method is available only through the per-node API endpoint 5.0 or later. """)
-@pass_context
-def list(ctx):
-    """The ListTests API method is used to return the tests that are available to run on a node."""
-    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("")
-    try:
-        _ListTestsResult = ctx.element.list_tests()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_ListTestsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('listutilities', short_help="""The ListUtilities API method is used to return the tests that are available to run on a node. Note: This method is available only through the per-node API endpoint 5.0 or later. """)
-@pass_context
-def listutilities(ctx):
-    """The ListUtilities API method is used to return the tests that are available to run on a node."""
-    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("")
-    try:
-        _ListUtilitiesResult = ctx.element.list_utilities()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_ListUtilitiesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_TestPingResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -166,35 +136,10 @@ def connectmvip(ctx,
 
 
 
-@cli.command('ping', short_help="""The TestPing API method is used to validate the connection to all nodes in the cluster on both 1G and 10G interfaces using ICMP packets. The test uses the appropriate MTU sizes for each packet based on the MTU settings in the network configuration. Note: This method is available only through the per-node API endpoint 5.0 or later. """)
-@click.option('--attempts',
-              type=int,
-              required=False,
-              help="""Specifies the number of times the system should repeat the test ping. Default is 5. """)
-@click.option('--hosts',
-              type=str,
-              required=False,
-              help="""Specify address or hostnames of devices to ping. """)
-@click.option('--totaltimeoutsec',
-              type=int,
-              required=False,
-              help="""Specifies the length of time the ping should wait for a system response before issuing the next ping attempt or ending the process. """)
-@click.option('--packetsize',
-              type=int,
-              required=False,
-              help="""Specify the number of bytes to send in the ICMP packet sent to each IP. Number be less than the maximum MTU specified in the network configuration. """)
-@click.option('--pingtimeoutmsec',
-              type=int,
-              required=False,
-              help="""Specify the number of milliseconds to wait for each individual ping response. Default is 500ms. """)
+@cli.command('list', short_help="""The ListTests API method is used to return the tests that are available to run on a node. Note: This method is available only through the per-node API endpoint 5.0 or later. """)
 @pass_context
-def ping(ctx,
-           attempts = None,
-           hosts = None,
-           totaltimeoutsec = None,
-           packetsize = None,
-           pingtimeoutmsec = None):
-    """The TestPing API method is used to validate the connection to all nodes in the cluster on both 1G and 10G interfaces using ICMP packets. The test uses the appropriate MTU sizes for each packet based on the MTU settings in the network configuration."""
+def list(ctx):
+    """The ListTests API method is used to return the tests that are available to run on a node."""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
@@ -202,9 +147,9 @@ def ping(ctx,
 
 
 
-    ctx.logger.info("""attempts = """+str(attempts)+""";"""+"""hosts = """+str(hosts)+""";"""+"""totaltimeoutsec = """+str(totaltimeoutsec)+""";"""+"""packetsize = """+str(packetsize)+""";"""+"""pingtimeoutmsec = """+str(pingtimeoutmsec)+""";"""+"")
+    ctx.logger.info("")
     try:
-        _TestPingResult = ctx.element.test_ping(attempts=attempts, hosts=hosts, total_timeout_sec=totaltimeoutsec, packet_size=packetsize, ping_timeout_msec=pingtimeoutmsec)
+        _ListTestsResult = ctx.element.list_tests()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -212,5 +157,60 @@ def ping(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_TestPingResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_ListTestsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('listutilities', short_help="""The ListUtilities API method is used to return the tests that are available to run on a node. Note: This method is available only through the per-node API endpoint 5.0 or later. """)
+@pass_context
+def listutilities(ctx):
+    """The ListUtilities API method is used to return the tests that are available to run on a node."""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("")
+    try:
+        _ListUtilitiesResult = ctx.element.list_utilities()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_ListUtilitiesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('connectsvip', short_help="""The TestConnectSvip API method is used to test the storage connection to the cluster. The test pings the SVIP using ICMP packets and when successful connects as an iSCSI initiator. Note: This method is available only through the per-node API endpoint 5.0 or later. """)
+@click.option('--svip',
+              type=str,
+              required=False,
+              help="""Optionally, use to test the storage connection of a different SVIP. This is not needed to test the connection to the target cluster. """)
+@pass_context
+def connectsvip(ctx,
+           svip = None):
+    """The TestConnectSvip API method is used to test the storage connection to the cluster. The test pings the SVIP using ICMP packets and when successful connects as an iSCSI initiator."""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("""svip = """+str(svip)+""";"""+"")
+    try:
+        _TestConnectSvipResult = ctx.element.test_connect_svip(svip=svip)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_TestConnectSvipResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
