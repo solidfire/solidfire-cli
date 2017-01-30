@@ -15,7 +15,6 @@ from element import utils
 import jsonpickle
 import simplejson
 from solidfire.models import *
-from solidfire.custom.models import *
 from uuid import UUID
 from element import exceptions
 from solidfire import common
@@ -24,10 +23,10 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """list getefficiency modify remove getbyname add getbyid """
+    """List GetEfficiency Modify Remove GetByName Add GetByID """
 
-@cli.command('list', short_help="""Returns the entire list of accounts, with optional paging support. """)
-@click.option('--startaccountid',
+@cli.command('List', short_help="""Returns the entire list of accounts, with optional paging support. """)
+@click.option('--start_account_id',
               type=int,
               required=False,
               help="""Starting AccountID to return. If no Account exists with this AccountID, the next Account by AccountID order is used as the start of the list. To page through the list, pass the AccountID of the last Account in the previous response + 1 """)
@@ -36,8 +35,8 @@ def cli(ctx):
               required=False,
               help="""Maximum number of AccountInfo objects to return. """)
 @pass_context
-def list(ctx,
-           startaccountid = None,
+def List(ctx,
+           start_account_id = None,
            limit = None):
     """Returns the entire list of accounts, with optional paging support."""
     if ctx.element is None:
@@ -46,9 +45,9 @@ def list(ctx,
 
 
 
-    ctx.logger.info("""startaccountid = """+str(startaccountid)+""";"""+"""limit = """+str(limit)+""";"""+"")
+    ctx.logger.info("""start_account_id = """+str(start_account_id)+""";"""+"""limit = """+str(limit)+""";"""+"")
     try:
-        _ListAccountsResult = ctx.element.list_accounts(start_account_id=startaccountid, limit=limit)
+        ListAccountsResult = ctx.element.list_accounts(start_account_id=start_account_id, limit=limit)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -56,18 +55,18 @@ def list(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_ListAccountsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(ListAccountsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
-@cli.command('getefficiency', short_help="""GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity. """)
-@click.option('--accountid',
+@cli.command('GetEfficiency', short_help="""GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity. """)
+@click.option('--account_id',
               type=int,
               required=True,
               help="""Specifies the volume account for which capacity is computed. """)
 @pass_context
-def getefficiency(ctx,
-           accountid):
+def GetEfficiency(ctx,
+           account_id):
     """GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
@@ -75,9 +74,9 @@ def getefficiency(ctx,
 
 
 
-    ctx.logger.info("""accountid = """+str(accountid)+""";"""+"")
+    ctx.logger.info("""account_id = """+str(account_id)+""";"""+"")
     try:
-        _GetEfficiencyResult = ctx.element.get_account_efficiency(account_id=accountid)
+        GetEfficiencyResult = ctx.element.get_account_efficiency(account_id=account_id)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -85,12 +84,12 @@ def getefficiency(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_GetEfficiencyResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(GetEfficiencyResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
-@cli.command('modify', short_help="""Used to modify an existing account. When locking an account, any existing connections from that account are immediately terminated. When changing CHAP settings, any existing connections continue to be active, and the new CHAP values are only used on subsequent connection or reconnection. """)
-@click.option('--accountid',
+@cli.command('Modify', short_help="""Used to modify an existing account. When locking an account, any existing connections from that account are immediately terminated. When changing CHAP settings, any existing connections continue to be active, and the new CHAP values are only used on subsequent connection or reconnection. """)
+@click.option('--account_id',
               type=int,
               required=True,
               help="""AccountID for the account to modify. """)
@@ -102,11 +101,11 @@ def getefficiency(ctx,
               type=str,
               required=False,
               help="""Status of the account. """)
-@click.option('--initiatorsecret',
+@click.option('--initiator_secret',
               type=str,
               required=False,
               help="""CHAP secret to use for the initiator. Should be 12-16 characters long and impenetrable. """)
-@click.option('--targetsecret',
+@click.option('--target_secret',
               type=str,
               required=False,
               help="""CHAP secret to use for the target (mutual CHAP authentication). Should be 12-16 characters long and impenetrable. """)
@@ -115,12 +114,12 @@ def getefficiency(ctx,
               required=False,
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
-def modify(ctx,
-           accountid,
+def Modify(ctx,
+           account_id,
            username = None,
            status = None,
-           initiatorsecret = None,
-           targetsecret = None,
+           initiator_secret = None,
+           target_secret = None,
            attributes = None):
     """Used to modify an existing account."""
     """When locking an account, any existing connections from that account are immediately terminated."""
@@ -132,16 +131,12 @@ def modify(ctx,
 
 
     if(attributes is not None):
-        try:
-            kwargsDict = simplejson.loads(attributes)
-        except Exception as e:
-            ctx.logger.error(e.__str__())
-            exit(1)
+        kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    ctx.logger.info("""accountid = """+str(accountid)+""";"""+"""username = """+str(username)+""";"""+"""status = """+str(status)+""";"""+"""initiatorsecret = """+str(initiatorsecret)+""";"""+"""targetsecret = """+str(targetsecret)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
+    ctx.logger.info("""account_id = """+str(account_id)+""";"""+"""username = """+str(username)+""";"""+"""status = """+str(status)+""";"""+"""initiator_secret = """+str(initiator_secret)+""";"""+"""target_secret = """+str(target_secret)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _ModifyAccountResult = ctx.element.modify_account(account_id=accountid, username=username, status=status, initiator_secret=initiatorsecret, target_secret=targetsecret, attributes=attributes)
+        ModifyAccountResult = ctx.element.modify_account(account_id=account_id, username=username, status=status, initiator_secret=initiator_secret, target_secret=target_secret, attributes=attributes)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -149,18 +144,18 @@ def modify(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_ModifyAccountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(ModifyAccountResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
-@cli.command('remove', short_help="""Used to remove an existing account. All Volumes must be deleted and purged on the account before it can be removed. If volumes on the account are still pending deletion, RemoveAccount cannot be used until DeleteVolume to delete and purge the volumes. """)
-@click.option('--accountid',
+@cli.command('Remove', short_help="""Used to remove an existing account. All Volumes must be deleted and purged on the account before it can be removed. If volumes on the account are still pending deletion, RemoveAccount cannot be used until DeleteVolume to delete and purge the volumes. """)
+@click.option('--account_id',
               type=int,
               required=True,
               help="""AccountID for the account to remove. """)
 @pass_context
-def remove(ctx,
-           accountid):
+def Remove(ctx,
+           account_id):
     """Used to remove an existing account."""
     """All Volumes must be deleted and purged on the account before it can be removed."""
     """If volumes on the account are still pending deletion, RemoveAccount cannot be used until DeleteVolume to delete and purge the volumes."""
@@ -170,9 +165,9 @@ def remove(ctx,
 
 
 
-    ctx.logger.info("""accountid = """+str(accountid)+""";"""+"")
+    ctx.logger.info("""account_id = """+str(account_id)+""";"""+"")
     try:
-        _RemoveAccountResult = ctx.element.remove_account(account_id=accountid)
+        RemoveAccountResult = ctx.element.remove_account(account_id=account_id)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -180,17 +175,17 @@ def remove(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_RemoveAccountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(RemoveAccountResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
-@cli.command('getbyname', short_help="""Returns details about an account, given its Username. """)
+@cli.command('GetByName', short_help="""Returns details about an account, given its Username. """)
 @click.option('--username',
               type=str,
               required=True,
               help="""Username for the account. """)
 @pass_context
-def getbyname(ctx,
+def GetByName(ctx,
            username):
     """Returns details about an account, given its Username."""
     if ctx.element is None:
@@ -201,7 +196,7 @@ def getbyname(ctx,
 
     ctx.logger.info("""username = """+str(username)+""";"""+"")
     try:
-        _GetAccountResult = ctx.element.get_account_by_name(username=username)
+        GetAccountResult = ctx.element.get_account_by_name(username=username)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -209,20 +204,20 @@ def getbyname(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_GetAccountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(GetAccountResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
-@cli.command('add', short_help="""Used to add a new account to the system. New volumes can be created under the new account. The CHAP settings specified for the account applies to all volumes owned by the account. """)
+@cli.command('Add', short_help="""Used to add a new account to the system. New volumes can be created under the new account. The CHAP settings specified for the account applies to all volumes owned by the account. """)
 @click.option('--username',
               type=str,
               required=True,
               help="""Unique username for this account. (May be 1 to 64 characters in length). """)
-@click.option('--initiatorsecret',
+@click.option('--initiator_secret',
               type=str,
               required=False,
               help="""CHAP secret to use for the initiator. Should be 12-16 characters long and impenetrable. The CHAP initiator secrets must be unique and cannot be the same as the target CHAP secret.  If not specified, a random secret is created. """)
-@click.option('--targetsecret',
+@click.option('--target_secret',
               type=str,
               required=False,
               help="""CHAP secret to use for the target (mutual CHAP authentication). Should be 12-16 characters long and impenetrable. The CHAP target secrets must be unique and cannot be the same as the initiator CHAP secret.  If not specified, a random secret is created. """)
@@ -231,10 +226,10 @@ def getbyname(ctx,
               required=False,
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
-def add(ctx,
+def Add(ctx,
            username,
-           initiatorsecret = None,
-           targetsecret = None,
+           initiator_secret = None,
+           target_secret = None,
            attributes = None):
     """Used to add a new account to the system."""
     """New volumes can be created under the new account."""
@@ -245,16 +240,12 @@ def add(ctx,
 
 
     if(attributes is not None):
-        try:
-            kwargsDict = simplejson.loads(attributes)
-        except Exception as e:
-            ctx.logger.error(e.__str__())
-            exit(1)
+        kwargsDict = simplejson.loads(attributes)
         attributes = dict(**kwargsDict)
 
-    ctx.logger.info("""username = """+str(username)+""";"""+"""initiatorsecret = """+str(initiatorsecret)+""";"""+"""targetsecret = """+str(targetsecret)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
+    ctx.logger.info("""username = """+str(username)+""";"""+"""initiator_secret = """+str(initiator_secret)+""";"""+"""target_secret = """+str(target_secret)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _AddAccountResult = ctx.element.add_account(username=username, initiator_secret=initiatorsecret, target_secret=targetsecret, attributes=attributes)
+        AddAccountResult = ctx.element.add_account(username=username, initiator_secret=initiator_secret, target_secret=target_secret, attributes=attributes)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -262,18 +253,18 @@ def add(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_AddAccountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(AddAccountResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
-@cli.command('getbyid', short_help="""Returns details about an account, given its AccountID. """)
-@click.option('--accountid',
+@cli.command('GetByID', short_help="""Returns details about an account, given its AccountID. """)
+@click.option('--account_id',
               type=int,
               required=True,
               help="""Specifies the account for which details are gathered. """)
 @pass_context
-def getbyid(ctx,
-           accountid):
+def GetByID(ctx,
+           account_id):
     """Returns details about an account, given its AccountID."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
@@ -281,9 +272,9 @@ def getbyid(ctx,
 
 
 
-    ctx.logger.info("""accountid = """+str(accountid)+""";"""+"")
+    ctx.logger.info("""account_id = """+str(account_id)+""";"""+"")
     try:
-        _GetAccountResult = ctx.element.get_account_by_id(account_id=accountid)
+        GetAccountResult = ctx.element.get_account_by_id(account_id=account_id)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -291,5 +282,5 @@ def getbyid(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_GetAccountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(GetAccountResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
