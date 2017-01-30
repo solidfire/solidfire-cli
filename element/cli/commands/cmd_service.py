@@ -24,11 +24,11 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """List """
+    """list """
 
-@cli.command('List', short_help="""List the services in the cluster. """)
+@cli.command('list', short_help="""List the services in the cluster. """)
 @pass_context
-def List(ctx):
+def list(ctx):
     """List the services in the cluster."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")

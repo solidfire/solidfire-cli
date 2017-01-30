@@ -24,36 +24,28 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """ModifyStorageContainer Delete CreateStorageContainer GetStorageContainerEfficiency List """
+    """list delete createstoragecontainer getstoragecontainerefficiency modifystoragecontainer """
 
-@cli.command('ModifyStorageContainer', short_help="""Modifies an existing storage container. """)
-@click.option('--storage_container_id',
-              type=str,
-              required=True,
-              help="""""")
-@click.option('--initiator_secret',
+@cli.command('list', short_help="""Gets information for all storage containers currently in the system. """)
+@click.option('--storagecontainerids',
               type=str,
               required=False,
-              help="""""")
-@click.option('--target_secret',
-              type=str,
-              required=False,
-              help="""""")
+              help="""List of storage containers to get """)
 @pass_context
-def ModifyStorageContainer(ctx,
-           storage_container_id,
-           initiator_secret = None,
-           target_secret = None):
-    """Modifies an existing storage container."""
+def list(ctx,
+           storagecontainerids = None):
+    """Gets information for all storage containers currently in the system."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
-    ctx.logger.info("""storage_container_id = """+str(storage_container_id)+""";"""+"""initiator_secret = """+str(initiator_secret)+""";"""+"""target_secret = """+str(target_secret)+""";"""+"")
+    storagecontainerids = parser.parse_array(storagecontainerids)
+
+    ctx.logger.info("""storagecontainerids = """+str(storagecontainerids)+""";"""+"")
     try:
-        _ModifyStorageContainerResult = ctx.element.modify_storage_container(storage_container_id=storage_container_id, initiator_secret=initiator_secret, target_secret=target_secret)
+        _ListStorageContainersResult = ctx.element.list_storage_containers(storagecontainerids=storagecontainerids)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -61,18 +53,18 @@ def ModifyStorageContainer(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_ModifyStorageContainerResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_ListStorageContainersResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
-@cli.command('Delete', short_help="""Deletes a storage container from the system. """)
-@click.option('--storage_container_ids',
+@cli.command('delete', short_help="""Deletes a storage container from the system. """)
+@click.option('--storagecontainerids',
               type=str,
               required=True,
               help="""list of storageContainerID of the storage container to delete. """)
 @pass_context
-def Delete(ctx,
-           storage_container_ids):
+def delete(ctx,
+           storagecontainerids):
     """Deletes a storage container from the system."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
@@ -80,11 +72,11 @@ def Delete(ctx,
 
 
 
-    storage_container_ids = parser.parse_array(storage_container_ids)
+    storagecontainerids = parser.parse_array(storagecontainerids)
 
-    ctx.logger.info("""storage_container_ids = """+str(storage_container_ids)+""";"""+"")
+    ctx.logger.info("""storagecontainerids = """+str(storagecontainerids)+""";"""+"")
     try:
-        _DeleteStorageContainerResult = ctx.element.delete_storage_containers(storage_container_ids=storage_container_ids)
+        _DeleteStorageContainerResult = ctx.element.delete_storage_containers(storage_container_ids=storagecontainerids)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -96,24 +88,24 @@ def Delete(ctx,
 
 
 
-@cli.command('CreateStorageContainer', short_help="""Creates a new VVols storage container. """)
+@cli.command('createstoragecontainer', short_help="""Creates a new VVols storage container. """)
 @click.option('--name',
               type=str,
               required=True,
               help="""Name of the storage container. """)
-@click.option('--initiator_secret',
+@click.option('--initiatorsecret',
               type=str,
               required=False,
               help="""The secret for CHAP authentication for the initiator """)
-@click.option('--target_secret',
+@click.option('--targetsecret',
               type=str,
               required=False,
               help="""The secret for CHAP authentication for the target """)
 @pass_context
-def CreateStorageContainer(ctx,
+def createstoragecontainer(ctx,
            name,
-           initiator_secret = None,
-           target_secret = None):
+           initiatorsecret = None,
+           targetsecret = None):
     """Creates a new VVols storage container."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
@@ -121,9 +113,9 @@ def CreateStorageContainer(ctx,
 
 
 
-    ctx.logger.info("""name = """+str(name)+""";"""+"""initiator_secret = """+str(initiator_secret)+""";"""+"""target_secret = """+str(target_secret)+""";"""+"")
+    ctx.logger.info("""name = """+str(name)+""";"""+"""initiatorsecret = """+str(initiatorsecret)+""";"""+"""targetsecret = """+str(targetsecret)+""";"""+"")
     try:
-        _CreateStorageContainerResult = ctx.element.create_storage_container(name=name, initiator_secret=initiator_secret, target_secret=target_secret)
+        _CreateStorageContainerResult = ctx.element.create_storage_container(name=name, initiatorsecret=initiatorsecret, targetsecret=targetsecret)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -135,14 +127,14 @@ def CreateStorageContainer(ctx,
 
 
 
-@cli.command('GetStorageContainerEfficiency', short_help="""GetStorageContainerEfficiency enables you to retrieve efficiency information about a virtual volume storage container. """)
-@click.option('--storage_container_id',
+@cli.command('getstoragecontainerefficiency', short_help="""GetStorageContainerEfficiency enables you to retrieve efficiency information about a virtual volume storage container. """)
+@click.option('--storagecontainerid',
               type=str,
               required=True,
               help="""The ID of the storage container for which to retrieve efficiency information. """)
 @pass_context
-def GetStorageContainerEfficiency(ctx,
-           storage_container_id):
+def getstoragecontainerefficiency(ctx,
+           storagecontainerid):
     """GetStorageContainerEfficiency enables you to retrieve efficiency information about a virtual volume storage container."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
@@ -150,9 +142,9 @@ def GetStorageContainerEfficiency(ctx,
 
 
 
-    ctx.logger.info("""storage_container_id = """+str(storage_container_id)+""";"""+"")
+    ctx.logger.info("""storagecontainerid = """+str(storagecontainerid)+""";"""+"")
     try:
-        _GetStorageContainerEfficiencyResult = ctx.element.get_storage_container_efficiency(storage_container_id=storage_container_id)
+        _GetStorageContainerEfficiencyResult = ctx.element.get_storage_container_efficiency(storage_container_id=storagecontainerid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -164,26 +156,34 @@ def GetStorageContainerEfficiency(ctx,
 
 
 
-@cli.command('List', short_help="""Gets information for all storage containers currently in the system. """)
-@click.option('--storage_container_ids',
+@cli.command('modifystoragecontainer', short_help="""Modifies an existing storage container. """)
+@click.option('--storagecontainerid',
+              type=str,
+              required=True,
+              help="""""")
+@click.option('--initiatorsecret',
               type=str,
               required=False,
-              help="""List of storage containers to get """)
+              help="""""")
+@click.option('--targetsecret',
+              type=str,
+              required=False,
+              help="""""")
 @pass_context
-def List(ctx,
-           storage_container_ids = None):
-    """Gets information for all storage containers currently in the system."""
+def modifystoragecontainer(ctx,
+           storagecontainerid,
+           initiatorsecret = None,
+           targetsecret = None):
+    """Modifies an existing storage container."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
-    storage_container_ids = parser.parse_array(storage_container_ids)
-
-    ctx.logger.info("""storage_container_ids = """+str(storage_container_ids)+""";"""+"")
+    ctx.logger.info("""storagecontainerid = """+str(storagecontainerid)+""";"""+"""initiatorsecret = """+str(initiatorsecret)+""";"""+"""targetsecret = """+str(targetsecret)+""";"""+"")
     try:
-        _ListStorageContainersResult = ctx.element.list_storage_containers(storage_container_ids=storage_container_ids)
+        _ModifyStorageContainerResult = ctx.element.modify_storage_container(storage_container_id=storagecontainerid, initiatorsecret=initiatorsecret, targetsecret=targetsecret)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -191,5 +191,5 @@ def List(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_ListStorageContainersResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_ModifyStorageContainerResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

@@ -9,7 +9,7 @@ from pkg_resources import Requirement, resource_filename
 from solidfire.factory import ElementFactory
 
 LOG = logging.getLogger(__name__)
-CONTEXT_SETTINGS = dict(auto_envvar_prefix='SOLIDFIRE')
+CONTEXT_SETTINGS = dict(auto_envvar_prefix='SOLIDFIRE', token_normalize_func=lambda x: x.lower())
 DEBUG_LOGGING_MAP = {
     0: logging.CRITICAL,
     1: logging.WARNING,
@@ -68,7 +68,7 @@ class SolidFireCLI(click.MultiCommand):
             if sys.version_info[0] == 2:
                 name = name.encode('ascii', 'replace')
             import_string = (
-                "element.cli.commands.cmd_%s" % (name))
+                "element.cli.commands.cmd_%s" % (name.lower()))
             mod = __import__(import_string, None, None, ['cli'])
         except ImportError as e:
             print(import_string+" failed.")

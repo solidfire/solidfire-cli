@@ -16,9 +16,9 @@ from pkg_resources import Requirement, resource_filename
 def cli(ctx):
     """Connection management"""
 
-@cli.command('Push', short_help="Pushes the connection onto connection.csv to save for later use.")
+@cli.command('push', short_help="Pushes the connection onto connection.csv to save for later use.")
 @pass_context
-def Push(ctx):
+def push(ctx):
     if(ctx.cfg.get("name", "") is None):
         ctx.logger.error("Please provide a connection name.")
 
@@ -34,7 +34,7 @@ def Push(ctx):
             if connection is not None:
                 w.writerow(connection)
 
-@cli.command('Remove', short_help="Removes a given connection")
+@cli.command('remove', short_help="Removes a given connection")
 @click.option('--name', '-n',
               type=str,
               required=False,
@@ -44,7 +44,7 @@ def Push(ctx):
               required=False,
               help="""The index of the connection you wish to remove - 0 is the oldest, 1 is the second oldest, and -1 is the newest.""")
 @pass_context
-def Remove(ctx, name=None, index=None):
+def remove(ctx, name=None, index=None):
     if name is not None and index is not None:
         raise exceptions.SolidFireUsageException("You must provide either the name or the index. Not both.")
     if name is None and index is None:

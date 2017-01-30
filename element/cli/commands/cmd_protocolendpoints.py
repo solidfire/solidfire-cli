@@ -24,16 +24,16 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """List """
+    """list """
 
-@cli.command('List', short_help="""Gets protocol endpoints in the system If protocolEndpointIDs isn't specified all protocol endpoints are returned. Else the supplied protocolEndpointIDs are. """)
-@click.option('--protocol_endpoint_ids',
+@cli.command('list', short_help="""Gets protocol endpoints in the system If protocolEndpointIDs isn't specified all protocol endpoints are returned. Else the supplied protocolEndpointIDs are. """)
+@click.option('--protocolendpointids',
               type=str,
               required=False,
               help="""""")
 @pass_context
-def List(ctx,
-           protocol_endpoint_ids = None):
+def list(ctx,
+           protocolendpointids = None):
     """Gets protocol endpoints in the system"""
     """If protocolEndpointIDs isn&#x27;t specified all protocol endpoints"""
     """are returned. Else the supplied protocolEndpointIDs are."""
@@ -43,11 +43,11 @@ def List(ctx,
 
 
 
-    protocol_endpoint_ids = parser.parse_array(protocol_endpoint_ids)
+    protocolendpointids = parser.parse_array(protocolendpointids)
 
-    ctx.logger.info("""protocol_endpoint_ids = """+str(protocol_endpoint_ids)+""";"""+"")
+    ctx.logger.info("""protocolendpointids = """+str(protocolendpointids)+""";"""+"")
     try:
-        _ListProtocolEndpointsResult = ctx.element.list_protocol_endpoints(protocol_endpoint_ids=protocol_endpoint_ids)
+        _ListProtocolEndpointsResult = ctx.element.list_protocol_endpoints(protocolendpointids=protocolendpointids)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
