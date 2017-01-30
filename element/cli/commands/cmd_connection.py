@@ -78,7 +78,7 @@ def remove(ctx, name=None, index=None):
               required=False,
               help="""The index of the connection you wish to view - 0 is the oldest, 1 is the second oldest, and -1 is the newest.""")
 @pass_context
-def remove(ctx, name=None, index=None):
+def list(ctx, name=None, index=None):
     connectionsCsvLocation = resource_filename(Requirement.parse("solidfire-cli"), "connections.csv")
     with open(connectionsCsvLocation) as connectionFile:
         connections = list(csv.DictReader(connectionFile, delimiter=','))
