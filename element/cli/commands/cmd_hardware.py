@@ -24,115 +24,7 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-<<<<<<< HEAD
-    """getnvraminfo getnodeinfo getclusterinfo getconfig """
-=======
-    """getnvraminfo getclusterinfo getnodeinfo getconfig """
->>>>>>> Removes the broken files
-
-@cli.command('getnvraminfo', short_help="""GetNvramInfo allows you to retrieve information from each node about the NVRAM card.   """)
-@pass_context
-def getnvraminfo(ctx):
-    """GetNvramInfo allows you to retrieve information from each node about the NVRAM card.  """
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("")
-    try:
-        _GetNvramInfoResult = ctx.element.get_nvram_info()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_GetNvramInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-<<<<<<< HEAD
-@cli.command('getnodeinfo', short_help="""GetNodeHardwareInfo is used to return all the hardware info and status for the node specified. This generally includes manufacturers, vendors, versions, and other associated hardware identification information. """)
-@click.option('--nodeid',
-              type=int,
-              required=True,
-              help="""The ID of the node for which hardware information is being requested.  Information about a  node is returned if a   node is specified. """)
-@pass_context
-def getnodeinfo(ctx,
-           nodeid):
-    """GetNodeHardwareInfo is used to return all the hardware info and status for the node specified. This generally includes manufacturers, vendors, versions, and other associated hardware identification information."""
-=======
-@cli.command('getclusterinfo', short_help="""You can use the GetClusterHardwareInfo method to retrieve the hardware status and information for all Fibre Channel nodes, iSCSI nodes and drives in the cluster. This generally includes manufacturers, vendors, versions, and other associated hardware identification information. """)
-@click.option('--type',
-              type=str,
-              required=False,
-              help="""Include only a certain type of hardware information in the response. Can be one of the following:drives: List only drive information in the response.nodes: List only node information in the response.all: Include both drive and node information in the response.If this parameter is omitted, a type of "all" is assumed. """)
-@pass_context
-def getclusterinfo(ctx,
-           type = None):
-    """You can use the GetClusterHardwareInfo method to retrieve the hardware status and information for all Fibre Channel nodes, iSCSI nodes and drives in the cluster. This generally includes manufacturers, vendors, versions, and other associated hardware identification information."""
->>>>>>> Removes the broken files
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-<<<<<<< HEAD
-    ctx.logger.info("""nodeid = """+str(nodeid)+""";"""+"")
-    try:
-        _GetNodeHardwareInfoResult = ctx.element.get_node_hardware_info(node_id=nodeid)
-=======
-    ctx.logger.info("""type = """+str(type)+""";"""+"")
-    try:
-        _GetClusterHardwareInfoResult = ctx.element.get_cluster_hardware_info(type=type)
->>>>>>> Removes the broken files
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-<<<<<<< HEAD
-    cli_utils.print_result(_GetNodeHardwareInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-=======
-    cli_utils.print_result(_GetClusterHardwareInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
->>>>>>> Removes the broken files
-
-
-
-@cli.command('getclusterinfo', short_help="""You can use the GetClusterHardwareInfo method to retrieve the hardware status and information for all Fibre Channel nodes, iSCSI nodes and drives in the cluster. This generally includes manufacturers, vendors, versions, and other associated hardware identification information. """)
-@click.option('--type',
-              type=str,
-              required=False,
-              help="""Include only a certain type of hardware information in the response. Can be one of the following:drives: List only drive information in the response.nodes: List only node information in the response.all: Include both drive and node information in the response.If this parameter is omitted, a type of "all" is assumed. """)
-@pass_context
-def getclusterinfo(ctx,
-           type = None):
-    """You can use the GetClusterHardwareInfo method to retrieve the hardware status and information for all Fibre Channel nodes, iSCSI nodes and drives in the cluster. This generally includes manufacturers, vendors, versions, and other associated hardware identification information."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("""type = """+str(type)+""";"""+"")
-    try:
-        _GetClusterHardwareInfoResult = ctx.element.get_cluster_hardware_info(type=type)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_GetClusterHardwareInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
+    """getconfig getclusterinfo getnodeinfo getnvraminfo """
 
 @cli.command('getconfig', short_help="""GetHardwareConfig enables you to display the hardware configuration information for a node. NOTE: This method is available only through the per-node API endpoint 5.0 or later. """)
 @pass_context
@@ -155,4 +47,86 @@ def getconfig(ctx):
         exit()
 
     cli_utils.print_result(_GetHardwareConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getclusterinfo', short_help="""You can use the GetClusterHardwareInfo method to retrieve the hardware status and information for all Fibre Channel nodes, iSCSI nodes and drives in the cluster. This generally includes manufacturers, vendors, versions, and other associated hardware identification information. """)
+@click.option('--type',
+              type=str,
+              required=False,
+              help="""Include only a certain type of hardware information in the response. Can be one of the following:drives: List only drive information in the response.nodes: List only node information in the response.all: Include both drive and node information in the response.If this parameter is omitted, a type of "all" is assumed. """)
+@pass_context
+def getclusterinfo(ctx,
+           type = None):
+    """You can use the GetClusterHardwareInfo method to retrieve the hardware status and information for all Fibre Channel nodes, iSCSI nodes and drives in the cluster. This generally includes manufacturers, vendors, versions, and other associated hardware identification information."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("""type = """+str(type)+""";"""+"")
+    try:
+        _GetClusterHardwareInfoResult = ctx.element.get_cluster_hardware_info(type=type)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_GetClusterHardwareInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getnodeinfo', short_help="""GetNodeHardwareInfo is used to return all the hardware info and status for the node specified. This generally includes manufacturers, vendors, versions, and other associated hardware identification information. """)
+@click.option('--nodeid',
+              type=int,
+              required=True,
+              help="""The ID of the node for which hardware information is being requested.  Information about a  node is returned if a   node is specified. """)
+@pass_context
+def getnodeinfo(ctx,
+           nodeid):
+    """GetNodeHardwareInfo is used to return all the hardware info and status for the node specified. This generally includes manufacturers, vendors, versions, and other associated hardware identification information."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("""nodeid = """+str(nodeid)+""";"""+"")
+    try:
+        _GetNodeHardwareInfoResult = ctx.element.get_node_hardware_info(node_id=nodeid)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_GetNodeHardwareInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getnvraminfo', short_help="""GetNvramInfo allows you to retrieve information from each node about the NVRAM card.   """)
+@pass_context
+def getnvraminfo(ctx):
+    """GetNvramInfo allows you to retrieve information from each node about the NVRAM card.  """
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("")
+    try:
+        _GetNvramInfoResult = ctx.element.get_nvram_info()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_GetNvramInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

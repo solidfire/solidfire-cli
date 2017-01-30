@@ -15,6 +15,7 @@ from element import utils
 import jsonpickle
 import simplejson
 from solidfire.models import *
+from solidfire.custom.models import *
 from uuid import UUID
 from element import exceptions
 from solidfire import common
@@ -23,9 +24,9 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """Invoke """
+    """invoke """
 
-@cli.command('Invoke', short_help="""This will invoke any API method supported by the SolidFire API for the version and port the connection is using. Returns a nested hashtable of key/value pairs that contain the result of the invoked method. """)
+@cli.command('invoke', short_help="""This will invoke any API method supported by the SolidFire API for the version and port the connection is using. Returns a nested hashtable of key/value pairs that contain the result of the invoked method. """)
 @click.option('--method',
               type=str,
               required=True,
@@ -35,7 +36,7 @@ def cli(ctx):
               required=False,
               help="""Provide in json format: An object, normally a dictionary or hashtable of the key/value pairs, to be passed as the params for the method being invoked. """)
 @pass_context
-def Invoke(ctx,
+def invoke(ctx,
            method,
            parameters = None):
     """This will invoke any API method supported by the SolidFire API for the version and port the connection is using."""
@@ -46,12 +47,16 @@ def Invoke(ctx,
 
 
     if(parameters is not None):
-        kwargsDict = simplejson.loads(parameters)
+        try:
+            kwargsDict = simplejson.loads(parameters)
+        except Exception as e:
+            ctx.logger.error(e.__str__())
+            exit(1)
         parameters = dict(**kwargsDict)
 
     ctx.logger.info("""method = """+str(method)+""";"""+"""parameters = """+str(parameters)+""";"""+"")
     try:
-        str = ctx.element.invoke_sfapi(method=method, parameters=parameters)
+        _str = ctx.element.invoke_sfapi(method=method, parameters=parameters)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -59,5 +64,5 @@ def Invoke(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(str, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_str, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

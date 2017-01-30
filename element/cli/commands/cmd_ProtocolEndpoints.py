@@ -15,6 +15,7 @@ from element import utils
 import jsonpickle
 import simplejson
 from solidfire.models import *
+from solidfire.custom.models import *
 from uuid import UUID
 from element import exceptions
 from solidfire import common
@@ -23,16 +24,16 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """List """
+    """list """
 
-@cli.command('List', short_help="""Gets protocol endpoints in the system If protocolEndpointIDs isn't specified all protocol endpoints are returned. Else the supplied protocolEndpointIDs are. """)
-@click.option('--protocol_endpoint_ids',
+@cli.command('list', short_help="""Gets protocol endpoints in the system If protocolEndpointIDs isn't specified all protocol endpoints are returned. Else the supplied protocolEndpointIDs are. """)
+@click.option('--protocolendpointids',
               type=str,
               required=False,
               help="""""")
 @pass_context
-def List(ctx,
-           protocol_endpoint_ids = None):
+def list(ctx,
+           protocolendpointids = None):
     """Gets protocol endpoints in the system"""
     """If protocolEndpointIDs isn&#x27;t specified all protocol endpoints"""
     """are returned. Else the supplied protocolEndpointIDs are."""
@@ -42,11 +43,11 @@ def List(ctx,
 
 
 
-    protocol_endpoint_ids = parser.parse_array(protocol_endpoint_ids)
+    protocolendpointids = parser.parse_array(protocolendpointids)
 
-    ctx.logger.info("""protocol_endpoint_ids = """+str(protocol_endpoint_ids)+""";"""+"")
+    ctx.logger.info("""protocolendpointids = """+str(protocolendpointids)+""";"""+"")
     try:
-        ListProtocolEndpointsResult = ctx.element.list_protocol_endpoints(protocol_endpoint_ids=protocol_endpoint_ids)
+        _ListProtocolEndpointsResult = ctx.element.list_protocol_endpoints(protocol_endpoint_ids=protocolendpointids)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -54,5 +55,5 @@ def List(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(ListProtocolEndpointsResult, ctx.logger, as_json=ctx.json, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_ListProtocolEndpointsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
