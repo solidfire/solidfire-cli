@@ -7,6 +7,7 @@ import csv
 from pkg_resources import Requirement, resource_filename
 
 from solidfire.factory import ElementFactory
+from solidfire import Element
 
 LOG = logging.getLogger(__name__)
 CONTEXT_SETTINGS = dict(auto_envvar_prefix='SOLIDFIRE', token_normalize_func=lambda x: x.lower())
@@ -90,10 +91,19 @@ class SolidFireCLI(click.MultiCommand):
               default=None,
               help="SolidFire cluster password",
               required=False)
+@click.option('--version', '-v',
+              default=None,
+              help='The version you would like to connect on',
+              required=False)
 @click.option('--name',
               default = None,
               help="The connection name for later reference (-n)",
               required=False)
+@click.option('--verifyssl', '-s',
+              default = False,
+              help="Enable this to check ssl connection for errors especially when using a hostname. It is invalid to set this to true when using an IP address in the target.",
+              required=False,
+              is_flag=True)
 @click.option('--connectionIndex', '-c',
               default=None,
               type=click.INT,
@@ -132,6 +142,7 @@ def cli(ctx,
         login=None,
         password=None,
         name=None,
+        verifyssl=False,
         connectionindex=None,
         connectionname=None,
         json=None,
@@ -139,7 +150,8 @@ def cli(ctx,
         depth=None,
         filter_tree=None,
         debug=0,
-        verbose=0):
+        verbose=0,
+        version='9.0'):
     """SolidFire command line interface."""
 
     # NOTE(jdg): This method is actually our console entry point,
@@ -174,8 +186,14 @@ def cli(ctx,
                'password': password,
                'name': name,
                'port': 443,
-               'url': 'https://%s:%s' % (mvip, 443)}
-        ctx.element = ElementFactory.create(cfg["mvip"],cfg["login"],cfg["password"],port=cfg["port"])
+               'url': 'https://%s:%s' % (mvip, 443),
+               'version': version}
+        try:
+            ctx.element = ElementFactory.create(cfg["mvip"],cfg["login"],cfg["password"],port=cfg["port"],version=version,verify_ssl=verifyssl)
+        except Exception as e:
+            ctx.logger.error(e.__str__())
+            exit(1)
+
     # If someone accidentally passed in an argument, but didn't specify everything, throw an error.
     elif mvip or login or password:
         LOG.error("In order to manually connect, please provide mvip, login, AND password")
@@ -191,13 +209,16 @@ def cli(ctx,
                 LOG.error("Could not find a connection named "+connectionname)
                 exit()
             cfg = filteredCfg[0]
+        else:
+            if len(connections) > 0:
+                cfg = connections[0]
+        if cfg is not None:
+            # Finaly, we need to establish our connection via elementfactory:
+            ctx.element = Element(cfg["mvip"], cfg["login"], cfg["password"], cfg["version"], verifyssl)
+
+    # The only time it is none is when we're asking for help. If that's not what we're doing, we catch it later.
     if cfg is not None:
         cfg["port"] = int(cfg["port"])
-        # Finaly, we need to establish our connection via elementfactory:
-        ctx.element = ElementFactory.create(cfg["mvip"],cfg["login"],cfg["password"],9.0,port=cfg["port"])
-
-         # TODO(jdg): Use the client to query the cluster for the supported version
-        ctx.sfapi_endpoint_version = 7
         ctx.cfg = cfg
         ctx.json = json
         ctx.pickle = pickle

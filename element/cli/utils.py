@@ -1,6 +1,9 @@
 from element.exceptions import *
 import jsonpickle
 import json as serializer
+from pkg_resources import Requirement, resource_filename
+import os
+import csv
 
 def kv_string_to_dict(kv_string):
     new_dict = {}
@@ -156,30 +159,20 @@ def print_result_as_table(objs, keyPaths):
 def print_result_as_tree(objs, depth=1):
     print(get_result_as_tree(objs, depth))
 
-def print_list(objs, fields, formatters={}, order_by=None):
-    pt = prettytable.PrettyTable([f for f in fields], caching=False)
-    pt.aligns = ['l' for f in fields]
-    pt.max_width = 80
-    if not objs:
-        objs = []
+def get_connections():
+    connectionsCsvLocation = resource_filename(Requirement.parse("solidfire-cli"), "connections.csv")
+    if os.path.exists(connectionsCsvLocation):
+        with open(connectionsCsvLocation) as connectionFile:
+            connections = list(csv.DictReader(connectionFile, delimiter=','))
+    else:
+        connections = []
+    return connections
 
-    for o in objs:
-        row = []
-        for field in fields:
-            if field == 'qos':
-                # The QoS attribute is ridiculously long with the curve
-                # data, which frankly isn't that useful for an end user, so
-                # let's pop it off of the object here for display
-                o['qos'].pop('curve', None)
-            if field in formatters:
-                row.append(formatters[field](o))
-            else:
-                field_name = field.replace(' ', '_')
-                if type(o) == dict and field in o:
-                    data = o[field]
-                else:
-                    data = getattr(o, field_name, '')
-                row.append(data)
-        pt.add_row(row)
-
-    print(pt)
+def write_connections(connections):
+    connectionsCsvLocation = resource_filename(Requirement.parse("solidfire-cli"), "connections.csv")
+    with open(connectionsCsvLocation, 'w') as f:
+        w = csv.DictWriter(f, ["name","mvip","port","login","password","version","url"], lineterminator='\n')
+        w.writeheader()
+        for connection in connections:
+            if connection is not None:
+                w.writerow(connection)

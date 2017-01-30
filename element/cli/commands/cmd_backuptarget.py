@@ -24,7 +24,31 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """modify remove create list get """
+    """list modify create remove get """
+
+@cli.command('list', short_help="""You can use ListBackupTargets to retrieve information about all backup targets that have been created. """)
+@pass_context
+def list(ctx):
+    """You can use ListBackupTargets to retrieve information about all backup targets that have been created."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("")
+    try:
+        _ListBackupTargetsResult = ctx.element.list_backup_targets()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_ListBackupTargetsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
 
 @cli.command('modify', short_help="""ModifyBackupTarget is used to change attributes of a backup target. """)
 @click.option('--backuptargetid',
@@ -72,35 +96,6 @@ def modify(ctx,
 
 
 
-@cli.command('remove', short_help="""RemoveBackupTarget allows you to delete backup targets. """)
-@click.option('--backuptargetid',
-              type=int,
-              required=True,
-              help="""Unique target ID of the target to remove. """)
-@pass_context
-def remove(ctx,
-           backuptargetid):
-    """RemoveBackupTarget allows you to delete backup targets."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("""backuptargetid = """+str(backuptargetid)+""";"""+"")
-    try:
-        _RemoveBackupTargetResult = ctx.element.remove_backup_target(backup_target_id=backuptargetid)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_RemoveBackupTargetResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
 @cli.command('create', short_help="""CreateBackupTarget allows you to create and store backup target information so that you do not need to re-enter it each time a backup is created. """)
 @click.option('--name',
               type=str,
@@ -142,19 +137,24 @@ def create(ctx,
 
 
 
-@cli.command('list', short_help="""You can use ListBackupTargets to retrieve information about all backup targets that have been created. """)
+@cli.command('remove', short_help="""RemoveBackupTarget allows you to delete backup targets. """)
+@click.option('--backuptargetid',
+              type=int,
+              required=True,
+              help="""Unique target ID of the target to remove. """)
 @pass_context
-def list(ctx):
-    """You can use ListBackupTargets to retrieve information about all backup targets that have been created."""
+def remove(ctx,
+           backuptargetid):
+    """RemoveBackupTarget allows you to delete backup targets."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
-    ctx.logger.info("")
+    ctx.logger.info("""backuptargetid = """+str(backuptargetid)+""";"""+"")
     try:
-        _ListBackupTargetsResult = ctx.element.list_backup_targets()
+        _RemoveBackupTargetResult = ctx.element.remove_backup_target(backup_target_id=backuptargetid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -162,7 +162,7 @@ def list(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_ListBackupTargetsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_RemoveBackupTargetResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
