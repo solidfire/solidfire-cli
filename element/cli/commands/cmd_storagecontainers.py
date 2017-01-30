@@ -24,7 +24,67 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """createstoragecontainer delete list modifystoragecontainer getstoragecontainerefficiency """
+    """list getstoragecontainerefficiency createstoragecontainer modifystoragecontainer delete """
+
+@cli.command('list', short_help="""Gets information for all storage containers currently in the system. """)
+@click.option('--storagecontainerids',
+              type=str,
+              required=False,
+              help="""List of storage containers to get """)
+@pass_context
+def list(ctx,
+           storagecontainerids = None):
+    """Gets information for all storage containers currently in the system."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    storagecontainerids = parser.parse_array(storagecontainerids)
+
+    ctx.logger.info("""storagecontainerids = """+str(storagecontainerids)+""";"""+"")
+    try:
+        _ListStorageContainersResult = ctx.element.list_storage_containers(storage_container_ids=storagecontainerids)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_ListStorageContainersResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getstoragecontainerefficiency', short_help="""GetStorageContainerEfficiency enables you to retrieve efficiency information about a virtual volume storage container. """)
+@click.option('--storagecontainerid',
+              type=str,
+              required=True,
+              help="""The ID of the storage container for which to retrieve efficiency information. """)
+@pass_context
+def getstoragecontainerefficiency(ctx,
+           storagecontainerid):
+    """GetStorageContainerEfficiency enables you to retrieve efficiency information about a virtual volume storage container."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("""storagecontainerid = """+str(storagecontainerid)+""";"""+"")
+    try:
+        _GetStorageContainerEfficiencyResult = ctx.element.get_storage_container_efficiency(storage_container_id=storagecontainerid)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_GetStorageContainerEfficiencyResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
 
 @cli.command('createstoragecontainer', short_help="""Creates a new VVols storage container. """)
 @click.option('--name',
@@ -62,68 +122,6 @@ def createstoragecontainer(ctx,
         exit()
 
     cli_utils.print_result(_CreateStorageContainerResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('delete', short_help="""Deletes a storage container from the system. """)
-@click.option('--storagecontainerids',
-              type=str,
-              required=True,
-              help="""list of storageContainerID of the storage container to delete. """)
-@pass_context
-def delete(ctx,
-           storagecontainerids):
-    """Deletes a storage container from the system."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    storagecontainerids = parser.parse_array(storagecontainerids)
-
-    ctx.logger.info("""storagecontainerids = """+str(storagecontainerids)+""";"""+"")
-    try:
-        _DeleteStorageContainerResult = ctx.element.delete_storage_containers(storage_container_ids=storagecontainerids)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_DeleteStorageContainerResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('list', short_help="""Gets information for all storage containers currently in the system. """)
-@click.option('--storagecontainerids',
-              type=str,
-              required=False,
-              help="""List of storage containers to get """)
-@pass_context
-def list(ctx,
-           storagecontainerids = None):
-    """Gets information for all storage containers currently in the system."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    storagecontainerids = parser.parse_array(storagecontainerids)
-
-    ctx.logger.info("""storagecontainerids = """+str(storagecontainerids)+""";"""+"")
-    try:
-        _ListStorageContainersResult = ctx.element.list_storage_containers(storage_container_ids=storagecontainerids)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_ListStorageContainersResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -166,24 +164,26 @@ def modifystoragecontainer(ctx,
 
 
 
-@cli.command('getstoragecontainerefficiency', short_help="""GetStorageContainerEfficiency enables you to retrieve efficiency information about a virtual volume storage container. """)
-@click.option('--storagecontainerid',
+@cli.command('delete', short_help="""Deletes a storage container from the system. """)
+@click.option('--storagecontainerids',
               type=str,
               required=True,
-              help="""The ID of the storage container for which to retrieve efficiency information. """)
+              help="""list of storageContainerID of the storage container to delete. """)
 @pass_context
-def getstoragecontainerefficiency(ctx,
-           storagecontainerid):
-    """GetStorageContainerEfficiency enables you to retrieve efficiency information about a virtual volume storage container."""
+def delete(ctx,
+           storagecontainerids):
+    """Deletes a storage container from the system."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
-    ctx.logger.info("""storagecontainerid = """+str(storagecontainerid)+""";"""+"")
+    storagecontainerids = parser.parse_array(storagecontainerids)
+
+    ctx.logger.info("""storagecontainerids = """+str(storagecontainerids)+""";"""+"")
     try:
-        _GetStorageContainerEfficiencyResult = ctx.element.get_storage_container_efficiency(storage_container_id=storagecontainerid)
+        _DeleteStorageContainerResult = ctx.element.delete_storage_containers(storage_container_ids=storagecontainerids)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -191,5 +191,5 @@ def getstoragecontainerefficiency(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_GetStorageContainerEfficiencyResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_DeleteStorageContainerResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

@@ -24,7 +24,67 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """list add remove getefficiency modify getbyid getbyname """
+    """getefficiency remove list add modify getbyid getbyname """
+
+@cli.command('getefficiency', short_help="""GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity. """)
+@click.option('--accountid',
+              type=int,
+              required=True,
+              help="""Specifies the volume account for which capacity is computed. """)
+@pass_context
+def getefficiency(ctx,
+           accountid):
+    """GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("""accountid = """+str(accountid)+""";"""+"")
+    try:
+        _GetEfficiencyResult = ctx.element.get_account_efficiency(account_id=accountid)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_GetEfficiencyResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('remove', short_help="""Used to remove an existing account. All Volumes must be deleted and purged on the account before it can be removed. If volumes on the account are still pending deletion, RemoveAccount cannot be used until DeleteVolume to delete and purge the volumes. """)
+@click.option('--accountid',
+              type=int,
+              required=True,
+              help="""AccountID for the account to remove. """)
+@pass_context
+def remove(ctx,
+           accountid):
+    """Used to remove an existing account."""
+    """All Volumes must be deleted and purged on the account before it can be removed."""
+    """If volumes on the account are still pending deletion, RemoveAccount cannot be used until DeleteVolume to delete and purge the volumes."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("""accountid = """+str(accountid)+""";"""+"")
+    try:
+        _RemoveAccountResult = ctx.element.remove_account(account_id=accountid)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_RemoveAccountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
 
 @cli.command('list', short_help="""Returns the entire list of accounts, with optional paging support. """)
 @click.option('--startaccountid',
@@ -110,66 +170,6 @@ def add(ctx,
         exit()
 
     cli_utils.print_result(_AddAccountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('remove', short_help="""Used to remove an existing account. All Volumes must be deleted and purged on the account before it can be removed. If volumes on the account are still pending deletion, RemoveAccount cannot be used until DeleteVolume to delete and purge the volumes. """)
-@click.option('--accountid',
-              type=int,
-              required=True,
-              help="""AccountID for the account to remove. """)
-@pass_context
-def remove(ctx,
-           accountid):
-    """Used to remove an existing account."""
-    """All Volumes must be deleted and purged on the account before it can be removed."""
-    """If volumes on the account are still pending deletion, RemoveAccount cannot be used until DeleteVolume to delete and purge the volumes."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("""accountid = """+str(accountid)+""";"""+"")
-    try:
-        _RemoveAccountResult = ctx.element.remove_account(account_id=accountid)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_RemoveAccountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getefficiency', short_help="""GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity. """)
-@click.option('--accountid',
-              type=int,
-              required=True,
-              help="""Specifies the volume account for which capacity is computed. """)
-@pass_context
-def getefficiency(ctx,
-           accountid):
-    """GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("""accountid = """+str(accountid)+""";"""+"")
-    try:
-        _GetEfficiencyResult = ctx.element.get_account_efficiency(account_id=accountid)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_GetEfficiencyResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 

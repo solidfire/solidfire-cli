@@ -214,7 +214,10 @@ def cli(ctx,
                 cfg = connections[0]
         if cfg is not None:
             # Finaly, we need to establish our connection via elementfactory:
-            ctx.element = Element(cfg["mvip"], cfg["login"], cfg["password"], cfg["version"], verifyssl)
+            try:
+                ctx.element = Element(cfg["mvip"], cfg["login"], cfg["password"], cfg["version"], verifyssl)
+            except:
+                ctx.logger.error("The config is corrupt. Run 'sfcli connection prune' to remove the broken connection.")
 
     # The only time it is none is when we're asking for help. If that's not what we're doing, we catch it later.
     if cfg is not None:

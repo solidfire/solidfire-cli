@@ -24,7 +24,7 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """listfibrechannelsessions listiscsisessions listinterfaces listfibrechannelportinfo listnodefibrechannelportinfo """
+    """listfibrechannelsessions listnodefibrechannelportinfo listiscsisessions listinterfaces listfibrechannelportinfo """
 
 @cli.command('listfibrechannelsessions', short_help="""The ListFibreChannelSessions is used to return information about the active Fibre Channel sessions on a cluster. """)
 @pass_context
@@ -47,6 +47,30 @@ def listfibrechannelsessions(ctx):
         exit()
 
     cli_utils.print_result(_ListFibreChannelSessionsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('listnodefibrechannelportinfo', short_help="""The ListNodeFibreChannelPortInfo is used to return information about the Fibre Channel ports. The API method is intended for use on individual nodes; userid and password is required for access to individual Fibre Channel nodes. """)
+@pass_context
+def listnodefibrechannelportinfo(ctx):
+    """The ListNodeFibreChannelPortInfo is used to return information about the Fibre Channel ports. The API method is intended for use on individual nodes; userid and password is required for access to individual Fibre Channel nodes."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("")
+    try:
+        _ListNodeFibreChannelPortInfoResult = ctx.element.list_node_fibre_channel_port_info()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_ListNodeFibreChannelPortInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -119,28 +143,4 @@ def listfibrechannelportinfo(ctx):
         exit()
 
     cli_utils.print_result(_ListFibreChannelPortInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('listnodefibrechannelportinfo', short_help="""The ListNodeFibreChannelPortInfo is used to return information about the Fibre Channel ports. The API method is intended for use on individual nodes; userid and password is required for access to individual Fibre Channel nodes. """)
-@pass_context
-def listnodefibrechannelportinfo(ctx):
-    """The ListNodeFibreChannelPortInfo is used to return information about the Fibre Channel ports. The API method is intended for use on individual nodes; userid and password is required for access to individual Fibre Channel nodes."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("")
-    try:
-        _ListNodeFibreChannelPortInfoResult = ctx.element.list_node_fibre_channel_port_info()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_ListNodeFibreChannelPortInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

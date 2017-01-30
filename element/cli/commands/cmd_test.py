@@ -24,32 +24,7 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """list ping connectmvip connectensemble connectsvip listutilities """
-
-@cli.command('list', short_help="""The ListTests API method is used to return the tests that are available to run on a node. Note: This method is available only through the per-node API endpoint 5.0 or later. """)
-@pass_context
-def list(ctx):
-    """The ListTests API method is used to return the tests that are available to run on a node."""
-    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("")
-    try:
-        _ListTestsResult = ctx.element.list_tests()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_ListTestsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
+    """ping connectmvip list connectensemble connectsvip listutilities """
 
 @cli.command('ping', short_help="""The TestPing API method is used to validate the connection to all nodes in the cluster on both 1G and 10G interfaces using ICMP packets. The test uses the appropriate MTU sizes for each packet based on the MTU settings in the network configuration. Note: This method is available only through the per-node API endpoint 5.0 or later. """)
 @click.option('--attempts',
@@ -128,6 +103,31 @@ def connectmvip(ctx,
         exit()
 
     cli_utils.print_result(_TestConnectMvipResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('list', short_help="""The ListTests API method is used to return the tests that are available to run on a node. Note: This method is available only through the per-node API endpoint 5.0 or later. """)
+@pass_context
+def list(ctx):
+    """The ListTests API method is used to return the tests that are available to run on a node."""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("")
+    try:
+        _ListTestsResult = ctx.element.list_tests()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_ListTestsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 

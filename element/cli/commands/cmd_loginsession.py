@@ -24,21 +24,45 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """setremotelogginghosts setinfo getinfo getremotelogginghosts """
+    """getinfo setremotelogginghosts setinfo getremotelogginghosts """
+
+@cli.command('getinfo', short_help="""GetLoginSessionInfo is used to return the period of time a log in authentication is valid for both log in shells and the TUI. """)
+@pass_context
+def getinfo(ctx):
+    """GetLoginSessionInfo is used to return the period of time a log in authentication is valid for both log in shells and the TUI."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("")
+    try:
+        _GetLoginSessionInfoResult = ctx.element.get_login_session_info()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_GetLoginSessionInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
 
 @cli.command('setremotelogginghosts', short_help="""RemoteLoggingHosts is used to configure remote logging from the nodes in the storage cluster to a centralized log server or servers. Remote logging is performed over TCP using the default port 514. This API does not add to the existing logging hosts. Rather, it replaces what currently exists with new values specified by this API method. You can use the GetRemoteLoggingHosts to determine what the current logging hosts are and then use the SetRemoteLoggingHosts to set the desired list of current and new logging hosts. """)
-@click.option('--loggingserver_host',
+@click.option('--loggingserverhost',
               type=str,
               required=True,
               help="""Hostname or IP address of the log server. """)
-@click.option('--loggingserver_port',
+@click.option('--loggingserverport',
               type=int,
               required=True,
               help="""Port number that the log server is listening on. """)
 @pass_context
 def setremotelogginghosts(ctx,
-           loggingserver_host,
-           loggingserver_port):
+           loggingserverhost,
+           loggingserverport):
     """RemoteLoggingHosts is used to configure remote logging from the nodes in the storage cluster to a centralized log server or servers. Remote logging is performed over TCP using the default port 514. This API does not add to the existing logging hosts. Rather, it replaces what currently exists with new values specified by this API method. You can use the GetRemoteLoggingHosts to determine what the current logging hosts are and then use the SetRemoteLoggingHosts to set the desired list of current and new logging hosts."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
@@ -49,8 +73,8 @@ def setremotelogginghosts(ctx,
     remotehosts = None
     if(remotehosts is not None or False):
         kwargsDict = dict()
-        kwargsDict["host"] = loggingserver_host
-        kwargsDict["port"] = loggingserver_port
+        kwargsDict["host"] = loggingserverhost
+        kwargsDict["port"] = loggingserverport
 
         remotehosts = LoggingServer(**kwargsDict)
 
@@ -96,30 +120,6 @@ def setinfo(ctx,
         exit()
 
     cli_utils.print_result(_SetLoginSessionInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getinfo', short_help="""GetLoginSessionInfo is used to return the period of time a log in authentication is valid for both log in shells and the TUI. """)
-@pass_context
-def getinfo(ctx):
-    """GetLoginSessionInfo is used to return the period of time a log in authentication is valid for both log in shells and the TUI."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("")
-    try:
-        _GetLoginSessionInfoResult = ctx.element.get_login_session_info()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_GetLoginSessionInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 

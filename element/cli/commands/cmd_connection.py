@@ -87,6 +87,13 @@ def prune(ctx):
     connections = cli_utils.get_connections()
     goodConnections = []
     for connection in connections:
+        print("called")
+        if set(["mvip", "login", "password", "version", "port", "url"]) <= set(list(connection.keys())):
+            print("Removing connection, ")
+            cli_utils.print_result(connection, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+            print("Connection info did not contain the following fields: mvip, login, password, version, port, and url")
+            print()
+            continue
         try:
             ElementFactory.create(connection["mvip"],connection["login"],connection["password"],version=connection["version"],port=connection["port"])
             goodConnections += [connection]
