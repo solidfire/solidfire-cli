@@ -39,11 +39,11 @@ def cli(ctx):
               type=str,
               required=False,
               help="""New name for the virtual network. """)
-@click.option('--addressblock_start',
+@click.option('--addressblockstart',
               type=str,
               required=True,
               help="""Start of the IP address range. """)
-@click.option('--addressblock_size',
+@click.option('--addressblocksize',
               type=int,
               required=True,
               help="""Number of IP addresses to include in the block. """)
@@ -72,8 +72,8 @@ def modify(ctx,
            virtualnetworkid = None,
            virtualnetworktag = None,
            name = None,
-           addressblock_start = None,
-           addressblock_size = None,
+           addressblockstart = None,
+           addressblocksize = None,
            netmask = None,
            svip = None,
            gateway = None,
@@ -91,8 +91,8 @@ def modify(ctx,
     addressblocks = None
     if(virtualnetworkid is not None or virtualnetworktag is not None or name is not None or addressblocks is not None or netmask is not None or svip is not None or gateway is not None or namespace is not None or attributes is not None or False):
         kwargsDict = dict()
-        kwargsDict["start"] = addressblock_start
-        kwargsDict["size"] = addressblock_size
+        kwargsDict["start"] = addressblockstart
+        kwargsDict["size"] = addressblocksize
 
         addressblocks = AddressBlock(**kwargsDict)
 
@@ -128,11 +128,11 @@ def modify(ctx,
               type=str,
               required=True,
               help="""User defined name for the new virtual network. """)
-@click.option('--addressblock_start',
+@click.option('--addressblockstart',
               type=str,
               required=True,
               help="""Start of the IP address range. """)
-@click.option('--addressblock_size',
+@click.option('--addressblocksize',
               type=int,
               required=True,
               help="""Number of IP addresses to include in the block. """)
@@ -162,8 +162,8 @@ def add(ctx,
            name,
            netmask,
            svip,
-           addressblock_start,
-           addressblock_size,
+           addressblockstart,
+           addressblocksize,
            gateway = None,
            namespace = None,
            attributes = None):
@@ -179,8 +179,8 @@ def add(ctx,
     addressblocks = None
     if(virtualnetworktag is not None or name is not None or addressblocks is not None or netmask is not None or svip is not None or gateway is not None or namespace is not None or attributes is not None or False):
         kwargsDict = dict()
-        kwargsDict["start"] = addressblock_start
-        kwargsDict["size"] = addressblock_size
+        kwargsDict["start"] = addressblockstart
+        kwargsDict["size"] = addressblocksize
 
         addressblocks = AddressBlock(**kwargsDict)
 

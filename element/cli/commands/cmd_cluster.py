@@ -224,15 +224,15 @@ def getsystemstatus(ctx):
 
 
 @cli.command('setsnmptrapinfo', short_help="""SetSnmpTrapInfo is used to enable and disable the generation of SolidFire SNMP notifications (traps) and to specify the set of network host computers that are to receive the notifications. The values passed with each SetSnmpTrapInfo method replaces all values set in any previous method to SetSnmpTrapInfo. """)
-@click.option('--snmptraprecipient_host',
+@click.option('--snmptraprecipienthost',
               type=str,
               required=True,
               help="""The IP address or host name of the target network management station. """)
-@click.option('--snmptraprecipient_community',
+@click.option('--snmptraprecipientcommunity',
               type=str,
               required=True,
               help="""SNMP community string. """)
-@click.option('--snmptraprecipient_port',
+@click.option('--snmptraprecipientport',
               type=int,
               required=True,
               help="""The UDP port number on the host where the trap is to be sent. Valid range is 1 - 65535. 0 (zero) is not a valid port number. Default is 162. """)
@@ -253,9 +253,9 @@ def setsnmptrapinfo(ctx,
            clusterfaulttrapsenabled,
            clusterfaultresolvedtrapsenabled,
            clustereventtrapsenabled,
-           snmptraprecipient_host,
-           snmptraprecipient_community,
-           snmptraprecipient_port):
+           snmptraprecipienthost,
+           snmptraprecipientcommunity,
+           snmptraprecipientport):
     """SetSnmpTrapInfo is used to enable and disable the generation of SolidFire SNMP notifications (traps) and to specify the set of network host computers that are to receive the notifications. The values passed with each SetSnmpTrapInfo method replaces all values set in any previous method to SetSnmpTrapInfo."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
@@ -266,9 +266,9 @@ def setsnmptrapinfo(ctx,
     traprecipients = None
     if(traprecipients is not None or clusterfaulttrapsenabled is not None or clusterfaultresolvedtrapsenabled is not None or clustereventtrapsenabled is not None or False):
         kwargsDict = dict()
-        kwargsDict["host"] = snmptraprecipient_host
-        kwargsDict["community"] = snmptraprecipient_community
-        kwargsDict["port"] = snmptraprecipient_port
+        kwargsDict["host"] = snmptraprecipienthost
+        kwargsDict["community"] = snmptraprecipientcommunity
+        kwargsDict["port"] = snmptraprecipientport
 
         traprecipients = SnmpTrapRecipient(**kwargsDict)
 
@@ -555,58 +555,58 @@ def setntpinfo(ctx,
 
 
 @cli.command('setconfig', short_help="""The SetClusterConfig API method is used to set the configuration this node uses to communicate with the cluster it is associated with. To see the states in which these objects can be modified see Cluster Object on page 109. To display the current cluster interface settings for a node, run the GetClusterConfig API method.  Note: This method is available only through the per-node API endpoint 5.0 or later. """)
-@click.option('--clusterconfig_cipi',
+@click.option('--clusterconfigcipi',
               type=str,
               required=False,
               help="""Network interface used for cluster communication. """)
-@click.option('--clusterconfig_cluster',
+@click.option('--clusterconfigcluster',
               type=str,
               required=False,
               help="""Unique cluster name. """)
-@click.option('--clusterconfig_ensemble',
+@click.option('--clusterconfigensemble',
               type=str,
               required=False,
               help="""Nodes that are participating in the cluster. """)
-@click.option('--clusterconfig_mipi',
+@click.option('--clusterconfigmipi',
               type=str,
               required=False,
               help="""Network interface used for node management. """)
-@click.option('--clusterconfig_name',
+@click.option('--clusterconfigname',
               type=str,
               required=False,
               help="""Unique cluster name. """)
-@click.option('--clusterconfig_nodeid',
+@click.option('--clusterconfignodeid',
               type=int,
               required=False,
               help="""""")
-@click.option('--clusterconfig_pendingnodeid',
+@click.option('--clusterconfigpendingnodeid',
               type=int,
               required=False,
               help="""""")
-@click.option('--clusterconfig_role',
+@click.option('--clusterconfigrole',
               type=str,
               required=False,
               help="""Identifies the role of the node """)
-@click.option('--clusterconfig_sipi',
+@click.option('--clusterconfigsipi',
               type=str,
               required=False,
               help="""Network interface used for storage. """)
-@click.option('--clusterconfig_state',
+@click.option('--clusterconfigstate',
               type=str,
               required=False,
               help="""""")
 @pass_context
 def setconfig(ctx,
-           clusterconfig_cipi = None,
-           clusterconfig_cluster = None,
-           clusterconfig_ensemble = None,
-           clusterconfig_mipi = None,
-           clusterconfig_name = None,
-           clusterconfig_nodeid = None,
-           clusterconfig_pendingnodeid = None,
-           clusterconfig_role = None,
-           clusterconfig_sipi = None,
-           clusterconfig_state = None):
+           clusterconfigcipi = None,
+           clusterconfigcluster = None,
+           clusterconfigensemble = None,
+           clusterconfigmipi = None,
+           clusterconfigname = None,
+           clusterconfignodeid = None,
+           clusterconfigpendingnodeid = None,
+           clusterconfigrole = None,
+           clusterconfigsipi = None,
+           clusterconfigstate = None):
     """The SetClusterConfig API method is used to set the configuration this node uses to communicate with the cluster it is associated with. To see the states in which these objects can be modified see Cluster Object on page 109. To display the current cluster interface settings for a node, run the GetClusterConfig API method."""
     """"""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
@@ -619,16 +619,16 @@ def setconfig(ctx,
     cluster = None
     if(cluster is not None or False):
         kwargsDict = dict()
-        kwargsDict["cipi"] = clusterconfig_cipi
-        kwargsDict["cluster"] = clusterconfig_cluster
-        kwargsDict["ensemble"] = clusterconfig_ensemble
-        kwargsDict["mipi"] = clusterconfig_mipi
-        kwargsDict["name"] = clusterconfig_name
-        kwargsDict["nodeid"] = clusterconfig_nodeid
-        kwargsDict["pendingnodeid"] = clusterconfig_pendingnodeid
-        kwargsDict["role"] = clusterconfig_role
-        kwargsDict["sipi"] = clusterconfig_sipi
-        kwargsDict["state"] = clusterconfig_state
+        kwargsDict["cipi"] = clusterconfigcipi
+        kwargsDict["cluster"] = clusterconfigcluster
+        kwargsDict["ensemble"] = clusterconfigensemble
+        kwargsDict["mipi"] = clusterconfigmipi
+        kwargsDict["name"] = clusterconfigname
+        kwargsDict["node_id"] = clusterconfignodeid
+        kwargsDict["pending_node_id"] = clusterconfigpendingnodeid
+        kwargsDict["role"] = clusterconfigrole
+        kwargsDict["sipi"] = clusterconfigsipi
+        kwargsDict["state"] = clusterconfigstate
 
         cluster = ClusterConfig(**kwargsDict)
 
@@ -1050,53 +1050,53 @@ def getversioninfo(ctx):
 
 
 @cli.command('setsnmpacl', short_help="""SetSnmpACL is used to configure SNMP access permissions on the cluster nodes. The values set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to SetSnmpACL. Also note that the values set with this interface replace all "network" or "usmUsers" values set with the older SetSnmpInfo. """)
-@click.option('--snmpnetwork_access',
+@click.option('--snmpnetworkaccess',
               type=str,
               required=True,
               help="""ro: read-only access.* rw: for read-write access. rosys: for read-only access to a restricted set of system information *SolidFire recommends that all networks other than the default "localhost" be set to "ro" access, because all SolidFire MIB objects are read-only. """)
-@click.option('--snmpnetwork_cidr',
+@click.option('--snmpnetworkcidr',
               type=int,
               required=True,
               help="""A CIDR network mask. This network mask must be an integer greater than or equal to 0, and less than or equal to 32. It must also not be equal to 31. """)
-@click.option('--snmpnetwork_community',
+@click.option('--snmpnetworkcommunity',
               type=str,
               required=True,
               help="""SNMP community string. """)
-@click.option('--snmpnetwork_network',
+@click.option('--snmpnetworknetwork',
               type=str,
               required=True,
               help="""This parameter along with the cidr variable is used to control which network the access and community string apply to. The special value of "default" is used to specify an entry that applies to all networks. The cidr mask is ignored when network value is either a host name or default. """)
-@click.option('--snmpv3usmuser_access',
+@click.option('--snmpv3usmuseraccess',
               type=str,
               required=True,
               help="""rouser: read-only access.* rwuser: for read-write access. rosys: for read-only access to a restricted set of system information *SolidFire recommends that all USM users be set to "rouser" access, because all SolidFire MIB objects are read-only. """)
-@click.option('--snmpv3usmuser_name',
+@click.option('--snmpv3usmusername',
               type=str,
               required=True,
               help="""The name of the user. Must contain at least one character, but no more than 32 characters. Blank spaces are not allowed. """)
-@click.option('--snmpv3usmuser_password',
+@click.option('--snmpv3usmuserpassword',
               type=str,
               required=True,
               help="""The password of the user. Must be between 8 and 255 characters long (inclusive). Blank spaces are not allowed. Required if "secLevel" is "auth" or "priv." """)
-@click.option('--snmpv3usmuser_passphrase',
+@click.option('--snmpv3usmuserpassphrase',
               type=str,
               required=True,
               help="""The passphrase of the user. Must be between 8 and 255 characters long (inclusive). Blank spaces are not allowed. Required if "secLevel" is "priv." """)
-@click.option('--snmpv3usmuser_seclevel',
+@click.option('--snmpv3usmuserseclevel',
               type=str,
               required=True,
               help="""noauth: No password or passphrase is required. auth: A password is required for user access. priv: A password and passphrase is required for user access. """)
 @pass_context
 def setsnmpacl(ctx,
-           snmpnetwork_access,
-           snmpnetwork_cidr,
-           snmpnetwork_community,
-           snmpnetwork_network,
-           snmpv3usmuser_access,
-           snmpv3usmuser_name,
-           snmpv3usmuser_password,
-           snmpv3usmuser_passphrase,
-           snmpv3usmuser_seclevel):
+           snmpnetworkaccess,
+           snmpnetworkcidr,
+           snmpnetworkcommunity,
+           snmpnetworknetwork,
+           snmpv3usmuseraccess,
+           snmpv3usmusername,
+           snmpv3usmuserpassword,
+           snmpv3usmuserpassphrase,
+           snmpv3usmuserseclevel):
     """SetSnmpACL is used to configure SNMP access permissions on the cluster nodes. The values set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to SetSnmpACL. Also note that the values set with this interface replace all &quot;network&quot; or &quot;usmUsers&quot; values set with the older SetSnmpInfo."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
@@ -1107,10 +1107,10 @@ def setsnmpacl(ctx,
     networks = None
     if(networks is not None or usmusers is not None or False):
         kwargsDict = dict()
-        kwargsDict["access"] = snmpnetwork_access
-        kwargsDict["cidr"] = snmpnetwork_cidr
-        kwargsDict["community"] = snmpnetwork_community
-        kwargsDict["network"] = snmpnetwork_network
+        kwargsDict["access"] = snmpnetworkaccess
+        kwargsDict["cidr"] = snmpnetworkcidr
+        kwargsDict["community"] = snmpnetworkcommunity
+        kwargsDict["network"] = snmpnetworknetwork
 
         networks = SnmpNetwork(**kwargsDict)
 
@@ -1119,11 +1119,11 @@ def setsnmpacl(ctx,
     usmusers = None
     if(networks is not None or usmusers is not None or False):
         kwargsDict = dict()
-        kwargsDict["access"] = snmpv3usmuser_access
-        kwargsDict["name"] = snmpv3usmuser_name
-        kwargsDict["password"] = snmpv3usmuser_password
-        kwargsDict["passphrase"] = snmpv3usmuser_passphrase
-        kwargsDict["seclevel"] = snmpv3usmuser_seclevel
+        kwargsDict["access"] = snmpv3usmuseraccess
+        kwargsDict["name"] = snmpv3usmusername
+        kwargsDict["password"] = snmpv3usmuserpassword
+        kwargsDict["passphrase"] = snmpv3usmuserpassphrase
+        kwargsDict["sec_level"] = snmpv3usmuserseclevel
 
         usmusers = SnmpV3UsmUser(**kwargsDict)
 
@@ -1298,19 +1298,19 @@ def getmasternodeid(ctx):
 
 
 @cli.command('setsnmpinfo', short_help="""SetSnmpInfo is used to configure SNMP v2 and v3 on the cluster nodes. The values set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to SetSnmpInfo.  Note: EnableSnmp and SetSnmpACL methods can be used to accomplish the same results as SetSnmpInfo. SetSnmpInfo will no longer be available after the Element 8 release. Please use EnableSnmp and SetSnmpACL in the future. """)
-@click.option('--snmpnetwork_access',
+@click.option('--snmpnetworkaccess',
               type=str,
               required=True,
               help="""ro: read-only access.* rw: for read-write access. rosys: for read-only access to a restricted set of system information *SolidFire recommends that all networks other than the default "localhost" be set to "ro" access, because all SolidFire MIB objects are read-only. """)
-@click.option('--snmpnetwork_cidr',
+@click.option('--snmpnetworkcidr',
               type=int,
               required=True,
               help="""A CIDR network mask. This network mask must be an integer greater than or equal to 0, and less than or equal to 32. It must also not be equal to 31. """)
-@click.option('--snmpnetwork_community',
+@click.option('--snmpnetworkcommunity',
               type=str,
               required=True,
               help="""SNMP community string. """)
-@click.option('--snmpnetwork_network',
+@click.option('--snmpnetworknetwork',
               type=str,
               required=True,
               help="""This parameter along with the cidr variable is used to control which network the access and community string apply to. The special value of "default" is used to specify an entry that applies to all networks. The cidr mask is ignored when network value is either a host name or default. """)
@@ -1322,39 +1322,39 @@ def getmasternodeid(ctx):
               type=bool,
               required=False,
               help="""If set to "true", then SNMP v3 is enabled on each node in the cluster. """)
-@click.option('--snmpv3usmuser_access',
+@click.option('--snmpv3usmuseraccess',
               type=str,
               required=True,
               help="""rouser: read-only access.* rwuser: for read-write access. rosys: for read-only access to a restricted set of system information *SolidFire recommends that all USM users be set to "rouser" access, because all SolidFire MIB objects are read-only. """)
-@click.option('--snmpv3usmuser_name',
+@click.option('--snmpv3usmusername',
               type=str,
               required=True,
               help="""The name of the user. Must contain at least one character, but no more than 32 characters. Blank spaces are not allowed. """)
-@click.option('--snmpv3usmuser_password',
+@click.option('--snmpv3usmuserpassword',
               type=str,
               required=True,
               help="""The password of the user. Must be between 8 and 255 characters long (inclusive). Blank spaces are not allowed. Required if "secLevel" is "auth" or "priv." """)
-@click.option('--snmpv3usmuser_passphrase',
+@click.option('--snmpv3usmuserpassphrase',
               type=str,
               required=True,
               help="""The passphrase of the user. Must be between 8 and 255 characters long (inclusive). Blank spaces are not allowed. Required if "secLevel" is "priv." """)
-@click.option('--snmpv3usmuser_seclevel',
+@click.option('--snmpv3usmuserseclevel',
               type=str,
               required=True,
               help="""noauth: No password or passphrase is required. auth: A password is required for user access. priv: A password and passphrase is required for user access. """)
 @pass_context
 def setsnmpinfo(ctx,
-           snmpnetwork_access = None,
-           snmpnetwork_cidr = None,
-           snmpnetwork_community = None,
-           snmpnetwork_network = None,
+           snmpnetworkaccess = None,
+           snmpnetworkcidr = None,
+           snmpnetworkcommunity = None,
+           snmpnetworknetwork = None,
            enabled = None,
            snmpv3enabled = None,
-           snmpv3usmuser_access = None,
-           snmpv3usmuser_name = None,
-           snmpv3usmuser_password = None,
-           snmpv3usmuser_passphrase = None,
-           snmpv3usmuser_seclevel = None):
+           snmpv3usmuseraccess = None,
+           snmpv3usmusername = None,
+           snmpv3usmuserpassword = None,
+           snmpv3usmuserpassphrase = None,
+           snmpv3usmuserseclevel = None):
     """SetSnmpInfo is used to configure SNMP v2 and v3 on the cluster nodes. The values set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to SetSnmpInfo."""
     """"""
     """Note: EnableSnmp and SetSnmpACL methods can be used to accomplish the same results as SetSnmpInfo. SetSnmpInfo will no longer be available after the Element 8 release. Please use EnableSnmp and SetSnmpACL in the future."""
@@ -1367,10 +1367,10 @@ def setsnmpinfo(ctx,
     networks = None
     if(networks is not None or enabled is not None or snmpv3enabled is not None or usmusers is not None or False):
         kwargsDict = dict()
-        kwargsDict["access"] = snmpnetwork_access
-        kwargsDict["cidr"] = snmpnetwork_cidr
-        kwargsDict["community"] = snmpnetwork_community
-        kwargsDict["network"] = snmpnetwork_network
+        kwargsDict["access"] = snmpnetworkaccess
+        kwargsDict["cidr"] = snmpnetworkcidr
+        kwargsDict["community"] = snmpnetworkcommunity
+        kwargsDict["network"] = snmpnetworknetwork
 
         networks = SnmpNetwork(**kwargsDict)
 
@@ -1379,11 +1379,11 @@ def setsnmpinfo(ctx,
     usmusers = None
     if(networks is not None or enabled is not None or snmpv3enabled is not None or usmusers is not None or False):
         kwargsDict = dict()
-        kwargsDict["access"] = snmpv3usmuser_access
-        kwargsDict["name"] = snmpv3usmuser_name
-        kwargsDict["password"] = snmpv3usmuser_password
-        kwargsDict["passphrase"] = snmpv3usmuser_passphrase
-        kwargsDict["seclevel"] = snmpv3usmuser_seclevel
+        kwargsDict["access"] = snmpv3usmuseraccess
+        kwargsDict["name"] = snmpv3usmusername
+        kwargsDict["password"] = snmpv3usmuserpassword
+        kwargsDict["passphrase"] = snmpv3usmuserpassphrase
+        kwargsDict["sec_level"] = snmpv3usmuserseclevel
 
         usmusers = SnmpV3UsmUser(**kwargsDict)
 

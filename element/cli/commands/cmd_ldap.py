@@ -135,43 +135,43 @@ def enableldapauthentication(ctx,
               type=str,
               required=True,
               help="""The password for the username to be tester. """)
-@click.option('--ldapconfiguration_authtype',
+@click.option('--ldapconfigurationauthtype',
               type=str,
               required=True,
               help="""Identifies which user authentcation method will be used.  Valid values: DirectBind SearchAndBind """)
-@click.option('--ldapconfiguration_enabled',
+@click.option('--ldapconfigurationenabled',
               type=bool,
               required=True,
               help="""Identifies whether or not the system is enabled for LDAP.  Valid values: true false """)
-@click.option('--ldapconfiguration_groupsearchbasedn',
+@click.option('--ldapconfigurationgroupsearchbasedn',
               type=str,
               required=True,
               help="""The base DN of the tree to start the group search (will do a subtree search from here). """)
-@click.option('--ldapconfiguration_groupsearchcustomfilter',
+@click.option('--ldapconfigurationgroupsearchcustomfilter',
               type=str,
               required=True,
               help="""The custom search filter used. """)
-@click.option('--ldapconfiguration_groupsearchtype',
+@click.option('--ldapconfigurationgroupsearchtype',
               type=str,
               required=True,
               help="""Controls the default group search filter used, can be one of the following: NoGroups: No group support. ActiveDirectory: Nested membership of all of a user's AD groups. MemberDN: MemberDN style groups (single-level). """)
-@click.option('--ldapconfiguration_searchbinddn',
+@click.option('--ldapconfigurationsearchbinddn',
               type=str,
               required=True,
               help="""A fully qualified DN to log in with to perform an LDAP search for the user (needs read access to the LDAP directory). """)
-@click.option('--ldapconfiguration_serveruris',
+@click.option('--ldapconfigurationserveruris',
               type=str,
               required=True,
               help="""A comma-separated list of LDAP server URIs (examples: "ldap://1.2.3.4" and ldaps://1.2.3.4:123") """)
-@click.option('--ldapconfiguration_userdntemplate',
+@click.option('--ldapconfigurationuserdntemplate',
               type=str,
               required=True,
               help="""A string that is used to form a fully qualified user DN. """)
-@click.option('--ldapconfiguration_usersearchbasedn',
+@click.option('--ldapconfigurationusersearchbasedn',
               type=str,
               required=True,
               help="""The base DN of the tree used to start the search (will do a subtree search from here). """)
-@click.option('--ldapconfiguration_usersearchfilter',
+@click.option('--ldapconfigurationusersearchfilter',
               type=str,
               required=True,
               help="""The LDAP filter used. """)
@@ -179,16 +179,16 @@ def enableldapauthentication(ctx,
 def testldapauthentication(ctx,
            username,
            password,
-           ldapconfiguration_authtype = None,
-           ldapconfiguration_enabled = None,
-           ldapconfiguration_groupsearchbasedn = None,
-           ldapconfiguration_groupsearchcustomfilter = None,
-           ldapconfiguration_groupsearchtype = None,
-           ldapconfiguration_searchbinddn = None,
-           ldapconfiguration_serveruris = None,
-           ldapconfiguration_userdntemplate = None,
-           ldapconfiguration_usersearchbasedn = None,
-           ldapconfiguration_usersearchfilter = None):
+           ldapconfigurationauthtype = None,
+           ldapconfigurationenabled = None,
+           ldapconfigurationgroupsearchbasedn = None,
+           ldapconfigurationgroupsearchcustomfilter = None,
+           ldapconfigurationgroupsearchtype = None,
+           ldapconfigurationsearchbinddn = None,
+           ldapconfigurationserveruris = None,
+           ldapconfigurationuserdntemplate = None,
+           ldapconfigurationusersearchbasedn = None,
+           ldapconfigurationusersearchfilter = None):
     """The TestLdapAuthentication is used to verify the currently enabled LDAP authentication configuration settings are correct. If the configuration settings are correct, the API call returns a list of the groups the tested user is a member of."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
@@ -199,16 +199,16 @@ def testldapauthentication(ctx,
     ldapconfiguration = None
     if(username is not None or password is not None or ldapconfiguration is not None or False):
         kwargsDict = dict()
-        kwargsDict["authtype"] = ldapconfiguration_authtype
-        kwargsDict["enabled"] = ldapconfiguration_enabled
-        kwargsDict["groupsearchbasedn"] = ldapconfiguration_groupsearchbasedn
-        kwargsDict["groupsearchcustomfilter"] = ldapconfiguration_groupsearchcustomfilter
-        kwargsDict["groupsearchtype"] = ldapconfiguration_groupsearchtype
-        kwargsDict["searchbinddn"] = ldapconfiguration_searchbinddn
-        kwargsDict["serveruris"] = ldapconfiguration_serveruris
-        kwargsDict["userdntemplate"] = ldapconfiguration_userdntemplate
-        kwargsDict["usersearchbasedn"] = ldapconfiguration_usersearchbasedn
-        kwargsDict["usersearchfilter"] = ldapconfiguration_usersearchfilter
+        kwargsDict["auth_type"] = ldapconfigurationauthtype
+        kwargsDict["enabled"] = ldapconfigurationenabled
+        kwargsDict["group_search_base_dn"] = ldapconfigurationgroupsearchbasedn
+        kwargsDict["group_search_custom_filter"] = ldapconfigurationgroupsearchcustomfilter
+        kwargsDict["group_search_type"] = ldapconfigurationgroupsearchtype
+        kwargsDict["search_bind_dn"] = ldapconfigurationsearchbinddn
+        kwargsDict["server_uris"] = ldapconfigurationserveruris
+        kwargsDict["user_dntemplate"] = ldapconfigurationuserdntemplate
+        kwargsDict["user_search_base_dn"] = ldapconfigurationusersearchbasedn
+        kwargsDict["user_search_filter"] = ldapconfigurationusersearchfilter
 
         ldapconfiguration = LdapConfiguration(**kwargsDict)
 

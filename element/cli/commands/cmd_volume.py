@@ -367,19 +367,19 @@ def liststatsby(ctx):
               type=bool,
               required=True,
               help="""Should the volume provides 512-byte sector emulation? """)
-@click.option('--qos_miniops',
+@click.option('--qosminiops',
               type=int,
               required=False,
               help="""Desired minimum 4KB IOPS to guarantee. The allowed IOPS will only drop below this level if all volumes have been capped at their minimum IOPS value and there is still insufficient performance capacity. """)
-@click.option('--qos_maxiops',
+@click.option('--qosmaxiops',
               type=int,
               required=False,
               help="""Desired maximum 4KB IOPS allowed over an extended period of time. """)
-@click.option('--qos_burstiops',
+@click.option('--qosburstiops',
               type=int,
               required=False,
               help="""Maximum "peak" 4KB IOPS allowed for short periods of time. Allows for bursts of I/O activity over the normal max IOPS value. """)
-@click.option('--qos_bursttime',
+@click.option('--qosbursttime',
               type=int,
               required=False,
               help="""The length of time burst IOPS is allowed. The value returned is represented in time units of seconds. Note: this value is calculated by the system based on IOPS set for QoS. """)
@@ -393,10 +393,10 @@ def create(ctx,
            accountid,
            totalsize,
            enable512e,
-           qos_miniops = None,
-           qos_maxiops = None,
-           qos_burstiops = None,
-           qos_bursttime = None,
+           qosminiops = None,
+           qosmaxiops = None,
+           qosburstiops = None,
+           qosbursttime = None,
            attributes = None):
     """CreateVolume is used to create a new (empty) volume on the cluster."""
     """When the volume is created successfully it is available for connection via iSCSI."""
@@ -409,10 +409,10 @@ def create(ctx,
     qos = None
     if(name is not None or accountid is not None or totalsize is not None or enable512e is not None or qos is not None or attributes is not None or False):
         kwargsDict = dict()
-        kwargsDict["miniops"] = qos_miniops
-        kwargsDict["maxiops"] = qos_maxiops
-        kwargsDict["burstiops"] = qos_burstiops
-        kwargsDict["bursttime"] = qos_bursttime
+        kwargsDict["min_iops"] = qosminiops
+        kwargsDict["max_iops"] = qosmaxiops
+        kwargsDict["burst_iops"] = qosburstiops
+        kwargsDict["burst_time"] = qosbursttime
 
         qos = QoS(**kwargsDict)
     if(attributes is not None):
@@ -701,19 +701,19 @@ def clone(ctx,
               type=str,
               required=False,
               help="""Access allowed for the volume. readOnly: Only read operations are allowed. readWrite: Reads and writes are allowed. locked: No reads or writes are allowed. replicationTarget: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked.  If unspecified, the access settings of the clone will be the same as the source. """)
-@click.option('--qos_miniops',
+@click.option('--qosminiops',
               type=int,
               required=False,
               help="""Desired minimum 4KB IOPS to guarantee. The allowed IOPS will only drop below this level if all volumes have been capped at their minimum IOPS value and there is still insufficient performance capacity. """)
-@click.option('--qos_maxiops',
+@click.option('--qosmaxiops',
               type=int,
               required=False,
               help="""Desired maximum 4KB IOPS allowed over an extended period of time. """)
-@click.option('--qos_burstiops',
+@click.option('--qosburstiops',
               type=int,
               required=False,
               help="""Maximum "peak" 4KB IOPS allowed for short periods of time. Allows for bursts of I/O activity over the normal max IOPS value. """)
-@click.option('--qos_bursttime',
+@click.option('--qosbursttime',
               type=int,
               required=False,
               help="""The length of time burst IOPS is allowed. The value returned is represented in time units of seconds. Note: this value is calculated by the system based on IOPS set for QoS. """)
@@ -730,10 +730,10 @@ def modify(ctx,
            volumeid,
            accountid = None,
            access = None,
-           qos_miniops = None,
-           qos_maxiops = None,
-           qos_burstiops = None,
-           qos_bursttime = None,
+           qosminiops = None,
+           qosmaxiops = None,
+           qosburstiops = None,
+           qosbursttime = None,
            totalsize = None,
            attributes = None):
     """ModifyVolume is used to modify settings on an existing volume."""
@@ -754,10 +754,10 @@ def modify(ctx,
     qos = None
     if(volumeid is not None or accountid is not None or access is not None or qos is not None or totalsize is not None or attributes is not None or False):
         kwargsDict = dict()
-        kwargsDict["miniops"] = qos_miniops
-        kwargsDict["maxiops"] = qos_maxiops
-        kwargsDict["burstiops"] = qos_burstiops
-        kwargsDict["bursttime"] = qos_bursttime
+        kwargsDict["min_iops"] = qosminiops
+        kwargsDict["max_iops"] = qosmaxiops
+        kwargsDict["burst_iops"] = qosburstiops
+        kwargsDict["burst_time"] = qosbursttime
 
         qos = QoS(**kwargsDict)
     if(attributes is not None):
@@ -946,27 +946,27 @@ def list(ctx,
 
 
 @cli.command('clonemultiple', short_help="""CloneMultipleVolumes is used to create a clone of a group of specified volumes. A consistent set of characteristics can be assigned to a group of multiple volume when they are cloned together. If groupSnapshotID is going to be used to clone the volumes in a group snapshot, the group snapshot must be created first using the CreateGroupSnapshot API method or the SolidFire Element WebUI. Using groupSnapshotID is optional when cloning multiple volumes.  Note: Cloning multiple volumes is allowed if cluster fullness is at stage 2 or 3. Clones are not created when cluster fullness is at stage 4 or 5. """)
-@click.option('--clonemultiplevolumeparams_volumeid',
+@click.option('--clonemultiplevolumeparamsvolumeid',
               type=int,
               required=True,
               help="""Required parameter for "volumes" array: volumeID. """)
-@click.option('--clonemultiplevolumeparams_access',
+@click.option('--clonemultiplevolumeparamsaccess',
               type=str,
               required=False,
               help="""Access settings for the new volume. readOnly: Only read operations are allowed. readWrite: Reads and writes are allowed. locked: No reads or writes are allowed. replicationTarget: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked.  If unspecified, the access settings of the clone will be the same as the source. """)
-@click.option('--clonemultiplevolumeparams_name',
+@click.option('--clonemultiplevolumeparamsname',
               type=str,
               required=False,
               help="""New name for the clone. """)
-@click.option('--clonemultiplevolumeparams_newaccountid',
+@click.option('--clonemultiplevolumeparamsnewaccountid',
               type=int,
               required=False,
               help="""Account ID for the new volume. """)
-@click.option('--clonemultiplevolumeparams_newsize',
+@click.option('--clonemultiplevolumeparamsnewsize',
               type=int,
               required=False,
               help="""New size Total size of the volume, in bytes. Size is rounded up to the nearest 1MB size. """)
-@click.option('--clonemultiplevolumeparams_attributes',
+@click.option('--clonemultiplevolumeparamsattributes',
               type=dict,
               required=False,
               help="""List of Name/Value pairs in JSON object format. """)
@@ -984,12 +984,12 @@ def list(ctx,
               help="""New account ID for the volumes if not overridden by information passed in the volumes array. """)
 @pass_context
 def clonemultiple(ctx,
-           clonemultiplevolumeparams_volumeid,
-           clonemultiplevolumeparams_access = None,
-           clonemultiplevolumeparams_name = None,
-           clonemultiplevolumeparams_newaccountid = None,
-           clonemultiplevolumeparams_newsize = None,
-           clonemultiplevolumeparams_attributes = None,
+           clonemultiplevolumeparamsvolumeid,
+           clonemultiplevolumeparamsaccess = None,
+           clonemultiplevolumeparamsname = None,
+           clonemultiplevolumeparamsnewaccountid = None,
+           clonemultiplevolumeparamsnewsize = None,
+           clonemultiplevolumeparamsattributes = None,
            access = None,
            groupsnapshotid = None,
            newaccountid = None):
@@ -1006,12 +1006,12 @@ def clonemultiple(ctx,
     volumes = None
     if(volumes is not None or access is not None or groupsnapshotid is not None or newaccountid is not None or False):
         kwargsDict = dict()
-        kwargsDict["volumeid"] = clonemultiplevolumeparams_volumeid
-        kwargsDict["access"] = clonemultiplevolumeparams_access
-        kwargsDict["name"] = clonemultiplevolumeparams_name
-        kwargsDict["newaccountid"] = clonemultiplevolumeparams_newaccountid
-        kwargsDict["newsize"] = clonemultiplevolumeparams_newsize
-        kwargsDict["attributes"] = clonemultiplevolumeparams_attributes
+        kwargsDict["volume_id"] = clonemultiplevolumeparamsvolumeid
+        kwargsDict["access"] = clonemultiplevolumeparamsaccess
+        kwargsDict["name"] = clonemultiplevolumeparamsname
+        kwargsDict["new_account_id"] = clonemultiplevolumeparamsnewaccountid
+        kwargsDict["new_size"] = clonemultiplevolumeparamsnewsize
+        kwargsDict["attributes"] = clonemultiplevolumeparamsattributes
 
         volumes = CloneMultipleVolumeParams(**kwargsDict)
 

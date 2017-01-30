@@ -196,13 +196,13 @@ def gethardwareinfo(ctx,
 
 
 @cli.command('add', short_help="""AddDrives is used to add one or more available drives to the cluster enabling the drives to host a portion of the cluster's data. When you add a node to the cluster or install new drives in an existing node, the new drives are marked as "available" and must be added via AddDrives before they can be utilized. Use the "ListDrives" method to display drives that are "available" to be added. When you add multiple drives, it is more efficient to add them in a single "AddDrives" method call rather than multiple individual methods with a single drive each. This reduces the amount of data balancing that must occur to stabilize the storage load on the cluster.  When you add a drive, the system automatically determines the "type" of drive it should be.  The method returns immediately. However, it may take some time for the data in the cluster to be rebalanced using the newly added drives. As the new drive(s) are syncing on the system, you can use the "ListSyncJobs" method to see how the drive(s) are being rebalanced and the progress of adding the new drive. """)
-@click.option('--newdrive_driveid',
+@click.option('--newdrivedriveid',
               type=int,
               required=True,
               help="""A unique identifier for this drive. """)
 @pass_context
 def add(ctx,
-           newdrive_driveid):
+           newdrivedriveid):
     """AddDrives is used to add one or more available drives to the cluster enabling the drives to host a portion of the cluster&#x27;s data."""
     """When you add a node to the cluster or install new drives in an existing node, the new drives are marked as &quot;available&quot; and must be added via AddDrives before they can be utilized."""
     """Use the &quot;ListDrives&quot; method to display drives that are &quot;available&quot; to be added."""
@@ -222,7 +222,7 @@ def add(ctx,
     drives = None
     if(drives is not None or False):
         kwargsDict = dict()
-        kwargsDict["driveid"] = newdrive_driveid
+        kwargsDict["drive_id"] = newdrivedriveid
 
         drives = NewDrive(**kwargsDict)
 

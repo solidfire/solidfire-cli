@@ -140,19 +140,19 @@ def create(ctx,
               type=int,
               required=True,
               help="""Unique volume access group ID for which the LUN assignments will be modified. """)
-@click.option('--lunassignment_volumeid',
+@click.option('--lunassignmentvolumeid',
               type=int,
               required=True,
               help="""The volume ID assigned to the Lun. """)
-@click.option('--lunassignment_lun',
+@click.option('--lunassignmentlun',
               type=int,
               required=True,
               help="""Correct LUN values are 0 - 16383. An exception will be seen if an incorrect LUN value is passed. """)
 @pass_context
 def modifylunassignments(ctx,
            volumeaccessgroupid,
-           lunassignment_volumeid,
-           lunassignment_lun):
+           lunassignmentvolumeid,
+           lunassignmentlun):
     """The ModifytVolumeAccessGroupLunAssignments is used to define custom LUN assignments for specific volumes. Only LUN values set on the lunAssignments parameter will be changed in the volume access group. All other LUN assignments will remain unchanged."""
     """"""
     """LUN assignment values must be unique for volumes in a volume access group. An exception will be seen if LUN assignments are duplicated in a volume access group. However, the same LUN values can be used again in different volume access groups."""
@@ -169,8 +169,8 @@ def modifylunassignments(ctx,
     lunassignments = None
     if(volumeaccessgroupid is not None or lunassignments is not None or False):
         kwargsDict = dict()
-        kwargsDict["volumeid"] = lunassignment_volumeid
-        kwargsDict["lun"] = lunassignment_lun
+        kwargsDict["volume_id"] = lunassignmentvolumeid
+        kwargsDict["lun"] = lunassignmentlun
 
         lunassignments = LunAssignment(**kwargsDict)
 
