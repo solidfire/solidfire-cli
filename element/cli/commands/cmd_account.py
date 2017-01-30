@@ -24,7 +24,7 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """list getefficiency modify remove getbyname add getbyid """
+    """list modify getbyname remove getbyid getefficiency add """
 
 @cli.command('list', short_help="""Returns the entire list of accounts, with optional paging support. """)
 @click.option('--startaccountid',
@@ -45,6 +45,7 @@ def list(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""startaccountid = """+str(startaccountid)+""";"""+"""limit = """+str(limit)+""";"""+"")
     try:
@@ -57,35 +58,6 @@ def list(ctx,
         exit()
 
     cli_utils.print_result(_ListAccountsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getefficiency', short_help="""GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity. """)
-@click.option('--accountid',
-              type=int,
-              required=True,
-              help="""Specifies the volume account for which capacity is computed. """)
-@pass_context
-def getefficiency(ctx,
-           accountid):
-    """GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("""accountid = """+str(accountid)+""";"""+"")
-    try:
-        _GetEfficiencyResult = ctx.element.get_account_efficiency(account_id=accountid)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_GetEfficiencyResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -138,6 +110,11 @@ def modify(ctx,
             ctx.logger.error(e.__str__())
             exit(1)
         attributes = dict(**kwargsDict)
+    
+    if initiatorsecret == "AUTO-GENERATE-CHAP-SECRET":
+        initiatorsecret = CHAPSecret.auto_generate()
+    if targetsecret == "AUTO-GENERATE-CHAP-SECRET":
+        targetsecret = CHAPSecret.auto_generate()
 
     ctx.logger.info("""accountid = """+str(accountid)+""";"""+"""username = """+str(username)+""";"""+"""status = """+str(status)+""";"""+"""initiatorsecret = """+str(initiatorsecret)+""";"""+"""targetsecret = """+str(targetsecret)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
@@ -150,6 +127,36 @@ def modify(ctx,
         exit()
 
     cli_utils.print_result(_ModifyAccountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getbyname', short_help="""Returns details about an account, given its Username. """)
+@click.option('--username',
+              type=str,
+              required=True,
+              help="""Username for the account. """)
+@pass_context
+def getbyname(ctx,
+           username):
+    """Returns details about an account, given its Username."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+    
+
+    ctx.logger.info("""username = """+str(username)+""";"""+"")
+    try:
+        _GetAccountResult = ctx.element.get_account_by_name(username=username)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_GetAccountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -169,6 +176,7 @@ def remove(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""accountid = """+str(accountid)+""";"""+"")
     try:
@@ -184,24 +192,25 @@ def remove(ctx,
 
 
 
-@cli.command('getbyname', short_help="""Returns details about an account, given its Username. """)
-@click.option('--username',
-              type=str,
+@cli.command('getbyid', short_help="""Returns details about an account, given its AccountID. """)
+@click.option('--accountid',
+              type=int,
               required=True,
-              help="""Username for the account. """)
+              help="""Specifies the account for which details are gathered. """)
 @pass_context
-def getbyname(ctx,
-           username):
-    """Returns details about an account, given its Username."""
+def getbyid(ctx,
+           accountid):
+    """Returns details about an account, given its AccountID."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
+    
 
-    ctx.logger.info("""username = """+str(username)+""";"""+"")
+    ctx.logger.info("""accountid = """+str(accountid)+""";"""+"")
     try:
-        _GetAccountResult = ctx.element.get_account_by_name(username=username)
+        _GetAccountResult = ctx.element.get_account_by_id(account_id=accountid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -210,6 +219,36 @@ def getbyname(ctx,
         exit()
 
     cli_utils.print_result(_GetAccountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getefficiency', short_help="""GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity. """)
+@click.option('--accountid',
+              type=int,
+              required=True,
+              help="""Specifies the volume account for which capacity is computed. """)
+@pass_context
+def getefficiency(ctx,
+           accountid):
+    """GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+    
+
+    ctx.logger.info("""accountid = """+str(accountid)+""";"""+"")
+    try:
+        _GetEfficiencyResult = ctx.element.get_account_efficiency(account_id=accountid)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_GetEfficiencyResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -251,6 +290,11 @@ def add(ctx,
             ctx.logger.error(e.__str__())
             exit(1)
         attributes = dict(**kwargsDict)
+    
+    if initiatorsecret == "AUTO-GENERATE-CHAP-SECRET":
+        initiatorsecret = CHAPSecret.auto_generate()
+    if targetsecret == "AUTO-GENERATE-CHAP-SECRET":
+        targetsecret = CHAPSecret.auto_generate()
 
     ctx.logger.info("""username = """+str(username)+""";"""+"""initiatorsecret = """+str(initiatorsecret)+""";"""+"""targetsecret = """+str(targetsecret)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
@@ -263,33 +307,4 @@ def add(ctx,
         exit()
 
     cli_utils.print_result(_AddAccountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getbyid', short_help="""Returns details about an account, given its AccountID. """)
-@click.option('--accountid',
-              type=int,
-              required=True,
-              help="""Specifies the account for which details are gathered. """)
-@pass_context
-def getbyid(ctx,
-           accountid):
-    """Returns details about an account, given its AccountID."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("""accountid = """+str(accountid)+""";"""+"")
-    try:
-        _GetAccountResult = ctx.element.get_account_by_id(account_id=accountid)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_GetAccountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

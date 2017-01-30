@@ -40,6 +40,7 @@ def getipmiinfo(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""force = """+str(force)+""";"""+"")
     try:
@@ -74,6 +75,7 @@ def getipmiconfig(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""chassistype = """+str(chassistype)+""";"""+"""force = """+str(force)+""";"""+"")
     try:
