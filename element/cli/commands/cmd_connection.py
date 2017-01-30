@@ -48,9 +48,8 @@ def remove(ctx, name=None, index=None):
         ctx.logger.error("You must provide either the name or the index. Not both.")
     if name is None and index is None:
         ctx.logger.error("You must provide either the name or the index of the connection to remove.")
-    connectionsCsvLocation = resource_filename(Requirement.parse("solidfire-cli"), "connections.csv")
-    with open(connectionsCsvLocation) as connectionFile:
-        connections = list(csv.DictReader(connectionFile, delimiter=','))
+
+    connections = cli_utils.get_connections()
 
     # Filter by name
     if name is not None:
@@ -58,12 +57,7 @@ def remove(ctx, name=None, index=None):
     # Filter by index
     if index is not None:
         del connections[index]
-    with open(connectionsCsvLocation, 'w') as f:
-        w = csv.DictWriter(f, ["name","mvip","port","login","password","url"], lineterminator='\n')
-        w.writeheader()
-        for connection in connections:
-            if connection is not None:
-                w.writerow(connection)
+    cli_utils.write_connections(connections)
 
 @cli.command('list', short_help="Lists the stored connection info")
 @click.option('--name', '-n',
@@ -77,8 +71,7 @@ def remove(ctx, name=None, index=None):
 @pass_context
 def list(ctx, name=None, index=None):
     connectionsCsvLocation = resource_filename(Requirement.parse("solidfire-cli"), "connections.csv")
-    with open(connectionsCsvLocation) as connectionFile:
-        connections = list(csv.DictReader(connectionFile, delimiter=','))
+    connections = cli_utils.get_connections()
     print(connectionsCsvLocation)
     if(name is None and index is None):
         cli_utils.print_result(connections, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
