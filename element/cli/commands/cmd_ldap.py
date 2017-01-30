@@ -24,6 +24,7 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
+<<<<<<< HEAD
     """disableldapauthentication enableldapauthentication testldapauthentication addldapclusteradmin getldapconfiguration """
 
 @cli.command('disableldapauthentication', short_help="""The DisableLdapAuthentication method is used disable LDAP authentication and remove all LDAP configuration settings. This call will not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no longer be able to log in. """)
@@ -49,6 +50,9 @@ def disableldapauthentication(ctx):
     cli_utils.print_result(_DisableLdapAuthenticationResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
+=======
+    """enableldapauthentication disableldapauthentication getldapconfiguration testldapauthentication addldapclusteradmin """
+>>>>>>> Removes the broken files
 
 @cli.command('enableldapauthentication', short_help="""The EnableLdapAuthentication method is used to configure an LDAP server connection to use for LDAP authentication to a SolidFire cluster. Users that are members on the LDAP server can then log in to a SolidFire storage system using their LDAP authentication userid and password. """)
 @click.option('--authtype',
@@ -126,6 +130,57 @@ def enableldapauthentication(ctx,
 
 
 
+<<<<<<< HEAD
+=======
+@cli.command('disableldapauthentication', short_help="""The DisableLdapAuthentication method is used disable LDAP authentication and remove all LDAP configuration settings. This call will not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no longer be able to log in. """)
+@pass_context
+def disableldapauthentication(ctx):
+    """The DisableLdapAuthentication method is used disable LDAP authentication and remove all LDAP configuration settings. This call will not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no longer be able to log in."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("")
+    try:
+        _DisableLdapAuthenticationResult = ctx.element.disable_ldap_authentication()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_DisableLdapAuthenticationResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getldapconfiguration', short_help="""The GetLdapConfiguration is used to get the LDAP configuration currently active on the cluster. """)
+@pass_context
+def getldapconfiguration(ctx):
+    """The GetLdapConfiguration is used to get the LDAP configuration currently active on the cluster."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("")
+    try:
+        _GetLdapConfigurationResult = ctx.element.get_ldap_configuration()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_GetLdapConfigurationResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+>>>>>>> Removes the broken files
 @cli.command('testldapauthentication', short_help="""The TestLdapAuthentication is used to verify the currently enabled LDAP authentication configuration settings are correct. If the configuration settings are correct, the API call returns a list of the groups the tested user is a member of. """)
 @click.option('--username',
               type=str,

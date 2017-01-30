@@ -24,6 +24,7 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
+<<<<<<< HEAD
     """list getefficiency modify remove getbyname add getbyid """
 
 @cli.command('list', short_help="""Returns the entire list of accounts, with optional paging support. """)
@@ -40,15 +41,34 @@ def list(ctx,
            startaccountid = None,
            limit = None):
     """Returns the entire list of accounts, with optional paging support."""
+=======
+    """getbyname list add getbyid remove getefficiency modify """
+
+@cli.command('getbyname', short_help="""Returns details about an account, given its Username. """)
+@click.option('--username',
+              type=str,
+              required=True,
+              help="""Username for the account. """)
+@pass_context
+def getbyname(ctx,
+           username):
+    """Returns details about an account, given its Username."""
+>>>>>>> Removes the broken files
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
+<<<<<<< HEAD
     ctx.logger.info("""startaccountid = """+str(startaccountid)+""";"""+"""limit = """+str(limit)+""";"""+"")
     try:
         _ListAccountsResult = ctx.element.list_accounts(start_account_id=startaccountid, limit=limit)
+=======
+    ctx.logger.info("""username = """+str(username)+""";"""+"")
+    try:
+        _GetAccountResult = ctx.element.get_account_by_name(username=username)
+>>>>>>> Removes the broken files
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -77,7 +97,11 @@ def getefficiency(ctx,
 
     ctx.logger.info("""accountid = """+str(accountid)+""";"""+"")
     try:
+<<<<<<< HEAD
         _GetEfficiencyResult = ctx.element.get_account_efficiency(account_id=accountid)
+=======
+        _ListAccountsResult = ctx.element.list_accounts(start_account_id=startaccountid, limit=limit)
+>>>>>>> Removes the broken files
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -141,7 +165,11 @@ def modify(ctx,
 
     ctx.logger.info("""accountid = """+str(accountid)+""";"""+"""username = """+str(username)+""";"""+"""status = """+str(status)+""";"""+"""initiatorsecret = """+str(initiatorsecret)+""";"""+"""targetsecret = """+str(targetsecret)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
+<<<<<<< HEAD
         _ModifyAccountResult = ctx.element.modify_account(account_id=accountid, username=username, status=status, initiator_secret=initiatorsecret, target_secret=targetsecret, attributes=attributes)
+=======
+        _AddAccountResult = ctx.element.add_account(username=username, initiator_secret=initiatorsecret, target_secret=targetsecret, attributes=attributes)
+>>>>>>> Removes the broken files
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -150,6 +178,35 @@ def modify(ctx,
         exit()
 
     cli_utils.print_result(_ModifyAccountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getbyid', short_help="""Returns details about an account, given its AccountID. """)
+@click.option('--accountid',
+              type=int,
+              required=True,
+              help="""Specifies the account for which details are gathered. """)
+@pass_context
+def getbyid(ctx,
+           accountid):
+    """Returns details about an account, given its AccountID."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("""accountid = """+str(accountid)+""";"""+"")
+    try:
+        _GetAccountResult = ctx.element.get_account_by_id(account_id=accountid)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_GetAccountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -184,7 +241,44 @@ def remove(ctx,
 
 
 
+<<<<<<< HEAD
 @cli.command('getbyname', short_help="""Returns details about an account, given its Username. """)
+=======
+@cli.command('getefficiency', short_help="""GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity. """)
+@click.option('--accountid',
+              type=int,
+              required=True,
+              help="""Specifies the volume account for which capacity is computed. """)
+@pass_context
+def getefficiency(ctx,
+           accountid):
+    """GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("""accountid = """+str(accountid)+""";"""+"")
+    try:
+        _GetEfficiencyResult = ctx.element.get_account_efficiency(account_id=accountid)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_GetEfficiencyResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('modify', short_help="""Used to modify an existing account. When locking an account, any existing connections from that account are immediately terminated. When changing CHAP settings, any existing connections continue to be active, and the new CHAP values are only used on subsequent connection or reconnection. """)
+@click.option('--accountid',
+              type=int,
+              required=True,
+              help="""AccountID for the account to modify. """)
+>>>>>>> Removes the broken files
 @click.option('--username',
               type=str,
               required=True,
@@ -198,10 +292,24 @@ def getbyname(ctx,
          exit()
 
 
+<<<<<<< HEAD
+=======
+    if(attributes is not None):
+        try:
+            kwargsDict = simplejson.loads(attributes)
+        except Exception as e:
+            ctx.logger.error(e.__str__())
+            exit(1)
+        attributes = dict(**kwargsDict)
+>>>>>>> Removes the broken files
 
     ctx.logger.info("""username = """+str(username)+""";"""+"")
     try:
+<<<<<<< HEAD
         _GetAccountResult = ctx.element.get_account_by_name(username=username)
+=======
+        _ModifyAccountResult = ctx.element.modify_account(account_id=accountid, username=username, status=status, initiator_secret=initiatorsecret, target_secret=targetsecret, attributes=attributes)
+>>>>>>> Removes the broken files
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -211,6 +319,7 @@ def getbyname(ctx,
 
     cli_utils.print_result(_GetAccountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
+<<<<<<< HEAD
 
 
 @cli.command('add', short_help="""Used to add a new account to the system. New volumes can be created under the new account. The CHAP settings specified for the account applies to all volumes owned by the account. """)
@@ -293,3 +402,5 @@ def getbyid(ctx,
 
     cli_utils.print_result(_GetAccountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
+=======
+>>>>>>> Removes the broken files

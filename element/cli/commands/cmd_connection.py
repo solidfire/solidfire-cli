@@ -10,6 +10,8 @@ import csv
 from element.cli.cli import pass_context
 from element import exceptions
 from pkg_resources import Requirement, resource_filename
+import simplejson
+from element.cli import utils as cli_utils
 
 @click.group()
 @pass_context
@@ -46,9 +48,9 @@ def push(ctx):
 @pass_context
 def remove(ctx, name=None, index=None):
     if name is not None and index is not None:
-        raise exceptions.SolidFireUsageException("You must provide either the name or the index. Not both.")
+        ctx.logger.error("You must provide either the name or the index. Not both.")
     if name is None and index is None:
-        raise exceptions.SolidFireUsageException("You must provide either the name or the index of the connection to remove.")
+        ctx.logger.error("You must provide either the name or the index of the connection to remove.")
     connectionsCsvLocation = resource_filename(Requirement.parse("solidfire-cli"), "connections.csv")
     with open(connectionsCsvLocation) as connectionFile:
         connections = list(csv.DictReader(connectionFile, delimiter=','))
@@ -65,3 +67,26 @@ def remove(ctx, name=None, index=None):
         for connection in connections:
             if connection is not None:
                 w.writerow(connection)
+
+@cli.command('list', short_help="Lists the stored connection info")
+@click.option('--name', '-n',
+              type=str,
+              required=False,
+              help="""The name of the connection you wish to view.""")
+@click.option('--index', '-i',
+              type=int,
+              required=False,
+              help="""The index of the connection you wish to view - 0 is the oldest, 1 is the second oldest, and -1 is the newest.""")
+@pass_context
+def remove(ctx, name=None, index=None):
+    connectionsCsvLocation = resource_filename(Requirement.parse("solidfire-cli"), "connections.csv")
+    with open(connectionsCsvLocation) as connectionFile:
+        connections = list(csv.DictReader(connectionFile, delimiter=','))
+    print(connectionsCsvLocation)
+    if(name is None and index is None):
+        cli_utils.print_result(connections, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if(name is None and index is not None):
+        cli_utils.print_result(connections[int(index)], ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if(name is not None and index is None):
+        connections = [connection for connection in connections if connection["name"]!=name]
+        cli_utils.print_result(connections, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
