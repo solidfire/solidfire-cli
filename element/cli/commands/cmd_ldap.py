@@ -24,7 +24,31 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """enableldapauthentication getldapconfiguration testldapauthentication disableldapauthentication addldapclusteradmin """
+    """disableldapauthentication enableldapauthentication testldapauthentication addldapclusteradmin getldapconfiguration """
+
+@cli.command('disableldapauthentication', short_help="""The DisableLdapAuthentication method is used disable LDAP authentication and remove all LDAP configuration settings. This call will not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no longer be able to log in. """)
+@pass_context
+def disableldapauthentication(ctx):
+    """The DisableLdapAuthentication method is used disable LDAP authentication and remove all LDAP configuration settings. This call will not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no longer be able to log in."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("")
+    try:
+        _DisableLdapAuthenticationResult = ctx.element.disable_ldap_authentication()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_DisableLdapAuthenticationResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
 
 @cli.command('enableldapauthentication', short_help="""The EnableLdapAuthentication method is used to configure an LDAP server connection to use for LDAP authentication to a SolidFire cluster. Users that are members on the LDAP server can then log in to a SolidFire storage system using their LDAP authentication userid and password. """)
 @click.option('--authtype',
@@ -90,7 +114,7 @@ def enableldapauthentication(ctx,
 
     ctx.logger.info("""authtype = """+str(authtype)+""";"""+"""groupsearchbasedn = """+str(groupsearchbasedn)+""";"""+"""groupsearchcustomfilter = """+str(groupsearchcustomfilter)+""";"""+"""groupsearchtype = """+str(groupsearchtype)+""";"""+"""searchbinddn = """+str(searchbinddn)+""";"""+"""searchbindpassword = """+str(searchbindpassword)+""";"""+"""serveruris = """+str(serveruris)+""";"""+"""userdntemplate = """+str(userdntemplate)+""";"""+"""usersearchbasedn = """+str(usersearchbasedn)+""";"""+"""usersearchfilter = """+str(usersearchfilter)+""";"""+"")
     try:
-        _EnableLdapAuthenticationResult = ctx.element.enable_ldap_authentication(server_uris=serveruris, authtype=authtype, groupsearchbasedn=groupsearchbasedn, groupsearchcustomfilter=groupsearchcustomfilter, groupsearchtype=groupsearchtype, searchbinddn=searchbinddn, searchbindpassword=searchbindpassword, userdntemplate=userdntemplate, usersearchbasedn=usersearchbasedn, usersearchfilter=usersearchfilter)
+        _EnableLdapAuthenticationResult = ctx.element.enable_ldap_authentication(server_uris=serveruris, auth_type=authtype, group_search_base_dn=groupsearchbasedn, group_search_custom_filter=groupsearchcustomfilter, group_search_type=groupsearchtype, search_bind_dn=searchbinddn, search_bind_password=searchbindpassword, user_dntemplate=userdntemplate, user_search_base_dn=usersearchbasedn, user_search_filter=usersearchfilter)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -99,30 +123,6 @@ def enableldapauthentication(ctx,
         exit()
 
     cli_utils.print_result(_EnableLdapAuthenticationResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getldapconfiguration', short_help="""The GetLdapConfiguration is used to get the LDAP configuration currently active on the cluster. """)
-@pass_context
-def getldapconfiguration(ctx):
-    """The GetLdapConfiguration is used to get the LDAP configuration currently active on the cluster."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("")
-    try:
-        _GetLdapConfigurationResult = ctx.element.get_ldap_configuration()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_GetLdapConfigurationResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -214,7 +214,7 @@ def testldapauthentication(ctx,
 
     ctx.logger.info("""username = """+str(username)+""";"""+"""password = """+str(password)+""";"""+"""ldapconfiguration = """+str(ldapconfiguration)+""";"""+"")
     try:
-        _TestLdapAuthenticationResult = ctx.element.test_ldap_authentication(username=username, password=password, ldapconfiguration=ldapconfiguration)
+        _TestLdapAuthenticationResult = ctx.element.test_ldap_authentication(username=username, password=password, ldap_configuration=ldapconfiguration)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -223,30 +223,6 @@ def testldapauthentication(ctx,
         exit()
 
     cli_utils.print_result(_TestLdapAuthenticationResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('disableldapauthentication', short_help="""The DisableLdapAuthentication method is used disable LDAP authentication and remove all LDAP configuration settings. This call will not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no longer be able to log in. """)
-@pass_context
-def disableldapauthentication(ctx):
-    """The DisableLdapAuthentication method is used disable LDAP authentication and remove all LDAP configuration settings. This call will not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no longer be able to log in."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    ctx.logger.info("")
-    try:
-        _DisableLdapAuthenticationResult = ctx.element.disable_ldap_authentication()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_DisableLdapAuthenticationResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -284,12 +260,16 @@ def addldapclusteradmin(ctx,
 
     access = parser.parse_array(access)
     if(attributes is not None):
-        kwargsDict = simplejson.loads(attributes)
+        try:
+            kwargsDict = simplejson.loads(attributes)
+        except Exception as e:
+            ctx.logger.error(e.__str__())
+            exit(1)
         attributes = dict(**kwargsDict)
 
     ctx.logger.info("""username = """+str(username)+""";"""+"""access = """+str(access)+""";"""+"""accepteula = """+str(accepteula)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _AddLdapClusterAdminResult = ctx.element.add_ldap_cluster_admin(username=username, access=access, accepteula=accepteula, attributes=attributes)
+        _AddLdapClusterAdminResult = ctx.element.add_ldap_cluster_admin(username=username, access=access, accept_eula=accepteula, attributes=attributes)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -298,4 +278,28 @@ def addldapclusteradmin(ctx,
         exit()
 
     cli_utils.print_result(_AddLdapClusterAdminResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getldapconfiguration', short_help="""The GetLdapConfiguration is used to get the LDAP configuration currently active on the cluster. """)
+@pass_context
+def getldapconfiguration(ctx):
+    """The GetLdapConfiguration is used to get the LDAP configuration currently active on the cluster."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("")
+    try:
+        _GetLdapConfigurationResult = ctx.element.get_ldap_configuration()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_GetLdapConfigurationResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

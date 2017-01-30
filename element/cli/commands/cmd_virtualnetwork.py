@@ -24,57 +24,7 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """list modify add remove """
-
-@cli.command('list', short_help="""ListVirtualNetworks is used to get a list of all the configured virtual networks for the cluster. This method can be used to verify the virtual network settings in the cluster.  This method does not require any parameters to be passed. But, one or more VirtualNetworkIDs or VirtualNetworkTags can be passed in order to filter the results. """)
-@click.option('--virtualnetworkid',
-              type=int,
-              required=False,
-              help="""Network ID to filter the list for a single virtual network """)
-@click.option('--virtualnetworktag',
-              type=int,
-              required=False,
-              help="""Network Tag to filter the list for a single virtual network """)
-@click.option('--virtualnetworkids',
-              type=str,
-              required=False,
-              help="""NetworkIDs to include in the list. """)
-@click.option('--virtualnetworktags',
-              type=str,
-              required=False,
-              help="""Network Tags to include in the list. """)
-@pass_context
-def list(ctx,
-           virtualnetworkid = None,
-           virtualnetworktag = None,
-           virtualnetworkids = None,
-           virtualnetworktags = None):
-    """ListVirtualNetworks is used to get a list of all the configured virtual networks for the cluster. This method can be used to verify the virtual network settings in the cluster."""
-    """"""
-    """This method does not require any parameters to be passed. But, one or more VirtualNetworkIDs or VirtualNetworkTags can be passed in order to filter the results."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    virtualnetworkids = parser.parse_array(virtualnetworkids)
-
-    virtualnetworktags = parser.parse_array(virtualnetworktags)
-
-    ctx.logger.info("""virtualnetworkid = """+str(virtualnetworkid)+""";"""+"""virtualnetworktag = """+str(virtualnetworktag)+""";"""+"""virtualnetworkids = """+str(virtualnetworkids)+""";"""+"""virtualnetworktags = """+str(virtualnetworktags)+""";"""+"")
-    try:
-        _ListVirtualNetworksResult = ctx.element.list_virtual_networks(virtualnetworkid=virtualnetworkid, virtualnetworktag=virtualnetworktag, virtualnetworkids=virtualnetworkids, virtualnetworktags=virtualnetworktags)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_ListVirtualNetworksResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
+    """modify add list remove """
 
 @cli.command('modify', short_help="""ModifyVirtualNetwork is used to change various attributes of a VirtualNetwork object. This method can be used to add or remove address blocks, change the netmask IP, or modify the name or description of the virtual network.  Note: This method requires either the VirtualNetworkID or the VirtualNetworkTag as a parameter, but not both. """)
 @click.option('--virtualnetworkid',
@@ -148,12 +98,16 @@ def modify(ctx,
 
     addressblocks = parser.parse_array(addressblocks)
     if(attributes is not None):
-        kwargsDict = simplejson.loads(attributes)
+        try:
+            kwargsDict = simplejson.loads(attributes)
+        except Exception as e:
+            ctx.logger.error(e.__str__())
+            exit(1)
         attributes = dict(**kwargsDict)
 
     ctx.logger.info("""virtualnetworkid = """+str(virtualnetworkid)+""";"""+"""virtualnetworktag = """+str(virtualnetworktag)+""";"""+"""name = """+str(name)+""";"""+"""addressblocks = """+str(addressblocks)+""";"""+"""netmask = """+str(netmask)+""";"""+"""svip = """+str(svip)+""";"""+"""gateway = """+str(gateway)+""";"""+"""namespace = """+str(namespace)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _AddVirtualNetworkResult = ctx.element.modify_virtual_network(virtualnetworkid=virtualnetworkid, virtualnetworktag=virtualnetworktag, name=name, addressblocks=addressblocks, netmask=netmask, svip=svip, gateway=gateway, namespace=namespace, attributes=attributes)
+        _AddVirtualNetworkResult = ctx.element.modify_virtual_network(virtual_network_id=virtualnetworkid, virtual_network_tag=virtualnetworktag, name=name, address_blocks=addressblocks, netmask=netmask, svip=svip, gateway=gateway, namespace=namespace, attributes=attributes)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -232,7 +186,11 @@ def add(ctx,
 
     addressblocks = parser.parse_array(addressblocks)
     if(attributes is not None):
-        kwargsDict = simplejson.loads(attributes)
+        try:
+            kwargsDict = simplejson.loads(attributes)
+        except Exception as e:
+            ctx.logger.error(e.__str__())
+            exit(1)
         attributes = dict(**kwargsDict)
 
     ctx.logger.info("""virtualnetworktag = """+str(virtualnetworktag)+""";"""+"""name = """+str(name)+""";"""+"""addressblocks = """+str(addressblocks)+""";"""+"""netmask = """+str(netmask)+""";"""+"""svip = """+str(svip)+""";"""+"""gateway = """+str(gateway)+""";"""+"""namespace = """+str(namespace)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
@@ -246,6 +204,56 @@ def add(ctx,
         exit()
 
     cli_utils.print_result(_AddVirtualNetworkResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('list', short_help="""ListVirtualNetworks is used to get a list of all the configured virtual networks for the cluster. This method can be used to verify the virtual network settings in the cluster.  This method does not require any parameters to be passed. But, one or more VirtualNetworkIDs or VirtualNetworkTags can be passed in order to filter the results. """)
+@click.option('--virtualnetworkid',
+              type=int,
+              required=False,
+              help="""Network ID to filter the list for a single virtual network """)
+@click.option('--virtualnetworktag',
+              type=int,
+              required=False,
+              help="""Network Tag to filter the list for a single virtual network """)
+@click.option('--virtualnetworkids',
+              type=str,
+              required=False,
+              help="""NetworkIDs to include in the list. """)
+@click.option('--virtualnetworktags',
+              type=str,
+              required=False,
+              help="""Network Tags to include in the list. """)
+@pass_context
+def list(ctx,
+           virtualnetworkid = None,
+           virtualnetworktag = None,
+           virtualnetworkids = None,
+           virtualnetworktags = None):
+    """ListVirtualNetworks is used to get a list of all the configured virtual networks for the cluster. This method can be used to verify the virtual network settings in the cluster."""
+    """"""
+    """This method does not require any parameters to be passed. But, one or more VirtualNetworkIDs or VirtualNetworkTags can be passed in order to filter the results."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    virtualnetworkids = parser.parse_array(virtualnetworkids)
+
+    virtualnetworktags = parser.parse_array(virtualnetworktags)
+
+    ctx.logger.info("""virtualnetworkid = """+str(virtualnetworkid)+""";"""+"""virtualnetworktag = """+str(virtualnetworktag)+""";"""+"""virtualnetworkids = """+str(virtualnetworkids)+""";"""+"""virtualnetworktags = """+str(virtualnetworktags)+""";"""+"")
+    try:
+        _ListVirtualNetworksResult = ctx.element.list_virtual_networks(virtual_network_id=virtualnetworkid, virtual_network_tag=virtualnetworktag, virtual_network_ids=virtualnetworkids, virtual_network_tags=virtualnetworktags)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_ListVirtualNetworksResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -273,7 +281,7 @@ def remove(ctx,
 
     ctx.logger.info("""virtualnetworkid = """+str(virtualnetworkid)+""";"""+"""virtualnetworktag = """+str(virtualnetworktag)+""";"""+"")
     try:
-        _RemoveVirtualNetworkResult = ctx.element.remove_virtual_network(virtualnetworkid=virtualnetworkid, virtualnetworktag=virtualnetworktag)
+        _RemoveVirtualNetworkResult = ctx.element.remove_virtual_network(virtual_network_id=virtualnetworkid, virtual_network_tag=virtualnetworktag)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
