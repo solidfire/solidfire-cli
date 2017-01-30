@@ -88,5 +88,5 @@ def remove(ctx, name=None, index=None):
     if(name is None and index is not None):
         cli_utils.print_result(connections[int(index)], ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
     if(name is not None and index is None):
-        connections = [connection for connection in connections if connection["name"]!=name]
+        connections = [connection for connection in connections if connection["name"]==name]
         cli_utils.print_result(connections, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
