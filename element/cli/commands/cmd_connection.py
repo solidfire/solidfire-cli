@@ -30,6 +30,9 @@ def push(ctx):
     if(ctx.cfg.get("name", "") is None):
         ctx.logger.error("Please provide a connection name.")
     connections = cli_utils.get_connections()
+    if(ctx.cfg["username"] is not None and ctx.cfg["password"] is not None):
+        ctx.cfg["username"] = cli_utils.encrypt(ctx.cfg["username"])
+        ctx.cfg["password"] = cli_utils.encrypt(ctx.cfg["password"])
     connections = connections + [ctx.cfg]
     cli_utils.write_connections(connections)
 
@@ -94,7 +97,7 @@ def prune(ctx):
             print()
             continue
         try:
-            ElementFactory.create(connection["mvip"],connection["username"],connection["password"],version=connection["version"],port=connection["port"])
+            ElementFactory.create(connection["mvip"],cli_utils.decrypt(connection["username"]),cli_utils.decrypt(connection["password"]),version=connection["version"],port=connection["port"])
             goodConnections += [connection]
         except Exception as e:
             print("Removing connection, ")

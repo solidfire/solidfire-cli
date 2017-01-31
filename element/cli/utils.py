@@ -4,6 +4,10 @@ import json as serializer
 from pkg_resources import Requirement, resource_filename
 import os
 import csv
+from Crypto.Cipher import ARC4
+import base64
+import base64
+import socket
 
 def kv_string_to_dict(kv_string):
     new_dict = {}
@@ -162,7 +166,7 @@ def print_result_as_tree(objs, depth=1):
 def get_connections():
     connectionsCsvLocation = resource_filename(Requirement.parse("solidfire-cli"), "connections.csv")
     if os.path.exists(connectionsCsvLocation):
-        with open(connectionsCsvLocation) as connectionFile:
+        with open(connectionsCsvLocation, 'r') as connectionFile:
             connections = list(csv.DictReader(connectionFile, delimiter=','))
     else:
         connections = []
@@ -171,8 +175,19 @@ def get_connections():
 def write_connections(connections):
     connectionsCsvLocation = resource_filename(Requirement.parse("solidfire-cli"), "connections.csv")
     with open(connectionsCsvLocation, 'w') as f:
-        w = csv.DictWriter(f, ["name","mvip","port","login","password","version","url"], lineterminator='\n')
+        w = csv.DictWriter(f, ["name","mvip","port","username","password","version","url"], lineterminator='\n')
         w.writeheader()
         for connection in connections:
             if connection is not None:
                 w.writerow(connection)
+
+# WARNING! This doesn't actually give us total security. It only gives us obscurity.
+def encrypt(sensitive_data):
+    cipher = ARC4.new(socket.gethostname())
+    encoded = base64.b64encode(cipher.encrypt(sensitive_data))
+    return encoded
+
+def decrypt(encoded_sensitive_data):
+    cipher = ARC4.new(socket.gethostname())
+    decoded = cipher.decrypt(base64.b64decode(encoded_sensitive_data[2:-1]))
+    return decoded.decode('utf-8')

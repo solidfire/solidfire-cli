@@ -5,9 +5,12 @@ import sys
 import click
 import csv
 from pkg_resources import Requirement, resource_filename
+import struct
+import base64
 
 from solidfire.factory import ElementFactory
 from solidfire import Element
+from element.cli import utils as cli_utils
 
 LOG = logging.getLogger(__name__)
 CONTEXT_SETTINGS = dict(auto_envvar_prefix='SOLIDFIRE', token_normalize_func=lambda x: x.lower())
@@ -92,7 +95,7 @@ class SolidFireCLI(click.MultiCommand):
               help="SolidFire cluster password",
               required=False)
 @click.option('--version', '-v',
-              default=None,
+              default="9.0",
               help='The version you would like to connect on',
               required=False)
 @click.option('--name',
@@ -215,7 +218,7 @@ def cli(ctx,
         if cfg is not None:
             # Finaly, we need to establish our connection via elementfactory:
             try:
-                ctx.element = Element(cfg["mvip"], cfg["username"], cfg["password"], cfg["version"], verifyssl)
+                ctx.element = Element(cfg["mvip"], cli_utils.decrypt(cfg["username"]), cli_utils.decrypt(cfg["password"]), cfg["version"], verifyssl)
             except:
                 ctx.logger.error("The connection is corrupt. Run 'sfcli connection prune' to remove the broken connection.")
                 ctx.logger.error(cfg)
