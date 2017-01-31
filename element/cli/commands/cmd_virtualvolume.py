@@ -24,114 +24,28 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """enablefeature getfeaturestatus getcount listbindings listtasks listhosts list """
+    """listhosts listtasks getfeaturestatus list listbindings getcount enablefeature """
 
-@cli.command('enablefeature', short_help="""EnableFeature allows you to enable cluster features that are disabled by default. """)
-@click.option('--feature',
-              type=str,
-              required=True,
-              help="""Valid values: vvols: Enable the Virtual Volumes (VVOLs) cluster feature. """)
-@pass_context
-def enablefeature(ctx,
-           feature):
-    """EnableFeature allows you to enable cluster features that are disabled by default."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-    
-
-    ctx.logger.info("""feature = """+str(feature)+""";"""+"")
-    try:
-        _EnableFeatureResult = ctx.element.enable_feature(feature=feature)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_EnableFeatureResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getfeaturestatus', short_help="""GetFeatureStatus allows you to retrieve the status of a cluster feature. """)
-@click.option('--feature',
-              type=str,
-              required=False,
-              help="""Valid values: vvols: Find the status of the Virtual Volumes (VVOLs) cluster feature. """)
-@pass_context
-def getfeaturestatus(ctx,
-           feature = None):
-    """GetFeatureStatus allows you to retrieve the status of a cluster feature."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-    
-
-    ctx.logger.info("""feature = """+str(feature)+""";"""+"")
-    try:
-        _GetFeatureStatusResult = ctx.element.get_feature_status(feature=feature)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_GetFeatureStatusResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getcount', short_help="""Enables retrieval of the number of virtual volumes currently in the system. """)
-@pass_context
-def getcount(ctx):
-    """Enables retrieval of the number of virtual volumes currently in the system."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-    
-
-    ctx.logger.info("")
-    try:
-        _GetVirtualVolumeCountResult = ctx.element.get_virtual_volume_count()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_GetVirtualVolumeCountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('listbindings', short_help="""ListVirtualVolumeBindings returns a list of VVol bindings. """)
-@click.option('--virtualvolumebindingids',
+@cli.command('listhosts', short_help="""ListVirtualVolumeHosts returns a list of known ESX hosts. """)
+@click.option('--virtualvolumehostids',
               type=str,
               required=False,
               help="""""")
 @pass_context
-def listbindings(ctx,
-           virtualvolumebindingids = None):
-    """ListVirtualVolumeBindings returns a list of VVol bindings."""
+def listhosts(ctx,
+           virtualvolumehostids = None):
+    """ListVirtualVolumeHosts returns a list of known ESX hosts."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
-    virtualvolumebindingids = parser.parse_array(virtualvolumebindingids)
-    
+    virtualvolumehostids = parser.parse_array(virtualvolumehostids)
 
-    ctx.logger.info("""virtualvolumebindingids = """+str(virtualvolumebindingids)+""";"""+"")
+    ctx.logger.info("""virtualvolumehostids = """+str(virtualvolumehostids)+""";"""+"")
     try:
-        _ListVirtualVolumeBindingsResult = ctx.element.list_virtual_volume_bindings(virtual_volume_binding_ids=virtualvolumebindingids)
+        _ListVirtualVolumeHostsResult = ctx.element.list_virtual_volume_hosts(virtual_volume_host_ids=virtualvolumehostids)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -139,7 +53,7 @@ def listbindings(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_ListVirtualVolumeBindingsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_ListVirtualVolumeHostsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -159,7 +73,6 @@ def listtasks(ctx,
 
 
     virtualvolumetaskids = parser.parse_array(virtualvolumetaskids)
-    
 
     ctx.logger.info("""virtualvolumetaskids = """+str(virtualvolumetaskids)+""";"""+"")
     try:
@@ -175,27 +88,24 @@ def listtasks(ctx,
 
 
 
-@cli.command('listhosts', short_help="""ListVirtualVolumeHosts returns a list of known ESX hosts. """)
-@click.option('--virtualvolumehostids',
+@cli.command('getfeaturestatus', short_help="""GetFeatureStatus allows you to retrieve the status of a cluster feature. """)
+@click.option('--feature',
               type=str,
               required=False,
-              help="""""")
+              help="""Valid values: vvols: Find the status of the Virtual Volumes (VVOLs) cluster feature. """)
 @pass_context
-def listhosts(ctx,
-           virtualvolumehostids = None):
-    """ListVirtualVolumeHosts returns a list of known ESX hosts."""
+def getfeaturestatus(ctx,
+           feature = None):
+    """GetFeatureStatus allows you to retrieve the status of a cluster feature."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
 
-    virtualvolumehostids = parser.parse_array(virtualvolumehostids)
-    
-
-    ctx.logger.info("""virtualvolumehostids = """+str(virtualvolumehostids)+""";"""+"")
+    ctx.logger.info("""feature = """+str(feature)+""";"""+"")
     try:
-        _ListVirtualVolumeHostsResult = ctx.element.list_virtual_volume_hosts(virtual_volume_host_ids=virtualvolumehostids)
+        _GetFeatureStatusResult = ctx.element.get_feature_status(feature=feature)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -203,7 +113,7 @@ def listhosts(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_ListVirtualVolumeHostsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_GetFeatureStatusResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -243,7 +153,6 @@ def list(ctx,
 
 
     virtualvolumeids = parser.parse_array(virtualvolumeids)
-    
 
     ctx.logger.info("""details = """+str(details)+""";"""+"""limit = """+str(limit)+""";"""+"""recursive = """+str(recursive)+""";"""+"""startvirtualvolumeid = """+str(startvirtualvolumeid)+""";"""+"""virtualvolumeids = """+str(virtualvolumeids)+""";"""+"")
     try:
@@ -256,4 +165,88 @@ def list(ctx,
         exit()
 
     cli_utils.print_result(_ListVirtualVolumesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('listbindings', short_help="""ListVirtualVolumeBindings returns a list of VVol bindings. """)
+@click.option('--virtualvolumebindingids',
+              type=str,
+              required=False,
+              help="""""")
+@pass_context
+def listbindings(ctx,
+           virtualvolumebindingids = None):
+    """ListVirtualVolumeBindings returns a list of VVol bindings."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    virtualvolumebindingids = parser.parse_array(virtualvolumebindingids)
+
+    ctx.logger.info("""virtualvolumebindingids = """+str(virtualvolumebindingids)+""";"""+"")
+    try:
+        _ListVirtualVolumeBindingsResult = ctx.element.list_virtual_volume_bindings(virtual_volume_binding_ids=virtualvolumebindingids)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_ListVirtualVolumeBindingsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getcount', short_help="""Enables retrieval of the number of virtual volumes currently in the system. """)
+@pass_context
+def getcount(ctx):
+    """Enables retrieval of the number of virtual volumes currently in the system."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("")
+    try:
+        _GetVirtualVolumeCountResult = ctx.element.get_virtual_volume_count()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_GetVirtualVolumeCountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('enablefeature', short_help="""EnableFeature allows you to enable cluster features that are disabled by default. """)
+@click.option('--feature',
+              type=str,
+              required=True,
+              help="""Valid values: vvols: Enable the Virtual Volumes (VVOLs) cluster feature. """)
+@pass_context
+def enablefeature(ctx,
+           feature):
+    """EnableFeature allows you to enable cluster features that are disabled by default."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    ctx.logger.info("""feature = """+str(feature)+""";"""+"")
+    try:
+        _EnableFeatureResult = ctx.element.enable_feature(feature=feature)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_EnableFeatureResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

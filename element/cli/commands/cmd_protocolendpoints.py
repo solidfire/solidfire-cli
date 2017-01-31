@@ -44,7 +44,6 @@ def list(ctx,
 
 
     protocolendpointids = parser.parse_array(protocolendpointids)
-    
 
     ctx.logger.info("""protocolendpointids = """+str(protocolendpointids)+""";"""+"")
     try:
