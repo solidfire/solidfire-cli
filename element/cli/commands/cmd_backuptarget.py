@@ -36,9 +36,9 @@ def cli(ctx):
               required=False,
               help="""Name for the backup target. """)
 @click.option('--attributes',
-              type=str,
+              type=dict,
               required=False,
-              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
+              help="""List of Name/Value pairs in JSON object format. """)
 @pass_context
 def modify(ctx,
            backuptargetid,
@@ -50,13 +50,7 @@ def modify(ctx,
          exit()
 
 
-    if(attributes is not None):
-        try:
-            kwargsDict = simplejson.loads(attributes)
-        except Exception as e:
-            ctx.logger.error(e.__str__())
-            exit(1)
-        attributes = dict(**kwargsDict)
+    
 
     ctx.logger.info("""backuptargetid = """+str(backuptargetid)+""";"""+"""name = """+str(name)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
@@ -78,9 +72,9 @@ def modify(ctx,
               required=True,
               help="""Name for the backup target. """)
 @click.option('--attributes',
-              type=str,
+              type=dict,
               required=False,
-              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
+              help="""List of Name/Value pairs in JSON object format. """)
 @pass_context
 def create(ctx,
            name,
@@ -91,13 +85,7 @@ def create(ctx,
          exit()
 
 
-    if(attributes is not None):
-        try:
-            kwargsDict = simplejson.loads(attributes)
-        except Exception as e:
-            ctx.logger.error(e.__str__())
-            exit(1)
-        attributes = dict(**kwargsDict)
+    
 
     ctx.logger.info("""name = """+str(name)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
@@ -122,6 +110,7 @@ def list(ctx):
          exit()
 
 
+    
 
     ctx.logger.info("")
     try:
@@ -151,6 +140,7 @@ def remove(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""backuptargetid = """+str(backuptargetid)+""";"""+"")
     try:
@@ -180,6 +170,7 @@ def get(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""backuptargetid = """+str(backuptargetid)+""";"""+"")
     try:

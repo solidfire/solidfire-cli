@@ -35,6 +35,7 @@ def getnvraminfo(ctx):
          exit()
 
 
+    
 
     ctx.logger.info("")
     try:
@@ -64,6 +65,7 @@ def getnodeinfo(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""nodeid = """+str(nodeid)+""";"""+"")
     try:
@@ -93,6 +95,7 @@ def getclusterinfo(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""type = """+str(type)+""";"""+"")
     try:
@@ -117,6 +120,7 @@ def getconfig(ctx):
          exit()
 
 
+    
 
     ctx.logger.info("")
     try:

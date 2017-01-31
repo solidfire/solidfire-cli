@@ -41,6 +41,7 @@ def getefficiency(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"")
     try:
@@ -66,6 +67,7 @@ def liststatsbyaccount(ctx):
          exit()
 
 
+    
 
     ctx.logger.info("")
     try:
@@ -99,9 +101,9 @@ def liststatsbyaccount(ctx):
               required=False,
               help="""JSON parameters to pass to the script. """)
 @click.option('--attributes',
-              type=str,
+              type=dict,
               required=False,
-              help="""Provide in json format: JSON attributes for the bulk volume job. """)
+              help="""JSON attributes for the bulk volume job. """)
 @pass_context
 def startbulkwrite(ctx,
            volumeid,
@@ -119,13 +121,7 @@ def startbulkwrite(ctx,
          exit()
 
 
-    if(attributes is not None):
-        try:
-            kwargsDict = simplejson.loads(attributes)
-        except Exception as e:
-            ctx.logger.error(e.__str__())
-            exit(1)
-        attributes = dict(**kwargsDict)
+    
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""format = """+str(format)+""";"""+"""script = """+str(script)+""";"""+"""scriptparameters = """+str(scriptparameters)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
@@ -159,9 +155,9 @@ def startbulkwrite(ctx,
               required=False,
               help="""Returns the status of the bulk volume job when the job has completed. """)
 @click.option('--attributes',
-              type=str,
+              type=dict,
               required=False,
-              help="""Provide in json format: JSON attributes  updates what is on the bulk volume job. """)
+              help="""JSON attributes  updates what is on the bulk volume job. """)
 @pass_context
 def updatebulkstatus(ctx,
            key,
@@ -175,13 +171,7 @@ def updatebulkstatus(ctx,
          exit()
 
 
-    if(attributes is not None):
-        try:
-            kwargsDict = simplejson.loads(attributes)
-        except Exception as e:
-            ctx.logger.error(e.__str__())
-            exit(1)
-        attributes = dict(**kwargsDict)
+    
 
     ctx.logger.info("""key = """+str(key)+""";"""+"""status = """+str(status)+""";"""+"""percentcomplete = """+str(percentcomplete)+""";"""+"""message = """+str(message)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
@@ -219,9 +209,9 @@ def updatebulkstatus(ctx,
               required=False,
               help="""JSON parameters to pass to the script. """)
 @click.option('--attributes',
-              type=str,
+              type=dict,
               required=False,
-              help="""Provide in json format: JSON attributes for the bulk volume job. """)
+              help="""JSON attributes for the bulk volume job. """)
 @pass_context
 def startbulkread(ctx,
            volumeid,
@@ -248,13 +238,7 @@ def startbulkread(ctx,
          exit()
 
 
-    if(attributes is not None):
-        try:
-            kwargsDict = simplejson.loads(attributes)
-        except Exception as e:
-            ctx.logger.error(e.__str__())
-            exit(1)
-        attributes = dict(**kwargsDict)
+    
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""format = """+str(format)+""";"""+"""snapshotid = """+str(snapshotid)+""";"""+"""script = """+str(script)+""";"""+"""scriptparameters = """+str(scriptparameters)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
@@ -279,6 +263,7 @@ def listdeleted(ctx):
          exit()
 
 
+    
 
     ctx.logger.info("")
     try:
@@ -310,6 +295,7 @@ def purgedeleted(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"")
     try:
@@ -335,6 +321,7 @@ def liststatsby(ctx):
          exit()
 
 
+    
 
     ctx.logger.info("")
     try:
@@ -384,9 +371,9 @@ def liststatsby(ctx):
               required=False,
               help="""The length of time burst IOPS is allowed. The value returned is represented in time units of seconds. Note: this value is calculated by the system based on IOPS set for QoS. """)
 @click.option('--attributes',
-              type=str,
+              type=dict,
               required=False,
-              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
+              help="""List of Name/Value pairs in JSON object format. """)
 @pass_context
 def create(ctx,
            name,
@@ -415,13 +402,7 @@ def create(ctx,
         kwargsDict["burst_time"] = qosbursttime
 
         qos = QoS(**kwargsDict)
-    if(attributes is not None):
-        try:
-            kwargsDict = simplejson.loads(attributes)
-        except Exception as e:
-            ctx.logger.error(e.__str__())
-            exit(1)
-        attributes = dict(**kwargsDict)
+    
 
     ctx.logger.info("""name = """+str(name)+""";"""+"""accountid = """+str(accountid)+""";"""+"""totalsize = """+str(totalsize)+""";"""+"""enable512e = """+str(enable512e)+""";"""+"""qos = """+str(qos)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
@@ -451,6 +432,7 @@ def cancelclone(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""cloneid = """+str(cloneid)+""";"""+"")
     try:
@@ -475,6 +457,7 @@ def getdefaultqos(ctx):
          exit()
 
 
+    
 
     ctx.logger.info("")
     try:
@@ -512,6 +495,7 @@ def getasyncresult(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""asynchandle = """+str(asynchandle)+""";"""+"")
     try:
@@ -543,6 +527,7 @@ def listasyncresults(ctx,
 
 
     asyncresulttypes = parser.parse_array(asyncresulttypes)
+    
 
     ctx.logger.info("""asyncresulttypes = """+str(asyncresulttypes)+""";"""+"")
     try:
@@ -574,6 +559,7 @@ def liststatsbyaccessgroup(ctx,
 
 
     volumeaccessgroups = parser.parse_array(volumeaccessgroups)
+    
 
     ctx.logger.info("""volumeaccessgroups = """+str(volumeaccessgroups)+""";"""+"")
     try:
@@ -598,6 +584,7 @@ def listbulkjobs(ctx):
          exit()
 
 
+    
 
     ctx.logger.info("")
     try:
@@ -639,9 +626,9 @@ def listbulkjobs(ctx):
               required=False,
               help="""ID of the snapshot to use as the source of the clone. If unspecified, the clone will be created with a snapshot of the active volume. """)
 @click.option('--attributes',
-              type=str,
+              type=dict,
               required=False,
-              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
+              help="""List of Name/Value pairs in JSON object format. """)
 @pass_context
 def clone(ctx,
            volumeid,
@@ -666,13 +653,7 @@ def clone(ctx,
          exit()
 
 
-    if(attributes is not None):
-        try:
-            kwargsDict = simplejson.loads(attributes)
-        except Exception as e:
-            ctx.logger.error(e.__str__())
-            exit(1)
-        attributes = dict(**kwargsDict)
+    
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""name = """+str(name)+""";"""+"""newaccountid = """+str(newaccountid)+""";"""+"""newsize = """+str(newsize)+""";"""+"""access = """+str(access)+""";"""+"""snapshotid = """+str(snapshotid)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
@@ -722,9 +703,9 @@ def clone(ctx,
               required=False,
               help="""New size of the volume in bytes. Size is rounded up to the nearest 1MiB size. This parameter can only be used to *increase* the size of a volume. """)
 @click.option('--attributes',
-              type=str,
+              type=dict,
               required=False,
-              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
+              help="""List of Name/Value pairs in JSON object format. """)
 @pass_context
 def modify(ctx,
            volumeid,
@@ -760,13 +741,7 @@ def modify(ctx,
         kwargsDict["burst_time"] = qosbursttime
 
         qos = QoS(**kwargsDict)
-    if(attributes is not None):
-        try:
-            kwargsDict = simplejson.loads(attributes)
-        except Exception as e:
-            ctx.logger.error(e.__str__())
-            exit(1)
-        attributes = dict(**kwargsDict)
+    
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""accountid = """+str(accountid)+""";"""+"""access = """+str(access)+""";"""+"""qos = """+str(qos)+""";"""+"""totalsize = """+str(totalsize)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
@@ -797,6 +772,7 @@ def restoredeleted(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"")
     try:
@@ -836,6 +812,7 @@ def copy(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""dstvolumeid = """+str(dstvolumeid)+""";"""+"""snapshotid = """+str(snapshotid)+""";"""+"")
     try:
@@ -871,6 +848,7 @@ def listactive(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""startvolumeid = """+str(startvolumeid)+""";"""+"""limit = """+str(limit)+""";"""+"")
     try:
@@ -930,6 +908,7 @@ def list(ctx,
     accounts = parser.parse_array(accounts)
 
     volumeids = parser.parse_array(volumeids)
+    
 
     ctx.logger.info("""startvolumeid = """+str(startvolumeid)+""";"""+"""limit = """+str(limit)+""";"""+"""volumestatus = """+str(volumestatus)+""";"""+"""accounts = """+str(accounts)+""";"""+"""ispaired = """+str(ispaired)+""";"""+"""volumeids = """+str(volumeids)+""";"""+"")
     try:
@@ -946,30 +925,10 @@ def list(ctx,
 
 
 @cli.command('clonemultiple', short_help="""CloneMultipleVolumes is used to create a clone of a group of specified volumes. A consistent set of characteristics can be assigned to a group of multiple volume when they are cloned together. If groupSnapshotID is going to be used to clone the volumes in a group snapshot, the group snapshot must be created first using the CreateGroupSnapshot API method or the SolidFire Element WebUI. Using groupSnapshotID is optional when cloning multiple volumes.  Note: Cloning multiple volumes is allowed if cluster fullness is at stage 2 or 3. Clones are not created when cluster fullness is at stage 4 or 5. """)
-@click.option('--clonemultiplevolumeparamsvolumeid',
-              type=int,
+@click.option('--volumes',
+              type=str,
               required=True,
-              help="""Required parameter for "volumes" array: volumeID. """)
-@click.option('--clonemultiplevolumeparamsaccess',
-              type=str,
-              required=False,
-              help="""Access settings for the new volume. readOnly: Only read operations are allowed. readWrite: Reads and writes are allowed. locked: No reads or writes are allowed. replicationTarget: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked.  If unspecified, the access settings of the clone will be the same as the source. """)
-@click.option('--clonemultiplevolumeparamsname',
-              type=str,
-              required=False,
-              help="""New name for the clone. """)
-@click.option('--clonemultiplevolumeparamsnewaccountid',
-              type=int,
-              required=False,
-              help="""Account ID for the new volume. """)
-@click.option('--clonemultiplevolumeparamsnewsize',
-              type=int,
-              required=False,
-              help="""New size Total size of the volume, in bytes. Size is rounded up to the nearest 1MB size. """)
-@click.option('--clonemultiplevolumeparamsattributes',
-              type=dict,
-              required=False,
-              help="""List of Name/Value pairs in JSON object format. """)
+              help="""Provide in json format: Array of Unique ID for each volume to include in the clone with optional parameters. If optional parameters are not specified, the values will be inherited from the source volumes. """)
 @click.option('--access',
               type=str,
               required=False,
@@ -984,12 +943,7 @@ def list(ctx,
               help="""New account ID for the volumes if not overridden by information passed in the volumes array. """)
 @pass_context
 def clonemultiple(ctx,
-           clonemultiplevolumeparamsvolumeid,
-           clonemultiplevolumeparamsaccess = None,
-           clonemultiplevolumeparamsname = None,
-           clonemultiplevolumeparamsnewaccountid = None,
-           clonemultiplevolumeparamsnewsize = None,
-           clonemultiplevolumeparamsattributes = None,
+           volumes,
            access = None,
            groupsnapshotid = None,
            newaccountid = None):
@@ -1002,20 +956,14 @@ def clonemultiple(ctx,
          exit()
 
 
-
-    volumes = None
-    if(volumes is not None or access is not None or groupsnapshotid is not None or newaccountid is not None or False):
-        kwargsDict = dict()
-        kwargsDict["volume_id"] = clonemultiplevolumeparamsvolumeid
-        kwargsDict["access"] = clonemultiplevolumeparamsaccess
-        kwargsDict["name"] = clonemultiplevolumeparamsname
-        kwargsDict["new_account_id"] = clonemultiplevolumeparamsnewaccountid
-        kwargsDict["new_size"] = clonemultiplevolumeparamsnewsize
-        kwargsDict["attributes"] = clonemultiplevolumeparamsattributes
-
+    if(volumes is not None):
+        try:
+            kwargsDict = simplejson.loads(volumes)
+        except Exception as e:
+            ctx.logger.error(e.__str__())
+            exit(1)
         volumes = CloneMultipleVolumeParams(**kwargsDict)
-
-    volumes = parser.parse_array(volumes)
+    
 
     ctx.logger.info("""volumes = """+str(volumes)+""";"""+"""access = """+str(access)+""";"""+"""groupsnapshotid = """+str(groupsnapshotid)+""";"""+"""newaccountid = """+str(newaccountid)+""";"""+"")
     try:
@@ -1055,6 +1003,7 @@ def setdefaultqos(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""miniops = """+str(miniops)+""";"""+"""maxiops = """+str(maxiops)+""";"""+"""burstiops = """+str(burstiops)+""";"""+"")
     try:
@@ -1085,6 +1034,7 @@ def getstats(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"")
     try:
@@ -1124,6 +1074,7 @@ def listforaccount(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""accountid = """+str(accountid)+""";"""+"""startvolumeid = """+str(startvolumeid)+""";"""+"""limit = """+str(limit)+""";"""+"")
     try:
@@ -1148,6 +1099,7 @@ def getcount(ctx):
          exit()
 
 
+    
 
     ctx.logger.info("")
     try:
@@ -1177,6 +1129,7 @@ def cancelgroupclone(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""groupcloneid = """+str(groupcloneid)+""";"""+"")
     try:
@@ -1220,6 +1173,7 @@ def delete(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"")
     try:

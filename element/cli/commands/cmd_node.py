@@ -51,6 +51,7 @@ def setnetworkconfig(ctx,
             ctx.logger.error(e.__str__())
             exit(1)
         network = Network(**kwargsDict)
+    
 
     ctx.logger.info("""network = """+str(network)+""";"""+"")
     try:
@@ -76,6 +77,7 @@ def listpending(ctx):
          exit()
 
 
+    
 
     ctx.logger.info("")
     try:
@@ -105,6 +107,7 @@ def getorigin(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""force = """+str(force)+""";"""+"")
     try:
@@ -129,6 +132,7 @@ def getbootstrapconfig(ctx):
          exit()
 
 
+    
 
     ctx.logger.info("")
     try:
@@ -162,6 +166,7 @@ def remove(ctx,
 
 
     nodes = parser.parse_array(nodes)
+    
 
     ctx.logger.info("""nodes = """+str(nodes)+""";"""+"")
     try:
@@ -186,6 +191,7 @@ def listpendingactive(ctx):
          exit()
 
 
+    
 
     ctx.logger.info("")
     try:
@@ -212,6 +218,7 @@ def getpendingoperation(ctx):
          exit()
 
 
+    
 
     ctx.logger.info("")
     try:
@@ -236,6 +243,7 @@ def liststats(ctx):
          exit()
 
 
+    
 
     ctx.logger.info("")
     try:
@@ -275,6 +283,7 @@ def add(ctx,
 
 
     pendingnodes = parser.parse_array(pendingnodes)
+    
 
     ctx.logger.info("""pendingnodes = """+str(pendingnodes)+""";"""+"")
     try:
@@ -315,6 +324,7 @@ def setconfig(ctx,
             ctx.logger.error(e.__str__())
             exit(1)
         config = Config(**kwargsDict)
+    
 
     ctx.logger.info("""config = """+str(config)+""";"""+"")
     try:
@@ -341,6 +351,7 @@ def getnetworkconfig(ctx):
          exit()
 
 
+    
 
     ctx.logger.info("")
     try:
@@ -370,6 +381,7 @@ def getstats(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""nodeid = """+str(nodeid)+""";"""+"")
     try:
@@ -396,6 +408,7 @@ def getconfig(ctx):
          exit()
 
 
+    
 
     ctx.logger.info("")
     try:
@@ -420,6 +433,7 @@ def listactive(ctx):
          exit()
 
 
+    
 
     ctx.logger.info("")
     try:
@@ -444,6 +458,7 @@ def listall(ctx):
          exit()
 
 
+    
 
     ctx.logger.info("")
     try:

@@ -47,6 +47,7 @@ def reset(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""drives = """+str(drives)+""";"""+"""force = """+str(force)+""";"""+"")
     try:
@@ -82,6 +83,7 @@ def secureerase(ctx,
 
 
     drives = parser.parse_array(drives)
+    
 
     ctx.logger.info("""drives = """+str(drives)+""";"""+"")
     try:
@@ -107,6 +109,7 @@ def list(ctx):
          exit()
 
 
+    
 
     ctx.logger.info("")
     try:
@@ -151,6 +154,7 @@ def remove(ctx,
 
 
     drives = parser.parse_array(drives)
+    
 
     ctx.logger.info("""drives = """+str(drives)+""";"""+"")
     try:
@@ -180,6 +184,7 @@ def gethardwareinfo(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""driveid = """+str(driveid)+""";"""+"")
     try:
@@ -196,13 +201,13 @@ def gethardwareinfo(ctx,
 
 
 @cli.command('add', short_help="""AddDrives is used to add one or more available drives to the cluster enabling the drives to host a portion of the cluster's data. When you add a node to the cluster or install new drives in an existing node, the new drives are marked as "available" and must be added via AddDrives before they can be utilized. Use the "ListDrives" method to display drives that are "available" to be added. When you add multiple drives, it is more efficient to add them in a single "AddDrives" method call rather than multiple individual methods with a single drive each. This reduces the amount of data balancing that must occur to stabilize the storage load on the cluster.  When you add a drive, the system automatically determines the "type" of drive it should be.  The method returns immediately. However, it may take some time for the data in the cluster to be rebalanced using the newly added drives. As the new drive(s) are syncing on the system, you can use the "ListSyncJobs" method to see how the drive(s) are being rebalanced and the progress of adding the new drive. """)
-@click.option('--newdrivedriveid',
-              type=int,
+@click.option('--drives',
+              type=str,
               required=True,
-              help="""A unique identifier for this drive. """)
+              help="""Provide in json format: List of drives to add to the cluster. """)
 @pass_context
 def add(ctx,
-           newdrivedriveid):
+           drives):
     """AddDrives is used to add one or more available drives to the cluster enabling the drives to host a portion of the cluster&#x27;s data."""
     """When you add a node to the cluster or install new drives in an existing node, the new drives are marked as &quot;available&quot; and must be added via AddDrives before they can be utilized."""
     """Use the &quot;ListDrives&quot; method to display drives that are &quot;available&quot; to be added."""
@@ -218,15 +223,14 @@ def add(ctx,
          exit()
 
 
-
-    drives = None
-    if(drives is not None or False):
-        kwargsDict = dict()
-        kwargsDict["drive_id"] = newdrivedriveid
-
+    if(drives is not None):
+        try:
+            kwargsDict = simplejson.loads(drives)
+        except Exception as e:
+            ctx.logger.error(e.__str__())
+            exit(1)
         drives = NewDrive(**kwargsDict)
-
-    drives = parser.parse_array(drives)
+    
 
     ctx.logger.info("""drives = """+str(drives)+""";"""+"")
     try:
@@ -257,6 +261,7 @@ def getstats(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""driveid = """+str(driveid)+""";"""+"")
     try:
@@ -283,6 +288,7 @@ def getconfig(ctx):
          exit()
 
 
+    
 
     ctx.logger.info("")
     try:
@@ -316,6 +322,7 @@ def test(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""minutes = """+str(minutes)+""";"""+"")
     try:
@@ -345,6 +352,7 @@ def listhardware(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""force = """+str(force)+""";"""+"")
     try:

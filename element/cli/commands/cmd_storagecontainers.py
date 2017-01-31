@@ -50,6 +50,7 @@ def modifystoragecontainer(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""storagecontainerid = """+str(storagecontainerid)+""";"""+"""initiatorsecret = """+str(initiatorsecret)+""";"""+"""targetsecret = """+str(targetsecret)+""";"""+"")
     try:
@@ -81,6 +82,7 @@ def list(ctx,
 
 
     storagecontainerids = parser.parse_array(storagecontainerids)
+    
 
     ctx.logger.info("""storagecontainerids = """+str(storagecontainerids)+""";"""+"")
     try:
@@ -110,6 +112,7 @@ def getstoragecontainerefficiency(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""storagecontainerid = """+str(storagecontainerid)+""";"""+"")
     try:
@@ -149,6 +152,7 @@ def createstoragecontainer(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""name = """+str(name)+""";"""+"""initiatorsecret = """+str(initiatorsecret)+""";"""+"""targetsecret = """+str(targetsecret)+""";"""+"")
     try:
@@ -180,6 +184,7 @@ def delete(ctx,
 
 
     storagecontainerids = parser.parse_array(storagecontainerids)
+    
 
     ctx.logger.info("""storagecontainerids = """+str(storagecontainerids)+""";"""+"")
     try:

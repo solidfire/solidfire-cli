@@ -50,6 +50,7 @@ def services(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""force = """+str(force)+""";"""+"""service = """+str(service)+""";"""+"""action = """+str(action)+""";"""+"")
     try:
@@ -79,6 +80,7 @@ def networking(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""force = """+str(force)+""";"""+"")
     try:
@@ -118,6 +120,7 @@ def resetnode(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""build = """+str(build)+""";"""+"""force = """+str(force)+""";"""+"""option = """+str(option)+""";"""+"")
     try:
@@ -154,6 +157,7 @@ def shutdown(ctx,
 
 
     nodes = parser.parse_array(nodes)
+    
 
     ctx.logger.info("""nodes = """+str(nodes)+""";"""+"""option = """+str(option)+""";"""+"")
     try:

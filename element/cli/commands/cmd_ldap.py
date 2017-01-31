@@ -35,6 +35,7 @@ def disableldapauthentication(ctx):
          exit()
 
 
+    
 
     ctx.logger.info("")
     try:
@@ -111,6 +112,7 @@ def enableldapauthentication(ctx,
 
 
     serveruris = parser.parse_array(serveruris)
+    
 
     ctx.logger.info("""authtype = """+str(authtype)+""";"""+"""groupsearchbasedn = """+str(groupsearchbasedn)+""";"""+"""groupsearchcustomfilter = """+str(groupsearchcustomfilter)+""";"""+"""groupsearchtype = """+str(groupsearchtype)+""";"""+"""searchbinddn = """+str(searchbinddn)+""";"""+"""searchbindpassword = """+str(searchbindpassword)+""";"""+"""serveruris = """+str(serveruris)+""";"""+"""userdntemplate = """+str(userdntemplate)+""";"""+"""usersearchbasedn = """+str(usersearchbasedn)+""";"""+"""usersearchfilter = """+str(usersearchfilter)+""";"""+"")
     try:
@@ -211,6 +213,7 @@ def testldapauthentication(ctx,
         kwargsDict["user_search_filter"] = ldapconfigurationusersearchfilter
 
         ldapconfiguration = LdapConfiguration(**kwargsDict)
+    
 
     ctx.logger.info("""username = """+str(username)+""";"""+"""password = """+str(password)+""";"""+"""ldapconfiguration = """+str(ldapconfiguration)+""";"""+"")
     try:
@@ -240,9 +243,9 @@ def testldapauthentication(ctx,
               required=False,
               help="""Indicate your acceptance of the End User License Agreement when creating this cluster admin. To accept the EULA, set this parameter to true. """)
 @click.option('--attributes',
-              type=str,
+              type=dict,
               required=False,
-              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
+              help="""List of Name/Value pairs in JSON object format. """)
 @pass_context
 def addldapclusteradmin(ctx,
            username,
@@ -259,13 +262,7 @@ def addldapclusteradmin(ctx,
 
 
     access = parser.parse_array(access)
-    if(attributes is not None):
-        try:
-            kwargsDict = simplejson.loads(attributes)
-        except Exception as e:
-            ctx.logger.error(e.__str__())
-            exit(1)
-        attributes = dict(**kwargsDict)
+    
 
     ctx.logger.info("""username = """+str(username)+""";"""+"""access = """+str(access)+""";"""+"""accepteula = """+str(accepteula)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
@@ -290,6 +287,7 @@ def getldapconfiguration(ctx):
          exit()
 
 
+    
 
     ctx.logger.info("")
     try:

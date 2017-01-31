@@ -36,6 +36,7 @@ def list(ctx):
          exit()
 
 
+    
 
     ctx.logger.info("")
     try:
@@ -86,6 +87,7 @@ def ping(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""attempts = """+str(attempts)+""";"""+"""hosts = """+str(hosts)+""";"""+"""totaltimeoutsec = """+str(totaltimeoutsec)+""";"""+"""packetsize = """+str(packetsize)+""";"""+"""pingtimeoutmsec = """+str(pingtimeoutmsec)+""";"""+"")
     try:
@@ -116,6 +118,7 @@ def connectmvip(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""mvip = """+str(mvip)+""";"""+"")
     try:
@@ -141,6 +144,7 @@ def listutilities(ctx):
          exit()
 
 
+    
 
     ctx.logger.info("")
     try:
@@ -171,6 +175,7 @@ def connectensemble(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""ensemble = """+str(ensemble)+""";"""+"")
     try:
@@ -201,6 +206,7 @@ def connectsvip(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""svip = """+str(svip)+""";"""+"")
     try:

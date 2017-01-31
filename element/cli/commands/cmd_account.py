@@ -45,6 +45,7 @@ def list(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""startaccountid = """+str(startaccountid)+""";"""+"""limit = """+str(limit)+""";"""+"")
     try:
@@ -74,6 +75,7 @@ def getefficiency(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""accountid = """+str(accountid)+""";"""+"")
     try:
@@ -111,9 +113,9 @@ def getefficiency(ctx,
               required=False,
               help="""CHAP secret to use for the target (mutual CHAP authentication). Should be 12-16 characters long and impenetrable. """)
 @click.option('--attributes',
-              type=str,
+              type=dict,
               required=False,
-              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
+              help="""List of Name/Value pairs in JSON object format. """)
 @pass_context
 def modify(ctx,
            accountid,
@@ -131,13 +133,11 @@ def modify(ctx,
          exit()
 
 
-    if(attributes is not None):
-        try:
-            kwargsDict = simplejson.loads(attributes)
-        except Exception as e:
-            ctx.logger.error(e.__str__())
-            exit(1)
-        attributes = dict(**kwargsDict)
+    
+    if initiatorsecret == "AUTO-GENERATE-CHAP-SECRET":
+        initiatorsecret = CHAPSecret.auto_generate()
+    if targetsecret == "AUTO-GENERATE-CHAP-SECRET":
+        targetsecret = CHAPSecret.auto_generate()
 
     ctx.logger.info("""accountid = """+str(accountid)+""";"""+"""username = """+str(username)+""";"""+"""status = """+str(status)+""";"""+"""initiatorsecret = """+str(initiatorsecret)+""";"""+"""targetsecret = """+str(targetsecret)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
@@ -169,6 +169,7 @@ def remove(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""accountid = """+str(accountid)+""";"""+"")
     try:
@@ -198,6 +199,7 @@ def getbyname(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""username = """+str(username)+""";"""+"")
     try:
@@ -227,9 +229,9 @@ def getbyname(ctx,
               required=False,
               help="""CHAP secret to use for the target (mutual CHAP authentication). Should be 12-16 characters long and impenetrable. The CHAP target secrets must be unique and cannot be the same as the initiator CHAP secret.  If not specified, a random secret is created. """)
 @click.option('--attributes',
-              type=str,
+              type=dict,
               required=False,
-              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
+              help="""List of Name/Value pairs in JSON object format. """)
 @pass_context
 def add(ctx,
            username,
@@ -244,13 +246,11 @@ def add(ctx,
          exit()
 
 
-    if(attributes is not None):
-        try:
-            kwargsDict = simplejson.loads(attributes)
-        except Exception as e:
-            ctx.logger.error(e.__str__())
-            exit(1)
-        attributes = dict(**kwargsDict)
+    
+    if initiatorsecret == "AUTO-GENERATE-CHAP-SECRET":
+        initiatorsecret = CHAPSecret.auto_generate()
+    if targetsecret == "AUTO-GENERATE-CHAP-SECRET":
+        targetsecret = CHAPSecret.auto_generate()
 
     ctx.logger.info("""username = """+str(username)+""";"""+"""initiatorsecret = """+str(initiatorsecret)+""";"""+"""targetsecret = """+str(targetsecret)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
@@ -280,6 +280,7 @@ def getbyid(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""accountid = """+str(accountid)+""";"""+"")
     try:

@@ -35,6 +35,7 @@ def listnodefibrechannelportinfo(ctx):
          exit()
 
 
+    
 
     ctx.logger.info("")
     try:
@@ -59,6 +60,7 @@ def listfibrechannelsessions(ctx):
          exit()
 
 
+    
 
     ctx.logger.info("")
     try:
@@ -83,6 +85,7 @@ def listfibrechannelportinfo(ctx):
          exit()
 
 
+    
 
     ctx.logger.info("")
     try:
@@ -107,6 +110,7 @@ def listiscsisessions(ctx):
          exit()
 
 
+    
 
     ctx.logger.info("")
     try:
@@ -131,6 +135,7 @@ def listinterfaces(ctx):
          exit()
 
 
+    
 
     ctx.logger.info("")
     try:

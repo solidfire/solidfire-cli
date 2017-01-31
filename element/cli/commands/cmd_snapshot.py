@@ -40,6 +40,7 @@ def listgroup(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"")
     try:
@@ -79,6 +80,7 @@ def modifygroup(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""groupsnapshotid = """+str(groupsnapshotid)+""";"""+"""expirationtime = """+str(expirationtime)+""";"""+"""enableremotereplication = """+str(enableremotereplication)+""";"""+"")
     try:
@@ -119,6 +121,7 @@ def modify(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""snapshotid = """+str(snapshotid)+""";"""+"""expirationtime = """+str(expirationtime)+""";"""+"""enableremotereplication = """+str(enableremotereplication)+""";"""+"")
     try:
@@ -156,9 +159,9 @@ def modify(ctx,
               required=False,
               help="""The amount of time the snapshot will be retained. Enter in HH:mm:ss """)
 @click.option('--attributes',
-              type=str,
+              type=dict,
               required=False,
-              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
+              help="""List of Name/Value pairs in JSON object format. """)
 @pass_context
 def create(ctx,
            volumeid,
@@ -177,13 +180,7 @@ def create(ctx,
          exit()
 
 
-    if(attributes is not None):
-        try:
-            kwargsDict = simplejson.loads(attributes)
-        except Exception as e:
-            ctx.logger.error(e.__str__())
-            exit(1)
-        attributes = dict(**kwargsDict)
+    
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""snapshotid = """+str(snapshotid)+""";"""+"""name = """+str(name)+""";"""+"""enableremotereplication = """+str(enableremotereplication)+""";"""+"""retention = """+str(retention)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
@@ -213,6 +210,7 @@ def list(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"")
     try:
@@ -421,6 +419,7 @@ def deletegroup(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""groupsnapshotid = """+str(groupsnapshotid)+""";"""+"""savemembers = """+str(savemembers)+""";"""+"")
     try:
@@ -450,6 +449,7 @@ def getschedule(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""scheduleid = """+str(scheduleid)+""";"""+"")
     try:
@@ -479,9 +479,9 @@ def getschedule(ctx,
               required=False,
               help="""Name for the snapshot. If no name is given, then the name of the snapshot being rolled back to is used with  "-copy" appended to the end of the name. """)
 @click.option('--attributes',
-              type=str,
+              type=dict,
               required=False,
-              help="""Provide in json format: List of Name/Value pairs in JSON object format """)
+              help="""List of Name/Value pairs in JSON object format """)
 @pass_context
 def rollbacktogroup(ctx,
            groupsnapshotid,
@@ -497,13 +497,7 @@ def rollbacktogroup(ctx,
          exit()
 
 
-    if(attributes is not None):
-        try:
-            kwargsDict = simplejson.loads(attributes)
-        except Exception as e:
-            ctx.logger.error(e.__str__())
-            exit(1)
-        attributes = dict(**kwargsDict)
+    
 
     ctx.logger.info("""groupsnapshotid = """+str(groupsnapshotid)+""";"""+"""savecurrentstate = """+str(savecurrentstate)+""";"""+"""name = """+str(name)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
@@ -537,9 +531,9 @@ def rollbacktogroup(ctx,
               required=False,
               help="""Name for the snapshot. If no name is given, then the name of the snapshot being rolled back to is used with  "-copy" appended to the end of the name. """)
 @click.option('--attributes',
-              type=str,
+              type=dict,
               required=False,
-              help="""Provide in json format: List of Name/Value pairs in JSON object format """)
+              help="""List of Name/Value pairs in JSON object format """)
 @pass_context
 def rollbackto(ctx,
            volumeid,
@@ -558,13 +552,7 @@ def rollbackto(ctx,
          exit()
 
 
-    if(attributes is not None):
-        try:
-            kwargsDict = simplejson.loads(attributes)
-        except Exception as e:
-            ctx.logger.error(e.__str__())
-            exit(1)
-        attributes = dict(**kwargsDict)
+    
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""snapshotid = """+str(snapshotid)+""";"""+"""savecurrentstate = """+str(savecurrentstate)+""";"""+"""name = """+str(name)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
@@ -598,9 +586,9 @@ def rollbackto(ctx,
               required=False,
               help="""The amount of time the snapshot will be retained. Enter in HH:mm:ss """)
 @click.option('--attributes',
-              type=str,
+              type=dict,
               required=False,
-              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
+              help="""List of Name/Value pairs in JSON object format. """)
 @pass_context
 def creategroup(ctx,
            volumes,
@@ -620,13 +608,7 @@ def creategroup(ctx,
 
 
     volumes = parser.parse_array(volumes)
-    if(attributes is not None):
-        try:
-            kwargsDict = simplejson.loads(attributes)
-        except Exception as e:
-            ctx.logger.error(e.__str__())
-            exit(1)
-        attributes = dict(**kwargsDict)
+    
 
     ctx.logger.info("""volumes = """+str(volumes)+""";"""+"""name = """+str(name)+""";"""+"""enableremotereplication = """+str(enableremotereplication)+""";"""+"""retention = """+str(retention)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
@@ -833,6 +815,7 @@ def listschedules(ctx):
          exit()
 
 
+    
 
     ctx.logger.info("")
     try:
@@ -865,6 +848,7 @@ def delete(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""snapshotid = """+str(snapshotid)+""";"""+"")
     try:

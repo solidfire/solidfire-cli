@@ -47,6 +47,7 @@ def removevolumesfrom(ctx,
 
 
     volumes = parser.parse_array(volumes)
+    
 
     ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"""volumes = """+str(volumes)+""";"""+"")
     try:
@@ -84,9 +85,9 @@ def removevolumesfrom(ctx,
               required=False,
               help="""The ID of the VLAN Virtual Network Tag to associate the volume access group with. """)
 @click.option('--attributes',
-              type=str,
+              type=dict,
               required=False,
-              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
+              help="""List of Name/Value pairs in JSON object format. """)
 @pass_context
 def create(ctx,
            name,
@@ -113,13 +114,7 @@ def create(ctx,
     virtualnetworkid = parser.parse_array(virtualnetworkid)
 
     virtualnetworktags = parser.parse_array(virtualnetworktags)
-    if(attributes is not None):
-        try:
-            kwargsDict = simplejson.loads(attributes)
-        except Exception as e:
-            ctx.logger.error(e.__str__())
-            exit(1)
-        attributes = dict(**kwargsDict)
+    
 
     ctx.logger.info("""name = """+str(name)+""";"""+"""initiators = """+str(initiators)+""";"""+"""volumes = """+str(volumes)+""";"""+"""virtualnetworkid = """+str(virtualnetworkid)+""";"""+"""virtualnetworktags = """+str(virtualnetworktags)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
@@ -140,19 +135,14 @@ def create(ctx,
               type=int,
               required=True,
               help="""Unique volume access group ID for which the LUN assignments will be modified. """)
-@click.option('--lunassignmentvolumeid',
-              type=int,
+@click.option('--lunassignments',
+              type=str,
               required=True,
-              help="""The volume ID assigned to the Lun. """)
-@click.option('--lunassignmentlun',
-              type=int,
-              required=True,
-              help="""Correct LUN values are 0 - 16383. An exception will be seen if an incorrect LUN value is passed. """)
+              help="""Provide in json format: The volume IDs with new assigned LUN values. """)
 @pass_context
 def modifylunassignments(ctx,
            volumeaccessgroupid,
-           lunassignmentvolumeid,
-           lunassignmentlun):
+           lunassignments):
     """The ModifytVolumeAccessGroupLunAssignments is used to define custom LUN assignments for specific volumes. Only LUN values set on the lunAssignments parameter will be changed in the volume access group. All other LUN assignments will remain unchanged."""
     """"""
     """LUN assignment values must be unique for volumes in a volume access group. An exception will be seen if LUN assignments are duplicated in a volume access group. However, the same LUN values can be used again in different volume access groups."""
@@ -165,16 +155,14 @@ def modifylunassignments(ctx,
          exit()
 
 
-
-    lunassignments = None
-    if(volumeaccessgroupid is not None or lunassignments is not None or False):
-        kwargsDict = dict()
-        kwargsDict["volume_id"] = lunassignmentvolumeid
-        kwargsDict["lun"] = lunassignmentlun
-
+    if(lunassignments is not None):
+        try:
+            kwargsDict = simplejson.loads(lunassignments)
+        except Exception as e:
+            ctx.logger.error(e.__str__())
+            exit(1)
         lunassignments = LunAssignment(**kwargsDict)
-
-    lunassignments = parser.parse_array(lunassignments)
+    
 
     ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"""lunassignments = """+str(lunassignments)+""";"""+"")
     try:
@@ -209,6 +197,7 @@ def list(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""startvolumeaccessgroupid = """+str(startvolumeaccessgroupid)+""";"""+"""limit = """+str(limit)+""";"""+"")
     try:
@@ -250,9 +239,9 @@ def list(ctx,
               required=False,
               help="""List of volumes to initially include in the volume access group. If unspecified, the access group's volumes will not be modified. """)
 @click.option('--attributes',
-              type=str,
+              type=dict,
               required=False,
-              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
+              help="""List of Name/Value pairs in JSON object format. """)
 @pass_context
 def modify(ctx,
            volumeaccessgroupid,
@@ -285,13 +274,7 @@ def modify(ctx,
     initiators = parser.parse_array(initiators)
 
     volumes = parser.parse_array(volumes)
-    if(attributes is not None):
-        try:
-            kwargsDict = simplejson.loads(attributes)
-        except Exception as e:
-            ctx.logger.error(e.__str__())
-            exit(1)
-        attributes = dict(**kwargsDict)
+    
 
     ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"""virtualnetworkid = """+str(virtualnetworkid)+""";"""+"""virtualnetworktags = """+str(virtualnetworktags)+""";"""+"""name = """+str(name)+""";"""+"""initiators = """+str(initiators)+""";"""+"""volumes = """+str(volumes)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
@@ -328,6 +311,7 @@ def addinitiatorsto(ctx,
 
 
     initiators = parser.parse_array(initiators)
+    
 
     ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"""initiators = """+str(initiators)+""";"""+"")
     try:
@@ -357,6 +341,7 @@ def getlunassignments(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"")
     try:
@@ -393,6 +378,7 @@ def addvolumesto(ctx,
 
 
     volumes = parser.parse_array(volumes)
+    
 
     ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"""volumes = """+str(volumes)+""";"""+"")
     try:
@@ -429,6 +415,7 @@ def removeinitiatorsfrom(ctx,
 
 
     initiators = parser.parse_array(initiators)
+    
 
     ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"""initiators = """+str(initiators)+""";"""+"")
     try:
@@ -458,6 +445,7 @@ def getefficiency(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"")
     try:
@@ -487,6 +475,7 @@ def delete(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"")
     try:

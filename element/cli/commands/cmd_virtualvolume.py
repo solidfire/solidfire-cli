@@ -42,6 +42,7 @@ def listhosts(ctx,
 
 
     virtualvolumehostids = parser.parse_array(virtualvolumehostids)
+    
 
     ctx.logger.info("""virtualvolumehostids = """+str(virtualvolumehostids)+""";"""+"")
     try:
@@ -73,6 +74,7 @@ def listtasks(ctx,
 
 
     virtualvolumetaskids = parser.parse_array(virtualvolumetaskids)
+    
 
     ctx.logger.info("""virtualvolumetaskids = """+str(virtualvolumetaskids)+""";"""+"")
     try:
@@ -102,6 +104,7 @@ def getfeaturestatus(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""feature = """+str(feature)+""";"""+"")
     try:
@@ -153,6 +156,7 @@ def list(ctx,
 
 
     virtualvolumeids = parser.parse_array(virtualvolumeids)
+    
 
     ctx.logger.info("""details = """+str(details)+""";"""+"""limit = """+str(limit)+""";"""+"""recursive = """+str(recursive)+""";"""+"""startvirtualvolumeid = """+str(startvirtualvolumeid)+""";"""+"""virtualvolumeids = """+str(virtualvolumeids)+""";"""+"")
     try:
@@ -184,6 +188,7 @@ def listbindings(ctx,
 
 
     virtualvolumebindingids = parser.parse_array(virtualvolumebindingids)
+    
 
     ctx.logger.info("""virtualvolumebindingids = """+str(virtualvolumebindingids)+""";"""+"")
     try:
@@ -208,6 +213,7 @@ def getcount(ctx):
          exit()
 
 
+    
 
     ctx.logger.info("")
     try:
@@ -237,6 +243,7 @@ def enablefeature(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""feature = """+str(feature)+""";"""+"")
     try:

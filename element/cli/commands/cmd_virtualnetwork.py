@@ -39,14 +39,10 @@ def cli(ctx):
               type=str,
               required=False,
               help="""New name for the virtual network. """)
-@click.option('--addressblockstart',
+@click.option('--addressblocks',
               type=str,
-              required=True,
-              help="""Start of the IP address range. """)
-@click.option('--addressblocksize',
-              type=int,
-              required=True,
-              help="""Number of IP addresses to include in the block. """)
+              required=False,
+              help="""Provide in json format: New addressBlock to set for this Virtual Network object. This may contain new address blocks to add to the existing object or it may omit unused address blocks that need to be removed. Alternatively, existing address blocks may be extended or reduced in size. The size of the starting addressBlocks for a Virtual Network object can only be increased, and can never be decreased. Attributes for this parameter are: start: start of the IP address range. (String) size: numbre of IP addresses to include in the block. (Integer) """)
 @click.option('--netmask',
               type=str,
               required=False,
@@ -64,16 +60,15 @@ def cli(ctx):
               required=False,
               help=""" """)
 @click.option('--attributes',
-              type=str,
+              type=dict,
               required=False,
-              help="""Provide in json format: A new list of Name/Value pairs in JSON object format. """)
+              help="""A new list of Name/Value pairs in JSON object format. """)
 @pass_context
 def modify(ctx,
            virtualnetworkid = None,
            virtualnetworktag = None,
            name = None,
-           addressblockstart = None,
-           addressblocksize = None,
+           addressblocks = None,
            netmask = None,
            svip = None,
            gateway = None,
@@ -87,23 +82,14 @@ def modify(ctx,
          exit()
 
 
-
-    addressblocks = None
-    if(virtualnetworkid is not None or virtualnetworktag is not None or name is not None or addressblocks is not None or netmask is not None or svip is not None or gateway is not None or namespace is not None or attributes is not None or False):
-        kwargsDict = dict()
-        kwargsDict["start"] = addressblockstart
-        kwargsDict["size"] = addressblocksize
-
-        addressblocks = AddressBlock(**kwargsDict)
-
-    addressblocks = parser.parse_array(addressblocks)
-    if(attributes is not None):
+    if(addressblocks is not None):
         try:
-            kwargsDict = simplejson.loads(attributes)
+            kwargsDict = simplejson.loads(addressblocks)
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
-        attributes = dict(**kwargsDict)
+        addressblocks = AddressBlock(**kwargsDict)
+    
 
     ctx.logger.info("""virtualnetworkid = """+str(virtualnetworkid)+""";"""+"""virtualnetworktag = """+str(virtualnetworktag)+""";"""+"""name = """+str(name)+""";"""+"""addressblocks = """+str(addressblocks)+""";"""+"""netmask = """+str(netmask)+""";"""+"""svip = """+str(svip)+""";"""+"""gateway = """+str(gateway)+""";"""+"""namespace = """+str(namespace)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
@@ -128,14 +114,10 @@ def modify(ctx,
               type=str,
               required=True,
               help="""User defined name for the new virtual network. """)
-@click.option('--addressblockstart',
+@click.option('--addressblocks',
               type=str,
               required=True,
-              help="""Start of the IP address range. """)
-@click.option('--addressblocksize',
-              type=int,
-              required=True,
-              help="""Number of IP addresses to include in the block. """)
+              help="""Provide in json format: Unique Range of IP addresses to include in the virtual network. Attributes for this parameter are: start: start of the IP address range. (String) size: numbre of IP addresses to include in the block. (Integer) """)
 @click.option('--netmask',
               type=str,
               required=True,
@@ -153,17 +135,16 @@ def modify(ctx,
               required=False,
               help=""" """)
 @click.option('--attributes',
-              type=str,
+              type=dict,
               required=False,
-              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
+              help="""List of Name/Value pairs in JSON object format. """)
 @pass_context
 def add(ctx,
            virtualnetworktag,
            name,
+           addressblocks,
            netmask,
            svip,
-           addressblockstart,
-           addressblocksize,
            gateway = None,
            namespace = None,
            attributes = None):
@@ -175,23 +156,14 @@ def add(ctx,
          exit()
 
 
-
-    addressblocks = None
-    if(virtualnetworktag is not None or name is not None or addressblocks is not None or netmask is not None or svip is not None or gateway is not None or namespace is not None or attributes is not None or False):
-        kwargsDict = dict()
-        kwargsDict["start"] = addressblockstart
-        kwargsDict["size"] = addressblocksize
-
-        addressblocks = AddressBlock(**kwargsDict)
-
-    addressblocks = parser.parse_array(addressblocks)
-    if(attributes is not None):
+    if(addressblocks is not None):
         try:
-            kwargsDict = simplejson.loads(attributes)
+            kwargsDict = simplejson.loads(addressblocks)
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
-        attributes = dict(**kwargsDict)
+        addressblocks = AddressBlock(**kwargsDict)
+    
 
     ctx.logger.info("""virtualnetworktag = """+str(virtualnetworktag)+""";"""+"""name = """+str(name)+""";"""+"""addressblocks = """+str(addressblocks)+""";"""+"""netmask = """+str(netmask)+""";"""+"""svip = """+str(svip)+""";"""+"""gateway = """+str(gateway)+""";"""+"""namespace = """+str(namespace)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
@@ -242,6 +214,7 @@ def list(ctx,
     virtualnetworkids = parser.parse_array(virtualnetworkids)
 
     virtualnetworktags = parser.parse_array(virtualnetworktags)
+    
 
     ctx.logger.info("""virtualnetworkid = """+str(virtualnetworkid)+""";"""+"""virtualnetworktag = """+str(virtualnetworktag)+""";"""+"""virtualnetworkids = """+str(virtualnetworkids)+""";"""+"""virtualnetworktags = """+str(virtualnetworktags)+""";"""+"")
     try:
@@ -278,6 +251,7 @@ def remove(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""virtualnetworkid = """+str(virtualnetworkid)+""";"""+"""virtualnetworktag = """+str(virtualnetworktag)+""";"""+"")
     try:

@@ -41,6 +41,7 @@ def completecluster(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""clusterpairingkey = """+str(clusterpairingkey)+""";"""+"")
     try:
@@ -75,6 +76,7 @@ def completevolume(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""volumepairingkey = """+str(volumepairingkey)+""";"""+"""volumeid = """+str(volumeid)+""";"""+"")
     try:
@@ -100,6 +102,7 @@ def listclusterpairs(ctx):
          exit()
 
 
+    
 
     ctx.logger.info("")
     try:
@@ -131,6 +134,7 @@ def removevolumepair(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"")
     try:
@@ -166,6 +170,7 @@ def startvolume(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""mode = """+str(mode)+""";"""+"")
     try:
@@ -191,6 +196,7 @@ def listactivepairedvolumes(ctx):
          exit()
 
 
+    
 
     ctx.logger.info("")
     try:
@@ -230,6 +236,7 @@ def modifyvolumepair(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""pausedmanual = """+str(pausedmanual)+""";"""+"""mode = """+str(mode)+""";"""+"")
     try:
@@ -256,6 +263,7 @@ def startcluster(ctx):
          exit()
 
 
+    
 
     ctx.logger.info("")
     try:
@@ -286,6 +294,7 @@ def removeclusterpair(ctx,
          exit()
 
 
+    
 
     ctx.logger.info("""clusterpairid = """+str(clusterpairid)+""";"""+"")
     try:

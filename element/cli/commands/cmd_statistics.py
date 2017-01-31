@@ -36,6 +36,7 @@ def getcompletestats(ctx):
          exit()
 
 
+    
 
     ctx.logger.info("")
     try:
@@ -60,6 +61,7 @@ def gethardwareinfo(ctx):
          exit()
 
 
+    
 
     ctx.logger.info("")
     try:
@@ -85,6 +87,7 @@ def getrawstats(ctx):
          exit()
 
 
+    
 
     ctx.logger.info("")
     try:
@@ -116,6 +119,7 @@ def listvolumestatsbyvirtualvolume(ctx,
 
 
     virtualvolumeids = parser.parse_array(virtualvolumeids)
+    
 
     ctx.logger.info("""virtualvolumeids = """+str(virtualvolumeids)+""";"""+"")
     try:
@@ -146,6 +150,7 @@ def listvolumestats(ctx,
 
 
     volumeids = parser.parse_array(volumeids)
+    
 
     ctx.logger.info("""volumeids = """+str(volumeids)+""";"""+"")
     try:
@@ -177,6 +182,7 @@ def listdrivestats(ctx,
 
 
     drives = parser.parse_array(drives)
+    
 
     ctx.logger.info("""drives = """+str(drives)+""";"""+"")
     try:
