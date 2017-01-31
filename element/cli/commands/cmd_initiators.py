@@ -24,6 +24,7 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
+<<<<<<< HEAD
     """modify create list delete """
 
 @cli.command('modify', short_help="""ModifyInitiators enables you to change the attributes of an existing initiator. You cannot change the name of an existing initiator. If you need to change the name of an initiator, delete the existing initiator with DeleteInitiators and create a new one with CreateInitiators. If ModifyInitiators fails to change one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible). """)
@@ -63,6 +64,9 @@ def modify(ctx,
     cli_utils.print_result(_ModifyInitiatorsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
+=======
+    """list create delete modify """
+>>>>>>> Fixes the modifylunassignments bug
 
 @cli.command('create', short_help="""CreateInitiators enables you to create multiple new initiator IQNs or World Wide Port Names (WWPNs) and optionally assign them aliases and attributes. When you use CreateInitiators to create new initiators, you can also add them to volume access groups. If CreateInitiators fails to create one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible). """)
 @click.option('--initiators',
@@ -102,6 +106,7 @@ def create(ctx,
 
 
 
+<<<<<<< HEAD
 @cli.command('list', short_help="""ListInitiators enables you to list initiator IQNs or World Wide Port Names (WWPNs). """)
 @click.option('--startinitiatorid',
               type=int,
@@ -121,18 +126,35 @@ def list(ctx,
            limit = None,
            initiators = None):
     """ListInitiators enables you to list initiator IQNs or World Wide Port Names (WWPNs)."""
+=======
+@cli.command('create', short_help="""CreateInitiators enables you to create multiple new initiator IQNs or World Wide Port Names (WWPNs) and optionally assign them aliases and attributes. When you use CreateInitiators to create new initiators, you can also add them to volume access groups. If CreateInitiators fails to create one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible). """)
+@click.option('--initiators',
+              type=str,
+              required=True,
+              help="""Provide in json format: A list of Initiator objects containing characteristics of each new initiator """)
+@pass_context
+def create(ctx,
+           initiators):
+    """CreateInitiators enables you to create multiple new initiator IQNs or World Wide Port Names (WWPNs) and optionally assign them aliases and attributes. When you use CreateInitiators to create new initiators, you can also add them to volume access groups."""
+    """If CreateInitiators fails to create one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible)."""
+>>>>>>> Fixes the modifylunassignments bug
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
-
-    initiators = parser.parse_array(initiators)
+    if(initiators is not None):
+        try:
+            kwargsDict = simplejson.loads(initiators)
+        except Exception as e:
+            ctx.logger.error(e.__str__())
+            exit(1)
+        initiators = CreateInitiator(**kwargsDict)
     
 
-    ctx.logger.info("""startinitiatorid = """+str(startinitiatorid)+""";"""+"""limit = """+str(limit)+""";"""+"""initiators = """+str(initiators)+""";"""+"")
+    ctx.logger.info("""initiators = """+str(initiators)+""";"""+"")
     try:
-        _ListInitiatorsResult = ctx.element.list_initiators(start_initiator_id=startinitiatorid, limit=limit, initiators=initiators)
+        _CreateInitiatorsResult = ctx.element.create_initiators(initiators=initiators)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -140,7 +162,7 @@ def list(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_ListInitiatorsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_CreateInitiatorsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -158,14 +180,21 @@ def delete(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
+<<<<<<< HEAD
+=======
 
 
+>>>>>>> Fixes the modifylunassignments bug
     initiators = parser.parse_array(initiators)
     
 
-    ctx.logger.info("""initiators = """+str(initiators)+""";"""+"")
+    ctx.logger.info("""startinitiatorid = """+str(startinitiatorid)+""";"""+"""limit = """+str(limit)+""";"""+"""initiators = """+str(initiators)+""";"""+"")
     try:
+<<<<<<< HEAD
+        _ListInitiatorsResult = ctx.element.list_initiators(start_initiator_id=startinitiatorid, limit=limit, initiators=initiators)
+=======
         _DeleteInitiatorsResult = ctx.element.delete_initiators(initiators=initiators)
+>>>>>>> Fixes the modifylunassignments bug
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -173,5 +202,73 @@ def delete(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
+    cli_utils.print_result(_ListInitiatorsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('delete', short_help="""DeleteInitiators enables you to delete one or more initiators from the system (and from any associated volumes or volume access groups). If DeleteInitiators fails to delete one of the initiators provided in the parameter, the system returns an error and does not delete any initiators (no partial completion is possible). """)
+@click.option('--initiators',
+              type=str,
+              required=True,
+              help="""An array of IDs of initiators to delete. """)
+@pass_context
+def delete(ctx,
+           initiators):
+    """DeleteInitiators enables you to delete one or more initiators from the system (and from any associated volumes or volume access groups)."""
+    """If DeleteInitiators fails to delete one of the initiators provided in the parameter, the system returns an error and does not delete any initiators (no partial completion is possible)."""
+=======
     cli_utils.print_result(_DeleteInitiatorsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('modify', short_help="""ModifyInitiators enables you to change the attributes of an existing initiator. You cannot change the name of an existing initiator. If you need to change the name of an initiator, delete the existing initiator with DeleteInitiators and create a new one with CreateInitiators. If ModifyInitiators fails to change one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible). """)
+@click.option('--initiators',
+              type=str,
+              required=True,
+              help="""Provide in json format: A list of Initiator objects containing characteristics of each initiator to modify. """)
+@pass_context
+def modify(ctx,
+           initiators):
+    """ModifyInitiators enables you to change the attributes of an existing initiator. You cannot change the name of an existing initiator. If you need to change the name of an initiator, delete the existing initiator with DeleteInitiators and create a new one with CreateInitiators."""
+    """If ModifyInitiators fails to change one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible)."""
+>>>>>>> Fixes the modifylunassignments bug
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+<<<<<<< HEAD
+
+    initiators = parser.parse_array(initiators)
+=======
+    if(initiators is not None):
+        try:
+            kwargsDict = simplejson.loads(initiators)
+        except Exception as e:
+            ctx.logger.error(e.__str__())
+            exit(1)
+        initiators = ModifyInitiator(**kwargsDict)
+>>>>>>> Fixes the modifylunassignments bug
+    
+
+    ctx.logger.info("""initiators = """+str(initiators)+""";"""+"")
+    try:
+<<<<<<< HEAD
+        _DeleteInitiatorsResult = ctx.element.delete_initiators(initiators=initiators)
+=======
+        _ModifyInitiatorsResult = ctx.element.modify_initiators(initiators=initiators)
+>>>>>>> Fixes the modifylunassignments bug
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+<<<<<<< HEAD
+    cli_utils.print_result(_DeleteInitiatorsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+=======
+    cli_utils.print_result(_ModifyInitiatorsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+>>>>>>> Fixes the modifylunassignments bug
 

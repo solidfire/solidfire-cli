@@ -24,6 +24,7 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
+<<<<<<< HEAD
     """modify create list remove get """
 
 @cli.command('modify', short_help="""ModifyBackupTarget is used to change attributes of a backup target. """)
@@ -45,6 +46,14 @@ def modify(ctx,
            name = None,
            attributes = None):
     """ModifyBackupTarget is used to change attributes of a backup target."""
+=======
+    """list create remove modify get """
+
+@cli.command('list', short_help="""You can use ListBackupTargets to retrieve information about all backup targets that have been created. """)
+@pass_context
+def list(ctx):
+    """You can use ListBackupTargets to retrieve information about all backup targets that have been created."""
+>>>>>>> Fixes the modifylunassignments bug
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -52,9 +61,15 @@ def modify(ctx,
 
     
 
+<<<<<<< HEAD
     ctx.logger.info("""backuptargetid = """+str(backuptargetid)+""";"""+"""name = """+str(name)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
         _ModifyBackupTargetResult = ctx.element.modify_backup_target(backup_target_id=backuptargetid, name=name, attributes=attributes)
+=======
+    ctx.logger.info("")
+    try:
+        _ListBackupTargetsResult = ctx.element.list_backup_targets()
+>>>>>>> Fixes the modifylunassignments bug
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -62,7 +77,11 @@ def modify(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
     cli_utils.print_result(_ModifyBackupTargetResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+=======
+    cli_utils.print_result(_ListBackupTargetsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+>>>>>>> Fixes the modifylunassignments bug
 
 
 
@@ -101,10 +120,15 @@ def create(ctx,
 
 
 
-@cli.command('list', short_help="""You can use ListBackupTargets to retrieve information about all backup targets that have been created. """)
+@cli.command('remove', short_help="""RemoveBackupTarget allows you to delete backup targets. """)
+@click.option('--backuptargetid',
+              type=int,
+              required=True,
+              help="""Unique target ID of the target to remove. """)
 @pass_context
-def list(ctx):
-    """You can use ListBackupTargets to retrieve information about all backup targets that have been created."""
+def remove(ctx,
+           backuptargetid):
+    """RemoveBackupTarget allows you to delete backup targets."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -112,9 +136,9 @@ def list(ctx):
 
     
 
-    ctx.logger.info("")
+    ctx.logger.info("""backuptargetid = """+str(backuptargetid)+""";"""+"")
     try:
-        _ListBackupTargetsResult = ctx.element.list_backup_targets()
+        _RemoveBackupTargetResult = ctx.element.remove_backup_target(backup_target_id=backuptargetid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -122,7 +146,7 @@ def list(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_ListBackupTargetsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_RemoveBackupTargetResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -130,7 +154,19 @@ def list(ctx):
 @click.option('--backuptargetid',
               type=int,
               required=True,
+<<<<<<< HEAD
               help="""Unique target ID of the target to remove. """)
+=======
+              help="""Unique identifier assigned to the backup target. """)
+@click.option('--name',
+              type=str,
+              required=False,
+              help="""Name for the backup target. """)
+@click.option('--attributes',
+              type=dict,
+              required=False,
+              help="""List of Name/Value pairs in JSON object format. """)
+>>>>>>> Fixes the modifylunassignments bug
 @pass_context
 def remove(ctx,
            backuptargetid):

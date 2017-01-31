@@ -24,12 +24,26 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
+<<<<<<< HEAD
     """list ping connectmvip listutilities connectensemble connectsvip """
 
 @cli.command('list', short_help="""The ListTests API method is used to return the tests that are available to run on a node. Note: This method is available only through the per-node API endpoint 5.0 or later. """)
 @pass_context
 def list(ctx):
     """The ListTests API method is used to return the tests that are available to run on a node."""
+=======
+    """connectensemble list connectmvip connectsvip listutilities ping """
+
+@cli.command('connectensemble', short_help="""The TestConnectEnsemble API method is used to verify connectivity with a sepcified database ensemble. By default it uses the ensemble for the cluster the node is associated with. Alternatively you can provide a different ensemble to test connectivity with. Note: This method is available only through the per-node API endpoint 5.0 or later. """)
+@click.option('--ensemble',
+              type=str,
+              required=False,
+              help="""A comma-separated list of ensemble node CIPs for connectivity testing """)
+@pass_context
+def connectensemble(ctx,
+           ensemble = None):
+    """The TestConnectEnsemble API method is used to verify connectivity with a sepcified database ensemble. By default it uses the ensemble for the cluster the node is associated with. Alternatively you can provide a different ensemble to test connectivity with."""
+>>>>>>> Fixes the modifylunassignments bug
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
@@ -38,9 +52,13 @@ def list(ctx):
 
     
 
-    ctx.logger.info("")
+    ctx.logger.info("""ensemble = """+str(ensemble)+""";"""+"")
     try:
+<<<<<<< HEAD
         _ListTestsResult = ctx.element.list_tests()
+=======
+        _TestConnectEnsembleResult = ctx.element.test_connect_ensemble(ensemble=ensemble)
+>>>>>>> Fixes the modifylunassignments bug
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -48,7 +66,11 @@ def list(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
+<<<<<<< HEAD
     cli_utils.print_result(_ListTestsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+=======
+    cli_utils.print_result(_TestConnectEnsembleResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+>>>>>>> Fixes the modifylunassignments bug
 
 
 
@@ -160,8 +182,43 @@ def listutilities(ctx):
 
 
 
+<<<<<<< HEAD
 @cli.command('connectensemble', short_help="""The TestConnectEnsemble API method is used to verify connectivity with a sepcified database ensemble. By default it uses the ensemble for the cluster the node is associated with. Alternatively you can provide a different ensemble to test connectivity with. Note: This method is available only through the per-node API endpoint 5.0 or later. """)
 @click.option('--ensemble',
+=======
+@cli.command('listutilities', short_help="""The ListUtilities API method is used to return the tests that are available to run on a node. Note: This method is available only through the per-node API endpoint 5.0 or later. """)
+@pass_context
+def listutilities(ctx):
+    """The ListUtilities API method is used to return the tests that are available to run on a node."""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+    
+
+    ctx.logger.info("")
+    try:
+        _ListUtilitiesResult = ctx.element.list_utilities()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_ListUtilitiesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('ping', short_help="""The TestPing API method is used to validate the connection to all nodes in the cluster on both 1G and 10G interfaces using ICMP packets. The test uses the appropriate MTU sizes for each packet based on the MTU settings in the network configuration. Note: This method is available only through the per-node API endpoint 5.0 or later. """)
+@click.option('--attempts',
+              type=int,
+              required=False,
+              help="""Specifies the number of times the system should repeat the test ping. Default is 5. """)
+@click.option('--hosts',
+>>>>>>> Fixes the modifylunassignments bug
               type=str,
               required=False,
               help="""A comma-separated list of ensemble node CIPs for connectivity testing """)
@@ -189,6 +246,7 @@ def connectensemble(ctx,
 
     cli_utils.print_result(_TestConnectEnsembleResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
+<<<<<<< HEAD
 
 
 @cli.command('connectsvip', short_help="""The TestConnectSvip API method is used to test the storage connection to the cluster. The test pings the SVIP using ICMP packets and when successful connects as an iSCSI initiator. Note: This method is available only through the per-node API endpoint 5.0 or later. """)
@@ -220,3 +278,5 @@ def connectsvip(ctx,
 
     cli_utils.print_result(_TestConnectSvipResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
+=======
+>>>>>>> Fixes the modifylunassignments bug

@@ -24,7 +24,11 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
+<<<<<<< HEAD
     """services networking resetnode shutdown """
+=======
+    """shutdown networking resetnode services """
+>>>>>>> Fixes the modifylunassignments bug
 
 @cli.command('services', short_help="""The RestartServices API method is used to restart the  Element services on a node.Caution: This method causes temporary node services interruption. Exercise caution when using this method. """)
 @click.option('--force',
@@ -67,6 +71,43 @@ def services(ctx,
 
 
 @cli.command('networking', short_help="""The RestartNetworking API method is used to restart the networking services on a node.WARNING! This method restarts all networking services on a node, causing temporary loss of networking connectivity. Exercise caution when using this method. """)
+<<<<<<< HEAD
+=======
+@click.option('--force',
+              type=bool,
+              required=True,
+              help="""The "force" parameter must be included on this method to successfully restart the networking. """)
+@pass_context
+def networking(ctx,
+           force):
+    """The RestartNetworking API method is used to restart the networking services on a node.WARNING! This method restarts all networking services on a node, causing temporary loss of networking connectivity. Exercise caution when using this method."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+    
+
+    ctx.logger.info("""force = """+str(force)+""";"""+"")
+    try:
+        _dict = ctx.element.restart_networking(force=force)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_dict, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('resetnode', short_help="""Allows you to reset a node to the SolidFire factory settings. All data will be deleted from the node when you call this method. A node participating in a cluster cannot be reset. """)
+@click.option('--build',
+              type=str,
+              required=True,
+              help="""Used to specify the URL to a remote Element software image to which the node will be reset. """)
+>>>>>>> Fixes the modifylunassignments bug
 @click.option('--force',
               type=bool,
               required=True,
@@ -134,6 +175,7 @@ def resetnode(ctx,
 
     cli_utils.print_result(_ResetNodeResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
+<<<<<<< HEAD
 
 
 @cli.command('shutdown', short_help="""The Shutdown API method enables you to restart or shutdown a node that has not yet been added to a cluster. To use this method, login in to the MIP for the pending node and enter the "shutdown" method with either the "restart" or "halt" options in the following table. """)
@@ -171,3 +213,5 @@ def shutdown(ctx,
 
     cli_utils.print_result(_ShutdownResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
+=======
+>>>>>>> Fixes the modifylunassignments bug
