@@ -24,117 +24,13 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-<<<<<<< HEAD
-    """completecluster completevolume listclusterpairs removevolumepair startvolume listactivepairedvolumes modifyvolumepair startcluster removeclusterpair """
-
-@cli.command('completecluster', short_help="""The CompleteClusterPairing method is the second step in the cluster pairing process. Use this method with the encoded key received from the "StartClusterPairing" API method to complete the cluster pairing process. """)
-@click.option('--clusterpairingkey',
-              type=str,
-              required=True,
-              help="""A string of characters that is returned from the "StartClusterPairing" API method. """)
-@pass_context
-def completecluster(ctx,
-           clusterpairingkey):
-    """The CompleteClusterPairing method is the second step in the cluster pairing process."""
-    """Use this method with the encoded key received from the &quot;StartClusterPairing&quot; API method to complete the cluster pairing process."""
-=======
-    """completevolume listactivepairedvolumes startcluster removevolumepair removeclusterpair modifyvolumepair listclusterpairs startvolume completecluster """
-
-@cli.command('completevolume', short_help="""CompleteVolumePairing is used to complete the pairing of two volumes. """)
-@click.option('--volumepairingkey',
-              type=str,
-              required=True,
-              help="""The key returned from the "StartVolumePairing" API method. """)
-@click.option('--volumeid',
-              type=int,
-              required=True,
-              help="""The ID of volume on which to complete the pairing process. """)
-@pass_context
-def completevolume(ctx,
-           volumepairingkey,
-           volumeid):
-    """CompleteVolumePairing is used to complete the pairing of two volumes."""
->>>>>>> Fixes the modifylunassignments bug
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-    
-
-<<<<<<< HEAD
-    ctx.logger.info("""clusterpairingkey = """+str(clusterpairingkey)+""";"""+"")
-    try:
-        _CompleteClusterPairingResult = ctx.element.complete_cluster_pairing(cluster_pairing_key=clusterpairingkey)
-=======
-    ctx.logger.info("""volumepairingkey = """+str(volumepairingkey)+""";"""+"""volumeid = """+str(volumeid)+""";"""+"")
-    try:
-        _CompleteVolumePairingResult = ctx.element.complete_volume_pairing(volume_pairing_key=volumepairingkey, volume_id=volumeid)
->>>>>>> Fixes the modifylunassignments bug
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-<<<<<<< HEAD
-    cli_utils.print_result(_CompleteClusterPairingResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('completevolume', short_help="""CompleteVolumePairing is used to complete the pairing of two volumes. """)
-@click.option('--volumepairingkey',
-              type=str,
-              required=True,
-              help="""The key returned from the "StartVolumePairing" API method. """)
-@click.option('--volumeid',
-              type=int,
-              required=True,
-              help="""The ID of volume on which to complete the pairing process. """)
-@pass_context
-def completevolume(ctx,
-           volumepairingkey,
-           volumeid):
-    """CompleteVolumePairing is used to complete the pairing of two volumes."""
-=======
-    cli_utils.print_result(_CompleteVolumePairingResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
+    """listactivepairedvolumes startvolume completevolume modifyvolumepair removeclusterpair completecluster listclusterpairs removevolumepair startcluster """
 
 @cli.command('listactivepairedvolumes', short_help="""ListActivePairedVolumes is used to list all of the active volumes paired with a volume. Volumes listed in the return for this method include volumes with active and pending pairings. """)
 @pass_context
 def listactivepairedvolumes(ctx):
     """ListActivePairedVolumes is used to list all of the active volumes paired with a volume."""
     """Volumes listed in the return for this method include volumes with active and pending pairings."""
->>>>>>> Fixes the modifylunassignments bug
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-    
-
-    ctx.logger.info("""volumepairingkey = """+str(volumepairingkey)+""";"""+"""volumeid = """+str(volumeid)+""";"""+"")
-    try:
-<<<<<<< HEAD
-        _CompleteVolumePairingResult = ctx.element.complete_volume_pairing(volume_pairing_key=volumepairingkey, volume_id=volumeid)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_CompleteVolumePairingResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('listclusterpairs', short_help="""ListClusterPairs is used to list all of the clusters a cluster is paired with. This method returns information about active and pending cluster pairings, such as statistics about the current pairing as well as the connectivity and latency (in milliseconds) of the cluster pairing. """)
-@pass_context
-def listclusterpairs(ctx):
-    """ListClusterPairs is used to list all of the clusters a cluster is paired with."""
-    """This method returns information about active and pending cluster pairings, such as statistics about the current pairing as well as the connectivity and latency (in milliseconds) of the cluster pairing."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -144,10 +40,7 @@ def listclusterpairs(ctx):
 
     ctx.logger.info("")
     try:
-        _ListClusterPairsResult = ctx.element.list_cluster_pairs()
-=======
         _ListActivePairedVolumesResult = ctx.element.list_active_paired_volumes()
->>>>>>> Fixes the modifylunassignments bug
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -155,59 +48,7 @@ def listclusterpairs(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-<<<<<<< HEAD
-    cli_utils.print_result(_ListClusterPairsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('removevolumepair', short_help="""RemoveVolumePair is used to remove the remote pairing between two volumes. When the volume pairing information is removed, data is no longer replicated to or from the volume. This method should be run on both the source and target volumes that are paired together. """)
-@click.option('--volumeid',
-              type=int,
-              required=True,
-              help="""ID of the volume on which to stop the replication process. """)
-@pass_context
-def removevolumepair(ctx,
-           volumeid):
-    """RemoveVolumePair is used to remove the remote pairing between two volumes."""
-    """When the volume pairing information is removed, data is no longer replicated to or from the volume."""
-    """This method should be run on both the source and target volumes that are paired together."""
-=======
     cli_utils.print_result(_ListActivePairedVolumesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('startcluster', short_help="""StartClusterPairing is used to create an encoded key from a cluster that is used to pair with another cluster. The key created from this API method is used in the "CompleteClusterPairing" API method to establish a cluster pairing. You can pair a cluster with a maximum of four other SolidFire clusters. """)
-@pass_context
-def startcluster(ctx):
-    """StartClusterPairing is used to create an encoded key from a cluster that is used to pair with another cluster."""
-    """The key created from this API method is used in the &quot;CompleteClusterPairing&quot; API method to establish a cluster pairing."""
-    """You can pair a cluster with a maximum of four other SolidFire clusters."""
->>>>>>> Fixes the modifylunassignments bug
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-    
-
-<<<<<<< HEAD
-    ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"")
-    try:
-        _RemoveVolumePairResult = ctx.element.remove_volume_pair(volume_id=volumeid)
-=======
-    ctx.logger.info("")
-    try:
-        _StartClusterPairingResult = ctx.element.start_cluster_pairing()
->>>>>>> Fixes the modifylunassignments bug
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-<<<<<<< HEAD
-    cli_utils.print_result(_RemoveVolumePairResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -226,23 +67,6 @@ def startvolume(ctx,
            mode = None):
     """StartVolumePairing is used to create an encoded key from a volume that is used to pair with another volume."""
     """The key that this method creates is used in the &quot;CompleteVolumePairing&quot; API method to establish a volume pairing."""
-=======
-    cli_utils.print_result(_StartClusterPairingResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('removevolumepair', short_help="""RemoveVolumePair is used to remove the remote pairing between two volumes. When the volume pairing information is removed, data is no longer replicated to or from the volume. This method should be run on both the source and target volumes that are paired together. """)
-@click.option('--volumeid',
-              type=int,
-              required=True,
-              help="""ID of the volume on which to stop the replication process. """)
-@pass_context
-def removevolumepair(ctx,
-           volumeid):
-    """RemoveVolumePair is used to remove the remote pairing between two volumes."""
-    """When the volume pairing information is removed, data is no longer replicated to or from the volume."""
-    """This method should be run on both the source and target volumes that are paired together."""
->>>>>>> Fixes the modifylunassignments bug
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -250,15 +74,9 @@ def removevolumepair(ctx,
 
     
 
-<<<<<<< HEAD
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""mode = """+str(mode)+""";"""+"")
     try:
         _StartVolumePairingResult = ctx.element.start_volume_pairing(volume_id=volumeid, mode=mode)
-=======
-    ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"")
-    try:
-        _RemoveVolumePairResult = ctx.element.remove_volume_pair(volume_id=volumeid)
->>>>>>> Fixes the modifylunassignments bug
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -266,32 +84,24 @@ def removevolumepair(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-<<<<<<< HEAD
     cli_utils.print_result(_StartVolumePairingResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
-@cli.command('listactivepairedvolumes', short_help="""ListActivePairedVolumes is used to list all of the active volumes paired with a volume. Volumes listed in the return for this method include volumes with active and pending pairings. """)
-@pass_context
-def listactivepairedvolumes(ctx):
-    """ListActivePairedVolumes is used to list all of the active volumes paired with a volume."""
-    """Volumes listed in the return for this method include volumes with active and pending pairings."""
-=======
-    cli_utils.print_result(_RemoveVolumePairResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('removeclusterpair', short_help="""You can use the RemoveClusterPair method to close the open connections between two paired clusters. Note: Before you remove a cluster pair, you must first remove all volume pairing to the clusters with the "RemoveVolumePair" API method. """)
-@click.option('--clusterpairid',
+@cli.command('completevolume', short_help="""CompleteVolumePairing is used to complete the pairing of two volumes. """)
+@click.option('--volumepairingkey',
+              type=str,
+              required=True,
+              help="""The key returned from the "StartVolumePairing" API method. """)
+@click.option('--volumeid',
               type=int,
               required=True,
-              help="""Unique identifier used to pair two clusters. """)
+              help="""The ID of volume on which to complete the pairing process. """)
 @pass_context
-def removeclusterpair(ctx,
-           clusterpairid):
-    """You can use the RemoveClusterPair method to close the open connections between two paired clusters."""
-    """Note: Before you remove a cluster pair, you must first remove all volume pairing to the clusters with the &quot;RemoveVolumePair&quot; API method."""
->>>>>>> Fixes the modifylunassignments bug
+def completevolume(ctx,
+           volumepairingkey,
+           volumeid):
+    """CompleteVolumePairing is used to complete the pairing of two volumes."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -299,15 +109,9 @@ def removeclusterpair(ctx,
 
     
 
-<<<<<<< HEAD
-    ctx.logger.info("")
+    ctx.logger.info("""volumepairingkey = """+str(volumepairingkey)+""";"""+"""volumeid = """+str(volumeid)+""";"""+"")
     try:
-        _ListActivePairedVolumesResult = ctx.element.list_active_paired_volumes()
-=======
-    ctx.logger.info("""clusterpairid = """+str(clusterpairid)+""";"""+"")
-    try:
-        _RemoveClusterPairResult = ctx.element.remove_cluster_pair(cluster_pair_id=clusterpairid)
->>>>>>> Fixes the modifylunassignments bug
+        _CompleteVolumePairingResult = ctx.element.complete_volume_pairing(volume_pairing_key=volumepairingkey, volume_id=volumeid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -315,11 +119,7 @@ def removeclusterpair(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-<<<<<<< HEAD
-    cli_utils.print_result(_ListActivePairedVolumesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-=======
-    cli_utils.print_result(_RemoveClusterPairResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
->>>>>>> Fixes the modifylunassignments bug
+    cli_utils.print_result(_CompleteVolumePairingResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -363,49 +163,6 @@ def modifyvolumepair(ctx,
 
 
 
-<<<<<<< HEAD
-@cli.command('startcluster', short_help="""StartClusterPairing is used to create an encoded key from a cluster that is used to pair with another cluster. The key created from this API method is used in the "CompleteClusterPairing" API method to establish a cluster pairing. You can pair a cluster with a maximum of four other SolidFire clusters. """)
-@pass_context
-def startcluster(ctx):
-    """StartClusterPairing is used to create an encoded key from a cluster that is used to pair with another cluster."""
-    """The key created from this API method is used in the &quot;CompleteClusterPairing&quot; API method to establish a cluster pairing."""
-    """You can pair a cluster with a maximum of four other SolidFire clusters."""
-=======
-@cli.command('listclusterpairs', short_help="""ListClusterPairs is used to list all of the clusters a cluster is paired with. This method returns information about active and pending cluster pairings, such as statistics about the current pairing as well as the connectivity and latency (in milliseconds) of the cluster pairing. """)
-@pass_context
-def listclusterpairs(ctx):
-    """ListClusterPairs is used to list all of the clusters a cluster is paired with."""
-    """This method returns information about active and pending cluster pairings, such as statistics about the current pairing as well as the connectivity and latency (in milliseconds) of the cluster pairing."""
->>>>>>> Fixes the modifylunassignments bug
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-    
-
-    ctx.logger.info("")
-    try:
-<<<<<<< HEAD
-        _StartClusterPairingResult = ctx.element.start_cluster_pairing()
-=======
-        _ListClusterPairsResult = ctx.element.list_cluster_pairs()
->>>>>>> Fixes the modifylunassignments bug
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-<<<<<<< HEAD
-    cli_utils.print_result(_StartClusterPairingResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-=======
-    cli_utils.print_result(_ListClusterPairsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
->>>>>>> Fixes the modifylunassignments bug
-
-
-
 @cli.command('removeclusterpair', short_help="""You can use the RemoveClusterPair method to close the open connections between two paired clusters. Note: Before you remove a cluster pair, you must first remove all volume pairing to the clusters with the "RemoveVolumePair" API method. """)
 @click.option('--clusterpairid',
               type=int,
@@ -465,4 +222,89 @@ def completecluster(ctx,
         exit()
 
     cli_utils.print_result(_CompleteClusterPairingResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('listclusterpairs', short_help="""ListClusterPairs is used to list all of the clusters a cluster is paired with. This method returns information about active and pending cluster pairings, such as statistics about the current pairing as well as the connectivity and latency (in milliseconds) of the cluster pairing. """)
+@pass_context
+def listclusterpairs(ctx):
+    """ListClusterPairs is used to list all of the clusters a cluster is paired with."""
+    """This method returns information about active and pending cluster pairings, such as statistics about the current pairing as well as the connectivity and latency (in milliseconds) of the cluster pairing."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+    
+
+    ctx.logger.info("")
+    try:
+        _ListClusterPairsResult = ctx.element.list_cluster_pairs()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_ListClusterPairsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('removevolumepair', short_help="""RemoveVolumePair is used to remove the remote pairing between two volumes. When the volume pairing information is removed, data is no longer replicated to or from the volume. This method should be run on both the source and target volumes that are paired together. """)
+@click.option('--volumeid',
+              type=int,
+              required=True,
+              help="""ID of the volume on which to stop the replication process. """)
+@pass_context
+def removevolumepair(ctx,
+           volumeid):
+    """RemoveVolumePair is used to remove the remote pairing between two volumes."""
+    """When the volume pairing information is removed, data is no longer replicated to or from the volume."""
+    """This method should be run on both the source and target volumes that are paired together."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+    
+
+    ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"")
+    try:
+        _RemoveVolumePairResult = ctx.element.remove_volume_pair(volume_id=volumeid)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_RemoveVolumePairResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('startcluster', short_help="""StartClusterPairing is used to create an encoded key from a cluster that is used to pair with another cluster. The key created from this API method is used in the "CompleteClusterPairing" API method to establish a cluster pairing. You can pair a cluster with a maximum of four other SolidFire clusters. """)
+@pass_context
+def startcluster(ctx):
+    """StartClusterPairing is used to create an encoded key from a cluster that is used to pair with another cluster."""
+    """The key created from this API method is used in the &quot;CompleteClusterPairing&quot; API method to establish a cluster pairing."""
+    """You can pair a cluster with a maximum of four other SolidFire clusters."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+    
+
+    ctx.logger.info("")
+    try:
+        _StartClusterPairingResult = ctx.element.start_cluster_pairing()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_StartClusterPairingResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

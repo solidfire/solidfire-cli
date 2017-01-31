@@ -24,21 +24,12 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-<<<<<<< HEAD
-    """getremotelogginghosts setremotelogginghosts setinfo getinfo """
-
-@cli.command('getremotelogginghosts', short_help="""GetRemoteLoggingHosts is used to retrieve the current list of log servers. """)
-@pass_context
-def getremotelogginghosts(ctx):
-    """GetRemoteLoggingHosts is used to retrieve the current list of log servers."""
-=======
-    """getinfo getremotelogginghosts setinfo setremotelogginghosts """
+    """getinfo setremotelogginghosts setinfo getremotelogginghosts """
 
 @cli.command('getinfo', short_help="""GetLoginSessionInfo is used to return the period of time a log in authentication is valid for both log in shells and the TUI. """)
 @pass_context
 def getinfo(ctx):
     """GetLoginSessionInfo is used to return the period of time a log in authentication is valid for both log in shells and the TUI."""
->>>>>>> Fixes the modifylunassignments bug
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -48,11 +39,7 @@ def getinfo(ctx):
 
     ctx.logger.info("")
     try:
-<<<<<<< HEAD
-        _GetRemoteLoggingHostsResult = ctx.element.get_remote_logging_hosts()
-=======
         _GetLoginSessionInfoResult = ctx.element.get_login_session_info()
->>>>>>> Fixes the modifylunassignments bug
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -60,11 +47,7 @@ def getinfo(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-<<<<<<< HEAD
-    cli_utils.print_result(_GetRemoteLoggingHostsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-=======
     cli_utils.print_result(_GetLoginSessionInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
->>>>>>> Fixes the modifylunassignments bug
 
 
 
@@ -87,8 +70,8 @@ def setremotelogginghosts(ctx,
             kwargsDict = simplejson.loads(remotehosts)
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1)
-        remotehosts = LoggingServer(**kwargsDict)
+            exit(1) 
+        remotehosts = [LoggingServer(**argsOfInterest) for argsOfInterest in kwargsDict]
     
 
     ctx.logger.info("""remotehosts = """+str(remotehosts)+""";"""+"")
@@ -135,32 +118,20 @@ def setinfo(ctx,
 
 
 
-@cli.command('setremotelogginghosts', short_help="""RemoteLoggingHosts is used to configure remote logging from the nodes in the storage cluster to a centralized log server or servers. Remote logging is performed over TCP using the default port 514. This API does not add to the existing logging hosts. Rather, it replaces what currently exists with new values specified by this API method. You can use the GetRemoteLoggingHosts to determine what the current logging hosts are and then use the SetRemoteLoggingHosts to set the desired list of current and new logging hosts. """)
-@click.option('--remotehosts',
-              type=str,
-              required=True,
-              help="""Provide in json format: List of hosts to send log messages to. """)
+@cli.command('getremotelogginghosts', short_help="""GetRemoteLoggingHosts is used to retrieve the current list of log servers. """)
 @pass_context
-def setremotelogginghosts(ctx,
-           remotehosts):
-    """RemoteLoggingHosts is used to configure remote logging from the nodes in the storage cluster to a centralized log server or servers. Remote logging is performed over TCP using the default port 514. This API does not add to the existing logging hosts. Rather, it replaces what currently exists with new values specified by this API method. You can use the GetRemoteLoggingHosts to determine what the current logging hosts are and then use the SetRemoteLoggingHosts to set the desired list of current and new logging hosts."""
+def getremotelogginghosts(ctx):
+    """GetRemoteLoggingHosts is used to retrieve the current list of log servers."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
-    if(remotehosts is not None):
-        try:
-            kwargsDict = simplejson.loads(remotehosts)
-        except Exception as e:
-            ctx.logger.error(e.__str__())
-            exit(1)
-        remotehosts = LoggingServer(**kwargsDict)
     
 
-    ctx.logger.info("""remotehosts = """+str(remotehosts)+""";"""+"")
+    ctx.logger.info("")
     try:
-        _SetRemoteLoggingHostsResult = ctx.element.set_remote_logging_hosts(remote_hosts=remotehosts)
+        _GetRemoteLoggingHostsResult = ctx.element.get_remote_logging_hosts()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -168,5 +139,5 @@ def setremotelogginghosts(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_SetRemoteLoggingHostsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_GetRemoteLoggingHostsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

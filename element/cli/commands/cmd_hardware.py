@@ -24,21 +24,12 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-<<<<<<< HEAD
-    """getnvraminfo getnodeinfo getclusterinfo getconfig """
-
-@cli.command('getnvraminfo', short_help="""GetNvramInfo allows you to retrieve information from each node about the NVRAM card.   """)
-@pass_context
-def getnvraminfo(ctx):
-    """GetNvramInfo allows you to retrieve information from each node about the NVRAM card.  """
-=======
-    """getconfig getclusterinfo getnvraminfo getnodeinfo """
+    """getconfig getnodeinfo getclusterinfo getnvraminfo """
 
 @cli.command('getconfig', short_help="""GetHardwareConfig enables you to display the hardware configuration information for a node. NOTE: This method is available only through the per-node API endpoint 5.0 or later. """)
 @pass_context
 def getconfig(ctx):
     """GetHardwareConfig enables you to display the hardware configuration information for a node. NOTE: This method is available only through the per-node API endpoint 5.0 or later."""
->>>>>>> Fixes the modifylunassignments bug
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -48,11 +39,7 @@ def getconfig(ctx):
 
     ctx.logger.info("")
     try:
-<<<<<<< HEAD
-        _GetNvramInfoResult = ctx.element.get_nvram_info()
-=======
         _GetHardwareConfigResult = ctx.element.get_hardware_config()
->>>>>>> Fixes the modifylunassignments bug
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -60,8 +47,7 @@ def getconfig(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-<<<<<<< HEAD
-    cli_utils.print_result(_GetNvramInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_GetHardwareConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -74,21 +60,6 @@ def getconfig(ctx):
 def getnodeinfo(ctx,
            nodeid):
     """GetNodeHardwareInfo is used to return all the hardware info and status for the node specified. This generally includes manufacturers, vendors, versions, and other associated hardware identification information."""
-=======
-    cli_utils.print_result(_GetHardwareConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getclusterinfo', short_help="""You can use the GetClusterHardwareInfo method to retrieve the hardware status and information for all Fibre Channel nodes, iSCSI nodes and drives in the cluster. This generally includes manufacturers, vendors, versions, and other associated hardware identification information. """)
-@click.option('--type',
-              type=str,
-              required=False,
-              help="""Include only a certain type of hardware information in the response. Can be one of the following:drives: List only drive information in the response.nodes: List only node information in the response.all: Include both drive and node information in the response.If this parameter is omitted, a type of "all" is assumed. """)
-@pass_context
-def getclusterinfo(ctx,
-           type = None):
-    """You can use the GetClusterHardwareInfo method to retrieve the hardware status and information for all Fibre Channel nodes, iSCSI nodes and drives in the cluster. This generally includes manufacturers, vendors, versions, and other associated hardware identification information."""
->>>>>>> Fixes the modifylunassignments bug
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -96,15 +67,9 @@ def getclusterinfo(ctx,
 
     
 
-<<<<<<< HEAD
     ctx.logger.info("""nodeid = """+str(nodeid)+""";"""+"")
     try:
         _GetNodeHardwareInfoResult = ctx.element.get_node_hardware_info(node_id=nodeid)
-=======
-    ctx.logger.info("""type = """+str(type)+""";"""+"")
-    try:
-        _GetClusterHardwareInfoResult = ctx.element.get_cluster_hardware_info(type=type)
->>>>>>> Fixes the modifylunassignments bug
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -112,7 +77,6 @@ def getclusterinfo(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-<<<<<<< HEAD
     cli_utils.print_result(_GetNodeHardwareInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
@@ -126,16 +90,6 @@ def getclusterinfo(ctx,
 def getclusterinfo(ctx,
            type = None):
     """You can use the GetClusterHardwareInfo method to retrieve the hardware status and information for all Fibre Channel nodes, iSCSI nodes and drives in the cluster. This generally includes manufacturers, vendors, versions, and other associated hardware identification information."""
-=======
-    cli_utils.print_result(_GetClusterHardwareInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getnvraminfo', short_help="""GetNvramInfo allows you to retrieve information from each node about the NVRAM card.   """)
-@pass_context
-def getnvraminfo(ctx):
-    """GetNvramInfo allows you to retrieve information from each node about the NVRAM card.  """
->>>>>>> Fixes the modifylunassignments bug
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -145,11 +99,7 @@ def getnvraminfo(ctx):
 
     ctx.logger.info("""type = """+str(type)+""";"""+"")
     try:
-<<<<<<< HEAD
         _GetClusterHardwareInfoResult = ctx.element.get_cluster_hardware_info(type=type)
-=======
-        _GetNvramInfoResult = ctx.element.get_nvram_info()
->>>>>>> Fixes the modifylunassignments bug
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -157,18 +107,14 @@ def getnvraminfo(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-<<<<<<< HEAD
     cli_utils.print_result(_GetClusterHardwareInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-=======
-    cli_utils.print_result(_GetNvramInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
->>>>>>> Fixes the modifylunassignments bug
 
 
 
-@cli.command('getconfig', short_help="""GetHardwareConfig enables you to display the hardware configuration information for a node. NOTE: This method is available only through the per-node API endpoint 5.0 or later. """)
+@cli.command('getnvraminfo', short_help="""GetNvramInfo allows you to retrieve information from each node about the NVRAM card.   """)
 @pass_context
-def getconfig(ctx):
-    """GetHardwareConfig enables you to display the hardware configuration information for a node. NOTE: This method is available only through the per-node API endpoint 5.0 or later."""
+def getnvraminfo(ctx):
+    """GetNvramInfo allows you to retrieve information from each node about the NVRAM card.  """
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -178,7 +124,7 @@ def getconfig(ctx):
 
     ctx.logger.info("")
     try:
-        _GetHardwareConfigResult = ctx.element.get_hardware_config()
+        _GetNvramInfoResult = ctx.element.get_nvram_info()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -186,5 +132,5 @@ def getconfig(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_GetHardwareConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_GetNvramInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
