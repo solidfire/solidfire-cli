@@ -24,12 +24,12 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """listfibrechannelportinfo listinterfaces listiscsisessions listfibrechannelsessions listnodefibrechannelportinfo """
+    """listnodefibrechannelportinfo listfibrechannelsessions listfibrechannelportinfo listiscsisessions listinterfaces """
 
-@cli.command('listfibrechannelportinfo', short_help="""The ListFibreChannelPortInfo is used to return information about the Fibre Channel ports. The API method is intended for use on individual nodes; userid and password is required for access to individual Fibre Channel nodes. """)
+@cli.command('listnodefibrechannelportinfo', short_help="""The ListNodeFibreChannelPortInfo is used to return information about the Fibre Channel ports. The API method is intended for use on individual nodes; userid and password is required for access to individual Fibre Channel nodes. """)
 @pass_context
-def listfibrechannelportinfo(ctx):
-    """The ListFibreChannelPortInfo is used to return information about the Fibre Channel ports. The API method is intended for use on individual nodes; userid and password is required for access to individual Fibre Channel nodes."""
+def listnodefibrechannelportinfo(ctx):
+    """The ListNodeFibreChannelPortInfo is used to return information about the Fibre Channel ports. The API method is intended for use on individual nodes; userid and password is required for access to individual Fibre Channel nodes."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -39,7 +39,7 @@ def listfibrechannelportinfo(ctx):
 
     ctx.logger.info("")
     try:
-        _ListFibreChannelPortInfoResult = ctx.element.list_fibre_channel_port_info()
+        _ListNodeFibreChannelPortInfoResult = ctx.element.list_node_fibre_channel_port_info()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -47,57 +47,7 @@ def listfibrechannelportinfo(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_ListFibreChannelPortInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('listinterfaces', short_help="""The ListNetworkInterfaces API method is used to return information about each network interface on a node. The API method is intended for use on individual nodes.  """)
-@pass_context
-def listinterfaces(ctx):
-    """The ListNetworkInterfaces API method is used to return information about each network interface on a node. The API method is intended for use on individual nodes. """
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-    
-
-    ctx.logger.info("")
-    try:
-        _ListNetworkInterfacesResult = ctx.element.list_network_interfaces()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_ListNetworkInterfacesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('listiscsisessions', short_help="""ListISCSISessions is used to return iSCSI connection information for volumes in the cluster. """)
-@pass_context
-def listiscsisessions(ctx):
-    """ListISCSISessions is used to return iSCSI connection information for volumes in the cluster."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-    
-
-    ctx.logger.info("")
-    try:
-        _ListISCSISessionsResult = ctx.element.list_iscsisessions()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_ListISCSISessionsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_ListNodeFibreChannelPortInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -126,10 +76,10 @@ def listfibrechannelsessions(ctx):
 
 
 
-@cli.command('listnodefibrechannelportinfo', short_help="""The ListNodeFibreChannelPortInfo is used to return information about the Fibre Channel ports. The API method is intended for use on individual nodes; userid and password is required for access to individual Fibre Channel nodes. """)
+@cli.command('listfibrechannelportinfo', short_help="""The ListFibreChannelPortInfo is used to return information about the Fibre Channel ports. The API method is intended for use on individual nodes; userid and password is required for access to individual Fibre Channel nodes. """)
 @pass_context
-def listnodefibrechannelportinfo(ctx):
-    """The ListNodeFibreChannelPortInfo is used to return information about the Fibre Channel ports. The API method is intended for use on individual nodes; userid and password is required for access to individual Fibre Channel nodes."""
+def listfibrechannelportinfo(ctx):
+    """The ListFibreChannelPortInfo is used to return information about the Fibre Channel ports. The API method is intended for use on individual nodes; userid and password is required for access to individual Fibre Channel nodes."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -139,7 +89,7 @@ def listnodefibrechannelportinfo(ctx):
 
     ctx.logger.info("")
     try:
-        _ListNodeFibreChannelPortInfoResult = ctx.element.list_node_fibre_channel_port_info()
+        _ListFibreChannelPortInfoResult = ctx.element.list_fibre_channel_port_info()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -147,5 +97,55 @@ def listnodefibrechannelportinfo(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_ListNodeFibreChannelPortInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_ListFibreChannelPortInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('listiscsisessions', short_help="""ListISCSISessions is used to return iSCSI connection information for volumes in the cluster. """)
+@pass_context
+def listiscsisessions(ctx):
+    """ListISCSISessions is used to return iSCSI connection information for volumes in the cluster."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+    
+
+    ctx.logger.info("")
+    try:
+        _ListISCSISessionsResult = ctx.element.list_iscsisessions()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_ListISCSISessionsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('listinterfaces', short_help="""The ListNetworkInterfaces API method is used to return information about each network interface on a node. The API method is intended for use on individual nodes.  """)
+@pass_context
+def listinterfaces(ctx):
+    """The ListNetworkInterfaces API method is used to return information about each network interface on a node. The API method is intended for use on individual nodes. """
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+    
+
+    ctx.logger.info("")
+    try:
+        _ListNetworkInterfacesResult = ctx.element.list_network_interfaces()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_ListNetworkInterfacesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

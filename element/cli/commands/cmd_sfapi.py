@@ -32,9 +32,9 @@ def cli(ctx):
               required=True,
               help="""The name of the method to invoke. This is case sensitive. """)
 @click.option('--parameters',
-              type=dict,
+              type=str,
               required=False,
-              help="""An object, normally a dictionary or hashtable of the key/value pairs, to be passed as the params for the method being invoked. """)
+              help="""Provide in json format: An object, normally a dictionary or hashtable of the key/value pairs, to be passed as the params for the method being invoked. """)
 @pass_context
 def invoke(ctx,
            method,
@@ -46,6 +46,13 @@ def invoke(ctx,
          exit()
 
 
+    if(parameters is not None):
+        try:
+            kwargsDict = simplejson.loads(parameters)
+        except Exception as e:
+            ctx.logger.error(e.__str__())
+            exit(1) 
+        parameters = dict(**kwargsDict)
     
 
     ctx.logger.info("""method = """+str(method)+""";"""+"""parameters = """+str(parameters)+""";"""+"")

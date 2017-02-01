@@ -24,12 +24,12 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """getconfig getnodeinfo getclusterinfo getnvraminfo """
+    """getnvraminfo getnodeinfo getclusterinfo getconfig """
 
-@cli.command('getconfig', short_help="""GetHardwareConfig enables you to display the hardware configuration information for a node. NOTE: This method is available only through the per-node API endpoint 5.0 or later. """)
+@cli.command('getnvraminfo', short_help="""GetNvramInfo allows you to retrieve information from each node about the NVRAM card.   """)
 @pass_context
-def getconfig(ctx):
-    """GetHardwareConfig enables you to display the hardware configuration information for a node. NOTE: This method is available only through the per-node API endpoint 5.0 or later."""
+def getnvraminfo(ctx):
+    """GetNvramInfo allows you to retrieve information from each node about the NVRAM card.  """
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -39,7 +39,7 @@ def getconfig(ctx):
 
     ctx.logger.info("")
     try:
-        _GetHardwareConfigResult = ctx.element.get_hardware_config()
+        _GetNvramInfoResult = ctx.element.get_nvram_info()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -47,7 +47,7 @@ def getconfig(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_GetHardwareConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_GetNvramInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -111,10 +111,10 @@ def getclusterinfo(ctx,
 
 
 
-@cli.command('getnvraminfo', short_help="""GetNvramInfo allows you to retrieve information from each node about the NVRAM card.   """)
+@cli.command('getconfig', short_help="""GetHardwareConfig enables you to display the hardware configuration information for a node. NOTE: This method is available only through the per-node API endpoint 5.0 or later. """)
 @pass_context
-def getnvraminfo(ctx):
-    """GetNvramInfo allows you to retrieve information from each node about the NVRAM card.  """
+def getconfig(ctx):
+    """GetHardwareConfig enables you to display the hardware configuration information for a node. NOTE: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -124,7 +124,7 @@ def getnvraminfo(ctx):
 
     ctx.logger.info("")
     try:
-        _GetNvramInfoResult = ctx.element.get_nvram_info()
+        _GetHardwareConfigResult = ctx.element.get_hardware_config()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -132,5 +132,5 @@ def getnvraminfo(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_GetNvramInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_GetHardwareConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
