@@ -24,12 +24,68 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """disableldapauthentication enableldapauthentication testldapauthentication addldapclusteradmin getldapconfiguration """
+    """addclusteradmin getconfiguration enableauthentication disableauthentication testauthentication """
 
-@cli.command('disableldapauthentication', short_help="""The DisableLdapAuthentication method is used disable LDAP authentication and remove all LDAP configuration settings. This call will not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no longer be able to log in. """)
+@cli.command('addclusteradmin', short_help="""AddLdapClusterAdmin is used to add a new LDAP Cluster Admin. An LDAP Cluster Admin can be used to manage the cluster via the API and management tools. LDAP Cluster Admins are completely separate and unrelated to standard tenant accounts.  An LDAP group that has been defined in Active Directory can also be added using this API method. The access level that is given to the group will be passed to the individual users in the LDAP group. """)
+@click.option('--username',
+              type=str,
+              required=True,
+              help="""The distinguished user name for the new LDAP cluster admin. """)
+@click.option('--access',
+              type=str,
+              required=True,
+              help="""Controls which methods this Cluster Admin can use. For more details on the levels of access, see the Access Control appendix in the SolidFire API Reference. """)
+@click.option('--accepteula',
+              type=bool,
+              required=False,
+              help="""Indicate your acceptance of the End User License Agreement when creating this cluster admin. To accept the EULA, set this parameter to true. """)
+@click.option('--attributes',
+              type=str,
+              required=False,
+              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
-def disableldapauthentication(ctx):
-    """The DisableLdapAuthentication method is used disable LDAP authentication and remove all LDAP configuration settings. This call will not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no longer be able to log in."""
+def addclusteradmin(ctx,
+           username,
+           access,
+           accepteula = None,
+           attributes = None):
+    """AddLdapClusterAdmin is used to add a new LDAP Cluster Admin. An LDAP Cluster Admin can be used to manage the cluster via the API and management tools. LDAP Cluster Admins are completely separate and unrelated to standard tenant accounts."""
+    """"""
+    """An LDAP group that has been defined in Active Directory can also be added using this API method. The access level that is given to the group will be passed to the individual users in the LDAP group."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+
+    access = parser.parse_array(access)
+    if(attributes is not None):
+        try:
+            kwargsDict = simplejson.loads(attributes)
+        except Exception as e:
+            ctx.logger.error(e.__str__())
+            exit(1) 
+        attributes = dict(**kwargsDict)
+    
+
+    ctx.logger.info("""username = """+str(username)+""";"""+"""access = """+str(access)+""";"""+"""accepteula = """+str(accepteula)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
+    try:
+        _AddLdapClusterAdminResult = ctx.element.add_ldap_cluster_admin(username=username, access=access, accept_eula=accepteula, attributes=attributes)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_AddLdapClusterAdminResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getconfiguration', short_help="""The GetLdapConfiguration is used to get the LDAP configuration currently active on the cluster. """)
+@pass_context
+def getconfiguration(ctx):
+    """The GetLdapConfiguration is used to get the LDAP configuration currently active on the cluster."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -39,7 +95,7 @@ def disableldapauthentication(ctx):
 
     ctx.logger.info("")
     try:
-        _DisableLdapAuthenticationResult = ctx.element.disable_ldap_authentication()
+        _GetLdapConfigurationResult = ctx.element.get_ldap_configuration()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -47,11 +103,11 @@ def disableldapauthentication(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_DisableLdapAuthenticationResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_GetLdapConfigurationResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
-@cli.command('enableldapauthentication', short_help="""The EnableLdapAuthentication method is used to configure an LDAP server connection to use for LDAP authentication to a SolidFire cluster. Users that are members on the LDAP server can then log in to a SolidFire storage system using their LDAP authentication userid and password. """)
+@cli.command('enableauthentication', short_help="""The EnableLdapAuthentication method is used to configure an LDAP server connection to use for LDAP authentication to a SolidFire cluster. Users that are members on the LDAP server can then log in to a SolidFire storage system using their LDAP authentication userid and password. """)
 @click.option('--authtype',
               type=str,
               required=False,
@@ -93,7 +149,7 @@ def disableldapauthentication(ctx):
               required=False,
               help="""REQUIRED for SearchAndBind. The LDAP filter to use. The string should have the placeholder text "%USERNAME%" which will be replaced with the username of the authenticating user. Example: (&(objectClass=person) (sAMAccountName=%USERNAME%)) will use the sAMAccountName field in Active Directory to match the nusername entered at cluster login. """)
 @pass_context
-def enableldapauthentication(ctx,
+def enableauthentication(ctx,
            serveruris,
            authtype = None,
            groupsearchbasedn = None,
@@ -128,7 +184,32 @@ def enableldapauthentication(ctx,
 
 
 
-@cli.command('testldapauthentication', short_help="""The TestLdapAuthentication is used to verify the currently enabled LDAP authentication configuration settings are correct. If the configuration settings are correct, the API call returns a list of the groups the tested user is a member of. """)
+@cli.command('disableauthentication', short_help="""The DisableLdapAuthentication method is used disable LDAP authentication and remove all LDAP configuration settings. This call will not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no longer be able to log in. """)
+@pass_context
+def disableauthentication(ctx):
+    """The DisableLdapAuthentication method is used disable LDAP authentication and remove all LDAP configuration settings. This call will not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no longer be able to log in."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+    
+
+    ctx.logger.info("")
+    try:
+        _DisableLdapAuthenticationResult = ctx.element.disable_ldap_authentication()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_DisableLdapAuthenticationResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('testauthentication', short_help="""The TestLdapAuthentication is used to verify the currently enabled LDAP authentication configuration settings are correct. If the configuration settings are correct, the API call returns a list of the groups the tested user is a member of. """)
 @click.option('--username',
               type=str,
               required=True,
@@ -139,46 +220,46 @@ def enableldapauthentication(ctx,
               help="""The password for the username to be tester. """)
 @click.option('--ldapconfigurationauthtype',
               type=str,
-              required=True,
+              required=False,
               help="""Identifies which user authentcation method will be used.  Valid values: DirectBind SearchAndBind """)
 @click.option('--ldapconfigurationenabled',
               type=bool,
-              required=True,
+              required=False,
               help="""Identifies whether or not the system is enabled for LDAP.  Valid values: true false """)
 @click.option('--ldapconfigurationgroupsearchbasedn',
               type=str,
-              required=True,
+              required=False,
               help="""The base DN of the tree to start the group search (will do a subtree search from here). """)
 @click.option('--ldapconfigurationgroupsearchcustomfilter',
               type=str,
-              required=True,
+              required=False,
               help="""The custom search filter used. """)
 @click.option('--ldapconfigurationgroupsearchtype',
               type=str,
-              required=True,
+              required=False,
               help="""Controls the default group search filter used, can be one of the following: NoGroups: No group support. ActiveDirectory: Nested membership of all of a user's AD groups. MemberDN: MemberDN style groups (single-level). """)
 @click.option('--ldapconfigurationsearchbinddn',
               type=str,
-              required=True,
+              required=False,
               help="""A fully qualified DN to log in with to perform an LDAP search for the user (needs read access to the LDAP directory). """)
 @click.option('--ldapconfigurationserveruris',
               type=str,
-              required=True,
+              required=False,
               help="""A comma-separated list of LDAP server URIs (examples: "ldap://1.2.3.4" and ldaps://1.2.3.4:123") """)
 @click.option('--ldapconfigurationuserdntemplate',
               type=str,
-              required=True,
+              required=False,
               help="""A string that is used to form a fully qualified user DN. """)
 @click.option('--ldapconfigurationusersearchbasedn',
               type=str,
-              required=True,
+              required=False,
               help="""The base DN of the tree used to start the search (will do a subtree search from here). """)
 @click.option('--ldapconfigurationusersearchfilter',
               type=str,
-              required=True,
+              required=False,
               help="""The LDAP filter used. """)
 @pass_context
-def testldapauthentication(ctx,
+def testauthentication(ctx,
            username,
            password,
            ldapconfigurationauthtype = None,
@@ -226,85 +307,4 @@ def testldapauthentication(ctx,
         exit()
 
     cli_utils.print_result(_TestLdapAuthenticationResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('addldapclusteradmin', short_help="""AddLdapClusterAdmin is used to add a new LDAP Cluster Admin. An LDAP Cluster Admin can be used to manage the cluster via the API and management tools. LDAP Cluster Admins are completely separate and unrelated to standard tenant accounts.  An LDAP group that has been defined in Active Directory can also be added using this API method. The access level that is given to the group will be passed to the individual users in the LDAP group. """)
-@click.option('--username',
-              type=str,
-              required=True,
-              help="""The distinguished user name for the new LDAP cluster admin. """)
-@click.option('--access',
-              type=str,
-              required=True,
-              help="""Controls which methods this Cluster Admin can use. For more details on the levels of access, see the Access Control appendix in the SolidFire API Reference. """)
-@click.option('--accepteula',
-              type=bool,
-              required=False,
-              help="""Indicate your acceptance of the End User License Agreement when creating this cluster admin. To accept the EULA, set this parameter to true. """)
-@click.option('--attributes',
-              type=str,
-              required=False,
-              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
-@pass_context
-def addldapclusteradmin(ctx,
-           username,
-           access,
-           accepteula = None,
-           attributes = None):
-    """AddLdapClusterAdmin is used to add a new LDAP Cluster Admin. An LDAP Cluster Admin can be used to manage the cluster via the API and management tools. LDAP Cluster Admins are completely separate and unrelated to standard tenant accounts."""
-    """"""
-    """An LDAP group that has been defined in Active Directory can also be added using this API method. The access level that is given to the group will be passed to the individual users in the LDAP group."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-
-    access = parser.parse_array(access)
-    if(attributes is not None):
-        try:
-            kwargsDict = simplejson.loads(attributes)
-        except Exception as e:
-            ctx.logger.error(e.__str__())
-            exit(1) 
-        attributes = dict(**kwargsDict)
-    
-
-    ctx.logger.info("""username = """+str(username)+""";"""+"""access = """+str(access)+""";"""+"""accepteula = """+str(accepteula)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
-    try:
-        _AddLdapClusterAdminResult = ctx.element.add_ldap_cluster_admin(username=username, access=access, accept_eula=accepteula, attributes=attributes)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_AddLdapClusterAdminResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getldapconfiguration', short_help="""The GetLdapConfiguration is used to get the LDAP configuration currently active on the cluster. """)
-@pass_context
-def getldapconfiguration(ctx):
-    """The GetLdapConfiguration is used to get the LDAP configuration currently active on the cluster."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-    
-
-    ctx.logger.info("")
-    try:
-        _GetLdapConfigurationResult = ctx.element.get_ldap_configuration()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_GetLdapConfigurationResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

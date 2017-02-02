@@ -89,20 +89,752 @@ $account = sfcli -c 0 SFApi Invoke --method GetAccountByID --parameters '{\"acco
 ----------------------
 Nonstandard Parameters
 ----------------------
-lunassignments
-network
-parameters
-schedule
-drives
-remotehosts
-traprecipients
-volumes
-initiators
-attributes
-usmusers
-config
-networks
-addressblocks
+Below are some template strings for each of the nonstandard parameters. To run the command, you can use one of the methods listed above to get the current values and substitute some new ones, or you can copy/paste the below parameters.
+Note:
+- If running in a PowerShell window, surround the string like so: 'STRING'
+- If running in a Bash window, surround the string like so ^"STRING^"
+So, if I were running sfcli volume clonemultiple on windows, I could use the following command:
+sfcli --mvip 10.117.61.44 -p --username admin --password admin Volume CloneMultiple --volumes '[{\"volume_id\": 1979},{\"volume_id\": 1980}]'
+
+--lunassignments
+[
+    {
+        \"volume_id\": int        [Required],
+        \"lun\": int        [Required]
+    }
+]
+
+--network
+{
+    \"bond10_g\": {
+        \"_default\": true/false,
+        \"bond_master\": \"string\"        [Required],
+        \"virtual_network_tag\": \"string\"        [Required],
+        \"address\": \"string\",
+        \"auto\": true/false,
+        \"bond_downdelay\": \"string\",
+        \"bond_fail_over_mac\": \"string\",
+        \"bond_primary_reselect\": \"string\",
+        \"bond_lacp_rate\": \"string\",
+        \"bond_miimon\": \"string\",
+        \"bond_mode\": \"string\",
+        \"bond_slaves\": \"string\",
+        \"bond_updelay\": \"string\",
+        \"broadcast\": \"string\",
+        \"dns_nameservers\": \"string\",
+        \"dns_search\": \"string\",
+        \"family\": \"string\",
+        \"gateway\": \"string\",
+        \"mac_address\": \"string\",
+        \"mac_address_permanent\": \"string\",
+        \"method\": \"string\",
+        \"mtu\": \"string\",
+        \"netmask\": \"string\",
+        \"network\": \"string\",
+        \"physical\": {
+            \"address\": \"string\",
+            \"mac_address\": \"string\",
+            \"mac_address_permanent\": \"string\",
+            \"mtu\": \"string\",
+            \"netmask\": \"string\",
+            \"network\": \"string\",
+            \"up_and_running\": true/false
+        },
+        \"routes\": [
+            \"string\"
+        ],
+        \"status\": \"string\",
+        \"symmetric_route_rules\": [
+            \"string\"
+        ],
+        \"up_and_running\": true/false
+    },
+    \"bond1_g\": {
+        \"_default\": true/false,
+        \"bond_master\": \"string\"        [Required],
+        \"virtual_network_tag\": \"string\"        [Required],
+        \"address\": \"string\",
+        \"auto\": true/false,
+        \"bond_downdelay\": \"string\",
+        \"bond_fail_over_mac\": \"string\",
+        \"bond_primary_reselect\": \"string\",
+        \"bond_lacp_rate\": \"string\",
+        \"bond_miimon\": \"string\",
+        \"bond_mode\": \"string\",
+        \"bond_slaves\": \"string\",
+        \"bond_updelay\": \"string\",
+        \"broadcast\": \"string\",
+        \"dns_nameservers\": \"string\",
+        \"dns_search\": \"string\",
+        \"family\": \"string\",
+        \"gateway\": \"string\",
+        \"mac_address\": \"string\",
+        \"mac_address_permanent\": \"string\",
+        \"method\": \"string\",
+        \"mtu\": \"string\",
+        \"netmask\": \"string\",
+        \"network\": \"string\",
+        \"physical\": {
+            \"address\": \"string\",
+            \"mac_address\": \"string\",
+            \"mac_address_permanent\": \"string\",
+            \"mtu\": \"string\",
+            \"netmask\": \"string\",
+            \"network\": \"string\",
+            \"up_and_running\": true/false
+        },
+        \"routes\": [
+            \"string\"
+        ],
+        \"status\": \"string\",
+        \"symmetric_route_rules\": [
+            \"string\"
+        ],
+        \"up_and_running\": true/false
+    },
+    \"eth0\": {
+        \"_default\": true/false,
+        \"bond_master\": \"string\"        [Required],
+        \"virtual_network_tag\": \"string\"        [Required],
+        \"address\": \"string\",
+        \"auto\": true/false,
+        \"bond_downdelay\": \"string\",
+        \"bond_fail_over_mac\": \"string\",
+        \"bond_primary_reselect\": \"string\",
+        \"bond_lacp_rate\": \"string\",
+        \"bond_miimon\": \"string\",
+        \"bond_mode\": \"string\",
+        \"bond_slaves\": \"string\",
+        \"bond_updelay\": \"string\",
+        \"broadcast\": \"string\",
+        \"dns_nameservers\": \"string\",
+        \"dns_search\": \"string\",
+        \"family\": \"string\",
+        \"gateway\": \"string\",
+        \"mac_address\": \"string\",
+        \"mac_address_permanent\": \"string\",
+        \"method\": \"string\",
+        \"mtu\": \"string\",
+        \"netmask\": \"string\",
+        \"network\": \"string\",
+        \"physical\": {
+            \"address\": \"string\",
+            \"mac_address\": \"string\",
+            \"mac_address_permanent\": \"string\",
+            \"mtu\": \"string\",
+            \"netmask\": \"string\",
+            \"network\": \"string\",
+            \"up_and_running\": true/false
+        },
+        \"routes\": [
+            \"string\"
+        ],
+        \"status\": \"string\",
+        \"symmetric_route_rules\": [
+            \"string\"
+        ],
+        \"up_and_running\": true/false
+    },
+    \"eth1\": {
+        \"_default\": true/false,
+        \"bond_master\": \"string\"        [Required],
+        \"virtual_network_tag\": \"string\"        [Required],
+        \"address\": \"string\",
+        \"auto\": true/false,
+        \"bond_downdelay\": \"string\",
+        \"bond_fail_over_mac\": \"string\",
+        \"bond_primary_reselect\": \"string\",
+        \"bond_lacp_rate\": \"string\",
+        \"bond_miimon\": \"string\",
+        \"bond_mode\": \"string\",
+        \"bond_slaves\": \"string\",
+        \"bond_updelay\": \"string\",
+        \"broadcast\": \"string\",
+        \"dns_nameservers\": \"string\",
+        \"dns_search\": \"string\",
+        \"family\": \"string\",
+        \"gateway\": \"string\",
+        \"mac_address\": \"string\",
+        \"mac_address_permanent\": \"string\",
+        \"method\": \"string\",
+        \"mtu\": \"string\",
+        \"netmask\": \"string\",
+        \"network\": \"string\",
+        \"physical\": {
+            \"address\": \"string\",
+            \"mac_address\": \"string\",
+            \"mac_address_permanent\": \"string\",
+            \"mtu\": \"string\",
+            \"netmask\": \"string\",
+            \"network\": \"string\",
+            \"up_and_running\": true/false
+        },
+        \"routes\": [
+            \"string\"
+        ],
+        \"status\": \"string\",
+        \"symmetric_route_rules\": [
+            \"string\"
+        ],
+        \"up_and_running\": true/false
+    },
+    \"eth2\": {
+        \"_default\": true/false,
+        \"bond_master\": \"string\"        [Required],
+        \"virtual_network_tag\": \"string\"        [Required],
+        \"address\": \"string\",
+        \"auto\": true/false,
+        \"bond_downdelay\": \"string\",
+        \"bond_fail_over_mac\": \"string\",
+        \"bond_primary_reselect\": \"string\",
+        \"bond_lacp_rate\": \"string\",
+        \"bond_miimon\": \"string\",
+        \"bond_mode\": \"string\",
+        \"bond_slaves\": \"string\",
+        \"bond_updelay\": \"string\",
+        \"broadcast\": \"string\",
+        \"dns_nameservers\": \"string\",
+        \"dns_search\": \"string\",
+        \"family\": \"string\",
+        \"gateway\": \"string\",
+        \"mac_address\": \"string\",
+        \"mac_address_permanent\": \"string\",
+        \"method\": \"string\",
+        \"mtu\": \"string\",
+        \"netmask\": \"string\",
+        \"network\": \"string\",
+        \"physical\": {
+            \"address\": \"string\",
+            \"mac_address\": \"string\",
+            \"mac_address_permanent\": \"string\",
+            \"mtu\": \"string\",
+            \"netmask\": \"string\",
+            \"network\": \"string\",
+            \"up_and_running\": true/false
+        },
+        \"routes\": [
+            \"string\"
+        ],
+        \"status\": \"string\",
+        \"symmetric_route_rules\": [
+            \"string\"
+        ],
+        \"up_and_running\": true/false
+    },
+    \"eth3\": {
+        \"_default\": true/false,
+        \"bond_master\": \"string\"        [Required],
+        \"virtual_network_tag\": \"string\"        [Required],
+        \"address\": \"string\",
+        \"auto\": true/false,
+        \"bond_downdelay\": \"string\",
+        \"bond_fail_over_mac\": \"string\",
+        \"bond_primary_reselect\": \"string\",
+        \"bond_lacp_rate\": \"string\",
+        \"bond_miimon\": \"string\",
+        \"bond_mode\": \"string\",
+        \"bond_slaves\": \"string\",
+        \"bond_updelay\": \"string\",
+        \"broadcast\": \"string\",
+        \"dns_nameservers\": \"string\",
+        \"dns_search\": \"string\",
+        \"family\": \"string\",
+        \"gateway\": \"string\",
+        \"mac_address\": \"string\",
+        \"mac_address_permanent\": \"string\",
+        \"method\": \"string\",
+        \"mtu\": \"string\",
+        \"netmask\": \"string\",
+        \"network\": \"string\",
+        \"physical\": {
+            \"address\": \"string\",
+            \"mac_address\": \"string\",
+            \"mac_address_permanent\": \"string\",
+            \"mtu\": \"string\",
+            \"netmask\": \"string\",
+            \"network\": \"string\",
+            \"up_and_running\": true/false
+        },
+        \"routes\": [
+            \"string\"
+        ],
+        \"status\": \"string\",
+        \"symmetric_route_rules\": [
+            \"string\"
+        ],
+        \"up_and_running\": true/false
+    },
+    \"lo\": {
+        \"_default\": true/false,
+        \"bond_master\": \"string\"        [Required],
+        \"virtual_network_tag\": \"string\"        [Required],
+        \"address\": \"string\",
+        \"auto\": true/false,
+        \"bond_downdelay\": \"string\",
+        \"bond_fail_over_mac\": \"string\",
+        \"bond_primary_reselect\": \"string\",
+        \"bond_lacp_rate\": \"string\",
+        \"bond_miimon\": \"string\",
+        \"bond_mode\": \"string\",
+        \"bond_slaves\": \"string\",
+        \"bond_updelay\": \"string\",
+        \"broadcast\": \"string\",
+        \"dns_nameservers\": \"string\",
+        \"dns_search\": \"string\",
+        \"family\": \"string\",
+        \"gateway\": \"string\",
+        \"mac_address\": \"string\",
+        \"mac_address_permanent\": \"string\",
+        \"method\": \"string\",
+        \"mtu\": \"string\",
+        \"netmask\": \"string\",
+        \"network\": \"string\",
+        \"physical\": {
+            \"address\": \"string\",
+            \"mac_address\": \"string\",
+            \"mac_address_permanent\": \"string\",
+            \"mtu\": \"string\",
+            \"netmask\": \"string\",
+            \"network\": \"string\",
+            \"up_and_running\": true/false
+        },
+        \"routes\": [
+            \"string\"
+        ],
+        \"status\": \"string\",
+        \"symmetric_route_rules\": [
+            \"string\"
+        ],
+        \"up_and_running\": true/false
+    }
+}
+
+--parameters
+\"parameters\": { "arbitrary_key":"arbitrary_value" }
+
+--schedule
+{
+    \"frequency\": {
+    }        [Required],
+    \"has_error\": true/false,
+    \"last_run_status\": \"string\"        [Required],
+    \"last_run_time_started\": \"string\"        [Required],
+    \"paused\": true/false,
+    \"recurring\": true/false,
+    \"run_next_interval\": true/false,
+    \"schedule_id\": int,
+    \"schedule_info\": {
+        \"volume_ids\": [
+            int
+        ],
+        \"snapshot_name\": \"string\",
+        \"enable_remote_replication\": true/false,
+        \"retention\": \"string\"
+    }        [Required],
+    \"name\": \"string\"        [Required],
+    \"starting_date\": \"string\"        [Required],
+    \"to_be_deleted\": true/false
+}
+
+--drives
+[
+    {
+        \"drive_id\": int        [Required]
+    }
+]
+
+--remotehosts
+[
+    {
+        \"host\": \"string\"        [Required],
+        \"port\": int        [Required]
+    }
+]
+
+--traprecipients
+[
+    {
+        \"host\": \"string\"        [Required],
+        \"community\": \"string\"        [Required],
+        \"port\": int        [Required]
+    }
+]
+
+--volumes
+[
+    {
+        \"volume_id\": int        [Required],
+        \"access\": \"string\",
+        \"name\": \"string\",
+        \"new_account_id\": int,
+        \"new_size\": int,
+        \"attributes\": \"attributes\": { "arbitrary_key":"arbitrary_value" }
+    }
+]
+
+--initiators
+[
+    {
+        \"name\": \"string\"        [Required],
+        \"alias\": \"string\",
+        \"volume_access_group_id\": int,
+        \"attributes\": \"attributes\": { "arbitrary_key":"arbitrary_value" }
+    }
+]
+
+--attributes
+\"attributes\": { "arbitrary_key":"arbitrary_value" }
+
+--usmusers
+[
+    {
+        \"access\": \"string\"        [Required],
+        \"name\": \"string\"        [Required],
+        \"password\": \"string\"        [Required],
+        \"passphrase\": \"string\"        [Required],
+        \"sec_level\": \"string\"        [Required]
+    }
+]
+
+--config
+{
+    \"cluster\": {
+        \"cipi\": \"string\",
+        \"cluster\": \"string\",
+        \"ensemble\": [
+            \"string\"
+        ],
+        \"mipi\": \"string\",
+        \"name\": \"string\",
+        \"node_id\": int,
+        \"pending_node_id\": int,
+        \"role\": \"string\",
+        \"sipi\": \"string\",
+        \"state\": \"string\"
+    }        [Required],
+    \"network\": {
+        \"bond10_g\": {
+            \"_default\": true/false,
+            \"bond_master\": \"string\"        [Required],
+            \"virtual_network_tag\": \"string\"        [Required],
+            \"address\": \"string\",
+            \"auto\": true/false,
+            \"bond_downdelay\": \"string\",
+            \"bond_fail_over_mac\": \"string\",
+            \"bond_primary_reselect\": \"string\",
+            \"bond_lacp_rate\": \"string\",
+            \"bond_miimon\": \"string\",
+            \"bond_mode\": \"string\",
+            \"bond_slaves\": \"string\",
+            \"bond_updelay\": \"string\",
+            \"broadcast\": \"string\",
+            \"dns_nameservers\": \"string\",
+            \"dns_search\": \"string\",
+            \"family\": \"string\",
+            \"gateway\": \"string\",
+            \"mac_address\": \"string\",
+            \"mac_address_permanent\": \"string\",
+            \"method\": \"string\",
+            \"mtu\": \"string\",
+            \"netmask\": \"string\",
+            \"network\": \"string\",
+            \"physical\": {
+                \"address\": \"string\",
+                \"mac_address\": \"string\",
+                \"mac_address_permanent\": \"string\",
+                \"mtu\": \"string\",
+                \"netmask\": \"string\",
+                \"network\": \"string\",
+                \"up_and_running\": true/false
+            },
+            \"routes\": [
+                \"string\"
+            ],
+            \"status\": \"string\",
+            \"symmetric_route_rules\": [
+                \"string\"
+            ],
+            \"up_and_running\": true/false
+        },
+        \"bond1_g\": {
+            \"_default\": true/false,
+            \"bond_master\": \"string\"        [Required],
+            \"virtual_network_tag\": \"string\"        [Required],
+            \"address\": \"string\",
+            \"auto\": true/false,
+            \"bond_downdelay\": \"string\",
+            \"bond_fail_over_mac\": \"string\",
+            \"bond_primary_reselect\": \"string\",
+            \"bond_lacp_rate\": \"string\",
+            \"bond_miimon\": \"string\",
+            \"bond_mode\": \"string\",
+            \"bond_slaves\": \"string\",
+            \"bond_updelay\": \"string\",
+            \"broadcast\": \"string\",
+            \"dns_nameservers\": \"string\",
+            \"dns_search\": \"string\",
+            \"family\": \"string\",
+            \"gateway\": \"string\",
+            \"mac_address\": \"string\",
+            \"mac_address_permanent\": \"string\",
+            \"method\": \"string\",
+            \"mtu\": \"string\",
+            \"netmask\": \"string\",
+            \"network\": \"string\",
+            \"physical\": {
+                \"address\": \"string\",
+                \"mac_address\": \"string\",
+                \"mac_address_permanent\": \"string\",
+                \"mtu\": \"string\",
+                \"netmask\": \"string\",
+                \"network\": \"string\",
+                \"up_and_running\": true/false
+            },
+            \"routes\": [
+                \"string\"
+            ],
+            \"status\": \"string\",
+            \"symmetric_route_rules\": [
+                \"string\"
+            ],
+            \"up_and_running\": true/false
+        },
+        \"eth0\": {
+            \"_default\": true/false,
+            \"bond_master\": \"string\"        [Required],
+            \"virtual_network_tag\": \"string\"        [Required],
+            \"address\": \"string\",
+            \"auto\": true/false,
+            \"bond_downdelay\": \"string\",
+            \"bond_fail_over_mac\": \"string\",
+            \"bond_primary_reselect\": \"string\",
+            \"bond_lacp_rate\": \"string\",
+            \"bond_miimon\": \"string\",
+            \"bond_mode\": \"string\",
+            \"bond_slaves\": \"string\",
+            \"bond_updelay\": \"string\",
+            \"broadcast\": \"string\",
+            \"dns_nameservers\": \"string\",
+            \"dns_search\": \"string\",
+            \"family\": \"string\",
+            \"gateway\": \"string\",
+            \"mac_address\": \"string\",
+            \"mac_address_permanent\": \"string\",
+            \"method\": \"string\",
+            \"mtu\": \"string\",
+            \"netmask\": \"string\",
+            \"network\": \"string\",
+            \"physical\": {
+                \"address\": \"string\",
+                \"mac_address\": \"string\",
+                \"mac_address_permanent\": \"string\",
+                \"mtu\": \"string\",
+                \"netmask\": \"string\",
+                \"network\": \"string\",
+                \"up_and_running\": true/false
+            },
+            \"routes\": [
+                \"string\"
+            ],
+            \"status\": \"string\",
+            \"symmetric_route_rules\": [
+                \"string\"
+            ],
+            \"up_and_running\": true/false
+        },
+        \"eth1\": {
+            \"_default\": true/false,
+            \"bond_master\": \"string\"        [Required],
+            \"virtual_network_tag\": \"string\"        [Required],
+            \"address\": \"string\",
+            \"auto\": true/false,
+            \"bond_downdelay\": \"string\",
+            \"bond_fail_over_mac\": \"string\",
+            \"bond_primary_reselect\": \"string\",
+            \"bond_lacp_rate\": \"string\",
+            \"bond_miimon\": \"string\",
+            \"bond_mode\": \"string\",
+            \"bond_slaves\": \"string\",
+            \"bond_updelay\": \"string\",
+            \"broadcast\": \"string\",
+            \"dns_nameservers\": \"string\",
+            \"dns_search\": \"string\",
+            \"family\": \"string\",
+            \"gateway\": \"string\",
+            \"mac_address\": \"string\",
+            \"mac_address_permanent\": \"string\",
+            \"method\": \"string\",
+            \"mtu\": \"string\",
+            \"netmask\": \"string\",
+            \"network\": \"string\",
+            \"physical\": {
+                \"address\": \"string\",
+                \"mac_address\": \"string\",
+                \"mac_address_permanent\": \"string\",
+                \"mtu\": \"string\",
+                \"netmask\": \"string\",
+                \"network\": \"string\",
+                \"up_and_running\": true/false
+            },
+            \"routes\": [
+                \"string\"
+            ],
+            \"status\": \"string\",
+            \"symmetric_route_rules\": [
+                \"string\"
+            ],
+            \"up_and_running\": true/false
+        },
+        \"eth2\": {
+            \"_default\": true/false,
+            \"bond_master\": \"string\"        [Required],
+            \"virtual_network_tag\": \"string\"        [Required],
+            \"address\": \"string\",
+            \"auto\": true/false,
+            \"bond_downdelay\": \"string\",
+            \"bond_fail_over_mac\": \"string\",
+            \"bond_primary_reselect\": \"string\",
+            \"bond_lacp_rate\": \"string\",
+            \"bond_miimon\": \"string\",
+            \"bond_mode\": \"string\",
+            \"bond_slaves\": \"string\",
+            \"bond_updelay\": \"string\",
+            \"broadcast\": \"string\",
+            \"dns_nameservers\": \"string\",
+            \"dns_search\": \"string\",
+            \"family\": \"string\",
+            \"gateway\": \"string\",
+            \"mac_address\": \"string\",
+            \"mac_address_permanent\": \"string\",
+            \"method\": \"string\",
+            \"mtu\": \"string\",
+            \"netmask\": \"string\",
+            \"network\": \"string\",
+            \"physical\": {
+                \"address\": \"string\",
+                \"mac_address\": \"string\",
+                \"mac_address_permanent\": \"string\",
+                \"mtu\": \"string\",
+                \"netmask\": \"string\",
+                \"network\": \"string\",
+                \"up_and_running\": true/false
+            },
+            \"routes\": [
+                \"string\"
+            ],
+            \"status\": \"string\",
+            \"symmetric_route_rules\": [
+                \"string\"
+            ],
+            \"up_and_running\": true/false
+        },
+        \"eth3\": {
+            \"_default\": true/false,
+            \"bond_master\": \"string\"        [Required],
+            \"virtual_network_tag\": \"string\"        [Required],
+            \"address\": \"string\",
+            \"auto\": true/false,
+            \"bond_downdelay\": \"string\",
+            \"bond_fail_over_mac\": \"string\",
+            \"bond_primary_reselect\": \"string\",
+            \"bond_lacp_rate\": \"string\",
+            \"bond_miimon\": \"string\",
+            \"bond_mode\": \"string\",
+            \"bond_slaves\": \"string\",
+            \"bond_updelay\": \"string\",
+            \"broadcast\": \"string\",
+            \"dns_nameservers\": \"string\",
+            \"dns_search\": \"string\",
+            \"family\": \"string\",
+            \"gateway\": \"string\",
+            \"mac_address\": \"string\",
+            \"mac_address_permanent\": \"string\",
+            \"method\": \"string\",
+            \"mtu\": \"string\",
+            \"netmask\": \"string\",
+            \"network\": \"string\",
+            \"physical\": {
+                \"address\": \"string\",
+                \"mac_address\": \"string\",
+                \"mac_address_permanent\": \"string\",
+                \"mtu\": \"string\",
+                \"netmask\": \"string\",
+                \"network\": \"string\",
+                \"up_and_running\": true/false
+            },
+            \"routes\": [
+                \"string\"
+            ],
+            \"status\": \"string\",
+            \"symmetric_route_rules\": [
+                \"string\"
+            ],
+            \"up_and_running\": true/false
+        },
+        \"lo\": {
+            \"_default\": true/false,
+            \"bond_master\": \"string\"        [Required],
+            \"virtual_network_tag\": \"string\"        [Required],
+            \"address\": \"string\",
+            \"auto\": true/false,
+            \"bond_downdelay\": \"string\",
+            \"bond_fail_over_mac\": \"string\",
+            \"bond_primary_reselect\": \"string\",
+            \"bond_lacp_rate\": \"string\",
+            \"bond_miimon\": \"string\",
+            \"bond_mode\": \"string\",
+            \"bond_slaves\": \"string\",
+            \"bond_updelay\": \"string\",
+            \"broadcast\": \"string\",
+            \"dns_nameservers\": \"string\",
+            \"dns_search\": \"string\",
+            \"family\": \"string\",
+            \"gateway\": \"string\",
+            \"mac_address\": \"string\",
+            \"mac_address_permanent\": \"string\",
+            \"method\": \"string\",
+            \"mtu\": \"string\",
+            \"netmask\": \"string\",
+            \"network\": \"string\",
+            \"physical\": {
+                \"address\": \"string\",
+                \"mac_address\": \"string\",
+                \"mac_address_permanent\": \"string\",
+                \"mtu\": \"string\",
+                \"netmask\": \"string\",
+                \"network\": \"string\",
+                \"up_and_running\": true/false
+            },
+            \"routes\": [
+                \"string\"
+            ],
+            \"status\": \"string\",
+            \"symmetric_route_rules\": [
+                \"string\"
+            ],
+            \"up_and_running\": true/false
+        }
+    }        [Required]
+}
+
+--networks
+[
+    {
+        \"access\": \"string\"        [Required],
+        \"cidr\": int        [Required],
+        \"community\": \"string\"        [Required],
+        \"network\": \"string\"        [Required]
+    }
+]
+
+--addressblocks
+[
+    {
+        \"start\": \"string\"        [Required],
+        \"size\": int        [Required]
+    }
+]
+
 
 
 ---------------
@@ -2285,13 +3017,29 @@ Options:
   LDAP Commands
   ---------------------------------------------------------------
     |-----------------------------
-    |disableldapauthentication
+    |addclusteradmin
     |  Description:
-    |    The DisableLdapAuthentication method is used disable LDAP authentication and remove all LDAP configuration settings. This call will not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no longer be able to log in.
+    |    AddLdapClusterAdmin is used to add a new LDAP Cluster Admin. An LDAP Cluster Admin can be used to manage the cluster via the API and management tools. LDAP Cluster Admins are completely separate and unrelated to standard tenant accounts.
+    |    
+    |    An LDAP group that has been defined in Active Directory can also be added using this API method. The access level that is given to the group will be passed to the individual users in the LDAP group.
+    |
+    |  Options:
+    |     --username
+    |        The distinguished user name for the new LDAP cluster admin.
+    |     --access
+    |        Controls which methods this Cluster Admin can use. For more details on the levels of access, see the Access Control appendix in the SolidFire API Reference.
+    |     --accepteula
+    |        Indicate your acceptance of the End User License Agreement when creating this cluster admin. To accept the EULA, set this parameter to true.
+    |     --attributes
+    |        List of Name/Value pairs in JSON object format.
+    |-----------------------------
+    |getconfiguration
+    |  Description:
+    |    The GetLdapConfiguration is used to get the LDAP configuration currently active on the cluster.
     |
     |  Options:
     |-----------------------------
-    |enableldapauthentication
+    |enableauthentication
     |  Description:
     |    The EnableLdapAuthentication method is used to configure an LDAP server connection to use for LDAP authentication to a SolidFire cluster. Users that are members on the LDAP server can then log in to a SolidFire storage system using their LDAP authentication userid and password.
     |
@@ -2333,7 +3081,13 @@ Options:
     |        The string should have the placeholder text "%USERNAME%" which will be replaced with the username of the authenticating user.
     |        Example: (&(objectClass=person) (sAMAccountName=%USERNAME%)) will use the sAMAccountName field in Active Directory to match the nusername entered at cluster login.
     |-----------------------------
-    |testldapauthentication
+    |disableauthentication
+    |  Description:
+    |    The DisableLdapAuthentication method is used disable LDAP authentication and remove all LDAP configuration settings. This call will not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no longer be able to log in.
+    |
+    |  Options:
+    |-----------------------------
+    |testauthentication
     |  Description:
     |    The TestLdapAuthentication is used to verify the currently enabled LDAP authentication configuration settings are correct. If the configuration settings are correct, the API call returns a list of the groups the tested user is a member of.
     |
@@ -2344,28 +3098,6 @@ Options:
     |        The password for the username to be tester.
     |     --ldapconfiguration
     |        An ldapConfiguration object to be tested. If this parameter is provided, the API call will test the provided configuration even if LDAP authentication is currently disabled.
-    |-----------------------------
-    |addldapclusteradmin
-    |  Description:
-    |    AddLdapClusterAdmin is used to add a new LDAP Cluster Admin. An LDAP Cluster Admin can be used to manage the cluster via the API and management tools. LDAP Cluster Admins are completely separate and unrelated to standard tenant accounts.
-    |    
-    |    An LDAP group that has been defined in Active Directory can also be added using this API method. The access level that is given to the group will be passed to the individual users in the LDAP group.
-    |
-    |  Options:
-    |     --username
-    |        The distinguished user name for the new LDAP cluster admin.
-    |     --access
-    |        Controls which methods this Cluster Admin can use. For more details on the levels of access, see the Access Control appendix in the SolidFire API Reference.
-    |     --accepteula
-    |        Indicate your acceptance of the End User License Agreement when creating this cluster admin. To accept the EULA, set this parameter to true.
-    |     --attributes
-    |        List of Name/Value pairs in JSON object format.
-    |-----------------------------
-    |getldapconfiguration
-    |  Description:
-    |    The GetLdapConfiguration is used to get the LDAP configuration currently active on the cluster.
-    |
-    |  Options:
     |        
   ---------------------------------------------------------------
   BackupTarget Commands
