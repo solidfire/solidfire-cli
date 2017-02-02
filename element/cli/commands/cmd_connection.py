@@ -49,10 +49,14 @@ def push(ctx):
 def remove(ctx, name=None, index=None):
     if name is not None and index is not None:
         ctx.logger.error("You must provide either the name or the index. Not both.")
+        exit(1)
     if name is None and index is None:
         ctx.logger.error("You must provide either the name or the index of the connection to remove.")
+        exit(1)
 
     connections = cli_utils.get_connections()
+    if index is not None and index > (len(connections) - 1):
+        ctx.logger.error("Your connection index is greater than the maximum index of your connections stack.")
 
     # Filter by name
     if name is not None:
