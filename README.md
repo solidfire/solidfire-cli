@@ -109,6 +109,7 @@ So, if I were running sfcli volume clonemultiple on windows, I could use the fol
 sfcli --mvip 10.117.61.44 -p --username admin --password admin Volume CloneMultiple --volumes '[{\"volume_id\": 1979},{\"volume_id\": 1980}]'
 
 --lunassignments
+
     [
         {
             \"volume_id\": int        [Required],
@@ -117,6 +118,7 @@ sfcli --mvip 10.117.61.44 -p --username admin --password admin Volume CloneMulti
     ]
 
 --network
+
     {
         \"bond10_g\": {
             \"_default\": true/false,
@@ -422,9 +424,11 @@ sfcli --mvip 10.117.61.44 -p --username admin --password admin Volume CloneMulti
     }
 
 --parameters
+
     \"parameters\": { "arbitrary_key":"arbitrary_value" }
 
 --schedule
+
     {
         \"frequency\": {
         }        [Required],
@@ -449,6 +453,7 @@ sfcli --mvip 10.117.61.44 -p --username admin --password admin Volume CloneMulti
     }
 
 --drives
+
     [
         {
             \"drive_id\": int        [Required]
@@ -456,6 +461,7 @@ sfcli --mvip 10.117.61.44 -p --username admin --password admin Volume CloneMulti
     ]
 
 --remotehosts
+
     [
         {
             \"host\": \"string\"        [Required],
@@ -464,6 +470,7 @@ sfcli --mvip 10.117.61.44 -p --username admin --password admin Volume CloneMulti
     ]
 
 --traprecipients
+
     [
         {
             \"host\": \"string\"        [Required],
@@ -473,6 +480,7 @@ sfcli --mvip 10.117.61.44 -p --username admin --password admin Volume CloneMulti
     ]
 
 --volumes
+
     [
         {
             \"volume_id\": int        [Required],
@@ -485,6 +493,7 @@ sfcli --mvip 10.117.61.44 -p --username admin --password admin Volume CloneMulti
     ]
 
 --initiators
+
     [
         {
             \"name\": \"string\"        [Required],
@@ -495,9 +504,11 @@ sfcli --mvip 10.117.61.44 -p --username admin --password admin Volume CloneMulti
     ]
 
 --attributes
+
     \"attributes\": { "arbitrary_key":"arbitrary_value" }
 
 --usmusers
+
     [
         {
             \"access\": \"string\"        [Required],
@@ -509,6 +520,7 @@ sfcli --mvip 10.117.61.44 -p --username admin --password admin Volume CloneMulti
     ]
 
 --config
+
     {
         \"cluster\": {
             \"cipi\": \"string\",
@@ -830,6 +842,7 @@ sfcli --mvip 10.117.61.44 -p --username admin --password admin Volume CloneMulti
     }
 
 --networks
+
     [
         {
             \"access\": \"string\"        [Required],
@@ -840,6 +853,7 @@ sfcli --mvip 10.117.61.44 -p --username admin --password admin Volume CloneMulti
     ]
 
 --addressblocks
+
     [
         {
             \"start\": \"string\"        [Required],
