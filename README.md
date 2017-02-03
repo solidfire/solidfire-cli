@@ -37,26 +37,14 @@ To store a given connection, use the Connection Push and supply the name option.
 
     sfcli --mvip 10.117.60.15 --login admin --password admin --name "Example" Connection Push
 
-To use a connection you've stored, use -n or --name or -c or -connectionIndex
-  Find by name:
+To use a connection you've stored, use -n or --name or -c or -connectionIndex or leave it to default to connection 0
 
-    sfcli -n Example Account List
-
-  Find by index:
-
-    sfcli -c 0 Account List
-
-  Use index 0 if no connection is provided, but at least one is stored.
-
-    sfcli Account List
+    sfcli -n Example Account List # by name
+    sfcli -c 0 Account List # by index
+    sfcli Account List # use connection 0
 
 To remove a given connection, use the Connection Remove command.
-  Remove by name:
-
     sfcli Connection Remove -n Example
-
-  Remove by index:
-
     sfcli Connection Remove -i -1 # Removes the newly pushed connection.
     sfcli Connection Remove -i 0 # Removes the oldest pushed connection.
     sfcli Connection Remove -i 1 # Removes the second oldest connection.
@@ -81,7 +69,7 @@ can be gotten by running a "get" function. I've provided a couple examples of th
 Below. Other times, the parameters are simple enough that the user can construct
 the json himself. There is an example of how to do this below.
 
-### Node SetConfig ###
+#### Node SetConfig ####
 First, we get the existing network config.
 
     $returnValue = sfcli -c 0 -j Node GetConfig | ConvertFrom-Json
@@ -96,7 +84,7 @@ And here, we feed it back in.
 
     sfcli -c 0 -j Node SetNetworkConfig --config $escaped
 
-### Node SetNetworkConfig ###
+#### Node SetNetworkConfig ####
 First, we get the existing network config.
 
     $returnValue = sfcli -c 0 -j Node GetNetworkConfig | ConvertFrom-Json
@@ -111,13 +99,13 @@ And here, we feed it back in.
 
     sfcli -c 0 -j Node SetNetworkConfig --network $escaped
 
-### Volume CloneMultiple ###
+#### Volume CloneMultiple ####
 First, we go to the help guide and find our non-standard parameter, "volumes".
 Next, we copy and paste the example into the command and modify it with our desired values.
 
     sfcli --mvip 10.117.61.44 -p --username admin --password admin Volume CloneMultiple --volumes '[{\"volume_id\": 1979},{\"volume_id\": 1980}]'
 
-### SFApi Invoke ###
+#### SFApi Invoke ####
 
     $account = sfcli -c 0 SFApi Invoke --method GetAccountByID --parameters '{\"accountID\":94}'
 
