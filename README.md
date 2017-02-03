@@ -107,30 +107,31 @@ Usage: sfcli [OPTIONS] COMMAND [ARGS]...
 
 Options:
 
-  -m, --mvip TEXT
-    SolidFire MVIP
-  -l, --login TEXT
-    SolidFire Cluster login
-  -p, --password TEXT
-    SolidFire cluster password
-  --name TEXT
-    The connection name for later reference (-n)
-  -c, --connectionIndex INTEGER
-    The index of the connection you wish to use in connections.csv. You can use this if you have previously stored away a connection.
-  -n, --connectionName TEXT
-    The name of the connection you wish to use in connections.csv. You can use this if you have previously stored away a connection.
-  -j, --json
-    To print the full output in json format, use this flag
-  -p, --pickle
-    To print the full output in a pickled json format, use this flag.
-  -d, --depth INTEGER
-    To print the output as a tree and specify the depth, use this option.
-  -f, --filter_tree TEXT
-    To filter the fields that will be displayed in a tree, use this parameter. Supply fields in a comma separated list of keypaths. For example, to filter accounts list, if I wanted only the username and status, I could supply 'accounts.username,accounts.status'.
-  --debug [0|1|2|3]
-    Set the debug level
-  --help
-    Show this help and exit.
+    -m, --mvip TEXT
+        SolidFire MVIP
+    -l, --login TEXT
+        SolidFire Cluster login
+    -p, --password TEXT
+        SolidFire cluster password
+    --name TEXT
+        The connection name for later reference (-n)
+    -c, --connectionIndex INTEGER
+        The index of the connection you wish to use in connections.csv. You can use this if you have previously stored away a connection.
+    -n, --connectionName TEXT
+        The name of the connection you wish to use in connections.csv. You can use this if you have previously stored away a connection.
+    -j, --json
+        To print the full output in json format, use this flag
+    -p, --pickle
+        To print the full output in a pickled json format, use this flag.
+    -d, --depth INTEGER
+        To print the output as a tree and specify the depth, use this option.
+    -f, --filter_tree TEXT
+        To filter the fields that will be displayed in a tree, use this parameter. Supply fields in a comma separated list of keypaths. For example, to filter accounts list, if I wanted only the username and status, I could supply 'accounts.username,accounts.status'.
+    --debug [0|1|2|3]
+        Set the debug level
+    --help
+        Show this help and exit.
+
   ---------------------------------------------------------------
   Statistics Commands
   ---------------------------------------------------------------
@@ -177,6 +178,7 @@ Options:
     |     --drives
     |        Optional list of DriveIDs for which to return drive statistics. If you omit this parameter, measurements for all drives are returned.
     |        
+
   ---------------------------------------------------------------
   Network Commands
   ---------------------------------------------------------------
@@ -211,6 +213,7 @@ Options:
     |
     |  Options:
     |        
+
   ---------------------------------------------------------------
   Service Commands
   ---------------------------------------------------------------
@@ -221,6 +224,7 @@ Options:
     |
     |  Options:
     |        
+
   ---------------------------------------------------------------
   Pairing Commands
   ---------------------------------------------------------------
@@ -319,6 +323,7 @@ Options:
     |     --clusterpairid
     |        Unique identifier used to pair two clusters.
     |        
+
   ---------------------------------------------------------------
   Test Commands
   ---------------------------------------------------------------
@@ -381,6 +386,7 @@ Options:
     |     --svip
     |        Optionally, use to test the storage connection of a different SVIP. This is not needed to test the connection to the target cluster.
     |        
+
   ---------------------------------------------------------------
   VolumeAccessGroup Commands
   ---------------------------------------------------------------
@@ -535,6 +541,7 @@ Options:
     |     --volumeaccessgroupid
     |        The ID of the volume access group to delete.
     |        
+
   ---------------------------------------------------------------
   Node Commands
   ---------------------------------------------------------------
@@ -665,6 +672,7 @@ Options:
     |
     |  Options:
     |        
+
   ---------------------------------------------------------------
   ProtocolEndpoints Commands
   ---------------------------------------------------------------
@@ -678,6 +686,7 @@ Options:
     |  Options:
     |     --protocolendpointids
     |        
+
   ---------------------------------------------------------------
   LoginSession Commands
   ---------------------------------------------------------------
@@ -710,6 +719,7 @@ Options:
     |
     |  Options:
     |        
+
   ---------------------------------------------------------------
   Volume Commands
   ---------------------------------------------------------------
@@ -1136,6 +1146,7 @@ Options:
     |     --volumeid
     |        The ID of the volume to delete.
     |        
+
   ---------------------------------------------------------------
   Sensors Commands
   ---------------------------------------------------------------
@@ -1156,6 +1167,7 @@ Options:
     |        Used to display information for each node chassis type. Valid values:all - returns sensor information for each chassis type. {chassis type} - returns sensor information for a specified chassis type.
     |     --force
     |        
+
   ---------------------------------------------------------------
   Restart Commands
   ---------------------------------------------------------------
@@ -1202,6 +1214,7 @@ Options:
     |     --option
     |        Action to take for the node shutdown:restart: Restarts the node.halt: Performs full power-off of the node.
     |        
+
   ---------------------------------------------------------------
   VirtualNetwork Commands
   ---------------------------------------------------------------
@@ -1290,6 +1303,7 @@ Options:
     |     --virtualnetworktag
     |        Network Tag that identifies the virtual network to remove.
     |        
+
   ---------------------------------------------------------------
   Account Commands
   ---------------------------------------------------------------
@@ -1389,6 +1403,7 @@ Options:
     |     --accountid
     |        Specifies the account for which details are gathered.
     |        
+
   ---------------------------------------------------------------
   Drive Commands
   ---------------------------------------------------------------
@@ -1507,6 +1522,7 @@ Options:
     |     --force
     |        To run this command, the force parameter must be set to true.
     |        
+
   ---------------------------------------------------------------
   Snapshot Commands
   ---------------------------------------------------------------
@@ -1716,6 +1732,7 @@ Options:
     |     --snapshotid
     |        The ID of the snapshot to delete.
     |        
+
   ---------------------------------------------------------------
   Initiators Commands
   ---------------------------------------------------------------
@@ -1759,6 +1776,7 @@ Options:
     |     --initiators
     |        An array of IDs of initiators to delete.
     |        
+
   ---------------------------------------------------------------
   SFApi Commands
   ---------------------------------------------------------------
@@ -1774,6 +1792,7 @@ Options:
     |     --parameters
     |        An object, normally a dictionary or hashtable of the key/value pairs, to be passed as the params for the method being invoked.
     |        
+
   ---------------------------------------------------------------
   VirtualVolume Commands
   ---------------------------------------------------------------
@@ -1837,6 +1856,7 @@ Options:
     |     --feature
     |        Valid values: vvols: Find the status of the Virtual Volumes (VVOLs) cluster feature.
     |        
+
   ---------------------------------------------------------------
   Hardware Commands
   ---------------------------------------------------------------
@@ -1869,6 +1889,7 @@ Options:
     |
     |  Options:
     |        
+
   ---------------------------------------------------------------
   Cluster Commands
   ---------------------------------------------------------------
@@ -2226,6 +2247,7 @@ Options:
     |
     |  Options:
     |        
+
   ---------------------------------------------------------------
   StorageContainers Commands
   ---------------------------------------------------------------
@@ -2275,6 +2297,7 @@ Options:
     |     --storagecontainerids
     |        list of storageContainerID of the storage container to delete.
     |        
+
   ---------------------------------------------------------------
   LDAP Commands
   ---------------------------------------------------------------
@@ -2361,6 +2384,7 @@ Options:
     |        The string should have the placeholder text "%USERNAME%" which will be replaced with the username of the authenticating user.
     |        Example: (&(objectClass=person) (sAMAccountName=%USERNAME%)) will use the sAMAccountName field in Active Directory to match the nusername entered at cluster login.
     |        
+
   ---------------------------------------------------------------
   BackupTarget Commands
   ---------------------------------------------------------------
