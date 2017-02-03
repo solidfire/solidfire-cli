@@ -143,8 +143,8 @@ Options:
     --help
         Show this help and exit.
 
+Statistics Commands 
 ---------------------------------------------------------------
-### Statistics Commands 
 #### getcompletestats ####
 Command:
 
@@ -156,6 +156,7 @@ The GetCompleteStats API method is used by SolidFire engineering to troubleshoot
 
 Options:
 
+---------------------------------------------------------------
 #### gethardwareinfo ####
 Command:
 
@@ -167,6 +168,7 @@ GetHardwareInfo allows you to return hardware information and status for a singl
 
 Options:
 
+---------------------------------------------------------------
 #### getrawstats ####
 Command:
 
@@ -178,6 +180,7 @@ The GetRawStats call is used by SolidFire engineering to troubleshoot new featur
 
 Options:
 
+---------------------------------------------------------------
 #### listvolumestatsbyvirtualvolume ####
 Command:
 
@@ -193,6 +196,7 @@ Options:
 
 A list of virtual volume  IDs for which to retrieve information. If you specify this parameter, the method returns information about only these virtual volumes. 
 
+---------------------------------------------------------------
 #### listvolumestats ####
 Command:
 
@@ -208,6 +212,7 @@ Options:
 
 
 
+---------------------------------------------------------------
 #### listdrivestats ####
 Command:
 
@@ -224,8 +229,8 @@ Options:
 Optional list of DriveIDs for which to return drive statistics. If you omit this parameter, measurements for all drives are returned. 
 
 
+Network Commands 
 ---------------------------------------------------------------
-### Network Commands 
 #### listnodefibrechannelportinfo ####
 Command:
 
@@ -237,6 +242,7 @@ The ListNodeFibreChannelPortInfo is used to return information about the Fibre C
 
 Options:
 
+---------------------------------------------------------------
 #### listfibrechannelsessions ####
 Command:
 
@@ -248,6 +254,7 @@ The ListFibreChannelSessions is used to return information about the active Fibr
 
 Options:
 
+---------------------------------------------------------------
 #### listfibrechannelportinfo ####
 Command:
 
@@ -259,6 +266,7 @@ The ListFibreChannelPortInfo is used to return information about the Fibre Chann
 
 Options:
 
+---------------------------------------------------------------
 #### listiscsisessions ####
 Command:
 
@@ -270,6 +278,7 @@ ListISCSISessions is used to return iSCSI connection information for volumes in 
 
 Options:
 
+---------------------------------------------------------------
 #### listinterfaces ####
 Command:
 
@@ -282,8 +291,8 @@ The ListNetworkInterfaces API method is used to return information about each ne
 Options:
 
 
+Service Commands 
 ---------------------------------------------------------------
-### Service Commands 
 #### list ####
 Command:
 
@@ -296,8 +305,8 @@ List the services in the cluster.
 Options:
 
 
+Pairing Commands 
 ---------------------------------------------------------------
-### Pairing Commands 
 #### completecluster ####
 Command:
 
@@ -313,6 +322,7 @@ Options:
 
 A string of characters that is returned from the "StartClusterPairing" API method. 
 
+---------------------------------------------------------------
 #### completevolume ####
 Command:
 
@@ -332,6 +342,7 @@ The key returned from the "StartVolumePairing" API method.
 
 The ID of volume on which to complete the pairing process. 
 
+---------------------------------------------------------------
 #### listclusterpairs ####
 Command:
 
@@ -343,6 +354,7 @@ ListClusterPairs is used to list all of the clusters a cluster is paired with. T
 
 Options:
 
+---------------------------------------------------------------
 #### removevolumepair ####
 Command:
 
@@ -358,6 +370,7 @@ Options:
 
 ID of the volume on which to stop the replication process. 
 
+---------------------------------------------------------------
 #### startvolume ####
 Command:
 
@@ -377,6 +390,7 @@ The ID of the volume on which to start the pairing process.
 
 The mode of the volume on which to start the pairing process. The mode can only be set if the volume is the source volume. Possible values: Async: (default if no mode parameter specified) Writes are acknowledged when they complete locally. The cluster does not wait for writes to be replicated to the target cluster. Sync: Source acknowledges write when the data is stored locally and on the remote cluster. SnapshotsOnly: Only snapshots created on the source cluster will be replicated. Active writes from the source volume will not be replicated. 
 
+---------------------------------------------------------------
 #### listactivepairedvolumes ####
 Command:
 
@@ -388,6 +402,7 @@ ListActivePairedVolumes is used to list all of the active volumes paired with a 
 
 Options:
 
+---------------------------------------------------------------
 #### modifyvolumepair ####
 Command:
 
@@ -411,6 +426,7 @@ Valid values that can be entered: true: to pause volume replication. false: to r
 
 Volume replication mode. Possible values: Async: Writes are acknowledged when they complete locally. The cluster does not wait for writes to be replicated to the target cluster. Sync: The source acknowledges the write when the data is stored locally and on the remote cluster. SnapshotsOnly: Only snapshots created on the source cluster will be replicated. Active writes from the source volume are not replicated. 
 
+---------------------------------------------------------------
 #### startcluster ####
 Command:
 
@@ -422,6 +438,7 @@ StartClusterPairing is used to create an encoded key from a cluster that is used
 
 Options:
 
+---------------------------------------------------------------
 #### removeclusterpair ####
 Command:
 
@@ -438,8 +455,8 @@ Options:
 Unique identifier used to pair two clusters. 
 
 
+Test Commands 
 ---------------------------------------------------------------
-### Test Commands 
 #### list ####
 Command:
 
@@ -451,6 +468,7 @@ The ListTests API method is used to return the tests that are available to run o
 
 Options:
 
+---------------------------------------------------------------
 #### ping ####
 Command:
 
@@ -482,6 +500,7 @@ Specify the number of bytes to send in the ICMP packet sent to each IP. Number b
 
 Specify the number of milliseconds to wait for each individual ping response. Default is 500ms. 
 
+---------------------------------------------------------------
 #### connectmvip ####
 Command:
 
@@ -497,6 +516,7 @@ Options:
 
 Optionally, use to test the management connection of a different MVIP. This is not needed to test the connection to the target cluster. 
 
+---------------------------------------------------------------
 #### listutilities ####
 Command:
 
@@ -508,6 +528,7 @@ The ListUtilities API method is used to return the tests that are available to r
 
 Options:
 
+---------------------------------------------------------------
 #### connectensemble ####
 Command:
 
@@ -523,6 +544,7 @@ Options:
 
 A comma-separated list of ensemble node CIPs for connectivity testing 
 
+---------------------------------------------------------------
 #### connectsvip ####
 Command:
 
@@ -539,8 +561,8 @@ Options:
 Optionally, use to test the storage connection of a different SVIP. This is not needed to test the connection to the target cluster. 
 
 
+VolumeAccessGroup Commands 
 ---------------------------------------------------------------
-### VolumeAccessGroup Commands 
 #### removevolumesfrom ####
 Command:
 
@@ -560,6 +582,7 @@ The ID of the volume access group to modify.
 
 List of volumes to remove from this volume access group. 
 
+---------------------------------------------------------------
 #### modify ####
 Command:
 
@@ -599,6 +622,7 @@ List of volumes to initially include in the volume access group. If unspecified,
 
 List of Name/Value pairs in JSON object format. 
 
+---------------------------------------------------------------
 #### create ####
 Command:
 
@@ -634,6 +658,7 @@ The ID of the VLAN Virtual Network Tag to associate the volume access group with
 
 List of Name/Value pairs in JSON object format. 
 
+---------------------------------------------------------------
 #### modifylunassignments ####
 Command:
 
@@ -653,6 +678,7 @@ Unique volume access group ID for which the LUN assignments will be modified.
 
 The volume IDs with new assigned LUN values. 
 
+---------------------------------------------------------------
 #### list ####
 Command:
 
@@ -672,6 +698,7 @@ The lowest VolumeAccessGroupID to return. This can be useful for paging. If unsp
 
 The maximum number of results to return. This can be useful for paging. 
 
+---------------------------------------------------------------
 #### addinitiatorsto ####
 Command:
 
@@ -691,6 +718,7 @@ The ID of the volume access group to modify.
 
 List of initiators to add to the volume access group. 
 
+---------------------------------------------------------------
 #### getlunassignments ####
 Command:
 
@@ -706,6 +734,7 @@ Options:
 
 Unique volume access group ID used to return information. 
 
+---------------------------------------------------------------
 #### addvolumesto ####
 Command:
 
@@ -725,6 +754,7 @@ The ID of the volume access group to modify.
 
 List of volumes to add to this volume access group. 
 
+---------------------------------------------------------------
 #### removeinitiatorsfrom ####
 Command:
 
@@ -744,6 +774,7 @@ The ID of the volume access group to modify.
 
 List of initiators to remove from the volume access group. 
 
+---------------------------------------------------------------
 #### getefficiency ####
 Command:
 
@@ -759,6 +790,7 @@ Options:
 
 Specifies the volume access group for which capacity is computed. 
 
+---------------------------------------------------------------
 #### delete ####
 Command:
 
@@ -775,8 +807,8 @@ Options:
 The ID of the volume access group to delete. 
 
 
+Node Commands 
 ---------------------------------------------------------------
-### Node Commands 
 #### setnetworkconfig ####
 Command:
 
@@ -792,6 +824,7 @@ Options:
 
 Objects that will be changed for the node network settings. 
 
+---------------------------------------------------------------
 #### listpending ####
 Command:
 
@@ -803,6 +836,7 @@ Gets the list of pending nodes. Pending nodes are running and configured to join
 
 Options:
 
+---------------------------------------------------------------
 #### getorigin ####
 Command:
 
@@ -818,6 +852,7 @@ Options:
 
 
 
+---------------------------------------------------------------
 #### listpendingactive ####
 Command:
 
@@ -829,6 +864,7 @@ ListPendingActiveNodes returns the list of nodes in the cluster that are current
 
 Options:
 
+---------------------------------------------------------------
 #### listall ####
 Command:
 
@@ -840,6 +876,7 @@ ListAllNodes enables you to retrieve a list of active and pending nodes in the c
 
 Options:
 
+---------------------------------------------------------------
 #### getpendingoperation ####
 Command:
 
@@ -851,6 +888,7 @@ GetPendingOperation is used to detect an operation on a node that is currently i
 
 Options:
 
+---------------------------------------------------------------
 #### liststats ####
 Command:
 
@@ -862,6 +900,7 @@ ListNodeStats is used to return the high-level activity measurements for all nod
 
 Options:
 
+---------------------------------------------------------------
 #### add ####
 Command:
 
@@ -877,6 +916,7 @@ Options:
 
 List of PendingNodeIDs for the Nodes to be added. You can obtain the list of Pending Nodes via the ListPendingNodes method. 
 
+---------------------------------------------------------------
 #### setconfig ####
 Command:
 
@@ -892,6 +932,7 @@ Options:
 
 Objects that you want changed for the cluster interface settings. 
 
+---------------------------------------------------------------
 #### getnetworkconfig ####
 Command:
 
@@ -903,6 +944,7 @@ The GetNetworkConfig API method is used to display the network configuration inf
 
 Options:
 
+---------------------------------------------------------------
 #### getstats ####
 Command:
 
@@ -918,6 +960,7 @@ Options:
 
 Specifies the node for which statistics are gathered. 
 
+---------------------------------------------------------------
 #### getconfig ####
 Command:
 
@@ -929,6 +972,7 @@ The GetConfig API method is used to retrieve all the configuration information f
 
 Options:
 
+---------------------------------------------------------------
 #### remove ####
 Command:
 
@@ -944,6 +988,7 @@ Options:
 
 List of NodeIDs for the nodes to be removed. 
 
+---------------------------------------------------------------
 #### listactive ####
 Command:
 
@@ -955,6 +1000,7 @@ ListActiveNodes returns the list of currently active nodes that are in the clust
 
 Options:
 
+---------------------------------------------------------------
 #### getbootstrapconfig ####
 Command:
 
@@ -967,8 +1013,8 @@ GetBootstrapConfig returns the cluster name and node name from the bootstrap con
 Options:
 
 
+ProtocolEndpoints Commands 
 ---------------------------------------------------------------
-### ProtocolEndpoints Commands 
 #### list ####
 Command:
 
@@ -985,8 +1031,8 @@ Options:
 
 
 
+LoginSession Commands 
 ---------------------------------------------------------------
-### LoginSession Commands 
 #### getremotelogginghosts ####
 Command:
 
@@ -998,6 +1044,7 @@ GetRemoteLoggingHosts is used to retrieve the current list of log servers.
 
 Options:
 
+---------------------------------------------------------------
 #### setremotelogginghosts ####
 Command:
 
@@ -1013,6 +1060,7 @@ Options:
 
 List of hosts to send log messages to. 
 
+---------------------------------------------------------------
 #### setinfo ####
 Command:
 
@@ -1028,6 +1076,7 @@ Options:
 
 Cluster authentication expiration period. Formatted in HH:mm:ss. For example: 01:30:00, 00:90:00, and 00:00:5400 can all be used to equal a 90 minute timeout period. Default is 30 minutes. 
 
+---------------------------------------------------------------
 #### getinfo ####
 Command:
 
@@ -1040,8 +1089,8 @@ GetLoginSessionInfo is used to return the period of time a log in authentication
 Options:
 
 
+Volume Commands 
 ---------------------------------------------------------------
-### Volume Commands 
 #### getefficiency ####
 Command:
 
@@ -1057,6 +1106,7 @@ Options:
 
 Specifies the volume for which capacity is computed. 
 
+---------------------------------------------------------------
 #### liststatsbyaccount ####
 Command:
 
@@ -1068,6 +1118,7 @@ ListVolumeStatsByAccount returns high-level activity measurements for every acco
 
 Options:
 
+---------------------------------------------------------------
 #### startbulkwrite ####
 Command:
 
@@ -1099,6 +1150,7 @@ JSON parameters to pass to the script.
 
 JSON attributes for the bulk volume job. 
 
+---------------------------------------------------------------
 #### updatebulkstatus ####
 Command:
 
@@ -1130,6 +1182,7 @@ Returns the status of the bulk volume job when the job has completed.
 
 JSON attributes  updates what is on the bulk volume job. 
 
+---------------------------------------------------------------
 #### startbulkread ####
 Command:
 
@@ -1165,6 +1218,7 @@ JSON parameters to pass to the script.
 
 JSON attributes for the bulk volume job. 
 
+---------------------------------------------------------------
 #### listdeleted ####
 Command:
 
@@ -1176,6 +1230,7 @@ ListDeletedVolumes is used to return the entire list of volumes that have been m
 
 Options:
 
+---------------------------------------------------------------
 #### purgedeleted ####
 Command:
 
@@ -1191,6 +1246,7 @@ Options:
 
 The ID of the volume to purge. 
 
+---------------------------------------------------------------
 #### liststatsby ####
 Command:
 
@@ -1202,6 +1258,7 @@ ListVolumeStatsByVolume returns high-level activity measurements for every volum
 
 Options:
 
+---------------------------------------------------------------
 #### create ####
 Command:
 
@@ -1237,6 +1294,7 @@ Initial quality of service settings for this volume.  Volumes created without sp
 
 List of Name/Value pairs in JSON object format. 
 
+---------------------------------------------------------------
 #### cancelclone ####
 Command:
 
@@ -1252,6 +1310,7 @@ Options:
 
 
 
+---------------------------------------------------------------
 #### getdefaultqos ####
 Command:
 
@@ -1263,6 +1322,7 @@ GetDefaultQoS is used to retrieve the default QoS values that are set for a volu
 
 Options:
 
+---------------------------------------------------------------
 #### getasyncresult ####
 Command:
 
@@ -1278,6 +1338,7 @@ Options:
 
 A value that was returned from the original asynchronous method call. 
 
+---------------------------------------------------------------
 #### listasyncresults ####
 Command:
 
@@ -1293,6 +1354,7 @@ Options:
 
 An optional list of types of results. You can use this list to restrict the results to only these types of operations. Possible values:BulkVolume: Copy operations between volumes, such as backups or restores.Clone: Volume cloning operations.DriveRemoval: Operations involving the system copying data from a drive in preparation to remove it from the cluster.RtfiPendingNode: Operations involving the system installing compatible software on a node before adding it to the cluster. 
 
+---------------------------------------------------------------
 #### liststatsbyaccessgroup ####
 Command:
 
@@ -1308,6 +1370,7 @@ Options:
 
 An array of VolumeAccessGroupIDs for which volume activity is returned. If no VolumeAccessGroupID is specified, stats for all volume access groups is returned. 
 
+---------------------------------------------------------------
 #### listbulkjobs ####
 Command:
 
@@ -1319,6 +1382,7 @@ ListBulkVolumeJobs is used to return information about each bulk volume read or 
 
 Options:
 
+---------------------------------------------------------------
 #### clone ####
 Command:
 
@@ -1358,6 +1422,7 @@ ID of the snapshot to use as the source of the clone. If unspecified, the clone 
 
 List of Name/Value pairs in JSON object format. 
 
+---------------------------------------------------------------
 #### modify ####
 Command:
 
@@ -1393,6 +1458,7 @@ New size of the volume in bytes. Size is rounded up to the nearest 1MiB size. Th
 
 List of Name/Value pairs in JSON object format. 
 
+---------------------------------------------------------------
 #### restoredeleted ####
 Command:
 
@@ -1408,6 +1474,7 @@ Options:
 
 VolumeID for the deleted volume to restore. 
 
+---------------------------------------------------------------
 #### copy ####
 Command:
 
@@ -1431,6 +1498,7 @@ Destination volume for the copy.
 
 Snapshot ID of the source volume to create the copy from. 
 
+---------------------------------------------------------------
 #### listactive ####
 Command:
 
@@ -1450,6 +1518,7 @@ The ID of the first volume to list. This can be useful for paging results. By de
 
 The maximum number of volumes to return from the API. 
 
+---------------------------------------------------------------
 #### list ####
 Command:
 
@@ -1485,6 +1554,7 @@ If specified, only fetch volumes which are paired (if true) or non-paired (if fa
 
 If specified, only fetch volumes specified in this list. This option cannot be specified if startVolumeID, limit, or accounts option is specified. 
 
+---------------------------------------------------------------
 #### clonemultiple ####
 Command:
 
@@ -1512,6 +1582,7 @@ ID of the group snapshot to use as a basis for the clone.
 
 New account ID for the volumes if not overridden by information passed in the volumes array. 
 
+---------------------------------------------------------------
 #### setdefaultqos ####
 Command:
 
@@ -1535,6 +1606,7 @@ The maximum number of sustained IOPS that are provided by the cluster to a volum
 
 The maximum number of IOPS allowed in a short burst scenario. 
 
+---------------------------------------------------------------
 #### getstats ####
 Command:
 
@@ -1550,6 +1622,7 @@ Options:
 
 Specifies the volume for which statistics is gathered. 
 
+---------------------------------------------------------------
 #### listforaccount ####
 Command:
 
@@ -1573,6 +1646,7 @@ The ID of the first volume to list. This can be useful for paging results. By de
 
 The maximum number of volumes to return from the API. 
 
+---------------------------------------------------------------
 #### getcount ####
 Command:
 
@@ -1584,6 +1658,7 @@ GetVolumeCount enables you to retrieve the number of volumes currently in the sy
 
 Options:
 
+---------------------------------------------------------------
 #### cancelgroupclone ####
 Command:
 
@@ -1599,6 +1674,7 @@ Options:
 
 cloneID for the ongoing clone process. 
 
+---------------------------------------------------------------
 #### delete ####
 Command:
 
@@ -1615,8 +1691,8 @@ Options:
 The ID of the volume to delete. 
 
 
+Sensors Commands 
 ---------------------------------------------------------------
-### Sensors Commands 
 #### getipmiinfo ####
 Command:
 
@@ -1632,6 +1708,7 @@ Options:
 
 
 
+---------------------------------------------------------------
 #### getipmiconfig ####
 Command:
 
@@ -1652,8 +1729,8 @@ Used to display information for each node chassis type. Valid values:all - retur
 
 
 
+Restart Commands 
 ---------------------------------------------------------------
-### Restart Commands 
 #### services ####
 Command:
 
@@ -1677,6 +1754,7 @@ Service name to be restarted.
 
 Action to perform on the service (start, stop, restart). 
 
+---------------------------------------------------------------
 #### networking ####
 Command:
 
@@ -1692,6 +1770,7 @@ Options:
 
 The "force" parameter must be included on this method to successfully restart the networking. 
 
+---------------------------------------------------------------
 #### resetnode ####
 Command:
 
@@ -1715,6 +1794,7 @@ The force parameter must be included in order to successfully reset the node.
 
 Used to enter specifications for running the reset operation. 
 
+---------------------------------------------------------------
 #### shutdown ####
 Command:
 
@@ -1735,8 +1815,8 @@ List of NodeIDs for the nodes to be shutdown.
 Action to take for the node shutdown:restart: Restarts the node.halt: Performs full power-off of the node. 
 
 
+VirtualNetwork Commands 
 ---------------------------------------------------------------
-### VirtualNetwork Commands 
 #### modify ####
 Command:
 
@@ -1784,6 +1864,7 @@ The storage virtual IP address for this virtual network. The svip for Virtual Ne
 
 A new list of Name/Value pairs in JSON object format. 
 
+---------------------------------------------------------------
 #### add ####
 Command:
 
@@ -1827,6 +1908,7 @@ Unique storage IP address for the virtual network being created.
 
 List of Name/Value pairs in JSON object format. 
 
+---------------------------------------------------------------
 #### list ####
 Command:
 
@@ -1854,6 +1936,7 @@ NetworkIDs to include in the list.
 
 Network Tags to include in the list. 
 
+---------------------------------------------------------------
 #### remove ####
 Command:
 
@@ -1874,8 +1957,8 @@ Network ID that identifies the virtual network to remove.
 Network Tag that identifies the virtual network to remove. 
 
 
+Account Commands 
 ---------------------------------------------------------------
-### Account Commands 
 #### list ####
 Command:
 
@@ -1895,6 +1978,7 @@ Starting AccountID to return. If no Account exists with this AccountID, the next
 
 Maximum number of AccountInfo objects to return. 
 
+---------------------------------------------------------------
 #### getefficiency ####
 Command:
 
@@ -1910,6 +1994,7 @@ Options:
 
 Specifies the volume account for which capacity is computed. 
 
+---------------------------------------------------------------
 #### modify ####
 Command:
 
@@ -1945,6 +2030,7 @@ CHAP secret to use for the target (mutual CHAP authentication). Should be 12-16 
 
 List of Name/Value pairs in JSON object format. 
 
+---------------------------------------------------------------
 #### remove ####
 Command:
 
@@ -1960,6 +2046,7 @@ Options:
 
 AccountID for the account to remove. 
 
+---------------------------------------------------------------
 #### getbyname ####
 Command:
 
@@ -1975,6 +2062,7 @@ Options:
 
 Username for the account. 
 
+---------------------------------------------------------------
 #### add ####
 Command:
 
@@ -2002,6 +2090,7 @@ CHAP secret to use for the target (mutual CHAP authentication). Should be 12-16 
 
 List of Name/Value pairs in JSON object format. 
 
+---------------------------------------------------------------
 #### getbyid ####
 Command:
 
@@ -2018,8 +2107,8 @@ Options:
 Specifies the account for which details are gathered. 
 
 
+Drive Commands 
 ---------------------------------------------------------------
-### Drive Commands 
 #### reset ####
 Command:
 
@@ -2039,6 +2128,7 @@ List of device names (not driveIDs) to reset.
 
 The "force" parameter must be included on this method to successfully reset a drive. 
 
+---------------------------------------------------------------
 #### secureerase ####
 Command:
 
@@ -2054,6 +2144,7 @@ Options:
 
 List of driveIDs to secure erase. 
 
+---------------------------------------------------------------
 #### list ####
 Command:
 
@@ -2065,6 +2156,7 @@ ListDrives allows you to retrieve the list of the drives that exist in the clust
 
 Options:
 
+---------------------------------------------------------------
 #### remove ####
 Command:
 
@@ -2080,6 +2172,7 @@ Options:
 
 List of driveIDs to remove from the cluster. 
 
+---------------------------------------------------------------
 #### gethardwareinfo ####
 Command:
 
@@ -2095,6 +2188,7 @@ Options:
 
 DriveID for the drive information requested. DriveIDs can be obtained via the "ListDrives" method. 
 
+---------------------------------------------------------------
 #### add ####
 Command:
 
@@ -2110,6 +2204,7 @@ Options:
 
 List of drives to add to the cluster. 
 
+---------------------------------------------------------------
 #### getstats ####
 Command:
 
@@ -2125,6 +2220,7 @@ Options:
 
 Specifies the drive for which statistics are gathered. 
 
+---------------------------------------------------------------
 #### getconfig ####
 Command:
 
@@ -2136,6 +2232,7 @@ GetDriveConfig is used to display drive information for expected slice and block
 
 Options:
 
+---------------------------------------------------------------
 #### test ####
 Command:
 
@@ -2151,6 +2248,7 @@ Options:
 
 The number of minutes to run the test can be specified. 
 
+---------------------------------------------------------------
 #### listhardware ####
 Command:
 
@@ -2167,8 +2265,8 @@ Options:
 To run this command, the force parameter must be set to true. 
 
 
+Snapshot Commands 
 ---------------------------------------------------------------
-### Snapshot Commands 
 #### listgroup ####
 Command:
 
@@ -2184,6 +2282,7 @@ Options:
 
 An array of unique volume IDs to query. If this parameter is not specified, all group snapshots on the cluster will be included. 
 
+---------------------------------------------------------------
 #### modifygroup ####
 Command:
 
@@ -2207,6 +2306,7 @@ Use to set the time when the snapshot should be removed.
 
 Use to enable the snapshot created to be replicated to a remote SolidFire cluster. Possible values: true: the snapshot will be replicated to remote storage. false: Default. No replication. 
 
+---------------------------------------------------------------
 #### modify ####
 Command:
 
@@ -2230,6 +2330,7 @@ Use to set the time when the snapshot should be removed.
 
 Use to enable the snapshot created to be replicated to a remote SolidFire cluster. Possible values: true: the snapshot will be replicated to remote storage. false: Default. No replication. 
 
+---------------------------------------------------------------
 #### create ####
 Command:
 
@@ -2265,6 +2366,7 @@ The amount of time the snapshot will be retained. Enter in HH:mm:ss
 
 List of Name/Value pairs in JSON object format. 
 
+---------------------------------------------------------------
 #### list ####
 Command:
 
@@ -2280,6 +2382,7 @@ Options:
 
 The volume to list snapshots for. If not provided, all snapshots for all volumes are returned. 
 
+---------------------------------------------------------------
 #### createschedule ####
 Command:
 
@@ -2295,6 +2398,7 @@ Options:
 
 The "Schedule" object will be used to create a new schedule. Do not set ScheduleID property, it will be ignored. Frequency property must be of type that inherits from Frequency. Valid types are: DaysOfMonthFrequency DaysOrWeekFrequency TimeIntervalFrequency 
 
+---------------------------------------------------------------
 #### deletegroup ####
 Command:
 
@@ -2314,6 +2418,7 @@ Unique ID of the group snapshot.
 
 true: Snapshots are kept, but group association is removed. false: The group and snapshots are deleted. 
 
+---------------------------------------------------------------
 #### getschedule ####
 Command:
 
@@ -2329,6 +2434,7 @@ Options:
 
 Unique ID of the schedule or multiple schedules to display 
 
+---------------------------------------------------------------
 #### rollbacktogroup ####
 Command:
 
@@ -2356,6 +2462,7 @@ Name for the snapshot. If no name is given, then the name of the snapshot being 
 
 List of Name/Value pairs in JSON object format 
 
+---------------------------------------------------------------
 #### rollbackto ####
 Command:
 
@@ -2387,6 +2494,7 @@ Name for the snapshot. If no name is given, then the name of the snapshot being 
 
 List of Name/Value pairs in JSON object format 
 
+---------------------------------------------------------------
 #### creategroup ####
 Command:
 
@@ -2418,6 +2526,7 @@ The amount of time the snapshot will be retained. Enter in HH:mm:ss
 
 List of Name/Value pairs in JSON object format. 
 
+---------------------------------------------------------------
 #### modifyschedule ####
 Command:
 
@@ -2433,6 +2542,7 @@ Options:
 
 The "Schedule" object will be used to modify an existing schedule. The ScheduleID property is required. Frequency property must be of type that inherits from Frequency. Valid types are: DaysOfMonthFrequency DaysOrWeekFrequency TimeIntervalFrequency 
 
+---------------------------------------------------------------
 #### listschedules ####
 Command:
 
@@ -2444,6 +2554,7 @@ ListSchedule is used to return information about all scheduled snapshots that ha
 
 Options:
 
+---------------------------------------------------------------
 #### delete ####
 Command:
 
@@ -2460,8 +2571,8 @@ Options:
 The ID of the snapshot to delete. 
 
 
+Initiators Commands 
 ---------------------------------------------------------------
-### Initiators Commands 
 #### modify ####
 Command:
 
@@ -2477,6 +2588,7 @@ Options:
 
 A list of Initiator objects containing characteristics of each initiator to modify. 
 
+---------------------------------------------------------------
 #### create ####
 Command:
 
@@ -2492,6 +2604,7 @@ Options:
 
 A list of Initiator objects containing characteristics of each new initiator 
 
+---------------------------------------------------------------
 #### list ####
 Command:
 
@@ -2515,6 +2628,7 @@ The maximum number of initiator objects to return.
 
 A list of initiator IDs to retrieve. You can supply this parameter or the "startInitiatorID" parameter, but not both. 
 
+---------------------------------------------------------------
 #### delete ####
 Command:
 
@@ -2531,8 +2645,8 @@ Options:
 An array of IDs of initiators to delete. 
 
 
+SFApi Commands 
 ---------------------------------------------------------------
-### SFApi Commands 
 #### invoke ####
 Command:
 
@@ -2553,8 +2667,8 @@ The name of the method to invoke. This is case sensitive.
 An object, normally a dictionary or hashtable of the key/value pairs, to be passed as the params for the method being invoked. 
 
 
+VirtualVolume Commands 
 ---------------------------------------------------------------
-### VirtualVolume Commands 
 #### listhosts ####
 Command:
 
@@ -2570,6 +2684,7 @@ Options:
 
 
 
+---------------------------------------------------------------
 #### listtasks ####
 Command:
 
@@ -2585,6 +2700,7 @@ Options:
 
 
 
+---------------------------------------------------------------
 #### enablefeature ####
 Command:
 
@@ -2600,6 +2716,7 @@ Options:
 
 Valid values: vvols: Enable the Virtual Volumes (VVOLs) cluster feature. 
 
+---------------------------------------------------------------
 #### list ####
 Command:
 
@@ -2631,6 +2748,7 @@ The ID of the virtual volume at which to begin the list.
 
 A list of virtual volume  IDs for which to retrieve information. If you specify this parameter, the method returns information about only these virtual volumes. 
 
+---------------------------------------------------------------
 #### listbindings ####
 Command:
 
@@ -2646,6 +2764,7 @@ Options:
 
 
 
+---------------------------------------------------------------
 #### getcount ####
 Command:
 
@@ -2657,6 +2776,7 @@ Enables retrieval of the number of virtual volumes currently in the system.
 
 Options:
 
+---------------------------------------------------------------
 #### getfeaturestatus ####
 Command:
 
@@ -2673,8 +2793,8 @@ Options:
 Valid values: vvols: Find the status of the Virtual Volumes (VVOLs) cluster feature. 
 
 
+Hardware Commands 
 ---------------------------------------------------------------
-### Hardware Commands 
 #### getnvraminfo ####
 Command:
 
@@ -2686,6 +2806,7 @@ GetNvramInfo allows you to retrieve information from each node about the NVRAM c
 
 Options:
 
+---------------------------------------------------------------
 #### getnodeinfo ####
 Command:
 
@@ -2701,6 +2822,7 @@ Options:
 
 The ID of the node for which hardware information is being requested.  Information about a  node is returned if a   node is specified. 
 
+---------------------------------------------------------------
 #### getclusterinfo ####
 Command:
 
@@ -2716,6 +2838,7 @@ Options:
 
 Include only a certain type of hardware information in the response. Can be one of the following:drives: List only drive information in the response.nodes: List only node information in the response.all: Include both drive and node information in the response.If this parameter is omitted, a type of "all" is assumed. 
 
+---------------------------------------------------------------
 #### getconfig ####
 Command:
 
@@ -2728,8 +2851,8 @@ GetHardwareConfig enables you to display the hardware configuration information 
 Options:
 
 
+Cluster Commands 
 ---------------------------------------------------------------
-### Cluster Commands 
 #### getinfo ####
 Command:
 
@@ -2741,6 +2864,7 @@ Return configuration information about the cluster.
 
 Options:
 
+---------------------------------------------------------------
 #### getapi ####
 Command:
 
@@ -2752,6 +2876,7 @@ Retrieves the current version of the API and a list of all supported versions.
 
 Options:
 
+---------------------------------------------------------------
 #### disablesnmp ####
 Command:
 
@@ -2763,6 +2888,7 @@ DisableSnmp is used to disable SNMP on the cluster nodes.
 
 Options:
 
+---------------------------------------------------------------
 #### getsnmpstate ####
 Command:
 
@@ -2774,6 +2900,7 @@ GetSnmpState is used to return the current state of the SNMP feature.  Note: Get
 
 Options:
 
+---------------------------------------------------------------
 #### getsnmpinfo ####
 Command:
 
@@ -2785,6 +2912,7 @@ GetSnmpInfo is used to return the current simple network management protocol (SN
 
 Options:
 
+---------------------------------------------------------------
 #### getconfig ####
 Command:
 
@@ -2796,6 +2924,7 @@ The GetClusterConfig API method is used to return information about the cluster 
 
 Options:
 
+---------------------------------------------------------------
 #### deleteallsupportbundles ####
 Command:
 
@@ -2807,6 +2936,7 @@ DeleteAllSupportBundles is used to delete all support bundles generated with the
 
 Options:
 
+---------------------------------------------------------------
 #### getsystemstatus ####
 Command:
 
@@ -2818,6 +2948,7 @@ Description:
 
 Options:
 
+---------------------------------------------------------------
 #### setsnmptrapinfo ####
 Command:
 
@@ -2845,6 +2976,7 @@ If "true", when a cluster fault is logged a corresponding solidFireClusterFaultR
 
 If "true", when a cluster fault is logged a corresponding solidFireClusterEventNotification is sent to the configured list of trap recipients. 
 
+---------------------------------------------------------------
 #### listfaults ####
 Command:
 
@@ -2872,6 +3004,7 @@ Include faults triggered by sub-optimal system configuration. Possible values: t
 
 Determines the types of faults returned: current: List active, unresolved faults. resolved: List faults that were previously detected and resolved. all: (Default) List both current and resolved faults. You can see the fault status in the 'resolved' field of the Cluster Fault object. 
 
+---------------------------------------------------------------
 #### listadmins ####
 Command:
 
@@ -2883,6 +3016,7 @@ ListClusterAdmins returns the list of all cluster administrators for the cluster
 
 Options:
 
+---------------------------------------------------------------
 #### create ####
 Command:
 
@@ -2926,6 +3060,7 @@ CIP/SIP addresses of the initial set of nodes making up the cluster. This node's
 
 List of Name/Value pairs in JSON object format. 
 
+---------------------------------------------------------------
 #### disableencryptionatrest ####
 Command:
 
@@ -2937,6 +3072,7 @@ The DisableEncryptionAtRest method enables you to remove the encryption that was
 
 Options:
 
+---------------------------------------------------------------
 #### addadmin ####
 Command:
 
@@ -2968,6 +3104,7 @@ Indicate your acceptance of the End User License Agreement when creating this cl
 
 List of Name/Value pairs in JSON object format. 
 
+---------------------------------------------------------------
 #### setntpinfo ####
 Command:
 
@@ -2987,6 +3124,7 @@ List of NTP servers to add to each node's NTP configuration.
 
 Enable every node in the cluster as a broadcase client. 
 
+---------------------------------------------------------------
 #### setconfig ####
 Command:
 
@@ -3002,6 +3140,7 @@ Options:
 
 Objects that are changed for the cluster interface settings. Only the fields you want changed need to be added to this method as objects in the "cluster" parameter. 
 
+---------------------------------------------------------------
 #### modifyadmin ####
 Command:
 
@@ -3029,6 +3168,7 @@ Controls which methods this Cluster Admin can use. For more details on the level
 
 List of Name/Value pairs in JSON object format. 
 
+---------------------------------------------------------------
 #### getsnmptrapinfo ####
 Command:
 
@@ -3040,6 +3180,7 @@ GetSnmpTrapInfo is used to return current SNMP trap configuration information.
 
 Options:
 
+---------------------------------------------------------------
 #### listevents ####
 Command:
 
@@ -3067,6 +3208,7 @@ Identifies the end of a range of events to return.
 
 
 
+---------------------------------------------------------------
 #### snmpsendtesttraps ####
 Command:
 
@@ -3078,6 +3220,7 @@ SnmpSendTestTraps enables you to test SNMP functionality for a cluster. This met
 
 Options:
 
+---------------------------------------------------------------
 #### removeadmin ####
 Command:
 
@@ -3093,6 +3236,7 @@ Options:
 
 ClusterAdminID for the Cluster Admin to remove. 
 
+---------------------------------------------------------------
 #### modifyfullthreshold ####
 Command:
 
@@ -3116,6 +3260,7 @@ Percent below "Error" state to raise a cluster "Warning" alert.
 
 A value representative of the number of times metadata space can be over provisioned relative to the amount of space available. For example, if there was enough metadata space to store 100 TiB of volumes and this number was set to 5, then 500 TiB worth of volumes could be created. 
 
+---------------------------------------------------------------
 #### getlimits ####
 Command:
 
@@ -3127,6 +3272,7 @@ GetLimits enables you to retrieve the limit values set by the API. These values 
 
 Options:
 
+---------------------------------------------------------------
 #### getcurrentadmin ####
 Command:
 
@@ -3138,6 +3284,7 @@ GetCurrentClusterAdmin returns information for the current primary cluster admin
 
 Options:
 
+---------------------------------------------------------------
 #### createsupportbundle ####
 Command:
 
@@ -3161,6 +3308,7 @@ This parameter is fed to the sf_make_support_bundle script. Should be used only 
 
 The number of seconds to let the support bundle script run before timing out and stopping. Default is 1500 seconds. 
 
+---------------------------------------------------------------
 #### getcapacity ####
 Command:
 
@@ -3172,6 +3320,7 @@ Return the high-level capacity measurements for an entire cluster. The fields re
 
 Options:
 
+---------------------------------------------------------------
 #### getntpinfo ####
 Command:
 
@@ -3183,6 +3332,7 @@ GetNtpInfo is used to return the current network time protocol (NTP) configurati
 
 Options:
 
+---------------------------------------------------------------
 #### enableencryptionatrest ####
 Command:
 
@@ -3194,6 +3344,7 @@ The EnableEncryptionAtRest method is used to enable the Advanced Encryption Stan
 
 Options:
 
+---------------------------------------------------------------
 #### getversioninfo ####
 Command:
 
@@ -3205,6 +3356,7 @@ Return information about the Element software version running on each node in th
 
 Options:
 
+---------------------------------------------------------------
 #### setsnmpacl ####
 Command:
 
@@ -3224,6 +3376,7 @@ List of networks and what type of access they have to the SNMP servers running o
 
 List of users and the type of access they have to the SNMP servers running on the cluster nodes. REQUIRED if SNMP v3 is enabled. 
 
+---------------------------------------------------------------
 #### clearfaults ####
 Command:
 
@@ -3239,6 +3392,7 @@ Options:
 
 Determines the types of faults cleared: current: Faults that are currently detected and have not been resolved. resolved: Faults that were previously detected and resolved. all: Both current and resolved faults are cleared. The fault status can be determined by the "resolved" field of the fault object. 
 
+---------------------------------------------------------------
 #### getsnmpacl ####
 Command:
 
@@ -3250,6 +3404,7 @@ GetSnmpACL is used to return the current SNMP access permissions on the cluster 
 
 Options:
 
+---------------------------------------------------------------
 #### getstate ####
 Command:
 
@@ -3265,6 +3420,7 @@ Options:
 
 To run this command, the force parameter must be set to true. 
 
+---------------------------------------------------------------
 #### enablesnmp ####
 Command:
 
@@ -3280,6 +3436,7 @@ Options:
 
 If set to "true", then SNMP v3 is enabled on each node in the cluster. If set to "false", then SNMP v2 is enabled. 
 
+---------------------------------------------------------------
 #### getstats ####
 Command:
 
@@ -3291,6 +3448,7 @@ GetClusterStats is used to return high-level activity measurements for the clust
 
 Options:
 
+---------------------------------------------------------------
 #### getmasternodeid ####
 Command:
 
@@ -3302,6 +3460,7 @@ GetClusterMasterNodeID is used to return the ID of the node that can perform clu
 
 Options:
 
+---------------------------------------------------------------
 #### setsnmpinfo ####
 Command:
 
@@ -3329,6 +3488,7 @@ If set to "true", then SNMP v3 is enabled on each node in the cluster.
 
 If SNMP v3 is enabled, this value must be passed in place of the "networks" parameter. SNMP v3 only. 
 
+---------------------------------------------------------------
 #### getfullthreshold ####
 Command:
 
@@ -3340,6 +3500,7 @@ GetClusterFullThreshold is used to view the stages set for cluster fullness leve
 
 Options:
 
+---------------------------------------------------------------
 #### listsyncjobs ####
 Command:
 
@@ -3352,8 +3513,8 @@ ListSyncJobs is used to return information about synchronization jobs that are r
 Options:
 
 
+StorageContainers Commands 
 ---------------------------------------------------------------
-### StorageContainers Commands 
 #### modifystoragecontainer ####
 Command:
 
@@ -3377,6 +3538,7 @@ Options:
 
 
 
+---------------------------------------------------------------
 #### list ####
 Command:
 
@@ -3392,6 +3554,7 @@ Options:
 
 List of storage containers to get 
 
+---------------------------------------------------------------
 #### getstoragecontainerefficiency ####
 Command:
 
@@ -3407,6 +3570,7 @@ Options:
 
 The ID of the storage container for which to retrieve efficiency information. 
 
+---------------------------------------------------------------
 #### createstoragecontainer ####
 Command:
 
@@ -3430,6 +3594,7 @@ The secret for CHAP authentication for the initiator
 
 The secret for CHAP authentication for the target 
 
+---------------------------------------------------------------
 #### delete ####
 Command:
 
@@ -3446,8 +3611,8 @@ Options:
 list of storageContainerID of the storage container to delete. 
 
 
+LDAP Commands 
 ---------------------------------------------------------------
-### LDAP Commands 
 #### addclusteradmin ####
 Command:
 
@@ -3475,6 +3640,7 @@ Indicate your acceptance of the End User License Agreement when creating this cl
 
 List of Name/Value pairs in JSON object format. 
 
+---------------------------------------------------------------
 #### getconfiguration ####
 Command:
 
@@ -3486,6 +3652,7 @@ The GetLdapConfiguration is used to get the LDAP configuration currently active 
 
 Options:
 
+---------------------------------------------------------------
 #### testauthentication ####
 Command:
 
@@ -3509,6 +3676,7 @@ The password for the username to be tester.
 
 An ldapConfiguration object to be tested. If this parameter is provided, the API call will test the provided configuration even if LDAP authentication is currently disabled. 
 
+---------------------------------------------------------------
 #### disableauthentication ####
 Command:
 
@@ -3520,6 +3688,7 @@ The DisableLdapAuthentication method is used disable LDAP authentication and rem
 
 Options:
 
+---------------------------------------------------------------
 #### enableauthentication ####
 Command:
 
@@ -3572,8 +3741,8 @@ REQUIRED for SearchAndBind The base DN of the tree used to start the search (wil
 REQUIRED for SearchAndBind. The LDAP filter to use. The string should have the placeholder text "%USERNAME%" which will be replaced with the username of the authenticating user. Example: (&(objectClass=person) (sAMAccountName=%USERNAME%)) will use the sAMAccountName field in Active Directory to match the nusername entered at cluster login. 
 
 
+BackupTarget Commands 
 ---------------------------------------------------------------
-### BackupTarget Commands 
 #### modify ####
 Command:
 
@@ -3597,6 +3766,7 @@ Name for the backup target.
 
 List of Name/Value pairs in JSON object format. 
 
+---------------------------------------------------------------
 #### create ####
 Command:
 
@@ -3616,6 +3786,7 @@ Name for the backup target.
 
 List of Name/Value pairs in JSON object format. 
 
+---------------------------------------------------------------
 #### list ####
 Command:
 
@@ -3627,6 +3798,7 @@ You can use ListBackupTargets to retrieve information about all backup targets t
 
 Options:
 
+---------------------------------------------------------------
 #### remove ####
 Command:
 
@@ -3642,6 +3814,7 @@ Options:
 
 Unique target ID of the target to remove. 
 
+---------------------------------------------------------------
 #### get ####
 Command:
 
