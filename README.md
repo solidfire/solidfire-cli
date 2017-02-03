@@ -143,9 +143,9 @@ Options:
     --help
         Show this help and exit.
 
----------------------------------------------------------------
-Statistics Commands
----------------------------------------------------------------
+ ---------------------------------------------------------------
+ Statistics Commands
+ ---------------------------------------------------------------
 #### getcompletestats ####
 Description:
 
@@ -201,9 +201,9 @@ Options:
 Optional list of DriveIDs for which to return drive statistics. If you omit this parameter, measurements for all drives are returned.
 
 
----------------------------------------------------------------
-Network Commands
----------------------------------------------------------------
+ ---------------------------------------------------------------
+ Network Commands
+ ---------------------------------------------------------------
 #### listnodefibrechannelportinfo ####
 Description:
 
@@ -240,9 +240,9 @@ The ListNetworkInterfaces API method is used to return information about each ne
 Options:
 
 
----------------------------------------------------------------
-Service Commands
----------------------------------------------------------------
+ ---------------------------------------------------------------
+ Service Commands
+ ---------------------------------------------------------------
 #### list ####
 Description:
 
@@ -251,9 +251,9 @@ List the services in the cluster.
 Options:
 
 
----------------------------------------------------------------
-Pairing Commands
----------------------------------------------------------------
+ ---------------------------------------------------------------
+ Pairing Commands
+ ---------------------------------------------------------------
 #### completecluster ####
 Description:
 
@@ -358,9 +358,9 @@ Options:
 Unique identifier used to pair two clusters.
 
 
----------------------------------------------------------------
-Test Commands
----------------------------------------------------------------
+ ---------------------------------------------------------------
+ Test Commands
+ ---------------------------------------------------------------
 #### list ####
 Description:
 
@@ -436,9 +436,9 @@ Options:
 Optionally, use to test the storage connection of a different SVIP. This is not needed to test the connection to the target cluster.
 
 
----------------------------------------------------------------
-VolumeAccessGroup Commands
----------------------------------------------------------------
+ ---------------------------------------------------------------
+ VolumeAccessGroup Commands
+ ---------------------------------------------------------------
 #### removevolumesfrom ####
 Description:
 
@@ -629,9 +629,9 @@ Options:
 The ID of the volume access group to delete.
 
 
----------------------------------------------------------------
-Node Commands
----------------------------------------------------------------
+ ---------------------------------------------------------------
+ Node Commands
+ ---------------------------------------------------------------
 #### setnetworkconfig ####
 Description:
 
@@ -762,9 +762,9 @@ GetBootstrapConfig returns the cluster name and node name from the bootstrap con
 Options:
 
 
----------------------------------------------------------------
-ProtocolEndpoints Commands
----------------------------------------------------------------
+ ---------------------------------------------------------------
+ ProtocolEndpoints Commands
+ ---------------------------------------------------------------
 #### list ####
 Description:
 
@@ -777,9 +777,9 @@ Options:
 
 
 
----------------------------------------------------------------
-LoginSession Commands
----------------------------------------------------------------
+ ---------------------------------------------------------------
+ LoginSession Commands
+ ---------------------------------------------------------------
 #### getremotelogginghosts ####
 Description:
 
@@ -817,9 +817,9 @@ GetLoginSessionInfo is used to return the period of time a log in authentication
 Options:
 
 
----------------------------------------------------------------
-Volume Commands
----------------------------------------------------------------
+ ---------------------------------------------------------------
+ Volume Commands
+ ---------------------------------------------------------------
 #### getefficiency ####
 Description:
 
@@ -1281,9 +1281,9 @@ Options:
 The ID of the volume to delete.
 
 
----------------------------------------------------------------
-Sensors Commands
----------------------------------------------------------------
+ ---------------------------------------------------------------
+ Sensors Commands
+ ---------------------------------------------------------------
 #### getipmiinfo ####
 Description:
 
@@ -1311,9 +1311,9 @@ Used to display information for each node chassis type. Valid values:all - retur
 
 
 
----------------------------------------------------------------
-Restart Commands
----------------------------------------------------------------
+ ---------------------------------------------------------------
+ Restart Commands
+ ---------------------------------------------------------------
 #### services ####
 Description:
 
@@ -1379,9 +1379,9 @@ List of NodeIDs for the nodes to be shutdown.
 Action to take for the node shutdown:restart: Restarts the node.halt: Performs full power-off of the node.
 
 
----------------------------------------------------------------
-VirtualNetwork Commands
----------------------------------------------------------------
+ ---------------------------------------------------------------
+ VirtualNetwork Commands
+ ---------------------------------------------------------------
 #### modify ####
 Description:
 
@@ -1503,9 +1503,9 @@ Network ID that identifies the virtual network to remove.
 Network Tag that identifies the virtual network to remove.
 
 
----------------------------------------------------------------
-Account Commands
----------------------------------------------------------------
+ ---------------------------------------------------------------
+ Account Commands
+ ---------------------------------------------------------------
 #### list ####
 Description:
 
@@ -1620,9 +1620,9 @@ Options:
 Specifies the account for which details are gathered.
 
 
----------------------------------------------------------------
-Drive Commands
----------------------------------------------------------------
+ ---------------------------------------------------------------
+ Drive Commands
+ ---------------------------------------------------------------
 #### reset ####
 Description:
 
@@ -1730,9 +1730,9 @@ Options:
 To run this command, the force parameter must be set to true.
 
 
----------------------------------------------------------------
-Snapshot Commands
----------------------------------------------------------------
+ ---------------------------------------------------------------
+ Snapshot Commands
+ ---------------------------------------------------------------
 #### listgroup ####
 Description:
 
@@ -1968,9 +1968,9 @@ Options:
 The ID of the snapshot to delete.
 
 
----------------------------------------------------------------
-Initiators Commands
----------------------------------------------------------------
+ ---------------------------------------------------------------
+ Initiators Commands
+ ---------------------------------------------------------------
 #### modify ####
 Description:
 
@@ -2024,9 +2024,9 @@ Options:
 An array of IDs of initiators to delete.
 
 
----------------------------------------------------------------
-SFApi Commands
----------------------------------------------------------------
+ ---------------------------------------------------------------
+ SFApi Commands
+ ---------------------------------------------------------------
 #### invoke ####
 Description:
 
@@ -2043,9 +2043,9 @@ The name of the method to invoke. This is case sensitive.
 An object, normally a dictionary or hashtable of the key/value pairs, to be passed as the params for the method being invoked.
 
 
----------------------------------------------------------------
-VirtualVolume Commands
----------------------------------------------------------------
+ ---------------------------------------------------------------
+ VirtualVolume Commands
+ ---------------------------------------------------------------
 #### listhosts ####
 Description:
 
@@ -2136,9 +2136,9 @@ Options:
 Valid values: vvols: Find the status of the Virtual Volumes (VVOLs) cluster feature.
 
 
----------------------------------------------------------------
-Hardware Commands
----------------------------------------------------------------
+ ---------------------------------------------------------------
+ Hardware Commands
+ ---------------------------------------------------------------
 #### getnvraminfo ####
 Description:
 
@@ -2176,9 +2176,9 @@ GetHardwareConfig enables you to display the hardware configuration information 
 Options:
 
 
----------------------------------------------------------------
-Cluster Commands
----------------------------------------------------------------
+ ---------------------------------------------------------------
+ Cluster Commands
+ ---------------------------------------------------------------
 #### getinfo ####
 Description:
 
@@ -2645,9 +2645,9 @@ ListSyncJobs is used to return information about synchronization jobs that are r
 Options:
 
 
----------------------------------------------------------------
-StorageContainers Commands
----------------------------------------------------------------
+ ---------------------------------------------------------------
+ StorageContainers Commands
+ ---------------------------------------------------------------
 #### modifystoragecontainer ####
 Description:
 
@@ -2720,9 +2720,9 @@ Options:
 list of storageContainerID of the storage container to delete.
 
 
----------------------------------------------------------------
-LDAP Commands
----------------------------------------------------------------
+ ---------------------------------------------------------------
+ LDAP Commands
+ ---------------------------------------------------------------
 #### addclusteradmin ####
 Description:
 
@@ -2827,9 +2827,9 @@ REQUIRED for SearchAndBindThe base DN of the tree used to start the search (will
 REQUIRED for SearchAndBind.The LDAP filter to use.The string should have the placeholder text "%USERNAME%" which will be replaced with the username of the authenticating user.Example: (&(objectClass=person) (sAMAccountName=%USERNAME%)) will use the sAMAccountName field in Active Directory to match the nusername entered at cluster login.
 
 
----------------------------------------------------------------
-BackupTarget Commands
----------------------------------------------------------------
+ ---------------------------------------------------------------
+ BackupTarget Commands
+ ---------------------------------------------------------------
 #### modify ####
 Description:
 
