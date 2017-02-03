@@ -29,36 +29,49 @@ Windows 7, 8, 10, Linux, Mac
 Connection Management
 ---------------------
 To run a command on a given connection without storing it away, use the mvip, login, and password options.
+
     sfcli --mvip 10.117.60.15 --login admin --password admin Account List
 
 To store a given connection, use the Connection Push and supply the name option.
+
     sfcli --mvip 10.117.60.15 --login admin --password admin --name "Example" Connection Push
 
 To use a connection you've stored, use -n or --name or -c or -connectionIndex
   Find by name:
+
     sfcli -n Example Account List
+
   Find by index:
+
     sfcli -c 0 Account List
+
   Use index 0 if no connection is provided, but at least one is stored.
+
     sfcli Account List
 
 To remove a given connection, use the Connection Remove command.
   Remove by name:
-sfcli Connection Remove -n Example
+
+    sfcli Connection Remove -n Example
+
   Remove by index:
+
     sfcli Connection Remove -i -1 # Removes the newly pushed connection.
     sfcli Connection Remove -i 0 # Removes the oldest pushed connection.
     sfcli Connection Remove -i 1 # Removes the second oldest connection.
 
 To list the stored connections, use the Connection List command.
+
 	sfcli Connection List
 
 To prune broken connections from the connection.csv file, use the Connection Prune command.
+
 	sfcli Connection Prune
 
 Executing Commands
 ------------------
 Executing a command with standard parameters:
+
     sfcli -c 0 Account GetByID --account_id 94
 
 Executing a command with non-standard parameters:
@@ -70,33 +83,45 @@ the json himself. There is an example of how to do this below.
 1. Node SetConfig
 Example:
   First, we get the existing network config.
+
     $returnValue = sfcli -c 0 -j Node GetConfig | ConvertFrom-Json
+
   Next, we extract the network part of the config and escape the '"'s.
+
     $config = $returnValue.config | ConvertTo-Json
     $escaped = $config.replace('"', '\"')
     #     HERE IS WHERE WE'D MAKE ANY CHANGES
+
   And here, we feed it back in.
+
     sfcli -c 0 -j Node SetNetworkConfig --config $escaped
 
 2. Node SetNetworkConfig
 Example:
   First, we get the existing network config.
+
     $returnValue = sfcli -c 0 -j Node GetNetworkConfig | ConvertFrom-Json
+
   Next, we extract the network part of the config and escape the '"'s.
+
     $network = $returnValue.network | ConvertTo-Json
     $escaped = $network.replace('"', '\"')
     #     HERE IS WHERE WE'D MAKE ANY CHANGES
+
   And here, we feed it back in.
+
     sfcli -c 0 -j Node SetNetworkConfig --network $escaped
 
 3. Volume CloneMultiple
 Example:
   First, we go to the help guide and find our non-standard parameter, "volumes".
   Next, we copy and paste the example into the command and modify it with our desired values.
+
     sfcli --mvip 10.117.61.44 -p --username admin --password admin Volume CloneMultiple --volumes '[{\"volume_id\": 1979},{\"volume_id\": 1980}]'
 
 4. SFApi Invoke
 Example:
+
     $account = sfcli -c 0 SFApi Invoke --method GetAccountByID --parameters '{\"accountID\":94}'
 
 Command Details
