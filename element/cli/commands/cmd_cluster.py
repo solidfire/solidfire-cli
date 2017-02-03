@@ -627,7 +627,20 @@ def setconfig(ctx,
 
 
     cluster = None
-    if(cluster is not None or False):
+    if(clusterconfigcipi is not None or
+       clusterconfigcluster is not None or
+       clusterconfigensemble is not None or
+       clusterconfigmipi is not None or
+       clusterconfigname is not None or
+       clusterconfignodeid is not None or
+       clusterconfigpendingnodeid is not None or
+       clusterconfigrole is not None or
+       clusterconfigsipi is not None or
+       clusterconfigstate is not None or
+       False):
+        if not ( True):
+            ctx.logger.error("""If you choose to provide clusterconfig, you must include at least the following parameters:
+""")
         kwargsDict = dict()
         kwargsDict["cipi"] = clusterconfigcipi
         kwargsDict["cluster"] = clusterconfigcluster

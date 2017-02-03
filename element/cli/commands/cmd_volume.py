@@ -424,7 +424,14 @@ def create(ctx,
 
 
     qos = None
-    if(name is not None or accountid is not None or totalsize is not None or enable512e is not None or qos is not None or attributes is not None or False):
+    if(qosminiops is not None or
+       qosmaxiops is not None or
+       qosburstiops is not None or
+       qosbursttime is not None or
+       False):
+        if not ( True):
+            ctx.logger.error("""If you choose to provide qos, you must include at least the following parameters:
+""")
         kwargsDict = dict()
         kwargsDict["min_iops"] = qosminiops
         kwargsDict["max_iops"] = qosmaxiops
@@ -783,7 +790,14 @@ def modify(ctx,
 
 
     qos = None
-    if(volumeid is not None or accountid is not None or access is not None or qos is not None or totalsize is not None or attributes is not None or False):
+    if(qosminiops is not None or
+       qosmaxiops is not None or
+       qosburstiops is not None or
+       qosbursttime is not None or
+       False):
+        if not ( True):
+            ctx.logger.error("""If you choose to provide qos, you must include at least the following parameters:
+""")
         kwargsDict = dict()
         kwargsDict["min_iops"] = qosminiops
         kwargsDict["max_iops"] = qosmaxiops

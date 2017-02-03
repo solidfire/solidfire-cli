@@ -181,7 +181,30 @@ def testauthentication(ctx,
 
 
     ldapconfiguration = None
-    if(username is not None or password is not None or ldapconfiguration is not None or False):
+    if(ldapconfigurationauthtype is not None or
+       ldapconfigurationenabled is not None or
+       ldapconfigurationgroupsearchbasedn is not None or
+       ldapconfigurationgroupsearchcustomfilter is not None or
+       ldapconfigurationgroupsearchtype is not None or
+       ldapconfigurationsearchbinddn is not None or
+       ldapconfigurationserveruris is not None or
+       ldapconfigurationuserdntemplate is not None or
+       ldapconfigurationusersearchbasedn is not None or
+       ldapconfigurationusersearchfilter is not None or
+       False):
+        if not (ldapconfiguration and ldapconfiguration and ldapconfiguration and ldapconfiguration and ldapconfiguration and ldapconfiguration and ldapconfiguration and ldapconfiguration and ldapconfiguration and ldapconfiguration and  True):
+            ctx.logger.error("""If you choose to provide ldapconfiguration, you must include at least the following parameters:
+ldapconfigurationauthtype
+ldapconfigurationenabled
+ldapconfigurationgroupsearchbasedn
+ldapconfigurationgroupsearchcustomfilter
+ldapconfigurationgroupsearchtype
+ldapconfigurationsearchbinddn
+ldapconfigurationserveruris
+ldapconfigurationuserdntemplate
+ldapconfigurationusersearchbasedn
+ldapconfigurationusersearchfilter
+""")
         kwargsDict = dict()
         kwargsDict["auth_type"] = ldapconfigurationauthtype
         kwargsDict["enabled"] = ldapconfigurationenabled
