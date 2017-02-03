@@ -81,46 +81,43 @@ can be gotten by running a "get" function. I've provided a couple examples of th
 Below. Other times, the parameters are simple enough that the user can construct
 the json himself. There is an example of how to do this below.
 
-* Node SetConfig
- * First, we get the existing network config.
+### Node SetConfig ###
+First, we get the existing network config.
 
     $returnValue = sfcli -c 0 -j Node GetConfig | ConvertFrom-Json
 
- * Next, we extract the network part of the config and escape the '"'s.
+Next, we extract the network part of the config and escape the '"'s.
 
     $config = $returnValue.config | ConvertTo-Json
     $escaped = $config.replace('"', '\"')
-    #     HERE IS WHERE WE'D MAKE ANY CHANGES
+    # HERE IS WHERE WE'D MAKE ANY CHANGES
 
-  * And here, we feed it back in.
+And here, we feed it back in.
 
     sfcli -c 0 -j Node SetNetworkConfig --config $escaped
 
-2. Node SetNetworkConfig
-Example:
-  First, we get the existing network config.
+### Node SetNetworkConfig ###
+First, we get the existing network config.
 
     $returnValue = sfcli -c 0 -j Node GetNetworkConfig | ConvertFrom-Json
 
-  Next, we extract the network part of the config and escape the '"'s.
+Next, we extract the network part of the config and escape the '"'s.
 
     $network = $returnValue.network | ConvertTo-Json
     $escaped = $network.replace('"', '\"')
-    #     HERE IS WHERE WE'D MAKE ANY CHANGES
+    # HERE IS WHERE WE'D MAKE ANY CHANGES
 
-  And here, we feed it back in.
+And here, we feed it back in.
 
     sfcli -c 0 -j Node SetNetworkConfig --network $escaped
 
-3. Volume CloneMultiple
-Example:
-  First, we go to the help guide and find our non-standard parameter, "volumes".
-  Next, we copy and paste the example into the command and modify it with our desired values.
+### Volume CloneMultiple ###
+First, we go to the help guide and find our non-standard parameter, "volumes".
+Next, we copy and paste the example into the command and modify it with our desired values.
 
     sfcli --mvip 10.117.61.44 -p --username admin --password admin Volume CloneMultiple --volumes '[{\"volume_id\": 1979},{\"volume_id\": 1980}]'
 
-4. SFApi Invoke
-Example:
+### SFApi Invoke ###
 
     $account = sfcli -c 0 SFApi Invoke --method GetAccountByID --parameters '{\"accountID\":94}'
 
