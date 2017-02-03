@@ -22,10 +22,6 @@ DEBUG_LOGGING_MAP = {
 }
 CLI_VERSION = 'v1'
 
-if sys.stdout.isatty():
-    DEFAULT_FORMAT = 'table'
-
-
 class Context(object):
 
     def __init__(self):
@@ -99,6 +95,10 @@ class SolidFireCLI(click.MultiCommand):
               default="9.0",
               help='The version you would like to connect on',
               required=False)
+@click.option('--port', '-q',
+              default=443,
+              help="The port number on which you wish to connect",
+              required=False)
 @click.option('--name', '-n',
               default = None,
               help="The name of the connection you wish to use in connections.csv. You can use this if you have previously stored away a connection with 'sfcli connection push'.",
@@ -141,6 +141,7 @@ def cli(ctx,
         username=None,
         password=None,
         name=None,
+        port=None,
         verifyssl=False,
         connectionindex=None,
         json=None,
@@ -161,29 +162,20 @@ def cli(ctx,
         level=logging.WARNING,
         format=('%(levelname)s in %(filename)s@%(lineno)s: %(message)s'))
     LOG.setLevel(DEBUG_LOGGING_MAP[int(debug)])
+
+    logging.getLogger('solidfire.Element').setLevel(logging.CRITICAL)
     ctx.logger = LOG
-
-    library_log = logging.getLogger('solidfire.Element').setLevel(logging.CRITICAL)
-
     ctx.verbose = verbose
 
-    connections_dirty = False
+
     cfg = None
-
-    connectionsCsvLocation = resource_filename(Requirement.parse("solidfire-cli"), "connections.csv")
-    if os.path.exists(connectionsCsvLocation):
-        with open(connectionsCsvLocation) as connectionFile:
-            connections = list(csv.DictReader(connectionFile, delimiter=','))
-    else:
-        connections = []
-
     # Arguments take precedence regardless of env settings
     if mvip and username and password:
         cfg = {'mvip': mvip,
                'username': username,
                'password': password,
-               'port': 443,
-               'url': 'https://%s:%s' % (mvip, 443),
+               'port': port,
+               'url': 'https://%s:%s' % (mvip, port),
                'version': version}
         try:
             ctx.element = ElementFactory.create(cfg["mvip"],cfg["username"],cfg["password"],port=cfg["port"],version=version,verify_ssl=verifyssl)
@@ -194,7 +186,10 @@ def cli(ctx,
     # If someone accidentally passed in an argument, but didn't specify everything, throw an error.
     elif mvip or username or password:
         LOG.error("In order to manually connect, please provide mvip, username, AND password")
+
+    # If someone asked for a given connection or we need to default to using the connection at index 0 if it exists:
     else:
+        connections = cli_utils.get_connections()
         if(connectionindex is not None):
             cfg = connections[connectionindex]
         elif(name is not None):
@@ -209,15 +204,19 @@ def cli(ctx,
         else:
             if len(connections) > 0:
                 cfg = connections[0]
+
+        # If we managed to find the connection we were looking for, we must try to establish the connection.
         if cfg is not None:
-            # Finaly, we need to establish our connection via elementfactory:
+            # Finally, we need to establish our connection via elementfactory:
             try:
-                ctx.element = Element(cfg["mvip"], cli_utils.decrypt(cfg["username"]), cli_utils.decrypt(cfg["password"]), cfg["version"], verifyssl)
-            except:
-                ctx.logger.error("The connection is corrupt. Run 'sfcli connection prune' to remove the broken connection.")
+                ctx.element = Element(cfg["mvip"]+":"+str(cfg["port"]), cli_utils.decrypt(cfg["username"]), cli_utils.decrypt(cfg["password"]), cfg["version"], verify_ssl=verifyssl)
+            except Exception as e:
+                ctx.logger.error(e.__str__())
+                ctx.logger.error("The connection is corrupt. Run 'sfcli connection prune' to try and remove all broken connections or use 'sfcli connection remove -n name'")
                 ctx.logger.error(cfg)
 
-    # The only time it is none is when we're asking for help. If that's not what we're doing, we catch it later.
+    # The only time it is none is when we're asking for help or we're trying to store a connection.
+    # If that's not what we're doing, we catch it later.
     if cfg is not None:
         cfg["port"] = int(cfg["port"])
         ctx.cfg = cfg
