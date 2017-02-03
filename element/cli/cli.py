@@ -39,6 +39,7 @@ class Context(object):
         self.pickle = None
         self.filter_tree = None
         self.table = None
+        self.verifyssl = None
 
     def log(self, msg, *args):
         """Logs a message to stderr."""
@@ -98,30 +99,25 @@ class SolidFireCLI(click.MultiCommand):
               default="9.0",
               help='The version you would like to connect on',
               required=False)
-@click.option('--name',
+@click.option('--name', '-n',
               default = None,
-              help="The connection name for later reference (-n)",
+              help="The name of the connection you wish to use in connections.csv. You can use this if you have previously stored away a connection with 'sfcli connection push'.",
+              required=False)
+@click.option('--connectionIndex', '-c',
+              default=None,
+              type=click.INT,
+              help="The index of the connection you wish to use in connections.csv. You can use this if you have previously stored away a connection with 'sfcli connection push'.",
               required=False)
 @click.option('--verifyssl', '-s',
               default = False,
               help="Enable this to check ssl connection for errors especially when using a hostname. It is invalid to set this to true when using an IP address in the target.",
               required=False,
               is_flag=True)
-@click.option('--connectionIndex', '-c',
-              default=None,
-              type=click.INT,
-              help="The index of the connection you wish to use in connections.csv. You can use this if you have previously stored away a connection.",
-              required=False)
-@click.option('--connectionName', '-n',
-              default=None,
-              type=click.STRING,
-              help="The name of the connection you wish to use in connections.csv. You can use this if you have previously stored away a connection.",
-              required=False)
 @click.option('--json', '-j',
               is_flag=True,
               required=False,
               help="To print the full output in json format, use this flag")
-@click.option('--pickle', '-p',
+@click.option('--pickle', '-k',
               is_flag=True,
               required=False,
               help="To print the full output in a pickled json format, use this flag.")
@@ -147,7 +143,6 @@ def cli(ctx,
         name=None,
         verifyssl=False,
         connectionindex=None,
-        connectionname=None,
         json=None,
         pickle=None,
         depth=None,
@@ -187,7 +182,6 @@ def cli(ctx,
         cfg = {'mvip': mvip,
                'username': username,
                'password': password,
-               'name': name,
                'port': 443,
                'url': 'https://%s:%s' % (mvip, 443),
                'version': version}
@@ -203,13 +197,13 @@ def cli(ctx,
     else:
         if(connectionindex is not None):
             cfg = connections[connectionindex]
-        elif(connectionname is not None):
-            filteredCfg = [connection for connection in connections if connection["name"] == connectionname]
+        elif(name is not None):
+            filteredCfg = [connection for connection in connections if connection["name"] == name]
             if(len(filteredCfg) > 1):
                 LOG.error("Your connections.csv file has become corrupted. There are two connections of the same name.")
                 exit()
             if(len(filteredCfg) < 1):
-                LOG.error("Could not find a connection named "+connectionname)
+                LOG.error("Could not find a connection named "+name)
                 exit()
             cfg = filteredCfg[0]
         else:
@@ -227,10 +221,11 @@ def cli(ctx,
     if cfg is not None:
         cfg["port"] = int(cfg["port"])
         ctx.cfg = cfg
-        ctx.json = json
-        ctx.pickle = pickle
-        ctx.depth = depth
-        ctx.filter_tree = filter_tree
+    ctx.json = json
+    ctx.pickle = pickle
+    ctx.depth = depth
+    ctx.filter_tree = filter_tree
+    ctx.verifyssl = verifyssl
 
 if __name__ == '__main__':
     cli.main()

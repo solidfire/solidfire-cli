@@ -19,21 +19,55 @@ def cli(ctx):
     """Connection management"""
 
 @cli.command('push', short_help="Pushes the connection onto connection.csv to save for later use.")
+@click.option('--mvip', '-m',
+              default=None,
+              help="SolidFire MVIP",
+              required=True)
+@click.option('--username', '-u',
+              default=None,
+              help="SolidFire cluster username",
+              required=True)
+@click.option('--password', '-p',
+              default=None,
+              help="SolidFire cluster password",
+              required=True)
+@click.option('--version', '-v',
+              default="9.0",
+              help='The version you would like to connect on',
+              required=True)
+@click.option('--name', '-n',
+              default = None,
+              help="The name you want to associate with the connection'.",
+              required=True)
+@click.option('--port',
+              default = 443,
+              help="The port you wish to connect on",
+              required=False)
 @pass_context
-def push(ctx):
+def push(ctx, mvip, username, password, version, port, name):
     # First, attempt to establish the connection. If that's not possible,
     # throw the error.
     try:
-        ctx.element = ElementFactory.create(ctx.cfg["mvip"],ctx.cfg["username"],ctx.cfg["password"],ctx.cfg["version"],port=ctx.cfg["port"])
+        ctx.element = ElementFactory.create(target=mvip,username=username,password=password,version=version,port=port,verify_ssl=ctx.verifyssl)
     except Exception as e:
         ctx.logger.error(e.__str__())
-    if(ctx.cfg.get("name", "") is None):
-        ctx.logger.error("Please provide a connection name.")
     connections = cli_utils.get_connections()
-    if(ctx.cfg["username"] is not None and ctx.cfg["password"] is not None):
-        ctx.cfg["username"] = cli_utils.encrypt(ctx.cfg["username"])
-        ctx.cfg["password"] = cli_utils.encrypt(ctx.cfg["password"])
-    connections = connections + [ctx.cfg]
+    # First, ensure that no other connections have the same name:
+    sameName = [connection for connection in connections if connection["name"]==name]
+    if sameName != []:
+        ctx.logger.error("A connection with that name already exists. Please try another.")
+        exit(1)
+
+    if(username is not None and password is not None):
+        username = cli_utils.encrypt(username)
+        password = cli_utils.encrypt(password)
+    connections = connections + [{'mvip': mvip,
+                                  'username': username,
+                                  'password': password,
+                                  'port': port,
+                                  'url': 'https://%s:%s' % (mvip, port),
+                                  'version': version,
+                                  'name': name}]
     cli_utils.write_connections(connections)
 
 @cli.command('remove', short_help="Removes a given connection")
