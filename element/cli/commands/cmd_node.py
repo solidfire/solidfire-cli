@@ -49,8 +49,11 @@ def setnetworkconfig(ctx,
             kwargsDict = simplejson.loads(network)
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1) 
-        network = Network(**kwargsDict)
+            exit(1)
+        try:
+            network = Network(**kwargsDict)
+        except:
+            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""network = """+str(network)+""";"""+"")
@@ -288,8 +291,11 @@ def setconfig(ctx,
             kwargsDict = simplejson.loads(config)
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1) 
-        config = Config(**kwargsDict)
+            exit(1)
+        try:
+            config = Config(**kwargsDict)
+        except:
+            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""config = """+str(config)+""";"""+"")

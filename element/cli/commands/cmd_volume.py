@@ -126,8 +126,11 @@ def startbulkwrite(ctx,
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1) 
-        attributes = dict(**kwargsDict)
+            exit(1)
+        try:
+            attributes = dict(**kwargsDict)
+        except:
+            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""format = """+str(format)+""";"""+"""script = """+str(script)+""";"""+"""scriptparameters = """+str(scriptparameters)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
@@ -183,8 +186,11 @@ def updatebulkstatus(ctx,
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1) 
-        attributes = dict(**kwargsDict)
+            exit(1)
+        try:
+            attributes = dict(**kwargsDict)
+        except:
+            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""key = """+str(key)+""";"""+"""status = """+str(status)+""";"""+"""percentcomplete = """+str(percentcomplete)+""";"""+"""message = """+str(message)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
@@ -257,8 +263,11 @@ def startbulkread(ctx,
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1) 
-        attributes = dict(**kwargsDict)
+            exit(1)
+        try:
+            attributes = dict(**kwargsDict)
+        except:
+            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""format = """+str(format)+""";"""+"""snapshotid = """+str(snapshotid)+""";"""+"""script = """+str(script)+""";"""+"""scriptparameters = """+str(scriptparameters)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
@@ -428,8 +437,11 @@ def create(ctx,
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1) 
-        attributes = dict(**kwargsDict)
+            exit(1)
+        try:
+            attributes = dict(**kwargsDict)
+        except:
+            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""name = """+str(name)+""";"""+"""accountid = """+str(accountid)+""";"""+"""totalsize = """+str(totalsize)+""";"""+"""enable512e = """+str(enable512e)+""";"""+"""qos = """+str(qos)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
@@ -686,8 +698,11 @@ def clone(ctx,
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1) 
-        attributes = dict(**kwargsDict)
+            exit(1)
+        try:
+            attributes = dict(**kwargsDict)
+        except:
+            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""name = """+str(name)+""";"""+"""newaccountid = """+str(newaccountid)+""";"""+"""newsize = """+str(newsize)+""";"""+"""access = """+str(access)+""";"""+"""snapshotid = """+str(snapshotid)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
@@ -781,8 +796,11 @@ def modify(ctx,
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1) 
-        attributes = dict(**kwargsDict)
+            exit(1)
+        try:
+            attributes = dict(**kwargsDict)
+        except:
+            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""accountid = """+str(accountid)+""";"""+"""access = """+str(access)+""";"""+"""qos = """+str(qos)+""";"""+"""totalsize = """+str(totalsize)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
@@ -1003,8 +1021,11 @@ def clonemultiple(ctx,
             kwargsDict = simplejson.loads(volumes)
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1) 
-        volumes = [CloneMultipleVolumeParams(**argsOfInterest) for argsOfInterest in kwargsDict]
+            exit(1)
+        try:
+            volumes = [CloneMultipleVolumeParams(**argsOfInterest) for argsOfInterest in kwargsDict]
+        except:
+            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""volumes = """+str(volumes)+""";"""+"""access = """+str(access)+""";"""+"""groupsnapshotid = """+str(groupsnapshotid)+""";"""+"""newaccountid = """+str(newaccountid)+""";"""+"")

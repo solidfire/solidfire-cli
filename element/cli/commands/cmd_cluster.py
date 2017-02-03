@@ -265,8 +265,11 @@ def setsnmptrapinfo(ctx,
             kwargsDict = simplejson.loads(traprecipients)
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1) 
-        traprecipients = [SnmpTrapRecipient(**argsOfInterest) for argsOfInterest in kwargsDict]
+            exit(1)
+        try:
+            traprecipients = [SnmpTrapRecipient(**argsOfInterest) for argsOfInterest in kwargsDict]
+        except:
+            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""traprecipients = """+str(traprecipients)+""";"""+"""clusterfaulttrapsenabled = """+str(clusterfaulttrapsenabled)+""";"""+"""clusterfaultresolvedtrapsenabled = """+str(clusterfaultresolvedtrapsenabled)+""";"""+"""clustereventtrapsenabled = """+str(clustereventtrapsenabled)+""";"""+"")
@@ -412,8 +415,11 @@ def create(ctx,
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1) 
-        attributes = dict(**kwargsDict)
+            exit(1)
+        try:
+            attributes = dict(**kwargsDict)
+        except:
+            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""accepteula = """+str(accepteula)+""";"""+"""mvip = """+str(mvip)+""";"""+"""svip = """+str(svip)+""";"""+"""repcount = """+str(repcount)+""";"""+"""username = """+str(username)+""";"""+"""password = """+str(password)+""";"""+"""nodes = """+str(nodes)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
@@ -500,8 +506,11 @@ def addadmin(ctx,
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1) 
-        attributes = dict(**kwargsDict)
+            exit(1)
+        try:
+            attributes = dict(**kwargsDict)
+        except:
+            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""username = """+str(username)+""";"""+"""password = """+str(password)+""";"""+"""access = """+str(access)+""";"""+"""accepteula = """+str(accepteula)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
@@ -684,8 +693,11 @@ def modifyadmin(ctx,
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1) 
-        attributes = dict(**kwargsDict)
+            exit(1)
+        try:
+            attributes = dict(**kwargsDict)
+        except:
+            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""clusteradminid = """+str(clusteradminid)+""";"""+"""password = """+str(password)+""";"""+"""access = """+str(access)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
@@ -1085,15 +1097,21 @@ def setsnmpacl(ctx,
             kwargsDict = simplejson.loads(networks)
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1) 
-        networks = [SnmpNetwork(**argsOfInterest) for argsOfInterest in kwargsDict]
+            exit(1)
+        try:
+            networks = [SnmpNetwork(**argsOfInterest) for argsOfInterest in kwargsDict]
+        except:
+            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     if(usmusers is not None):
         try:
             kwargsDict = simplejson.loads(usmusers)
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1) 
-        usmusers = [SnmpV3UsmUser(**argsOfInterest) for argsOfInterest in kwargsDict]
+            exit(1)
+        try:
+            usmusers = [SnmpV3UsmUser(**argsOfInterest) for argsOfInterest in kwargsDict]
+        except:
+            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""networks = """+str(networks)+""";"""+"""usmusers = """+str(usmusers)+""";"""+"")
@@ -1311,15 +1329,21 @@ def setsnmpinfo(ctx,
             kwargsDict = simplejson.loads(networks)
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1) 
-        networks = [SnmpNetwork(**argsOfInterest) for argsOfInterest in kwargsDict]
+            exit(1)
+        try:
+            networks = [SnmpNetwork(**argsOfInterest) for argsOfInterest in kwargsDict]
+        except:
+            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     if(usmusers is not None):
         try:
             kwargsDict = simplejson.loads(usmusers)
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1) 
-        usmusers = [SnmpV3UsmUser(**argsOfInterest) for argsOfInterest in kwargsDict]
+            exit(1)
+        try:
+            usmusers = [SnmpV3UsmUser(**argsOfInterest) for argsOfInterest in kwargsDict]
+        except:
+            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""networks = """+str(networks)+""";"""+"""enabled = """+str(enabled)+""";"""+"""snmpv3enabled = """+str(snmpv3enabled)+""";"""+"""usmusers = """+str(usmusers)+""";"""+"")

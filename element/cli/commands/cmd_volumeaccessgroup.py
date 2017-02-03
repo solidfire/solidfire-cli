@@ -129,8 +129,11 @@ def modify(ctx,
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1) 
-        attributes = dict(**kwargsDict)
+            exit(1)
+        try:
+            attributes = dict(**kwargsDict)
+        except:
+            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"""virtualnetworkid = """+str(virtualnetworkid)+""";"""+"""virtualnetworktags = """+str(virtualnetworktags)+""";"""+"""name = """+str(name)+""";"""+"""initiators = """+str(initiators)+""";"""+"""volumes = """+str(volumes)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
@@ -203,8 +206,11 @@ def create(ctx,
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1) 
-        attributes = dict(**kwargsDict)
+            exit(1)
+        try:
+            attributes = dict(**kwargsDict)
+        except:
+            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""name = """+str(name)+""";"""+"""initiators = """+str(initiators)+""";"""+"""volumes = """+str(volumes)+""";"""+"""virtualnetworkid = """+str(virtualnetworkid)+""";"""+"""virtualnetworktags = """+str(virtualnetworktags)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
@@ -251,8 +257,11 @@ def modifylunassignments(ctx,
             kwargsDict = simplejson.loads(lunassignments)
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1) 
-        lunassignments = [LunAssignment(**argsOfInterest) for argsOfInterest in kwargsDict]
+            exit(1)
+        try:
+            lunassignments = [LunAssignment(**argsOfInterest) for argsOfInterest in kwargsDict]
+        except:
+            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"""lunassignments = """+str(lunassignments)+""";"""+"")

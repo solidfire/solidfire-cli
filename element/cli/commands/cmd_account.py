@@ -138,8 +138,11 @@ def modify(ctx,
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1) 
-        attributes = dict(**kwargsDict)
+            exit(1)
+        try:
+            attributes = dict(**kwargsDict)
+        except:
+            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
     if initiatorsecret == "AUTO-GENERATE-CHAP-SECRET":
         initiatorsecret = CHAPSecret.auto_generate()
@@ -258,8 +261,11 @@ def add(ctx,
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1) 
-        attributes = dict(**kwargsDict)
+            exit(1)
+        try:
+            attributes = dict(**kwargsDict)
+        except:
+            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
     if initiatorsecret == "AUTO-GENERATE-CHAP-SECRET":
         initiatorsecret = CHAPSecret.auto_generate()
