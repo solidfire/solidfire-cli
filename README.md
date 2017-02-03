@@ -1,6 +1,7 @@
 Python Lib and CLI for SolidFire Storage Clusters
 =================================================
 The purpose of this tool is not as a hard core programming language, but rather as a quick and dirty command line interface. This feature gives the user the ability to
+
 1. Quickly install a fully functional interface to the JSON-RPC using pip
 2. Learn how to use the commands by via inline help
 3. Execute any command supported by Fluorine
@@ -80,19 +81,18 @@ can be gotten by running a "get" function. I've provided a couple examples of th
 Below. Other times, the parameters are simple enough that the user can construct
 the json himself. There is an example of how to do this below.
 
-1. Node SetConfig
-Example:
-  First, we get the existing network config.
+* Node SetConfig
+ * First, we get the existing network config.
 
     $returnValue = sfcli -c 0 -j Node GetConfig | ConvertFrom-Json
 
-  Next, we extract the network part of the config and escape the '"'s.
+ * Next, we extract the network part of the config and escape the '"'s.
 
     $config = $returnValue.config | ConvertTo-Json
     $escaped = $config.replace('"', '\"')
     #     HERE IS WHERE WE'D MAKE ANY CHANGES
 
-  And here, we feed it back in.
+  * And here, we feed it back in.
 
     sfcli -c 0 -j Node SetNetworkConfig --config $escaped
 
