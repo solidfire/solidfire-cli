@@ -51,11 +51,8 @@ def invoke(ctx,
             kwargsDict = simplejson.loads(parameters)
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1)
-        try:
-            parameters = dict(**kwargsDict)
-        except:
-            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
+            exit(1) 
+        parameters = dict(**kwargsDict)
     
 
     ctx.logger.info("""method = """+str(method)+""";"""+"""parameters = """+str(parameters)+""";"""+"")

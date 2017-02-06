@@ -87,21 +87,15 @@ def modify(ctx,
             kwargsDict = simplejson.loads(addressblocks)
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1)
-        try:
-            addressblocks = [AddressBlock(**argsOfInterest) for argsOfInterest in kwargsDict]
-        except:
-            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
+            exit(1) 
+        addressblocks = [AddressBlock(**argsOfInterest) for argsOfInterest in kwargsDict]
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1)
-        try:
-            attributes = dict(**kwargsDict)
-        except:
-            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
+            exit(1) 
+        attributes = dict(**kwargsDict)
     
 
     ctx.logger.info("""virtualnetworkid = """+str(virtualnetworkid)+""";"""+"""virtualnetworktag = """+str(virtualnetworktag)+""";"""+"""name = """+str(name)+""";"""+"""addressblocks = """+str(addressblocks)+""";"""+"""netmask = """+str(netmask)+""";"""+"""svip = """+str(svip)+""";"""+"""gateway = """+str(gateway)+""";"""+"""namespace = """+str(namespace)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
@@ -174,21 +168,15 @@ def add(ctx,
             kwargsDict = simplejson.loads(addressblocks)
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1)
-        try:
-            addressblocks = [AddressBlock(**argsOfInterest) for argsOfInterest in kwargsDict]
-        except:
-            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
+            exit(1) 
+        addressblocks = [AddressBlock(**argsOfInterest) for argsOfInterest in kwargsDict]
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1)
-        try:
-            attributes = dict(**kwargsDict)
-        except:
-            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
+            exit(1) 
+        attributes = dict(**kwargsDict)
     
 
     ctx.logger.info("""virtualnetworktag = """+str(virtualnetworktag)+""";"""+"""name = """+str(name)+""";"""+"""addressblocks = """+str(addressblocks)+""";"""+"""netmask = """+str(netmask)+""";"""+"""svip = """+str(svip)+""";"""+"""gateway = """+str(gateway)+""";"""+"""namespace = """+str(namespace)+""";"""+"""attributes = """+str(attributes)+""";"""+"")

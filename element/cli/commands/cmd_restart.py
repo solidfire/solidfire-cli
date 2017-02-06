@@ -24,7 +24,7 @@ from solidfire import common
 @click.group()
 @pass_context
 def cli(ctx):
-    """services networking resetnode shutdown """
+    """services resetnode networking shutdown """
 
 @cli.command('services', short_help="""The RestartServices API method is used to restart the  Element services on a node.Caution: This method causes temporary node services interruption. Exercise caution when using this method. """)
 @click.option('--force',
@@ -66,6 +66,46 @@ def services(ctx,
 
 
 
+@cli.command('resetnode', short_help="""Allows you to reset a node to the SolidFire factory settings. All data will be deleted from the node when you call this method. A node participating in a cluster cannot be reset. """)
+@click.option('--build',
+              type=str,
+              required=True,
+              help="""Used to specify the URL to a remote Element software image to which the node will be reset. """)
+@click.option('--force',
+              type=bool,
+              required=True,
+              help="""The force parameter must be included in order to successfully reset the node. """)
+@click.option('--option',
+              type=str,
+              required=False,
+              help="""Used to enter specifications for running the reset operation. """)
+@pass_context
+def resetnode(ctx,
+           build,
+           force,
+           option = None):
+    """Allows you to reset a node to the SolidFire factory settings. All data will be deleted from the node when you call this method. A node participating in a cluster cannot be reset."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+    
+
+    ctx.logger.info("""build = """+str(build)+""";"""+"""force = """+str(force)+""";"""+"""option = """+str(option)+""";"""+"")
+    try:
+        _ResetNodeResult = ctx.element.reset_node(build=build, force=force, option=option)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_ResetNodeResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
 @cli.command('networking', short_help="""The RestartNetworking API method is used to restart the networking services on a node.WARNING! This method restarts all networking services on a node, causing temporary loss of networking connectivity. Exercise caution when using this method. """)
 @click.option('--force',
               type=bool,
@@ -93,46 +133,6 @@ def networking(ctx,
         exit()
 
     cli_utils.print_result(_dict, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('resetnode', short_help="""Allows you to reset a node to the SolidFire factory settings. All data will be deleted from the node when you call this method. A node participating in a cluster cannot be reset. """)
-@click.option('--build',
-              type=str,
-              required=True,
-              help="""Used to specify the URL to a remote Element software image to which the node will be reset. """)
-@click.option('--force',
-              type=bool,
-              required=True,
-              help="""The force parameter must be included in order to successfully reset the node. """)
-@click.option('--option',
-              type=str,
-              required=True,
-              help="""Used to enter specifications for running the reset operation. """)
-@pass_context
-def resetnode(ctx,
-           build,
-           force,
-           option):
-    """Allows you to reset a node to the SolidFire factory settings. All data will be deleted from the node when you call this method. A node participating in a cluster cannot be reset."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-    
-
-    ctx.logger.info("""build = """+str(build)+""";"""+"""force = """+str(force)+""";"""+"""option = """+str(option)+""";"""+"")
-    try:
-        _ResetNodeResult = ctx.element.reset_node(build=build, force=force, option=option)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_ResetNodeResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
