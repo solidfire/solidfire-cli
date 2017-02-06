@@ -581,46 +581,6 @@ The ID of the volume access group to modify.
 List of volumes to remove from this volume access group. 
 
 ---------------------------------------------------------------
-#### modify ####
-Command:
-
-    sfcli VolumeAccessGroup modify <options>
-
-Description:
-
-Update initiators and add or remove volumes from a volume access group. A specified initiator or volume that duplicates an existing volume or initiator in a volume access group is left as-is. If a value is not specified for volumes or initiators, the current list of initiators and volumes are not changed.  Often, it is easier to use the convenience functions to modify initiators and volumes independently:  AddInitiatorsToVolumeAccessGroup RemoveInitiatorsFromVolumeAccessGroup AddVolumesToVolumeAccessGroup RemoveVolumesFromVolumeAccessGroup 
-
-Options:
-
---volumeaccessgroupid
-
-The ID of the volume access group to modify. 
-
---virtualnetworkid
-
-The ID of the SolidFire Virtual Network ID to associate the volume access group with. 
-
---virtualnetworktags
-
-The ID of the VLAN Virtual Network Tag to associate the volume access group with. 
-
---name
-
-Name of the volume access group. It is not required to be unique, but recommended. 
-
---initiators
-
-List of initiators to include in the volume access group. If unspecified, the access group's configured initiators will not be modified. 
-
---volumes
-
-List of volumes to initially include in the volume access group. If unspecified, the access group's volumes will not be modified. 
-
---attributes
-
-List of Name/Value pairs in JSON object format. 
-
----------------------------------------------------------------
 #### create ####
 Command:
 
@@ -695,6 +655,46 @@ The lowest VolumeAccessGroupID to return. This can be useful for paging. If unsp
 --limit
 
 The maximum number of results to return. This can be useful for paging. 
+
+---------------------------------------------------------------
+#### modify ####
+Command:
+
+    sfcli VolumeAccessGroup modify <options>
+
+Description:
+
+Update initiators and add or remove volumes from a volume access group. A specified initiator or volume that duplicates an existing volume or initiator in a volume access group is left as-is. If a value is not specified for volumes or initiators, the current list of initiators and volumes are not changed.  Often, it is easier to use the convenience functions to modify initiators and volumes independently:  AddInitiatorsToVolumeAccessGroup RemoveInitiatorsFromVolumeAccessGroup AddVolumesToVolumeAccessGroup RemoveVolumesFromVolumeAccessGroup 
+
+Options:
+
+--volumeaccessgroupid
+
+The ID of the volume access group to modify. 
+
+--virtualnetworkid
+
+The ID of the SolidFire Virtual Network ID to associate the volume access group with. 
+
+--virtualnetworktags
+
+The ID of the VLAN Virtual Network Tag to associate the volume access group with. 
+
+--name
+
+Name of the volume access group. It is not required to be unique, but recommended. 
+
+--initiators
+
+List of initiators to include in the volume access group. If unspecified, the access group's configured initiators will not be modified. 
+
+--volumes
+
+List of volumes to initially include in the volume access group. If unspecified, the access group's volumes will not be modified. 
+
+--attributes
+
+List of Name/Value pairs in JSON object format. 
 
 ---------------------------------------------------------------
 #### addinitiatorsto ####
@@ -851,6 +851,34 @@ Options:
 
 
 ---------------------------------------------------------------
+#### getbootstrapconfig ####
+Command:
+
+    sfcli Node getbootstrapconfig <options>
+
+Description:
+
+GetBootstrapConfig returns the cluster name and node name from the bootstrap configuration file. This API method should be performed on an individual node before it has been configured into a cluster. The resulting information from this method is used in the Cluster Configuration UI when the cluster is eventually created. 
+
+Options:
+
+---------------------------------------------------------------
+#### remove ####
+Command:
+
+    sfcli Node remove <options>
+
+Description:
+
+RemoveNodes is used to remove one or more nodes that should no longer participate in the cluster. Before removing a node, all drives it contains must first be removed with "RemoveDrives" method. A node cannot be removed until the RemoveDrives process has completed and all data has been migrated away from the node.  Once removed, a node registers itself as a pending node and can be added again, or shut down which removes it from the "Pending Node" list. 
+
+Options:
+
+--nodes
+
+List of NodeIDs for the nodes to be removed. 
+
+---------------------------------------------------------------
 #### listpendingactive ####
 Command:
 
@@ -859,18 +887,6 @@ Command:
 Description:
 
 ListPendingActiveNodes returns the list of nodes in the cluster that are currently in the PendingActive state, between the pending and active states. These are nodes that are currently being returned to the factory image. 
-
-Options:
-
----------------------------------------------------------------
-#### listall ####
-Command:
-
-    sfcli Node listall <options>
-
-Description:
-
-ListAllNodes enables you to retrieve a list of active and pending nodes in the cluster. 
 
 Options:
 
@@ -971,22 +987,6 @@ The GetConfig API method is used to retrieve all the configuration information f
 Options:
 
 ---------------------------------------------------------------
-#### remove ####
-Command:
-
-    sfcli Node remove <options>
-
-Description:
-
-RemoveNodes is used to remove one or more nodes that should no longer participate in the cluster. Before removing a node, all drives it contains must first be removed with "RemoveDrives" method. A node cannot be removed until the RemoveDrives process has completed and all data has been migrated away from the node.  Once removed, a node registers itself as a pending node and can be added again, or shut down which removes it from the "Pending Node" list. 
-
-Options:
-
---nodes
-
-List of NodeIDs for the nodes to be removed. 
-
----------------------------------------------------------------
 #### listactive ####
 Command:
 
@@ -999,14 +999,14 @@ ListActiveNodes returns the list of currently active nodes that are in the clust
 Options:
 
 ---------------------------------------------------------------
-#### getbootstrapconfig ####
+#### listall ####
 Command:
 
-    sfcli Node getbootstrapconfig <options>
+    sfcli Node listall <options>
 
 Description:
 
-GetBootstrapConfig returns the cluster name and node name from the bootstrap configuration file. This API method should be performed on an individual node before it has been configured into a cluster. The resulting information from this method is used in the Cluster Configuration UI when the cluster is eventually created. 
+ListAllNodes enables you to retrieve a list of active and pending nodes in the cluster. 
 
 Options:
 
@@ -2699,20 +2699,20 @@ Options:
 
 
 ---------------------------------------------------------------
-#### enablefeature ####
+#### getfeaturestatus ####
 Command:
 
-    sfcli VirtualVolume enablefeature <options>
+    sfcli VirtualVolume getfeaturestatus <options>
 
 Description:
 
-EnableFeature allows you to enable cluster features that are disabled by default. 
+GetFeatureStatus allows you to retrieve the status of a cluster feature. 
 
 Options:
 
 --feature
 
-Valid values: vvols: Enable the Virtual Volumes (VVOLs) cluster feature. 
+Valid values: vvols: Find the status of the Virtual Volumes (VVOLs) cluster feature. 
 
 ---------------------------------------------------------------
 #### list ####
@@ -2775,20 +2775,20 @@ Enables retrieval of the number of virtual volumes currently in the system.
 Options:
 
 ---------------------------------------------------------------
-#### getfeaturestatus ####
+#### enablefeature ####
 Command:
 
-    sfcli VirtualVolume getfeaturestatus <options>
+    sfcli VirtualVolume enablefeature <options>
 
 Description:
 
-GetFeatureStatus allows you to retrieve the status of a cluster feature. 
+EnableFeature allows you to enable cluster features that are disabled by default. 
 
 Options:
 
 --feature
 
-Valid values: vvols: Find the status of the Virtual Volumes (VVOLs) cluster feature. 
+Valid values: vvols: Enable the Virtual Volumes (VVOLs) cluster feature. 
 
 
 Hardware Commands 
@@ -2875,14 +2875,14 @@ Retrieves the current version of the API and a list of all supported versions.
 Options:
 
 ---------------------------------------------------------------
-#### disablesnmp ####
+#### getconfig ####
 Command:
 
-    sfcli Cluster disablesnmp <options>
+    sfcli Cluster getconfig <options>
 
 Description:
 
-DisableSnmp is used to disable SNMP on the cluster nodes. 
+The GetClusterConfig API method is used to return information about the cluster configuration this node uses to communicate with the cluster it is a part of.  Note: This method is available only through the per-node API endpoint 5.0 or later. 
 
 Options:
 
@@ -2911,14 +2911,14 @@ GetSnmpInfo is used to return the current simple network management protocol (SN
 Options:
 
 ---------------------------------------------------------------
-#### getconfig ####
+#### disablesnmp ####
 Command:
 
-    sfcli Cluster getconfig <options>
+    sfcli Cluster disablesnmp <options>
 
 Description:
 
-The GetClusterConfig API method is used to return information about the cluster configuration this node uses to communicate with the cluster it is a part of.  Note: This method is available only through the per-node API endpoint 5.0 or later. 
+DisableSnmp is used to disable SNMP on the cluster nodes. 
 
 Options:
 
@@ -3207,16 +3207,20 @@ Identifies the end of a range of events to return.
 
 
 ---------------------------------------------------------------
-#### snmpsendtesttraps ####
+#### clearfaults ####
 Command:
 
-    sfcli Cluster snmpsendtesttraps <options>
+    sfcli Cluster clearfaults <options>
 
 Description:
 
-SnmpSendTestTraps enables you to test SNMP functionality for a cluster. This method instructs the cluster to send test SNMP traps to the currently configured SNMP manager. 
+ClearClusterFaults is used to clear information about both current faults that are resolved as well as faults that were previously detected and resolved can be cleared. 
 
 Options:
+
+--faulttypes
+
+Determines the types of faults cleared: current: Faults that are currently detected and have not been resolved. resolved: Faults that were previously detected and resolved. all: Both current and resolved faults are cleared. The fault status can be determined by the "resolved" field of the fault object. 
 
 ---------------------------------------------------------------
 #### removeadmin ####
@@ -3331,14 +3335,14 @@ GetNtpInfo is used to return the current network time protocol (NTP) configurati
 Options:
 
 ---------------------------------------------------------------
-#### enableencryptionatrest ####
+#### listsyncjobs ####
 Command:
 
-    sfcli Cluster enableencryptionatrest <options>
+    sfcli Cluster listsyncjobs <options>
 
 Description:
 
-The EnableEncryptionAtRest method is used to enable the Advanced Encryption Standard (AES) 256-bit encryption at rest on the cluster so that the cluster can manage the encryption key used for the drives on each node. This feature is not enabled by default. Enabling this operation allows the cluster to automatically manage encryption keys internally for the drives on each node in the cluster. Nodes do not store the keys to unlock drives and the keys are never passed over the network. Two nodes participating in a cluster are required to access the key to disable encryption on a drive. The encryption management does not affect performance or efficiency on the cluster. If an encryption-enabled drive or node is removed from the cluster with the API, all data is secure erased and any data left on the drive cannot be read or accessed. Enabling or disabling encryption should be performed when the cluster is running and in a healthy state. Encryption can be enabled or disabled at your discretion and can be performed as often as you need. Note: This process is asynchronous and returns a response before encryption is enabled. The GetClusterInfo method can be used to poll the system to see when the process has completed. 
+ListSyncJobs is used to return information about synchronization jobs that are running on a SolidFire cluster. Synchronization jobs that are returned with this method are, "slice," "clone" and "remote." 
 
 Options:
 
@@ -3375,20 +3379,16 @@ List of networks and what type of access they have to the SNMP servers running o
 List of users and the type of access they have to the SNMP servers running on the cluster nodes. REQUIRED if SNMP v3 is enabled. 
 
 ---------------------------------------------------------------
-#### clearfaults ####
+#### snmpsendtesttraps ####
 Command:
 
-    sfcli Cluster clearfaults <options>
+    sfcli Cluster snmpsendtesttraps <options>
 
 Description:
 
-ClearClusterFaults is used to clear information about both current faults that are resolved as well as faults that were previously detected and resolved can be cleared. 
+SnmpSendTestTraps enables you to test SNMP functionality for a cluster. This method instructs the cluster to send test SNMP traps to the currently configured SNMP manager. 
 
 Options:
-
---faulttypes
-
-Determines the types of faults cleared: current: Faults that are currently detected and have not been resolved. resolved: Faults that were previously detected and resolved. all: Both current and resolved faults are cleared. The fault status can be determined by the "resolved" field of the fault object. 
 
 ---------------------------------------------------------------
 #### getsnmpacl ####
@@ -3499,14 +3499,14 @@ GetClusterFullThreshold is used to view the stages set for cluster fullness leve
 Options:
 
 ---------------------------------------------------------------
-#### listsyncjobs ####
+#### enableencryptionatrest ####
 Command:
 
-    sfcli Cluster listsyncjobs <options>
+    sfcli Cluster enableencryptionatrest <options>
 
 Description:
 
-ListSyncJobs is used to return information about synchronization jobs that are running on a SolidFire cluster. Synchronization jobs that are returned with this method are, "slice," "clone" and "remote." 
+The EnableEncryptionAtRest method is used to enable the Advanced Encryption Standard (AES) 256-bit encryption at rest on the cluster so that the cluster can manage the encryption key used for the drives on each node. This feature is not enabled by default. Enabling this operation allows the cluster to automatically manage encryption keys internally for the drives on each node in the cluster. Nodes do not store the keys to unlock drives and the keys are never passed over the network. Two nodes participating in a cluster are required to access the key to disable encryption on a drive. The encryption management does not affect performance or efficiency on the cluster. If an encryption-enabled drive or node is removed from the cluster with the API, all data is secure erased and any data left on the drive cannot be read or accessed. Enabling or disabling encryption should be performed when the cluster is running and in a healthy state. Encryption can be enabled or disabled at your discretion and can be performed as often as you need. Note: This process is asynchronous and returns a response before encryption is enabled. The GetClusterInfo method can be used to poll the system to see when the process has completed. 
 
 Options:
 
@@ -3651,42 +3651,6 @@ The GetLdapConfiguration is used to get the LDAP configuration currently active 
 Options:
 
 ---------------------------------------------------------------
-#### testauthentication ####
-Command:
-
-    sfcli LDAP testauthentication <options>
-
-Description:
-
-The TestLdapAuthentication is used to verify the currently enabled LDAP authentication configuration settings are correct. If the configuration settings are correct, the API call returns a list of the groups the tested user is a member of. 
-
-Options:
-
---username
-
-The username to be tested. 
-
---password
-
-The password for the username to be tester. 
-
---ldapconfiguration
-
-An ldapConfiguration object to be tested. If this parameter is provided, the API call will test the provided configuration even if LDAP authentication is currently disabled. 
-
----------------------------------------------------------------
-#### disableauthentication ####
-Command:
-
-    sfcli LDAP disableauthentication <options>
-
-Description:
-
-The DisableLdapAuthentication method is used disable LDAP authentication and remove all LDAP configuration settings. This call will not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no longer be able to log in. 
-
-Options:
-
----------------------------------------------------------------
 #### enableauthentication ####
 Command:
 
@@ -3737,6 +3701,42 @@ REQUIRED for SearchAndBind The base DN of the tree used to start the search (wil
 --usersearchfilter
 
 REQUIRED for SearchAndBind. The LDAP filter to use. The string should have the placeholder text "%USERNAME%" which will be replaced with the username of the authenticating user. Example: (&(objectClass=person) (sAMAccountName=%USERNAME%)) will use the sAMAccountName field in Active Directory to match the nusername entered at cluster login. 
+
+---------------------------------------------------------------
+#### disableauthentication ####
+Command:
+
+    sfcli LDAP disableauthentication <options>
+
+Description:
+
+The DisableLdapAuthentication method is used disable LDAP authentication and remove all LDAP configuration settings. This call will not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no longer be able to log in. 
+
+Options:
+
+---------------------------------------------------------------
+#### testauthentication ####
+Command:
+
+    sfcli LDAP testauthentication <options>
+
+Description:
+
+The TestLdapAuthentication is used to verify the currently enabled LDAP authentication configuration settings are correct. If the configuration settings are correct, the API call returns a list of the groups the tested user is a member of. 
+
+Options:
+
+--username
+
+The username to be tested. 
+
+--password
+
+The password for the username to be tester. 
+
+--ldapconfiguration
+
+An ldapConfiguration object to be tested. If this parameter is provided, the API call will test the provided configuration even if LDAP authentication is currently disabled. 
 
 
 BackupTarget Commands 
