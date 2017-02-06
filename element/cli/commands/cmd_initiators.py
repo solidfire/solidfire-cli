@@ -46,8 +46,11 @@ def modify(ctx,
             kwargsDict = simplejson.loads(initiators)
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1) 
-        initiators = [ModifyInitiator(**argsOfInterest) for argsOfInterest in kwargsDict]
+            exit(1)
+        try:
+            initiators = [ModifyInitiator(**argsOfInterest) for argsOfInterest in kwargsDict]
+        except:
+            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""initiators = """+str(initiators)+""";"""+"")
@@ -84,8 +87,11 @@ def create(ctx,
             kwargsDict = simplejson.loads(initiators)
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1) 
-        initiators = [CreateInitiator(**argsOfInterest) for argsOfInterest in kwargsDict]
+            exit(1)
+        try:
+            initiators = [CreateInitiator(**argsOfInterest) for argsOfInterest in kwargsDict]
+        except:
+            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""initiators = """+str(initiators)+""";"""+"")
