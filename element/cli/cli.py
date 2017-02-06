@@ -167,6 +167,10 @@ def cli(ctx,
     ctx.logger = LOG
     ctx.verbose = verbose
 
+    # Verify that the mvip does not contain the port number:
+    if mvip and ":" in mvip:
+        ctx.logger.error('Please provide the port using the port parameter.')
+        exit(1)
 
     cfg = None
     # Arguments take precedence regardless of env settings

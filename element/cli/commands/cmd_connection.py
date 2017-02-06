@@ -47,6 +47,11 @@ def cli(ctx):
 def push(ctx, mvip, username, password, version, port, name):
     # First, attempt to establish the connection. If that's not possible,
     # throw the error.
+
+    # Verify that the mvip does not contain the port number:
+    if mvip and ":" in mvip:
+        ctx.logger.error('Please provide the port using the port parameter.')
+        exit(1)
     try:
         ctx.element = ElementFactory.create(target=mvip,username=username,password=password,version=version,port=port,verify_ssl=ctx.verifyssl)
     except Exception as e:
