@@ -3852,7 +3852,7 @@ sfcli --mvip 10.117.61.44 -k --username admin --password admin Volume CloneMulti
         \"bond10_g\": {
             \"_default\": true/false,
             \"bond_master\": \"string\"        [Required],
-            \"virtual_network_tag\": \"string\"        [Required],
+            \"virtual_network_tag\": \"string\",
             \"address\": \"string\",
             \"auto\": true/false,
             \"bond_downdelay\": \"string\",
@@ -3895,7 +3895,7 @@ sfcli --mvip 10.117.61.44 -k --username admin --password admin Volume CloneMulti
         \"bond1_g\": {
             \"_default\": true/false,
             \"bond_master\": \"string\"        [Required],
-            \"virtual_network_tag\": \"string\"        [Required],
+            \"virtual_network_tag\": \"string\",
             \"address\": \"string\",
             \"auto\": true/false,
             \"bond_downdelay\": \"string\",
@@ -3938,7 +3938,7 @@ sfcli --mvip 10.117.61.44 -k --username admin --password admin Volume CloneMulti
         \"eth0\": {
             \"_default\": true/false,
             \"bond_master\": \"string\"        [Required],
-            \"virtual_network_tag\": \"string\"        [Required],
+            \"virtual_network_tag\": \"string\",
             \"address\": \"string\",
             \"auto\": true/false,
             \"bond_downdelay\": \"string\",
@@ -3981,7 +3981,7 @@ sfcli --mvip 10.117.61.44 -k --username admin --password admin Volume CloneMulti
         \"eth1\": {
             \"_default\": true/false,
             \"bond_master\": \"string\"        [Required],
-            \"virtual_network_tag\": \"string\"        [Required],
+            \"virtual_network_tag\": \"string\",
             \"address\": \"string\",
             \"auto\": true/false,
             \"bond_downdelay\": \"string\",
@@ -4024,7 +4024,7 @@ sfcli --mvip 10.117.61.44 -k --username admin --password admin Volume CloneMulti
         \"eth2\": {
             \"_default\": true/false,
             \"bond_master\": \"string\"        [Required],
-            \"virtual_network_tag\": \"string\"        [Required],
+            \"virtual_network_tag\": \"string\",
             \"address\": \"string\",
             \"auto\": true/false,
             \"bond_downdelay\": \"string\",
@@ -4067,7 +4067,7 @@ sfcli --mvip 10.117.61.44 -k --username admin --password admin Volume CloneMulti
         \"eth3\": {
             \"_default\": true/false,
             \"bond_master\": \"string\"        [Required],
-            \"virtual_network_tag\": \"string\"        [Required],
+            \"virtual_network_tag\": \"string\",
             \"address\": \"string\",
             \"auto\": true/false,
             \"bond_downdelay\": \"string\",
@@ -4110,7 +4110,7 @@ sfcli --mvip 10.117.61.44 -k --username admin --password admin Volume CloneMulti
         \"lo\": {
             \"_default\": true/false,
             \"bond_master\": \"string\"        [Required],
-            \"virtual_network_tag\": \"string\"        [Required],
+            \"virtual_network_tag\": \"string\",
             \"address\": \"string\",
             \"auto\": true/false,
             \"bond_downdelay\": \"string\",

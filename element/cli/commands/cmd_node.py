@@ -50,7 +50,7 @@ def setnetworkconfig(ctx,
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1) 
-        network = Network(**kwargsDict)
+        network = NetworkParams(**kwargsDict)
     
 
     ctx.logger.info("""network = """+str(network)+""";"""+"")
