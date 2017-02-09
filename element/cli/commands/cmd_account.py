@@ -298,20 +298,31 @@ def add(ctx,
               required=True,
               help="""Specifies the account for which details are gathered. """,
               cls=SolidFireOption,
-              subparameters=["sub"],
+              subparameters=["sub", "sub2"],
               multiple=True)
 @click.option('--sub',
               required=False,
               multiple=True,
-              default=None)
+              default=None,
+              is_sub_parameter=True,
+              cls=SolidFireOption
+              )
+@click.option('--sub2',
+              required=False,
+              multiple=True,
+              default=None,
+              is_sub_parameter=True,
+              cls=SolidFireOption)
 @pass_context
 def getbyid(ctx,
            accountid,
             accountid2,
-            sub):
+            sub,
+            sub2):
     print("PARAMETERS")
     print(accountid2)
     print(sub)
+    print(sub2)
     """Returns details about an account, given its AccountID."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
