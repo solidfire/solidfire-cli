@@ -19,14 +19,14 @@ from solidfire.custom.models import *
 from uuid import UUID
 from element import exceptions
 from solidfire import common
-
+from element.cli.cli import SolidFireOption, SolidFireCommand
 
 @click.group()
 @pass_context
 def cli(ctx):
     """list ping connectmvip listutilities connectensemble connectsvip """
 
-@cli.command('list', short_help="""The ListTests API method is used to return the tests that are available to run on a node. Note: This method is available only through the per-node API endpoint 5.0 or later. """)
+@cli.command('list', short_help="""The ListTests API method is used to return the tests that are available to run on a node. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
 @pass_context
 def list(ctx):
     """The ListTests API method is used to return the tests that are available to run on a node."""
@@ -52,7 +52,7 @@ def list(ctx):
 
 
 
-@cli.command('ping', short_help="""The TestPing API method is used to validate the connection to all nodes in the cluster on both 1G and 10G interfaces using ICMP packets. The test uses the appropriate MTU sizes for each packet based on the MTU settings in the network configuration. Note: This method is available only through the per-node API endpoint 5.0 or later. """)
+@cli.command('ping', short_help="""The TestPing API method is used to validate the connection to all nodes in the cluster on both 1G and 10G interfaces using ICMP packets. The test uses the appropriate MTU sizes for each packet based on the MTU settings in the network configuration. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
 @click.option('--attempts',
               type=int,
               required=False,
@@ -103,7 +103,7 @@ def ping(ctx,
 
 
 
-@cli.command('connectmvip', short_help="""The TestConnectMvip API method is used to test the management connection to the cluster. The test pings the MVIP and executes a simple API method to verify connectivity. Note: This method is available only through the per-node API endpoint 5.0 or later. """)
+@cli.command('connectmvip', short_help="""The TestConnectMvip API method is used to test the management connection to the cluster. The test pings the MVIP and executes a simple API method to verify connectivity. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
 @click.option('--mvip',
               type=str,
               required=False,
@@ -134,7 +134,7 @@ def connectmvip(ctx,
 
 
 
-@cli.command('listutilities', short_help="""The ListUtilities API method is used to return the tests that are available to run on a node. Note: This method is available only through the per-node API endpoint 5.0 or later. """)
+@cli.command('listutilities', short_help="""The ListUtilities API method is used to return the tests that are available to run on a node. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
 @pass_context
 def listutilities(ctx):
     """The ListUtilities API method is used to return the tests that are available to run on a node."""
@@ -160,7 +160,7 @@ def listutilities(ctx):
 
 
 
-@cli.command('connectensemble', short_help="""The TestConnectEnsemble API method is used to verify connectivity with a sepcified database ensemble. By default it uses the ensemble for the cluster the node is associated with. Alternatively you can provide a different ensemble to test connectivity with. Note: This method is available only through the per-node API endpoint 5.0 or later. """)
+@cli.command('connectensemble', short_help="""The TestConnectEnsemble API method is used to verify connectivity with a sepcified database ensemble. By default it uses the ensemble for the cluster the node is associated with. Alternatively you can provide a different ensemble to test connectivity with. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
 @click.option('--ensemble',
               type=str,
               required=False,
@@ -191,7 +191,7 @@ def connectensemble(ctx,
 
 
 
-@cli.command('connectsvip', short_help="""The TestConnectSvip API method is used to test the storage connection to the cluster. The test pings the SVIP using ICMP packets and when successful connects as an iSCSI initiator. Note: This method is available only through the per-node API endpoint 5.0 or later. """)
+@cli.command('connectsvip', short_help="""The TestConnectSvip API method is used to test the storage connection to the cluster. The test pings the SVIP using ICMP packets and when successful connects as an iSCSI initiator. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
 @click.option('--svip',
               type=str,
               required=False,

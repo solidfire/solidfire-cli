@@ -19,14 +19,14 @@ from solidfire.custom.models import *
 from uuid import UUID
 from element import exceptions
 from solidfire import common
-
+from element.cli.cli import SolidFireOption, SolidFireCommand
 
 @click.group()
 @pass_context
 def cli(ctx):
     """modify add list remove """
 
-@cli.command('modify', short_help="""ModifyVirtualNetwork is used to change various attributes of a VirtualNetwork object. This method can be used to add or remove address blocks, change the netmask IP, or modify the name or description of the virtual network.  Note: This method requires either the VirtualNetworkID or the VirtualNetworkTag as a parameter, but not both. """)
+@cli.command('modify', short_help="""ModifyVirtualNetwork is used to change various attributes of a VirtualNetwork object. This method can be used to add or remove address blocks, change the netmask IP, or modify the name or description of the virtual network.  Note: This method requires either the VirtualNetworkID or the VirtualNetworkTag as a parameter, but not both. """, cls=SolidFireCommand)
 @click.option('--virtualnetworkid',
               type=int,
               required=False,
@@ -40,9 +40,28 @@ def cli(ctx):
               required=False,
               help="""New name for the virtual network. """)
 @click.option('--addressblocks',
-              type=str,
+              cls=SolidFireOption,
+              is_flag=True,
+              multiple=True,
+              subparameters=["_start", "_size", ],
               required=False,
               help="""Provide in json format: New addressBlock to set for this Virtual Network object. This may contain new address blocks to add to the existing object or it may omit unused address blocks that need to be removed. Alternatively, existing address blocks may be extended or reduced in size. The size of the starting addressBlocks for a Virtual Network object can only be increased, and can never be decreased. Attributes for this parameter are: start: start of the IP address range. (String) size: numbre of IP addresses to include in the block. (Integer) """)
+@click.option('--_start',
+              required=False,
+              multiple=True,
+              type=str,
+              default=None,
+              is_sub_parameter=True,
+              help="""Start of the IP address range. """,
+              cls=SolidFireOption)
+@click.option('--_size',
+              required=False,
+              multiple=True,
+              type=int,
+              default=None,
+              is_sub_parameter=True,
+              help="""Number of IP addresses to include in the block. """,
+              cls=SolidFireOption)
 @click.option('--netmask',
               type=str,
               required=False,
@@ -60,7 +79,10 @@ def cli(ctx):
               required=False,
               help=""" """)
 @click.option('--attributes',
-              type=str,
+              cls=SolidFireOption,
+              is_flag=True,
+              multiple=True,
+              subparameters=[],
               required=False,
               help="""Provide in json format: A new list of Name/Value pairs in JSON object format. """)
 @pass_context
@@ -69,6 +91,8 @@ def modify(ctx,
            virtualnetworktag = None,
            name = None,
            addressblocks = None,
+           _start = None,
+           _size = None,
            netmask = None,
            svip = None,
            gateway = None,
@@ -82,31 +106,26 @@ def modify(ctx,
          exit()
 
 
+    addressblocksArray = []
     if(addressblocks is not None):
         try:
-            kwargsDict = cli_utils.loads(addressblocks)
+            for i, _addressblocks in enumerate(addressblocks):
+                addressblocksArray.append(AddressBlock(start=_start[i], size=_size[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
-        try:
-            addressblocks = [AddressBlock(**argsOfInterest) for argsOfInterest in kwargsDict]
-        except:
-            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
+    attributesArray = []
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
-        try:
-            attributes = dict(**kwargsDict)
-        except:
-            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""virtualnetworkid = """+str(virtualnetworkid)+""";"""+"""virtualnetworktag = """+str(virtualnetworktag)+""";"""+"""name = """+str(name)+""";"""+"""addressblocks = """+str(addressblocks)+""";"""+"""netmask = """+str(netmask)+""";"""+"""svip = """+str(svip)+""";"""+"""gateway = """+str(gateway)+""";"""+"""namespace = """+str(namespace)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _AddVirtualNetworkResult = ctx.element.modify_virtual_network(virtual_network_id=virtualnetworkid, virtual_network_tag=virtualnetworktag, name=name, address_blocks=addressblocks, netmask=netmask, svip=svip, gateway=gateway, namespace=namespace, attributes=attributes)
+        _AddVirtualNetworkResult = ctx.element.modify_virtual_network(virtual_network_id=virtualnetworkid, virtual_network_tag=virtualnetworktag, name=name, address_blocks=addressblocksArray, netmask=netmask, svip=svip, gateway=gateway, namespace=namespace, attributes=attributesArray)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -118,7 +137,7 @@ def modify(ctx,
 
 
 
-@cli.command('add', short_help="""AddVirtualNetwork is used to add a new virtual network to a cluster configuration. When a virtual network is added, an interface for each node is created and each will require a virtual network IP address. The number of IP addresses specified as a parameter for this API method must be equal to or greater than the number of nodes in the cluster. Virtual network addresses are bulk provisioned by SolidFire and assigned to individual nodes automatically. Virtual network addresses do not need to be assigned to nodes manually.  Note: The AddVirtualNetwork method is used only to create a new virtual network. If you want to make changes to a virtual network, please use the ModifyVirtualNetwork method. """)
+@cli.command('add', short_help="""AddVirtualNetwork is used to add a new virtual network to a cluster configuration. When a virtual network is added, an interface for each node is created and each will require a virtual network IP address. The number of IP addresses specified as a parameter for this API method must be equal to or greater than the number of nodes in the cluster. Virtual network addresses are bulk provisioned by SolidFire and assigned to individual nodes automatically. Virtual network addresses do not need to be assigned to nodes manually.  Note: The AddVirtualNetwork method is used only to create a new virtual network. If you want to make changes to a virtual network, please use the ModifyVirtualNetwork method. """, cls=SolidFireCommand)
 @click.option('--virtualnetworktag',
               type=int,
               required=True,
@@ -128,9 +147,28 @@ def modify(ctx,
               required=True,
               help="""User defined name for the new virtual network. """)
 @click.option('--addressblocks',
-              type=str,
+              cls=SolidFireOption,
+              is_flag=True,
+              multiple=True,
+              subparameters=["_start", "_size", ],
               required=True,
               help="""Provide in json format: Unique Range of IP addresses to include in the virtual network. Attributes for this parameter are: start: start of the IP address range. (String) size: numbre of IP addresses to include in the block. (Integer) """)
+@click.option('--_start',
+              required=True,
+              multiple=True,
+              type=str,
+              default=None,
+              is_sub_parameter=True,
+              help="""Start of the IP address range. """,
+              cls=SolidFireOption)
+@click.option('--_size',
+              required=True,
+              multiple=True,
+              type=int,
+              default=None,
+              is_sub_parameter=True,
+              help="""Number of IP addresses to include in the block. """,
+              cls=SolidFireOption)
 @click.option('--netmask',
               type=str,
               required=True,
@@ -148,7 +186,10 @@ def modify(ctx,
               required=False,
               help=""" """)
 @click.option('--attributes',
-              type=str,
+              cls=SolidFireOption,
+              is_flag=True,
+              multiple=True,
+              subparameters=[],
               required=False,
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
@@ -158,6 +199,8 @@ def add(ctx,
            addressblocks,
            netmask,
            svip,
+           _start,
+           _size,
            gateway = None,
            namespace = None,
            attributes = None):
@@ -169,31 +212,26 @@ def add(ctx,
          exit()
 
 
+    addressblocksArray = []
     if(addressblocks is not None):
         try:
-            kwargsDict = cli_utils.loads(addressblocks)
+            for i, _addressblocks in enumerate(addressblocks):
+                addressblocksArray.append(AddressBlock(start=_start[i], size=_size[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
-        try:
-            addressblocks = [AddressBlock(**argsOfInterest) for argsOfInterest in kwargsDict]
-        except:
-            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
+    attributesArray = []
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
-        try:
-            attributes = dict(**kwargsDict)
-        except:
-            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""virtualnetworktag = """+str(virtualnetworktag)+""";"""+"""name = """+str(name)+""";"""+"""addressblocks = """+str(addressblocks)+""";"""+"""netmask = """+str(netmask)+""";"""+"""svip = """+str(svip)+""";"""+"""gateway = """+str(gateway)+""";"""+"""namespace = """+str(namespace)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _AddVirtualNetworkResult = ctx.element.add_virtual_network(virtual_network_tag=virtualnetworktag, name=name, address_blocks=addressblocks, netmask=netmask, svip=svip, gateway=gateway, namespace=namespace, attributes=attributes)
+        _AddVirtualNetworkResult = ctx.element.add_virtual_network(virtual_network_tag=virtualnetworktag, name=name, address_blocks=addressblocks, netmask=netmask, svip=svipArray, gateway=gateway, namespace=namespace, attributes=attributesArray)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -205,7 +243,7 @@ def add(ctx,
 
 
 
-@cli.command('list', short_help="""ListVirtualNetworks is used to get a list of all the configured virtual networks for the cluster. This method can be used to verify the virtual network settings in the cluster.  This method does not require any parameters to be passed. But, one or more VirtualNetworkIDs or VirtualNetworkTags can be passed in order to filter the results. """)
+@cli.command('list', short_help="""ListVirtualNetworks is used to get a list of all the configured virtual networks for the cluster. This method can be used to verify the virtual network settings in the cluster.  This method does not require any parameters to be passed. But, one or more VirtualNetworkIDs or VirtualNetworkTags can be passed in order to filter the results. """, cls=SolidFireCommand)
 @click.option('--virtualnetworkid',
               type=int,
               required=False,
@@ -256,7 +294,7 @@ def list(ctx,
 
 
 
-@cli.command('remove', short_help="""RemoveVirtualNetwork is used to remove a previously added virtual network.  Note: This method requires either the VirtualNetworkID of the VirtualNetworkTag as a parameter, but not both. """)
+@cli.command('remove', short_help="""RemoveVirtualNetwork is used to remove a previously added virtual network.  Note: This method requires either the VirtualNetworkID of the VirtualNetworkTag as a parameter, but not both. """, cls=SolidFireCommand)
 @click.option('--virtualnetworkid',
               type=int,
               required=False,

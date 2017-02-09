@@ -19,14 +19,14 @@ from solidfire.custom.models import *
 from uuid import UUID
 from element import exceptions
 from solidfire import common
-
+from element.cli.cli import SolidFireOption, SolidFireCommand
 
 @click.group()
 @pass_context
 def cli(ctx):
     """listhosts listtasks enablefeature list listbindings getcount getfeaturestatus """
 
-@cli.command('listhosts', short_help="""ListVirtualVolumeHosts returns a list of known ESX hosts. """)
+@cli.command('listhosts', short_help="""ListVirtualVolumeHosts returns a list of known ESX hosts. """, cls=SolidFireCommand)
 @click.option('--virtualvolumehostids',
               type=str,
               required=False,
@@ -58,7 +58,7 @@ def listhosts(ctx,
 
 
 
-@cli.command('listtasks', short_help="""ListVirtualVolumeTasks returns a list of VVol Async Tasks. """)
+@cli.command('listtasks', short_help="""ListVirtualVolumeTasks returns a list of VVol Async Tasks. """, cls=SolidFireCommand)
 @click.option('--virtualvolumetaskids',
               type=str,
               required=False,
@@ -90,7 +90,7 @@ def listtasks(ctx,
 
 
 
-@cli.command('enablefeature', short_help="""EnableFeature allows you to enable cluster features that are disabled by default. """)
+@cli.command('enablefeature', short_help="""EnableFeature allows you to enable cluster features that are disabled by default. """, cls=SolidFireCommand)
 @click.option('--feature',
               type=str,
               required=True,
@@ -120,7 +120,7 @@ def enablefeature(ctx,
 
 
 
-@cli.command('list', short_help="""ListVirtualVolumes enables you to list the virtual volumes currently in the system. You can use this method to list all virtual volumes, or only list a subset. """)
+@cli.command('list', short_help="""ListVirtualVolumes enables you to list the virtual volumes currently in the system. You can use this method to list all virtual volumes, or only list a subset. """, cls=SolidFireCommand)
 @click.option('--details',
               type=bool,
               required=False,
@@ -172,7 +172,7 @@ def list(ctx,
 
 
 
-@cli.command('listbindings', short_help="""ListVirtualVolumeBindings returns a list of VVol bindings. """)
+@cli.command('listbindings', short_help="""ListVirtualVolumeBindings returns a list of VVol bindings. """, cls=SolidFireCommand)
 @click.option('--virtualvolumebindingids',
               type=str,
               required=False,
@@ -204,7 +204,7 @@ def listbindings(ctx,
 
 
 
-@cli.command('getcount', short_help="""Enables retrieval of the number of virtual volumes currently in the system. """)
+@cli.command('getcount', short_help="""Enables retrieval of the number of virtual volumes currently in the system. """, cls=SolidFireCommand)
 @pass_context
 def getcount(ctx):
     """Enables retrieval of the number of virtual volumes currently in the system."""
@@ -229,7 +229,7 @@ def getcount(ctx):
 
 
 
-@cli.command('getfeaturestatus', short_help="""GetFeatureStatus allows you to retrieve the status of a cluster feature. """)
+@cli.command('getfeaturestatus', short_help="""GetFeatureStatus allows you to retrieve the status of a cluster feature. """, cls=SolidFireCommand)
 @click.option('--feature',
               type=str,
               required=False,

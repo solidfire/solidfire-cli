@@ -19,14 +19,14 @@ from solidfire.custom.models import *
 from uuid import UUID
 from element import exceptions
 from solidfire import common
-
+from element.cli.cli import SolidFireOption, SolidFireCommand
 
 @click.group()
 @pass_context
 def cli(ctx):
     """modifystoragecontainer list getstoragecontainerefficiency createstoragecontainer delete """
 
-@cli.command('modifystoragecontainer', short_help="""Modifies an existing storage container. """)
+@cli.command('modifystoragecontainer', short_help="""Modifies an existing storage container. """, cls=SolidFireCommand)
 @click.option('--storagecontainerid',
               type=str,
               required=True,
@@ -66,7 +66,7 @@ def modifystoragecontainer(ctx,
 
 
 
-@cli.command('list', short_help="""Gets information for all storage containers currently in the system. """)
+@cli.command('list', short_help="""Gets information for all storage containers currently in the system. """, cls=SolidFireCommand)
 @click.option('--storagecontainerids',
               type=str,
               required=False,
@@ -98,7 +98,7 @@ def list(ctx,
 
 
 
-@cli.command('getstoragecontainerefficiency', short_help="""GetStorageContainerEfficiency enables you to retrieve efficiency information about a virtual volume storage container. """)
+@cli.command('getstoragecontainerefficiency', short_help="""GetStorageContainerEfficiency enables you to retrieve efficiency information about a virtual volume storage container. """, cls=SolidFireCommand)
 @click.option('--storagecontainerid',
               type=str,
               required=True,
@@ -128,7 +128,7 @@ def getstoragecontainerefficiency(ctx,
 
 
 
-@cli.command('createstoragecontainer', short_help="""Creates a new VVols storage container. """)
+@cli.command('createstoragecontainer', short_help="""Creates a new VVols storage container. """, cls=SolidFireCommand)
 @click.option('--name',
               type=str,
               required=True,
@@ -168,7 +168,7 @@ def createstoragecontainer(ctx,
 
 
 
-@cli.command('delete', short_help="""Deletes a storage container from the system. """)
+@cli.command('delete', short_help="""Deletes a storage container from the system. """, cls=SolidFireCommand)
 @click.option('--storagecontainerids',
               type=str,
               required=True,

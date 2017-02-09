@@ -19,20 +19,23 @@ from solidfire.custom.models import *
 from uuid import UUID
 from element import exceptions
 from solidfire import common
-
+from element.cli.cli import SolidFireOption, SolidFireCommand
 
 @click.group()
 @pass_context
 def cli(ctx):
     """invoke """
 
-@cli.command('invoke', short_help="""This will invoke any API method supported by the SolidFire API for the version and port the connection is using. Returns a nested hashtable of key/value pairs that contain the result of the invoked method. """)
+@cli.command('invoke', short_help="""This will invoke any API method supported by the SolidFire API for the version and port the connection is using. Returns a nested hashtable of key/value pairs that contain the result of the invoked method. """, cls=SolidFireCommand)
 @click.option('--method',
               type=str,
               required=True,
               help="""The name of the method to invoke. This is case sensitive. """)
 @click.option('--parameters',
-              type=str,
+              cls=SolidFireOption,
+              is_flag=True,
+              multiple=True,
+              subparameters=[],
               required=False,
               help="""Provide in json format: An object, normally a dictionary or hashtable of the key/value pairs, to be passed as the params for the method being invoked. """)
 @pass_context
@@ -46,21 +49,18 @@ def invoke(ctx,
          exit()
 
 
+    parametersArray = []
     if(parameters is not None):
         try:
             kwargsDict = simplejson.loads(parameters)
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
-        try:
-            parameters = dict(**kwargsDict)
-        except:
-            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""method = """+str(method)+""";"""+"""parameters = """+str(parameters)+""";"""+"")
     try:
-        _str = ctx.element.invoke_sfapi(method=method, parameters=parameters)
+        _str = ctx.element.invoke_sfapi(method=method, parameters=parametersArray)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()

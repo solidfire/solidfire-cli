@@ -19,14 +19,14 @@ from solidfire.custom.models import *
 from uuid import UUID
 from element import exceptions
 from solidfire import common
-
+from element.cli.cli import SolidFireOption, SolidFireCommand
 
 @click.group()
 @pass_context
 def cli(ctx):
     """getipmiinfo getipmiconfig """
 
-@cli.command('getipmiinfo', short_help="""GetIpmiInfo allows you to display a detailed reporting of sensors (objects) for node fans, intake and exhaust temperatures, and power supplies  that are monitored by .  """)
+@cli.command('getipmiinfo', short_help="""GetIpmiInfo allows you to display a detailed reporting of sensors (objects) for node fans, intake and exhaust temperatures, and power supplies  that are monitored by .  """, cls=SolidFireCommand)
 @click.option('--force',
               type=bool,
               required=True,
@@ -56,7 +56,7 @@ def getipmiinfo(ctx,
 
 
 
-@cli.command('getipmiconfig', short_help="""GetIpmiConfig enables you to retrieve hardware sensor information from sensors that are in your node. """)
+@cli.command('getipmiconfig', short_help="""GetIpmiConfig enables you to retrieve hardware sensor information from sensors that are in your node. """, cls=SolidFireCommand)
 @click.option('--chassistype',
               type=str,
               required=False,

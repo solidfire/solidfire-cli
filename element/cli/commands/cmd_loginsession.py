@@ -19,14 +19,14 @@ from solidfire.custom.models import *
 from uuid import UUID
 from element import exceptions
 from solidfire import common
-
+from element.cli.cli import SolidFireOption, SolidFireCommand
 
 @click.group()
 @pass_context
 def cli(ctx):
     """getremotelogginghosts setremotelogginghosts setinfo getinfo """
 
-@cli.command('getremotelogginghosts', short_help="""GetRemoteLoggingHosts is used to retrieve the current list of log servers. """)
+@cli.command('getremotelogginghosts', short_help="""GetRemoteLoggingHosts is used to retrieve the current list of log servers. """, cls=SolidFireCommand)
 @pass_context
 def getremotelogginghosts(ctx):
     """GetRemoteLoggingHosts is used to retrieve the current list of log servers."""
@@ -51,35 +51,54 @@ def getremotelogginghosts(ctx):
 
 
 
-@cli.command('setremotelogginghosts', short_help="""RemoteLoggingHosts is used to configure remote logging from the nodes in the storage cluster to a centralized log server or servers. Remote logging is performed over TCP using the default port 514. This API does not add to the existing logging hosts. Rather, it replaces what currently exists with new values specified by this API method. You can use the GetRemoteLoggingHosts to determine what the current logging hosts are and then use the SetRemoteLoggingHosts to set the desired list of current and new logging hosts. """)
+@cli.command('setremotelogginghosts', short_help="""RemoteLoggingHosts is used to configure remote logging from the nodes in the storage cluster to a centralized log server or servers. Remote logging is performed over TCP using the default port 514. This API does not add to the existing logging hosts. Rather, it replaces what currently exists with new values specified by this API method. You can use the GetRemoteLoggingHosts to determine what the current logging hosts are and then use the SetRemoteLoggingHosts to set the desired list of current and new logging hosts. """, cls=SolidFireCommand)
 @click.option('--remotehosts',
-              type=str,
+              cls=SolidFireOption,
+              is_flag=True,
+              multiple=True,
+              subparameters=["_host", "_port", ],
               required=True,
               help="""Provide in json format: List of hosts to send log messages to. """)
+@click.option('--_host',
+              required=True,
+              multiple=True,
+              type=str,
+              default=None,
+              is_sub_parameter=True,
+              help="""Hostname or IP address of the log server. """,
+              cls=SolidFireOption)
+@click.option('--_port',
+              required=True,
+              multiple=True,
+              type=int,
+              default=None,
+              is_sub_parameter=True,
+              help="""Port number that the log server is listening on. """,
+              cls=SolidFireOption)
 @pass_context
 def setremotelogginghosts(ctx,
-           remotehosts):
+           remotehosts,
+           _host,
+           _port):
     """RemoteLoggingHosts is used to configure remote logging from the nodes in the storage cluster to a centralized log server or servers. Remote logging is performed over TCP using the default port 514. This API does not add to the existing logging hosts. Rather, it replaces what currently exists with new values specified by this API method. You can use the GetRemoteLoggingHosts to determine what the current logging hosts are and then use the SetRemoteLoggingHosts to set the desired list of current and new logging hosts."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
 
+    remotehostsArray = []
     if(remotehosts is not None):
         try:
-            kwargsDict = cli_utils.loads(remotehosts)
+            for i, _remotehosts in enumerate(remotehosts):
+                remotehostsArray.append(LoggingServer(host=_host[i], port=_port[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
-        try:
-            remotehosts = [LoggingServer(**argsOfInterest) for argsOfInterest in kwargsDict]
-        except:
-            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""remotehosts = """+str(remotehosts)+""";"""+"")
     try:
-        _SetRemoteLoggingHostsResult = ctx.element.set_remote_logging_hosts(remote_hosts=remotehosts)
+        _SetRemoteLoggingHostsResult = ctx.element.set_remote_logging_hosts(remote_hosts=remotehostsArray)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -91,7 +110,7 @@ def setremotelogginghosts(ctx,
 
 
 
-@cli.command('setinfo', short_help="""SetLoginSessionInfo is used to set the period of time a log in authentication is valid. After the log in period elapses without activity on the system the authentication will expire. New log in credentials will be required for continued access to the cluster once the timeout period has elapsed. """)
+@cli.command('setinfo', short_help="""SetLoginSessionInfo is used to set the period of time a log in authentication is valid. After the log in period elapses without activity on the system the authentication will expire. New log in credentials will be required for continued access to the cluster once the timeout period has elapsed. """, cls=SolidFireCommand)
 @click.option('--timeout',
               type=str,
               required=True,
@@ -121,7 +140,7 @@ def setinfo(ctx,
 
 
 
-@cli.command('getinfo', short_help="""GetLoginSessionInfo is used to return the period of time a log in authentication is valid for both log in shells and the TUI. """)
+@cli.command('getinfo', short_help="""GetLoginSessionInfo is used to return the period of time a log in authentication is valid for both log in shells and the TUI. """, cls=SolidFireCommand)
 @pass_context
 def getinfo(ctx):
     """GetLoginSessionInfo is used to return the period of time a log in authentication is valid for both log in shells and the TUI."""

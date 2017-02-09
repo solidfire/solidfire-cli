@@ -19,14 +19,14 @@ from solidfire.custom.models import *
 from uuid import UUID
 from element import exceptions
 from solidfire import common
-
+from element.cli.cli import SolidFireOption, SolidFireCommand
 
 @click.group()
 @pass_context
 def cli(ctx):
     """list """
 
-@cli.command('list', short_help="""List the services in the cluster. """)
+@cli.command('list', short_help="""List the services in the cluster. """, cls=SolidFireCommand)
 @pass_context
 def list(ctx):
     """List the services in the cluster."""

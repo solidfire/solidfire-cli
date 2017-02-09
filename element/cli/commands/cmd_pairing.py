@@ -19,14 +19,14 @@ from solidfire.custom.models import *
 from uuid import UUID
 from element import exceptions
 from solidfire import common
-
+from element.cli.cli import SolidFireOption, SolidFireCommand
 
 @click.group()
 @pass_context
 def cli(ctx):
     """completecluster completevolume listclusterpairs removevolumepair startvolume listactivepairedvolumes modifyvolumepair startcluster removeclusterpair """
 
-@cli.command('completecluster', short_help="""The CompleteClusterPairing method is the second step in the cluster pairing process. Use this method with the encoded key received from the "StartClusterPairing" API method to complete the cluster pairing process. """)
+@cli.command('completecluster', short_help="""The CompleteClusterPairing method is the second step in the cluster pairing process. Use this method with the encoded key received from the "StartClusterPairing" API method to complete the cluster pairing process. """, cls=SolidFireCommand)
 @click.option('--clusterpairingkey',
               type=str,
               required=True,
@@ -57,7 +57,7 @@ def completecluster(ctx,
 
 
 
-@cli.command('completevolume', short_help="""CompleteVolumePairing is used to complete the pairing of two volumes. """)
+@cli.command('completevolume', short_help="""CompleteVolumePairing is used to complete the pairing of two volumes. """, cls=SolidFireCommand)
 @click.option('--volumepairingkey',
               type=str,
               required=True,
@@ -92,7 +92,7 @@ def completevolume(ctx,
 
 
 
-@cli.command('listclusterpairs', short_help="""ListClusterPairs is used to list all of the clusters a cluster is paired with. This method returns information about active and pending cluster pairings, such as statistics about the current pairing as well as the connectivity and latency (in milliseconds) of the cluster pairing. """)
+@cli.command('listclusterpairs', short_help="""ListClusterPairs is used to list all of the clusters a cluster is paired with. This method returns information about active and pending cluster pairings, such as statistics about the current pairing as well as the connectivity and latency (in milliseconds) of the cluster pairing. """, cls=SolidFireCommand)
 @pass_context
 def listclusterpairs(ctx):
     """ListClusterPairs is used to list all of the clusters a cluster is paired with."""
@@ -118,7 +118,7 @@ def listclusterpairs(ctx):
 
 
 
-@cli.command('removevolumepair', short_help="""RemoveVolumePair is used to remove the remote pairing between two volumes. When the volume pairing information is removed, data is no longer replicated to or from the volume. This method should be run on both the source and target volumes that are paired together. """)
+@cli.command('removevolumepair', short_help="""RemoveVolumePair is used to remove the remote pairing between two volumes. When the volume pairing information is removed, data is no longer replicated to or from the volume. This method should be run on both the source and target volumes that are paired together. """, cls=SolidFireCommand)
 @click.option('--volumeid',
               type=int,
               required=True,
@@ -150,7 +150,7 @@ def removevolumepair(ctx,
 
 
 
-@cli.command('startvolume', short_help="""StartVolumePairing is used to create an encoded key from a volume that is used to pair with another volume. The key that this method creates is used in the "CompleteVolumePairing" API method to establish a volume pairing. """)
+@cli.command('startvolume', short_help="""StartVolumePairing is used to create an encoded key from a volume that is used to pair with another volume. The key that this method creates is used in the "CompleteVolumePairing" API method to establish a volume pairing. """, cls=SolidFireCommand)
 @click.option('--volumeid',
               type=int,
               required=True,
@@ -186,7 +186,7 @@ def startvolume(ctx,
 
 
 
-@cli.command('listactivepairedvolumes', short_help="""ListActivePairedVolumes is used to list all of the active volumes paired with a volume. Volumes listed in the return for this method include volumes with active and pending pairings. """)
+@cli.command('listactivepairedvolumes', short_help="""ListActivePairedVolumes is used to list all of the active volumes paired with a volume. Volumes listed in the return for this method include volumes with active and pending pairings. """, cls=SolidFireCommand)
 @pass_context
 def listactivepairedvolumes(ctx):
     """ListActivePairedVolumes is used to list all of the active volumes paired with a volume."""
@@ -212,7 +212,7 @@ def listactivepairedvolumes(ctx):
 
 
 
-@cli.command('modifyvolumepair', short_help="""ModifyVolumePair is used to pause or restart replication between a pair of volumes. """)
+@cli.command('modifyvolumepair', short_help="""ModifyVolumePair is used to pause or restart replication between a pair of volumes. """, cls=SolidFireCommand)
 @click.option('--volumeid',
               type=int,
               required=True,
@@ -252,7 +252,7 @@ def modifyvolumepair(ctx,
 
 
 
-@cli.command('startcluster', short_help="""StartClusterPairing is used to create an encoded key from a cluster that is used to pair with another cluster. The key created from this API method is used in the "CompleteClusterPairing" API method to establish a cluster pairing. You can pair a cluster with a maximum of four other SolidFire clusters. """)
+@cli.command('startcluster', short_help="""StartClusterPairing is used to create an encoded key from a cluster that is used to pair with another cluster. The key created from this API method is used in the "CompleteClusterPairing" API method to establish a cluster pairing. You can pair a cluster with a maximum of four other SolidFire clusters. """, cls=SolidFireCommand)
 @pass_context
 def startcluster(ctx):
     """StartClusterPairing is used to create an encoded key from a cluster that is used to pair with another cluster."""
@@ -279,7 +279,7 @@ def startcluster(ctx):
 
 
 
-@cli.command('removeclusterpair', short_help="""You can use the RemoveClusterPair method to close the open connections between two paired clusters. Note: Before you remove a cluster pair, you must first remove all volume pairing to the clusters with the "RemoveVolumePair" API method. """)
+@cli.command('removeclusterpair', short_help="""You can use the RemoveClusterPair method to close the open connections between two paired clusters. Note: Before you remove a cluster pair, you must first remove all volume pairing to the clusters with the "RemoveVolumePair" API method. """, cls=SolidFireCommand)
 @click.option('--clusterpairid',
               type=int,
               required=True,

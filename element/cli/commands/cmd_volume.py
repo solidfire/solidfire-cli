@@ -19,14 +19,14 @@ from solidfire.custom.models import *
 from uuid import UUID
 from element import exceptions
 from solidfire import common
-
+from element.cli.cli import SolidFireOption, SolidFireCommand
 
 @click.group()
 @pass_context
 def cli(ctx):
     """getefficiency liststatsbyaccount startbulkwrite updatebulkstatus startbulkread listdeleted purgedeleted liststatsby create cancelclone getdefaultqos getasyncresult listasyncresults liststatsbyaccessgroup listbulkjobs clone modify restoredeleted copy listactive list clonemultiple setdefaultqos getstats listforaccount getcount cancelgroupclone delete """
 
-@cli.command('getefficiency', short_help="""GetVolumeEfficiency is used to retrieve information about a volume. Only the volume given as a parameter in this API method is used to compute the capacity. """)
+@cli.command('getefficiency', short_help="""GetVolumeEfficiency is used to retrieve information about a volume. Only the volume given as a parameter in this API method is used to compute the capacity. """, cls=SolidFireCommand)
 @click.option('--volumeid',
               type=int,
               required=True,
@@ -57,7 +57,7 @@ def getefficiency(ctx,
 
 
 
-@cli.command('liststatsbyaccount', short_help="""ListVolumeStatsByAccount returns high-level activity measurements for every account. Values are summed from all the volumes owned by the account. """)
+@cli.command('liststatsbyaccount', short_help="""ListVolumeStatsByAccount returns high-level activity measurements for every account. Values are summed from all the volumes owned by the account. """, cls=SolidFireCommand)
 @pass_context
 def liststatsbyaccount(ctx):
     """ListVolumeStatsByAccount returns high-level activity measurements for every account."""
@@ -83,7 +83,7 @@ def liststatsbyaccount(ctx):
 
 
 
-@cli.command('startbulkwrite', short_help="""StartBulkVolumeWrite allows you to initialize a bulk volume write session on a specified volume. Only two bulk volume processes can run simultaneously on a volume. When the session is initialized, data can be written to a SolidFire storage volume from an external backup source. The external data is accessed by a web server running on a SolidFire node. Communications and server interaction information for external data access is passed by a script running on the SolidFire storage system. """)
+@cli.command('startbulkwrite', short_help="""StartBulkVolumeWrite allows you to initialize a bulk volume write session on a specified volume. Only two bulk volume processes can run simultaneously on a volume. When the session is initialized, data can be written to a SolidFire storage volume from an external backup source. The external data is accessed by a web server running on a SolidFire node. Communications and server interaction information for external data access is passed by a script running on the SolidFire storage system. """, cls=SolidFireCommand)
 @click.option('--volumeid',
               type=int,
               required=True,
@@ -101,7 +101,10 @@ def liststatsbyaccount(ctx):
               required=False,
               help="""JSON parameters to pass to the script. """)
 @click.option('--attributes',
-              type=str,
+              cls=SolidFireOption,
+              is_flag=True,
+              multiple=True,
+              subparameters=[],
               required=False,
               help="""Provide in json format: JSON attributes for the bulk volume job. """)
 @pass_context
@@ -121,21 +124,18 @@ def startbulkwrite(ctx,
          exit()
 
 
+    attributesArray = []
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
-        try:
-            attributes = dict(**kwargsDict)
-        except:
-            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""format = """+str(format)+""";"""+"""script = """+str(script)+""";"""+"""scriptparameters = """+str(scriptparameters)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _StartBulkVolumeWriteResult = ctx.element.start_bulk_volume_write(volume_id=volumeid, format=format, script=script, script_parameters=scriptparameters, attributes=attributes)
+        _StartBulkVolumeWriteResult = ctx.element.start_bulk_volume_write(volume_id=volumeid, format=format, script=script, script_parameters=scriptparameters, attributes=attributesArray)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -147,7 +147,7 @@ def startbulkwrite(ctx,
 
 
 
-@cli.command('updatebulkstatus', short_help="""You can use UpdateBulkVolumeStatus in a script to return to the SolidFire system the status of a bulk volume job that you have started with the "StartBulkVolumeRead" or "StartBulkVolumeWrite" methods. """)
+@cli.command('updatebulkstatus', short_help="""You can use UpdateBulkVolumeStatus in a script to return to the SolidFire system the status of a bulk volume job that you have started with the "StartBulkVolumeRead" or "StartBulkVolumeWrite" methods. """, cls=SolidFireCommand)
 @click.option('--key',
               type=str,
               required=True,
@@ -165,7 +165,10 @@ def startbulkwrite(ctx,
               required=False,
               help="""Returns the status of the bulk volume job when the job has completed. """)
 @click.option('--attributes',
-              type=str,
+              cls=SolidFireOption,
+              is_flag=True,
+              multiple=True,
+              subparameters=[],
               required=False,
               help="""Provide in json format: JSON attributes  updates what is on the bulk volume job. """)
 @pass_context
@@ -181,21 +184,18 @@ def updatebulkstatus(ctx,
          exit()
 
 
+    attributesArray = []
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
-        try:
-            attributes = dict(**kwargsDict)
-        except:
-            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""key = """+str(key)+""";"""+"""status = """+str(status)+""";"""+"""percentcomplete = """+str(percentcomplete)+""";"""+"""message = """+str(message)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _UpdateBulkVolumeStatusResult = ctx.element.update_bulk_volume_status(key=key, status=status, percent_complete=percentcomplete, message=message, attributes=attributes)
+        _UpdateBulkVolumeStatusResult = ctx.element.update_bulk_volume_status(key=key, status=status, percent_complete=percentcomplete, message=message, attributes=attributesArray)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -207,7 +207,7 @@ def updatebulkstatus(ctx,
 
 
 
-@cli.command('startbulkread', short_help="""StartBulkVolumeRead allows you to initialize a bulk volume read session on a specified volume. Only two bulk volume processes can run simultaneously on a volume. When you initialize the session, data is read from a SolidFire storage volume for the purposes of storing the data on an external backup source. The external data is accessed by a web server running on a SolidFire node. Communications and server interaction information for external data access is passed by a script running on the SolidFire storage system.  At the start of a bulk volume read operation, a snapshot of the volume is made and the snapshot is deleted when the read has completed. You can also read a snapshot of the volume by entering the ID of the snapshot as a parameter. Reading a previous snapshot does not create a new snapshot of the volume, nor does the previous snapshot be deleted when the read completes.  Note: This process creates a new snapshot if the ID of an existing snapshot is not provided. Snapshots can be created if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """)
+@cli.command('startbulkread', short_help="""StartBulkVolumeRead allows you to initialize a bulk volume read session on a specified volume. Only two bulk volume processes can run simultaneously on a volume. When you initialize the session, data is read from a SolidFire storage volume for the purposes of storing the data on an external backup source. The external data is accessed by a web server running on a SolidFire node. Communications and server interaction information for external data access is passed by a script running on the SolidFire storage system.  At the start of a bulk volume read operation, a snapshot of the volume is made and the snapshot is deleted when the read has completed. You can also read a snapshot of the volume by entering the ID of the snapshot as a parameter. Reading a previous snapshot does not create a new snapshot of the volume, nor does the previous snapshot be deleted when the read completes.  Note: This process creates a new snapshot if the ID of an existing snapshot is not provided. Snapshots can be created if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """, cls=SolidFireCommand)
 @click.option('--volumeid',
               type=int,
               required=True,
@@ -229,7 +229,10 @@ def updatebulkstatus(ctx,
               required=False,
               help="""JSON parameters to pass to the script. """)
 @click.option('--attributes',
-              type=str,
+              cls=SolidFireOption,
+              is_flag=True,
+              multiple=True,
+              subparameters=[],
               required=False,
               help="""Provide in json format: JSON attributes for the bulk volume job. """)
 @pass_context
@@ -258,21 +261,18 @@ def startbulkread(ctx,
          exit()
 
 
+    attributesArray = []
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
-        try:
-            attributes = dict(**kwargsDict)
-        except:
-            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""format = """+str(format)+""";"""+"""snapshotid = """+str(snapshotid)+""";"""+"""script = """+str(script)+""";"""+"""scriptparameters = """+str(scriptparameters)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _StartBulkVolumeReadResult = ctx.element.start_bulk_volume_read(volume_id=volumeid, format=format, snapshot_id=snapshotid, script=script, script_parameters=scriptparameters, attributes=attributes)
+        _StartBulkVolumeReadResult = ctx.element.start_bulk_volume_read(volume_id=volumeid, format=format, snapshot_id=snapshotid, script=script, script_parameters=scriptparameters, attributes=attributesArray)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -284,7 +284,7 @@ def startbulkread(ctx,
 
 
 
-@cli.command('listdeleted', short_help="""ListDeletedVolumes is used to return the entire list of volumes that have been marked for deletion and is purged from the system. """)
+@cli.command('listdeleted', short_help="""ListDeletedVolumes is used to return the entire list of volumes that have been marked for deletion and is purged from the system. """, cls=SolidFireCommand)
 @pass_context
 def listdeleted(ctx):
     """ListDeletedVolumes is used to return the entire list of volumes that have been marked for deletion and is purged from the system."""
@@ -309,7 +309,7 @@ def listdeleted(ctx):
 
 
 
-@cli.command('purgedeleted', short_help="""PurgeDeletedVolume immediately and permanently purges a volume which has been deleted. A volume must be deleted using DeleteVolume before it can be purged. Volumes are purged automatically after a period of time, so usage of this method is not typically required. """)
+@cli.command('purgedeleted', short_help="""PurgeDeletedVolume immediately and permanently purges a volume which has been deleted. A volume must be deleted using DeleteVolume before it can be purged. Volumes are purged automatically after a period of time, so usage of this method is not typically required. """, cls=SolidFireCommand)
 @click.option('--volumeid',
               type=int,
               required=True,
@@ -341,7 +341,7 @@ def purgedeleted(ctx,
 
 
 
-@cli.command('liststatsby', short_help="""ListVolumeStatsByVolume returns high-level activity measurements for every volume, by volume. Values are cumulative from the creation of the volume. """)
+@cli.command('liststatsby', short_help="""ListVolumeStatsByVolume returns high-level activity measurements for every volume, by volume. Values are cumulative from the creation of the volume. """, cls=SolidFireCommand)
 @pass_context
 def liststatsby(ctx):
     """ListVolumeStatsByVolume returns high-level activity measurements for every volume, by volume."""
@@ -367,7 +367,7 @@ def liststatsby(ctx):
 
 
 
-@cli.command('create', short_help="""CreateVolume is used to create a new (empty) volume on the cluster. When the volume is created successfully it is available for connection via iSCSI. """)
+@cli.command('create', short_help="""CreateVolume is used to create a new (empty) volume on the cluster. When the volume is created successfully it is available for connection via iSCSI. """, cls=SolidFireCommand)
 @click.option('--name',
               type=str,
               required=True,
@@ -384,24 +384,27 @@ def liststatsby(ctx):
               type=bool,
               required=True,
               help="""Should the volume provides 512-byte sector emulation? """)
-@click.option('--qosminiops',
+@click.option('--_miniops',
               type=int,
               required=False,
               help="""Desired minimum 4KB IOPS to guarantee. The allowed IOPS will only drop below this level if all volumes have been capped at their minimum IOPS value and there is still insufficient performance capacity. """)
-@click.option('--qosmaxiops',
+@click.option('--_maxiops',
               type=int,
               required=False,
               help="""Desired maximum 4KB IOPS allowed over an extended period of time. """)
-@click.option('--qosburstiops',
+@click.option('--_burstiops',
               type=int,
               required=False,
               help="""Maximum "peak" 4KB IOPS allowed for short periods of time. Allows for bursts of I/O activity over the normal max IOPS value. """)
-@click.option('--qosbursttime',
+@click.option('--_bursttime',
               type=int,
               required=False,
               help="""The length of time burst IOPS is allowed. The value returned is represented in time units of seconds. Note: this value is calculated by the system based on IOPS set for QoS. """)
 @click.option('--attributes',
-              type=str,
+              cls=SolidFireOption,
+              is_flag=True,
+              multiple=True,
+              subparameters=[],
               required=False,
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
@@ -410,10 +413,10 @@ def create(ctx,
            accountid,
            totalsize,
            enable512e,
-           qosminiops = None,
-           qosmaxiops = None,
-           qosburstiops = None,
-           qosbursttime = None,
+           _miniops = None,
+           _maxiops = None,
+           _burstiops = None,
+           _bursttime = None,
            attributes = None):
     """CreateVolume is used to create a new (empty) volume on the cluster."""
     """When the volume is created successfully it is available for connection via iSCSI."""
@@ -439,21 +442,18 @@ def create(ctx,
         kwargsDict["burst_time"] = qosbursttime
 
         qos = QoS(**kwargsDict)
+    attributesArray = []
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
-        try:
-            attributes = dict(**kwargsDict)
-        except:
-            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""name = """+str(name)+""";"""+"""accountid = """+str(accountid)+""";"""+"""totalsize = """+str(totalsize)+""";"""+"""enable512e = """+str(enable512e)+""";"""+"""qos = """+str(qos)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _CreateVolumeResult = ctx.element.create_volume(name=name, account_id=accountid, total_size=totalsize, enable512e=enable512e, qos=qos, attributes=attributes)
+        _CreateVolumeResult = ctx.element.create_volume(name=name, account_id=accountid, total_size=totalsize, enable512e=enable512e, qos=qos, attributes=attributesArray)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -465,7 +465,7 @@ def create(ctx,
 
 
 
-@cli.command('cancelclone', short_help="""Cancels a currently running clone operation. This method does not return anything. """)
+@cli.command('cancelclone', short_help="""Cancels a currently running clone operation. This method does not return anything. """, cls=SolidFireCommand)
 @click.option('--cloneid',
               type=int,
               required=True,
@@ -495,7 +495,7 @@ def cancelclone(ctx,
 
 
 
-@cli.command('getdefaultqos', short_help="""GetDefaultQoS is used to retrieve the default QoS values that are set for a volume if QoS is not supplied. """)
+@cli.command('getdefaultqos', short_help="""GetDefaultQoS is used to retrieve the default QoS values that are set for a volume if QoS is not supplied. """, cls=SolidFireCommand)
 @pass_context
 def getdefaultqos(ctx):
     """GetDefaultQoS is used to retrieve the default QoS values that are set for a volume if QoS is not supplied."""
@@ -520,7 +520,7 @@ def getdefaultqos(ctx):
 
 
 
-@cli.command('getasyncresult', short_help="""Used to retrieve the result of asynchronous method calls. Some method calls are long running and do not complete when the initial response is sent. To obtain the result of the method call, polling with GetAsyncResult is required.  GetAsyncResult returns the overall status of the operation (in progress, completed, or error) in a standard fashion, but the actual data returned for the operation depends on the original method call and the return data is documented with each method.  The result for a completed asynchronous method call can only be retrieved once. Once the final result has been returned, later attempts returns an error. """)
+@cli.command('getasyncresult', short_help="""Used to retrieve the result of asynchronous method calls. Some method calls are long running and do not complete when the initial response is sent. To obtain the result of the method call, polling with GetAsyncResult is required.  GetAsyncResult returns the overall status of the operation (in progress, completed, or error) in a standard fashion, but the actual data returned for the operation depends on the original method call and the return data is documented with each method.  The result for a completed asynchronous method call can only be retrieved once. Once the final result has been returned, later attempts returns an error. """, cls=SolidFireCommand)
 @click.option('--asynchandle',
               type=int,
               required=True,
@@ -558,7 +558,7 @@ def getasyncresult(ctx,
 
 
 
-@cli.command('listasyncresults', short_help="""You can use ListAsyncResults to list the results of all currently running and completed asynchronous methods on the system. Querying asynchronous results with ListAsyncResults does not cause completed asyncHandles to expire; you can use GetAsyncResult to query any of the asyncHandles returned by ListAsyncResults. """)
+@cli.command('listasyncresults', short_help="""You can use ListAsyncResults to list the results of all currently running and completed asynchronous methods on the system. Querying asynchronous results with ListAsyncResults does not cause completed asyncHandles to expire; you can use GetAsyncResult to query any of the asyncHandles returned by ListAsyncResults. """, cls=SolidFireCommand)
 @click.option('--asyncresulttypes',
               type=str,
               required=False,
@@ -590,7 +590,7 @@ def listasyncresults(ctx,
 
 
 
-@cli.command('liststatsbyaccessgroup', short_help="""ListVolumeStatsByVolumeAccessGroup is used to get total activity measurements for all of the volumes that are a member of the specified volume access group(s). """)
+@cli.command('liststatsbyaccessgroup', short_help="""ListVolumeStatsByVolumeAccessGroup is used to get total activity measurements for all of the volumes that are a member of the specified volume access group(s). """, cls=SolidFireCommand)
 @click.option('--volumeaccessgroups',
               type=str,
               required=False,
@@ -622,7 +622,7 @@ def liststatsbyaccessgroup(ctx,
 
 
 
-@cli.command('listbulkjobs', short_help="""ListBulkVolumeJobs is used to return information about each bulk volume read or write operation that is occurring in the system. """)
+@cli.command('listbulkjobs', short_help="""ListBulkVolumeJobs is used to return information about each bulk volume read or write operation that is occurring in the system. """, cls=SolidFireCommand)
 @pass_context
 def listbulkjobs(ctx):
     """ListBulkVolumeJobs is used to return information about each bulk volume read or write operation that is occurring in the system."""
@@ -647,7 +647,7 @@ def listbulkjobs(ctx):
 
 
 
-@cli.command('clone', short_help="""CloneVolume is used to create a copy of the volume. This method is asynchronous and may take a variable amount of time to complete. The cloning process begins immediately when the CloneVolume request is made and is representative of the state of the volume when the API method is issued. GetAsyncResults can be used to determine when the cloning process is complete and the new volume is available for connections. ListSyncJobs can be used to see the progress of creating the clone.  Note: The initial attributes and quality of service settings for the volume are inherited from the volume being cloned. If different settings are required, they can be changed via ModifyVolume.  Note: Cloned volumes do not inherit volume access group memberships from the source volume. """)
+@cli.command('clone', short_help="""CloneVolume is used to create a copy of the volume. This method is asynchronous and may take a variable amount of time to complete. The cloning process begins immediately when the CloneVolume request is made and is representative of the state of the volume when the API method is issued. GetAsyncResults can be used to determine when the cloning process is complete and the new volume is available for connections. ListSyncJobs can be used to see the progress of creating the clone.  Note: The initial attributes and quality of service settings for the volume are inherited from the volume being cloned. If different settings are required, they can be changed via ModifyVolume.  Note: Cloned volumes do not inherit volume access group memberships from the source volume. """, cls=SolidFireCommand)
 @click.option('--volumeid',
               type=int,
               required=True,
@@ -673,7 +673,10 @@ def listbulkjobs(ctx):
               required=False,
               help="""ID of the snapshot to use as the source of the clone. If unspecified, the clone will be created with a snapshot of the active volume. """)
 @click.option('--attributes',
-              type=str,
+              cls=SolidFireOption,
+              is_flag=True,
+              multiple=True,
+              subparameters=[],
               required=False,
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
@@ -700,21 +703,18 @@ def clone(ctx,
          exit()
 
 
+    attributesArray = []
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
-        try:
-            attributes = dict(**kwargsDict)
-        except:
-            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""name = """+str(name)+""";"""+"""newaccountid = """+str(newaccountid)+""";"""+"""newsize = """+str(newsize)+""";"""+"""access = """+str(access)+""";"""+"""snapshotid = """+str(snapshotid)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _CloneVolumeResult = ctx.element.clone_volume(volume_id=volumeid, name=name, new_account_id=newaccountid, new_size=newsize, access=access, snapshot_id=snapshotid, attributes=attributes)
+        _CloneVolumeResult = ctx.element.clone_volume(volume_id=volumeid, name=name, new_account_id=newaccountid, new_size=newsize, access=access, snapshot_id=snapshotid, attributes=attributesArray)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -726,7 +726,7 @@ def clone(ctx,
 
 
 
-@cli.command('modify', short_help="""ModifyVolume is used to modify settings on an existing volume. Modifications can be made to one volume at a time and changes take place immediately. If an optional parameter is left unspecified, the value will not be changed.  Extending the size of a volume that is being replicated should be done in an order. The target (Replication Target) volume should first be increased in size, then the source (Read/Write) volume can be resized. It is recommended that both the target and the source volumes be the same size.  Note: If you change access status to locked or target all existing iSCSI connections are terminated. """)
+@cli.command('modify', short_help="""ModifyVolume is used to modify settings on an existing volume. Modifications can be made to one volume at a time and changes take place immediately. If an optional parameter is left unspecified, the value will not be changed.  Extending the size of a volume that is being replicated should be done in an order. The target (Replication Target) volume should first be increased in size, then the source (Read/Write) volume can be resized. It is recommended that both the target and the source volumes be the same size.  Note: If you change access status to locked or target all existing iSCSI connections are terminated. """, cls=SolidFireCommand)
 @click.option('--volumeid',
               type=int,
               required=True,
@@ -739,19 +739,19 @@ def clone(ctx,
               type=str,
               required=False,
               help="""Access allowed for the volume. readOnly: Only read operations are allowed. readWrite: Reads and writes are allowed. locked: No reads or writes are allowed. replicationTarget: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked.  If unspecified, the access settings of the clone will be the same as the source. """)
-@click.option('--qosminiops',
+@click.option('--_miniops',
               type=int,
               required=False,
               help="""Desired minimum 4KB IOPS to guarantee. The allowed IOPS will only drop below this level if all volumes have been capped at their minimum IOPS value and there is still insufficient performance capacity. """)
-@click.option('--qosmaxiops',
+@click.option('--_maxiops',
               type=int,
               required=False,
               help="""Desired maximum 4KB IOPS allowed over an extended period of time. """)
-@click.option('--qosburstiops',
+@click.option('--_burstiops',
               type=int,
               required=False,
               help="""Maximum "peak" 4KB IOPS allowed for short periods of time. Allows for bursts of I/O activity over the normal max IOPS value. """)
-@click.option('--qosbursttime',
+@click.option('--_bursttime',
               type=int,
               required=False,
               help="""The length of time burst IOPS is allowed. The value returned is represented in time units of seconds. Note: this value is calculated by the system based on IOPS set for QoS. """)
@@ -760,7 +760,10 @@ def clone(ctx,
               required=False,
               help="""New size of the volume in bytes. Size is rounded up to the nearest 1MiB size. This parameter can only be used to *increase* the size of a volume. """)
 @click.option('--attributes',
-              type=str,
+              cls=SolidFireOption,
+              is_flag=True,
+              multiple=True,
+              subparameters=[],
               required=False,
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
@@ -768,10 +771,10 @@ def modify(ctx,
            volumeid,
            accountid = None,
            access = None,
-           qosminiops = None,
-           qosmaxiops = None,
-           qosburstiops = None,
-           qosbursttime = None,
+           _miniops = None,
+           _maxiops = None,
+           _burstiops = None,
+           _bursttime = None,
            totalsize = None,
            attributes = None):
     """ModifyVolume is used to modify settings on an existing volume."""
@@ -805,21 +808,18 @@ def modify(ctx,
         kwargsDict["burst_time"] = qosbursttime
 
         qos = QoS(**kwargsDict)
+    attributesArray = []
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
-        try:
-            attributes = dict(**kwargsDict)
-        except:
-            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""accountid = """+str(accountid)+""";"""+"""access = """+str(access)+""";"""+"""qos = """+str(qos)+""";"""+"""totalsize = """+str(totalsize)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _ModifyVolumeResult = ctx.element.modify_volume(volume_id=volumeid, account_id=accountid, access=access, qos=qos, total_size=totalsize, attributes=attributes)
+        _ModifyVolumeResult = ctx.element.modify_volume(volume_id=volumeid, account_id=accountid, access=access, qos=qos, total_size=totalsize, attributes=attributesArray)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -831,7 +831,7 @@ def modify(ctx,
 
 
 
-@cli.command('restoredeleted', short_help="""RestoreDeletedVolume marks a deleted volume as active again. This action makes the volume immediately available for iSCSI connection. """)
+@cli.command('restoredeleted', short_help="""RestoreDeletedVolume marks a deleted volume as active again. This action makes the volume immediately available for iSCSI connection. """, cls=SolidFireCommand)
 @click.option('--volumeid',
               type=int,
               required=True,
@@ -862,7 +862,7 @@ def restoredeleted(ctx,
 
 
 
-@cli.command('copy', short_help="""Copies one volume to another. """)
+@cli.command('copy', short_help="""Copies one volume to another. """, cls=SolidFireCommand)
 @click.option('--volumeid',
               type=int,
               required=True,
@@ -902,7 +902,7 @@ def copy(ctx,
 
 
 
-@cli.command('listactive', short_help="""ListActiveVolumes is used to return the list of active volumes currently in the system. The list of volumes is returned sorted in VolumeID order and can be returned in multiple parts (pages). """)
+@cli.command('listactive', short_help="""ListActiveVolumes is used to return the list of active volumes currently in the system. The list of volumes is returned sorted in VolumeID order and can be returned in multiple parts (pages). """, cls=SolidFireCommand)
 @click.option('--startvolumeid',
               type=int,
               required=False,
@@ -938,7 +938,7 @@ def listactive(ctx,
 
 
 
-@cli.command('list', short_help="""The ListVolumes method is used to return a list of volumes that are in a cluster. You can specify the volumes you want to return in the list by using the available parameters. """)
+@cli.command('list', short_help="""The ListVolumes method is used to return a list of volumes that are in a cluster. You can specify the volumes you want to return in the list by using the available parameters. """, cls=SolidFireCommand)
 @click.option('--startvolumeid',
               type=int,
               required=False,
@@ -998,11 +998,62 @@ def list(ctx,
 
 
 
-@cli.command('clonemultiple', short_help="""CloneMultipleVolumes is used to create a clone of a group of specified volumes. A consistent set of characteristics can be assigned to a group of multiple volume when they are cloned together. If groupSnapshotID is going to be used to clone the volumes in a group snapshot, the group snapshot must be created first using the CreateGroupSnapshot API method or the SolidFire Element WebUI. Using groupSnapshotID is optional when cloning multiple volumes.  Note: Cloning multiple volumes is allowed if cluster fullness is at stage 2 or 3. Clones are not created when cluster fullness is at stage 4 or 5. """)
+@cli.command('clonemultiple', short_help="""CloneMultipleVolumes is used to create a clone of a group of specified volumes. A consistent set of characteristics can be assigned to a group of multiple volume when they are cloned together. If groupSnapshotID is going to be used to clone the volumes in a group snapshot, the group snapshot must be created first using the CreateGroupSnapshot API method or the SolidFire Element WebUI. Using groupSnapshotID is optional when cloning multiple volumes.  Note: Cloning multiple volumes is allowed if cluster fullness is at stage 2 or 3. Clones are not created when cluster fullness is at stage 4 or 5. """, cls=SolidFireCommand)
 @click.option('--volumes',
-              type=str,
+              cls=SolidFireOption,
+              is_flag=True,
+              multiple=True,
+              subparameters=["_volumeid", "_access", "_name", "_newaccountid", "_newsize", "_attributes", ],
               required=True,
               help="""Provide in json format: Array of Unique ID for each volume to include in the clone with optional parameters. If optional parameters are not specified, the values will be inherited from the source volumes. """)
+@click.option('--_volumeid',
+              required=True,
+              multiple=True,
+              type=int,
+              default=None,
+              is_sub_parameter=True,
+              help="""Required parameter for "volumes" array: volumeID. """,
+              cls=SolidFireOption)
+@click.option('--_access',
+              required=False,
+              multiple=True,
+              type=str,
+              default=None,
+              is_sub_parameter=True,
+              help="""Access settings for the new volume. readOnly: Only read operations are allowed. readWrite: Reads and writes are allowed. locked: No reads or writes are allowed. replicationTarget: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked.  If unspecified, the access settings of the clone will be the same as the source. """,
+              cls=SolidFireOption)
+@click.option('--_name',
+              required=False,
+              multiple=True,
+              type=str,
+              default=None,
+              is_sub_parameter=True,
+              help="""New name for the clone. """,
+              cls=SolidFireOption)
+@click.option('--_newaccountid',
+              required=False,
+              multiple=True,
+              type=int,
+              default=None,
+              is_sub_parameter=True,
+              help="""Account ID for the new volume. """,
+              cls=SolidFireOption)
+@click.option('--_newsize',
+              required=False,
+              multiple=True,
+              type=int,
+              default=None,
+              is_sub_parameter=True,
+              help="""New size Total size of the volume, in bytes. Size is rounded up to the nearest 1MB size. """,
+              cls=SolidFireOption)
+@click.option('--_attributes',
+              required=False,
+              multiple=True,
+              type=dict,
+              default=None,
+              is_sub_parameter=True,
+              help="""List of Name/Value pairs in JSON object format. """,
+              cls=SolidFireOption)
 @click.option('--access',
               type=str,
               required=False,
@@ -1018,6 +1069,12 @@ def list(ctx,
 @pass_context
 def clonemultiple(ctx,
            volumes,
+           _volumeid,
+           _access = None,
+           _name = None,
+           _newaccountid = None,
+           _newsize = None,
+           _attributes = None,
            access = None,
            groupsnapshotid = None,
            newaccountid = None):
@@ -1029,22 +1086,22 @@ def clonemultiple(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
+    print(_volumeid)
+    print(_attributes)
 
+    volumesArray = []
     if(volumes is not None):
         try:
-            kwargsDict = cli_utils.loads(volumes)
+            for i, _volumes in enumerate(volumes):
+                volumesArray.append(CloneMultipleVolumeParams(volume_id=_volumeid[i], access=_access[i], name=_name[i], new_account_id=_newaccountid[i], new_size=_newsize[i], attributes=_attributes[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
-        try:
-            volumes = [CloneMultipleVolumeParams(**argsOfInterest) for argsOfInterest in kwargsDict]
-        except:
-            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""volumes = """+str(volumes)+""";"""+"""access = """+str(access)+""";"""+"""groupsnapshotid = """+str(groupsnapshotid)+""";"""+"""newaccountid = """+str(newaccountid)+""";"""+"")
     try:
-        _CloneMultipleVolumesResult = ctx.element.clone_multiple_volumes(volumes=volumes, access=access, group_snapshot_id=groupsnapshotid, new_account_id=newaccountid)
+        _CloneMultipleVolumesResult = ctx.element.clone_multiple_volumes(volumes=volumesArray, access=access, group_snapshot_id=groupsnapshotid, new_account_id=newaccountid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1056,7 +1113,7 @@ def clonemultiple(ctx,
 
 
 
-@cli.command('setdefaultqos', short_help="""SetDefaultQoS enables you to configure the default Quality of Service (QoS) values (measured in inputs and outputs per second, or IOPS) for all volumes not yet created. """)
+@cli.command('setdefaultqos', short_help="""SetDefaultQoS enables you to configure the default Quality of Service (QoS) values (measured in inputs and outputs per second, or IOPS) for all volumes not yet created. """, cls=SolidFireCommand)
 @click.option('--miniops',
               type=int,
               required=False,
@@ -1096,7 +1153,7 @@ def setdefaultqos(ctx,
 
 
 
-@cli.command('getstats', short_help="""GetVolumeStats is used to retrieve high-level activity measurements for a single volume. Values are cumulative from the creation of the volume. """)
+@cli.command('getstats', short_help="""GetVolumeStats is used to retrieve high-level activity measurements for a single volume. Values are cumulative from the creation of the volume. """, cls=SolidFireCommand)
 @click.option('--volumeid',
               type=int,
               required=True,
@@ -1127,7 +1184,7 @@ def getstats(ctx,
 
 
 
-@cli.command('listforaccount', short_help="""ListVolumesForAccount returns the list of active AND (pending) deleted volumes for an account. """)
+@cli.command('listforaccount', short_help="""ListVolumesForAccount returns the list of active AND (pending) deleted volumes for an account. """, cls=SolidFireCommand)
 @click.option('--accountid',
               type=int,
               required=True,
@@ -1167,7 +1224,7 @@ def listforaccount(ctx,
 
 
 
-@cli.command('getcount', short_help="""GetVolumeCount enables you to retrieve the number of volumes currently in the system. """)
+@cli.command('getcount', short_help="""GetVolumeCount enables you to retrieve the number of volumes currently in the system. """, cls=SolidFireCommand)
 @pass_context
 def getcount(ctx):
     """GetVolumeCount enables you to retrieve the number of volumes currently in the system."""
@@ -1192,7 +1249,7 @@ def getcount(ctx):
 
 
 
-@cli.command('cancelgroupclone', short_help="""CancelGroupClone enables you to stop an ongoing CloneMultipleVolumes process for a group of clones. When you cancel a group clone operation, the system completes and removes the operation's associated asyncHandle. This method does not return anything. """)
+@cli.command('cancelgroupclone', short_help="""CancelGroupClone enables you to stop an ongoing CloneMultipleVolumes process for a group of clones. When you cancel a group clone operation, the system completes and removes the operation's associated asyncHandle. This method does not return anything. """, cls=SolidFireCommand)
 @click.option('--groupcloneid',
               type=int,
               required=True,
@@ -1222,7 +1279,7 @@ def cancelgroupclone(ctx,
 
 
 
-@cli.command('delete', short_help="""DeleteVolume marks an active volume for deletion. It is purged (permanently deleted) after the cleanup interval elapses. After making a request to delete a volume, any active iSCSI connections to the volume is immediately terminated and no further connections are allowed while the volume is in this state. It is not returned in target discovery requests.  Any snapshots of a volume that has been marked to delete are not affected. Snapshots are kept until the volume is purged from the system.  If a volume is marked for deletion, and it has a bulk volume read or bulk volume write operation in progress, the bulk volume operation is stopped.  If the volume you delete is paired with a volume, replication between the paired volumes is suspended and no data is transferred to it or from it while in a deleted state. The remote volume the deleted volume was paired with enters into a PausedMisconfigured state and data is no longer sent to it or from the deleted volume. Until the deleted volume is purged, it can be restored and data transfers resumes. If the deleted volume gets purged from the system, the volume it was paired with enters into a StoppedMisconfigured state and the volume pairing status is removed. The purged volume becomes permanently unavailable. """)
+@cli.command('delete', short_help="""DeleteVolume marks an active volume for deletion. It is purged (permanently deleted) after the cleanup interval elapses. After making a request to delete a volume, any active iSCSI connections to the volume is immediately terminated and no further connections are allowed while the volume is in this state. It is not returned in target discovery requests.  Any snapshots of a volume that has been marked to delete are not affected. Snapshots are kept until the volume is purged from the system.  If a volume is marked for deletion, and it has a bulk volume read or bulk volume write operation in progress, the bulk volume operation is stopped.  If the volume you delete is paired with a volume, replication between the paired volumes is suspended and no data is transferred to it or from it while in a deleted state. The remote volume the deleted volume was paired with enters into a PausedMisconfigured state and data is no longer sent to it or from the deleted volume. Until the deleted volume is purged, it can be restored and data transfers resumes. If the deleted volume gets purged from the system, the volume it was paired with enters into a StoppedMisconfigured state and the volume pairing status is removed. The purged volume becomes permanently unavailable. """, cls=SolidFireCommand)
 @click.option('--volumeid',
               type=int,
               required=True,

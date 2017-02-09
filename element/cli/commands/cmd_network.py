@@ -19,14 +19,14 @@ from solidfire.custom.models import *
 from uuid import UUID
 from element import exceptions
 from solidfire import common
-
+from element.cli.cli import SolidFireOption, SolidFireCommand
 
 @click.group()
 @pass_context
 def cli(ctx):
     """listnodefibrechannelportinfo listfibrechannelsessions listfibrechannelportinfo listiscsisessions listinterfaces """
 
-@cli.command('listnodefibrechannelportinfo', short_help="""The ListNodeFibreChannelPortInfo is used to return information about the Fibre Channel ports. The API method is intended for use on individual nodes; userid and password is required for access to individual Fibre Channel nodes. """)
+@cli.command('listnodefibrechannelportinfo', short_help="""The ListNodeFibreChannelPortInfo is used to return information about the Fibre Channel ports. The API method is intended for use on individual nodes; userid and password is required for access to individual Fibre Channel nodes. """, cls=SolidFireCommand)
 @pass_context
 def listnodefibrechannelportinfo(ctx):
     """The ListNodeFibreChannelPortInfo is used to return information about the Fibre Channel ports. The API method is intended for use on individual nodes; userid and password is required for access to individual Fibre Channel nodes."""
@@ -51,7 +51,7 @@ def listnodefibrechannelportinfo(ctx):
 
 
 
-@cli.command('listfibrechannelsessions', short_help="""The ListFibreChannelSessions is used to return information about the active Fibre Channel sessions on a cluster. """)
+@cli.command('listfibrechannelsessions', short_help="""The ListFibreChannelSessions is used to return information about the active Fibre Channel sessions on a cluster. """, cls=SolidFireCommand)
 @pass_context
 def listfibrechannelsessions(ctx):
     """The ListFibreChannelSessions is used to return information about the active Fibre Channel sessions on a cluster."""
@@ -76,7 +76,7 @@ def listfibrechannelsessions(ctx):
 
 
 
-@cli.command('listfibrechannelportinfo', short_help="""The ListFibreChannelPortInfo is used to return information about the Fibre Channel ports. The API method is intended for use on individual nodes; userid and password is required for access to individual Fibre Channel nodes. """)
+@cli.command('listfibrechannelportinfo', short_help="""The ListFibreChannelPortInfo is used to return information about the Fibre Channel ports. The API method is intended for use on individual nodes; userid and password is required for access to individual Fibre Channel nodes. """, cls=SolidFireCommand)
 @pass_context
 def listfibrechannelportinfo(ctx):
     """The ListFibreChannelPortInfo is used to return information about the Fibre Channel ports. The API method is intended for use on individual nodes; userid and password is required for access to individual Fibre Channel nodes."""
@@ -101,7 +101,7 @@ def listfibrechannelportinfo(ctx):
 
 
 
-@cli.command('listiscsisessions', short_help="""ListISCSISessions is used to return iSCSI connection information for volumes in the cluster. """)
+@cli.command('listiscsisessions', short_help="""ListISCSISessions is used to return iSCSI connection information for volumes in the cluster. """, cls=SolidFireCommand)
 @pass_context
 def listiscsisessions(ctx):
     """ListISCSISessions is used to return iSCSI connection information for volumes in the cluster."""
@@ -126,7 +126,7 @@ def listiscsisessions(ctx):
 
 
 
-@cli.command('listinterfaces', short_help="""The ListNetworkInterfaces API method is used to return information about each network interface on a node. The API method is intended for use on individual nodes.  """)
+@cli.command('listinterfaces', short_help="""The ListNetworkInterfaces API method is used to return information about each network interface on a node. The API method is intended for use on individual nodes.  """, cls=SolidFireCommand)
 @pass_context
 def listinterfaces(ctx):
     """The ListNetworkInterfaces API method is used to return information about each network interface on a node. The API method is intended for use on individual nodes. """

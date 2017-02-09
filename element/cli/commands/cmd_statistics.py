@@ -19,14 +19,14 @@ from solidfire.custom.models import *
 from uuid import UUID
 from element import exceptions
 from solidfire import common
-
+from element.cli.cli import SolidFireOption, SolidFireCommand
 
 @click.group()
 @pass_context
 def cli(ctx):
     """getcompletestats gethardwareinfo getrawstats listvolumestatsbyvirtualvolume listvolumestats listdrivestats """
 
-@cli.command('getcompletestats', short_help="""The GetCompleteStats API method is used by SolidFire engineering to troubleshoot new features. The data returned from GetCompleteStats is not documented, changes frequently, and is not guaranteed to be accurate. It is not recommended to ever use GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster. The data returned from GetCompleteStats changes frequently, and is not guaranteed to accurately show performance from the system. It is not recommended to ever use GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster. """)
+@cli.command('getcompletestats', short_help="""The GetCompleteStats API method is used by SolidFire engineering to troubleshoot new features. The data returned from GetCompleteStats is not documented, changes frequently, and is not guaranteed to be accurate. It is not recommended to ever use GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster. The data returned from GetCompleteStats changes frequently, and is not guaranteed to accurately show performance from the system. It is not recommended to ever use GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster. """, cls=SolidFireCommand)
 @pass_context
 def getcompletestats(ctx):
     """The GetCompleteStats API method is used by SolidFire engineering to troubleshoot new features. The data returned from GetCompleteStats is not documented, changes frequently, and is not guaranteed to be accurate. It is not recommended to ever use GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster."""
@@ -52,7 +52,7 @@ def getcompletestats(ctx):
 
 
 
-@cli.command('gethardwareinfo', short_help="""GetHardwareInfo allows you to return hardware information and status for a single node. This generally includes manufacturers, vendors, versions, drives, and other associated hardware identification information. """)
+@cli.command('gethardwareinfo', short_help="""GetHardwareInfo allows you to return hardware information and status for a single node. This generally includes manufacturers, vendors, versions, drives, and other associated hardware identification information. """, cls=SolidFireCommand)
 @pass_context
 def gethardwareinfo(ctx):
     """GetHardwareInfo allows you to return hardware information and status for a single node. This generally includes manufacturers, vendors, versions, drives, and other associated hardware identification information."""
@@ -77,7 +77,7 @@ def gethardwareinfo(ctx):
 
 
 
-@cli.command('getrawstats', short_help="""The GetRawStats call is used by SolidFire engineering to troubleshoot new features. The data returned from GetRawStats is not documented, it changes frequently, and is not guaranteed to be accurate. It is not recommended to ever use GetRawStats for collecting performance data or any other management integration with a SolidFire cluster. The data returned from GetRawStats changes frequently, and is not guaranteed to accurately show performance from the system. It is not recommended to ever use GetRawStats for collecting performance data or any other management integration with a SolidFire cluster. """)
+@cli.command('getrawstats', short_help="""The GetRawStats call is used by SolidFire engineering to troubleshoot new features. The data returned from GetRawStats is not documented, it changes frequently, and is not guaranteed to be accurate. It is not recommended to ever use GetRawStats for collecting performance data or any other management integration with a SolidFire cluster. The data returned from GetRawStats changes frequently, and is not guaranteed to accurately show performance from the system. It is not recommended to ever use GetRawStats for collecting performance data or any other management integration with a SolidFire cluster. """, cls=SolidFireCommand)
 @pass_context
 def getrawstats(ctx):
     """The GetRawStats call is used by SolidFire engineering to troubleshoot new features. The data returned from GetRawStats is not documented, it changes frequently, and is not guaranteed to be accurate. It is not recommended to ever use GetRawStats for collecting performance data or any other management integration with a SolidFire cluster."""
@@ -103,7 +103,7 @@ def getrawstats(ctx):
 
 
 
-@cli.command('listvolumestatsbyvirtualvolume', short_help="""ListVolumeStatsByVirtualVolume enables you to list statistics for volumes, sorted by virtual volumes. """)
+@cli.command('listvolumestatsbyvirtualvolume', short_help="""ListVolumeStatsByVirtualVolume enables you to list statistics for volumes, sorted by virtual volumes. """, cls=SolidFireCommand)
 @click.option('--virtualvolumeids',
               type=str,
               required=False,
@@ -135,7 +135,7 @@ def listvolumestatsbyvirtualvolume(ctx,
 
 
 
-@cli.command('listvolumestats', short_help="""""")
+@cli.command('listvolumestats', short_help="""""", cls=SolidFireCommand)
 @click.option('--volumeids',
               type=str,
               required=False,
@@ -166,7 +166,7 @@ def listvolumestats(ctx,
 
 
 
-@cli.command('listdrivestats', short_help="""ListDriveStats enables you to retrieve  high-level activity measurements for multiple drives in the cluster. By default, this method returns statistics for all drives in the cluster, and these measurements are cumulative from the addition of the drive to the cluster. Some values this method returns are specific to block drives, and some are specific to metadata drives. For more information on what data each drive type returns, see the response examples for the GetDriveStats method. """)
+@cli.command('listdrivestats', short_help="""ListDriveStats enables you to retrieve  high-level activity measurements for multiple drives in the cluster. By default, this method returns statistics for all drives in the cluster, and these measurements are cumulative from the addition of the drive to the cluster. Some values this method returns are specific to block drives, and some are specific to metadata drives. For more information on what data each drive type returns, see the response examples for the GetDriveStats method. """, cls=SolidFireCommand)
 @click.option('--drives',
               type=str,
               required=False,

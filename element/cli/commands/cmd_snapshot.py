@@ -19,14 +19,14 @@ from solidfire.custom.models import *
 from uuid import UUID
 from element import exceptions
 from solidfire import common
-
+from element.cli.cli import SolidFireOption, SolidFireCommand
 
 @click.group()
 @pass_context
 def cli(ctx):
     """listgroup modifygroup modify create list createschedule deletegroup getschedule rollbacktogroup rollbackto creategroup modifyschedule listschedules delete """
 
-@cli.command('listgroup', short_help="""ListGroupSnapshots is used to return information about all group snapshots that have been created. """)
+@cli.command('listgroup', short_help="""ListGroupSnapshots is used to return information about all group snapshots that have been created. """, cls=SolidFireCommand)
 @click.option('--volumeid',
               type=int,
               required=False,
@@ -56,7 +56,7 @@ def listgroup(ctx,
 
 
 
-@cli.command('modifygroup', short_help="""ModifyGroupSnapshot is used to change the attributes currently assigned to a group snapshot. """)
+@cli.command('modifygroup', short_help="""ModifyGroupSnapshot is used to change the attributes currently assigned to a group snapshot. """, cls=SolidFireCommand)
 @click.option('--groupsnapshotid',
               type=int,
               required=True,
@@ -96,7 +96,7 @@ def modifygroup(ctx,
 
 
 
-@cli.command('modify', short_help="""ModifySnapshot is used to change the attributes currently assigned to a snapshot. Use this API method to enable the snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system. """)
+@cli.command('modify', short_help="""ModifySnapshot is used to change the attributes currently assigned to a snapshot. Use this API method to enable the snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system. """, cls=SolidFireCommand)
 @click.option('--snapshotid',
               type=int,
               required=True,
@@ -137,7 +137,7 @@ def modify(ctx,
 
 
 
-@cli.command('create', short_help="""CreateSnapshot is used to create a point-in-time copy of a volume. A snapshot can be created from any volume or from an existing snapshot.  Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """)
+@cli.command('create', short_help="""CreateSnapshot is used to create a point-in-time copy of a volume. A snapshot can be created from any volume or from an existing snapshot.  Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """, cls=SolidFireCommand)
 @click.option('--volumeid',
               type=int,
               required=True,
@@ -159,7 +159,10 @@ def modify(ctx,
               required=False,
               help="""The amount of time the snapshot will be retained. Enter in HH:mm:ss """)
 @click.option('--attributes',
-              type=str,
+              cls=SolidFireOption,
+              is_flag=True,
+              multiple=True,
+              subparameters=[],
               required=False,
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
@@ -180,21 +183,18 @@ def create(ctx,
          exit()
 
 
+    attributesArray = []
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
-        try:
-            attributes = dict(**kwargsDict)
-        except:
-            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""snapshotid = """+str(snapshotid)+""";"""+"""name = """+str(name)+""";"""+"""enableremotereplication = """+str(enableremotereplication)+""";"""+"""retention = """+str(retention)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _CreateSnapshotResult = ctx.element.create_snapshot(volume_id=volumeid, snapshot_id=snapshotid, name=name, enable_remote_replication=enableremotereplication, retention=retention, attributes=attributes)
+        _CreateSnapshotResult = ctx.element.create_snapshot(volume_id=volumeid, snapshot_id=snapshotid, name=name, enable_remote_replication=enableremotereplication, retention=retention, attributes=attributesArray)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -206,7 +206,7 @@ def create(ctx,
 
 
 
-@cli.command('list', short_help="""ListSnapshots is used to return the attributes of each snapshot taken on the volume. """)
+@cli.command('list', short_help="""ListSnapshots is used to return the attributes of each snapshot taken on the volume. """, cls=SolidFireCommand)
 @click.option('--volumeid',
               type=int,
               required=False,
@@ -408,7 +408,7 @@ def CreateSchedule(ctx,
     cli_utils.print_result(_CreateScheduleResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
-@cli.command('deletegroup', short_help="""DeleteGroupSnapshot is used to delete a group snapshot. The saveMembers parameter can be used to preserve all the snapshots that were made for the volumes in the group but the group association will be removed. """)
+@cli.command('deletegroup', short_help="""DeleteGroupSnapshot is used to delete a group snapshot. The saveMembers parameter can be used to preserve all the snapshots that were made for the volumes in the group but the group association will be removed. """, cls=SolidFireCommand)
 @click.option('--groupsnapshotid',
               type=int,
               required=True,
@@ -445,7 +445,7 @@ def deletegroup(ctx,
 
 
 
-@cli.command('getschedule', short_help="""GetSchedule is used to return information about a scheduled snapshot that has been created. You can see information about a specified schedule if there are many snapshot schedules in the system. You can include more than one schedule with this method by specifying additional scheduleIDs to the parameter. """)
+@cli.command('getschedule', short_help="""GetSchedule is used to return information about a scheduled snapshot that has been created. You can see information about a specified schedule if there are many snapshot schedules in the system. You can include more than one schedule with this method by specifying additional scheduleIDs to the parameter. """, cls=SolidFireCommand)
 @click.option('--scheduleid',
               type=int,
               required=True,
@@ -475,7 +475,7 @@ def getschedule(ctx,
 
 
 
-@cli.command('rollbacktogroup', short_help="""RollbackToGroupSnapshot is used to roll back each individual volume in a snapshot group to a copy of their individual snapshots.  Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """)
+@cli.command('rollbacktogroup', short_help="""RollbackToGroupSnapshot is used to roll back each individual volume in a snapshot group to a copy of their individual snapshots.  Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """, cls=SolidFireCommand)
 @click.option('--groupsnapshotid',
               type=int,
               required=True,
@@ -489,7 +489,10 @@ def getschedule(ctx,
               required=False,
               help="""Name for the snapshot. If no name is given, then the name of the snapshot being rolled back to is used with  "-copy" appended to the end of the name. """)
 @click.option('--attributes',
-              type=str,
+              cls=SolidFireOption,
+              is_flag=True,
+              multiple=True,
+              subparameters=[],
               required=False,
               help="""Provide in json format: List of Name/Value pairs in JSON object format """)
 @pass_context
@@ -507,21 +510,18 @@ def rollbacktogroup(ctx,
          exit()
 
 
+    attributesArray = []
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
-        try:
-            attributes = dict(**kwargsDict)
-        except:
-            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""groupsnapshotid = """+str(groupsnapshotid)+""";"""+"""savecurrentstate = """+str(savecurrentstate)+""";"""+"""name = """+str(name)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _CreateGroupSnapshotResult = ctx.element.rollback_to_group_snapshot(group_snapshot_id=groupsnapshotid, save_current_state=savecurrentstate, name=name, attributes=attributes)
+        _CreateGroupSnapshotResult = ctx.element.rollback_to_group_snapshot(group_snapshot_id=groupsnapshotid, save_current_state=savecurrentstate, name=name, attributes=attributesArray)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -533,7 +533,7 @@ def rollbacktogroup(ctx,
 
 
 
-@cli.command('rollbackto', short_help="""RollbackToSnapshot is used to make an existing snapshot the "active" volume image. This method creates a new  snapshot from an existing snapshot. The new snapshot becomes "active" and the existing snapshot is preserved until  it is manually deleted. The previously "active" snapshot is deleted unless the parameter saveCurrentState is set with  a value of "true." Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """)
+@cli.command('rollbackto', short_help="""RollbackToSnapshot is used to make an existing snapshot the "active" volume image. This method creates a new  snapshot from an existing snapshot. The new snapshot becomes "active" and the existing snapshot is preserved until  it is manually deleted. The previously "active" snapshot is deleted unless the parameter saveCurrentState is set with  a value of "true." Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """, cls=SolidFireCommand)
 @click.option('--volumeid',
               type=int,
               required=True,
@@ -551,7 +551,10 @@ def rollbacktogroup(ctx,
               required=False,
               help="""Name for the snapshot. If no name is given, then the name of the snapshot being rolled back to is used with  "-copy" appended to the end of the name. """)
 @click.option('--attributes',
-              type=str,
+              cls=SolidFireOption,
+              is_flag=True,
+              multiple=True,
+              subparameters=[],
               required=False,
               help="""Provide in json format: List of Name/Value pairs in JSON object format """)
 @pass_context
@@ -572,21 +575,18 @@ def rollbackto(ctx,
          exit()
 
 
+    attributesArray = []
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
-        try:
-            attributes = dict(**kwargsDict)
-        except:
-            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""snapshotid = """+str(snapshotid)+""";"""+"""savecurrentstate = """+str(savecurrentstate)+""";"""+"""name = """+str(name)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _CreateSnapshotResult = ctx.element.rollback_to_snapshot(volume_id=volumeid, snapshot_id=snapshotid, save_current_state=savecurrentstate, name=name, attributes=attributes)
+        _CreateSnapshotResult = ctx.element.rollback_to_snapshot(volume_id=volumeid, snapshot_id=snapshotid, save_current_state=savecurrentstate, name=name, attributes=attributesArray)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -598,7 +598,7 @@ def rollbackto(ctx,
 
 
 
-@cli.command('creategroup', short_help="""CreateGroupSnapshot is used to create a point-in-time copy of a group of volumes. The snapshot created can then be used later as a backup or rollback to ensure the data on the group of volumes is consistent for the point in time in which the snapshot was created.  Note: Creating a group snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """)
+@cli.command('creategroup', short_help="""CreateGroupSnapshot is used to create a point-in-time copy of a group of volumes. The snapshot created can then be used later as a backup or rollback to ensure the data on the group of volumes is consistent for the point in time in which the snapshot was created.  Note: Creating a group snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """, cls=SolidFireCommand)
 @click.option('--volumes',
               type=str,
               required=True,
@@ -616,7 +616,10 @@ def rollbackto(ctx,
               required=False,
               help="""The amount of time the snapshot will be retained. Enter in HH:mm:ss """)
 @click.option('--attributes',
-              type=str,
+              cls=SolidFireOption,
+              is_flag=True,
+              multiple=True,
+              subparameters=[],
               required=False,
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
@@ -638,21 +641,18 @@ def creategroup(ctx,
 
 
     volumes = parser.parse_array(volumes)
+    attributesArray = []
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
-        try:
-            attributes = dict(**kwargsDict)
-        except:
-            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""volumes = """+str(volumes)+""";"""+"""name = """+str(name)+""";"""+"""enableremotereplication = """+str(enableremotereplication)+""";"""+"""retention = """+str(retention)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _CreateGroupSnapshotResult = ctx.element.create_group_snapshot(volumes=volumes, name=name, enable_remote_replication=enableremotereplication, retention=retention, attributes=attributes)
+        _CreateGroupSnapshotResult = ctx.element.create_group_snapshot(volumes=volumes, name=name, enable_remote_replication=enableremotereplication, retention=retention, attributes=attributesArray)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -846,7 +846,7 @@ def ModifySchedule(ctx,
     cli_utils.print_result(_ModifyScheduleResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
-@cli.command('listschedules', short_help="""ListSchedule is used to return information about all scheduled snapshots that have been created. """)
+@cli.command('listschedules', short_help="""ListSchedule is used to return information about all scheduled snapshots that have been created. """, cls=SolidFireCommand)
 @pass_context
 def listschedules(ctx):
     """ListSchedule is used to return information about all scheduled snapshots that have been created."""
@@ -871,7 +871,7 @@ def listschedules(ctx):
 
 
 
-@cli.command('delete', short_help="""DeleteSnapshot is used to delete a snapshot. A snapshot that is currently the "active" snapshot cannot be deleted. You must rollback and make another snapshot "active" before the current snapshot can be deleted. To rollback a snapshot, use RollbackToSnapshot. """)
+@cli.command('delete', short_help="""DeleteSnapshot is used to delete a snapshot. A snapshot that is currently the "active" snapshot cannot be deleted. You must rollback and make another snapshot "active" before the current snapshot can be deleted. To rollback a snapshot, use RollbackToSnapshot. """, cls=SolidFireCommand)
 @click.option('--snapshotid',
               type=int,
               required=True,

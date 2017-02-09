@@ -11,7 +11,6 @@ import click
 from element.cli import utils as cli_utils
 from element.cli import parser
 from element.cli.cli import pass_context
-from element.cli.cli import SolidFireCommand, SolidFireOption
 from element import utils
 import jsonpickle
 import simplejson
@@ -20,14 +19,14 @@ from solidfire.custom.models import *
 from uuid import UUID
 from element import exceptions
 from solidfire import common
-
+from element.cli.cli import SolidFireOption, SolidFireCommand
 
 @click.group()
 @pass_context
 def cli(ctx):
     """list getefficiency modify remove getbyname add getbyid """
 
-@cli.command('list', short_help="""Returns the entire list of accounts, with optional paging support. """)
+@cli.command('list', short_help="""Returns the entire list of accounts, with optional paging support. """, cls=SolidFireCommand)
 @click.option('--startaccountid',
               type=int,
               required=False,
@@ -62,7 +61,7 @@ def list(ctx,
 
 
 
-@cli.command('getefficiency', short_help="""GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity. """)
+@cli.command('getefficiency', short_help="""GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity. """, cls=SolidFireCommand)
 @click.option('--accountid',
               type=int,
               required=True,
@@ -92,7 +91,7 @@ def getefficiency(ctx,
 
 
 
-@cli.command('modify', short_help="""Used to modify an existing account. When locking an account, any existing connections from that account are immediately terminated. When changing CHAP settings, any existing connections continue to be active, and the new CHAP values are only used on subsequent connection or reconnection. """)
+@cli.command('modify', short_help="""Used to modify an existing account. When locking an account, any existing connections from that account are immediately terminated. When changing CHAP settings, any existing connections continue to be active, and the new CHAP values are only used on subsequent connection or reconnection. """, cls=SolidFireCommand)
 @click.option('--accountid',
               type=int,
               required=True,
@@ -114,7 +113,10 @@ def getefficiency(ctx,
               required=False,
               help="""CHAP secret to use for the target (mutual CHAP authentication). Should be 12-16 characters long and impenetrable. """)
 @click.option('--attributes',
-              type=str,
+              cls=SolidFireOption,
+              is_flag=True,
+              multiple=True,
+              subparameters=[],
               required=False,
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
@@ -134,16 +136,13 @@ def modify(ctx,
          exit()
 
 
+    attributesArray = []
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
-        try:
-            attributes = dict(**kwargsDict)
-        except:
-            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
     if initiatorsecret == "AUTO-GENERATE-CHAP-SECRET":
         initiatorsecret = CHAPSecret.auto_generate()
@@ -152,7 +151,7 @@ def modify(ctx,
 
     ctx.logger.info("""accountid = """+str(accountid)+""";"""+"""username = """+str(username)+""";"""+"""status = """+str(status)+""";"""+"""initiatorsecret = """+str(initiatorsecret)+""";"""+"""targetsecret = """+str(targetsecret)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _ModifyAccountResult = ctx.element.modify_account(account_id=accountid, username=username, status=status, initiator_secret=initiatorsecret, target_secret=targetsecret, attributes=attributes)
+        _ModifyAccountResult = ctx.element.modify_account(account_id=accountid, username=username, status=status, initiator_secret=initiatorsecret, target_secret=targetsecret, attributes=attributesArray)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -164,7 +163,7 @@ def modify(ctx,
 
 
 
-@cli.command('remove', short_help="""Used to remove an existing account. All Volumes must be deleted and purged on the account before it can be removed. If volumes on the account are still pending deletion, RemoveAccount cannot be used until DeleteVolume to delete and purge the volumes. """)
+@cli.command('remove', short_help="""Used to remove an existing account. All Volumes must be deleted and purged on the account before it can be removed. If volumes on the account are still pending deletion, RemoveAccount cannot be used until DeleteVolume to delete and purge the volumes. """, cls=SolidFireCommand)
 @click.option('--accountid',
               type=int,
               required=True,
@@ -196,7 +195,7 @@ def remove(ctx,
 
 
 
-@cli.command('getbyname', short_help="""Returns details about an account, given its Username. """)
+@cli.command('getbyname', short_help="""Returns details about an account, given its Username. """, cls=SolidFireCommand)
 @click.option('--username',
               type=str,
               required=True,
@@ -226,7 +225,7 @@ def getbyname(ctx,
 
 
 
-@cli.command('add', short_help="""Used to add a new account to the system. New volumes can be created under the new account. The CHAP settings specified for the account applies to all volumes owned by the account. """)
+@cli.command('add', short_help="""Used to add a new account to the system. New volumes can be created under the new account. The CHAP settings specified for the account applies to all volumes owned by the account. """, cls=SolidFireCommand)
 @click.option('--username',
               type=str,
               required=True,
@@ -240,7 +239,10 @@ def getbyname(ctx,
               required=False,
               help="""CHAP secret to use for the target (mutual CHAP authentication). Should be 12-16 characters long and impenetrable. The CHAP target secrets must be unique and cannot be the same as the initiator CHAP secret.  If not specified, a random secret is created. """)
 @click.option('--attributes',
-              type=str,
+              cls=SolidFireOption,
+              is_flag=True,
+              multiple=True,
+              subparameters=[],
               required=False,
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
@@ -257,16 +259,13 @@ def add(ctx,
          exit()
 
 
+    attributesArray = []
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
-        try:
-            attributes = dict(**kwargsDict)
-        except:
-            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
     if initiatorsecret == "AUTO-GENERATE-CHAP-SECRET":
         initiatorsecret = CHAPSecret.auto_generate()
@@ -275,7 +274,7 @@ def add(ctx,
 
     ctx.logger.info("""username = """+str(username)+""";"""+"""initiatorsecret = """+str(initiatorsecret)+""";"""+"""targetsecret = """+str(targetsecret)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _AddAccountResult = ctx.element.add_account(username=username, initiator_secret=initiatorsecret, target_secret=targetsecret, attributes=attributes)
+        _AddAccountResult = ctx.element.add_account(username=username, initiator_secret=initiatorsecret, target_secret=targetsecret, attributes=attributesArray)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -291,38 +290,10 @@ def add(ctx,
 @click.option('--accountid',
               type=int,
               required=True,
-              help="""Specifies the account for which details are gathered. """,
-              cls=SolidFireOption)
-@click.option('--accountid2',
-              type=int,
-              required=True,
-              help="""Specifies the account for which details are gathered. """,
-              cls=SolidFireOption,
-              subparameters=["sub", "sub2"],
-              multiple=True)
-@click.option('--sub',
-              required=False,
-              multiple=True,
-              default=None,
-              is_sub_parameter=True,
-              cls=SolidFireOption
-              )
-@click.option('--sub2',
-              required=False,
-              multiple=True,
-              default=None,
-              is_sub_parameter=True,
-              cls=SolidFireOption)
+              help="""Specifies the account for which details are gathered. """)
 @pass_context
 def getbyid(ctx,
-           accountid,
-            accountid2,
-            sub,
-            sub2):
-    print("PARAMETERS")
-    print(accountid2)
-    print(sub)
-    print(sub2)
+           accountid):
     """Returns details about an account, given its AccountID."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")

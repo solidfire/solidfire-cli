@@ -19,21 +19,60 @@ from solidfire.custom.models import *
 from uuid import UUID
 from element import exceptions
 from solidfire import common
-
+from element.cli.cli import SolidFireOption, SolidFireCommand
 
 @click.group()
 @pass_context
 def cli(ctx):
     """modify create list delete """
 
-@cli.command('modify', short_help="""ModifyInitiators enables you to change the attributes of an existing initiator. You cannot change the name of an existing initiator. If you need to change the name of an initiator, delete the existing initiator with DeleteInitiators and create a new one with CreateInitiators. If ModifyInitiators fails to change one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible). """)
+@cli.command('modify', short_help="""ModifyInitiators enables you to change the attributes of an existing initiator. You cannot change the name of an existing initiator. If you need to change the name of an initiator, delete the existing initiator with DeleteInitiators and create a new one with CreateInitiators. If ModifyInitiators fails to change one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible). """, cls=SolidFireCommand)
 @click.option('--initiators',
-              type=str,
+              cls=SolidFireOption,
+              is_flag=True,
+              multiple=True,
+              subparameters=["_initiatorid", "_alias", "_volumeaccessgroupid", "_attributes", ],
               required=True,
               help="""Provide in json format: A list of Initiator objects containing characteristics of each initiator to modify. """)
+@click.option('--_initiatorid',
+              required=True,
+              multiple=True,
+              type=int,
+              default=None,
+              is_sub_parameter=True,
+              help="""(Required) The numeric ID of the initiator to modify. (Integer) """,
+              cls=SolidFireOption)
+@click.option('--_alias',
+              required=False,
+              multiple=True,
+              type=str,
+              default=None,
+              is_sub_parameter=True,
+              help="""(Optional) A new friendly name to assign to the initiator. (String) """,
+              cls=SolidFireOption)
+@click.option('--_volumeaccessgroupid',
+              required=False,
+              multiple=True,
+              type=int,
+              default=None,
+              is_sub_parameter=True,
+              help="""(Optional) The ID of the volume access group into to which the newly created initiator should be added. If the initiator was previously in a different volume access group, it is removed from the old volume access group. If this key is present but null, the initiator is removed from its current volume access group, but not placed in any new volume access group. (Integer) """,
+              cls=SolidFireOption)
+@click.option('--_attributes',
+              required=False,
+              multiple=True,
+              type=dict,
+              default=None,
+              is_sub_parameter=True,
+              help="""(Optional) A new set of JSON attributes assigned to this initiator. (JSON Object) """,
+              cls=SolidFireOption)
 @pass_context
 def modify(ctx,
-           initiators):
+           initiators,
+           _initiatorid,
+           _alias = None,
+           _volumeaccessgroupid = None,
+           _attributes = None):
     """ModifyInitiators enables you to change the attributes of an existing initiator. You cannot change the name of an existing initiator. If you need to change the name of an initiator, delete the existing initiator with DeleteInitiators and create a new one with CreateInitiators."""
     """If ModifyInitiators fails to change one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible)."""
     if ctx.element is None:
@@ -41,21 +80,19 @@ def modify(ctx,
          exit()
 
 
+    initiatorsArray = []
     if(initiators is not None):
         try:
-            kwargsDict = cli_utils.loads(initiators)
+            for i, _initiators in enumerate(initiators):
+                initiatorsArray.append(ModifyInitiator(initiator_id=_initiatorid[i], alias=_alias[i], volume_access_group_id=_volumeaccessgroupid[i], attributes=_attributes[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
-        try:
-            initiators = [ModifyInitiator(**argsOfInterest) for argsOfInterest in kwargsDict]
-        except:
-            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""initiators = """+str(initiators)+""";"""+"")
     try:
-        _ModifyInitiatorsResult = ctx.element.modify_initiators(initiators=initiators)
+        _ModifyInitiatorsResult = ctx.element.modify_initiators(initiators=initiatorsArray)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -67,14 +104,53 @@ def modify(ctx,
 
 
 
-@cli.command('create', short_help="""CreateInitiators enables you to create multiple new initiator IQNs or World Wide Port Names (WWPNs) and optionally assign them aliases and attributes. When you use CreateInitiators to create new initiators, you can also add them to volume access groups. If CreateInitiators fails to create one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible). """)
+@cli.command('create', short_help="""CreateInitiators enables you to create multiple new initiator IQNs or World Wide Port Names (WWPNs) and optionally assign them aliases and attributes. When you use CreateInitiators to create new initiators, you can also add them to volume access groups. If CreateInitiators fails to create one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible). """, cls=SolidFireCommand)
 @click.option('--initiators',
-              type=str,
+              cls=SolidFireOption,
+              is_flag=True,
+              multiple=True,
+              subparameters=["_name", "_alias", "_volumeaccessgroupid", "_attributes", ],
               required=True,
               help="""Provide in json format: A list of Initiator objects containing characteristics of each new initiator """)
+@click.option('--_name',
+              required=True,
+              multiple=True,
+              type=str,
+              default=None,
+              is_sub_parameter=True,
+              help="""(Required) The name of the initiator (IQN or WWPN) to create. (String) """,
+              cls=SolidFireOption)
+@click.option('--_alias',
+              required=False,
+              multiple=True,
+              type=str,
+              default=None,
+              is_sub_parameter=True,
+              help="""(Optional) The friendly name to assign to this initiator. (String) """,
+              cls=SolidFireOption)
+@click.option('--_volumeaccessgroupid',
+              required=False,
+              multiple=True,
+              type=int,
+              default=None,
+              is_sub_parameter=True,
+              help="""(Optional) The ID of the volume access group into to which this newly created initiator will be added. (Integer) """,
+              cls=SolidFireOption)
+@click.option('--_attributes',
+              required=False,
+              multiple=True,
+              type=dict,
+              default=None,
+              is_sub_parameter=True,
+              help="""(Optional) A set of JSON attributes assigned to this initiator. (JSON Object) """,
+              cls=SolidFireOption)
 @pass_context
 def create(ctx,
-           initiators):
+           initiators,
+           _name,
+           _alias = None,
+           _volumeaccessgroupid = None,
+           _attributes = None):
     """CreateInitiators enables you to create multiple new initiator IQNs or World Wide Port Names (WWPNs) and optionally assign them aliases and attributes. When you use CreateInitiators to create new initiators, you can also add them to volume access groups."""
     """If CreateInitiators fails to create one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible)."""
     if ctx.element is None:
@@ -82,21 +158,19 @@ def create(ctx,
          exit()
 
 
+    initiatorsArray = []
     if(initiators is not None):
         try:
-            kwargsDict = cli_utils.loads(initiators)
+            for i, _initiators in enumerate(initiators):
+                initiatorsArray.append(CreateInitiator(name=_name[i], alias=_alias[i], volume_access_group_id=_volumeaccessgroupid[i], attributes=_attributes[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
-        try:
-            initiators = [CreateInitiator(**argsOfInterest) for argsOfInterest in kwargsDict]
-        except:
-            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""initiators = """+str(initiators)+""";"""+"")
     try:
-        _CreateInitiatorsResult = ctx.element.create_initiators(initiators=initiators)
+        _CreateInitiatorsResult = ctx.element.create_initiators(initiators=initiatorsArray)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -108,7 +182,7 @@ def create(ctx,
 
 
 
-@cli.command('list', short_help="""ListInitiators enables you to list initiator IQNs or World Wide Port Names (WWPNs). """)
+@cli.command('list', short_help="""ListInitiators enables you to list initiator IQNs or World Wide Port Names (WWPNs). """, cls=SolidFireCommand)
 @click.option('--startinitiatorid',
               type=int,
               required=False,
@@ -150,7 +224,7 @@ def list(ctx,
 
 
 
-@cli.command('delete', short_help="""DeleteInitiators enables you to delete one or more initiators from the system (and from any associated volumes or volume access groups). If DeleteInitiators fails to delete one of the initiators provided in the parameter, the system returns an error and does not delete any initiators (no partial completion is possible). """)
+@cli.command('delete', short_help="""DeleteInitiators enables you to delete one or more initiators from the system (and from any associated volumes or volume access groups). If DeleteInitiators fails to delete one of the initiators provided in the parameter, the system returns an error and does not delete any initiators (no partial completion is possible). """, cls=SolidFireCommand)
 @click.option('--initiators',
               type=str,
               required=True,

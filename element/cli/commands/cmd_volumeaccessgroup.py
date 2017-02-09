@@ -19,14 +19,14 @@ from solidfire.custom.models import *
 from uuid import UUID
 from element import exceptions
 from solidfire import common
-
+from element.cli.cli import SolidFireOption, SolidFireCommand
 
 @click.group()
 @pass_context
 def cli(ctx):
     """removevolumesfrom modify create modifylunassignments list addinitiatorsto getlunassignments addvolumesto removeinitiatorsfrom getefficiency delete """
 
-@cli.command('removevolumesfrom', short_help="""Remove volumes from a volume access group. """)
+@cli.command('removevolumesfrom', short_help="""Remove volumes from a volume access group. """, cls=SolidFireCommand)
 @click.option('--volumeaccessgroupid',
               type=int,
               required=True,
@@ -63,7 +63,7 @@ def removevolumesfrom(ctx,
 
 
 
-@cli.command('modify', short_help="""Update initiators and add or remove volumes from a volume access group. A specified initiator or volume that duplicates an existing volume or initiator in a volume access group is left as-is. If a value is not specified for volumes or initiators, the current list of initiators and volumes are not changed.  Often, it is easier to use the convenience functions to modify initiators and volumes independently:  AddInitiatorsToVolumeAccessGroup RemoveInitiatorsFromVolumeAccessGroup AddVolumesToVolumeAccessGroup RemoveVolumesFromVolumeAccessGroup """)
+@cli.command('modify', short_help="""Update initiators and add or remove volumes from a volume access group. A specified initiator or volume that duplicates an existing volume or initiator in a volume access group is left as-is. If a value is not specified for volumes or initiators, the current list of initiators and volumes are not changed.  Often, it is easier to use the convenience functions to modify initiators and volumes independently:  AddInitiatorsToVolumeAccessGroup RemoveInitiatorsFromVolumeAccessGroup AddVolumesToVolumeAccessGroup RemoveVolumesFromVolumeAccessGroup """, cls=SolidFireCommand)
 @click.option('--volumeaccessgroupid',
               type=int,
               required=True,
@@ -89,7 +89,10 @@ def removevolumesfrom(ctx,
               required=False,
               help="""List of volumes to initially include in the volume access group. If unspecified, the access group's volumes will not be modified. """)
 @click.option('--attributes',
-              type=str,
+              cls=SolidFireOption,
+              is_flag=True,
+              multiple=True,
+              subparameters=[],
               required=False,
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
@@ -124,21 +127,18 @@ def modify(ctx,
     initiators = parser.parse_array(initiators)
 
     volumes = parser.parse_array(volumes)
+    attributesArray = []
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
-        try:
-            attributes = dict(**kwargsDict)
-        except:
-            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"""virtualnetworkid = """+str(virtualnetworkid)+""";"""+"""virtualnetworktags = """+str(virtualnetworktags)+""";"""+"""name = """+str(name)+""";"""+"""initiators = """+str(initiators)+""";"""+"""volumes = """+str(volumes)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _ModifyVolumeAccessGroupResult = ctx.element.modify_volume_access_group(volume_access_group_id=volumeaccessgroupid, virtual_network_id=virtualnetworkid, virtual_network_tags=virtualnetworktags, name=name, initiators=initiators, volumes=volumes, attributes=attributes)
+        _ModifyVolumeAccessGroupResult = ctx.element.modify_volume_access_group(volume_access_group_id=volumeaccessgroupid, virtual_network_id=virtualnetworkid, virtual_network_tags=virtualnetworktags, name=name, initiators=initiators, volumes=volumes, attributes=attributesArray)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -150,7 +150,7 @@ def modify(ctx,
 
 
 
-@cli.command('create', short_help="""Creates a new volume access group. The new volume access group must be given a name when it is created. Entering initiators and volumes are optional when creating a volume access group. Once the group is created volumes and initiator IQNs can be added. Any initiator IQN that is successfully added to the volume access group is able to access any volume in the group without CHAP authentication. """)
+@cli.command('create', short_help="""Creates a new volume access group. The new volume access group must be given a name when it is created. Entering initiators and volumes are optional when creating a volume access group. Once the group is created volumes and initiator IQNs can be added. Any initiator IQN that is successfully added to the volume access group is able to access any volume in the group without CHAP authentication. """, cls=SolidFireCommand)
 @click.option('--name',
               type=str,
               required=True,
@@ -172,7 +172,10 @@ def modify(ctx,
               required=False,
               help="""The ID of the VLAN Virtual Network Tag to associate the volume access group with. """)
 @click.option('--attributes',
-              type=str,
+              cls=SolidFireOption,
+              is_flag=True,
+              multiple=True,
+              subparameters=[],
               required=False,
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
@@ -201,21 +204,18 @@ def create(ctx,
     virtualnetworkid = parser.parse_array(virtualnetworkid)
 
     virtualnetworktags = parser.parse_array(virtualnetworktags)
+    attributesArray = []
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
-        try:
-            attributes = dict(**kwargsDict)
-        except:
-            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""name = """+str(name)+""";"""+"""initiators = """+str(initiators)+""";"""+"""volumes = """+str(volumes)+""";"""+"""virtualnetworkid = """+str(virtualnetworkid)+""";"""+"""virtualnetworktags = """+str(virtualnetworktags)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _CreateVolumeAccessGroupResult = ctx.element.create_volume_access_group(name=name, initiators=initiators, volumes=volumes, virtual_network_id=virtualnetworkid, virtual_network_tags=virtualnetworktags, attributes=attributes)
+        _CreateVolumeAccessGroupResult = ctx.element.create_volume_access_group(name=name, initiators=initiators, volumes=volumes, virtual_network_id=virtualnetworkid, virtual_network_tags=virtualnetworktags, attributes=attributesArray)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -227,19 +227,40 @@ def create(ctx,
 
 
 
-@cli.command('modifylunassignments', short_help="""The ModifytVolumeAccessGroupLunAssignments is used to define custom LUN assignments for specific volumes. Only LUN values set on the lunAssignments parameter will be changed in the volume access group. All other LUN assignments will remain unchanged.  LUN assignment values must be unique for volumes in a volume access group. An exception will be seen if LUN assignments are duplicated in a volume access group. However, the same LUN values can be used again in different volume access groups.  Note: Correct LUN values are 0 - 16383. An exception will be seen if an incorrect LUN value is passed. None of the specified LUN assignments will be modified if there is an exception.  Caution: If a LUN assignment is changed for a volume with active I/O, the I/O could be disrupted. Changes to the server configuration may be required in order to change volume LUN assignments. """)
+@cli.command('modifylunassignments', short_help="""The ModifytVolumeAccessGroupLunAssignments is used to define custom LUN assignments for specific volumes. Only LUN values set on the lunAssignments parameter will be changed in the volume access group. All other LUN assignments will remain unchanged.  LUN assignment values must be unique for volumes in a volume access group. An exception will be seen if LUN assignments are duplicated in a volume access group. However, the same LUN values can be used again in different volume access groups.  Note: Correct LUN values are 0 - 16383. An exception will be seen if an incorrect LUN value is passed. None of the specified LUN assignments will be modified if there is an exception.  Caution: If a LUN assignment is changed for a volume with active I/O, the I/O could be disrupted. Changes to the server configuration may be required in order to change volume LUN assignments. """, cls=SolidFireCommand)
 @click.option('--volumeaccessgroupid',
               type=int,
               required=True,
               help="""Unique volume access group ID for which the LUN assignments will be modified. """)
 @click.option('--lunassignments',
-              type=str,
+              cls=SolidFireOption,
+              is_flag=True,
+              multiple=True,
+              subparameters=["_volumeid", "_lun", ],
               required=True,
               help="""Provide in json format: The volume IDs with new assigned LUN values. """)
+@click.option('--_volumeid',
+              required=True,
+              multiple=True,
+              type=int,
+              default=None,
+              is_sub_parameter=True,
+              help="""The volume ID assigned to the Lun. """,
+              cls=SolidFireOption)
+@click.option('--_lun',
+              required=True,
+              multiple=True,
+              type=int,
+              default=None,
+              is_sub_parameter=True,
+              help="""Correct LUN values are 0 - 16383. An exception will be seen if an incorrect LUN value is passed. """,
+              cls=SolidFireOption)
 @pass_context
 def modifylunassignments(ctx,
            volumeaccessgroupid,
-           lunassignments):
+           lunassignments,
+           _volumeid,
+           _lun):
     """The ModifytVolumeAccessGroupLunAssignments is used to define custom LUN assignments for specific volumes. Only LUN values set on the lunAssignments parameter will be changed in the volume access group. All other LUN assignments will remain unchanged."""
     """"""
     """LUN assignment values must be unique for volumes in a volume access group. An exception will be seen if LUN assignments are duplicated in a volume access group. However, the same LUN values can be used again in different volume access groups."""
@@ -252,21 +273,19 @@ def modifylunassignments(ctx,
          exit()
 
 
+    lunassignmentsArray = []
     if(lunassignments is not None):
         try:
-            kwargsDict = cli_utils.loads(lunassignments)
+            for i, _lunassignments in enumerate(lunassignments):
+                lunassignmentsArray.append(LunAssignment(volume_id=_volumeid[i], lun=_lun[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
-        try:
-            lunassignments = [LunAssignment(**argsOfInterest) for argsOfInterest in kwargsDict]
-        except:
-            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"""lunassignments = """+str(lunassignments)+""";"""+"")
     try:
-        _ModifyVolumeAccessGroupLunAssignmentsResult = ctx.element.modify_volume_access_group_lun_assignments(volume_access_group_id=volumeaccessgroupid, lun_assignments=lunassignments)
+        _ModifyVolumeAccessGroupLunAssignmentsResult = ctx.element.modify_volume_access_group_lun_assignments(volume_access_group_id=volumeaccessgroupid, lun_assignments=lunassignmentsArray)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -278,7 +297,7 @@ def modifylunassignments(ctx,
 
 
 
-@cli.command('list', short_help="""ListVolumeAccessGroups is used to return information about the volume access groups that are currently in the system. """)
+@cli.command('list', short_help="""ListVolumeAccessGroups is used to return information about the volume access groups that are currently in the system. """, cls=SolidFireCommand)
 @click.option('--startvolumeaccessgroupid',
               type=int,
               required=False,
@@ -313,7 +332,7 @@ def list(ctx,
 
 
 
-@cli.command('addinitiatorsto', short_help="""Add initiators to a volume access group. """)
+@cli.command('addinitiatorsto', short_help="""Add initiators to a volume access group. """, cls=SolidFireCommand)
 @click.option('--volumeaccessgroupid',
               type=int,
               required=True,
@@ -350,7 +369,7 @@ def addinitiatorsto(ctx,
 
 
 
-@cli.command('getlunassignments', short_help="""The GetVolumeAccessGroupLunAssignments is used to return information LUN mappings of a specified volume access group. """)
+@cli.command('getlunassignments', short_help="""The GetVolumeAccessGroupLunAssignments is used to return information LUN mappings of a specified volume access group. """, cls=SolidFireCommand)
 @click.option('--volumeaccessgroupid',
               type=int,
               required=True,
@@ -380,7 +399,7 @@ def getlunassignments(ctx,
 
 
 
-@cli.command('addvolumesto', short_help="""Add volumes to a volume access group. """)
+@cli.command('addvolumesto', short_help="""Add volumes to a volume access group. """, cls=SolidFireCommand)
 @click.option('--volumeaccessgroupid',
               type=int,
               required=True,
@@ -417,7 +436,7 @@ def addvolumesto(ctx,
 
 
 
-@cli.command('removeinitiatorsfrom', short_help="""Remove initiators from a volume access group. """)
+@cli.command('removeinitiatorsfrom', short_help="""Remove initiators from a volume access group. """, cls=SolidFireCommand)
 @click.option('--volumeaccessgroupid',
               type=int,
               required=True,
@@ -454,7 +473,7 @@ def removeinitiatorsfrom(ctx,
 
 
 
-@cli.command('getefficiency', short_help="""GetVolumeAccessGroupEfficiency is used to retrieve efficiency information about a volume access group. Only the volume access group provided as parameters in this API method is used to compute the capacity. """)
+@cli.command('getefficiency', short_help="""GetVolumeAccessGroupEfficiency is used to retrieve efficiency information about a volume access group. Only the volume access group provided as parameters in this API method is used to compute the capacity. """, cls=SolidFireCommand)
 @click.option('--volumeaccessgroupid',
               type=int,
               required=True,
@@ -484,7 +503,7 @@ def getefficiency(ctx,
 
 
 
-@cli.command('delete', short_help="""Delete a volume access group from the system. """)
+@cli.command('delete', short_help="""Delete a volume access group from the system. """, cls=SolidFireCommand)
 @click.option('--volumeaccessgroupid',
               type=int,
               required=True,

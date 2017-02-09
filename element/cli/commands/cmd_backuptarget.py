@@ -19,14 +19,14 @@ from solidfire.custom.models import *
 from uuid import UUID
 from element import exceptions
 from solidfire import common
-
+from element.cli.cli import SolidFireOption, SolidFireCommand
 
 @click.group()
 @pass_context
 def cli(ctx):
     """modify create list remove get """
 
-@cli.command('modify', short_help="""ModifyBackupTarget is used to change attributes of a backup target. """)
+@cli.command('modify', short_help="""ModifyBackupTarget is used to change attributes of a backup target. """, cls=SolidFireCommand)
 @click.option('--backuptargetid',
               type=int,
               required=True,
@@ -36,7 +36,10 @@ def cli(ctx):
               required=False,
               help="""Name for the backup target. """)
 @click.option('--attributes',
-              type=str,
+              cls=SolidFireOption,
+              is_flag=True,
+              multiple=True,
+              subparameters=[],
               required=False,
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
@@ -50,21 +53,18 @@ def modify(ctx,
          exit()
 
 
+    attributesArray = []
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
-        try:
-            attributes = dict(**kwargsDict)
-        except:
-            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""backuptargetid = """+str(backuptargetid)+""";"""+"""name = """+str(name)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _ModifyBackupTargetResult = ctx.element.modify_backup_target(backup_target_id=backuptargetid, name=name, attributes=attributes)
+        _ModifyBackupTargetResult = ctx.element.modify_backup_target(backup_target_id=backuptargetid, name=name, attributes=attributesArray)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -76,13 +76,16 @@ def modify(ctx,
 
 
 
-@cli.command('create', short_help="""CreateBackupTarget allows you to create and store backup target information so that you do not need to re-enter it each time a backup is created. """)
+@cli.command('create', short_help="""CreateBackupTarget allows you to create and store backup target information so that you do not need to re-enter it each time a backup is created. """, cls=SolidFireCommand)
 @click.option('--name',
               type=str,
               required=True,
               help="""Name for the backup target. """)
 @click.option('--attributes',
-              type=str,
+              cls=SolidFireOption,
+              is_flag=True,
+              multiple=True,
+              subparameters=[],
               required=False,
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
@@ -95,21 +98,18 @@ def create(ctx,
          exit()
 
 
+    attributesArray = []
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
-        try:
-            attributes = dict(**kwargsDict)
-        except:
-            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     
 
     ctx.logger.info("""name = """+str(name)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _CreateBackupTargetResult = ctx.element.create_backup_target(name=name, attributes=attributes)
+        _CreateBackupTargetResult = ctx.element.create_backup_target(name=name, attributes=attributesArray)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -121,7 +121,7 @@ def create(ctx,
 
 
 
-@cli.command('list', short_help="""You can use ListBackupTargets to retrieve information about all backup targets that have been created. """)
+@cli.command('list', short_help="""You can use ListBackupTargets to retrieve information about all backup targets that have been created. """, cls=SolidFireCommand)
 @pass_context
 def list(ctx):
     """You can use ListBackupTargets to retrieve information about all backup targets that have been created."""
@@ -146,7 +146,7 @@ def list(ctx):
 
 
 
-@cli.command('remove', short_help="""RemoveBackupTarget allows you to delete backup targets. """)
+@cli.command('remove', short_help="""RemoveBackupTarget allows you to delete backup targets. """, cls=SolidFireCommand)
 @click.option('--backuptargetid',
               type=int,
               required=True,
@@ -176,7 +176,7 @@ def remove(ctx,
 
 
 
-@cli.command('get', short_help="""GetBackupTarget allows you to return information about a specific backup target that has been created. """)
+@cli.command('get', short_help="""GetBackupTarget allows you to return information about a specific backup target that has been created. """, cls=SolidFireCommand)
 @click.option('--backuptargetid',
               type=int,
               required=True,
