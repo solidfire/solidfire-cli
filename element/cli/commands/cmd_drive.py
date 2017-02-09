@@ -225,7 +225,7 @@ def add(ctx,
 
     if(drives is not None):
         try:
-            kwargsDict = simplejson.loads(drives)
+            kwargsDict = cli_utils.loads(drives)
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)

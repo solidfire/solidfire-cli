@@ -1032,7 +1032,7 @@ def clonemultiple(ctx,
 
     if(volumes is not None):
         try:
-            kwargsDict = simplejson.loads(volumes)
+            kwargsDict = cli_utils.loads(volumes)
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)

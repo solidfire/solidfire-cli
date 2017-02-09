@@ -107,13 +107,13 @@ def networking(ctx,
               help="""The force parameter must be included in order to successfully reset the node. """)
 @click.option('--option',
               type=str,
-              required=True,
+              required=False,
               help="""Used to enter specifications for running the reset operation. """)
 @pass_context
 def resetnode(ctx,
            build,
            force,
-           option):
+           option = None):
     """Allows you to reset a node to the SolidFire factory settings. All data will be deleted from the node when you call this method. A node participating in a cluster cannot be reset."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")

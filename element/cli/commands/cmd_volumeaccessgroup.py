@@ -254,7 +254,7 @@ def modifylunassignments(ctx,
 
     if(lunassignments is not None):
         try:
-            kwargsDict = simplejson.loads(lunassignments)
+            kwargsDict = cli_utils.loads(lunassignments)
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)

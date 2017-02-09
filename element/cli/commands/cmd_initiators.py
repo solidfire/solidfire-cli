@@ -43,7 +43,7 @@ def modify(ctx,
 
     if(initiators is not None):
         try:
-            kwargsDict = simplejson.loads(initiators)
+            kwargsDict = cli_utils.loads(initiators)
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
@@ -84,7 +84,7 @@ def create(ctx,
 
     if(initiators is not None):
         try:
-            kwargsDict = simplejson.loads(initiators)
+            kwargsDict = cli_utils.loads(initiators)
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)

@@ -181,6 +181,23 @@ def write_connections(connections):
             if connection is not None:
                 w.writerow(connection)
 
+# Split up something like this:
+# name:value,name:value,name:value;name:value,name:value,name:value
+# into something like this:
+# [{name:value, name:value, name:value}, {name:value, name:value, name:value}]
+def loads(parametersString):
+    splitByObjects = parametersString[1:-1].split(')(') # Splits by objects(name:value,name:value,name:value;name:value,name:value,name:value)
+    splitByParams = [param.split(',') for param in splitByObjects] # Splits by parameters (name:value,name:value,name:value)
+    objectArray = []
+    for paramSet in splitByParams:
+        object = dict()
+        for param in paramSet:
+            splitByNameValue = param.split(':') # Splits between the name and value (name:value)
+            object[splitByNameValue[0]] = splitByNameValue[1]
+        objectArray += [object]
+    print(objectArray)
+    return objectArray
+
 # WARNING! This doesn't actually give us total security. It only gives us obscurity.
 def encrypt(sensitive_data):
     cipher = ARC4.new(socket.gethostname())

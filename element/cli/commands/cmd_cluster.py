@@ -262,7 +262,7 @@ def setsnmptrapinfo(ctx,
 
     if(traprecipients is not None):
         try:
-            kwargsDict = simplejson.loads(traprecipients)
+            kwargsDict = cli_utils.loads(traprecipients)
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
@@ -1107,7 +1107,7 @@ def setsnmpacl(ctx,
 
     if(networks is not None):
         try:
-            kwargsDict = simplejson.loads(networks)
+            kwargsDict = cli_utils.loads(networks)
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
@@ -1117,7 +1117,7 @@ def setsnmpacl(ctx,
             ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     if(usmusers is not None):
         try:
-            kwargsDict = simplejson.loads(usmusers)
+            kwargsDict = cli_utils.loads(usmusers)
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
@@ -1339,7 +1339,7 @@ def setsnmpinfo(ctx,
 
     if(networks is not None):
         try:
-            kwargsDict = simplejson.loads(networks)
+            kwargsDict = cli_utils.loads(networks)
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
@@ -1349,7 +1349,7 @@ def setsnmpinfo(ctx,
             ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
     if(usmusers is not None):
         try:
-            kwargsDict = simplejson.loads(usmusers)
+            kwargsDict = cli_utils.loads(usmusers)
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)

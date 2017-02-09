@@ -67,7 +67,7 @@ def setremotelogginghosts(ctx,
 
     if(remotehosts is not None):
         try:
-            kwargsDict = simplejson.loads(remotehosts)
+            kwargsDict = cli_utils.loads(remotehosts)
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)

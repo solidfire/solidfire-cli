@@ -3,6 +3,8 @@ import logging.config
 import os
 import sys
 import click
+import click.core
+import copy
 import csv
 from pkg_resources import Requirement, resource_filename
 import struct
@@ -22,7 +24,7 @@ DEBUG_LOGGING_MAP = {
 }
 CLI_VERSION = 'v1'
 
-class Context(object):
+class Context():
 
     def __init__(self):
         self.logger = None
@@ -52,7 +54,6 @@ pass_context = click.make_pass_decorator(Context, ensure=True)
 cmd_folder = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                           'commands'))
 
-
 class SolidFireCLI(click.MultiCommand):
 
     def list_commands(self, ctx):
@@ -77,6 +78,149 @@ class SolidFireCLI(click.MultiCommand):
             return
         return mod.cli
 
+class SolidFireParsingState(click.parser.ParsingState):
+    def __init__(self, args):
+        self.subparameters = []
+        click.parser.ParsingState.__init__(self, args)
+
+class SolidFireParser(click.parser.OptionParser):
+    def _process_args_for_options(self, state):
+        while state.rargs:
+            arg = state.rargs.pop(0)
+            arglen = len(arg)
+            # Double dashes always handled explicitly regardless of what
+            # prefixes are valid.
+            if arg == '--':
+                return
+            elif arg[:1] in self._opt_prefixes and arglen > 1:
+                self._process_opts(arg, state) # If it starts with -.
+            elif self.allow_interspersed_args:
+                state.largs.append(arg)
+            else:
+                state.rargs.insert(0, arg)
+                return
+
+    # We overrided this guy because we needed to inject our custom parsing
+    # state parameter into the native ParsingState.
+    def parse_args(self, args):
+        """Parses positional arguments and returns ``(values, args, order)``
+        for the parsed options and arguments as well as the leftover
+        arguments if there are any.  The order is a list of objects as they
+        appear on the command line.  If arguments appear multiple times they
+        will be memorized multiple times as well.
+        """
+        state = SolidFireParsingState(args)
+        try:
+            self._process_args_for_options(state)
+            self._process_args_for_args(state)
+        except click.parser.UsageError:
+            if self.ctx is None or not self.ctx.resilient_parsing:
+                raise
+        return state.opts, state.largs, state.order
+
+
+    def _match_long_opt(self, opt, explicit_value, state):
+        print(state.rargs)
+        if opt not in self._long_opt:
+            possibilities = [word for word in self._long_opt
+                             if word.startswith(opt)]
+            raise click.parser.NoSuchOption(opt, possibilities=possibilities)
+
+        option = self._long_opt[opt]
+        if state.subparameters == [] or opt[2:] in state.subparameters:
+            # First, remove it from the subparameters list because we found
+            # it!
+            if opt[2:] in state.subparameters:
+                state.subparameters.remove(opt[2:])
+            if option.takes_value:
+                # At this point it's safe to modify rargs by injecting the
+                # explicit value, because no exception is raised in this
+                # branch.  This means that the inserted value will be fully
+                # consumed.
+                if explicit_value is not None:
+                    state.rargs.insert(0, explicit_value)
+
+                nargs = option.nargs
+                if len(state.rargs) < nargs:
+                    click.parser._error_opt_args(nargs, opt)
+                elif nargs == 1:
+                    value = state.rargs.pop(0)
+                else:
+                    value = tuple(state.rargs[:nargs])
+                    del state.rargs[:nargs]
+
+            elif explicit_value is not None:
+                raise click.parser.BadOptionUsage(opt, '%s option does not take a value' % opt)
+
+            else:
+                value = None
+
+            option.process(value, state)
+        else:
+            # If we find out that there were some options we were expecting
+            # that didn't show up, we account for them by setting them to
+            # none here.
+            extraParams = []
+            for paramName in state.subparameters:
+                extraParams.append("--"+paramName)
+                extraParams.append("")
+            extraParams.append(opt)
+            state.subparameters = []
+            state.rargs = extraParams + state.rargs
+
+        # Also, if the subparameters list is empty, we check to add any extra
+        # subparameters from our new parameter
+        if state.subparameters == [] and type(option.obj) == SolidFireOption:
+            state.subparameters = copy.deepcopy(option.obj.subparameters)
+
+class SolidFireOption(click.core.Option):
+    def __init__(self, param_decls=None, subparameters=[], *args, **kwargs):
+        self.subparameters = subparameters # This is simply a list of names that depend on our given param.
+        click.core.Option.__init__(self, param_decls, *args, **kwargs)
+
+class SolidFireCommand(click.Command):
+    def parse_args(self, ctx, args):
+        myargs= click.Command.parse_args(self, ctx, args)
+        return myargs
+
+    def make_parser(self, ctx):
+        """Creates the underlying option parser for this command."""
+        parser = SolidFireParser(ctx)
+        parser.allow_interspersed_args = ctx.allow_interspersed_args
+        parser.ignore_unknown_options = ctx.ignore_unknown_options
+        for param in self.get_params(ctx):
+            param.add_to_parser(parser, ctx)
+        return parser
+
+    def parse_args(self, ctx, args):
+        parser = self.make_parser(ctx)
+        opts, args, param_order = parser.parse_args(args=args)
+
+        for param in click.core.iter_params_for_processing(
+                param_order, self.get_params(ctx)):
+            value, args = param.handle_parse_result(ctx, opts, args)
+
+        if args and not ctx.allow_extra_args and not ctx.resilient_parsing:
+            ctx.fail('Got unexpected extra argument%s (%s)'
+                     % (len(args) != 1 and 's' or '',
+                        ' '.join(map(click.core.make_str, args))))
+
+        ctx.args = args
+        return args
+
+
+class SolidFireGroup(click.Group):
+    def command(self, *args, **kwargs):
+        """A shortcut decorator for declaring and attaching a command to
+        the group.  This takes the same arguments as :func:`command` but
+        immediately registers the created command with this instance by
+        calling into :meth:`add_command`.
+        """
+        def decorator(f):
+            cmd = click.core.command(*args, **kwargs, cls=SolidFireCommand)(f)
+            self.add_command(cmd)
+            return cmd
+        return decorator
 
 @click.command(cls=SolidFireCLI, context_settings=CONTEXT_SETTINGS)
 @click.option('--mvip', '-m',
@@ -152,7 +296,6 @@ def cli(ctx,
         verbose=0,
         version='9.0'):
     """SolidFire command line interface."""
-
     # NOTE(jdg): This method is actually our console entry point,
     # if/when we introduce a v2 of the shell and client, we may
     # need to define a new entry point one level up that parses

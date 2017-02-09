@@ -84,7 +84,7 @@ def modify(ctx,
 
     if(addressblocks is not None):
         try:
-            kwargsDict = simplejson.loads(addressblocks)
+            kwargsDict = cli_utils.loads(addressblocks)
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
@@ -171,7 +171,7 @@ def add(ctx,
 
     if(addressblocks is not None):
         try:
-            kwargsDict = simplejson.loads(addressblocks)
+            kwargsDict = cli_utils.loads(addressblocks)
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)

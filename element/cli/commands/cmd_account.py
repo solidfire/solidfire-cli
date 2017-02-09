@@ -11,6 +11,7 @@ import click
 from element.cli import utils as cli_utils
 from element.cli import parser
 from element.cli.cli import pass_context
+from element.cli.cli import SolidFireCommand, SolidFireOption
 from element import utils
 import jsonpickle
 import simplejson
@@ -286,14 +287,31 @@ def add(ctx,
 
 
 
-@cli.command('getbyid', short_help="""Returns details about an account, given its AccountID. """)
+@cli.command('getbyid', short_help="""Returns details about an account, given its AccountID. """, cls=SolidFireCommand)
 @click.option('--accountid',
               type=int,
               required=True,
-              help="""Specifies the account for which details are gathered. """)
+              help="""Specifies the account for which details are gathered. """,
+              cls=SolidFireOption)
+@click.option('--accountid2',
+              type=int,
+              required=True,
+              help="""Specifies the account for which details are gathered. """,
+              cls=SolidFireOption,
+              subparameters=["sub"],
+              multiple=True)
+@click.option('--sub',
+              required=False,
+              multiple=True,
+              default=None)
 @pass_context
 def getbyid(ctx,
-           accountid):
+           accountid,
+            accountid2,
+            sub):
+    print("PARAMETERS")
+    print(accountid2)
+    print(sub)
     """Returns details about an account, given its AccountID."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")

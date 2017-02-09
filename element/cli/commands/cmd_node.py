@@ -25,49 +25,8 @@ from solidfire import common
 @pass_context
 def cli(ctx):
     """setnetworkconfig listpending getorigin listpendingactive listall getpendingoperation liststats add setconfig getnetworkconfig getstats getconfig remove listactive getbootstrapconfig """
-
-@cli.command('setnetworkconfig', short_help="""The "SetNetworkConfig" method is used to set the network configuration for a node. To see the states in which these objects can be modified, see "Network Object for 1G and 10G Interfaces" on page 109 of the Element API. To display the current network settings for a node, run the "GetNetworkConfig" method.  WARNING! Changing the "bond-mode" on a node can cause a temporary loss of network connectivity. Caution should be taken when using this method.  Note: This method is available only through the per-node API endpoint 5.0 or later. """)
-@click.option('--network',
-              type=str,
-              required=True,
-              help="""Provide in json format: Objects that will be changed for the node network settings. """)
-@pass_context
-def setnetworkconfig(ctx,
-           network):
-    """The &quot;SetNetworkConfig&quot; method is used to set the network configuration for a node. To see the states in which these objects can be modified, see &quot;Network Object for 1G and 10G Interfaces&quot; on page 109 of the Element API. To display the current network settings for a node, run the &quot;GetNetworkConfig&quot; method."""
-    """"""
-    """WARNING! Changing the &quot;bond-mode&quot; on a node can cause a temporary loss of network connectivity. Caution should be taken when using this method."""
-    """"""
-    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-    if(network is not None):
-        try:
-            kwargsDict = simplejson.loads(network)
-        except Exception as e:
-            ctx.logger.error(e.__str__())
-            exit(1)
-        try:
-            network = NetworkParams(**kwargsDict)
-        except:
-            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
-    
-
-    ctx.logger.info("""network = """+str(network)+""";"""+"")
-    try:
-        _SetNetworkConfigResult = ctx.element.set_network_config(network=network)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_SetNetworkConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
+# SetNewtorkConfig has been intentionally excluded from the python cli because
+# the input values would be too complex to reasonably support in a CLI.
 
 
 @cli.command('listpending', short_help="""Gets the list of pending nodes. Pending nodes are running and configured to join the cluster, but have not been added via the AddNodes method. """)
@@ -267,49 +226,8 @@ def add(ctx,
     cli_utils.print_result(_AddNodesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
-
-@cli.command('setconfig', short_help="""The SetConfig API method is used to set all the configuration information for the node. This includes the same information available via calls to SetClusterConfig and SetNetworkConfig in one API method.  Warning! Changing the 'bond-mode' on a node can cause a temporary loss of network connectivity. Caution should be taken when using this method.  Note: This method is available only through the per-node API endpoint 5.0 or later. """)
-@click.option('--config',
-              type=str,
-              required=True,
-              help="""Provide in json format: Objects that you want changed for the cluster interface settings. """)
-@pass_context
-def setconfig(ctx,
-           config):
-    """The SetConfig API method is used to set all the configuration information for the node. This includes the same information available via calls to SetClusterConfig and SetNetworkConfig in one API method."""
-    """"""
-    """Warning! Changing the &#x27;bond-mode&#x27; on a node can cause a temporary loss of network connectivity. Caution should be taken when using this method."""
-    """"""
-    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-    if(config is not None):
-        try:
-            kwargsDict = simplejson.loads(config)
-        except Exception as e:
-            ctx.logger.error(e.__str__())
-            exit(1)
-        try:
-            config = Config(**kwargsDict)
-        except:
-            ctx.logger.error("""The format of the json you passed in did not match the required format of the special json. Either correct your format by referring to the README.md or use sfcli sfapi invoke if you'd rather directly interface with the json-rpc.""")
-    
-
-    ctx.logger.info("""config = """+str(config)+""";"""+"")
-    try:
-        _SetConfigResult = ctx.element.set_config(config=config)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_SetConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
+# SetConfig has been intentionally excluded from the python cli because
+# the input values would be too complex to reasonably support in a CLI.
 
 
 @cli.command('getnetworkconfig', short_help="""The GetNetworkConfig API method is used to display the network configuration information for a node.  Note: This method is available only through the per-node API endpoint 5.0 or later. """)
