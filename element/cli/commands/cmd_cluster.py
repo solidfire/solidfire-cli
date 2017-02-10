@@ -1117,10 +1117,10 @@ def getversioninfo(ctx):
               cls=SolidFireOption,
               is_flag=True,
               multiple=True,
-              subparameters=["_access", "_cidr", "_community", "_network", ],
+              subparameters=["_accessnetworks", "_cidr", "_community", "_network", ],
               required=True,
               help="""Provide in json format: List of networks and what type of access they have to the SNMP servers running on the cluster nodes. See SNMP Network Object for possible "networks" values. REQUIRED if SNMP v# is disabled. """)
-@click.option('--_access',
+@click.option('--_accessnetworks',
               required=True,
               multiple=True,
               type=str,
@@ -1156,10 +1156,10 @@ def getversioninfo(ctx):
               cls=SolidFireOption,
               is_flag=True,
               multiple=True,
-              subparameters=["_access", "_name", "_password", "_passphrase", "_seclevel", ],
+              subparameters=["_accessusmusers", "_name", "_password", "_passphrase", "_seclevel", ],
               required=True,
               help="""Provide in json format: List of users and the type of access they have to the SNMP servers running on the cluster nodes. REQUIRED if SNMP v3 is enabled. """)
-@click.option('--_access',
+@click.option('--_accessusmusers',
               required=True,
               multiple=True,
               type=str,
@@ -1203,11 +1203,11 @@ def getversioninfo(ctx):
 def setsnmpacl(ctx,
            networks,
            usmusers,
-           _access,
+           _accessnetworks,
            _cidr,
            _community,
            _network,
-           _access,
+           _accessusmusers,
            _name,
            _password,
            _passphrase,
@@ -1223,7 +1223,7 @@ def setsnmpacl(ctx,
     if(networks is not None):
         try:
             for i, _networks in enumerate(networks):
-                networksArray.append(SnmpNetwork(access=_access[i], cidr=_cidr[i], community=_community[i], network=_network[i], ))
+                networksArray.append(SnmpNetwork(access=_accessnetworks[i], cidr=_cidr[i], community=_community[i], network=_network[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)    
@@ -1232,7 +1232,7 @@ def setsnmpacl(ctx,
     if(usmusers is not None):
         try:
             for i, _usmusers in enumerate(usmusers):
-                usmusersArray.append(SnmpV3UsmUser(access=_access[i], name=_name[i], password=_password[i], passphrase=_passphrase[i], sec_level=_seclevel[i], ))
+                usmusersArray.append(SnmpV3UsmUser(access=_accessusmusers[i], name=_name[i], password=_password[i], passphrase=_passphrase[i], sec_level=_seclevel[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
@@ -1422,10 +1422,10 @@ def getmasternodeid(ctx):
               cls=SolidFireOption,
               is_flag=True,
               multiple=True,
-              subparameters=["_access", "_cidr", "_community", "_network", ],
+              subparameters=["_accessnetworks", "_cidr", "_community", "_network", ],
               required=False,
               help="""Provide in json format: List of networks and what type of access they have to the SNMP servers running on the cluster nodes. See SNMP Network Object for possible "networks" values. SNMP v2 only. """)
-@click.option('--_access',
+@click.option('--_accessnetworks',
               required=False,
               multiple=True,
               type=str,
@@ -1469,10 +1469,10 @@ def getmasternodeid(ctx):
               cls=SolidFireOption,
               is_flag=True,
               multiple=True,
-              subparameters=["_access", "_name", "_password", "_passphrase", "_seclevel", ],
+              subparameters=["_accessusmusers", "_name", "_password", "_passphrase", "_seclevel", ],
               required=False,
               help="""Provide in json format: If SNMP v3 is enabled, this value must be passed in place of the "networks" parameter. SNMP v3 only. """)
-@click.option('--_access',
+@click.option('--_accessusmusers',
               required=False,
               multiple=True,
               type=str,
@@ -1515,14 +1515,14 @@ def getmasternodeid(ctx):
 @pass_context
 def setsnmpinfo(ctx,
            networks = None,
-           _access = None,
+           _accessnetworks = None,
            _cidr = None,
            _community = None,
            _network = None,
            enabled = None,
            snmpv3enabled = None,
            usmusers = None,
-           _access = None,
+           _accessusmusers = None,
            _name = None,
            _password = None,
            _passphrase = None,
@@ -1540,7 +1540,7 @@ def setsnmpinfo(ctx,
     if(networks is not None):
         try:
             for i, _networks in enumerate(networks):
-                networksArray.append(SnmpNetwork(access=_access[i], cidr=_cidr[i], community=_community[i], network=_network[i], ))
+                networksArray.append(SnmpNetwork(access=_accessnetworks[i], cidr=_cidr[i], community=_community[i], network=_network[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)            
@@ -1549,7 +1549,7 @@ def setsnmpinfo(ctx,
     if(usmusers is not None):
         try:
             for i, _usmusers in enumerate(usmusers):
-                usmusersArray.append(SnmpV3UsmUser(access=_access[i], name=_name[i], password=_password[i], passphrase=_passphrase[i], sec_level=_seclevel[i], ))
+                usmusersArray.append(SnmpV3UsmUser(access=_accessusmusers[i], name=_name[i], password=_password[i], passphrase=_passphrase[i], sec_level=_seclevel[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
