@@ -381,19 +381,19 @@ def liststatsby(ctx):
               type=bool,
               required=True,
               help="""Should the volume provides 512-byte sector emulation? """)
-@click.option('--_miniops',
+@click.option('--qosminiops',
               type=int,
               required=False,
               help="""Desired minimum 4KB IOPS to guarantee. The allowed IOPS will only drop below this level if all volumes have been capped at their minimum IOPS value and there is still insufficient performance capacity. """)
-@click.option('--_maxiops',
+@click.option('--qosmaxiops',
               type=int,
               required=False,
               help="""Desired maximum 4KB IOPS allowed over an extended period of time. """)
-@click.option('--_burstiops',
+@click.option('--qosburstiops',
               type=int,
               required=False,
               help="""Maximum "peak" 4KB IOPS allowed for short periods of time. Allows for bursts of I/O activity over the normal max IOPS value. """)
-@click.option('--_bursttime',
+@click.option('--qosbursttime',
               type=int,
               required=False,
               help="""The length of time burst IOPS is allowed. The value returned is represented in time units of seconds. Note: this value is calculated by the system based on IOPS set for QoS. """)
@@ -734,19 +734,19 @@ def clone(ctx,
               type=str,
               required=False,
               help="""Access allowed for the volume. readOnly: Only read operations are allowed. readWrite: Reads and writes are allowed. locked: No reads or writes are allowed. replicationTarget: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked.  If unspecified, the access settings of the clone will be the same as the source. """)
-@click.option('--_miniops',
+@click.option('--qosminiops',
               type=int,
               required=False,
               help="""Desired minimum 4KB IOPS to guarantee. The allowed IOPS will only drop below this level if all volumes have been capped at their minimum IOPS value and there is still insufficient performance capacity. """)
-@click.option('--_maxiops',
+@click.option('--qosmaxiops',
               type=int,
               required=False,
               help="""Desired maximum 4KB IOPS allowed over an extended period of time. """)
-@click.option('--_burstiops',
+@click.option('--qosburstiops',
               type=int,
               required=False,
               help="""Maximum "peak" 4KB IOPS allowed for short periods of time. Allows for bursts of I/O activity over the normal max IOPS value. """)
-@click.option('--_bursttime',
+@click.option('--qosbursttime',
               type=int,
               required=False,
               help="""The length of time burst IOPS is allowed. The value returned is represented in time units of seconds. Note: this value is calculated by the system based on IOPS set for QoS. """)

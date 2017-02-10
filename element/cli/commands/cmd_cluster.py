@@ -592,43 +592,43 @@ def setntpinfo(ctx,
 
 
 @cli.command('setconfig', short_help="""The SetClusterConfig API method is used to set the configuration this node uses to communicate with the cluster it is associated with. To see the states in which these objects can be modified see Cluster Object on page 109. To display the current cluster interface settings for a node, run the GetClusterConfig API method.  Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
-@click.option('--_cipi',
+@click.option('--clusterconfigcipi',
               type=str,
               required=False,
               help="""Network interface used for cluster communication. """)
-@click.option('--_cluster',
+@click.option('--clusterconfigcluster',
               type=str,
               required=False,
               help="""Unique cluster name. """)
-@click.option('--_ensemble',
+@click.option('--clusterconfigensemble',
               type=str,
               required=False,
               help="""Nodes that are participating in the cluster. """)
-@click.option('--_mipi',
+@click.option('--clusterconfigmipi',
               type=str,
               required=False,
               help="""Network interface used for node management. """)
-@click.option('--_name',
+@click.option('--clusterconfigname',
               type=str,
               required=False,
               help="""Unique cluster name. """)
-@click.option('--_nodeid',
+@click.option('--clusterconfignodeid',
               type=int,
               required=False,
               help="""""")
-@click.option('--_pendingnodeid',
+@click.option('--clusterconfigpendingnodeid',
               type=int,
               required=False,
               help="""""")
-@click.option('--_role',
+@click.option('--clusterconfigrole',
               type=str,
               required=False,
               help="""Identifies the role of the node """)
-@click.option('--_sipi',
+@click.option('--clusterconfigsipi',
               type=str,
               required=False,
               help="""Network interface used for storage. """)
-@click.option('--_state',
+@click.option('--clusterconfigstate',
               type=str,
               required=False,
               help="""""")

@@ -118,43 +118,43 @@ def getconfiguration(ctx):
               type=str,
               required=True,
               help="""The password for the username to be tester. """)
-@click.option('--_authtype',
+@click.option('--ldapconfigurationauthtype',
               type=str,
               required=False,
               help="""Identifies which user authentcation method will be used.  Valid values: DirectBind SearchAndBind """)
-@click.option('--_enabled',
+@click.option('--ldapconfigurationenabled',
               type=bool,
               required=False,
               help="""Identifies whether or not the system is enabled for LDAP.  Valid values: true false """)
-@click.option('--_groupsearchbasedn',
+@click.option('--ldapconfigurationgroupsearchbasedn',
               type=str,
               required=False,
               help="""The base DN of the tree to start the group search (will do a subtree search from here). """)
-@click.option('--_groupsearchcustomfilter',
+@click.option('--ldapconfigurationgroupsearchcustomfilter',
               type=str,
               required=False,
               help="""The custom search filter used. """)
-@click.option('--_groupsearchtype',
+@click.option('--ldapconfigurationgroupsearchtype',
               type=str,
               required=False,
               help="""Controls the default group search filter used, can be one of the following: NoGroups: No group support. ActiveDirectory: Nested membership of all of a user's AD groups. MemberDN: MemberDN style groups (single-level). """)
-@click.option('--_searchbinddn',
+@click.option('--ldapconfigurationsearchbinddn',
               type=str,
               required=False,
               help="""A fully qualified DN to log in with to perform an LDAP search for the user (needs read access to the LDAP directory). """)
-@click.option('--_serveruris',
+@click.option('--ldapconfigurationserveruris',
               type=str,
               required=False,
               help="""A comma-separated list of LDAP server URIs (examples: "ldap://1.2.3.4" and ldaps://1.2.3.4:123") """)
-@click.option('--_userdntemplate',
+@click.option('--ldapconfigurationuserdntemplate',
               type=str,
               required=False,
               help="""A string that is used to form a fully qualified user DN. """)
-@click.option('--_usersearchbasedn',
+@click.option('--ldapconfigurationusersearchbasedn',
               type=str,
               required=False,
               help="""The base DN of the tree used to start the search (will do a subtree search from here). """)
-@click.option('--_usersearchfilter',
+@click.option('--ldapconfigurationusersearchfilter',
               type=str,
               required=False,
               help="""The LDAP filter used. """)
