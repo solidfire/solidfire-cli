@@ -87,7 +87,8 @@ def setremotelogginghosts(ctx,
 
     
 
-    remotehostsArray = []    if(remotehosts is not None):
+    remotehostsArray = []
+    if(remotehosts is not None):
         try:
             for i, _remotehosts in enumerate(remotehosts):
                 remotehostsArray.append(LoggingServer(host=_host[i], port=_port[i], ))

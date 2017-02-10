@@ -61,6 +61,7 @@ def addclusteradmin(ctx,
     access = parser.parse_array(access)        
 
     kwargsDict = None
+
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)

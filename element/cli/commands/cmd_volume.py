@@ -123,6 +123,7 @@ def startbulkwrite(ctx,
                     
 
     kwargsDict = None
+
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
@@ -181,6 +182,7 @@ def updatebulkstatus(ctx,
                     
 
     kwargsDict = None
+
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
@@ -256,6 +258,7 @@ def startbulkread(ctx,
                         
 
     kwargsDict = None
+
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
@@ -435,6 +438,7 @@ def create(ctx,
         qos = QoS(**kwargsDict)    
 
     kwargsDict = None
+
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
@@ -694,6 +698,7 @@ def clone(ctx,
                             
 
     kwargsDict = None
+
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
@@ -797,6 +802,7 @@ def modify(ctx,
         qos = QoS(**kwargsDict)        
 
     kwargsDict = None
+
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
@@ -1076,7 +1082,8 @@ def clonemultiple(ctx,
 
     
 
-    volumesArray = []    if(volumes is not None):
+    volumesArray = []
+    if(volumes is not None):
         try:
             for i, _volumes in enumerate(volumes):
                 volumesArray.append(CloneMultipleVolumeParams(volume_id=_volumeid[i], access=_access[i], name=_name[i], new_account_id=_newaccountid[i], new_size=_newsize[i], attributes=_attributes[i], ))

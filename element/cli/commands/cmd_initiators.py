@@ -81,7 +81,8 @@ def modify(ctx,
 
     
 
-    initiatorsArray = []    if(initiators is not None):
+    initiatorsArray = []
+    if(initiators is not None):
         try:
             for i, _initiators in enumerate(initiators):
                 initiatorsArray.append(ModifyInitiator(initiator_id=_initiatorid[i], alias=_alias[i], volume_access_group_id=_volumeaccessgroupid[i], attributes=_attributes[i], ))
@@ -159,7 +160,8 @@ def create(ctx,
 
     
 
-    initiatorsArray = []    if(initiators is not None):
+    initiatorsArray = []
+    if(initiators is not None):
         try:
             for i, _initiators in enumerate(initiators):
                 initiatorsArray.append(CreateInitiator(name=_name[i], alias=_alias[i], volume_access_group_id=_volumeaccessgroupid[i], attributes=_attributes[i], ))

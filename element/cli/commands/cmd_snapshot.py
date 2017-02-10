@@ -182,6 +182,7 @@ def create(ctx,
                         
 
     kwargsDict = None
+
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
@@ -507,6 +508,7 @@ def rollbacktogroup(ctx,
                 
 
     kwargsDict = None
+
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
@@ -570,6 +572,7 @@ def rollbackto(ctx,
                     
 
     kwargsDict = None
+
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
@@ -634,6 +637,7 @@ def creategroup(ctx,
     volumes = parser.parse_array(volumes)                
 
     kwargsDict = None
+
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)

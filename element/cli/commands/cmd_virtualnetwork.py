@@ -104,7 +104,8 @@ def modify(ctx,
 
                 
 
-    addressblocksArray = []    if(addressblocks is not None):
+    addressblocksArray = []
+    if(addressblocks is not None):
         try:
             for i, _addressblocks in enumerate(addressblocks):
                 addressblocksArray.append(AddressBlock(start=_start[i], size=_size[i], ))
@@ -113,6 +114,7 @@ def modify(ctx,
             exit(1)                    
 
     kwargsDict = None
+
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
@@ -208,7 +210,8 @@ def add(ctx,
 
             
 
-    addressblocksArray = []    if(addressblocks is not None):
+    addressblocksArray = []
+    if(addressblocks is not None):
         try:
             for i, _addressblocks in enumerate(addressblocks):
                 addressblocksArray.append(AddressBlock(start=_start[i], size=_size[i], ))
@@ -217,6 +220,7 @@ def add(ctx,
             exit(1)                    
 
     kwargsDict = None
+
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)

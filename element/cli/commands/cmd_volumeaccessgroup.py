@@ -126,6 +126,7 @@ def modify(ctx,
     volumes = parser.parse_array(volumes)    
 
     kwargsDict = None
+
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
@@ -201,6 +202,7 @@ def create(ctx,
     virtualnetworktags = parser.parse_array(virtualnetworktags)    
 
     kwargsDict = None
+
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
@@ -270,7 +272,8 @@ def modifylunassignments(ctx,
 
         
 
-    lunassignmentsArray = []    if(lunassignments is not None):
+    lunassignmentsArray = []
+    if(lunassignments is not None):
         try:
             for i, _lunassignments in enumerate(lunassignments):
                 lunassignmentsArray.append(LunAssignment(volume_id=_volumeid[i], lun=_lun[i], ))

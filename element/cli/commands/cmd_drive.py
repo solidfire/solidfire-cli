@@ -236,7 +236,8 @@ def add(ctx,
 
     
 
-    drivesArray = []    if(drives is not None):
+    drivesArray = []
+    if(drives is not None):
         try:
             for i, _drives in enumerate(drives):
                 drivesArray.append(NewDrive(drive_id=_driveid[i], ))

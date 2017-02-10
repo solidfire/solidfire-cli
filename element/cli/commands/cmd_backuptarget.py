@@ -52,6 +52,7 @@ def modify(ctx,
             
 
     kwargsDict = None
+
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
@@ -95,6 +96,7 @@ def create(ctx,
         
 
     kwargsDict = None
+
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)

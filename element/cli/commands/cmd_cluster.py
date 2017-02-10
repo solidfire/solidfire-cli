@@ -291,7 +291,8 @@ def setsnmptrapinfo(ctx,
 
     
 
-    traprecipientsArray = []    if(traprecipients is not None):
+    traprecipientsArray = []
+    if(traprecipients is not None):
         try:
             for i, _traprecipients in enumerate(traprecipients):
                 traprecipientsArray.append(SnmpTrapRecipient(host=_host[i], community=_community[i], port=_port[i], ))
@@ -440,6 +441,7 @@ def create(ctx,
     nodes = parser.parse_array(nodes)    
 
     kwargsDict = None
+
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
@@ -529,6 +531,7 @@ def addadmin(ctx,
     access = parser.parse_array(access)        
 
     kwargsDict = None
+
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
@@ -727,6 +730,7 @@ def modifyadmin(ctx,
     access = parser.parse_array(access)    
 
     kwargsDict = None
+
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
@@ -1215,7 +1219,8 @@ def setsnmpacl(ctx,
 
     
 
-    networksArray = []    if(networks is not None):
+    networksArray = []
+    if(networks is not None):
         try:
             for i, _networks in enumerate(networks):
                 networksArray.append(SnmpNetwork(access=_access[i], cidr=_cidr[i], community=_community[i], network=_network[i], ))
@@ -1223,7 +1228,8 @@ def setsnmpacl(ctx,
             ctx.logger.error(e.__str__())
             exit(1)    
 
-    usmusersArray = []    if(usmusers is not None):
+    usmusersArray = []
+    if(usmusers is not None):
         try:
             for i, _usmusers in enumerate(usmusers):
                 usmusersArray.append(SnmpV3UsmUser(access=_access[i], name=_name[i], password=_password[i], passphrase=_passphrase[i], sec_level=_seclevel[i], ))
@@ -1530,7 +1536,8 @@ def setsnmpinfo(ctx,
 
     
 
-    networksArray = []    if(networks is not None):
+    networksArray = []
+    if(networks is not None):
         try:
             for i, _networks in enumerate(networks):
                 networksArray.append(SnmpNetwork(access=_access[i], cidr=_cidr[i], community=_community[i], network=_network[i], ))
@@ -1538,7 +1545,8 @@ def setsnmpinfo(ctx,
             ctx.logger.error(e.__str__())
             exit(1)            
 
-    usmusersArray = []    if(usmusers is not None):
+    usmusersArray = []
+    if(usmusers is not None):
         try:
             for i, _usmusers in enumerate(usmusers):
                 usmusersArray.append(SnmpV3UsmUser(access=_access[i], name=_name[i], password=_password[i], passphrase=_passphrase[i], sec_level=_seclevel[i], ))
