@@ -44,7 +44,7 @@ def removevolumesfrom(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+        
 
     volumes = parser.parse_array(volumes)
     
@@ -89,10 +89,7 @@ def removevolumesfrom(ctx,
               required=False,
               help="""List of volumes to initially include in the volume access group. If unspecified, the access group's volumes will not be modified. """)
 @click.option('--attributes',
-              cls=SolidFireOption,
-              is_flag=True,
-              multiple=True,
-              subparameters=[],
+              type=str,
               required=False,
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
@@ -118,16 +115,17 @@ def modify(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
+        
 
+    virtualnetworkid = parser.parse_array(virtualnetworkid)    
 
-    virtualnetworkid = parser.parse_array(virtualnetworkid)
+    virtualnetworktags = parser.parse_array(virtualnetworktags)        
 
-    virtualnetworktags = parser.parse_array(virtualnetworktags)
+    initiators = parser.parse_array(initiators)    
 
-    initiators = parser.parse_array(initiators)
+    volumes = parser.parse_array(volumes)    
 
-    volumes = parser.parse_array(volumes)
-    attributesArray = []
+    kwargsDict = None
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
@@ -138,7 +136,7 @@ def modify(ctx,
 
     ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"""virtualnetworkid = """+str(virtualnetworkid)+""";"""+"""virtualnetworktags = """+str(virtualnetworktags)+""";"""+"""name = """+str(name)+""";"""+"""initiators = """+str(initiators)+""";"""+"""volumes = """+str(volumes)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _ModifyVolumeAccessGroupResult = ctx.element.modify_volume_access_group(volume_access_group_id=volumeaccessgroupid, virtual_network_id=virtualnetworkid, virtual_network_tags=virtualnetworktags, name=name, initiators=initiators, volumes=volumes, attributes=attributesArray)
+        _ModifyVolumeAccessGroupResult = ctx.element.modify_volume_access_group(volume_access_group_id=volumeaccessgroupid, virtual_network_id=virtualnetworkid, virtual_network_tags=virtualnetworktags, name=name, initiators=initiators, volumes=volumes, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -172,10 +170,7 @@ def modify(ctx,
               required=False,
               help="""The ID of the VLAN Virtual Network Tag to associate the volume access group with. """)
 @click.option('--attributes',
-              cls=SolidFireOption,
-              is_flag=True,
-              multiple=True,
-              subparameters=[],
+              type=str,
               required=False,
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
@@ -195,16 +190,17 @@ def create(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
+        
 
+    initiators = parser.parse_array(initiators)    
 
-    initiators = parser.parse_array(initiators)
+    volumes = parser.parse_array(volumes)    
 
-    volumes = parser.parse_array(volumes)
+    virtualnetworkid = parser.parse_array(virtualnetworkid)    
 
-    virtualnetworkid = parser.parse_array(virtualnetworkid)
+    virtualnetworktags = parser.parse_array(virtualnetworktags)    
 
-    virtualnetworktags = parser.parse_array(virtualnetworktags)
-    attributesArray = []
+    kwargsDict = None
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
@@ -215,7 +211,7 @@ def create(ctx,
 
     ctx.logger.info("""name = """+str(name)+""";"""+"""initiators = """+str(initiators)+""";"""+"""volumes = """+str(volumes)+""";"""+"""virtualnetworkid = """+str(virtualnetworkid)+""";"""+"""virtualnetworktags = """+str(virtualnetworktags)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _CreateVolumeAccessGroupResult = ctx.element.create_volume_access_group(name=name, initiators=initiators, volumes=volumes, virtual_network_id=virtualnetworkid, virtual_network_tags=virtualnetworktags, attributes=attributesArray)
+        _CreateVolumeAccessGroupResult = ctx.element.create_volume_access_group(name=name, initiators=initiators, volumes=volumes, virtual_network_id=virtualnetworkid, virtual_network_tags=virtualnetworktags, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -272,9 +268,9 @@ def modifylunassignments(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
+        
 
-    lunassignmentsArray = []
-    if(lunassignments is not None):
+    lunassignmentsArray = []    if(lunassignments is not None):
         try:
             for i, _lunassignments in enumerate(lunassignments):
                 lunassignmentsArray.append(LunAssignment(volume_id=_volumeid[i], lun=_lun[i], ))
@@ -315,7 +311,7 @@ def list(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+        
     
 
     ctx.logger.info("""startvolumeaccessgroupid = """+str(startvolumeaccessgroupid)+""";"""+"""limit = """+str(limit)+""";"""+"")
@@ -350,7 +346,7 @@ def addinitiatorsto(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+        
 
     initiators = parser.parse_array(initiators)
     
@@ -382,7 +378,7 @@ def getlunassignments(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"")
@@ -417,7 +413,7 @@ def addvolumesto(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+        
 
     volumes = parser.parse_array(volumes)
     
@@ -454,7 +450,7 @@ def removeinitiatorsfrom(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+        
 
     initiators = parser.parse_array(initiators)
     
@@ -486,7 +482,7 @@ def getefficiency(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"")
@@ -516,7 +512,7 @@ def delete(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"")

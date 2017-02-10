@@ -39,7 +39,7 @@ def listhosts(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
 
     virtualvolumehostids = parser.parse_array(virtualvolumehostids)
     
@@ -71,7 +71,7 @@ def listtasks(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
 
     virtualvolumetaskids = parser.parse_array(virtualvolumetaskids)
     
@@ -103,7 +103,7 @@ def enablefeature(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""feature = """+str(feature)+""";"""+"")
@@ -153,7 +153,7 @@ def list(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+                    
 
     virtualvolumeids = parser.parse_array(virtualvolumeids)
     
@@ -185,7 +185,7 @@ def listbindings(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
 
     virtualvolumebindingids = parser.parse_array(virtualvolumebindingids)
     
@@ -242,7 +242,7 @@ def getfeaturestatus(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""feature = """+str(feature)+""";"""+"")

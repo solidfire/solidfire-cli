@@ -85,9 +85,9 @@ def setremotelogginghosts(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
+    
 
-    remotehostsArray = []
-    if(remotehosts is not None):
+    remotehostsArray = []    if(remotehosts is not None):
         try:
             for i, _remotehosts in enumerate(remotehosts):
                 remotehostsArray.append(LoggingServer(host=_host[i], port=_port[i], ))
@@ -123,7 +123,7 @@ def setinfo(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""timeout = """+str(timeout)+""";"""+"")

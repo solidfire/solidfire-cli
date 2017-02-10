@@ -39,7 +39,7 @@ def getipmiinfo(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""force = """+str(force)+""";"""+"")
@@ -74,7 +74,7 @@ def getipmiconfig(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+        
     
 
     ctx.logger.info("""chassistype = """+str(chassistype)+""";"""+"""force = """+str(force)+""";"""+"")

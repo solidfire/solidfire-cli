@@ -86,7 +86,7 @@ def ping(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+                    
     
 
     ctx.logger.info("""attempts = """+str(attempts)+""";"""+"""hosts = """+str(hosts)+""";"""+"""totaltimeoutsec = """+str(totaltimeoutsec)+""";"""+"""packetsize = """+str(packetsize)+""";"""+"""pingtimeoutmsec = """+str(pingtimeoutmsec)+""";"""+"")
@@ -117,7 +117,7 @@ def connectmvip(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""mvip = """+str(mvip)+""";"""+"")
@@ -174,7 +174,7 @@ def connectensemble(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""ensemble = """+str(ensemble)+""";"""+"")
@@ -205,7 +205,7 @@ def connectsvip(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""svip = """+str(svip)+""";"""+"")

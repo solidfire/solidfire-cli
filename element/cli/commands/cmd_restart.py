@@ -49,7 +49,7 @@ def services(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+            
     
 
     ctx.logger.info("""force = """+str(force)+""";"""+"""service = """+str(service)+""";"""+"""action = """+str(action)+""";"""+"")
@@ -79,7 +79,7 @@ def networking(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""force = """+str(force)+""";"""+"")
@@ -119,7 +119,7 @@ def resetnode(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+            
     
 
     ctx.logger.info("""build = """+str(build)+""";"""+"""force = """+str(force)+""";"""+"""option = """+str(option)+""";"""+"")
@@ -154,9 +154,9 @@ def shutdown(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
+    
 
-
-    nodes = parser.parse_array(nodes)
+    nodes = parser.parse_array(nodes)    
     
 
     ctx.logger.info("""nodes = """+str(nodes)+""";"""+"""option = """+str(option)+""";"""+"")

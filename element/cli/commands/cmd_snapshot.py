@@ -39,7 +39,7 @@ def listgroup(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"")
@@ -79,7 +79,7 @@ def modifygroup(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+            
     
 
     ctx.logger.info("""groupsnapshotid = """+str(groupsnapshotid)+""";"""+"""expirationtime = """+str(expirationtime)+""";"""+"""enableremotereplication = """+str(enableremotereplication)+""";"""+"")
@@ -120,7 +120,7 @@ def modify(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+            
     
 
     ctx.logger.info("""snapshotid = """+str(snapshotid)+""";"""+"""expirationtime = """+str(expirationtime)+""";"""+"""enableremotereplication = """+str(enableremotereplication)+""";"""+"")
@@ -159,10 +159,7 @@ def modify(ctx,
               required=False,
               help="""The amount of time the snapshot will be retained. Enter in HH:mm:ss """)
 @click.option('--attributes',
-              cls=SolidFireOption,
-              is_flag=True,
-              multiple=True,
-              subparameters=[],
+              type=str,
               required=False,
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
@@ -182,8 +179,9 @@ def create(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
+                        
 
-    attributesArray = []
+    kwargsDict = None
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
@@ -194,7 +192,7 @@ def create(ctx,
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""snapshotid = """+str(snapshotid)+""";"""+"""name = """+str(name)+""";"""+"""enableremotereplication = """+str(enableremotereplication)+""";"""+"""retention = """+str(retention)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _CreateSnapshotResult = ctx.element.create_snapshot(volume_id=volumeid, snapshot_id=snapshotid, name=name, enable_remote_replication=enableremotereplication, retention=retention, attributes=attributesArray)
+        _CreateSnapshotResult = ctx.element.create_snapshot(volume_id=volumeid, snapshot_id=snapshotid, name=name, enable_remote_replication=enableremotereplication, retention=retention, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -219,7 +217,7 @@ def list(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"")
@@ -428,7 +426,7 @@ def deletegroup(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+        
     
 
     ctx.logger.info("""groupsnapshotid = """+str(groupsnapshotid)+""";"""+"""savemembers = """+str(savemembers)+""";"""+"")
@@ -458,7 +456,7 @@ def getschedule(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""scheduleid = """+str(scheduleid)+""";"""+"")
@@ -489,10 +487,7 @@ def getschedule(ctx,
               required=False,
               help="""Name for the snapshot. If no name is given, then the name of the snapshot being rolled back to is used with  "-copy" appended to the end of the name. """)
 @click.option('--attributes',
-              cls=SolidFireOption,
-              is_flag=True,
-              multiple=True,
-              subparameters=[],
+              type=str,
               required=False,
               help="""Provide in json format: List of Name/Value pairs in JSON object format """)
 @pass_context
@@ -509,8 +504,9 @@ def rollbacktogroup(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
+                
 
-    attributesArray = []
+    kwargsDict = None
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
@@ -521,7 +517,7 @@ def rollbacktogroup(ctx,
 
     ctx.logger.info("""groupsnapshotid = """+str(groupsnapshotid)+""";"""+"""savecurrentstate = """+str(savecurrentstate)+""";"""+"""name = """+str(name)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _CreateGroupSnapshotResult = ctx.element.rollback_to_group_snapshot(group_snapshot_id=groupsnapshotid, save_current_state=savecurrentstate, name=name, attributes=attributesArray)
+        _CreateGroupSnapshotResult = ctx.element.rollback_to_group_snapshot(group_snapshot_id=groupsnapshotid, save_current_state=savecurrentstate, name=name, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -551,10 +547,7 @@ def rollbacktogroup(ctx,
               required=False,
               help="""Name for the snapshot. If no name is given, then the name of the snapshot being rolled back to is used with  "-copy" appended to the end of the name. """)
 @click.option('--attributes',
-              cls=SolidFireOption,
-              is_flag=True,
-              multiple=True,
-              subparameters=[],
+              type=str,
               required=False,
               help="""Provide in json format: List of Name/Value pairs in JSON object format """)
 @pass_context
@@ -574,8 +567,9 @@ def rollbackto(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
+                    
 
-    attributesArray = []
+    kwargsDict = None
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
@@ -586,7 +580,7 @@ def rollbackto(ctx,
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""snapshotid = """+str(snapshotid)+""";"""+"""savecurrentstate = """+str(savecurrentstate)+""";"""+"""name = """+str(name)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _CreateSnapshotResult = ctx.element.rollback_to_snapshot(volume_id=volumeid, snapshot_id=snapshotid, save_current_state=savecurrentstate, name=name, attributes=attributesArray)
+        _CreateSnapshotResult = ctx.element.rollback_to_snapshot(volume_id=volumeid, snapshot_id=snapshotid, save_current_state=savecurrentstate, name=name, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -616,10 +610,7 @@ def rollbackto(ctx,
               required=False,
               help="""The amount of time the snapshot will be retained. Enter in HH:mm:ss """)
 @click.option('--attributes',
-              cls=SolidFireOption,
-              is_flag=True,
-              multiple=True,
-              subparameters=[],
+              type=str,
               required=False,
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
@@ -638,10 +629,11 @@ def creategroup(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
+    
 
+    volumes = parser.parse_array(volumes)                
 
-    volumes = parser.parse_array(volumes)
-    attributesArray = []
+    kwargsDict = None
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
@@ -652,7 +644,7 @@ def creategroup(ctx,
 
     ctx.logger.info("""volumes = """+str(volumes)+""";"""+"""name = """+str(name)+""";"""+"""enableremotereplication = """+str(enableremotereplication)+""";"""+"""retention = """+str(retention)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _CreateGroupSnapshotResult = ctx.element.create_group_snapshot(volumes=volumes, name=name, enable_remote_replication=enableremotereplication, retention=retention, attributes=attributesArray)
+        _CreateGroupSnapshotResult = ctx.element.create_group_snapshot(volumes=volumes, name=name, enable_remote_replication=enableremotereplication, retention=retention, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -887,7 +879,7 @@ def delete(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""snapshotid = """+str(snapshotid)+""";"""+"")

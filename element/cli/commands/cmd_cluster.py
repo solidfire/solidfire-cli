@@ -289,15 +289,15 @@ def setsnmptrapinfo(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
+    
 
-    traprecipientsArray = []
-    if(traprecipients is not None):
+    traprecipientsArray = []    if(traprecipients is not None):
         try:
             for i, _traprecipients in enumerate(traprecipients):
                 traprecipientsArray.append(SnmpTrapRecipient(host=_host[i], community=_community[i], port=_port[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1)
+            exit(1)            
     
 
     ctx.logger.info("""traprecipients = """+str(traprecipients)+""";"""+"""clusterfaulttrapsenabled = """+str(clusterfaulttrapsenabled)+""";"""+"""clusterfaultresolvedtrapsenabled = """+str(clusterfaultresolvedtrapsenabled)+""";"""+"""clustereventtrapsenabled = """+str(clustereventtrapsenabled)+""";"""+"")
@@ -343,7 +343,7 @@ def listfaults(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+                
     
 
     ctx.logger.info("""exceptions = """+str(exceptions)+""";"""+"""bestpractices = """+str(bestpractices)+""";"""+"""update = """+str(update)+""";"""+"""faulttypes = """+str(faulttypes)+""";"""+"")
@@ -415,10 +415,7 @@ def listadmins(ctx):
               required=True,
               help="""CIP/SIP addresses of the initial set of nodes making up the cluster. This node's IP must be in the list. """)
 @click.option('--attributes',
-              cls=SolidFireOption,
-              is_flag=True,
-              multiple=True,
-              subparameters=[],
+              type=str,
               required=False,
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
@@ -438,10 +435,11 @@ def create(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
+                            
 
+    nodes = parser.parse_array(nodes)    
 
-    nodes = parser.parse_array(nodes)
-    attributesArray = []
+    kwargsDict = None
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
@@ -452,7 +450,7 @@ def create(ctx,
 
     ctx.logger.info("""accepteula = """+str(accepteula)+""";"""+"""mvip = """+str(mvip)+""";"""+"""svip = """+str(svip)+""";"""+"""repcount = """+str(repcount)+""";"""+"""username = """+str(username)+""";"""+"""password = """+str(password)+""";"""+"""nodes = """+str(nodes)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _CreateClusterResult = ctx.element.create_cluster(mvip=mvip, svip=svip, rep_count=repcount, username=username, password=password, nodes=nodes, accept_eula=accepteula, attributes=attributesArray)
+        _CreateClusterResult = ctx.element.create_cluster(mvip=mvip, svip=svip, rep_count=repcount, username=username, password=password, nodes=nodes, accept_eula=accepteula, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -509,10 +507,7 @@ def disableencryptionatrest(ctx):
               required=False,
               help="""Indicate your acceptance of the End User License Agreement when creating this cluster admin. To accept the EULA, set this parameter to true. """)
 @click.option('--attributes',
-              cls=SolidFireOption,
-              is_flag=True,
-              multiple=True,
-              subparameters=[],
+              type=str,
               required=False,
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
@@ -529,10 +524,11 @@ def addadmin(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
+            
 
+    access = parser.parse_array(access)        
 
-    access = parser.parse_array(access)
-    attributesArray = []
+    kwargsDict = None
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
@@ -543,7 +539,7 @@ def addadmin(ctx,
 
     ctx.logger.info("""username = """+str(username)+""";"""+"""password = """+str(password)+""";"""+"""access = """+str(access)+""";"""+"""accepteula = """+str(accepteula)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _AddClusterAdminResult = ctx.element.add_cluster_admin(username=username, password=password, access=access, accept_eula=accepteula, attributes=attributesArray)
+        _AddClusterAdminResult = ctx.element.add_cluster_admin(username=username, password=password, access=access, accept_eula=accepteula, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -573,9 +569,9 @@ def setntpinfo(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
+    
 
-
-    servers = parser.parse_array(servers)
+    servers = parser.parse_array(servers)    
     
 
     ctx.logger.info("""servers = """+str(servers)+""";"""+"""broadcastclient = """+str(broadcastclient)+""";"""+"")
@@ -652,7 +648,7 @@ def setconfig(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
 
     cluster = None
     if(clusterconfigcipi is not None or
@@ -712,10 +708,7 @@ def setconfig(ctx,
               required=False,
               help="""Controls which methods this Cluster Admin can use. For more details on the levels of access, see "Access Control" in the Element API Guide. """)
 @click.option('--attributes',
-              cls=SolidFireOption,
-              is_flag=True,
-              multiple=True,
-              subparameters=[],
+              type=str,
               required=False,
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
@@ -729,10 +722,11 @@ def modifyadmin(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
+            
 
+    access = parser.parse_array(access)    
 
-    access = parser.parse_array(access)
-    attributesArray = []
+    kwargsDict = None
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
@@ -743,7 +737,7 @@ def modifyadmin(ctx,
 
     ctx.logger.info("""clusteradminid = """+str(clusteradminid)+""";"""+"""password = """+str(password)+""";"""+"""access = """+str(access)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _ModifyClusterAdminResult = ctx.element.modify_cluster_admin(cluster_admin_id=clusteradminid, password=password, access=access, attributes=attributesArray)
+        _ModifyClusterAdminResult = ctx.element.modify_cluster_admin(cluster_admin_id=clusteradminid, password=password, access=access, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -808,7 +802,7 @@ def listevents(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+                
     
 
     ctx.logger.info("""maxevents = """+str(maxevents)+""";"""+"""starteventid = """+str(starteventid)+""";"""+"""endeventid = """+str(endeventid)+""";"""+"""eventqueuetype = """+str(eventqueuetype)+""";"""+"")
@@ -863,7 +857,7 @@ def removeadmin(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""clusteradminid = """+str(clusteradminid)+""";"""+"")
@@ -903,7 +897,7 @@ def modifyfullthreshold(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+            
     
 
     ctx.logger.info("""stage2awarethreshold = """+str(stage2awarethreshold)+""";"""+"""stage3blockthresholdpercent = """+str(stage3blockthresholdpercent)+""";"""+"""maxmetadataoverprovisionfactor = """+str(maxmetadataoverprovisionfactor)+""";"""+"")
@@ -993,7 +987,7 @@ def createsupportbundle(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+            
     
 
     ctx.logger.info("""bundlename = """+str(bundlename)+""";"""+"""extraargs = """+str(extraargs)+""";"""+"""timeoutsec = """+str(timeoutsec)+""";"""+"")
@@ -1219,17 +1213,17 @@ def setsnmpacl(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
+    
 
-    networksArray = []
-    if(networks is not None):
+    networksArray = []    if(networks is not None):
         try:
             for i, _networks in enumerate(networks):
                 networksArray.append(SnmpNetwork(access=_access[i], cidr=_cidr[i], community=_community[i], network=_network[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1)
-    usmusersArray = []
-    if(usmusers is not None):
+            exit(1)    
+
+    usmusersArray = []    if(usmusers is not None):
         try:
             for i, _usmusers in enumerate(usmusers):
                 usmusersArray.append(SnmpV3UsmUser(access=_access[i], name=_name[i], password=_password[i], passphrase=_passphrase[i], sec_level=_seclevel[i], ))
@@ -1265,7 +1259,7 @@ def clearfaults(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""faulttypes = """+str(faulttypes)+""";"""+"")
@@ -1320,7 +1314,7 @@ def getstate(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""force = """+str(force)+""";"""+"")
@@ -1350,7 +1344,7 @@ def enablesnmp(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""snmpv3enabled = """+str(snmpv3enabled)+""";"""+"")
@@ -1534,17 +1528,17 @@ def setsnmpinfo(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
+    
 
-    networksArray = []
-    if(networks is not None):
+    networksArray = []    if(networks is not None):
         try:
             for i, _networks in enumerate(networks):
                 networksArray.append(SnmpNetwork(access=_access[i], cidr=_cidr[i], community=_community[i], network=_network[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1)
-    usmusersArray = []
-    if(usmusers is not None):
+            exit(1)            
+
+    usmusersArray = []    if(usmusers is not None):
         try:
             for i, _usmusers in enumerate(usmusers):
                 usmusersArray.append(SnmpV3UsmUser(access=_access[i], name=_name[i], password=_password[i], passphrase=_passphrase[i], sec_level=_seclevel[i], ))

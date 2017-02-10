@@ -79,9 +79,9 @@ def modify(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
+    
 
-    initiatorsArray = []
-    if(initiators is not None):
+    initiatorsArray = []    if(initiators is not None):
         try:
             for i, _initiators in enumerate(initiators):
                 initiatorsArray.append(ModifyInitiator(initiator_id=_initiatorid[i], alias=_alias[i], volume_access_group_id=_volumeaccessgroupid[i], attributes=_attributes[i], ))
@@ -157,9 +157,9 @@ def create(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
+    
 
-    initiatorsArray = []
-    if(initiators is not None):
+    initiatorsArray = []    if(initiators is not None):
         try:
             for i, _initiators in enumerate(initiators):
                 initiatorsArray.append(CreateInitiator(name=_name[i], alias=_alias[i], volume_access_group_id=_volumeaccessgroupid[i], attributes=_attributes[i], ))
@@ -205,7 +205,7 @@ def list(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+            
 
     initiators = parser.parse_array(initiators)
     
@@ -238,7 +238,7 @@ def delete(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
 
     initiators = parser.parse_array(initiators)
     

@@ -68,7 +68,7 @@ def getorigin(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""force = """+str(force)+""";"""+"")
@@ -208,7 +208,7 @@ def add(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
 
     pendingnodes = parser.parse_array(pendingnodes)
     
@@ -270,7 +270,7 @@ def getstats(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""nodeid = """+str(nodeid)+""";"""+"")
@@ -329,7 +329,7 @@ def remove(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
 
     nodes = parser.parse_array(nodes)
     

@@ -40,7 +40,7 @@ def completecluster(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""clusterpairingkey = """+str(clusterpairingkey)+""";"""+"")
@@ -75,7 +75,7 @@ def completevolume(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+        
     
 
     ctx.logger.info("""volumepairingkey = """+str(volumepairingkey)+""";"""+"""volumeid = """+str(volumeid)+""";"""+"")
@@ -133,7 +133,7 @@ def removevolumepair(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"")
@@ -169,7 +169,7 @@ def startvolume(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+        
     
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""mode = """+str(mode)+""";"""+"")
@@ -235,7 +235,7 @@ def modifyvolumepair(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+            
     
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""pausedmanual = """+str(pausedmanual)+""";"""+"""mode = """+str(mode)+""";"""+"")
@@ -293,7 +293,7 @@ def removeclusterpair(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""clusterpairid = """+str(clusterpairid)+""";"""+"")

@@ -36,10 +36,7 @@ def cli(ctx):
               required=False,
               help="""Name for the backup target. """)
 @click.option('--attributes',
-              cls=SolidFireOption,
-              is_flag=True,
-              multiple=True,
-              subparameters=[],
+              type=str,
               required=False,
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
@@ -52,8 +49,9 @@ def modify(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
+            
 
-    attributesArray = []
+    kwargsDict = None
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
@@ -64,7 +62,7 @@ def modify(ctx,
 
     ctx.logger.info("""backuptargetid = """+str(backuptargetid)+""";"""+"""name = """+str(name)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _ModifyBackupTargetResult = ctx.element.modify_backup_target(backup_target_id=backuptargetid, name=name, attributes=attributesArray)
+        _ModifyBackupTargetResult = ctx.element.modify_backup_target(backup_target_id=backuptargetid, name=name, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -82,10 +80,7 @@ def modify(ctx,
               required=True,
               help="""Name for the backup target. """)
 @click.option('--attributes',
-              cls=SolidFireOption,
-              is_flag=True,
-              multiple=True,
-              subparameters=[],
+              type=str,
               required=False,
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
@@ -97,8 +92,9 @@ def create(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
+        
 
-    attributesArray = []
+    kwargsDict = None
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
@@ -109,7 +105,7 @@ def create(ctx,
 
     ctx.logger.info("""name = """+str(name)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _CreateBackupTargetResult = ctx.element.create_backup_target(name=name, attributes=attributesArray)
+        _CreateBackupTargetResult = ctx.element.create_backup_target(name=name, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -159,7 +155,7 @@ def remove(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""backuptargetid = """+str(backuptargetid)+""";"""+"")
@@ -189,7 +185,7 @@ def get(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""backuptargetid = """+str(backuptargetid)+""";"""+"")

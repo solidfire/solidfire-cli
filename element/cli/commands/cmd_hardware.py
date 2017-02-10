@@ -64,7 +64,7 @@ def getnodeinfo(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""nodeid = """+str(nodeid)+""";"""+"")
@@ -94,7 +94,7 @@ def getclusterinfo(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""type = """+str(type)+""";"""+"")

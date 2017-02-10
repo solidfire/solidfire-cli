@@ -40,7 +40,7 @@ def getefficiency(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"")
@@ -101,10 +101,7 @@ def liststatsbyaccount(ctx):
               required=False,
               help="""JSON parameters to pass to the script. """)
 @click.option('--attributes',
-              cls=SolidFireOption,
-              is_flag=True,
-              multiple=True,
-              subparameters=[],
+              type=str,
               required=False,
               help="""Provide in json format: JSON attributes for the bulk volume job. """)
 @pass_context
@@ -123,8 +120,9 @@ def startbulkwrite(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
+                    
 
-    attributesArray = []
+    kwargsDict = None
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
@@ -135,7 +133,7 @@ def startbulkwrite(ctx,
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""format = """+str(format)+""";"""+"""script = """+str(script)+""";"""+"""scriptparameters = """+str(scriptparameters)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _StartBulkVolumeWriteResult = ctx.element.start_bulk_volume_write(volume_id=volumeid, format=format, script=script, script_parameters=scriptparameters, attributes=attributesArray)
+        _StartBulkVolumeWriteResult = ctx.element.start_bulk_volume_write(volume_id=volumeid, format=format, script=script, script_parameters=scriptparameters, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -165,10 +163,7 @@ def startbulkwrite(ctx,
               required=False,
               help="""Returns the status of the bulk volume job when the job has completed. """)
 @click.option('--attributes',
-              cls=SolidFireOption,
-              is_flag=True,
-              multiple=True,
-              subparameters=[],
+              type=str,
               required=False,
               help="""Provide in json format: JSON attributes  updates what is on the bulk volume job. """)
 @pass_context
@@ -183,8 +178,9 @@ def updatebulkstatus(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
+                    
 
-    attributesArray = []
+    kwargsDict = None
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
@@ -195,7 +191,7 @@ def updatebulkstatus(ctx,
 
     ctx.logger.info("""key = """+str(key)+""";"""+"""status = """+str(status)+""";"""+"""percentcomplete = """+str(percentcomplete)+""";"""+"""message = """+str(message)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _UpdateBulkVolumeStatusResult = ctx.element.update_bulk_volume_status(key=key, status=status, percent_complete=percentcomplete, message=message, attributes=attributesArray)
+        _UpdateBulkVolumeStatusResult = ctx.element.update_bulk_volume_status(key=key, status=status, percent_complete=percentcomplete, message=message, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -229,10 +225,7 @@ def updatebulkstatus(ctx,
               required=False,
               help="""JSON parameters to pass to the script. """)
 @click.option('--attributes',
-              cls=SolidFireOption,
-              is_flag=True,
-              multiple=True,
-              subparameters=[],
+              type=str,
               required=False,
               help="""Provide in json format: JSON attributes for the bulk volume job. """)
 @pass_context
@@ -260,8 +253,9 @@ def startbulkread(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
+                        
 
-    attributesArray = []
+    kwargsDict = None
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
@@ -272,7 +266,7 @@ def startbulkread(ctx,
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""format = """+str(format)+""";"""+"""snapshotid = """+str(snapshotid)+""";"""+"""script = """+str(script)+""";"""+"""scriptparameters = """+str(scriptparameters)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _StartBulkVolumeReadResult = ctx.element.start_bulk_volume_read(volume_id=volumeid, format=format, snapshot_id=snapshotid, script=script, script_parameters=scriptparameters, attributes=attributesArray)
+        _StartBulkVolumeReadResult = ctx.element.start_bulk_volume_read(volume_id=volumeid, format=format, snapshot_id=snapshotid, script=script, script_parameters=scriptparameters, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -324,7 +318,7 @@ def purgedeleted(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"")
@@ -401,10 +395,7 @@ def liststatsby(ctx):
               required=False,
               help="""The length of time burst IOPS is allowed. The value returned is represented in time units of seconds. Note: this value is calculated by the system based on IOPS set for QoS. """)
 @click.option('--attributes',
-              cls=SolidFireOption,
-              is_flag=True,
-              multiple=True,
-              subparameters=[],
+              type=str,
               required=False,
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
@@ -424,7 +415,7 @@ def create(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+                    
 
     qos = None
     if(qosminiops is not None or
@@ -441,8 +432,9 @@ def create(ctx,
         kwargsDict["burst_iops"] = qosburstiops
         kwargsDict["burst_time"] = qosbursttime
 
-        qos = QoS(**kwargsDict)
-    attributesArray = []
+        qos = QoS(**kwargsDict)    
+
+    kwargsDict = None
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
@@ -453,7 +445,7 @@ def create(ctx,
 
     ctx.logger.info("""name = """+str(name)+""";"""+"""accountid = """+str(accountid)+""";"""+"""totalsize = """+str(totalsize)+""";"""+"""enable512e = """+str(enable512e)+""";"""+"""qos = """+str(qos)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _CreateVolumeResult = ctx.element.create_volume(name=name, account_id=accountid, total_size=totalsize, enable512e=enable512e, qos=qos, attributes=attributesArray)
+        _CreateVolumeResult = ctx.element.create_volume(name=name, account_id=accountid, total_size=totalsize, enable512e=enable512e, qos=qos, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -478,7 +470,7 @@ def cancelclone(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""cloneid = """+str(cloneid)+""";"""+"")
@@ -541,7 +533,7 @@ def getasyncresult(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""asynchandle = """+str(asynchandle)+""";"""+"")
@@ -571,7 +563,7 @@ def listasyncresults(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
 
     asyncresulttypes = parser.parse_array(asyncresulttypes)
     
@@ -603,7 +595,7 @@ def liststatsbyaccessgroup(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
 
     volumeaccessgroups = parser.parse_array(volumeaccessgroups)
     
@@ -673,10 +665,7 @@ def listbulkjobs(ctx):
               required=False,
               help="""ID of the snapshot to use as the source of the clone. If unspecified, the clone will be created with a snapshot of the active volume. """)
 @click.option('--attributes',
-              cls=SolidFireOption,
-              is_flag=True,
-              multiple=True,
-              subparameters=[],
+              type=str,
               required=False,
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
@@ -702,8 +691,9 @@ def clone(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
+                            
 
-    attributesArray = []
+    kwargsDict = None
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
@@ -714,7 +704,7 @@ def clone(ctx,
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""name = """+str(name)+""";"""+"""newaccountid = """+str(newaccountid)+""";"""+"""newsize = """+str(newsize)+""";"""+"""access = """+str(access)+""";"""+"""snapshotid = """+str(snapshotid)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _CloneVolumeResult = ctx.element.clone_volume(volume_id=volumeid, name=name, new_account_id=newaccountid, new_size=newsize, access=access, snapshot_id=snapshotid, attributes=attributesArray)
+        _CloneVolumeResult = ctx.element.clone_volume(volume_id=volumeid, name=name, new_account_id=newaccountid, new_size=newsize, access=access, snapshot_id=snapshotid, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -760,10 +750,7 @@ def clone(ctx,
               required=False,
               help="""New size of the volume in bytes. Size is rounded up to the nearest 1MiB size. This parameter can only be used to *increase* the size of a volume. """)
 @click.option('--attributes',
-              cls=SolidFireOption,
-              is_flag=True,
-              multiple=True,
-              subparameters=[],
+              type=str,
               required=False,
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
@@ -790,7 +777,7 @@ def modify(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+                
 
     qos = None
     if(qosminiops is not None or
@@ -807,8 +794,9 @@ def modify(ctx,
         kwargsDict["burst_iops"] = qosburstiops
         kwargsDict["burst_time"] = qosbursttime
 
-        qos = QoS(**kwargsDict)
-    attributesArray = []
+        qos = QoS(**kwargsDict)        
+
+    kwargsDict = None
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
@@ -819,7 +807,7 @@ def modify(ctx,
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""accountid = """+str(accountid)+""";"""+"""access = """+str(access)+""";"""+"""qos = """+str(qos)+""";"""+"""totalsize = """+str(totalsize)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _ModifyVolumeResult = ctx.element.modify_volume(volume_id=volumeid, account_id=accountid, access=access, qos=qos, total_size=totalsize, attributes=attributesArray)
+        _ModifyVolumeResult = ctx.element.modify_volume(volume_id=volumeid, account_id=accountid, access=access, qos=qos, total_size=totalsize, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -845,7 +833,7 @@ def restoredeleted(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"")
@@ -885,7 +873,7 @@ def copy(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+            
     
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""dstvolumeid = """+str(dstvolumeid)+""";"""+"""snapshotid = """+str(snapshotid)+""";"""+"")
@@ -921,7 +909,7 @@ def listactive(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+        
     
 
     ctx.logger.info("""startvolumeid = """+str(startvolumeid)+""";"""+"""limit = """+str(limit)+""";"""+"")
@@ -977,9 +965,9 @@ def list(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
+                
 
-
-    accounts = parser.parse_array(accounts)
+    accounts = parser.parse_array(accounts)        
 
     volumeids = parser.parse_array(volumeids)
     
@@ -1086,15 +1074,15 @@ def clonemultiple(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
+    
 
-    volumesArray = []
-    if(volumes is not None):
+    volumesArray = []    if(volumes is not None):
         try:
             for i, _volumes in enumerate(volumes):
                 volumesArray.append(CloneMultipleVolumeParams(volume_id=_volumeid[i], access=_access[i], name=_name[i], new_account_id=_newaccountid[i], new_size=_newsize[i], attributes=_attributes[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1)
+            exit(1)            
     
 
     ctx.logger.info("""volumes = """+str(volumes)+""";"""+"""access = """+str(access)+""";"""+"""groupsnapshotid = """+str(groupsnapshotid)+""";"""+"""newaccountid = """+str(newaccountid)+""";"""+"")
@@ -1134,7 +1122,7 @@ def setdefaultqos(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+            
     
 
     ctx.logger.info("""miniops = """+str(miniops)+""";"""+"""maxiops = """+str(maxiops)+""";"""+"""burstiops = """+str(burstiops)+""";"""+"")
@@ -1165,7 +1153,7 @@ def getstats(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"")
@@ -1205,7 +1193,7 @@ def listforaccount(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+            
     
 
     ctx.logger.info("""accountid = """+str(accountid)+""";"""+"""startvolumeid = """+str(startvolumeid)+""";"""+"""limit = """+str(limit)+""";"""+"")
@@ -1260,7 +1248,7 @@ def cancelgroupclone(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""groupcloneid = """+str(groupcloneid)+""";"""+"")
@@ -1304,7 +1292,7 @@ def delete(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"")

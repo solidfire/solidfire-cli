@@ -79,10 +79,7 @@ def cli(ctx):
               required=False,
               help=""" """)
 @click.option('--attributes',
-              cls=SolidFireOption,
-              is_flag=True,
-              multiple=True,
-              subparameters=[],
+              type=str,
               required=False,
               help="""Provide in json format: A new list of Name/Value pairs in JSON object format. """)
 @pass_context
@@ -105,16 +102,17 @@ def modify(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
+                
 
-    addressblocksArray = []
-    if(addressblocks is not None):
+    addressblocksArray = []    if(addressblocks is not None):
         try:
             for i, _addressblocks in enumerate(addressblocks):
                 addressblocksArray.append(AddressBlock(start=_start[i], size=_size[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1)
-    attributesArray = []
+            exit(1)                    
+
+    kwargsDict = None
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
@@ -125,7 +123,7 @@ def modify(ctx,
 
     ctx.logger.info("""virtualnetworkid = """+str(virtualnetworkid)+""";"""+"""virtualnetworktag = """+str(virtualnetworktag)+""";"""+"""name = """+str(name)+""";"""+"""addressblocks = """+str(addressblocks)+""";"""+"""netmask = """+str(netmask)+""";"""+"""svip = """+str(svip)+""";"""+"""gateway = """+str(gateway)+""";"""+"""namespace = """+str(namespace)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _AddVirtualNetworkResult = ctx.element.modify_virtual_network(virtual_network_id=virtualnetworkid, virtual_network_tag=virtualnetworktag, name=name, address_blocks=addressblocksArray, netmask=netmask, svip=svip, gateway=gateway, namespace=namespace, attributes=attributesArray)
+        _AddVirtualNetworkResult = ctx.element.modify_virtual_network(virtual_network_id=virtualnetworkid, virtual_network_tag=virtualnetworktag, name=name, address_blocks=addressblocksArray, netmask=netmask, svip=svip, gateway=gateway, namespace=namespace, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -186,10 +184,7 @@ def modify(ctx,
               required=False,
               help=""" """)
 @click.option('--attributes',
-              cls=SolidFireOption,
-              is_flag=True,
-              multiple=True,
-              subparameters=[],
+              type=str,
               required=False,
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
@@ -211,16 +206,17 @@ def add(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
+            
 
-    addressblocksArray = []
-    if(addressblocks is not None):
+    addressblocksArray = []    if(addressblocks is not None):
         try:
             for i, _addressblocks in enumerate(addressblocks):
                 addressblocksArray.append(AddressBlock(start=_start[i], size=_size[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1)
-    attributesArray = []
+            exit(1)                    
+
+    kwargsDict = None
     if(attributes is not None):
         try:
             kwargsDict = simplejson.loads(attributes)
@@ -231,7 +227,7 @@ def add(ctx,
 
     ctx.logger.info("""virtualnetworktag = """+str(virtualnetworktag)+""";"""+"""name = """+str(name)+""";"""+"""addressblocks = """+str(addressblocks)+""";"""+"""netmask = """+str(netmask)+""";"""+"""svip = """+str(svip)+""";"""+"""gateway = """+str(gateway)+""";"""+"""namespace = """+str(namespace)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _AddVirtualNetworkResult = ctx.element.add_virtual_network(virtual_network_tag=virtualnetworktag, name=name, address_blocks=addressblocks, netmask=netmask, svip=svipArray, gateway=gateway, namespace=namespace, attributes=attributesArray)
+        _AddVirtualNetworkResult = ctx.element.add_virtual_network(virtual_network_tag=virtualnetworktag, name=name, address_blocks=addressblocks, netmask=netmask, svip=svipArray, gateway=gateway, namespace=namespace, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -273,9 +269,9 @@ def list(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
+            
 
-
-    virtualnetworkids = parser.parse_array(virtualnetworkids)
+    virtualnetworkids = parser.parse_array(virtualnetworkids)    
 
     virtualnetworktags = parser.parse_array(virtualnetworktags)
     
@@ -314,7 +310,7 @@ def remove(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+        
     
 
     ctx.logger.info("""virtualnetworkid = """+str(virtualnetworkid)+""";"""+"""virtualnetworktag = """+str(virtualnetworktag)+""";"""+"")

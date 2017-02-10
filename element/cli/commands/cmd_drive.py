@@ -46,7 +46,7 @@ def reset(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+        
     
 
     ctx.logger.info("""drives = """+str(drives)+""";"""+"""force = """+str(force)+""";"""+"")
@@ -80,7 +80,7 @@ def secureerase(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
 
     drives = parser.parse_array(drives)
     
@@ -151,7 +151,7 @@ def remove(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
 
     drives = parser.parse_array(drives)
     
@@ -183,7 +183,7 @@ def gethardwareinfo(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""driveid = """+str(driveid)+""";"""+"")
@@ -234,9 +234,9 @@ def add(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
+    
 
-    drivesArray = []
-    if(drives is not None):
+    drivesArray = []    if(drives is not None):
         try:
             for i, _drives in enumerate(drives):
                 drivesArray.append(NewDrive(drive_id=_driveid[i], ))
@@ -273,7 +273,7 @@ def getstats(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""driveid = """+str(driveid)+""";"""+"")
@@ -334,7 +334,7 @@ def test(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""minutes = """+str(minutes)+""";"""+"")
@@ -364,7 +364,7 @@ def listhardware(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
     ctx.logger.info("""force = """+str(force)+""";"""+"")

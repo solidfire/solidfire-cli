@@ -116,7 +116,7 @@ def listvolumestatsbyvirtualvolume(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
 
     virtualvolumeids = parser.parse_array(virtualvolumeids)
     
@@ -147,7 +147,7 @@ def listvolumestats(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
 
     volumeids = parser.parse_array(volumeids)
     
@@ -179,7 +179,7 @@ def listdrivestats(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
 
     drives = parser.parse_array(drives)
     
