@@ -303,7 +303,7 @@ def setsnmptrapinfo(ctx,
 
     ctx.logger.info("""traprecipients = """+str(traprecipients)+""";"""+"""clusterfaulttrapsenabled = """+str(clusterfaulttrapsenabled)+""";"""+"""clusterfaultresolvedtrapsenabled = """+str(clusterfaultresolvedtrapsenabled)+""";"""+"""clustereventtrapsenabled = """+str(clustereventtrapsenabled)+""";"""+"")
     try:
-        _SetSnmpTrapInfoResult = ctx.element.set_snmp_trap_info(trap_recipients=traprecipients, cluster_fault_traps_enabled=clusterfaulttrapsenabled, cluster_fault_resolved_traps_enabled=clusterfaultresolvedtrapsenabled, cluster_event_traps_enabled=clustereventtrapsenabledArray)
+        _SetSnmpTrapInfoResult = ctx.element.set_snmp_trap_info(trap_recipients=traprecipientsArray, cluster_fault_traps_enabled=clusterfaulttrapsenabled, cluster_fault_resolved_traps_enabled=clusterfaultresolvedtrapsenabled, cluster_event_traps_enabled=clustereventtrapsenabled)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1240,7 +1240,7 @@ def setsnmpacl(ctx,
 
     ctx.logger.info("""networks = """+str(networks)+""";"""+"""usmusers = """+str(usmusers)+""";"""+"")
     try:
-        _SetSnmpACLResult = ctx.element.set_snmp_acl(networks=networks, usm_users=usmusersArrayArray)
+        _SetSnmpACLResult = ctx.element.set_snmp_acl(networks=networksArray, usm_users=usmusersArray)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
