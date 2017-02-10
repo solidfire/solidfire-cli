@@ -84,35 +84,9 @@ class SolidFireParsingState(click.parser.ParsingState):
         click.parser.ParsingState.__init__(self, args)
 
 class SolidFireParser(click.parser.OptionParser):
-    def _process_args_for_options(self, state):
-        while state.rargs:
-            arg = state.rargs.pop(0)
-
-            arglen = len(arg)
-            # Double dashes always handled explicitly regardless of what
-            # prefixes are valid.
-
-            if arg == '--':
-                return
-            elif arg[:1] in self._opt_prefixes and arglen > 1:
-                self._process_opts(arg, state)
-
-                # This is the edge case: If we've run out of rargs
-                # but we still are expecting some subparams, empty
-                # them into rargs now.
-
-                if state.rargs == [] and state.subparameters != []:
-                    for paramName in state.subparameters:
-                        state.rargs.append("--" + paramName)
-                        state.rargs.append("")
-            elif self.allow_interspersed_args:
-                state.largs.append(arg)
-            else:
-                state.rargs.insert(0, arg)
-                return
-
     # We overrided this guy because we needed to inject our custom parsing
-    # state parameter into the native ParsingState.
+    # state parameter into the native ParsingState. Other than that, the
+    # logic is all the same.
     def parse_args(self, args):
         """Parses positional arguments and returns ``(values, args, order)``
         for the parsed options and arguments as well as the leftover
@@ -129,75 +103,59 @@ class SolidFireParser(click.parser.OptionParser):
                 raise
         return state.opts, state.largs, state.order
 
+    # Basically, this is the thing we're overriding. Typically, this function will
+    # consume the array of arguments that come directly from the user. What I'm
+    # doing is adding in the subparameters as null whenever they are not provided
+    # by the user.
     def _match_long_opt(self, opt, explicit_value, state):
-        if opt not in self._long_opt:
-            possibilities = [word for word in self._long_opt
-                             if word.startswith(opt)]
-            raise click.parser.NoSuchOption(opt, possibilities=possibilities)
+        option = self._long_opt.get(opt, None)
+        if option != None:
+            if type(option.obj) == SolidFireOption and\
+                    option.obj.is_sub_parameter and\
+                    opt[2:] not in state.subparameters:
+                raise click.parser.BadOptionUsage(opt+" is a subparameter and cannot be provided in this context.")
 
-        option = self._long_opt[opt]
-        if type(option.obj) == SolidFireOption and\
-                option.obj.is_sub_parameter and\
-                opt[2:] not in state.subparameters:
-            #raise click.parser.BadArgumentUsage("Cannot use subparameter like this.")
-            #raise click.parser.NoSuchOption(opt)
-            raise click.parser.BadOptionUsage(opt+" is a subparameter and cannot be provided in this context.")
-
-        if state.subparameters != [] and opt[2:] not in state.subparameters:
-            # If we find out that there were some options we were expecting
-            # that didn't show up, we account for them by setting them to
-            # none here, pushing them into the state machine, and returning.
-            # We'll process them in the next iteration.
-            extraParams = []
-            for paramName in state.subparameters:
-                extraParams.append("--"+paramName)
-                extraParams.append("")
-            extraParams.append(opt)
-            state.rargs = extraParams + state.rargs
-            return
+            if state.subparameters != [] and opt[2:] not in state.subparameters:
+                # If we find out that there were some options we were expecting
+                # that didn't show up, we account for them by setting them to
+                # none here, pushing them into the state machine, and returning.
+                # We'll process them in the next iteration.
+                extraParams = []
+                for paramName in state.subparameters:
+                    extraParams.append("--"+paramName)
+                    extraParams.append("")
+                extraParams.append(opt)
+                state.rargs = extraParams + state.rargs
+                return
 
 
-        # If we've gotten here, it implies that we are either handling
-        # an expected subparameter (ie opt[2:] in state.subparameters)
-        # or we're handling a regular parameter (ie state.subparameters=[])
+            # If we've gotten here, it implies that we are either handling
+            # an expected subparameter (ie opt[2:] in state.subparameters)
+            # or we're handling a regular parameter (ie state.subparameters=[])
+            # If it is a subparameter,
+            # First, remove it from the expected subparameters list because
+            # we found it!
+            if opt[2:] in state.subparameters:
+                state.subparameters.remove(opt[2:])
 
-        # If it is a subparameter,
-        # First, remove it from the expected subparameters list because
-        # we found it!
-        if opt[2:] in state.subparameters:
-            state.subparameters.remove(opt[2:])
-
-        # Now we go ahead and process it like you would expect.
-        if option.takes_value:
-            # At this point it's safe to modify rargs by injecting the
-            # explicit value, because no exception is raised in this
-            # branch.  This means that the inserted value will be fully
-            # consumed.
-            if explicit_value is not None:
-                state.rargs.insert(0, explicit_value)
-
-            nargs = option.nargs
-            if len(state.rargs) < nargs:
-                click.parser._error_opt_args(nargs, opt)
-            elif nargs == 1:
-                value = state.rargs.pop(0)
-            else:
-                value = tuple(state.rargs[:nargs])
-                del state.rargs[:nargs]
-
-        elif explicit_value is not None:
-            raise click.parser.BadOptionUsage(opt, '%s option does not take a value' % opt)
-
-        else:
-            value = None
-
-        option.process(value, state)
+        # Now, one way or another, we process it.
+        # This kicks us out with an error if option=None. Hence, everything
+        # following definitely has an option.
+        click.OptionParser._match_long_opt(self, opt, explicit_value, state)
 
         # Finally, if this is a regular parameter, there is a chance it has
         # subparameters we need to expect. We add them to the state machine
         # here. These will be expected in the next iteration.
         if state.subparameters == [] and type(option.obj) == SolidFireOption:
             state.subparameters = copy.deepcopy(option.obj.subparameters)
+
+        # This is the edge case: If we've run out of rargs
+        # but we still are expecting some subparams, empty
+        # them into rargs now.
+        if state.rargs == [] and state.subparameters != []:
+            for paramName in state.subparameters:
+                state.rargs.append("--" + paramName)
+                state.rargs.append("")
 
 class SolidFireOption(click.core.Option):
     def __init__(self, param_decls=None, subparameters=[], is_sub_parameter=False, *args, **kwargs):
@@ -233,10 +191,6 @@ class SolidFireOption(click.core.Option):
 
 
 class SolidFireCommand(click.Command):
-    def parse_args(self, ctx, args):
-        myargs= click.Command.parse_args(self, ctx, args)
-        return myargs
-
     def make_parser(self, ctx):
         """Creates the underlying option parser for this command."""
         parser = SolidFireParser(ctx)
@@ -245,38 +199,6 @@ class SolidFireCommand(click.Command):
         for param in self.get_params(ctx):
             param.add_to_parser(parser, ctx)
         return parser
-
-
-    # We override this in order to tell it to skip extra error handling
-    # in the case of nulls for sub parameters.
-    def parse_args(self, ctx, args):
-        parser = self.make_parser(ctx)
-        opts, args, param_order = parser.parse_args(args=args)
-        for param in click.core.iter_params_for_processing(
-                param_order, self.get_params(ctx)):
-            value, args = param.handle_parse_result(ctx, opts, args)
-
-        if args and not ctx.allow_extra_args and not ctx.resilient_parsing:
-            ctx.fail('Got unexpected extra argument%s (%s)'
-                     % (len(args) != 1 and 's' or '',
-                        ' '.join(map(click.core.make_str, args))))
-
-        ctx.args = args
-        return args
-
-
-class SolidFireGroup(click.Group):
-    def command(self, *args, **kwargs):
-        """A shortcut decorator for declaring and attaching a command to
-        the group.  This takes the same arguments as :func:`command` but
-        immediately registers the created command with this instance by
-        calling into :meth:`add_command`.
-        """
-        def decorator(f):
-            cmd = click.core.command(*args, **kwargs, cls=SolidFireCommand)(f)
-            self.add_command(cmd)
-            return cmd
-        return decorator
 
 @click.command(cls=SolidFireCLI, context_settings=CONTEXT_SETTINGS)
 @click.option('--mvip', '-m',
