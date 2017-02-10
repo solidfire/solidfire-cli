@@ -277,12 +277,19 @@ def getsystemstatus(ctx):
               help="""If "true", when a cluster fault is logged a corresponding solidFireClusterEventNotification is sent to the configured list of trap recipients. """)
 @pass_context
 def setsnmptrapinfo(ctx,
+           # Mandatory main parameter
            traprecipients,
+           # Mandatory main parameter
            clusterfaulttrapsenabled,
+           # Mandatory main parameter
            clusterfaultresolvedtrapsenabled,
+           # Mandatory main parameter
            clustereventtrapsenabled,
+           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
            _host,
+           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
            _community,
+           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
            _port):
     """SetSnmpTrapInfo is used to enable and disable the generation of SolidFire SNMP notifications (traps) and to specify the set of network host computers that are to receive the notifications. The values passed with each SetSnmpTrapInfo method replaces all values set in any previous method to SetSnmpTrapInfo."""
     if ctx.element is None:
@@ -334,9 +341,13 @@ def setsnmptrapinfo(ctx,
               help="""Determines the types of faults returned: current: List active, unresolved faults. resolved: List faults that were previously detected and resolved. all: (Default) List both current and resolved faults. You can see the fault status in the 'resolved' field of the Cluster Fault object. """)
 @pass_context
 def listfaults(ctx,
+           # Optional main parameter
            exceptions = None,
+           # Optional main parameter
            bestpractices = None,
+           # Optional main parameter
            update = None,
+           # Optional main parameter
            faulttypes = None):
     """ListClusterFaults is used to retrieve information about any faults detected on the cluster."""
     """With this method, both current and resolved faults can be retrieved. The system caches faults every 30 seconds."""
@@ -421,13 +432,21 @@ def listadmins(ctx):
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def create(ctx,
+           # Mandatory main parameter
            mvip,
+           # Mandatory main parameter
            svip,
+           # Mandatory main parameter
            repcount,
+           # Mandatory main parameter
            username,
+           # Mandatory main parameter
            password,
+           # Mandatory main parameter
            nodes,
+           # Optional main parameter
            accepteula = None,
+           # Optional main parameter
            attributes = None):
     """The CreateCluster method is used to initialize the node in a cluster that has ownership of the &quot;mvip&quot; and &quot;svip&quot; addresses. Each new cluster is initialized using the MIP of the first node in the cluster. This method also automatically adds all the nodes being configured into the cluster. The method is used only once each time a new cluster is initialized."""
     """"""
@@ -514,10 +533,15 @@ def disableencryptionatrest(ctx):
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def addadmin(ctx,
+           # Mandatory main parameter
            username,
+           # Mandatory main parameter
            password,
+           # Mandatory main parameter
            access,
+           # Optional main parameter
            accepteula = None,
+           # Optional main parameter
            attributes = None):
     """AddClusterAdmin adds a new Cluster Admin. A Cluster Admin can be used to manage the cluster via the API and management tools. Cluster Admins are completely separate and unrelated to standard tenant accounts."""
     """"""
@@ -565,7 +589,9 @@ def addadmin(ctx,
               help="""Enable every node in the cluster as a broadcase client. """)
 @pass_context
 def setntpinfo(ctx,
+           # Mandatory main parameter
            servers,
+           # Optional main parameter
            broadcastclient = None):
     """SetNtpInfo is used to configure the NTP on cluster nodes. The values set with this interface apply to all nodes in the cluster. The nodes can only be configured as a server where a host is selected to administrate the networking and/or a broadcast client where each host sends each message to each peer."""
     if ctx.element is None:
@@ -634,16 +660,26 @@ def setntpinfo(ctx,
               help="""""")
 @pass_context
 def setconfig(ctx,
-           _cipi = None,
-           _cluster = None,
-           _ensemble = None,
-           _mipi = None,
-           _name = None,
-           _nodeid = None,
-           _pendingnodeid = None,
-           _role = None,
-           _sipi = None,
-           _state = None):
+           # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
+           clusterconfigcipi = None,
+           # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
+           clusterconfigcluster = None,
+           # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
+           clusterconfigensemble = None,
+           # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
+           clusterconfigmipi = None,
+           # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
+           clusterconfigname = None,
+           # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
+           clusterconfignodeid = None,
+           # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
+           clusterconfigpendingnodeid = None,
+           # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
+           clusterconfigrole = None,
+           # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
+           clusterconfigsipi = None,
+           # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
+           clusterconfigstate = None):
     """The SetClusterConfig API method is used to set the configuration this node uses to communicate with the cluster it is associated with. To see the states in which these objects can be modified see Cluster Object on page 109. To display the current cluster interface settings for a node, run the GetClusterConfig API method."""
     """"""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
@@ -716,9 +752,13 @@ def setconfig(ctx,
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def modifyadmin(ctx,
+           # Mandatory main parameter
            clusteradminid,
+           # Optional main parameter
            password = None,
+           # Optional main parameter
            access = None,
+           # Optional main parameter
            attributes = None):
     """ModifyClusterAdmin is used to change the settings for a Cluster Admin or LDAP Cluster Admin. Access for the administrator Cluster Admin account cannot be changed."""
     if ctx.element is None:
@@ -797,9 +837,13 @@ def getsnmptrapinfo(ctx):
               help="""""")
 @pass_context
 def listevents(ctx,
+           # Optional main parameter
            maxevents = None,
+           # Optional main parameter
            starteventid = None,
+           # Optional main parameter
            endeventid = None,
+           # Optional main parameter
            eventqueuetype = None):
     """ListEvents returns events detected on the cluster, sorted from oldest to newest."""
     if ctx.element is None:
@@ -855,6 +899,7 @@ def snmpsendtesttraps(ctx):
               help="""ClusterAdminID for the Cluster Admin to remove. """)
 @pass_context
 def removeadmin(ctx,
+           # Mandatory main parameter
            clusteradminid):
     """RemoveClusterAdmin is used to remove a Cluster Admin. The &quot;admin&quot; Cluster Admin cannot be removed."""
     if ctx.element is None:
@@ -893,8 +938,11 @@ def removeadmin(ctx,
               help="""A value representative of the number of times metadata space can be over provisioned relative to the amount of space available. For example, if there was enough metadata space to store 100 TiB of volumes and this number was set to 5, then 500 TiB worth of volumes could be created. """)
 @pass_context
 def modifyfullthreshold(ctx,
+           # Optional main parameter
            stage2awarethreshold = None,
+           # Optional main parameter
            stage3blockthresholdpercent = None,
+           # Optional main parameter
            maxmetadataoverprovisionfactor = None):
     """ModifyClusterFullThreshold is used to change the level at which an event is generated when the storage cluster approaches the capacity utilization requested. The number entered in this setting is used to indicate the number of node failures the system is required to recover from. For example, on a 10 node cluster, if you want to be alerted when the system cannot recover from 3 nodes failures, enter the value of &quot;3&quot;. When this number is reached, a message alert is sent to the Event Log in the Cluster Management Console."""
     if ctx.element is None:
@@ -983,8 +1031,11 @@ def getcurrentadmin(ctx):
               help="""The number of seconds to let the support bundle script run before timing out and stopping. Default is 1500 seconds. """)
 @pass_context
 def createsupportbundle(ctx,
+           # Optional main parameter
            bundlename = None,
+           # Optional main parameter
            extraargs = None,
+           # Optional main parameter
            timeoutsec = None):
     """CreateSupportBundle is used to create a support bundle file under the node&#x27;s directory. When the bundle has been successfully created, the bundle is stored on the node as a tar.gz file."""
     if ctx.element is None:
@@ -1201,16 +1252,27 @@ def getversioninfo(ctx):
               cls=SolidFireOption)
 @pass_context
 def setsnmpacl(ctx,
+           # Mandatory main parameter
            networks,
+           # Mandatory main parameter
            usmusers,
+           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
            _accessnetworks,
+           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
            _cidr,
+           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
            _community,
+           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
            _network,
+           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
            _accessusmusers,
+           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
            _name,
+           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
            _password,
+           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
            _passphrase,
+           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
            _seclevel):
     """SetSnmpACL is used to configure SNMP access permissions on the cluster nodes. The values set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to SetSnmpACL. Also note that the values set with this interface replace all &quot;network&quot; or &quot;usmUsers&quot; values set with the older SetSnmpInfo."""
     if ctx.element is None:
@@ -1259,6 +1321,7 @@ def setsnmpacl(ctx,
               help="""Determines the types of faults cleared: current: Faults that are currently detected and have not been resolved. resolved: Faults that were previously detected and resolved. all: Both current and resolved faults are cleared. The fault status can be determined by the "resolved" field of the fault object. """)
 @pass_context
 def clearfaults(ctx,
+           # Optional main parameter
            faulttypes = None):
     """ClearClusterFaults is used to clear information about both current faults that are resolved as well as faults that were previously detected and resolved can be cleared."""
     if ctx.element is None:
@@ -1314,6 +1377,7 @@ def getsnmpacl(ctx):
               help="""To run this command, the force parameter must be set to true. """)
 @pass_context
 def getstate(ctx,
+           # Mandatory main parameter
            force):
     """The GetClusterState method is used to indicate if a node is part of a cluster or not. The three states are: Available: Node has not been configured with a cluster name.Pending: Node is pending for a specific named cluster and can be added.Active: Node is active and a member of a cluster and may not be added to another cluster."""
     if ctx.element is None:
@@ -1344,6 +1408,7 @@ def getstate(ctx,
               help="""If set to "true", then SNMP v3 is enabled on each node in the cluster. If set to "false", then SNMP v2 is enabled. """)
 @pass_context
 def enablesnmp(ctx,
+           # Mandatory main parameter
            snmpv3enabled):
     """EnableSnmp is used to enable SNMP on the cluster nodes. The values set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to EnableSnmp."""
     if ctx.element is None:
@@ -1514,18 +1579,31 @@ def getmasternodeid(ctx):
               cls=SolidFireOption)
 @pass_context
 def setsnmpinfo(ctx,
+           # Optional main parameter
            networks = None,
+           # Optional subparameter of optional main parameter.
            _accessnetworks = None,
+           # Optional subparameter of optional main parameter.
            _cidr = None,
+           # Optional subparameter of optional main parameter.
            _community = None,
+           # Optional subparameter of optional main parameter.
            _network = None,
+           # Optional main parameter
            enabled = None,
+           # Optional main parameter
            snmpv3enabled = None,
+           # Optional main parameter
            usmusers = None,
+           # Optional subparameter of optional main parameter.
            _accessusmusers = None,
+           # Optional subparameter of optional main parameter.
            _name = None,
+           # Optional subparameter of optional main parameter.
            _password = None,
+           # Optional subparameter of optional main parameter.
            _passphrase = None,
+           # Optional subparameter of optional main parameter.
            _seclevel = None):
     """SetSnmpInfo is used to configure SNMP v2 and v3 on the cluster nodes. The values set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to SetSnmpInfo."""
     """"""

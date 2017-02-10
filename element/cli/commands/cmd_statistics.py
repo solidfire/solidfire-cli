@@ -110,6 +110,7 @@ def getrawstats(ctx):
               help="""A list of virtual volume  IDs for which to retrieve information. If you specify this parameter, the method returns information about only these virtual volumes. """)
 @pass_context
 def listvolumestatsbyvirtualvolume(ctx,
+           # Optional main parameter
            virtualvolumeids = None):
     """ListVolumeStatsByVirtualVolume enables you to list statistics for volumes, sorted by virtual volumes."""
     if ctx.element is None:
@@ -142,6 +143,7 @@ def listvolumestatsbyvirtualvolume(ctx,
               help="""""")
 @pass_context
 def listvolumestats(ctx,
+           # Optional main parameter
            volumeids = None):
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
@@ -173,6 +175,7 @@ def listvolumestats(ctx,
               help="""Optional list of DriveIDs for which to return drive statistics. If you omit this parameter, measurements for all drives are returned. """)
 @pass_context
 def listdrivestats(ctx,
+           # Optional main parameter
            drives = None):
     """ListDriveStats enables you to retrieve  high-level activity measurements for multiple drives in the cluster. By default, this method returns statistics for all drives in the cluster, and these measurements are cumulative from the addition of the drive to the cluster. Some values this method returns are specific to block drives, and some are specific to metadata drives. For more information on what data each drive type returns, see the response examples for the GetDriveStats method."""
     if ctx.element is None:

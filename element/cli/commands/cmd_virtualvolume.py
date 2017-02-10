@@ -33,6 +33,7 @@ def cli(ctx):
               help="""""")
 @pass_context
 def listhosts(ctx,
+           # Optional main parameter
            virtualvolumehostids = None):
     """ListVirtualVolumeHosts returns a list of known ESX hosts."""
     if ctx.element is None:
@@ -65,6 +66,7 @@ def listhosts(ctx,
               help="""""")
 @pass_context
 def listtasks(ctx,
+           # Optional main parameter
            virtualvolumetaskids = None):
     """ListVirtualVolumeTasks returns a list of VVol Async Tasks."""
     if ctx.element is None:
@@ -97,6 +99,7 @@ def listtasks(ctx,
               help="""Valid values: vvols: Enable the Virtual Volumes (VVOLs) cluster feature. """)
 @pass_context
 def enablefeature(ctx,
+           # Mandatory main parameter
            feature):
     """EnableFeature allows you to enable cluster features that are disabled by default."""
     if ctx.element is None:
@@ -143,10 +146,15 @@ def enablefeature(ctx,
               help="""A list of virtual volume  IDs for which to retrieve information. If you specify this parameter, the method returns information about only these virtual volumes. """)
 @pass_context
 def list(ctx,
+           # Optional main parameter
            details = None,
+           # Optional main parameter
            limit = None,
+           # Optional main parameter
            recursive = None,
+           # Optional main parameter
            startvirtualvolumeid = None,
+           # Optional main parameter
            virtualvolumeids = None):
     """ListVirtualVolumes enables you to list the virtual volumes currently in the system. You can use this method to list all virtual volumes, or only list a subset."""
     if ctx.element is None:
@@ -179,6 +187,7 @@ def list(ctx,
               help="""""")
 @pass_context
 def listbindings(ctx,
+           # Optional main parameter
            virtualvolumebindingids = None):
     """ListVirtualVolumeBindings returns a list of VVol bindings."""
     if ctx.element is None:
@@ -236,6 +245,7 @@ def getcount(ctx):
               help="""Valid values: vvols: Find the status of the Virtual Volumes (VVOLs) cluster feature. """)
 @pass_context
 def getfeaturestatus(ctx,
+           # Optional main parameter
            feature = None):
     """GetFeatureStatus allows you to retrieve the status of a cluster feature."""
     if ctx.element is None:

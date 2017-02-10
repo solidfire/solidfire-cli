@@ -37,7 +37,9 @@ def cli(ctx):
               help="""List of volumes to remove from this volume access group. """)
 @pass_context
 def removevolumesfrom(ctx,
+           # Mandatory main parameter
            volumeaccessgroupid,
+           # Mandatory main parameter
            volumes):
     """Remove volumes from a volume access group."""
     if ctx.element is None:
@@ -94,12 +96,19 @@ def removevolumesfrom(ctx,
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def modify(ctx,
+           # Mandatory main parameter
            volumeaccessgroupid,
+           # Optional main parameter
            virtualnetworkid = None,
+           # Optional main parameter
            virtualnetworktags = None,
+           # Optional main parameter
            name = None,
+           # Optional main parameter
            initiators = None,
+           # Optional main parameter
            volumes = None,
+           # Optional main parameter
            attributes = None):
     """Update initiators and add or remove volumes from a volume access group."""
     """A specified initiator or volume that duplicates an existing volume or initiator in a volume access group is left as-is."""
@@ -176,11 +185,17 @@ def modify(ctx,
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def create(ctx,
+           # Mandatory main parameter
            name,
+           # Optional main parameter
            initiators = None,
+           # Optional main parameter
            volumes = None,
+           # Optional main parameter
            virtualnetworkid = None,
+           # Optional main parameter
            virtualnetworktags = None,
+           # Optional main parameter
            attributes = None):
     """Creates a new volume access group."""
     """The new volume access group must be given a name when it is created."""
@@ -255,9 +270,13 @@ def create(ctx,
               cls=SolidFireOption)
 @pass_context
 def modifylunassignments(ctx,
+           # Mandatory main parameter
            volumeaccessgroupid,
+           # Mandatory main parameter
            lunassignments,
+           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
            _volumeid,
+           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
            _lun):
     """The ModifytVolumeAccessGroupLunAssignments is used to define custom LUN assignments for specific volumes. Only LUN values set on the lunAssignments parameter will be changed in the volume access group. All other LUN assignments will remain unchanged."""
     """"""
@@ -307,7 +326,9 @@ def modifylunassignments(ctx,
               help="""The maximum number of results to return. This can be useful for paging. """)
 @pass_context
 def list(ctx,
+           # Optional main parameter
            startvolumeaccessgroupid = None,
+           # Optional main parameter
            limit = None):
     """ListVolumeAccessGroups is used to return information about the volume access groups that are currently in the system."""
     if ctx.element is None:
@@ -342,7 +363,9 @@ def list(ctx,
               help="""List of initiators to add to the volume access group. """)
 @pass_context
 def addinitiatorsto(ctx,
+           # Mandatory main parameter
            volumeaccessgroupid,
+           # Mandatory main parameter
            initiators):
     """Add initiators to a volume access group."""
     if ctx.element is None:
@@ -375,6 +398,7 @@ def addinitiatorsto(ctx,
               help="""Unique volume access group ID used to return information. """)
 @pass_context
 def getlunassignments(ctx,
+           # Mandatory main parameter
            volumeaccessgroupid):
     """The GetVolumeAccessGroupLunAssignments is used to return information LUN mappings of a specified volume access group."""
     if ctx.element is None:
@@ -409,7 +433,9 @@ def getlunassignments(ctx,
               help="""List of volumes to add to this volume access group. """)
 @pass_context
 def addvolumesto(ctx,
+           # Mandatory main parameter
            volumeaccessgroupid,
+           # Mandatory main parameter
            volumes):
     """Add volumes to a volume access group."""
     if ctx.element is None:
@@ -446,7 +472,9 @@ def addvolumesto(ctx,
               help="""List of initiators to remove from the volume access group. """)
 @pass_context
 def removeinitiatorsfrom(ctx,
+           # Mandatory main parameter
            volumeaccessgroupid,
+           # Mandatory main parameter
            initiators):
     """Remove initiators from a volume access group."""
     if ctx.element is None:
@@ -479,6 +507,7 @@ def removeinitiatorsfrom(ctx,
               help="""Specifies the volume access group for which capacity is computed. """)
 @pass_context
 def getefficiency(ctx,
+           # Mandatory main parameter
            volumeaccessgroupid):
     """GetVolumeAccessGroupEfficiency is used to retrieve efficiency information about a volume access group. Only the volume access group provided as parameters in this API method is used to compute the capacity."""
     if ctx.element is None:
@@ -509,6 +538,7 @@ def getefficiency(ctx,
               help="""The ID of the volume access group to delete. """)
 @pass_context
 def delete(ctx,
+           # Mandatory main parameter
            volumeaccessgroupid):
     """Delete a volume access group from the system."""
     if ctx.element is None:

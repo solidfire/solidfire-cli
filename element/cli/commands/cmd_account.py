@@ -37,7 +37,9 @@ def cli(ctx):
               help="""Maximum number of AccountInfo objects to return. """)
 @pass_context
 def list(ctx,
+           # Optional main parameter
            startaccountid = None,
+           # Optional main parameter
            limit = None):
     """Returns the entire list of accounts, with optional paging support."""
     if ctx.element is None:
@@ -68,6 +70,7 @@ def list(ctx,
               help="""Specifies the volume account for which capacity is computed. """)
 @pass_context
 def getefficiency(ctx,
+           # Mandatory main parameter
            accountid):
     """GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity."""
     if ctx.element is None:
@@ -118,11 +121,17 @@ def getefficiency(ctx,
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def modify(ctx,
+           # Mandatory main parameter
            accountid,
+           # Optional main parameter
            username = None,
+           # Optional main parameter
            status = None,
+           # Optional main parameter
            initiatorsecret = None,
+           # Optional main parameter
            targetsecret = None,
+           # Optional main parameter
            attributes = None):
     """Used to modify an existing account."""
     """When locking an account, any existing connections from that account are immediately terminated."""
@@ -169,6 +178,7 @@ def modify(ctx,
               help="""AccountID for the account to remove. """)
 @pass_context
 def remove(ctx,
+           # Mandatory main parameter
            accountid):
     """Used to remove an existing account."""
     """All Volumes must be deleted and purged on the account before it can be removed."""
@@ -201,6 +211,7 @@ def remove(ctx,
               help="""Username for the account. """)
 @pass_context
 def getbyname(ctx,
+           # Mandatory main parameter
            username):
     """Returns details about an account, given its Username."""
     if ctx.element is None:
@@ -243,9 +254,13 @@ def getbyname(ctx,
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def add(ctx,
+           # Mandatory main parameter
            username,
+           # Optional main parameter
            initiatorsecret = None,
+           # Optional main parameter
            targetsecret = None,
+           # Optional main parameter
            attributes = None):
     """Used to add a new account to the system."""
     """New volumes can be created under the new account."""
@@ -291,6 +306,7 @@ def add(ctx,
               help="""Specifies the account for which details are gathered. """)
 @pass_context
 def getbyid(ctx,
+           # Mandatory main parameter
            accountid):
     """Returns details about an account, given its AccountID."""
     if ctx.element is None:

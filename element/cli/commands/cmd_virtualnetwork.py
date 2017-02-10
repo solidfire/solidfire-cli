@@ -84,16 +84,27 @@ def cli(ctx):
               help="""Provide in json format: A new list of Name/Value pairs in JSON object format. """)
 @pass_context
 def modify(ctx,
+           # Optional main parameter
            virtualnetworkid = None,
+           # Optional main parameter
            virtualnetworktag = None,
+           # Optional main parameter
            name = None,
+           # Optional main parameter
            addressblocks = None,
+           # Optional subparameter of optional main parameter.
            _start = None,
+           # Optional subparameter of optional main parameter.
            _size = None,
+           # Optional main parameter
            netmask = None,
+           # Optional main parameter
            svip = None,
+           # Optional main parameter
            gateway = None,
+           # Optional main parameter
            namespace = None,
+           # Optional main parameter
            attributes = None):
     """ModifyVirtualNetwork is used to change various attributes of a VirtualNetwork object. This method can be used to add or remove address blocks, change the netmask IP, or modify the name or description of the virtual network."""
     """"""
@@ -191,15 +202,25 @@ def modify(ctx,
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def add(ctx,
+           # Mandatory main parameter
            virtualnetworktag,
+           # Mandatory main parameter
            name,
+           # Mandatory main parameter
            addressblocks,
+           # Mandatory main parameter
            netmask,
+           # Mandatory main parameter
            svip,
+           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
            _start,
+           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
            _size,
+           # Optional main parameter
            gateway = None,
+           # Optional main parameter
            namespace = None,
+           # Optional main parameter
            attributes = None):
     """AddVirtualNetwork is used to add a new virtual network to a cluster configuration. When a virtual network is added, an interface for each node is created and each will require a virtual network IP address. The number of IP addresses specified as a parameter for this API method must be equal to or greater than the number of nodes in the cluster. Virtual network addresses are bulk provisioned by SolidFire and assigned to individual nodes automatically. Virtual network addresses do not need to be assigned to nodes manually."""
     """"""
@@ -262,9 +283,13 @@ def add(ctx,
               help="""Network Tags to include in the list. """)
 @pass_context
 def list(ctx,
+           # Optional main parameter
            virtualnetworkid = None,
+           # Optional main parameter
            virtualnetworktag = None,
+           # Optional main parameter
            virtualnetworkids = None,
+           # Optional main parameter
            virtualnetworktags = None):
     """ListVirtualNetworks is used to get a list of all the configured virtual networks for the cluster. This method can be used to verify the virtual network settings in the cluster."""
     """"""
@@ -305,7 +330,9 @@ def list(ctx,
               help="""Network Tag that identifies the virtual network to remove. """)
 @pass_context
 def remove(ctx,
+           # Optional main parameter
            virtualnetworkid = None,
+           # Optional main parameter
            virtualnetworktag = None):
     """RemoveVirtualNetwork is used to remove a previously added virtual network."""
     """"""

@@ -62,6 +62,7 @@ def listpending(ctx):
               help="""""")
 @pass_context
 def getorigin(ctx,
+           # Mandatory main parameter
            force):
     """GetOrigin enables you to retrieve the origination certificate for where the node was built.NOTE: The GetOrigin method may return &quot;null&quot; if there is no origination certification."""
     if ctx.element is None:
@@ -194,6 +195,7 @@ def liststats(ctx):
               help="""List of PendingNodeIDs for the Nodes to be added. You can obtain the list of Pending Nodes via the ListPendingNodes method. """)
 @pass_context
 def add(ctx,
+           # Mandatory main parameter
            pendingnodes):
     """AddNodes is used to add one or more new nodes to the cluster. When a node is not configured and starts up for the first time you are prompted to configure the node. Once a node is configured it is registered as a &quot;pending node&quot; with the cluster."""
     """"""
@@ -264,6 +266,7 @@ def getnetworkconfig(ctx):
               help="""Specifies the node for which statistics are gathered. """)
 @pass_context
 def getstats(ctx,
+           # Mandatory main parameter
            nodeid):
     """GetNodeStats is used to return the high-level activity measurements for a single node."""
     if ctx.element is None:
@@ -321,6 +324,7 @@ def getconfig(ctx):
               help="""List of NodeIDs for the nodes to be removed. """)
 @pass_context
 def remove(ctx,
+           # Mandatory main parameter
            nodes):
     """RemoveNodes is used to remove one or more nodes that should no longer participate in the cluster. Before removing a node, all drives it contains must first be removed with &quot;RemoveDrives&quot; method. A node cannot be removed until the RemoveDrives process has completed and all data has been migrated away from the node."""
     """"""

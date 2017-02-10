@@ -33,6 +33,7 @@ def cli(ctx):
               help="""An array of unique volume IDs to query. If this parameter is not specified, all group snapshots on the cluster will be included. """)
 @pass_context
 def listgroup(ctx,
+           # Optional main parameter
            volumeid = None):
     """ListGroupSnapshots is used to return information about all group snapshots that have been created."""
     if ctx.element is None:
@@ -71,8 +72,11 @@ def listgroup(ctx,
               help="""Use to enable the snapshot created to be replicated to a remote SolidFire cluster. Possible values: true: the snapshot will be replicated to remote storage. false: Default. No replication. """)
 @pass_context
 def modifygroup(ctx,
+           # Mandatory main parameter
            groupsnapshotid,
+           # Optional main parameter
            expirationtime = None,
+           # Optional main parameter
            enableremotereplication = None):
     """ModifyGroupSnapshot is used to change the attributes currently assigned to a group snapshot."""
     if ctx.element is None:
@@ -111,8 +115,11 @@ def modifygroup(ctx,
               help="""Use to enable the snapshot created to be replicated to a remote SolidFire cluster. Possible values: true: the snapshot will be replicated to remote storage. false: Default. No replication. """)
 @pass_context
 def modify(ctx,
+           # Mandatory main parameter
            snapshotid,
+           # Optional main parameter
            expirationtime = None,
+           # Optional main parameter
            enableremotereplication = None):
     """ModifySnapshot is used to change the attributes currently assigned to a snapshot."""
     """Use this API method to enable the snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system."""
@@ -164,11 +171,17 @@ def modify(ctx,
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def create(ctx,
+           # Mandatory main parameter
            volumeid,
+           # Optional main parameter
            snapshotid = None,
+           # Optional main parameter
            name = None,
+           # Optional main parameter
            enableremotereplication = None,
+           # Optional main parameter
            retention = None,
+           # Optional main parameter
            attributes = None):
     """CreateSnapshot is used to create a point-in-time copy of a volume."""
     """A snapshot can be created from any volume or from an existing snapshot."""
@@ -212,6 +225,7 @@ def create(ctx,
               help="""The volume to list snapshots for. If not provided, all snapshots for all volumes are returned. """)
 @pass_context
 def list(ctx,
+           # Optional main parameter
            volumeid = None):
     """ListSnapshots is used to return the attributes of each snapshot taken on the volume."""
     if ctx.element is None:
@@ -418,7 +432,9 @@ def CreateSchedule(ctx,
               help="""true: Snapshots are kept, but group association is removed. false: The group and snapshots are deleted. """)
 @pass_context
 def deletegroup(ctx,
+           # Mandatory main parameter
            groupsnapshotid,
+           # Mandatory main parameter
            savemembers):
     """DeleteGroupSnapshot is used to delete a group snapshot."""
     """The saveMembers parameter can be used to preserve all the snapshots that"""
@@ -451,6 +467,7 @@ def deletegroup(ctx,
               help="""Unique ID of the schedule or multiple schedules to display """)
 @pass_context
 def getschedule(ctx,
+           # Mandatory main parameter
            scheduleid):
     """GetSchedule is used to return information about a scheduled snapshot that has been created. You can see information about a specified schedule if there are many snapshot schedules in the system. You can include more than one schedule with this method by specifying additional scheduleIDs to the parameter."""
     if ctx.element is None:
@@ -493,9 +510,13 @@ def getschedule(ctx,
               help="""Provide in json format: List of Name/Value pairs in JSON object format """)
 @pass_context
 def rollbacktogroup(ctx,
+           # Mandatory main parameter
            groupsnapshotid,
+           # Mandatory main parameter
            savecurrentstate,
+           # Optional main parameter
            name = None,
+           # Optional main parameter
            attributes = None):
     """RollbackToGroupSnapshot is used to roll back each individual volume in a snapshot group to a copy of their individual snapshots."""
     """"""
@@ -554,10 +575,15 @@ def rollbacktogroup(ctx,
               help="""Provide in json format: List of Name/Value pairs in JSON object format """)
 @pass_context
 def rollbackto(ctx,
+           # Mandatory main parameter
            volumeid,
+           # Mandatory main parameter
            snapshotid,
+           # Mandatory main parameter
            savecurrentstate,
+           # Optional main parameter
            name = None,
+           # Optional main parameter
            attributes = None):
     """RollbackToSnapshot is used to make an existing snapshot the &quot;active&quot; volume image. This method creates a new """
     """snapshot from an existing snapshot. The new snapshot becomes &quot;active&quot; and the existing snapshot is preserved until """
@@ -618,10 +644,15 @@ def rollbackto(ctx,
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def creategroup(ctx,
+           # Mandatory main parameter
            volumes,
+           # Optional main parameter
            name = None,
+           # Optional main parameter
            enableremotereplication = None,
+           # Optional main parameter
            retention = None,
+           # Optional main parameter
            attributes = None):
     """CreateGroupSnapshot is used to create a point-in-time copy of a group of volumes."""
     """The snapshot created can then be used later as a backup or rollback to ensure the data on the group of volumes is consistent for the point in time in which the snapshot was created."""
@@ -874,6 +905,7 @@ def listschedules(ctx):
               help="""The ID of the snapshot to delete. """)
 @pass_context
 def delete(ctx,
+           # Mandatory main parameter
            snapshotid):
     """DeleteSnapshot is used to delete a snapshot."""
     """A snapshot that is currently the &quot;active&quot; snapshot cannot be deleted."""

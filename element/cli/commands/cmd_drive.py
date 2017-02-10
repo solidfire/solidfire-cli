@@ -37,7 +37,9 @@ def cli(ctx):
               help="""The "force" parameter must be included on this method to successfully reset a drive. """)
 @pass_context
 def reset(ctx,
+           # Mandatory main parameter
            drives,
+           # Mandatory main parameter
            force):
     """ResetDrives is used to pro-actively initialize drives and remove all data currently residing on the drive. The drive can then be reused in an existing node or used in an upgraded SolidFire node. This method requires the force=true parameter to be included in the method call."""
     """"""
@@ -70,6 +72,7 @@ def reset(ctx,
               help="""List of driveIDs to secure erase. """)
 @pass_context
 def secureerase(ctx,
+           # Mandatory main parameter
            drives):
     """SecureEraseDrives is used to remove any residual data from drives that have a status of &quot;available.&quot; For example, when replacing a drive at its end-of-life that contained sensitive data."""
     """It uses a Security Erase Unit command to write a predetermined pattern to the drive and resets the encryption key on the drive. The method may take up to two minutes to complete, so it is an asynchronous method."""
@@ -132,6 +135,7 @@ def list(ctx):
               help="""List of driveIDs to remove from the cluster. """)
 @pass_context
 def remove(ctx,
+           # Mandatory main parameter
            drives):
     """You can use RemoveDrives to proactively remove drives that are part of the cluster."""
     """You may want to use this method when reducing cluster capacity or preparing to replace drives nearing the end of their service life."""
@@ -177,6 +181,7 @@ def remove(ctx,
               help="""DriveID for the drive information requested. DriveIDs can be obtained via the "ListDrives" method. """)
 @pass_context
 def gethardwareinfo(ctx,
+           # Mandatory main parameter
            driveid):
     """GetDriveHardwareInfo returns all the hardware info for the given drive. This generally includes manufacturers, vendors, versions, and other associated hardware identification information."""
     if ctx.element is None:
@@ -218,7 +223,9 @@ def gethardwareinfo(ctx,
               cls=SolidFireOption)
 @pass_context
 def add(ctx,
+           # Mandatory main parameter
            drives,
+           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
            _driveid):
     """AddDrives is used to add one or more available drives to the cluster enabling the drives to host a portion of the cluster&#x27;s data."""
     """When you add a node to the cluster or install new drives in an existing node, the new drives are marked as &quot;available&quot; and must be added via AddDrives before they can be utilized."""
@@ -267,6 +274,7 @@ def add(ctx,
               help="""Specifies the drive for which statistics are gathered. """)
 @pass_context
 def getstats(ctx,
+           # Mandatory main parameter
            driveid):
     """GetDriveStats return high-level activity measurements for a single drive. Values are cumulative from the addition of the drive to the cluster. Some values are specific to Block Drives. Statistical data may not be returned for both block and metadata drives when running this method."""
     """For more information on which drive type returns which data, see Response Example (Block Drive) and Response Example (Volume Metadata Drive) in the SolidFire API guide."""
@@ -325,6 +333,7 @@ def getconfig(ctx):
               help="""The number of minutes to run the test can be specified. """)
 @pass_context
 def test(ctx,
+           # Optional main parameter
            minutes = None):
     """The TestDrives API method is used to run a hardware validation on all the drives on the node. Hardware failures on the drives are detected if present and they are reported in the results of the validation tests."""
     """"""
@@ -359,6 +368,7 @@ def test(ctx,
               help="""To run this command, the force parameter must be set to true. """)
 @pass_context
 def listhardware(ctx,
+           # Mandatory main parameter
            force):
     """ListDriveHardware returns all the drives connected to a node. Use this method on the cluster to return drive hardware information for all the drives on all nodes."""
     if ctx.element is None:

@@ -33,6 +33,7 @@ def cli(ctx):
               help="""""")
 @pass_context
 def list(ctx,
+           # Optional main parameter
            protocolendpointids = None):
     """Gets protocol endpoints in the system"""
     """If protocolEndpointIDs isn&#x27;t specified all protocol endpoints"""

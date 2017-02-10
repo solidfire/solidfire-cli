@@ -33,6 +33,7 @@ def cli(ctx):
               help="""A string of characters that is returned from the "StartClusterPairing" API method. """)
 @pass_context
 def completecluster(ctx,
+           # Mandatory main parameter
            clusterpairingkey):
     """The CompleteClusterPairing method is the second step in the cluster pairing process."""
     """Use this method with the encoded key received from the &quot;StartClusterPairing&quot; API method to complete the cluster pairing process."""
@@ -68,7 +69,9 @@ def completecluster(ctx,
               help="""The ID of volume on which to complete the pairing process. """)
 @pass_context
 def completevolume(ctx,
+           # Mandatory main parameter
            volumepairingkey,
+           # Mandatory main parameter
            volumeid):
     """CompleteVolumePairing is used to complete the pairing of two volumes."""
     if ctx.element is None:
@@ -125,6 +128,7 @@ def listclusterpairs(ctx):
               help="""ID of the volume on which to stop the replication process. """)
 @pass_context
 def removevolumepair(ctx,
+           # Mandatory main parameter
            volumeid):
     """RemoveVolumePair is used to remove the remote pairing between two volumes."""
     """When the volume pairing information is removed, data is no longer replicated to or from the volume."""
@@ -161,7 +165,9 @@ def removevolumepair(ctx,
               help="""The mode of the volume on which to start the pairing process. The mode can only be set if the volume is the source volume. Possible values: Async: (default if no mode parameter specified) Writes are acknowledged when they complete locally. The cluster does not wait for writes to be replicated to the target cluster. Sync: Source acknowledges write when the data is stored locally and on the remote cluster. SnapshotsOnly: Only snapshots created on the source cluster will be replicated. Active writes from the source volume will not be replicated. """)
 @pass_context
 def startvolume(ctx,
+           # Mandatory main parameter
            volumeid,
+           # Optional main parameter
            mode = None):
     """StartVolumePairing is used to create an encoded key from a volume that is used to pair with another volume."""
     """The key that this method creates is used in the &quot;CompleteVolumePairing&quot; API method to establish a volume pairing."""
@@ -227,8 +233,11 @@ def listactivepairedvolumes(ctx):
               help="""Volume replication mode. Possible values: Async: Writes are acknowledged when they complete locally. The cluster does not wait for writes to be replicated to the target cluster. Sync: The source acknowledges the write when the data is stored locally and on the remote cluster. SnapshotsOnly: Only snapshots created on the source cluster will be replicated. Active writes from the source volume are not replicated. """)
 @pass_context
 def modifyvolumepair(ctx,
+           # Mandatory main parameter
            volumeid,
+           # Optional main parameter
            pausedmanual = None,
+           # Optional main parameter
            mode = None):
     """ModifyVolumePair is used to pause or restart replication between a pair of volumes."""
     if ctx.element is None:
@@ -286,6 +295,7 @@ def startcluster(ctx):
               help="""Unique identifier used to pair two clusters. """)
 @pass_context
 def removeclusterpair(ctx,
+           # Mandatory main parameter
            clusterpairid):
     """You can use the RemoveClusterPair method to close the open connections between two paired clusters."""
     """Note: Before you remove a cluster pair, you must first remove all volume pairing to the clusters with the &quot;RemoveVolumePair&quot; API method."""

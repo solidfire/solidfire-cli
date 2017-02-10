@@ -45,9 +45,13 @@ def cli(ctx):
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def addclusteradmin(ctx,
+           # Mandatory main parameter
            username,
+           # Mandatory main parameter
            access,
+           # Optional main parameter
            accepteula = None,
+           # Optional main parameter
            attributes = None):
     """AddLdapClusterAdmin is used to add a new LDAP Cluster Admin. An LDAP Cluster Admin can be used to manage the cluster via the API and management tools. LDAP Cluster Admins are completely separate and unrelated to standard tenant accounts."""
     """"""
@@ -160,18 +164,30 @@ def getconfiguration(ctx):
               help="""The LDAP filter used. """)
 @pass_context
 def testauthentication(ctx,
+           # Mandatory main parameter
            username,
+           # Mandatory main parameter
            password,
-           _authtype = None,
-           _enabled = None,
-           _groupsearchbasedn = None,
-           _groupsearchcustomfilter = None,
-           _groupsearchtype = None,
-           _searchbinddn = None,
-           _serveruris = None,
-           _userdntemplate = None,
-           _usersearchbasedn = None,
-           _usersearchfilter = None):
+           # Optional subparameter of optional main parameter.
+           ldapconfigurationauthtype = None,
+           # Optional subparameter of optional main parameter.
+           ldapconfigurationenabled = None,
+           # Optional subparameter of optional main parameter.
+           ldapconfigurationgroupsearchbasedn = None,
+           # Optional subparameter of optional main parameter.
+           ldapconfigurationgroupsearchcustomfilter = None,
+           # Optional subparameter of optional main parameter.
+           ldapconfigurationgroupsearchtype = None,
+           # Optional subparameter of optional main parameter.
+           ldapconfigurationsearchbinddn = None,
+           # Optional subparameter of optional main parameter.
+           ldapconfigurationserveruris = None,
+           # Optional subparameter of optional main parameter.
+           ldapconfigurationuserdntemplate = None,
+           # Optional subparameter of optional main parameter.
+           ldapconfigurationusersearchbasedn = None,
+           # Optional subparameter of optional main parameter.
+           ldapconfigurationusersearchfilter = None):
     """The TestLdapAuthentication is used to verify the currently enabled LDAP authentication configuration settings are correct. If the configuration settings are correct, the API call returns a list of the groups the tested user is a member of."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
@@ -301,15 +317,25 @@ def disableauthentication(ctx):
               help="""REQUIRED for SearchAndBind. The LDAP filter to use. The string should have the placeholder text "%USERNAME%" which will be replaced with the username of the authenticating user. Example: (&(objectClass=person) (sAMAccountName=%USERNAME%)) will use the sAMAccountName field in Active Directory to match the nusername entered at cluster login. """)
 @pass_context
 def enableauthentication(ctx,
+           # Mandatory main parameter
            serveruris,
+           # Optional main parameter
            authtype = None,
+           # Optional main parameter
            groupsearchbasedn = None,
+           # Optional main parameter
            groupsearchcustomfilter = None,
+           # Optional main parameter
            groupsearchtype = None,
+           # Optional main parameter
            searchbinddn = None,
+           # Optional main parameter
            searchbindpassword = None,
+           # Optional main parameter
            userdntemplate = None,
+           # Optional main parameter
            usersearchbasedn = None,
+           # Optional main parameter
            usersearchfilter = None):
     """The EnableLdapAuthentication method is used to configure an LDAP server connection to use for LDAP authentication to a SolidFire cluster. Users that are members on the LDAP server can then log in to a SolidFire storage system using their LDAP authentication userid and password."""
     if ctx.element is None:

@@ -33,6 +33,7 @@ def cli(ctx):
               help="""Specifies the volume for which capacity is computed. """)
 @pass_context
 def getefficiency(ctx,
+           # Mandatory main parameter
            volumeid):
     """GetVolumeEfficiency is used to retrieve information about a volume."""
     """Only the volume given as a parameter in this API method is used to compute the capacity."""
@@ -106,10 +107,15 @@ def liststatsbyaccount(ctx):
               help="""Provide in json format: JSON attributes for the bulk volume job. """)
 @pass_context
 def startbulkwrite(ctx,
+           # Mandatory main parameter
            volumeid,
+           # Mandatory main parameter
            format,
+           # Optional main parameter
            script = None,
+           # Optional main parameter
            scriptparameters = None,
+           # Optional main parameter
            attributes = None):
     """StartBulkVolumeWrite allows you to initialize a bulk volume write session on a specified volume."""
     """Only two bulk volume processes can run simultaneously on a volume."""
@@ -169,10 +175,15 @@ def startbulkwrite(ctx,
               help="""Provide in json format: JSON attributes  updates what is on the bulk volume job. """)
 @pass_context
 def updatebulkstatus(ctx,
+           # Mandatory main parameter
            key,
+           # Mandatory main parameter
            status,
+           # Optional main parameter
            percentcomplete = None,
+           # Optional main parameter
            message = None,
+           # Optional main parameter
            attributes = None):
     """You can use UpdateBulkVolumeStatus in a script to return to the SolidFire system the status of a bulk volume job that you have started with the &quot;StartBulkVolumeRead&quot; or &quot;StartBulkVolumeWrite&quot; methods."""
     if ctx.element is None:
@@ -232,11 +243,17 @@ def updatebulkstatus(ctx,
               help="""Provide in json format: JSON attributes for the bulk volume job. """)
 @pass_context
 def startbulkread(ctx,
+           # Mandatory main parameter
            volumeid,
+           # Mandatory main parameter
            format,
+           # Optional main parameter
            snapshotid = None,
+           # Optional main parameter
            script = None,
+           # Optional main parameter
            scriptparameters = None,
+           # Optional main parameter
            attributes = None):
     """StartBulkVolumeRead allows you to initialize a bulk volume read session on a specified volume."""
     """Only two bulk volume processes can run simultaneously on a volume."""
@@ -313,6 +330,7 @@ def listdeleted(ctx):
               help="""The ID of the volume to purge. """)
 @pass_context
 def purgedeleted(ctx,
+           # Mandatory main parameter
            volumeid):
     """PurgeDeletedVolume immediately and permanently purges a volume which has been deleted."""
     """A volume must be deleted using DeleteVolume before it can be purged."""
@@ -403,14 +421,23 @@ def liststatsby(ctx):
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def create(ctx,
+           # Mandatory main parameter
            name,
+           # Mandatory main parameter
            accountid,
+           # Mandatory main parameter
            totalsize,
+           # Mandatory main parameter
            enable512e,
-           _miniops = None,
-           _maxiops = None,
-           _burstiops = None,
-           _bursttime = None,
+           # Optional subparameter of optional main parameter.
+           qosminiops = None,
+           # Optional subparameter of optional main parameter.
+           qosmaxiops = None,
+           # Optional subparameter of optional main parameter.
+           qosburstiops = None,
+           # Optional subparameter of optional main parameter.
+           qosbursttime = None,
+           # Optional main parameter
            attributes = None):
     """CreateVolume is used to create a new (empty) volume on the cluster."""
     """When the volume is created successfully it is available for connection via iSCSI."""
@@ -468,6 +495,7 @@ def create(ctx,
               help="""""")
 @pass_context
 def cancelclone(ctx,
+           # Mandatory main parameter
            cloneid):
     """Cancels a currently running clone operation. This method does not return anything."""
     if ctx.element is None:
@@ -523,6 +551,7 @@ def getdefaultqos(ctx):
               help="""A value that was returned from the original asynchronous method call. """)
 @pass_context
 def getasyncresult(ctx,
+           # Mandatory main parameter
            asynchandle):
     """Used to retrieve the result of asynchronous method calls."""
     """Some method calls are long running and do not complete when the initial response is sent."""
@@ -561,6 +590,7 @@ def getasyncresult(ctx,
               help="""An optional list of types of results. You can use this list to restrict the results to only these types of operations. Possible values:BulkVolume: Copy operations between volumes, such as backups or restores.Clone: Volume cloning operations.DriveRemoval: Operations involving the system copying data from a drive in preparation to remove it from the cluster.RtfiPendingNode: Operations involving the system installing compatible software on a node before adding it to the cluster. """)
 @pass_context
 def listasyncresults(ctx,
+           # Optional main parameter
            asyncresulttypes = None):
     """You can use ListAsyncResults to list the results of all currently running and completed asynchronous methods on the system. Querying asynchronous results with ListAsyncResults does not cause completed asyncHandles to expire; you can use GetAsyncResult to query any of the asyncHandles returned by ListAsyncResults."""
     if ctx.element is None:
@@ -593,6 +623,7 @@ def listasyncresults(ctx,
               help="""An array of VolumeAccessGroupIDs for which volume activity is returned. If no VolumeAccessGroupID is specified, stats for all volume access groups is returned. """)
 @pass_context
 def liststatsbyaccessgroup(ctx,
+           # Optional main parameter
            volumeaccessgroups = None):
     """ListVolumeStatsByVolumeAccessGroup is used to get total activity measurements for all of the volumes that are a member of the specified volume access group(s)."""
     if ctx.element is None:
@@ -674,12 +705,19 @@ def listbulkjobs(ctx):
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def clone(ctx,
+           # Mandatory main parameter
            volumeid,
+           # Mandatory main parameter
            name,
+           # Optional main parameter
            newaccountid = None,
+           # Optional main parameter
            newsize = None,
+           # Optional main parameter
            access = None,
+           # Optional main parameter
            snapshotid = None,
+           # Optional main parameter
            attributes = None):
     """CloneVolume is used to create a copy of the volume."""
     """This method is asynchronous and may take a variable amount of time to complete."""
@@ -760,14 +798,23 @@ def clone(ctx,
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def modify(ctx,
+           # Mandatory main parameter
            volumeid,
+           # Optional main parameter
            accountid = None,
+           # Optional main parameter
            access = None,
-           _miniops = None,
-           _maxiops = None,
-           _burstiops = None,
-           _bursttime = None,
+           # Optional subparameter of optional main parameter.
+           qosminiops = None,
+           # Optional subparameter of optional main parameter.
+           qosmaxiops = None,
+           # Optional subparameter of optional main parameter.
+           qosburstiops = None,
+           # Optional subparameter of optional main parameter.
+           qosbursttime = None,
+           # Optional main parameter
            totalsize = None,
+           # Optional main parameter
            attributes = None):
     """ModifyVolume is used to modify settings on an existing volume."""
     """Modifications can be made to one volume at a time and changes take place immediately."""
@@ -832,6 +879,7 @@ def modify(ctx,
               help="""VolumeID for the deleted volume to restore. """)
 @pass_context
 def restoredeleted(ctx,
+           # Mandatory main parameter
            volumeid):
     """RestoreDeletedVolume marks a deleted volume as active again."""
     """This action makes the volume immediately available for iSCSI connection."""
@@ -871,8 +919,11 @@ def restoredeleted(ctx,
               help="""Snapshot ID of the source volume to create the copy from. """)
 @pass_context
 def copy(ctx,
+           # Mandatory main parameter
            volumeid,
+           # Mandatory main parameter
            dstvolumeid,
+           # Optional main parameter
            snapshotid = None):
     """Copies one volume to another."""
     if ctx.element is None:
@@ -907,7 +958,9 @@ def copy(ctx,
               help="""The maximum number of volumes to return from the API. """)
 @pass_context
 def listactive(ctx,
+           # Optional main parameter
            startvolumeid = None,
+           # Optional main parameter
            limit = None):
     """ListActiveVolumes is used to return the list of active volumes currently in the system."""
     """The list of volumes is returned sorted in VolumeID order and can be returned in multiple parts (pages)."""
@@ -959,11 +1012,17 @@ def listactive(ctx,
               help="""If specified, only fetch volumes specified in this list. This option cannot be specified if startVolumeID, limit, or accounts option is specified. """)
 @pass_context
 def list(ctx,
+           # Optional main parameter
            startvolumeid = None,
+           # Optional main parameter
            limit = None,
+           # Optional main parameter
            volumestatus = None,
+           # Optional main parameter
            accounts = None,
+           # Optional main parameter
            ispaired = None,
+           # Optional main parameter
            volumeids = None):
     """The ListVolumes method is used to return a list of volumes that are in a cluster."""
     """You can specify the volumes you want to return in the list by using the available parameters."""
@@ -1062,15 +1121,25 @@ def list(ctx,
               help="""New account ID for the volumes if not overridden by information passed in the volumes array. """)
 @pass_context
 def clonemultiple(ctx,
+           # Mandatory main parameter
            volumes,
+           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
            _volumeid,
+           # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
            _access = None,
+           # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
            _name = None,
+           # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
            _newaccountid = None,
+           # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
            _newsize = None,
+           # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
            _attributes = None,
+           # Optional main parameter
            access = None,
+           # Optional main parameter
            groupsnapshotid = None,
+           # Optional main parameter
            newaccountid = None):
     """CloneMultipleVolumes is used to create a clone of a group of specified volumes. A consistent set of characteristics can be assigned to a group of multiple volume when they are cloned together."""
     """If groupSnapshotID is going to be used to clone the volumes in a group snapshot, the group snapshot must be created first using the CreateGroupSnapshot API method or the SolidFire Element WebUI. Using groupSnapshotID is optional when cloning multiple volumes."""
@@ -1121,8 +1190,11 @@ def clonemultiple(ctx,
               help="""The maximum number of IOPS allowed in a short burst scenario. """)
 @pass_context
 def setdefaultqos(ctx,
+           # Optional main parameter
            miniops = None,
+           # Optional main parameter
            maxiops = None,
+           # Optional main parameter
            burstiops = None):
     """SetDefaultQoS enables you to configure the default Quality of Service (QoS) values (measured in inputs and outputs per second, or IOPS) for all volumes not yet created."""
     if ctx.element is None:
@@ -1153,6 +1225,7 @@ def setdefaultqos(ctx,
               help="""Specifies the volume for which statistics is gathered. """)
 @pass_context
 def getstats(ctx,
+           # Mandatory main parameter
            volumeid):
     """GetVolumeStats is used to retrieve high-level activity measurements for a single volume."""
     """Values are cumulative from the creation of the volume."""
@@ -1192,8 +1265,11 @@ def getstats(ctx,
               help="""The maximum number of volumes to return from the API. """)
 @pass_context
 def listforaccount(ctx,
+           # Mandatory main parameter
            accountid,
+           # Optional main parameter
            startvolumeid = None,
+           # Optional main parameter
            limit = None):
     """ListVolumesForAccount returns the list of active AND (pending) deleted volumes for an account."""
     if ctx.element is None:
@@ -1249,6 +1325,7 @@ def getcount(ctx):
               help="""cloneID for the ongoing clone process. """)
 @pass_context
 def cancelgroupclone(ctx,
+           # Mandatory main parameter
            groupcloneid):
     """CancelGroupClone enables you to stop an ongoing CloneMultipleVolumes process for a group of clones. When you cancel a group clone operation, the system completes and removes the operation&#x27;s associated asyncHandle. This method does not return anything."""
     if ctx.element is None:
@@ -1279,6 +1356,7 @@ def cancelgroupclone(ctx,
               help="""The ID of the volume to delete. """)
 @pass_context
 def delete(ctx,
+           # Mandatory main parameter
            volumeid):
     """DeleteVolume marks an active volume for deletion."""
     """It is purged (permanently deleted) after the cleanup interval elapses."""

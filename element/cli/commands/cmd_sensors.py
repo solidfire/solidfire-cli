@@ -33,6 +33,7 @@ def cli(ctx):
               help="""""")
 @pass_context
 def getipmiinfo(ctx,
+           # Mandatory main parameter
            force):
     """GetIpmiInfo allows you to display a detailed reporting of sensors (objects) for node fans, intake and exhaust temperatures, and power supplies  that are monitored by . """
     if ctx.element is None:
@@ -67,7 +68,9 @@ def getipmiinfo(ctx,
               help="""""")
 @pass_context
 def getipmiconfig(ctx,
+           # Mandatory main parameter
            force,
+           # Optional main parameter
            chassistype = None):
     """GetIpmiConfig enables you to retrieve hardware sensor information from sensors that are in your node."""
     if ctx.element is None:

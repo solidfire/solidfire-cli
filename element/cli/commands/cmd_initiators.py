@@ -68,10 +68,15 @@ def cli(ctx):
               cls=SolidFireOption)
 @pass_context
 def modify(ctx,
+           # Mandatory main parameter
            initiators,
+           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
            _initiatorid,
+           # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
            _alias = None,
+           # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
            _volumeaccessgroupid = None,
+           # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
            _attributes = None):
     """ModifyInitiators enables you to change the attributes of an existing initiator. You cannot change the name of an existing initiator. If you need to change the name of an initiator, delete the existing initiator with DeleteInitiators and create a new one with CreateInitiators."""
     """If ModifyInitiators fails to change one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible)."""
@@ -147,10 +152,15 @@ def modify(ctx,
               cls=SolidFireOption)
 @pass_context
 def create(ctx,
+           # Mandatory main parameter
            initiators,
+           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
            _name,
+           # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
            _alias = None,
+           # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
            _volumeaccessgroupid = None,
+           # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
            _attributes = None):
     """CreateInitiators enables you to create multiple new initiator IQNs or World Wide Port Names (WWPNs) and optionally assign them aliases and attributes. When you use CreateInitiators to create new initiators, you can also add them to volume access groups."""
     """If CreateInitiators fails to create one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible)."""
@@ -199,8 +209,11 @@ def create(ctx,
               help="""A list of initiator IDs to retrieve. You can supply this parameter or the "startInitiatorID" parameter, but not both. """)
 @pass_context
 def list(ctx,
+           # Optional main parameter
            startinitiatorid = None,
+           # Optional main parameter
            limit = None,
+           # Optional main parameter
            initiators = None):
     """ListInitiators enables you to list initiator IQNs or World Wide Port Names (WWPNs)."""
     if ctx.element is None:
@@ -233,6 +246,7 @@ def list(ctx,
               help="""An array of IDs of initiators to delete. """)
 @pass_context
 def delete(ctx,
+           # Mandatory main parameter
            initiators):
     """DeleteInitiators enables you to delete one or more initiators from the system (and from any associated volumes or volume access groups)."""
     """If DeleteInitiators fails to delete one of the initiators provided in the parameter, the system returns an error and does not delete any initiators (no partial completion is possible)."""

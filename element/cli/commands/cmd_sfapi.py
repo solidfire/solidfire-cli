@@ -37,7 +37,9 @@ def cli(ctx):
               help="""Provide in json format: An object, normally a dictionary or hashtable of the key/value pairs, to be passed as the params for the method being invoked. """)
 @pass_context
 def invoke(ctx,
+           # Mandatory main parameter
            method,
+           # Optional main parameter
            parameters = None):
     """This will invoke any API method supported by the SolidFire API for the version and port the connection is using."""
     """Returns a nested hashtable of key/value pairs that contain the result of the invoked method."""

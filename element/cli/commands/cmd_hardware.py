@@ -58,6 +58,7 @@ def getnvraminfo(ctx):
               help="""The ID of the node for which hardware information is being requested.  Information about a  node is returned if a   node is specified. """)
 @pass_context
 def getnodeinfo(ctx,
+           # Mandatory main parameter
            nodeid):
     """GetNodeHardwareInfo is used to return all the hardware info and status for the node specified. This generally includes manufacturers, vendors, versions, and other associated hardware identification information."""
     if ctx.element is None:
@@ -88,6 +89,7 @@ def getnodeinfo(ctx,
               help="""Include only a certain type of hardware information in the response. Can be one of the following:drives: List only drive information in the response.nodes: List only node information in the response.all: Include both drive and node information in the response.If this parameter is omitted, a type of "all" is assumed. """)
 @pass_context
 def getclusterinfo(ctx,
+           # Optional main parameter
            type = None):
     """You can use the GetClusterHardwareInfo method to retrieve the hardware status and information for all Fibre Channel nodes, iSCSI nodes and drives in the cluster. This generally includes manufacturers, vendors, versions, and other associated hardware identification information."""
     if ctx.element is None:

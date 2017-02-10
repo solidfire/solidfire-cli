@@ -41,8 +41,11 @@ def cli(ctx):
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def modify(ctx,
+           # Mandatory main parameter
            backuptargetid,
+           # Optional main parameter
            name = None,
+           # Optional main parameter
            attributes = None):
     """ModifyBackupTarget is used to change attributes of a backup target."""
     if ctx.element is None:
@@ -86,7 +89,9 @@ def modify(ctx,
               help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def create(ctx,
+           # Mandatory main parameter
            name,
+           # Optional main parameter
            attributes = None):
     """CreateBackupTarget allows you to create and store backup target information so that you do not need to re-enter it each time a backup is created."""
     if ctx.element is None:
@@ -151,6 +156,7 @@ def list(ctx):
               help="""Unique target ID of the target to remove. """)
 @pass_context
 def remove(ctx,
+           # Mandatory main parameter
            backuptargetid):
     """RemoveBackupTarget allows you to delete backup targets."""
     if ctx.element is None:
@@ -181,6 +187,7 @@ def remove(ctx,
               help="""Unique identifier assigned to the backup target. """)
 @pass_context
 def get(ctx,
+           # Mandatory main parameter
            backuptargetid):
     """GetBackupTarget allows you to return information about a specific backup target that has been created."""
     if ctx.element is None:

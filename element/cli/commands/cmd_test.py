@@ -75,10 +75,15 @@ def list(ctx):
               help="""Specify the number of milliseconds to wait for each individual ping response. Default is 500ms. """)
 @pass_context
 def ping(ctx,
+           # Optional main parameter
            attempts = None,
+           # Optional main parameter
            hosts = None,
+           # Optional main parameter
            totaltimeoutsec = None,
+           # Optional main parameter
            packetsize = None,
+           # Optional main parameter
            pingtimeoutmsec = None):
     """The TestPing API method is used to validate the connection to all nodes in the cluster on both 1G and 10G interfaces using ICMP packets. The test uses the appropriate MTU sizes for each packet based on the MTU settings in the network configuration."""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
@@ -110,6 +115,7 @@ def ping(ctx,
               help="""Optionally, use to test the management connection of a different MVIP. This is not needed to test the connection to the target cluster. """)
 @pass_context
 def connectmvip(ctx,
+           # Optional main parameter
            mvip = None):
     """The TestConnectMvip API method is used to test the management connection to the cluster. The test pings the MVIP and executes a simple API method to verify connectivity."""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
@@ -167,6 +173,7 @@ def listutilities(ctx):
               help="""A comma-separated list of ensemble node CIPs for connectivity testing """)
 @pass_context
 def connectensemble(ctx,
+           # Optional main parameter
            ensemble = None):
     """The TestConnectEnsemble API method is used to verify connectivity with a sepcified database ensemble. By default it uses the ensemble for the cluster the node is associated with. Alternatively you can provide a different ensemble to test connectivity with."""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
@@ -198,6 +205,7 @@ def connectensemble(ctx,
               help="""Optionally, use to test the storage connection of a different SVIP. This is not needed to test the connection to the target cluster. """)
 @pass_context
 def connectsvip(ctx,
+           # Optional main parameter
            svip = None):
     """The TestConnectSvip API method is used to test the storage connection to the cluster. The test pings the SVIP using ICMP packets and when successful connects as an iSCSI initiator."""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""

@@ -41,8 +41,11 @@ def cli(ctx):
               help="""Action to perform on the service (start, stop, restart). """)
 @pass_context
 def services(ctx,
+           # Mandatory main parameter
            force,
+           # Optional main parameter
            service = None,
+           # Optional main parameter
            action = None):
     """The RestartServices API method is used to restart the  Element services on a node.Caution: This method causes temporary node services interruption. Exercise caution when using this method."""
     if ctx.element is None:
@@ -73,6 +76,7 @@ def services(ctx,
               help="""The "force" parameter must be included on this method to successfully restart the networking. """)
 @pass_context
 def networking(ctx,
+           # Mandatory main parameter
            force):
     """The RestartNetworking API method is used to restart the networking services on a node.WARNING! This method restarts all networking services on a node, causing temporary loss of networking connectivity. Exercise caution when using this method."""
     if ctx.element is None:
@@ -111,8 +115,11 @@ def networking(ctx,
               help="""Used to enter specifications for running the reset operation. """)
 @pass_context
 def resetnode(ctx,
+           # Mandatory main parameter
            build,
+           # Mandatory main parameter
            force,
+           # Optional main parameter
            option = None):
     """Allows you to reset a node to the SolidFire factory settings. All data will be deleted from the node when you call this method. A node participating in a cluster cannot be reset."""
     if ctx.element is None:
@@ -147,7 +154,9 @@ def resetnode(ctx,
               help="""Action to take for the node shutdown:restart: Restarts the node.halt: Performs full power-off of the node. """)
 @pass_context
 def shutdown(ctx,
+           # Mandatory main parameter
            nodes,
+           # Optional main parameter
            option = None):
     """The Shutdown API method enables you to restart or shutdown a node that has not yet been added to a cluster. To use this method, login in to the MIP for the pending node and enter the &quot;shutdown&quot; method with either the &quot;restart&quot; or &quot;halt&quot; options in the following table."""
     if ctx.element is None:

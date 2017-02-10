@@ -41,8 +41,11 @@ def cli(ctx):
               help="""""")
 @pass_context
 def modifystoragecontainer(ctx,
+           # Mandatory main parameter
            storagecontainerid,
+           # Optional main parameter
            initiatorsecret = None,
+           # Optional main parameter
            targetsecret = None):
     """Modifies an existing storage container."""
     if ctx.element is None:
@@ -73,6 +76,7 @@ def modifystoragecontainer(ctx,
               help="""List of storage containers to get """)
 @pass_context
 def list(ctx,
+           # Optional main parameter
            storagecontainerids = None):
     """Gets information for all storage containers currently in the system."""
     if ctx.element is None:
@@ -105,6 +109,7 @@ def list(ctx,
               help="""The ID of the storage container for which to retrieve efficiency information. """)
 @pass_context
 def getstoragecontainerefficiency(ctx,
+           # Mandatory main parameter
            storagecontainerid):
     """GetStorageContainerEfficiency enables you to retrieve efficiency information about a virtual volume storage container."""
     if ctx.element is None:
@@ -143,8 +148,11 @@ def getstoragecontainerefficiency(ctx,
               help="""The secret for CHAP authentication for the target """)
 @pass_context
 def createstoragecontainer(ctx,
+           # Mandatory main parameter
            name,
+           # Optional main parameter
            initiatorsecret = None,
+           # Optional main parameter
            targetsecret = None):
     """Creates a new VVols storage container."""
     if ctx.element is None:
@@ -175,6 +183,7 @@ def createstoragecontainer(ctx,
               help="""list of storageContainerID of the storage container to delete. """)
 @pass_context
 def delete(ctx,
+           # Mandatory main parameter
            storagecontainerids):
     """Deletes a storage container from the system."""
     if ctx.element is None:
