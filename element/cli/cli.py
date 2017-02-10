@@ -101,10 +101,10 @@ class SolidFireParser(click.parser.OptionParser):
                 # but we still are expecting some subparams, empty
                 # them into rargs now.
 
-            if state.rargs == [] and state.subparameters != []:
-                for paramName in state.subparameters:
-                    state.rargs.append("--" + paramName)
-                    state.rargs.append("")
+                if state.rargs == [] and state.subparameters != []:
+                    for paramName in state.subparameters:
+                        state.rargs.append("--" + paramName)
+                        state.rargs.append("")
             elif self.allow_interspersed_args:
                 state.largs.append(arg)
             else:
@@ -229,7 +229,6 @@ class SolidFireOption(click.core.Option):
                 return self.type(value, self, ctx)
             return tuple(_convert(x, level - 1) for x in value or ())
         v = _convert(value, (self.nargs != 1) + bool(self.multiple))
-        print(v)
         return _convert(value, (self.nargs != 1) + bool(self.multiple))
 
 
@@ -250,7 +249,7 @@ class SolidFireCommand(click.Command):
 
     # We override this in order to tell it to skip extra error handling
     # in the case of nulls for sub parameters.
-    def _parse_args(self, ctx, args):
+    def parse_args(self, ctx, args):
         parser = self.make_parser(ctx)
         opts, args, param_order = parser.parse_args(args=args)
         for param in click.core.iter_params_for_processing(

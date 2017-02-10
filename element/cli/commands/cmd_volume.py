@@ -1086,8 +1086,6 @@ def clonemultiple(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-    print(_volumeid)
-    print(_attributes)
 
     volumesArray = []
     if(volumes is not None):
