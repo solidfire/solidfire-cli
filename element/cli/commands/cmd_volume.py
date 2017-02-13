@@ -1102,7 +1102,7 @@ def list(ctx,
 @click.option('--attributes',
               required=False,
               multiple=True,
-              type=dict,
+              type=str,
               default=None,
               is_sub_parameter=True,
               help="""List of Name/Value pairs in JSON object format. """,
@@ -1155,7 +1155,8 @@ def clonemultiple(ctx,
     if(volumes is not None):
         try:
             for i, _volumes in enumerate(volumes):
-                volumesArray.append(CloneMultipleVolumeParams(volume_id=volumeid[i], access=accessvolumes[i], name=name[i], new_account_id=newaccountidvolumes[i], new_size=newsize[i], attributes=attributes[i], ))
+                attributes_json = simplejson.loads(attributes[i])
+                volumesArray.append(CloneMultipleVolumeParams(volume_id=volumeid[i], access=accessvolumes[i], name=name[i], new_account_id=newaccountidvolumes[i], new_size=newsize[i], attributes=attributes_json, ))
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)            

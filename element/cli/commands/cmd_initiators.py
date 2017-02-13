@@ -61,7 +61,7 @@ def cli(ctx):
 @click.option('--attributes',
               required=False,
               multiple=True,
-              type=dict,
+              type=str,
               default=None,
               is_sub_parameter=True,
               help="""(Optional) A new set of JSON attributes assigned to this initiator. (JSON Object) """,
@@ -90,7 +90,8 @@ def modify(ctx,
     if(initiators is not None):
         try:
             for i, _initiators in enumerate(initiators):
-                initiatorsArray.append(ModifyInitiator(initiator_id=initiatorid[i], alias=alias[i], volume_access_group_id=volumeaccessgroupid[i], attributes=attributes[i], ))
+                attributes_json = simplejson.loads(attributes[i])
+                initiatorsArray.append(ModifyInitiator(initiator_id=initiatorid[i], alias=alias[i], volume_access_group_id=volumeaccessgroupid[i], attributes=attributes_json, ))
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
@@ -145,7 +146,7 @@ def modify(ctx,
 @click.option('--attributes',
               required=False,
               multiple=True,
-              type=dict,
+              type=str,
               default=None,
               is_sub_parameter=True,
               help="""(Optional) A set of JSON attributes assigned to this initiator. (JSON Object) """,
@@ -174,7 +175,8 @@ def create(ctx,
     if(initiators is not None):
         try:
             for i, _initiators in enumerate(initiators):
-                initiatorsArray.append(CreateInitiator(name=name[i], alias=alias[i], volume_access_group_id=volumeaccessgroupid[i], attributes=attributes[i], ))
+                attributes_json = simplejson.loads(attributes[i])
+                initiatorsArray.append(CreateInitiator(name=name[i], alias=alias[i], volume_access_group_id=volumeaccessgroupid[i], attributes=attributes_json, ))
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
