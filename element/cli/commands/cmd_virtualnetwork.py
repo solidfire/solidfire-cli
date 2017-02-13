@@ -45,14 +45,14 @@ def cli(ctx):
               multiple=True,
               subparameters=["start", "size", ],
               required=False,
-              help="""Provide in json format: New addressBlock to set for this Virtual Network object. This may contain new address blocks to add to the existing object or it may omit unused address blocks that need to be removed. Alternatively, existing address blocks may be extended or reduced in size. The size of the starting addressBlocks for a Virtual Network object can only be increased, and can never be decreased. Attributes for this parameter are: start: start of the IP address range. (String) size: numbre of IP addresses to include in the block. (Integer) """)
+              help="""New addressBlock to set for this Virtual Network object. This may contain new address blocks to add to the existing object or it may omit unused address blocks that need to be removed. Alternatively, existing address blocks may be extended or reduced in size. The size of the starting addressBlocks for a Virtual Network object can only be increased, and can never be decreased. Attributes for this parameter are: start: start of the IP address range. (String) size: numbre of IP addresses to include in the block. (Integer)  Has the following subparameters: --start --size """)
 @click.option('--start',
               required=False,
               multiple=True,
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""Start of the IP address range. """,
+              help="""[subparameter]Start of the IP address range. """,
               cls=SolidFireOption)
 @click.option('--size',
               required=False,
@@ -60,7 +60,7 @@ def cli(ctx):
               type=int,
               default=None,
               is_sub_parameter=True,
-              help="""Number of IP addresses to include in the block. """,
+              help="""[subparameter]Number of IP addresses to include in the block. """,
               cls=SolidFireOption)
 @click.option('--netmask',
               type=str,
@@ -81,7 +81,7 @@ def cli(ctx):
 @click.option('--attributes',
               type=str,
               required=False,
-              help="""Provide in json format: A new list of Name/Value pairs in JSON object format. """)
+              help="""A new list of Name/Value pairs in JSON object format.  Has the following subparameters: """)
 @pass_context
 def modify(ctx,
            # Optional main parameter
@@ -163,14 +163,14 @@ def modify(ctx,
               multiple=True,
               subparameters=["start", "size", ],
               required=True,
-              help="""Provide in json format: Unique Range of IP addresses to include in the virtual network. Attributes for this parameter are: start: start of the IP address range. (String) size: numbre of IP addresses to include in the block. (Integer) """)
+              help="""Unique Range of IP addresses to include in the virtual network. Attributes for this parameter are: start: start of the IP address range. (String) size: numbre of IP addresses to include in the block. (Integer)  Has the following subparameters: --start --size """)
 @click.option('--start',
               required=True,
               multiple=True,
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""Start of the IP address range. """,
+              help="""[subparameter]Start of the IP address range. """,
               cls=SolidFireOption)
 @click.option('--size',
               required=True,
@@ -178,7 +178,7 @@ def modify(ctx,
               type=int,
               default=None,
               is_sub_parameter=True,
-              help="""Number of IP addresses to include in the block. """,
+              help="""[subparameter]Number of IP addresses to include in the block. """,
               cls=SolidFireOption)
 @click.option('--netmask',
               type=str,
@@ -199,7 +199,7 @@ def modify(ctx,
 @click.option('--attributes',
               type=str,
               required=False,
-              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
+              help="""List of Name/Value pairs in JSON object format.  Has the following subparameters: """)
 @pass_context
 def add(ctx,
            # Mandatory main parameter

@@ -93,7 +93,7 @@ def removevolumesfrom(ctx,
 @click.option('--attributes',
               type=str,
               required=False,
-              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
+              help="""List of Name/Value pairs in JSON object format.  Has the following subparameters: """)
 @pass_context
 def modify(ctx,
            # Mandatory main parameter
@@ -182,7 +182,7 @@ def modify(ctx,
 @click.option('--attributes',
               type=str,
               required=False,
-              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
+              help="""List of Name/Value pairs in JSON object format.  Has the following subparameters: """)
 @pass_context
 def create(ctx,
            # Mandatory main parameter
@@ -251,14 +251,14 @@ def create(ctx,
               multiple=True,
               subparameters=["volumeid", "lun", ],
               required=True,
-              help="""Provide in json format: The volume IDs with new assigned LUN values. """)
+              help="""The volume IDs with new assigned LUN values.  Has the following subparameters: --volumeid --lun """)
 @click.option('--volumeid',
               required=True,
               multiple=True,
               type=int,
               default=None,
               is_sub_parameter=True,
-              help="""The volume ID assigned to the Lun. """,
+              help="""[subparameter]The volume ID assigned to the Lun. """,
               cls=SolidFireOption)
 @click.option('--lun',
               required=True,
@@ -266,7 +266,7 @@ def create(ctx,
               type=int,
               default=None,
               is_sub_parameter=True,
-              help="""Correct LUN values are 0 - 16383. An exception will be seen if an incorrect LUN value is passed. """,
+              help="""[subparameter]Correct LUN values are 0 - 16383. An exception will be seen if an incorrect LUN value is passed. """,
               cls=SolidFireOption)
 @pass_context
 def modifylunassignments(ctx,

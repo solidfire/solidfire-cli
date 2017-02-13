@@ -33,14 +33,14 @@ def cli(ctx):
               multiple=True,
               subparameters=["initiatorid", "alias", "volumeaccessgroupid", "attributes", ],
               required=True,
-              help="""Provide in json format: A list of Initiator objects containing characteristics of each initiator to modify. """)
+              help="""A list of Initiator objects containing characteristics of each initiator to modify.  Has the following subparameters: --initiatorid --alias --volumeaccessgroupid --attributes """)
 @click.option('--initiatorid',
               required=True,
               multiple=True,
               type=int,
               default=None,
               is_sub_parameter=True,
-              help="""(Required) The numeric ID of the initiator to modify. (Integer) """,
+              help="""[subparameter](Required) The numeric ID of the initiator to modify. (Integer) """,
               cls=SolidFireOption)
 @click.option('--alias',
               required=False,
@@ -48,7 +48,7 @@ def cli(ctx):
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""(Optional) A new friendly name to assign to the initiator. (String) """,
+              help="""[subparameter](Optional) A new friendly name to assign to the initiator. (String) """,
               cls=SolidFireOption)
 @click.option('--volumeaccessgroupid',
               required=False,
@@ -56,7 +56,7 @@ def cli(ctx):
               type=int,
               default=None,
               is_sub_parameter=True,
-              help="""(Optional) The ID of the volume access group into to which the newly created initiator should be added. If the initiator was previously in a different volume access group, it is removed from the old volume access group. If this key is present but null, the initiator is removed from its current volume access group, but not placed in any new volume access group. (Integer) """,
+              help="""[subparameter](Optional) The ID of the volume access group into to which the newly created initiator should be added. If the initiator was previously in a different volume access group, it is removed from the old volume access group. If this key is present but null, the initiator is removed from its current volume access group, but not placed in any new volume access group. (Integer) """,
               cls=SolidFireOption)
 @click.option('--attributes',
               required=False,
@@ -64,7 +64,7 @@ def cli(ctx):
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""(Optional) A new set of JSON attributes assigned to this initiator. (JSON Object) """,
+              help="""[subparameter](Optional) A new set of JSON attributes assigned to this initiator. (JSON Object) """,
               cls=SolidFireOption)
 @pass_context
 def modify(ctx,
@@ -118,14 +118,14 @@ def modify(ctx,
               multiple=True,
               subparameters=["name", "alias", "volumeaccessgroupid", "attributes", ],
               required=True,
-              help="""Provide in json format: A list of Initiator objects containing characteristics of each new initiator """)
+              help="""A list of Initiator objects containing characteristics of each new initiator  Has the following subparameters: --name --alias --volumeaccessgroupid --attributes """)
 @click.option('--name',
               required=True,
               multiple=True,
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""(Required) The name of the initiator (IQN or WWPN) to create. (String) """,
+              help="""[subparameter](Required) The name of the initiator (IQN or WWPN) to create. (String) """,
               cls=SolidFireOption)
 @click.option('--alias',
               required=False,
@@ -133,7 +133,7 @@ def modify(ctx,
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""(Optional) The friendly name to assign to this initiator. (String) """,
+              help="""[subparameter](Optional) The friendly name to assign to this initiator. (String) """,
               cls=SolidFireOption)
 @click.option('--volumeaccessgroupid',
               required=False,
@@ -141,7 +141,7 @@ def modify(ctx,
               type=int,
               default=None,
               is_sub_parameter=True,
-              help="""(Optional) The ID of the volume access group into to which this newly created initiator will be added. (Integer) """,
+              help="""[subparameter](Optional) The ID of the volume access group into to which this newly created initiator will be added. (Integer) """,
               cls=SolidFireOption)
 @click.option('--attributes',
               required=False,
@@ -149,7 +149,7 @@ def modify(ctx,
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""(Optional) A set of JSON attributes assigned to this initiator. (JSON Object) """,
+              help="""[subparameter](Optional) A set of JSON attributes assigned to this initiator. (JSON Object) """,
               cls=SolidFireOption)
 @pass_context
 def create(ctx,

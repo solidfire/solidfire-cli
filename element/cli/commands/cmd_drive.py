@@ -212,14 +212,14 @@ def gethardwareinfo(ctx,
               multiple=True,
               subparameters=["driveid", ],
               required=True,
-              help="""Provide in json format: List of drives to add to the cluster. """)
+              help="""List of drives to add to the cluster.  Has the following subparameters: --driveid """)
 @click.option('--driveid',
               required=True,
               multiple=True,
               type=int,
               default=None,
               is_sub_parameter=True,
-              help="""A unique identifier for this drive. """,
+              help="""[subparameter]A unique identifier for this drive. """,
               cls=SolidFireOption)
 @pass_context
 def add(ctx,
