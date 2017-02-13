@@ -90,7 +90,9 @@ def modify(ctx,
     if(initiators is not None):
         try:
             for i, _initiators in enumerate(initiators):
-                attributes_json = simplejson.loads(attributes[i])
+                attributes_json = None
+                if attributes[i] != None:
+                    attributes_json = simplejson.loads(attributes[i])
                 initiatorsArray.append(ModifyInitiator(initiator_id=initiatorid[i], alias=alias[i], volume_access_group_id=volumeaccessgroupid[i], attributes=attributes_json, ))
         except Exception as e:
             ctx.logger.error(e.__str__())
@@ -175,7 +177,9 @@ def create(ctx,
     if(initiators is not None):
         try:
             for i, _initiators in enumerate(initiators):
-                attributes_json = simplejson.loads(attributes[i])
+                attributes_json = None
+                if attributes[i] != None:
+                    attributes_json = simplejson.loads(attributes[i])
                 initiatorsArray.append(CreateInitiator(name=name[i], alias=alias[i], volume_access_group_id=volumeaccessgroupid[i], attributes=attributes_json, ))
         except Exception as e:
             ctx.logger.error(e.__str__())

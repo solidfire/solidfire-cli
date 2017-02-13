@@ -1155,7 +1155,9 @@ def clonemultiple(ctx,
     if(volumes is not None):
         try:
             for i, _volumes in enumerate(volumes):
-                attributes_json = simplejson.loads(attributes[i])
+                attributes_json = None
+                if attributes[i] != None:
+                    attributes_json = simplejson.loads(attributes[i])
                 volumesArray.append(CloneMultipleVolumeParams(volume_id=volumeid[i], access=accessvolumes[i], name=name[i], new_account_id=newaccountidvolumes[i], new_size=newsize[i], attributes=attributes_json, ))
         except Exception as e:
             ctx.logger.error(e.__str__())
