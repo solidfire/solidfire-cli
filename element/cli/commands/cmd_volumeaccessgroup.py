@@ -249,10 +249,10 @@ def create(ctx,
               cls=SolidFireOption,
               is_flag=True,
               multiple=True,
-              subparameters=["_volumeid", "_lun", ],
+              subparameters=["volumeid", "lun", ],
               required=True,
               help="""Provide in json format: The volume IDs with new assigned LUN values. """)
-@click.option('--_volumeid',
+@click.option('--volumeid',
               required=True,
               multiple=True,
               type=int,
@@ -260,7 +260,7 @@ def create(ctx,
               is_sub_parameter=True,
               help="""The volume ID assigned to the Lun. """,
               cls=SolidFireOption)
-@click.option('--_lun',
+@click.option('--lun',
               required=True,
               multiple=True,
               type=int,
@@ -275,9 +275,9 @@ def modifylunassignments(ctx,
            # Mandatory main parameter
            lunassignments,
            # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
-           _volumeid,
+           volumeid,
            # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
-           _lun):
+           lun):
     """The ModifytVolumeAccessGroupLunAssignments is used to define custom LUN assignments for specific volumes. Only LUN values set on the lunAssignments parameter will be changed in the volume access group. All other LUN assignments will remain unchanged."""
     """"""
     """LUN assignment values must be unique for volumes in a volume access group. An exception will be seen if LUN assignments are duplicated in a volume access group. However, the same LUN values can be used again in different volume access groups."""
@@ -295,7 +295,7 @@ def modifylunassignments(ctx,
     if(lunassignments is not None):
         try:
             for i, _lunassignments in enumerate(lunassignments):
-                lunassignmentsArray.append(LunAssignment(volume_id=_volumeid[i], lun=_lun[i], ))
+                lunassignmentsArray.append(LunAssignment(volume_id=volumeid[i], lun=lun[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)

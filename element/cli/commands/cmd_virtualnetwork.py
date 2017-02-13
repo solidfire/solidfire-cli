@@ -43,10 +43,10 @@ def cli(ctx):
               cls=SolidFireOption,
               is_flag=True,
               multiple=True,
-              subparameters=["_start", "_size", ],
+              subparameters=["start", "size", ],
               required=False,
               help="""Provide in json format: New addressBlock to set for this Virtual Network object. This may contain new address blocks to add to the existing object or it may omit unused address blocks that need to be removed. Alternatively, existing address blocks may be extended or reduced in size. The size of the starting addressBlocks for a Virtual Network object can only be increased, and can never be decreased. Attributes for this parameter are: start: start of the IP address range. (String) size: numbre of IP addresses to include in the block. (Integer) """)
-@click.option('--_start',
+@click.option('--start',
               required=False,
               multiple=True,
               type=str,
@@ -54,7 +54,7 @@ def cli(ctx):
               is_sub_parameter=True,
               help="""Start of the IP address range. """,
               cls=SolidFireOption)
-@click.option('--_size',
+@click.option('--size',
               required=False,
               multiple=True,
               type=int,
@@ -93,9 +93,9 @@ def modify(ctx,
            # Optional main parameter
            addressblocks = None,
            # Optional subparameter of optional main parameter.
-           _start = None,
+           start = None,
            # Optional subparameter of optional main parameter.
-           _size = None,
+           size = None,
            # Optional main parameter
            netmask = None,
            # Optional main parameter
@@ -119,7 +119,7 @@ def modify(ctx,
     if(addressblocks is not None):
         try:
             for i, _addressblocks in enumerate(addressblocks):
-                addressblocksArray.append(AddressBlock(start=_start[i], size=_size[i], ))
+                addressblocksArray.append(AddressBlock(start=start[i], size=size[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)                    
@@ -161,10 +161,10 @@ def modify(ctx,
               cls=SolidFireOption,
               is_flag=True,
               multiple=True,
-              subparameters=["_start", "_size", ],
+              subparameters=["start", "size", ],
               required=True,
               help="""Provide in json format: Unique Range of IP addresses to include in the virtual network. Attributes for this parameter are: start: start of the IP address range. (String) size: numbre of IP addresses to include in the block. (Integer) """)
-@click.option('--_start',
+@click.option('--start',
               required=True,
               multiple=True,
               type=str,
@@ -172,7 +172,7 @@ def modify(ctx,
               is_sub_parameter=True,
               help="""Start of the IP address range. """,
               cls=SolidFireOption)
-@click.option('--_size',
+@click.option('--size',
               required=True,
               multiple=True,
               type=int,
@@ -213,9 +213,9 @@ def add(ctx,
            # Mandatory main parameter
            svip,
            # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
-           _start,
+           start,
            # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
-           _size,
+           size,
            # Optional main parameter
            gateway = None,
            # Optional main parameter
@@ -235,7 +235,7 @@ def add(ctx,
     if(addressblocks is not None):
         try:
             for i, _addressblocks in enumerate(addressblocks):
-                addressblocksArray.append(AddressBlock(start=_start[i], size=_size[i], ))
+                addressblocksArray.append(AddressBlock(start=start[i], size=size[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)                    

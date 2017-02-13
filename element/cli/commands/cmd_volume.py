@@ -1056,10 +1056,10 @@ def list(ctx,
               cls=SolidFireOption,
               is_flag=True,
               multiple=True,
-              subparameters=["_volumeid", "_access", "_name", "_newaccountid", "_newsize", "_attributes", ],
+              subparameters=["volumeid", "accessvolumes", "name", "newaccountidvolumes", "newsize", "attributes", ],
               required=True,
               help="""Provide in json format: Array of Unique ID for each volume to include in the clone with optional parameters. If optional parameters are not specified, the values will be inherited from the source volumes. """)
-@click.option('--_volumeid',
+@click.option('--volumeid',
               required=True,
               multiple=True,
               type=int,
@@ -1067,7 +1067,7 @@ def list(ctx,
               is_sub_parameter=True,
               help="""Required parameter for "volumes" array: volumeID. """,
               cls=SolidFireOption)
-@click.option('--_access',
+@click.option('--accessvolumes',
               required=False,
               multiple=True,
               type=str,
@@ -1075,7 +1075,7 @@ def list(ctx,
               is_sub_parameter=True,
               help="""Access settings for the new volume. readOnly: Only read operations are allowed. readWrite: Reads and writes are allowed. locked: No reads or writes are allowed. replicationTarget: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked.  If unspecified, the access settings of the clone will be the same as the source. """,
               cls=SolidFireOption)
-@click.option('--_name',
+@click.option('--name',
               required=False,
               multiple=True,
               type=str,
@@ -1083,7 +1083,7 @@ def list(ctx,
               is_sub_parameter=True,
               help="""New name for the clone. """,
               cls=SolidFireOption)
-@click.option('--_newaccountid',
+@click.option('--newaccountidvolumes',
               required=False,
               multiple=True,
               type=int,
@@ -1091,7 +1091,7 @@ def list(ctx,
               is_sub_parameter=True,
               help="""Account ID for the new volume. """,
               cls=SolidFireOption)
-@click.option('--_newsize',
+@click.option('--newsize',
               required=False,
               multiple=True,
               type=int,
@@ -1099,7 +1099,7 @@ def list(ctx,
               is_sub_parameter=True,
               help="""New size Total size of the volume, in bytes. Size is rounded up to the nearest 1MB size. """,
               cls=SolidFireOption)
-@click.option('--_attributes',
+@click.option('--attributes',
               required=False,
               multiple=True,
               type=dict,
@@ -1124,17 +1124,17 @@ def clonemultiple(ctx,
            # Mandatory main parameter
            volumes,
            # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
-           _volumeid,
+           volumeid,
            # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
-           _access = None,
+           accessvolumes = None,
            # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
-           _name = None,
+           name = None,
            # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
-           _newaccountid = None,
+           newaccountidvolumes = None,
            # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
-           _newsize = None,
+           newsize = None,
            # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
-           _attributes = None,
+           attributes = None,
            # Optional main parameter
            access = None,
            # Optional main parameter
@@ -1155,7 +1155,7 @@ def clonemultiple(ctx,
     if(volumes is not None):
         try:
             for i, _volumes in enumerate(volumes):
-                volumesArray.append(CloneMultipleVolumeParams(volume_id=_volumeid[i], access=_access[i], name=_name[i], new_account_id=_newaccountid[i], new_size=_newsize[i], attributes=_attributes[i], ))
+                volumesArray.append(CloneMultipleVolumeParams(volume_id=volumeid[i], access=accessvolumes[i], name=name[i], new_account_id=newaccountidvolumes[i], new_size=newsize[i], attributes=attributes[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)            

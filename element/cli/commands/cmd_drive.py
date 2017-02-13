@@ -210,10 +210,10 @@ def gethardwareinfo(ctx,
               cls=SolidFireOption,
               is_flag=True,
               multiple=True,
-              subparameters=["_driveid", ],
+              subparameters=["driveid", ],
               required=True,
               help="""Provide in json format: List of drives to add to the cluster. """)
-@click.option('--_driveid',
+@click.option('--driveid',
               required=True,
               multiple=True,
               type=int,
@@ -226,7 +226,7 @@ def add(ctx,
            # Mandatory main parameter
            drives,
            # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
-           _driveid):
+           driveid):
     """AddDrives is used to add one or more available drives to the cluster enabling the drives to host a portion of the cluster&#x27;s data."""
     """When you add a node to the cluster or install new drives in an existing node, the new drives are marked as &quot;available&quot; and must be added via AddDrives before they can be utilized."""
     """Use the &quot;ListDrives&quot; method to display drives that are &quot;available&quot; to be added."""
@@ -247,7 +247,7 @@ def add(ctx,
     if(drives is not None):
         try:
             for i, _drives in enumerate(drives):
-                drivesArray.append(NewDrive(drive_id=_driveid[i], ))
+                drivesArray.append(NewDrive(drive_id=driveid[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)

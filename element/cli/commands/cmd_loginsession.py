@@ -56,10 +56,10 @@ def getremotelogginghosts(ctx):
               cls=SolidFireOption,
               is_flag=True,
               multiple=True,
-              subparameters=["_host", "_port", ],
+              subparameters=["host", "port", ],
               required=True,
               help="""Provide in json format: List of hosts to send log messages to. """)
-@click.option('--_host',
+@click.option('--host',
               required=True,
               multiple=True,
               type=str,
@@ -67,7 +67,7 @@ def getremotelogginghosts(ctx):
               is_sub_parameter=True,
               help="""Hostname or IP address of the log server. """,
               cls=SolidFireOption)
-@click.option('--_port',
+@click.option('--port',
               required=True,
               multiple=True,
               type=int,
@@ -80,9 +80,9 @@ def setremotelogginghosts(ctx,
            # Mandatory main parameter
            remotehosts,
            # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
-           _host,
+           host,
            # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
-           _port):
+           port):
     """RemoteLoggingHosts is used to configure remote logging from the nodes in the storage cluster to a centralized log server or servers. Remote logging is performed over TCP using the default port 514. This API does not add to the existing logging hosts. Rather, it replaces what currently exists with new values specified by this API method. You can use the GetRemoteLoggingHosts to determine what the current logging hosts are and then use the SetRemoteLoggingHosts to set the desired list of current and new logging hosts."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
@@ -94,7 +94,7 @@ def setremotelogginghosts(ctx,
     if(remotehosts is not None):
         try:
             for i, _remotehosts in enumerate(remotehosts):
-                remotehostsArray.append(LoggingServer(host=_host[i], port=_port[i], ))
+                remotehostsArray.append(LoggingServer(host=host[i], port=port[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
