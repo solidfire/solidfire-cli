@@ -4162,8 +4162,8 @@ sfcli --mvip 10.117.61.44 -k --username admin --password admin Volume CloneMulti
         \"frequency\": {
         }        [Required],
         \"has_error\": true/false,
-        \"last_run_status\": \"string\"        [Required],
-        \"last_run_time_started\": \"string\"        [Required],
+        \"last_run_status\": \"string\",
+        \"last_run_time_started\": \"string\",
         \"paused\": true/false,
         \"recurring\": true/false,
         \"run_next_interval\": true/false,
@@ -4177,7 +4177,7 @@ sfcli --mvip 10.117.61.44 -k --username admin --password admin Volume CloneMulti
             \"retention\": \"string\"
         }        [Required],
         \"name\": \"string\"        [Required],
-        \"starting_date\": \"string\"        [Required],
+        \"starting_date\": \"string\",
         \"to_be_deleted\": true/false
     }
 

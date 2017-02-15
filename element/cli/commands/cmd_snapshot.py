@@ -248,10 +248,12 @@ def list(ctx,
     cli_utils.print_result(_ListSnapshotsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
+
 @cli.command('createschedule', short_help="""CreateSchedule is used to create a schedule that will autonomously make a snapshot of a volume at a defined interval.  The snapshot created can be used later as a backup or rollback to ensure the data on a volume or group of volumes is consistent for the point in time in which the snapshot was created.   Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """)
 @click.option('--minutes',
               type=int,
-              required=True,
+              required=False,
+              default=0,
               help="""If provided with hours and days, it suggests (with hours and days) how much time is in between each snapshot. If it is provided with weekdays or monthdays, it suggests the time on which a snapshot will occur.""")
 @click.option('--hours',
               type=int,
@@ -273,14 +275,6 @@ def list(ctx,
               type=bool,
               required=False,
               help="""Indicates whether or not the schedule has errors.""")
-@click.option('--lastrunstatus',
-              type=str,
-              required=True,
-              help="""Indicates the status of the last scheduled snapshot. Valid values are: Success Failed""")
-@click.option('--lastruntimestarted',
-              type=str,
-              required=True,
-              help="""Indicates the last time the schedule started n ISO 8601 date string. Valid values are: Success Failed""")
 @click.option('--paused',
               type=bool,
               required=False,
@@ -293,10 +287,6 @@ def list(ctx,
               type=bool,
               required=False,
               help="""Indicates whether or not the schedule will run the next time the scheduler is active. When set to "true", the schedule will run the next time the scheduler is active and then reset back to "false".""")
-@click.option('--scheduleid',
-              type=int,
-              required=True,
-              help="""Unique ID of the schedule""")
 @click.option('--volumeids',
               type=str,
               required=False,
@@ -319,12 +309,8 @@ def list(ctx,
               help="""Unique name assigned to the schedule.""")
 @click.option('--startingdate',
               type=str,
-              required=True,
+              required=False,
               help="""Indicates the date the first time the schedule began of will begin. Formatted in UTC time.""")
-@click.option('--tobedeleted',
-              type=bool,
-              required=True,
-              help="""Indicates if the schedule is marked for deletion.""")
 @pass_context
 def CreateSchedule(ctx,
                    minutes,
@@ -333,24 +319,21 @@ def CreateSchedule(ctx,
                    days,
                    monthdays,
                    haserror,
-                   lastrunstatus,
-                   lastruntimestarted,
                    paused,
                    recurring,
                    runnextinterval,
-                   scheduleid,
                    volumeids,
                    snapshotname,
                    enableremotereplication,
                    retention,
                    name,
-                   startingdate,
-                   tobedeleted):
+                   startingdate):
     """CreateSchedule is used to create a schedule that will autonomously make a snapshot of a volume at a defined interval."""
     """"""
     """The snapshot created can be used later as a backup or rollback to ensure the data on a volume or group of volumes is consistent for the point in time in which the snapshot was created. """
     """"""
     """Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5."""
+    print("CALLED")
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -363,54 +346,36 @@ def CreateSchedule(ctx,
         Option 1: Provide minutes, hours, and days
         Option 2: Provide minutes, hours, and weekdays
         Option 3: Provide minutes, hours, and monthdays""")
+        exit(1)
 
     # Mandatory parameters:
     if(minutes and hours and days):
-        freq = TimeIntervalFrequency()
-        freq.minutes = minutes
-        freq.hours = hours
-        freq.days = days
+        freq = TimeIntervalFrequency(minutes=minutes, hours=hours, days=days)
     if(minutes and hours and weekdays):
-        freq = DaysOfWeekFrequency()
-        freq.minutes = minutes
-        freq.hours = hours
-        freq.weekdays = weekdays
+        print("BADNESS")
+        freq = DaysOfWeekFrequency(minutes=minutes, hours=hours, weekdays=weekdays)
     if(minutes and hours and monthdays):
-        freq = DaysOfMonthFrequency()
-        freq.minutes = minutes
-        freq.hours = hours
-        freq.weekdays = weekdays
+        freq = DaysOfMonthFrequency(minutes=minutes, hours=hours, weekdays=weekdays)
 
-    scheduleInfo = ScheduleInfo()
-    scheduleInfo.volumeIDs = volumeids
-    scheduleInfo.snashotName = snapshotname
-    scheduleInfo.enableRemoteReplication = enableremotereplication
-    scheduleInfo.retention = retention
+    volumeids = parser.parse_array(volumeids)
 
-    schedule = Schedule()
-    schedule.frequency = freq
-    schedule.last_run_status = lastrunstatus
-    schedule.last_run_time_started = lastruntimestarted
-    schedule.schedule_info = scheduleInfo
-    schedule.name = name
-    schedule.starting_date = startingdate
+    scheduleInfo = ScheduleInfo(volume_ids=volumeids, snapshot_name=snapshotname, enable_remote_replication=enableremotereplication, retention=retention)
 
-    if has_error:
+    schedule = Schedule(frequency=freq, schedule_info=scheduleInfo, name=name, starting_date=startingdate)
+
+    if haserror:
         schedule.has_error = haserror
     if paused:
         schedule.paused = paused
     if recurring:
         schedule.recurring = recurring
-    if run_next_interval:
+    if runnextinterval:
         schedule.run_next_interval = runnextinterval
-    if schedule_id:
-        schedule.schedule_id = scheduleid
-    if to_be_deleted:
-        schedule.to_be_deleted = tobedeleted
+    _CreateScheduleResult = ctx.element.create_schedule(schedule=schedule)
 
     ctx.logger.info("""schedule = """+str(schedule)+""";"""+"")
     try:
-        _CreateScheduleResult = ctx.element.createschedule(schedule=schedule)
+        _CreateScheduleResult = ctx.element.create_schedule(schedule=schedule)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -805,6 +770,7 @@ def ModifySchedule(ctx,
         Option 1: Provide minutes, hours, and days - specifies time in between snapshots
         Option 2: Provide minutes, hours, and weekdays - specifies time to take snapshots
         Option 3: Provide minutes, hours, and monthdays - specifies time to take snapshots""")
+        exit(1)
 
     # Now that we've done our checks, get the specific schedule:
     _GetScheduleResult = ctx.element.get_schedule(schedule_id=scheduleid)
