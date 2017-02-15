@@ -168,7 +168,7 @@ def modify(ctx,
 @click.option('--attributes',
               type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format.  Has the following subparameters: """)
+              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def create(ctx,
            # Mandatory main parameter
@@ -507,7 +507,7 @@ def getschedule(ctx,
 @click.option('--attributes',
               type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format  Has the following subparameters: """)
+              help="""Provide in json format: List of Name/Value pairs in JSON object format """)
 @pass_context
 def rollbacktogroup(ctx,
            # Mandatory main parameter
@@ -572,7 +572,7 @@ def rollbacktogroup(ctx,
 @click.option('--attributes',
               type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format  Has the following subparameters: """)
+              help="""Provide in json format: List of Name/Value pairs in JSON object format """)
 @pass_context
 def rollbackto(ctx,
            # Mandatory main parameter
@@ -641,7 +641,7 @@ def rollbackto(ctx,
 @click.option('--attributes',
               type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format.  Has the following subparameters: """)
+              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def creategroup(ctx,
            # Mandatory main parameter

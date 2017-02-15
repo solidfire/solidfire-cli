@@ -24,7 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """getinfo getapi disablesnmp getsnmpstate getsnmpinfo getconfig deleteallsupportbundles getsystemstatus setsnmptrapinfo listfaults listadmins create disableencryptionatrest addadmin setntpinfo setconfig modifyadmin getsnmptrapinfo listevents snmpsendtesttraps removeadmin modifyfullthreshold getlimits getcurrentadmin createsupportbundle getcapacity getntpinfo enableencryptionatrest getversioninfo setsnmpacl clearfaults getsnmpacl getstate enablesnmp getstats getmasternodeid setsnmpinfo getfullthreshold listsyncjobs """
+    """getinfo getapi getconfig getsnmpstate getsnmpinfo disablesnmp deleteallsupportbundles getsystemstatus setsnmptrapinfo listfaults listadmins create disableencryptionatrest addadmin setntpinfo setconfig modifyadmin getsnmptrapinfo listevents clearfaults removeadmin modifyfullthreshold getlimits getcurrentadmin createsupportbundle getcapacity getntpinfo listsyncjobs getversioninfo setsnmpacl snmpsendtesttraps getsnmpacl getstate enablesnmp getstats getmasternodeid setsnmpinfo getfullthreshold enableencryptionatrest """
 
 @cli.command('getinfo', short_help="""Return configuration information about the cluster. """, cls=SolidFireCommand)
 @pass_context
@@ -76,10 +76,12 @@ def getapi(ctx):
 
 
 
-@cli.command('disablesnmp', short_help="""DisableSnmp is used to disable SNMP on the cluster nodes. """, cls=SolidFireCommand)
+@cli.command('getconfig', short_help="""The GetClusterConfig API method is used to return information about the cluster configuration this node uses to communicate with the cluster it is a part of.  Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
 @pass_context
-def disablesnmp(ctx):
-    """DisableSnmp is used to disable SNMP on the cluster nodes."""
+def getconfig(ctx):
+    """The GetClusterConfig API method is used to return information about the cluster configuration this node uses to communicate with the cluster it is a part of."""
+    """"""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -89,7 +91,7 @@ def disablesnmp(ctx):
 
     ctx.logger.info("")
     try:
-        _DisableSnmpResult = ctx.element.disable_snmp()
+        _GetClusterConfigResult = ctx.element.get_cluster_config()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -97,7 +99,7 @@ def disablesnmp(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_DisableSnmpResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_GetClusterConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -155,12 +157,10 @@ def getsnmpinfo(ctx):
 
 
 
-@cli.command('getconfig', short_help="""The GetClusterConfig API method is used to return information about the cluster configuration this node uses to communicate with the cluster it is a part of.  Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
+@cli.command('disablesnmp', short_help="""DisableSnmp is used to disable SNMP on the cluster nodes. """, cls=SolidFireCommand)
 @pass_context
-def getconfig(ctx):
-    """The GetClusterConfig API method is used to return information about the cluster configuration this node uses to communicate with the cluster it is a part of."""
-    """"""
-    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
+def disablesnmp(ctx):
+    """DisableSnmp is used to disable SNMP on the cluster nodes."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -170,7 +170,7 @@ def getconfig(ctx):
 
     ctx.logger.info("")
     try:
-        _GetClusterConfigResult = ctx.element.get_cluster_config()
+        _DisableSnmpResult = ctx.element.disable_snmp()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -178,7 +178,7 @@ def getconfig(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_GetClusterConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_DisableSnmpResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -236,32 +236,32 @@ def getsystemstatus(ctx):
               cls=SolidFireOption,
               is_flag=True,
               multiple=True,
-              subparameters=["host", "community", "port", ],
+              subparameters=["_host", "_community", "_port", ],
               required=True,
-              help="""List of hosts that are to receive the traps generated by the Cluster Master. At least one object is required if any one of the trap types is enabled.  Has the following subparameters: --host --community --port """)
-@click.option('--host',
-              required=True,
-              multiple=True,
-              type=str,
-              default=None,
-              is_sub_parameter=True,
-              help="""[subparameter]The IP address or host name of the target network management station. """,
-              cls=SolidFireOption)
-@click.option('--community',
+              help="""Provide in json format: List of hosts that are to receive the traps generated by the Cluster Master. At least one object is required if any one of the trap types is enabled. """)
+@click.option('--_host',
               required=True,
               multiple=True,
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter]SNMP community string. """,
+              help="""The IP address or host name of the target network management station. """,
               cls=SolidFireOption)
-@click.option('--port',
+@click.option('--_community',
+              required=True,
+              multiple=True,
+              type=str,
+              default=None,
+              is_sub_parameter=True,
+              help="""SNMP community string. """,
+              cls=SolidFireOption)
+@click.option('--_port',
               required=True,
               multiple=True,
               type=int,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter]The UDP port number on the host where the trap is to be sent. Valid range is 1 - 65535. 0 (zero) is not a valid port number. Default is 162. """,
+              help="""The UDP port number on the host where the trap is to be sent. Valid range is 1 - 65535. 0 (zero) is not a valid port number. Default is 162. """,
               cls=SolidFireOption)
 @click.option('--clusterfaulttrapsenabled',
               type=bool,
@@ -286,11 +286,11 @@ def setsnmptrapinfo(ctx,
            # Mandatory main parameter
            clustereventtrapsenabled,
            # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
-           host,
+           _host,
            # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
-           community,
+           _community,
            # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
-           port):
+           _port):
     """SetSnmpTrapInfo is used to enable and disable the generation of SolidFire SNMP notifications (traps) and to specify the set of network host computers that are to receive the notifications. The values passed with each SetSnmpTrapInfo method replaces all values set in any previous method to SetSnmpTrapInfo."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
@@ -302,7 +302,7 @@ def setsnmptrapinfo(ctx,
     if(traprecipients is not None):
         try:
             for i, _traprecipients in enumerate(traprecipients):
-                traprecipientsArray.append(SnmpTrapRecipient(host=host[i], community=community[i], port=port[i], ))
+                traprecipientsArray.append(SnmpTrapRecipient(host=_host[i], community=_community[i], port=_port[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)            
@@ -429,7 +429,7 @@ def listadmins(ctx):
 @click.option('--attributes',
               type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format.  Has the following subparameters: """)
+              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def create(ctx,
            # Mandatory main parameter
@@ -530,7 +530,7 @@ def disableencryptionatrest(ctx):
 @click.option('--attributes',
               type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format.  Has the following subparameters: """)
+              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def addadmin(ctx,
            # Mandatory main parameter
@@ -622,7 +622,7 @@ def setntpinfo(ctx,
               type=str,
               required=False,
               help="""Network interface used for cluster communication. """)
-@click.option('--clusterconfigclustercluster',
+@click.option('--clusterconfigcluster',
               type=str,
               required=False,
               help="""Unique cluster name. """)
@@ -663,7 +663,7 @@ def setconfig(ctx,
            # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
            clusterconfigcipi = None,
            # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
-           clusterconfigclustercluster = None,
+           clusterconfigcluster = None,
            # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
            clusterconfigensemble = None,
            # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
@@ -691,7 +691,7 @@ def setconfig(ctx,
 
     cluster = None
     if(clusterconfigcipi is not None or
-       clusterconfigclustercluster is not None or
+       clusterconfigcluster is not None or
        clusterconfigensemble is not None or
        clusterconfigmipi is not None or
        clusterconfigname is not None or
@@ -706,7 +706,7 @@ def setconfig(ctx,
 """)
         kwargsDict = dict()
         kwargsDict["cipi"] = clusterconfigcipi
-        kwargsDict["cluster"] = clusterconfigclustercluster
+        kwargsDict["cluster"] = clusterconfigcluster
         kwargsDict["ensemble"] = clusterconfigensemble
         kwargsDict["mipi"] = clusterconfigmipi
         kwargsDict["name"] = clusterconfigname
@@ -749,7 +749,7 @@ def setconfig(ctx,
 @click.option('--attributes',
               type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format.  Has the following subparameters: """)
+              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def modifyadmin(ctx,
            # Mandatory main parameter
@@ -867,20 +867,26 @@ def listevents(ctx,
 
 
 
-@cli.command('snmpsendtesttraps', short_help="""SnmpSendTestTraps enables you to test SNMP functionality for a cluster. This method instructs the cluster to send test SNMP traps to the currently configured SNMP manager. """, cls=SolidFireCommand)
+@cli.command('clearfaults', short_help="""ClearClusterFaults is used to clear information about both current faults that are resolved as well as faults that were previously detected and resolved can be cleared. """, cls=SolidFireCommand)
+@click.option('--faulttypes',
+              type=str,
+              required=False,
+              help="""Determines the types of faults cleared: current: Faults that are currently detected and have not been resolved. resolved: Faults that were previously detected and resolved. all: Both current and resolved faults are cleared. The fault status can be determined by the "resolved" field of the fault object. """)
 @pass_context
-def snmpsendtesttraps(ctx):
-    """SnmpSendTestTraps enables you to test SNMP functionality for a cluster. This method instructs the cluster to send test SNMP traps to the currently configured SNMP manager."""
+def clearfaults(ctx,
+           # Optional main parameter
+           faulttypes = None):
+    """ClearClusterFaults is used to clear information about both current faults that are resolved as well as faults that were previously detected and resolved can be cleared."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
-    ctx.logger.info("")
+    ctx.logger.info("""faulttypes = """+str(faulttypes)+""";"""+"")
     try:
-        _SnmpSendTestTrapsResult = ctx.element.snmp_send_test_traps()
+        _ClearClusterFaultsResult = ctx.element.clear_cluster_faults(fault_types=faulttypes)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -888,7 +894,7 @@ def snmpsendtesttraps(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_SnmpSendTestTrapsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_ClearClusterFaultsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1110,12 +1116,10 @@ def getntpinfo(ctx):
 
 
 
-@cli.command('enableencryptionatrest', short_help="""The EnableEncryptionAtRest method is used to enable the Advanced Encryption Standard (AES) 256-bit encryption at rest on the cluster so that the cluster can manage the encryption key used for the drives on each node. This feature is not enabled by default. Enabling this operation allows the cluster to automatically manage encryption keys internally for the drives on each node in the cluster. Nodes do not store the keys to unlock drives and the keys are never passed over the network. Two nodes participating in a cluster are required to access the key to disable encryption on a drive. The encryption management does not affect performance or efficiency on the cluster. If an encryption-enabled drive or node is removed from the cluster with the API, all data is secure erased and any data left on the drive cannot be read or accessed. Enabling or disabling encryption should be performed when the cluster is running and in a healthy state. Encryption can be enabled or disabled at your discretion and can be performed as often as you need. Note: This process is asynchronous and returns a response before encryption is enabled. The GetClusterInfo method can be used to poll the system to see when the process has completed. """, cls=SolidFireCommand)
+@cli.command('listsyncjobs', short_help="""ListSyncJobs is used to return information about synchronization jobs that are running on a SolidFire cluster. Synchronization jobs that are returned with this method are, "slice," "clone" and "remote." """, cls=SolidFireCommand)
 @pass_context
-def enableencryptionatrest(ctx):
-    """The EnableEncryptionAtRest method is used to enable the Advanced Encryption Standard (AES) 256-bit encryption at rest on the cluster so that the cluster can manage the encryption key used for the drives on each node. This feature is not enabled by default. Enabling this operation allows the cluster to automatically manage encryption keys internally for the drives on each node in the cluster. Nodes do not store the keys to unlock drives and the keys are never passed over the network. Two nodes participating in a cluster are required to access the key to disable encryption on a drive. The encryption management does not affect performance or efficiency on the cluster. If an encryption-enabled drive or node is removed from the cluster with the API, all data is secure erased and any data left on the drive cannot be read or accessed."""
-    """Enabling or disabling encryption should be performed when the cluster is running and in a healthy state. Encryption can be enabled or disabled at your discretion and can be performed as often as you need."""
-    """Note: This process is asynchronous and returns a response before encryption is enabled. The GetClusterInfo method can be used to poll the system to see when the process has completed."""
+def listsyncjobs(ctx):
+    """ListSyncJobs is used to return information about synchronization jobs that are running on a SolidFire cluster. Synchronization jobs that are returned with this method are, &quot;slice,&quot; &quot;clone&quot; and &quot;remote.&quot;"""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -1125,7 +1129,7 @@ def enableencryptionatrest(ctx):
 
     ctx.logger.info("")
     try:
-        _EnableEncryptionAtRestResult = ctx.element.enable_encryption_at_rest()
+        _ListSyncJobsResult = ctx.element.list_sync_jobs()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1133,7 +1137,7 @@ def enableencryptionatrest(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_EnableEncryptionAtRestResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_ListSyncJobsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1168,87 +1172,87 @@ def getversioninfo(ctx):
               cls=SolidFireOption,
               is_flag=True,
               multiple=True,
-              subparameters=["accessnetworks", "cidr", "community", "network", ],
+              subparameters=["_accessnetworks", "_cidr", "_community", "_network", ],
               required=True,
-              help="""List of networks and what type of access they have to the SNMP servers running on the cluster nodes. See SNMP Network Object for possible "networks" values. REQUIRED if SNMP v# is disabled.  Has the following subparameters: --accessnetworks --cidr --community --network """)
-@click.option('--accessnetworks',
+              help="""Provide in json format: List of networks and what type of access they have to the SNMP servers running on the cluster nodes. See SNMP Network Object for possible "networks" values. REQUIRED if SNMP v# is disabled. """)
+@click.option('--_accessnetworks',
               required=True,
               multiple=True,
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter]ro: read-only access.* rw: for read-write access. rosys: for read-only access to a restricted set of system information *SolidFire recommends that all networks other than the default "localhost" be set to "ro" access, because all SolidFire MIB objects are read-only. """,
+              help="""ro: read-only access.* rw: for read-write access. rosys: for read-only access to a restricted set of system information *SolidFire recommends that all networks other than the default "localhost" be set to "ro" access, because all SolidFire MIB objects are read-only. """,
               cls=SolidFireOption)
-@click.option('--cidr',
+@click.option('--_cidr',
               required=True,
               multiple=True,
               type=int,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter]A CIDR network mask. This network mask must be an integer greater than or equal to 0, and less than or equal to 32. It must also not be equal to 31. """,
+              help="""A CIDR network mask. This network mask must be an integer greater than or equal to 0, and less than or equal to 32. It must also not be equal to 31. """,
               cls=SolidFireOption)
-@click.option('--community',
+@click.option('--_community',
               required=True,
               multiple=True,
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter]SNMP community string. """,
+              help="""SNMP community string. """,
               cls=SolidFireOption)
-@click.option('--network',
+@click.option('--_network',
               required=True,
               multiple=True,
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter]This parameter along with the cidr variable is used to control which network the access and community string apply to. The special value of "default" is used to specify an entry that applies to all networks. The cidr mask is ignored when network value is either a host name or default. """,
+              help="""This parameter along with the cidr variable is used to control which network the access and community string apply to. The special value of "default" is used to specify an entry that applies to all networks. The cidr mask is ignored when network value is either a host name or default. """,
               cls=SolidFireOption)
 @click.option('--usmusers',
               cls=SolidFireOption,
               is_flag=True,
               multiple=True,
-              subparameters=["accessusmusers", "name", "password", "passphrase", "seclevel", ],
+              subparameters=["_accessusmusers", "_name", "_password", "_passphrase", "_seclevel", ],
               required=True,
-              help="""List of users and the type of access they have to the SNMP servers running on the cluster nodes. REQUIRED if SNMP v3 is enabled.  Has the following subparameters: --accessusmusers --name --password --passphrase --seclevel """)
-@click.option('--accessusmusers',
+              help="""Provide in json format: List of users and the type of access they have to the SNMP servers running on the cluster nodes. REQUIRED if SNMP v3 is enabled. """)
+@click.option('--_accessusmusers',
               required=True,
               multiple=True,
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter]rouser: read-only access.* rwuser: for read-write access. rosys: for read-only access to a restricted set of system information *SolidFire recommends that all USM users be set to "rouser" access, because all SolidFire MIB objects are read-only. """,
+              help="""rouser: read-only access.* rwuser: for read-write access. rosys: for read-only access to a restricted set of system information *SolidFire recommends that all USM users be set to "rouser" access, because all SolidFire MIB objects are read-only. """,
               cls=SolidFireOption)
-@click.option('--name',
+@click.option('--_name',
               required=True,
               multiple=True,
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter]The name of the user. Must contain at least one character, but no more than 32 characters. Blank spaces are not allowed. """,
+              help="""The name of the user. Must contain at least one character, but no more than 32 characters. Blank spaces are not allowed. """,
               cls=SolidFireOption)
-@click.option('--password',
+@click.option('--_password',
               required=True,
               multiple=True,
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter]The password of the user. Must be between 8 and 255 characters long (inclusive). Blank spaces are not allowed. Required if "secLevel" is "auth" or "priv." """,
+              help="""The password of the user. Must be between 8 and 255 characters long (inclusive). Blank spaces are not allowed. Required if "secLevel" is "auth" or "priv." """,
               cls=SolidFireOption)
-@click.option('--passphrase',
+@click.option('--_passphrase',
               required=True,
               multiple=True,
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter]The passphrase of the user. Must be between 8 and 255 characters long (inclusive). Blank spaces are not allowed. Required if "secLevel" is "priv." """,
+              help="""The passphrase of the user. Must be between 8 and 255 characters long (inclusive). Blank spaces are not allowed. Required if "secLevel" is "priv." """,
               cls=SolidFireOption)
-@click.option('--seclevel',
+@click.option('--_seclevel',
               required=True,
               multiple=True,
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter]noauth: No password or passphrase is required. auth: A password is required for user access. priv: A password and passphrase is required for user access. """,
+              help="""noauth: No password or passphrase is required. auth: A password is required for user access. priv: A password and passphrase is required for user access. """,
               cls=SolidFireOption)
 @pass_context
 def setsnmpacl(ctx,
@@ -1257,23 +1261,23 @@ def setsnmpacl(ctx,
            # Mandatory main parameter
            usmusers,
            # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
-           accessnetworks,
+           _accessnetworks,
            # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
-           cidr,
+           _cidr,
            # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
-           community,
+           _community,
            # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
-           network,
+           _network,
            # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
-           accessusmusers,
+           _accessusmusers,
            # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
-           name,
+           _name,
            # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
-           password,
+           _password,
            # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
-           passphrase,
+           _passphrase,
            # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
-           seclevel):
+           _seclevel):
     """SetSnmpACL is used to configure SNMP access permissions on the cluster nodes. The values set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to SetSnmpACL. Also note that the values set with this interface replace all &quot;network&quot; or &quot;usmUsers&quot; values set with the older SetSnmpInfo."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
@@ -1285,7 +1289,7 @@ def setsnmpacl(ctx,
     if(networks is not None):
         try:
             for i, _networks in enumerate(networks):
-                networksArray.append(SnmpNetwork(access=accessnetworks[i], cidr=cidr[i], community=community[i], network=network[i], ))
+                networksArray.append(SnmpNetwork(access=_accessnetworks[i], cidr=_cidr[i], community=_community[i], network=_network[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)    
@@ -1294,7 +1298,7 @@ def setsnmpacl(ctx,
     if(usmusers is not None):
         try:
             for i, _usmusers in enumerate(usmusers):
-                usmusersArray.append(SnmpV3UsmUser(access=accessusmusers[i], name=name[i], password=password[i], passphrase=passphrase[i], sec_level=seclevel[i], ))
+                usmusersArray.append(SnmpV3UsmUser(access=_accessusmusers[i], name=_name[i], password=_password[i], passphrase=_passphrase[i], sec_level=_seclevel[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
@@ -1314,26 +1318,20 @@ def setsnmpacl(ctx,
 
 
 
-@cli.command('clearfaults', short_help="""ClearClusterFaults is used to clear information about both current faults that are resolved as well as faults that were previously detected and resolved can be cleared. """, cls=SolidFireCommand)
-@click.option('--faulttypes',
-              type=str,
-              required=False,
-              help="""Determines the types of faults cleared: current: Faults that are currently detected and have not been resolved. resolved: Faults that were previously detected and resolved. all: Both current and resolved faults are cleared. The fault status can be determined by the "resolved" field of the fault object. """)
+@cli.command('snmpsendtesttraps', short_help="""SnmpSendTestTraps enables you to test SNMP functionality for a cluster. This method instructs the cluster to send test SNMP traps to the currently configured SNMP manager. """, cls=SolidFireCommand)
 @pass_context
-def clearfaults(ctx,
-           # Optional main parameter
-           faulttypes = None):
-    """ClearClusterFaults is used to clear information about both current faults that are resolved as well as faults that were previously detected and resolved can be cleared."""
+def snmpsendtesttraps(ctx):
+    """SnmpSendTestTraps enables you to test SNMP functionality for a cluster. This method instructs the cluster to send test SNMP traps to the currently configured SNMP manager."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-    
+
     
 
-    ctx.logger.info("""faulttypes = """+str(faulttypes)+""";"""+"")
+    ctx.logger.info("")
     try:
-        _ClearClusterFaultsResult = ctx.element.clear_cluster_faults(fault_types=faulttypes)
+        _SnmpSendTestTrapsResult = ctx.element.snmp_send_test_traps()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1341,7 +1339,7 @@ def clearfaults(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_ClearClusterFaultsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_SnmpSendTestTrapsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1487,40 +1485,40 @@ def getmasternodeid(ctx):
               cls=SolidFireOption,
               is_flag=True,
               multiple=True,
-              subparameters=["accessnetworks", "cidr", "community", "network", ],
+              subparameters=["_accessnetworks", "_cidr", "_community", "_network", ],
               required=False,
-              help="""List of networks and what type of access they have to the SNMP servers running on the cluster nodes. See SNMP Network Object for possible "networks" values. SNMP v2 only.  Has the following subparameters: --accessnetworks --cidr --community --network """)
-@click.option('--accessnetworks',
+              help="""Provide in json format: List of networks and what type of access they have to the SNMP servers running on the cluster nodes. See SNMP Network Object for possible "networks" values. SNMP v2 only. """)
+@click.option('--_accessnetworks',
               required=False,
               multiple=True,
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter]ro: read-only access.* rw: for read-write access. rosys: for read-only access to a restricted set of system information *SolidFire recommends that all networks other than the default "localhost" be set to "ro" access, because all SolidFire MIB objects are read-only. """,
+              help="""ro: read-only access.* rw: for read-write access. rosys: for read-only access to a restricted set of system information *SolidFire recommends that all networks other than the default "localhost" be set to "ro" access, because all SolidFire MIB objects are read-only. """,
               cls=SolidFireOption)
-@click.option('--cidr',
+@click.option('--_cidr',
               required=False,
               multiple=True,
               type=int,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter]A CIDR network mask. This network mask must be an integer greater than or equal to 0, and less than or equal to 32. It must also not be equal to 31. """,
+              help="""A CIDR network mask. This network mask must be an integer greater than or equal to 0, and less than or equal to 32. It must also not be equal to 31. """,
               cls=SolidFireOption)
-@click.option('--community',
+@click.option('--_community',
               required=False,
               multiple=True,
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter]SNMP community string. """,
+              help="""SNMP community string. """,
               cls=SolidFireOption)
-@click.option('--network',
+@click.option('--_network',
               required=False,
               multiple=True,
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter]This parameter along with the cidr variable is used to control which network the access and community string apply to. The special value of "default" is used to specify an entry that applies to all networks. The cidr mask is ignored when network value is either a host name or default. """,
+              help="""This parameter along with the cidr variable is used to control which network the access and community string apply to. The special value of "default" is used to specify an entry that applies to all networks. The cidr mask is ignored when network value is either a host name or default. """,
               cls=SolidFireOption)
 @click.option('--enabled',
               type=bool,
@@ -1534,61 +1532,61 @@ def getmasternodeid(ctx):
               cls=SolidFireOption,
               is_flag=True,
               multiple=True,
-              subparameters=["accessusmusers", "name", "password", "passphrase", "seclevel", ],
+              subparameters=["_accessusmusers", "_name", "_password", "_passphrase", "_seclevel", ],
               required=False,
-              help="""If SNMP v3 is enabled, this value must be passed in place of the "networks" parameter. SNMP v3 only.  Has the following subparameters: --accessusmusers --name --password --passphrase --seclevel """)
-@click.option('--accessusmusers',
+              help="""Provide in json format: If SNMP v3 is enabled, this value must be passed in place of the "networks" parameter. SNMP v3 only. """)
+@click.option('--_accessusmusers',
               required=False,
               multiple=True,
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter]rouser: read-only access.* rwuser: for read-write access. rosys: for read-only access to a restricted set of system information *SolidFire recommends that all USM users be set to "rouser" access, because all SolidFire MIB objects are read-only. """,
+              help="""rouser: read-only access.* rwuser: for read-write access. rosys: for read-only access to a restricted set of system information *SolidFire recommends that all USM users be set to "rouser" access, because all SolidFire MIB objects are read-only. """,
               cls=SolidFireOption)
-@click.option('--name',
+@click.option('--_name',
               required=False,
               multiple=True,
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter]The name of the user. Must contain at least one character, but no more than 32 characters. Blank spaces are not allowed. """,
+              help="""The name of the user. Must contain at least one character, but no more than 32 characters. Blank spaces are not allowed. """,
               cls=SolidFireOption)
-@click.option('--password',
+@click.option('--_password',
               required=False,
               multiple=True,
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter]The password of the user. Must be between 8 and 255 characters long (inclusive). Blank spaces are not allowed. Required if "secLevel" is "auth" or "priv." """,
+              help="""The password of the user. Must be between 8 and 255 characters long (inclusive). Blank spaces are not allowed. Required if "secLevel" is "auth" or "priv." """,
               cls=SolidFireOption)
-@click.option('--passphrase',
+@click.option('--_passphrase',
               required=False,
               multiple=True,
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter]The passphrase of the user. Must be between 8 and 255 characters long (inclusive). Blank spaces are not allowed. Required if "secLevel" is "priv." """,
+              help="""The passphrase of the user. Must be between 8 and 255 characters long (inclusive). Blank spaces are not allowed. Required if "secLevel" is "priv." """,
               cls=SolidFireOption)
-@click.option('--seclevel',
+@click.option('--_seclevel',
               required=False,
               multiple=True,
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter]noauth: No password or passphrase is required. auth: A password is required for user access. priv: A password and passphrase is required for user access. """,
+              help="""noauth: No password or passphrase is required. auth: A password is required for user access. priv: A password and passphrase is required for user access. """,
               cls=SolidFireOption)
 @pass_context
 def setsnmpinfo(ctx,
            # Optional main parameter
            networks = None,
            # Optional subparameter of optional main parameter.
-           accessnetworks = None,
+           _accessnetworks = None,
            # Optional subparameter of optional main parameter.
-           cidr = None,
+           _cidr = None,
            # Optional subparameter of optional main parameter.
-           community = None,
+           _community = None,
            # Optional subparameter of optional main parameter.
-           network = None,
+           _network = None,
            # Optional main parameter
            enabled = None,
            # Optional main parameter
@@ -1596,15 +1594,15 @@ def setsnmpinfo(ctx,
            # Optional main parameter
            usmusers = None,
            # Optional subparameter of optional main parameter.
-           accessusmusers = None,
+           _accessusmusers = None,
            # Optional subparameter of optional main parameter.
-           name = None,
+           _name = None,
            # Optional subparameter of optional main parameter.
-           password = None,
+           _password = None,
            # Optional subparameter of optional main parameter.
-           passphrase = None,
+           _passphrase = None,
            # Optional subparameter of optional main parameter.
-           seclevel = None):
+           _seclevel = None):
     """SetSnmpInfo is used to configure SNMP v2 and v3 on the cluster nodes. The values set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to SetSnmpInfo."""
     """"""
     """Note: EnableSnmp and SetSnmpACL methods can be used to accomplish the same results as SetSnmpInfo. SetSnmpInfo will no longer be available after the Element 8 release. Please use EnableSnmp and SetSnmpACL in the future."""
@@ -1618,7 +1616,7 @@ def setsnmpinfo(ctx,
     if(networks is not None):
         try:
             for i, _networks in enumerate(networks):
-                networksArray.append(SnmpNetwork(access=accessnetworks[i], cidr=cidr[i], community=community[i], network=network[i], ))
+                networksArray.append(SnmpNetwork(access=_accessnetworks[i], cidr=_cidr[i], community=_community[i], network=_network[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)            
@@ -1627,7 +1625,7 @@ def setsnmpinfo(ctx,
     if(usmusers is not None):
         try:
             for i, _usmusers in enumerate(usmusers):
-                usmusersArray.append(SnmpV3UsmUser(access=accessusmusers[i], name=name[i], password=password[i], passphrase=passphrase[i], sec_level=seclevel[i], ))
+                usmusersArray.append(SnmpV3UsmUser(access=_accessusmusers[i], name=_name[i], password=_password[i], passphrase=_passphrase[i], sec_level=_seclevel[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
@@ -1672,10 +1670,12 @@ def getfullthreshold(ctx):
 
 
 
-@cli.command('listsyncjobs', short_help="""ListSyncJobs is used to return information about synchronization jobs that are running on a SolidFire cluster. Synchronization jobs that are returned with this method are, "slice," "clone" and "remote." """, cls=SolidFireCommand)
+@cli.command('enableencryptionatrest', short_help="""The EnableEncryptionAtRest method is used to enable the Advanced Encryption Standard (AES) 256-bit encryption at rest on the cluster so that the cluster can manage the encryption key used for the drives on each node. This feature is not enabled by default. Enabling this operation allows the cluster to automatically manage encryption keys internally for the drives on each node in the cluster. Nodes do not store the keys to unlock drives and the keys are never passed over the network. Two nodes participating in a cluster are required to access the key to disable encryption on a drive. The encryption management does not affect performance or efficiency on the cluster. If an encryption-enabled drive or node is removed from the cluster with the API, all data is secure erased and any data left on the drive cannot be read or accessed. Enabling or disabling encryption should be performed when the cluster is running and in a healthy state. Encryption can be enabled or disabled at your discretion and can be performed as often as you need. Note: This process is asynchronous and returns a response before encryption is enabled. The GetClusterInfo method can be used to poll the system to see when the process has completed. """, cls=SolidFireCommand)
 @pass_context
-def listsyncjobs(ctx):
-    """ListSyncJobs is used to return information about synchronization jobs that are running on a SolidFire cluster. Synchronization jobs that are returned with this method are, &quot;slice,&quot; &quot;clone&quot; and &quot;remote.&quot;"""
+def enableencryptionatrest(ctx):
+    """The EnableEncryptionAtRest method is used to enable the Advanced Encryption Standard (AES) 256-bit encryption at rest on the cluster so that the cluster can manage the encryption key used for the drives on each node. This feature is not enabled by default. Enabling this operation allows the cluster to automatically manage encryption keys internally for the drives on each node in the cluster. Nodes do not store the keys to unlock drives and the keys are never passed over the network. Two nodes participating in a cluster are required to access the key to disable encryption on a drive. The encryption management does not affect performance or efficiency on the cluster. If an encryption-enabled drive or node is removed from the cluster with the API, all data is secure erased and any data left on the drive cannot be read or accessed."""
+    """Enabling or disabling encryption should be performed when the cluster is running and in a healthy state. Encryption can be enabled or disabled at your discretion and can be performed as often as you need."""
+    """Note: This process is asynchronous and returns a response before encryption is enabled. The GetClusterInfo method can be used to poll the system to see when the process has completed."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -1685,7 +1685,7 @@ def listsyncjobs(ctx):
 
     ctx.logger.info("")
     try:
-        _ListSyncJobsResult = ctx.element.list_sync_jobs()
+        _EnableEncryptionAtRestResult = ctx.element.enable_encryption_at_rest()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1693,5 +1693,5 @@ def listsyncjobs(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_ListSyncJobsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_EnableEncryptionAtRestResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
