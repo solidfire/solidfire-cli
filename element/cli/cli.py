@@ -73,9 +73,8 @@ class SolidFireCLI(click.MultiCommand):
                 "element.cli.commands.cmd_%s" % (name.lower()))
             mod = __import__(import_string, None, None, ['cli'])
         except ImportError as e:
-            print(import_string+" failed.")
-            print(e.__str__())
-            return
+            LOG.error(name.lower()+" is not a valid module. Please run 'sfcli --help' for a list of valid modules.")
+            exit(1)
         return mod.cli
 
 class SolidFireParsingState(click.parser.ParsingState):
