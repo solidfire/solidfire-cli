@@ -104,7 +104,7 @@ def liststatsbyaccount(ctx):
 @click.option('--attributes',
               type=str,
               required=False,
-              help="""JSON attributes for the bulk volume job.  Has the following subparameters: """)
+              help="""Provide in json format: JSON attributes for the bulk volume job. """)
 @pass_context
 def startbulkwrite(ctx,
            # Mandatory main parameter
@@ -172,7 +172,7 @@ def startbulkwrite(ctx,
 @click.option('--attributes',
               type=str,
               required=False,
-              help="""JSON attributes  updates what is on the bulk volume job.  Has the following subparameters: """)
+              help="""Provide in json format: JSON attributes  updates what is on the bulk volume job. """)
 @pass_context
 def updatebulkstatus(ctx,
            # Mandatory main parameter
@@ -240,7 +240,7 @@ def updatebulkstatus(ctx,
 @click.option('--attributes',
               type=str,
               required=False,
-              help="""JSON attributes for the bulk volume job.  Has the following subparameters: """)
+              help="""Provide in json format: JSON attributes for the bulk volume job. """)
 @pass_context
 def startbulkread(ctx,
            # Mandatory main parameter
@@ -418,7 +418,7 @@ def liststatsby(ctx):
 @click.option('--attributes',
               type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format.  Has the following subparameters: """)
+              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def create(ctx,
            # Mandatory main parameter
@@ -702,7 +702,7 @@ def listbulkjobs(ctx):
 @click.option('--attributes',
               type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format.  Has the following subparameters: """)
+              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def clone(ctx,
            # Mandatory main parameter
@@ -795,7 +795,7 @@ def clone(ctx,
 @click.option('--attributes',
               type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format.  Has the following subparameters: """)
+              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def modify(ctx,
            # Mandatory main parameter
@@ -1056,56 +1056,56 @@ def list(ctx,
               cls=SolidFireOption,
               is_flag=True,
               multiple=True,
-              subparameters=["volumeid", "accessvolumes", "name", "newaccountidvolumes", "newsize", "attributes", ],
+              subparameters=["_volumeid", "_access", "_name", "_newaccountid", "_newsize", "_attributes", ],
               required=True,
-              help="""Array of Unique ID for each volume to include in the clone with optional parameters. If optional parameters are not specified, the values will be inherited from the source volumes.  Has the following subparameters: --volumeid --accessvolumes --name --newaccountidvolumes --newsize --attributes """)
-@click.option('--volumeid',
+              help="""Provide in json format: Array of Unique ID for each volume to include in the clone with optional parameters. If optional parameters are not specified, the values will be inherited from the source volumes. """)
+@click.option('--_volumeid',
               required=True,
               multiple=True,
               type=int,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter]Required parameter for "volumes" array: volumeID. """,
+              help="""Required parameter for "volumes" array: volumeID. """,
               cls=SolidFireOption)
-@click.option('--accessvolumes',
+@click.option('--_access',
               required=False,
               multiple=True,
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter]Access settings for the new volume. readOnly: Only read operations are allowed. readWrite: Reads and writes are allowed. locked: No reads or writes are allowed. replicationTarget: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked.  If unspecified, the access settings of the clone will be the same as the source. """,
+              help="""Access settings for the new volume. readOnly: Only read operations are allowed. readWrite: Reads and writes are allowed. locked: No reads or writes are allowed. replicationTarget: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked.  If unspecified, the access settings of the clone will be the same as the source. """,
               cls=SolidFireOption)
-@click.option('--name',
+@click.option('--_name',
               required=False,
               multiple=True,
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter]New name for the clone. """,
+              help="""New name for the clone. """,
               cls=SolidFireOption)
-@click.option('--newaccountidvolumes',
+@click.option('--_newaccountid',
               required=False,
               multiple=True,
               type=int,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter]Account ID for the new volume. """,
+              help="""Account ID for the new volume. """,
               cls=SolidFireOption)
-@click.option('--newsize',
+@click.option('--_newsize',
               required=False,
               multiple=True,
               type=int,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter]New size Total size of the volume, in bytes. Size is rounded up to the nearest 1MB size. """,
+              help="""New size Total size of the volume, in bytes. Size is rounded up to the nearest 1MB size. """,
               cls=SolidFireOption)
-@click.option('--attributes',
+@click.option('--_attributes',
               required=False,
               multiple=True,
-              type=str,
+              type=dict,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter]List of Name/Value pairs in JSON object format. """,
+              help="""List of Name/Value pairs in JSON object format. """,
               cls=SolidFireOption)
 @click.option('--access',
               type=str,
@@ -1124,17 +1124,17 @@ def clonemultiple(ctx,
            # Mandatory main parameter
            volumes,
            # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
-           volumeid,
+           _volumeid,
            # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
-           accessvolumes = None,
+           _access = None,
            # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
-           name = None,
+           _name = None,
            # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
-           newaccountidvolumes = None,
+           _newaccountid = None,
            # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
-           newsize = None,
+           _newsize = None,
            # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
-           attributes = None,
+           _attributes = None,
            # Optional main parameter
            access = None,
            # Optional main parameter
@@ -1155,10 +1155,7 @@ def clonemultiple(ctx,
     if(volumes is not None):
         try:
             for i, _volumes in enumerate(volumes):
-                attributes_json = None
-                if attributes[i] != None:
-                    attributes_json = simplejson.loads(attributes[i])
-                volumesArray.append(CloneMultipleVolumeParams(volume_id=volumeid[i], access=accessvolumes[i], name=name[i], new_account_id=newaccountidvolumes[i], new_size=newsize[i], attributes=attributes_json, ))
+                volumesArray.append(CloneMultipleVolumeParams(volume_id=_volumeid[i], access=_access[i], name=_name[i], new_account_id=_newaccountid[i], new_size=_newsize[i], attributes=_attributes[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)            

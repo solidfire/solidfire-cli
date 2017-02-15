@@ -34,7 +34,7 @@ def cli(ctx):
 @click.option('--parameters',
               type=str,
               required=False,
-              help="""An object, normally a dictionary or hashtable of the key/value pairs, to be passed as the params for the method being invoked.  Has the following subparameters: """)
+              help="""Provide in json format: An object, normally a dictionary or hashtable of the key/value pairs, to be passed as the params for the method being invoked. """)
 @pass_context
 def invoke(ctx,
            # Mandatory main parameter

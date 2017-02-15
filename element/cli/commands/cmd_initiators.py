@@ -31,53 +31,53 @@ def cli(ctx):
               cls=SolidFireOption,
               is_flag=True,
               multiple=True,
-              subparameters=["initiatorid", "alias", "volumeaccessgroupid", "attributes", ],
+              subparameters=["_initiatorid", "_alias", "_volumeaccessgroupid", "_attributes", ],
               required=True,
-              help="""A list of Initiator objects containing characteristics of each initiator to modify.  Has the following subparameters: --initiatorid --alias --volumeaccessgroupid --attributes """)
-@click.option('--initiatorid',
+              help="""Provide in json format: A list of Initiator objects containing characteristics of each initiator to modify. """)
+@click.option('--_initiatorid',
               required=True,
               multiple=True,
               type=int,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter](Required) The numeric ID of the initiator to modify. (Integer) """,
+              help="""(Required) The numeric ID of the initiator to modify. (Integer) """,
               cls=SolidFireOption)
-@click.option('--alias',
+@click.option('--_alias',
               required=False,
               multiple=True,
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter](Optional) A new friendly name to assign to the initiator. (String) """,
+              help="""(Optional) A new friendly name to assign to the initiator. (String) """,
               cls=SolidFireOption)
-@click.option('--volumeaccessgroupid',
+@click.option('--_volumeaccessgroupid',
               required=False,
               multiple=True,
               type=int,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter](Optional) The ID of the volume access group into to which the newly created initiator should be added. If the initiator was previously in a different volume access group, it is removed from the old volume access group. If this key is present but null, the initiator is removed from its current volume access group, but not placed in any new volume access group. (Integer) """,
+              help="""(Optional) The ID of the volume access group into to which the newly created initiator should be added. If the initiator was previously in a different volume access group, it is removed from the old volume access group. If this key is present but null, the initiator is removed from its current volume access group, but not placed in any new volume access group. (Integer) """,
               cls=SolidFireOption)
-@click.option('--attributes',
+@click.option('--_attributes',
               required=False,
               multiple=True,
-              type=str,
+              type=dict,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter](Optional) A new set of JSON attributes assigned to this initiator. (JSON Object) """,
+              help="""(Optional) A new set of JSON attributes assigned to this initiator. (JSON Object) """,
               cls=SolidFireOption)
 @pass_context
 def modify(ctx,
            # Mandatory main parameter
            initiators,
            # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
-           initiatorid,
+           _initiatorid,
            # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
-           alias = None,
+           _alias = None,
            # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
-           volumeaccessgroupid = None,
+           _volumeaccessgroupid = None,
            # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
-           attributes = None):
+           _attributes = None):
     """ModifyInitiators enables you to change the attributes of an existing initiator. You cannot change the name of an existing initiator. If you need to change the name of an initiator, delete the existing initiator with DeleteInitiators and create a new one with CreateInitiators."""
     """If ModifyInitiators fails to change one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible)."""
     if ctx.element is None:
@@ -90,10 +90,7 @@ def modify(ctx,
     if(initiators is not None):
         try:
             for i, _initiators in enumerate(initiators):
-                attributes_json = None
-                if attributes[i] != None:
-                    attributes_json = simplejson.loads(attributes[i])
-                initiatorsArray.append(ModifyInitiator(initiator_id=initiatorid[i], alias=alias[i], volume_access_group_id=volumeaccessgroupid[i], attributes=attributes_json, ))
+                initiatorsArray.append(ModifyInitiator(initiator_id=_initiatorid[i], alias=_alias[i], volume_access_group_id=_volumeaccessgroupid[i], attributes=_attributes[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
@@ -118,53 +115,53 @@ def modify(ctx,
               cls=SolidFireOption,
               is_flag=True,
               multiple=True,
-              subparameters=["name", "alias", "volumeaccessgroupid", "attributes", ],
+              subparameters=["_name", "_alias", "_volumeaccessgroupid", "_attributes", ],
               required=True,
-              help="""A list of Initiator objects containing characteristics of each new initiator  Has the following subparameters: --name --alias --volumeaccessgroupid --attributes """)
-@click.option('--name',
+              help="""Provide in json format: A list of Initiator objects containing characteristics of each new initiator """)
+@click.option('--_name',
               required=True,
               multiple=True,
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter](Required) The name of the initiator (IQN or WWPN) to create. (String) """,
+              help="""(Required) The name of the initiator (IQN or WWPN) to create. (String) """,
               cls=SolidFireOption)
-@click.option('--alias',
+@click.option('--_alias',
               required=False,
               multiple=True,
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter](Optional) The friendly name to assign to this initiator. (String) """,
+              help="""(Optional) The friendly name to assign to this initiator. (String) """,
               cls=SolidFireOption)
-@click.option('--volumeaccessgroupid',
+@click.option('--_volumeaccessgroupid',
               required=False,
               multiple=True,
               type=int,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter](Optional) The ID of the volume access group into to which this newly created initiator will be added. (Integer) """,
+              help="""(Optional) The ID of the volume access group into to which this newly created initiator will be added. (Integer) """,
               cls=SolidFireOption)
-@click.option('--attributes',
+@click.option('--_attributes',
               required=False,
               multiple=True,
-              type=str,
+              type=dict,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter](Optional) A set of JSON attributes assigned to this initiator. (JSON Object) """,
+              help="""(Optional) A set of JSON attributes assigned to this initiator. (JSON Object) """,
               cls=SolidFireOption)
 @pass_context
 def create(ctx,
            # Mandatory main parameter
            initiators,
            # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
-           name,
+           _name,
            # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
-           alias = None,
+           _alias = None,
            # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
-           volumeaccessgroupid = None,
+           _volumeaccessgroupid = None,
            # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
-           attributes = None):
+           _attributes = None):
     """CreateInitiators enables you to create multiple new initiator IQNs or World Wide Port Names (WWPNs) and optionally assign them aliases and attributes. When you use CreateInitiators to create new initiators, you can also add them to volume access groups."""
     """If CreateInitiators fails to create one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible)."""
     if ctx.element is None:
@@ -177,10 +174,7 @@ def create(ctx,
     if(initiators is not None):
         try:
             for i, _initiators in enumerate(initiators):
-                attributes_json = None
-                if attributes[i] != None:
-                    attributes_json = simplejson.loads(attributes[i])
-                initiatorsArray.append(CreateInitiator(name=name[i], alias=alias[i], volume_access_group_id=volumeaccessgroupid[i], attributes=attributes_json, ))
+                initiatorsArray.append(CreateInitiator(name=_name[i], alias=_alias[i], volume_access_group_id=_volumeaccessgroupid[i], attributes=_attributes[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
