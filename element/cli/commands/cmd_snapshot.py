@@ -348,11 +348,11 @@ def CreateSchedule(ctx,
         exit(1)
 
     # Mandatory parameters:
-    if(minutes and hours and days):
+    if(minutes is not None and hours is not None and days is not None):
         freq = TimeIntervalFrequency(minutes=minutes, hours=hours, days=days)
-    if(minutes and hours and weekdays):
+    if(minutes is not None and hours is not None and weekdays is not None):
         freq = DaysOfWeekFrequency(minutes=minutes, hours=hours, weekdays=weekdays)
-    if(minutes and hours and monthdays):
+    if(minutes is not None and hours is not None and monthdays is not None):
         freq = DaysOfMonthFrequency(minutes=minutes, hours=hours, weekdays=weekdays)
 
     volumeids = parser.parse_array(volumeids)
