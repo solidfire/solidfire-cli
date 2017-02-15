@@ -353,7 +353,7 @@ def CreateSchedule(ctx,
     if(minutes is not None and hours is not None and weekdays is not None):
         freq = DaysOfWeekFrequency(minutes=minutes, hours=hours, weekdays=weekdays)
     if(minutes is not None and hours is not None and monthdays is not None):
-        freq = DaysOfMonthFrequency(minutes=minutes, hours=hours, weekdays=weekdays)
+        freq = DaysOfMonthFrequency(minutes=minutes, hours=hours, monthdays=parser.parse_array(monthdays))
 
     volumeids = parser.parse_array(volumeids)
 
@@ -779,7 +779,7 @@ def ModifySchedule(ctx,
         freq = DaysOfMonthFrequency(
             minutes=minutes,
             hours=hours,
-            monthdays=monthdays
+            monthdays=parser.parse_array(monthdays)
         )
     if freq:
         schedule.frequency = freq
