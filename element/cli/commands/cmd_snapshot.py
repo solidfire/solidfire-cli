@@ -168,7 +168,7 @@ def modify(ctx,
 @click.option('--attributes',
               type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format.  Has the following subparameters: """)
+              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def create(ctx,
            # Mandatory main parameter
@@ -248,7 +248,7 @@ def list(ctx,
     cli_utils.print_result(_ListSnapshotsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
-@cli.command('createschedule', short_help="""CreateSchedule is used to create a schedule that will autonomously make a snapshot of a volume at a defined interval.  The snapshot created can be used later as a backup or rollback to ensure the data on a volume or group of volumes is consistent for the point in time in which the snapshot was created.   Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """)
+@cli.command('CreateSchedule', short_help="""CreateSchedule is used to create a schedule that will autonomously make a snapshot of a volume at a defined interval.  The snapshot created can be used later as a backup or rollback to ensure the data on a volume or group of volumes is consistent for the point in time in which the snapshot was created.   Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """)
 @click.option('--minutes',
               type=int,
               required=True,
@@ -269,15 +269,15 @@ def list(ctx,
               type=str,
               required=False,
               help="""Indicates the monthdays on which snapshots will occur..""")
-@click.option('--haserror',
+@click.option('--has_error',
               type=bool,
               required=False,
               help="""Indicates whether or not the schedule has errors.""")
-@click.option('--lastrunstatus',
+@click.option('--last_run_status',
               type=str,
               required=True,
               help="""Indicates the status of the last scheduled snapshot. Valid values are: Success Failed""")
-@click.option('--lastruntimestarted',
+@click.option('--last_run_time_started',
               type=str,
               required=True,
               help="""Indicates the last time the schedule started n ISO 8601 date string. Valid values are: Success Failed""")
@@ -289,23 +289,23 @@ def list(ctx,
               type=bool,
               required=False,
               help="""Indicates whether or not the schedule is recurring.""")
-@click.option('--runnextinterval',
+@click.option('--run_next_interval',
               type=bool,
               required=False,
               help="""Indicates whether or not the schedule will run the next time the scheduler is active. When set to "true", the schedule will run the next time the scheduler is active and then reset back to "false".""")
-@click.option('--scheduleid',
+@click.option('--schedule_id',
               type=int,
               required=True,
               help="""Unique ID of the schedule""")
-@click.option('--volumeids',
+@click.option('--volume_ids',
               type=str,
               required=False,
               help="""A list of volume IDs to be included in the group snapshot.""")
-@click.option('--snapshotname',
+@click.option('--snapshot_name',
               type=str,
               required=False,
               help="""The snapshot name to be used.""")
-@click.option('--enableremotereplication',
+@click.option('--enable_remote_replication',
               type=bool,
               required=False,
               help="""Indicates if the snapshot should be included in remote replication.""")
@@ -317,11 +317,11 @@ def list(ctx,
               type=str,
               required=True,
               help="""Unique name assigned to the schedule.""")
-@click.option('--startingdate',
+@click.option('--starting_date',
               type=str,
               required=True,
               help="""Indicates the date the first time the schedule began of will begin. Formatted in UTC time.""")
-@click.option('--tobedeleted',
+@click.option('--to_be_deleted',
               type=bool,
               required=True,
               help="""Indicates if the schedule is marked for deletion.""")
@@ -332,20 +332,20 @@ def CreateSchedule(ctx,
                    weekdays,
                    days,
                    monthdays,
-                   haserror,
-                   lastrunstatus,
-                   lastruntimestarted,
+                   has_error,
+                   last_run_status,
+                   last_run_time_started,
                    paused,
                    recurring,
-                   runnextinterval,
-                   scheduleid,
-                   volumeids,
-                   snapshotname,
-                   enableremotereplication,
+                   run_next_interval,
+                   schedule_id,
+                   volume_ids,
+                   snapshot_name,
+                   enable_remote_replication,
                    retention,
                    name,
-                   startingdate,
-                   tobedeleted):
+                   starting_date,
+                   to_be_deleted):
     """CreateSchedule is used to create a schedule that will autonomously make a snapshot of a volume at a defined interval."""
     """"""
     """The snapshot created can be used later as a backup or rollback to ensure the data on a volume or group of volumes is consistent for the point in time in which the snapshot was created. """
@@ -382,35 +382,35 @@ def CreateSchedule(ctx,
         freq.weekdays = weekdays
 
     scheduleInfo = ScheduleInfo()
-    scheduleInfo.volumeIDs = volumeids
-    scheduleInfo.snashotName = snapshotname
-    scheduleInfo.enableRemoteReplication = enableremotereplication
+    scheduleInfo.volumeIDs = volume_ids
+    scheduleInfo.snapshotName = snapshot_name
+    scheduleInfo.enableRemoteReplication = enable_remote_replication
     scheduleInfo.retention = retention
 
     schedule = Schedule()
     schedule.frequency = freq
-    schedule.last_run_status = lastrunstatus
-    schedule.last_run_time_started = lastruntimestarted
+    schedule.last_run_status = last_run_status
+    schedule.last_run_time_started = last_run_time_started
     schedule.schedule_info = scheduleInfo
     schedule.name = name
-    schedule.starting_date = startingdate
+    schedule.starting_date = starting_date
 
     if has_error:
-        schedule.has_error = haserror
+        schedule.has_error = has_error
     if paused:
         schedule.paused = paused
     if recurring:
         schedule.recurring = recurring
     if run_next_interval:
-        schedule.run_next_interval = runnextinterval
+        schedule.run_next_interval = run_next_interval
     if schedule_id:
-        schedule.schedule_id = scheduleid
+        schedule.schedule_id = schedule_id
     if to_be_deleted:
-        schedule.to_be_deleted = tobedeleted
+        schedule.to_be_deleted = to_be_deleted
 
     ctx.logger.info("""schedule = """+str(schedule)+""";"""+"")
     try:
-        _CreateScheduleResult = ctx.element.createschedule(schedule=schedule)
+        _CreateScheduleResult = ctx.element.create_schedule(schedule=schedule)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -507,7 +507,7 @@ def getschedule(ctx,
 @click.option('--attributes',
               type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format  Has the following subparameters: """)
+              help="""Provide in json format: List of Name/Value pairs in JSON object format """)
 @pass_context
 def rollbacktogroup(ctx,
            # Mandatory main parameter
@@ -572,7 +572,7 @@ def rollbacktogroup(ctx,
 @click.option('--attributes',
               type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format  Has the following subparameters: """)
+              help="""Provide in json format: List of Name/Value pairs in JSON object format """)
 @pass_context
 def rollbackto(ctx,
            # Mandatory main parameter
@@ -641,7 +641,7 @@ def rollbackto(ctx,
 @click.option('--attributes',
               type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format.  Has the following subparameters: """)
+              help="""Provide in json format: List of Name/Value pairs in JSON object format. """)
 @pass_context
 def creategroup(ctx,
            # Mandatory main parameter
@@ -690,8 +690,8 @@ def creategroup(ctx,
     cli_utils.print_result(_CreateGroupSnapshotResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
-@cli.command('modifyschedule', short_help="""ModifySchedule is used to change the intervals at which a scheduled snapshot occurs. This allows for adjustment to the snapshot frequency and retention. """)
-@click.option('--scheduleid',
+@cli.command('ModifySchedule', short_help="""ModifySchedule is used to change the intervals at which a scheduled snapshot occurs. This allows for adjustment to the snapshot frequency and retention. """)
+@click.option('--schedule_id',
               type=int,
               required=True,
               help="""Unique ID of the schedule""")
@@ -715,15 +715,15 @@ def creategroup(ctx,
               type=str,
               required=False,
               help="""Indicates the monthdays on which snapshots will occur..""")
-@click.option('--haserror',
+@click.option('--has_error',
               type=bool,
               required=False,
               help="""Indicates whether or not the schedule has errors.""")
-@click.option('--lastrunstatus',
+@click.option('--last_run_status',
               type=str,
               required=False,
               help="""Indicates the status of the last scheduled snapshot. Valid values are: Success Failed""")
-@click.option('--lastruntimestarted',
+@click.option('--last_run_time_started',
               type=str,
               required=False,
               help="""Indicates the last time the schedule started n ISO 8601 date string. Valid values are: Success Failed""")
@@ -735,19 +735,19 @@ def creategroup(ctx,
               type=bool,
               required=False,
               help="""Indicates whether or not the schedule is recurring.""")
-@click.option('--runnextinterval',
+@click.option('--run_next_interval',
               type=bool,
               required=False,
               help="""Indicates whether or not the schedule will run the next time the scheduler is active. When set to "true", the schedule will run the next time the scheduler is active and then reset back to "false".""")
-@click.option('--volumeids',
+@click.option('--volume_ids',
               type=str,
               required=False,
               help="""A list of volume IDs to be included in the group snapshot.""")
-@click.option('--snapshotname',
+@click.option('--snapshot_name',
               type=str,
               required=False,
               help="""The snapshot name to be used.""")
-@click.option('--enableremotereplication',
+@click.option('--enable_remote_replication',
               type=bool,
               required=False,
               help="""Indicates if the snapshot should be included in remote replication.""")
@@ -759,35 +759,35 @@ def creategroup(ctx,
               type=str,
               required=False,
               help="""Unique name assigned to the schedule.""")
-@click.option('--startingdate',
+@click.option('--starting_date',
               type=str,
               required=False,
               help="""Indicates the date the first time the schedule began of will begin. Formatted in UTC time.""")
-@click.option('--tobedeleted',
+@click.option('--to_be_deleted',
               type=bool,
               required=False,
               help="""Indicates if the schedule is marked for deletion.""")
 @pass_context
 def ModifySchedule(ctx,
-                   scheduleid,
+                   schedule_id,
                    minutes,
                    hours,
                    weekdays,
                    days,
                    monthdays,
-                   haserror,
-                   lastrunstatus,
-                   lastruntimestarted,
+                   has_error,
+                   last_run_status,
+                   last_run_time_started,
                    paused,
                    recurring,
-                   runnextinterval,
-                   volumeids,
-                   snapshotname,
-                   enableremotereplication,
+                   run_next_interval,
+                   volume_ids,
+                   snapshot_name,
+                   enable_remote_replication,
                    retention,
                    name,
-                   startingdate,
-                   tobedeleted):
+                   starting_date,
+                   to_be_deleted):
     """ModifySchedule is used to modify a schedule that will autonomously make a snapshot of a volume at a defined interval."""
     """"""
     """The snapshot can be used later as a backup or rollback to ensure the data on a volume or group of volumes is consistent for the point in time in which the snapshot was created. """
@@ -807,7 +807,7 @@ def ModifySchedule(ctx,
         Option 3: Provide minutes, hours, and monthdays - specifies time to take snapshots""")
 
     # Now that we've done our checks, get the specific schedule:
-    _GetScheduleResult = ctx.element.get_schedule(schedule_id=scheduleid)
+    _GetScheduleResult = ctx.element.get_schedule(schedule_id=schedule_id)
     if _GetScheduleResult.schedule == None:
         ctx.logger.error("The schedule specified by schedule_id does not exist.")
     schedule = _GetScheduleResult.schedule
@@ -831,34 +831,34 @@ def ModifySchedule(ctx,
         freq.weekdays = weekdays
     if freq:
         schedule.frequency = freq
-    if lastrunstatus:
-        schedule.last_run_status = lastrunstatus
-    if lastruntimestarted:
-        schedule.last_run_time_started = lastruntimestarted
-    if volumeids:
-        schedule.scheduleInfo.volume_ids = volumeids
-    if snapshotname:
-        schedule.scheduleInfo.snapshot_name = snapshotname
-    if enableremotereplication:
-        schedule.scheduleInfo.enable_remote_replication = enableremotereplication
+    if last_run_status:
+        schedule.last_run_status = last_run_status
+    if last_run_time_started:
+        schedule.last_run_time_started = last_run_time_started
+    if volume_ids:
+        schedule.scheduleInfo.volume_ids = volume_ids
+    if snapshot_name:
+        schedule.scheduleInfo.snapshot_name = snapshot_name
+    if enable_remote_replication:
+        schedule.scheduleInfo.enable_remote_replication = enable_remote_replication
     if retention:
         schedule.scheduleInfo.retention = retention
     if name:
         schedule.name = name
-    if startingdate:
-        schedule.starting_date = startingdate
-    if haserror:
-        schedule.has_error = haserror
+    if starting_date:
+        schedule.starting_date = starting_date
+    if has_error:
+        schedule.has_error = has_error
     if paused:
         schedule.paused = paused
     if recurring:
         schedule.recurring = recurring
-    if runnextinterval:
-        schedule.run_next_interval = runnextinterval
-    if scheduleid:
-        schedule.schedule_id = scheduleid
-    if tobedeleted:
-        schedule.to_be_deleted = tobedeleted
+    if run_next_interval:
+        schedule.run_next_interval = run_next_interval
+    if schedule_id:
+        schedule.schedule_id = schedule_id
+    if to_be_deleted:
+        schedule.to_be_deleted = to_be_deleted
 
     ctx.logger.info("""schedule = """+str(schedule)+""";"""+"")
     try:
