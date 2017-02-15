@@ -31,8 +31,14 @@ def cli(ctx):
               type=int,
               required=False,
               help="""An array of unique volume IDs to query. If this parameter is not specified, all group snapshots on the cluster will be included. """)
+@click.option('--groupsnapshotid',
+              type=int,
+              required=True,
+              help="""Get info about individual snapshot """)
 @pass_context
 def listgroup(ctx,
+           # Mandatory main parameter
+           groupsnapshotid,
            # Optional main parameter
            volumeid = None):
     """ListGroupSnapshots is used to return information about all group snapshots that have been created."""
@@ -40,12 +46,12 @@ def listgroup(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-    
+        
     
 
-    ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"")
+    ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""groupsnapshotid = """+str(groupsnapshotid)+""";"""+"")
     try:
-        _ListGroupSnapshotsResult = ctx.element.list_group_snapshots(volume_id=volumeid)
+        _ListGroupSnapshotsResult = ctx.element.list_group_snapshots(group_snapshot_id=groupsnapshotid, volume_id=volumeid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -353,7 +359,7 @@ def CreateSchedule(ctx,
     if(minutes is not None and hours is not None and weekdays is not None):
         freq = DaysOfWeekFrequency(minutes=minutes, hours=hours, weekdays=weekdays)
     if(minutes is not None and hours is not None and monthdays is not None):
-        freq = DaysOfMonthFrequency(minutes=minutes, hours=hours, monthdays=parser.parse_array(monthdays))
+        freq = DaysOfMonthFrequency(minutes=minutes, hours=hours, weekdays=weekdays)
 
     volumeids = parser.parse_array(volumeids)
 
@@ -779,7 +785,7 @@ def ModifySchedule(ctx,
         freq = DaysOfMonthFrequency(
             minutes=minutes,
             hours=hours,
-            monthdays=parser.parse_array(monthdays)
+            monthdays=monthdays
         )
     if freq:
         schedule.frequency = freq
