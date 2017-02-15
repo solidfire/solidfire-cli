@@ -254,7 +254,7 @@ def list(ctx,
               type=int,
               required=False,
               default=0,
-              help="""If provided with hours and days, it suggests (with hours and days) how much time is in between each snapshot. If it is provided with weekdays or monthdays, it suggests the time on which a snapshot will occur.""")
+              help="""If provided with hours and days, it suggests (with hours and days) how much time is in between each snapshot. If it is provided with weekdays or monthdays, it suggests the time on which a snapshot will occur. If not provided, defaults to 0.""")
 @click.option('--hours',
               type=int,
               required=True,
@@ -333,14 +333,13 @@ def CreateSchedule(ctx,
     """The snapshot created can be used later as a backup or rollback to ensure the data on a volume or group of volumes is consistent for the point in time in which the snapshot was created. """
     """"""
     """Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5."""
-    print("CALLED")
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
     if not (
-            (minutes and hours and days) or
-            (minutes and hours and weekdays) or
-            (minutes and hours and monthdays)
+            (minutes is not None and hours is not None and days is not None) or
+            (minutes is not None and hours is not None and weekdays is not None) or
+            (minutes is not None and hours is not None and monthdays is not None)
     ):
         ctx.logger.error("""You must provide one of the three possible frequency formats:
         Option 1: Provide minutes, hours, and days
@@ -352,7 +351,6 @@ def CreateSchedule(ctx,
     if(minutes and hours and days):
         freq = TimeIntervalFrequency(minutes=minutes, hours=hours, days=days)
     if(minutes and hours and weekdays):
-        print("BADNESS")
         freq = DaysOfWeekFrequency(minutes=minutes, hours=hours, weekdays=weekdays)
     if(minutes and hours and monthdays):
         freq = DaysOfMonthFrequency(minutes=minutes, hours=hours, weekdays=weekdays)
