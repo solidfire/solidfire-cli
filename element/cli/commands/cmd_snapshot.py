@@ -678,18 +678,6 @@ def creategroup(ctx,
               type=str,
               required=False,
               help="""Indicates the monthdays on which snapshots will occur..""")
-@click.option('--haserror',
-              type=bool,
-              required=False,
-              help="""Indicates whether or not the schedule has errors.""")
-@click.option('--lastrunstatus',
-              type=str,
-              required=False,
-              help="""Indicates the status of the last scheduled snapshot. Valid values are: Success Failed""")
-@click.option('--lastruntimestarted',
-              type=str,
-              required=False,
-              help="""Indicates the last time the schedule started n ISO 8601 date string. Valid values are: Success Failed""")
 @click.option('--paused',
               type=bool,
               required=False,
@@ -738,9 +726,6 @@ def ModifySchedule(ctx,
                    weekdays,
                    days,
                    monthdays,
-                   haserror,
-                   lastrunstatus,
-                   lastruntimestarted,
                    paused,
                    recurring,
                    runnextinterval,
@@ -759,10 +744,10 @@ def ModifySchedule(ctx,
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
-    if (minutes or hours or days or weekdays or monthdays) and not (
-            (minutes and hours and days) or
-            (minutes and hours and weekdays) or
-            (minutes and hours and monthdays)
+    if (minutes is not None or hours is not None or days is not None or weekdays is not None or monthdays is not None) and not (
+            (minutes is not None and hours is not None and days is not None) or
+            (minutes is not None and hours is not None and weekdays is not None) or
+            (minutes is not None and hours is not None and monthdays is not None)
     ):
         ctx.logger.error("""You must provide one of the three possible frequency formats:
         Option 1: Provide minutes, hours, and days - specifies time in between snapshots
@@ -778,27 +763,26 @@ def ModifySchedule(ctx,
 
     # Mandatory parameters:
     freq = None
-    if(minutes and hours and days):
-        freq = TimeIntervalFrequency()
-        freq.minutes = minutes
-        freq.hours = hours
-        freq.days = days
-    if(minutes and hours and weekdays):
-        freq = DaysOfWeekFrequency()
-        freq.minutes = minutes
-        freq.hours = hours
-        freq.weekdays = weekdays
-    if(minutes and hours and monthdays):
-        freq = DaysOfMonthFrequency()
-        freq.minutes = minutes
-        freq.hours = hours
-        freq.weekdays = weekdays
+    if(minutes is not None and hours is not None and days is not None):
+        freq = TimeIntervalFrequency(
+            minutes=minutes,
+            hours=hours,
+            days=days
+        )
+    if(minutes is not None and hours is not None and weekdays is not None):
+        freq = DaysOfWeekFrequency(
+            minutes=minutes,
+            hours=hours,
+            weekdays=weekdays
+        )
+    if(minutes is not None and hours is not None and monthdays is not None):
+        freq = DaysOfMonthFrequency(
+            minutes=minutes,
+            hours=hours,
+            monthdays=monthdays
+        )
     if freq:
         schedule.frequency = freq
-    if lastrunstatus:
-        schedule.last_run_status = lastrunstatus
-    if lastruntimestarted:
-        schedule.last_run_time_started = lastruntimestarted
     if volumeids:
         schedule.scheduleInfo.volume_ids = volumeids
     if snapshotname:
@@ -811,8 +795,6 @@ def ModifySchedule(ctx,
         schedule.name = name
     if startingdate:
         schedule.starting_date = startingdate
-    if haserror:
-        schedule.has_error = haserror
     if paused:
         schedule.paused = paused
     if recurring:
