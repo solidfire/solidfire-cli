@@ -31,8 +31,14 @@ def cli(ctx):
               type=int,
               required=False,
               help="""An array of unique volume IDs to query. If this parameter is not specified, all group snapshots on the cluster will be included. """)
+@click.option('--groupsnapshotid',
+              type=int,
+              required=True,
+              help="""Get info about individual snapshot """)
 @pass_context
 def listgroup(ctx,
+           # Mandatory main parameter
+           groupsnapshotid,
            # Optional main parameter
            volumeid = None):
     """ListGroupSnapshots is used to return information about all group snapshots that have been created."""
@@ -40,12 +46,12 @@ def listgroup(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-    
+        
     
 
-    ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"")
+    ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""groupsnapshotid = """+str(groupsnapshotid)+""";"""+"")
     try:
-        _ListGroupSnapshotsResult = ctx.element.list_group_snapshots(volume_id=volumeid)
+        _ListGroupSnapshotsResult = ctx.element.list_group_snapshots(group_snapshot_id=groupsnapshotid, volume_id=volumeid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -257,11 +263,13 @@ def list(ctx,
               help="""If provided with hours and days, it suggests (with hours and days) how much time is in between each snapshot. If it is provided with weekdays or monthdays, it suggests the time on which a snapshot will occur. If not provided, defaults to 0.""")
 @click.option('--hours',
               type=int,
-              required=True,
+              required=False,
+              default=0,
               help="""If provided with minutes and days, it suggests (with minutes and days) how much time is in between each snapshot. If it is provided with weekdays or monthdays, it suggests the time on which a snapshot will occur.""")
 @click.option('--days',
               type=int,
               required=False,
+              default=0,
               help="""Indicates the number of days in between each snapshot.""")
 @click.option('--weekdays',
               type=str,
@@ -348,10 +356,11 @@ def CreateSchedule(ctx,
         exit(1)
 
     # Mandatory parameters:
+    weekdayStringArray = parser.parse_array(weekdays)
     if(minutes is not None and hours is not None and days is not None):
         freq = TimeIntervalFrequency(minutes=minutes, hours=hours, days=days)
     if(minutes is not None and hours is not None and weekdays is not None):
-        freq = DaysOfWeekFrequency(minutes=minutes, hours=hours, weekdays=weekdays)
+        freq = DaysOfWeekFrequency(minutes=minutes, hours=hours, weekdays=[Weekday.from_name(name) for name in weekdayStringArray])
     if(minutes is not None and hours is not None and monthdays is not None):
         freq = DaysOfMonthFrequency(minutes=minutes, hours=hours, monthdays=parser.parse_array(monthdays))
 
@@ -763,6 +772,8 @@ def ModifySchedule(ctx,
 
     # Mandatory parameters:
     freq = None
+    weekdayStringArray = parser.parse_array(weekdays)
+
     if(minutes is not None and hours is not None and days is not None):
         freq = TimeIntervalFrequency(
             minutes=minutes,
@@ -773,7 +784,7 @@ def ModifySchedule(ctx,
         freq = DaysOfWeekFrequency(
             minutes=minutes,
             hours=hours,
-            weekdays=weekdays
+            weekdays=[Weekday.from_name(name) for name in weekdayStringArray]
         )
     if(minutes is not None and hours is not None and monthdays is not None):
         freq = DaysOfMonthFrequency(

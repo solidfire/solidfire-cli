@@ -2280,6 +2280,10 @@ Options:
 
 An array of unique volume IDs to query. If this parameter is not specified, all group snapshots on the cluster will be included. 
 
+--groupsnapshotid
+
+Get info about individual snapshot 
+
 ---------------------------------------------------------------
 #### modifygroup ####
 Command:
