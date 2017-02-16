@@ -263,11 +263,13 @@ def list(ctx,
               help="""If provided with hours and days, it suggests (with hours and days) how much time is in between each snapshot. If it is provided with weekdays or monthdays, it suggests the time on which a snapshot will occur. If not provided, defaults to 0.""")
 @click.option('--hours',
               type=int,
-              required=True,
+              required=False,
+              default=0,
               help="""If provided with minutes and days, it suggests (with minutes and days) how much time is in between each snapshot. If it is provided with weekdays or monthdays, it suggests the time on which a snapshot will occur.""")
 @click.option('--days',
               type=int,
               required=False,
+              default=0,
               help="""Indicates the number of days in between each snapshot.""")
 @click.option('--weekdays',
               type=str,
@@ -359,7 +361,7 @@ def CreateSchedule(ctx,
     if(minutes is not None and hours is not None and weekdays is not None):
         freq = DaysOfWeekFrequency(minutes=minutes, hours=hours, weekdays=weekdays)
     if(minutes is not None and hours is not None and monthdays is not None):
-        freq = DaysOfMonthFrequency(minutes=minutes, hours=hours, weekdays=weekdays)
+        freq = DaysOfMonthFrequency(minutes=minutes, hours=hours, monthdays=parser.parse_array(monthdays))
 
     volumeids = parser.parse_array(volumeids)
 
@@ -785,7 +787,7 @@ def ModifySchedule(ctx,
         freq = DaysOfMonthFrequency(
             minutes=minutes,
             hours=hours,
-            monthdays=monthdays
+            monthdays=parser.parse_array(monthdays)
         )
     if freq:
         schedule.frequency = freq
