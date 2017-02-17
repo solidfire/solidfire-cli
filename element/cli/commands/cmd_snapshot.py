@@ -33,14 +33,14 @@ def cli(ctx):
               help="""An array of unique volume IDs to query. If this parameter is not specified, all group snapshots on the cluster will be included. """)
 @click.option('--groupsnapshotid',
               type=int,
-              required=True,
+              required=False,
               help="""Get info about individual snapshot """)
 @pass_context
 def listgroup(ctx,
-           # Mandatory main parameter
-           groupsnapshotid,
            # Optional main parameter
-           volumeid = None):
+           volumeid = None,
+           # Optional main parameter
+           groupsnapshotid = None):
     """ListGroupSnapshots is used to return information about all group snapshots that have been created."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
@@ -51,7 +51,7 @@ def listgroup(ctx,
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""groupsnapshotid = """+str(groupsnapshotid)+""";"""+"")
     try:
-        _ListGroupSnapshotsResult = ctx.element.list_group_snapshots(group_snapshot_id=groupsnapshotid, volume_id=volumeid)
+        _ListGroupSnapshotsResult = ctx.element.list_group_snapshots(volume_id=volumeid, group_snapshot_id=groupsnapshotid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
