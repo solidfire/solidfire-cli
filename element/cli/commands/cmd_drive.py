@@ -219,7 +219,7 @@ def gethardwareinfo(ctx,
               type=int,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter]A unique identifier for this drive. """,
+              help="""[subparameter] A unique identifier for this drive.""",
               cls=SolidFireOption)
 @click.option('--forceduringupgrade',
               type=bool,

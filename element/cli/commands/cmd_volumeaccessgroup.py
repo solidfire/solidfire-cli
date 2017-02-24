@@ -258,7 +258,7 @@ def create(ctx,
               type=int,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter]The volume ID assigned to the Lun. """,
+              help="""[subparameter] The volume ID assigned to the Lun.""",
               cls=SolidFireOption)
 @click.option('--lun',
               required=True,
@@ -266,7 +266,7 @@ def create(ctx,
               type=int,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter]Correct LUN values are 0 - 16383. An exception will be seen if an incorrect LUN value is passed. """,
+              help="""[subparameter] Correct LUN values are 0 - 16383. An exception will be seen if an incorrect LUN value is passed.""",
               cls=SolidFireOption)
 @pass_context
 def modifylunassignments(ctx,
