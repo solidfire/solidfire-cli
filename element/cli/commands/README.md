@@ -1292,6 +1292,10 @@ Initial quality of service settings for this volume.  Volumes created without sp
 
 List of Name/Value pairs in JSON object format. 
 
+--slicecount
+
+
+
 ---------------------------------------------------------------
 #### cancelclone ####
 Command:
@@ -2201,6 +2205,10 @@ Options:
 --drives
 
 List of drives to add to the cluster. 
+
+--forceduringupgrade
+
+Allows the user to force the addition of drives during an upgrade. 
 
 ---------------------------------------------------------------
 #### getstats ####
@@ -3390,7 +3398,7 @@ ClearClusterFaults is used to clear information about both current faults that a
 
 Options:
 
---faulttypes
+--faulttype
 
 Determines the types of faults cleared: current: Faults that are currently detected and have not been resolved. resolved: Faults that were previously detected and resolved. all: Both current and resolved faults are cleared. The fault status can be determined by the "resolved" field of the fault object. 
 
@@ -4267,7 +4275,10 @@ sfcli --mvip 10.117.61.44 -k --username admin --password admin Volume CloneMulti
             \"pending_node_id\": int,
             \"role\": \"string\",
             \"sipi\": \"string\",
-            \"state\": \"string\"
+            \"state\": \"string\",
+            \"encryption_capable\": true/false,
+            \"has_local_admin\": true/false,
+            \"version\": \"string\"
         }        [Required],
         \"network\": {
             \"bond10_g\": {

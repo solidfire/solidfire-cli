@@ -658,6 +658,18 @@ def setntpinfo(ctx,
               type=str,
               required=False,
               help="""""")
+@click.option('--clusterconfigencryptioncapable',
+              type=bool,
+              required=False,
+              help="""""")
+@click.option('--clusterconfighaslocaladmin',
+              type=bool,
+              required=False,
+              help="""""")
+@click.option('--clusterconfigversion',
+              type=str,
+              required=False,
+              help="""""")
 @pass_context
 def setconfig(ctx,
            # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
@@ -679,7 +691,13 @@ def setconfig(ctx,
            # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
            clusterconfigsipi = None,
            # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
-           clusterconfigstate = None):
+           clusterconfigstate = None,
+           # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
+           clusterconfigencryptioncapable = None,
+           # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
+           clusterconfighaslocaladmin = None,
+           # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
+           clusterconfigversion = None):
     """The SetClusterConfig API method is used to set the configuration this node uses to communicate with the cluster it is associated with. To see the states in which these objects can be modified see Cluster Object on page 109. To display the current cluster interface settings for a node, run the GetClusterConfig API method."""
     """"""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
@@ -700,6 +718,9 @@ def setconfig(ctx,
        clusterconfigrole is not None or
        clusterconfigsipi is not None or
        clusterconfigstate is not None or
+       clusterconfigencryptioncapable is not None or
+       clusterconfighaslocaladmin is not None or
+       clusterconfigversion is not None or
        False):
         if not ( True):
             ctx.logger.error("""If you choose to provide clusterconfig, you must include all of the following parameters:
@@ -715,6 +736,9 @@ def setconfig(ctx,
         kwargsDict["role"] = clusterconfigrole
         kwargsDict["sipi"] = clusterconfigsipi
         kwargsDict["state"] = clusterconfigstate
+        kwargsDict["encryption_capable"] = clusterconfigencryptioncapable
+        kwargsDict["has_local_admin"] = clusterconfighaslocaladmin
+        kwargsDict["version"] = clusterconfigversion
 
         cluster = ClusterConfig(**kwargsDict)
     
@@ -1315,14 +1339,14 @@ def setsnmpacl(ctx,
 
 
 @cli.command('clearfaults', short_help="""ClearClusterFaults is used to clear information about both current faults that are resolved as well as faults that were previously detected and resolved can be cleared. """, cls=SolidFireCommand)
-@click.option('--faulttypes',
+@click.option('--faulttype',
               type=str,
               required=False,
               help="""Determines the types of faults cleared: current: Faults that are currently detected and have not been resolved. resolved: Faults that were previously detected and resolved. all: Both current and resolved faults are cleared. The fault status can be determined by the "resolved" field of the fault object. """)
 @pass_context
 def clearfaults(ctx,
            # Optional main parameter
-           faulttypes = None):
+           faulttype = None):
     """ClearClusterFaults is used to clear information about both current faults that are resolved as well as faults that were previously detected and resolved can be cleared."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
@@ -1331,9 +1355,9 @@ def clearfaults(ctx,
     
     
 
-    ctx.logger.info("""faulttypes = """+str(faulttypes)+""";"""+"")
+    ctx.logger.info("""faulttype = """+str(faulttype)+""";"""+"")
     try:
-        _ClearClusterFaultsResult = ctx.element.clear_cluster_faults(fault_types=faulttypes)
+        _ClearClusterFaultsResult = ctx.element.clear_cluster_faults(fault_type=faulttype)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()

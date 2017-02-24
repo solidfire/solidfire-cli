@@ -221,12 +221,18 @@ def gethardwareinfo(ctx,
               is_sub_parameter=True,
               help="""[subparameter]A unique identifier for this drive. """,
               cls=SolidFireOption)
+@click.option('--forceduringupgrade',
+              type=bool,
+              required=False,
+              help="""Allows the user to force the addition of drives during an upgrade. """)
 @pass_context
 def add(ctx,
            # Mandatory main parameter
            drives,
            # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
-           driveid):
+           driveid,
+           # Optional main parameter
+           forceduringupgrade = None):
     """AddDrives is used to add one or more available drives to the cluster enabling the drives to host a portion of the cluster&#x27;s data."""
     """When you add a node to the cluster or install new drives in an existing node, the new drives are marked as &quot;available&quot; and must be added via AddDrives before they can be utilized."""
     """Use the &quot;ListDrives&quot; method to display drives that are &quot;available&quot; to be added."""
@@ -250,12 +256,12 @@ def add(ctx,
                 drivesArray.append(NewDrive(drive_id=driveid[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1)
+            exit(1)    
     
 
-    ctx.logger.info("""drives = """+str(drives)+""";"""+"")
+    ctx.logger.info("""drives = """+str(drives)+""";"""+"""forceduringupgrade = """+str(forceduringupgrade)+""";"""+"")
     try:
-        _AddDrivesResult = ctx.element.add_drives(drives=drivesArray)
+        _AddDrivesResult = ctx.element.add_drives(drives=drivesArray, force_during_upgrade=forceduringupgrade)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()

@@ -48,7 +48,7 @@ def print_result(objs, log, as_json=False, as_pickle=False, depth=None, filter_t
 def print_result_as_json(objs, pickle=False):
     #print(jsonpickle.encode(objs))
     nestedDict = serializer.loads(jsonpickle.encode(objs))
-    filteredDict = dict()
+    filteredDict = type(nestedDict)()
     if(pickle==False):
         remove_pickling(nestedDict, filteredDict)
     else:

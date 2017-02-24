@@ -33,14 +33,14 @@ def cli(ctx):
               help="""An array of unique volume IDs to query. If this parameter is not specified, all group snapshots on the cluster will be included. """)
 @click.option('--groupsnapshotid',
               type=int,
-              required=True,
+              required=False,
               help="""Get info about individual snapshot """)
 @pass_context
 def listgroup(ctx,
-           # Mandatory main parameter
-           groupsnapshotid,
            # Optional main parameter
-           volumeid = None):
+           volumeid = None,
+           # Optional main parameter
+           groupsnapshotid = None):
     """ListGroupSnapshots is used to return information about all group snapshots that have been created."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
@@ -51,7 +51,7 @@ def listgroup(ctx,
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""groupsnapshotid = """+str(groupsnapshotid)+""";"""+"")
     try:
-        _ListGroupSnapshotsResult = ctx.element.list_group_snapshots(group_snapshot_id=groupsnapshotid, volume_id=volumeid)
+        _ListGroupSnapshotsResult = ctx.element.list_group_snapshots(volume_id=volumeid, group_snapshot_id=groupsnapshotid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -212,7 +212,7 @@ def create(ctx,
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""snapshotid = """+str(snapshotid)+""";"""+"""name = """+str(name)+""";"""+"""enableremotereplication = """+str(enableremotereplication)+""";"""+"""retention = """+str(retention)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _CreateSnapshotResult = ctx.element.create_snapshot(volume_id=volumeid, snapshot_id=snapshotid, name=name, enable_remote_replication=enableremotereplication, retention=retention, attributes=kwargsDict)
+        _dict = ctx.element.create_snapshot(volume_id=volumeid, snapshot_id=snapshotid, name=name, enable_remote_replication=enableremotereplication, retention=retention, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -220,7 +220,7 @@ def create(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_CreateSnapshotResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_dict, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -378,7 +378,6 @@ def CreateSchedule(ctx,
         schedule.recurring = recurring
     if runnextinterval:
         schedule.run_next_interval = runnextinterval
-    _CreateScheduleResult = ctx.element.create_schedule(schedule=schedule)
 
     ctx.logger.info("""schedule = """+str(schedule)+""";"""+"")
     try:
@@ -765,7 +764,15 @@ def ModifySchedule(ctx,
         exit(1)
 
     # Now that we've done our checks, get the specific schedule:
-    _GetScheduleResult = ctx.element.get_schedule(schedule_id=scheduleid)
+    try:
+        _GetScheduleResult = ctx.element.get_schedule(schedule_id=scheduleid)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
     if _GetScheduleResult.schedule == None:
         ctx.logger.error("The schedule specified by schedule_id does not exist.")
     schedule = _GetScheduleResult.schedule
