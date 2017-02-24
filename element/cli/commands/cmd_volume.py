@@ -419,10 +419,6 @@ def liststatsby(ctx):
               type=str,
               required=False,
               help="""List of Name/Value pairs in JSON object format.  Has the following subparameters: """)
-@click.option('--slicecount',
-              type=int,
-              required=False,
-              help="""""")
 @pass_context
 def create(ctx,
            # Mandatory main parameter
@@ -442,9 +438,7 @@ def create(ctx,
            # Optional subparameter of optional main parameter.
            qosbursttime = None,
            # Optional main parameter
-           attributes = None,
-           # Optional main parameter
-           slicecount = None):
+           attributes = None):
     """CreateVolume is used to create a new (empty) volume on the cluster."""
     """When the volume is created successfully it is available for connection via iSCSI."""
     if ctx.element is None:
@@ -477,12 +471,12 @@ def create(ctx,
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1)    
+            exit(1)
     
 
-    ctx.logger.info("""name = """+str(name)+""";"""+"""accountid = """+str(accountid)+""";"""+"""totalsize = """+str(totalsize)+""";"""+"""enable512e = """+str(enable512e)+""";"""+"""qos = """+str(qos)+""";"""+"""attributes = """+str(attributes)+""";"""+"""slicecount = """+str(slicecount)+""";"""+"")
+    ctx.logger.info("""name = """+str(name)+""";"""+"""accountid = """+str(accountid)+""";"""+"""totalsize = """+str(totalsize)+""";"""+"""enable512e = """+str(enable512e)+""";"""+"""qos = """+str(qos)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _CreateVolumeResult = ctx.element.create_volume(name=name, account_id=accountid, total_size=totalsize, enable512e=enable512e, qos=qos, attributes=kwargsDict, slice_count=slicecount)
+        _CreateVolumeResult = ctx.element.create_volume(name=name, account_id=accountid, total_size=totalsize, enable512e=enable512e, qos=qos, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -577,7 +571,7 @@ def getasyncresult(ctx,
 
     ctx.logger.info("""asynchandle = """+str(asynchandle)+""";"""+"")
     try:
-        _dict = ctx.element.get_async_result(async_handle=asynchandle)
+        _GetAsyncResultResult = ctx.element.get_async_result(async_handle=asynchandle)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -585,7 +579,7 @@ def getasyncresult(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_dict, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_GetAsyncResultResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
