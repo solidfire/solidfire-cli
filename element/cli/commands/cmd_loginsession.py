@@ -65,7 +65,7 @@ def getremotelogginghosts(ctx):
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter] Hostname or IP address of the log server.""",
+              help="""[subparameter]Hostname or IP address of the log server. """,
               cls=SolidFireOption)
 @click.option('--port',
               required=True,
@@ -73,7 +73,7 @@ def getremotelogginghosts(ctx):
               type=int,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter] Port number that the log server is listening on.""",
+              help="""[subparameter]Port number that the log server is listening on. """,
               cls=SolidFireOption)
 @pass_context
 def setremotelogginghosts(ctx,
