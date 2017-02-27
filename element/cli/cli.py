@@ -333,6 +333,7 @@ def cli(ctx,
         # If we managed to find the connection we were looking for, we must try to establish the connection.
         if cfg is not None:
             # Finally, we need to establish our connection via elementfactory:
+
             try:
                 ctx.element = Element(cfg["mvip"]+":"+str(cfg["port"]), cli_utils.decrypt(cfg["username"]), cli_utils.decrypt(cfg["password"]), cfg["version"], verify_ssl=verifyssl)
             except Exception as e:

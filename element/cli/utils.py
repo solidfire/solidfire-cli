@@ -77,7 +77,7 @@ def get_result_as_tree(objs, depth=1, currentDepth=0, lastKey = ""):
     stringToReturn = ""
     if(currentDepth > depth):
         return "<to see more details, increase depth>\n"
-    if(type(objs) is str or type(objs) is bool or type(objs) is int or type(objs) is unicode or objs is None):
+    if(type(objs) is str or type(objs) is bool or type(objs) is int or type(objs) is type(u'') or objs is None):
         return str(objs) + "\n"
     if(type(objs) is list):
         stringToReturn += "\n"
