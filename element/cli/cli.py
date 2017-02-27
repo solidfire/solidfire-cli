@@ -14,6 +14,7 @@ from solidfire.factory import ElementFactory
 from solidfire import Element
 from element.cli import utils as cli_utils
 
+logging.basicConfig()
 LOG = logging.getLogger(__name__)
 CONTEXT_SETTINGS = dict(auto_envvar_prefix='SOLIDFIRE', token_normalize_func=lambda x: x.lower())
 DEBUG_LOGGING_MAP = {
