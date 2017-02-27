@@ -27,6 +27,26 @@ Operating Systems and Distributions
 -----------------------------------
 Windows 7, 8, 10, Linux, Mac
 
+Accessing Inline Help
+---------------------
+To see top level help, run:
+
+    sfcli --help
+
+To see second level help, run:
+
+    sfcli account --help
+
+To see commands specific help, run:
+
+    sfcli account getbyid --help
+
+Enabling Autocomplete
+---------------------
+Copy and paste the following into your .bashrc file or run it whenever you want autocomplete enabled:
+
+    eval "$(_SFCLI_COMPLETE=source sfcli)"
+
 Connection Management
 ---------------------
 To run a command on a given connection without storing it away, use the mvip, login, and password options.
@@ -64,51 +84,270 @@ Executing a command with standard parameters:
 
     sfcli -c 0 Account GetByID --account_id 94
 
-Executing a command with non-standard parameters:
-There are a total of 14 types of non-standard parameters. Often these parameters
-can be gotten by running a "get" function. I've provided a couple examples of this
-Below. Other times, the parameters are simple enough that the user can construct
-the json himself. There is an example of how to do this below.
+Executing Commands with Grouped Parameters
+------------------------------------------
+Occasionally, the docs will refer to something called a subparameter. A subparameter
+is used to specify an attribute of a super parameter. For instance,
 
-#### Node SetConfig ####
-First, we get the existing network config.
+    sfcli volume clonemultiple --help
 
-    $returnValue = sfcli -c 0 -j Node GetConfig | ConvertFrom-Json
+    Usage: sfcli volume clonemultiple [OPTIONS]
 
-Next, we extract the network part of the config and escape the '"'s.
+      CloneMultipleVolumes is used to create a clone of a group of specified
+      volumes. A consistent set of characteristics can be assigned to a group of
+      multiple volume when they are cloned together.
 
-    $config = $returnValue.config | ConvertTo-Json
-    $escaped = $config.replace('"', '\"')
-    # HERE IS WHERE WE'D MAKE ANY CHANGES
+    Options:
+      --volumes                      Array of Unique ID for each volume to include
+                                     in the clone with optional parameters. If
+                                     optional parameters are not specified, the
+                                     values will be inherited from the source
+                                     volumes.  Has the following subparameters:
+                                     --volumeid --accessvolumes --name
+                                     --newaccountidvolumes --newsize --attributes
+                                     [required]
+      --volumeid INTEGER             [subparameter] Required parameter for
+                                     "volumes" array: volumeID.  [required]
+      --accessvolumes TEXT           [subparameter] Access settings for the new
+                                     volume. readOnly: Only read operations are
+                                     allowed. readWrite: Reads and writes are
+                                     allowed. locked: No reads or writes are
+                                     allowed. replicationTarget: Identify a volume
+                                     as the target volume for a paired set of
+                                     volumes. If the volume is not paired, the
+                                     access status is locked.  If unspecified, the
+                                     access settings of the clone will be the same
+                                     as the source.
+      --name TEXT                    [subparameter] New name for the clone.
+      --newaccountidvolumes INTEGER  [subparameter] Account ID for the new volume.
+      --newsize INTEGER              [subparameter] New size Total size of the
+                                     volume, in bytes. Size is rounded up to the
+                                     nearest 1MB size.
+      --attributes TEXT              [subparameter] List of Name/Value pairs in
+                                     JSON object format.
+      --access TEXT                  New default access method for the new volumes
+                                     if not overridden by information passed in
+                                     the volumes array. readOnly: Only read
+                                     operations are allowed. readWrite: Reads and
+                                     writes are allowed. locked: No reads or
+                                     writes are allowed. replicationTarget:
+                                     Identify a volume as the target volume for a
+                                     paired set of volumes. If the volume is not
+                                     paired, the access status is locked.  If
+                                     unspecified, the access settings of the clone
+                                     will be the same as the source.
+      --groupsnapshotid INTEGER      ID of the group snapshot to use as a basis
+                                     for the clone.
+      --newaccountid INTEGER         New account ID for the volumes if not
+                                     overridden by information passed in the
+                                     volumes array.
+      --help                         Show this message and exit.
 
-And here, we feed it back in.
+If I want to clone multipe volumes in the same group, I can run it as follows:
 
-    sfcli -c 0 -j Node SetNetworkConfig --config $escaped
+    sfcli volume clonemultiple --volumes --volumeid 1 --accessvolumes readWrite --volumes --volumeid 1
 
-#### Node SetNetworkConfig ####
-First, we get the existing network config.
+This will clone the volumes and apply the readWrite access to volume 1 and use the default for volume 2.
 
-    $returnValue = sfcli -c 0 -j Node GetNetworkConfig | ConvertFrom-Json
+Executing Commands with Non-Standard Parameters
+------------------------------------------------
+Occasionally, the user will need to pass in an arbitrary dictionary of keys and values. In that case,
+the user will need to provide a json string directly to the command line.
 
-Next, we extract the network part of the config and escape the '"'s.
-
-    $network = $returnValue.network | ConvertTo-Json
-    $escaped = $network.replace('"', '\"')
-    # HERE IS WHERE WE'D MAKE ANY CHANGES
-
-And here, we feed it back in.
-
-    sfcli -c 0 -j Node SetNetworkConfig --network $escaped
-
-#### Volume CloneMultiple ####
-First, we go to the help guide and find our non-standard parameter, "volumes".
-Next, we copy and paste the example into the command and modify it with our desired values.
-
-    sfcli --mvip 10.117.61.44 -k --username admin --password admin Volume CloneMultiple --volumes '[{\"volume_id\": 1979},{\"volume_id\": 1980}]'
+In the example below, if you want to bypass the logic and send somethign directly to the api, you can
+do so by using SFApi Invoke.
 
 #### SFApi Invoke ####
 
     $account = sfcli -c 0 SFApi Invoke --method GetAccountByID --parameters '{\"accountID\":94}'
+
+Output Formats
+--------------
+#### Tree Format (Default) ####
+The tree format was constructed specifically to make it easier for users to grep the output and get
+a result without extra formatting. It uses whitespace to distinguish between different objects. To
+view this format, one need only run a command without the -j or -k flags.
+
+Example:
+
+    accounts:
+
+            attributes:
+            storage_container_id:
+                int:   <to see more details, increase depth>
+            account_id:   2404
+            status:   active
+            initiator_secret:
+                secret:   <to see more details, increase depth>
+            target_secret:
+                secret:   <to see more details, increase depth>
+            volumes:
+                <to see more details, increase depth>
+            username:   ARIEL
+
+            attributes:
+            storage_container_id:
+                int:   <to see more details, increase depth>
+            account_id:   2405
+            status:   active
+            initiator_secret:
+                secret:   <to see more details, increase depth>
+            target_secret:
+                secret:   <to see more details, increase depth>
+            volumes:
+            username:   haxecliFV8QdeT6fn5DxtvFuYzjsFwWtc1YzXfT5-NQE5pHiQAQBelNqVskTsJY8
+
+            attributes:
+            storage_container_id:
+                int:   <to see more details, increase depth>
+            account_id:   2406
+            status:   active
+            initiator_secret:
+                secret:   <to see more details, increase depth>
+            target_secret:
+                secret:   <to see more details, increase depth>
+            volumes:
+            username:   haxeclij0yA7YVfCDiq9jZXdkdiKfkSytK2flKk9Gi9NFq0677Fcg44QIDc9inqF
+
+#### Json Format ####
+The json format is constructed to look like the output of the api. This can be useful if you are going
+to store the data away for later use with postman or if you want to import it via any json libraries.
+To get this output, add the flag, -j after "sfcli" in your command.
+
+Example:
+
+    {
+        "accounts": [
+            {
+                "attributes": {},
+                "initiator_secret": {
+                    "secret": "3,gG[sP02V'@911}"
+                },
+                "volumes": [
+                    4588
+                ],
+                "target_secret": {
+                    "secret": "aAe6Bb&q]63zU0Ei"
+                },
+                "status": "active",
+                "account_id": 2404,
+                "username": "ARIEL",
+                "storage_container_id": {
+                    "hex": "00000000000000000000000000000000"
+                }
+            },
+            {
+                "attributes": {},
+                "initiator_secret": {
+                    "secret": "haxecliiSgmB"
+                },
+                "volumes": [],
+                "target_secret": {
+                    "secret": "haxecliLUuvO9s"
+                },
+                "status": "active",
+                "account_id": 2405,
+                "username": "haxecliFV8QdeT6fn5DxtvFuYzjsFwWtc1YzXfT5-NQE5pHiQAQBelNqVskTsJY8",
+                "storage_container_id": {
+                    "hex": "00000000000000000000000000000000"
+                }
+            },
+            {
+                "attributes": {},
+                "initiator_secret": {
+                    "secret": "haxecli7tOAtk"
+                },
+                "volumes": [],
+                "target_secret": {
+                    "secret": "haxecliXFty4F2"
+                },
+                "status": "active",
+                "account_id": 2406,
+                "username": "haxeclij0yA7YVfCDiq9jZXdkdiKfkSytK2flKk9Gi9NFq0677Fcg44QIDc9inqF",
+                "storage_container_id": {
+                    "hex": "00000000000000000000000000000000"
+                }
+            }
+        ]
+    }
+
+#### Pickle Format ####
+The pickle format is the same as the json format except with an extra field in every object.
+This field names the object type. This is useful if you want to store the data away and use
+it with a python sdk later. If you unpickle the string using the python sdk, you will get
+a full object model instead of a nested dictionary. To use this, add the flag -k to your
+command after "sfcli".
+
+Example:
+
+    {
+        "py/object": "solidfire.models.ListAccountsResult",
+        "accounts": [
+            {
+                "account_id": 2404,
+                "attributes": {},
+                "status": "active",
+                "py/object": "solidfire.models.Account",
+                "target_secret": {
+                    "secret": "aAe6Bb&q]63zU0Ei",
+                    "py/object": "solidfire.custom.models.CHAPSecret"
+                },
+                "initiator_secret": {
+                    "secret": "3,gG[sP02V'@911}",
+                    "py/object": "solidfire.custom.models.CHAPSecret"
+                },
+                "username": "ARIEL",
+                "volumes": [
+                    4588
+                ],
+                "storage_container_id": {
+                    "hex": "00000000000000000000000000000000",
+                    "py/object": "uuid.UUID"
+                }
+            },
+            {
+                "account_id": 2405,
+                "attributes": {},
+                "status": "active",
+                "py/object": "solidfire.models.Account",
+                "target_secret": {
+                    "secret": "haxecliLUuvO9s",
+                    "py/object": "solidfire.custom.models.CHAPSecret"
+                },
+                "initiator_secret": {
+                    "secret": "haxecliiSgmB",
+                    "py/object": "solidfire.custom.models.CHAPSecret"
+                },
+                "username": "haxecliFV8QdeT6fn5DxtvFuYzjsFwWtc1YzXfT5-NQE5pHiQAQBelNqVskTsJY8",
+                "volumes": [],
+                "storage_container_id": {
+                    "hex": "00000000000000000000000000000000",
+                    "py/object": "uuid.UUID"
+                }
+            },
+            {
+                "account_id": 2406,
+                "attributes": {},
+                "status": "active",
+                "py/object": "solidfire.models.Account",
+                "target_secret": {
+                    "secret": "haxecliXFty4F2",
+                    "py/object": "solidfire.custom.models.CHAPSecret"
+                },
+                "initiator_secret": {
+                    "secret": "haxecli7tOAtk",
+                    "py/object": "solidfire.custom.models.CHAPSecret"
+                },
+                "username": "haxeclij0yA7YVfCDiq9jZXdkdiKfkSytK2flKk9Gi9NFq0677Fcg44QIDc9inqF",
+                "volumes": [],
+                "storage_container_id": {
+                    "hex": "00000000000000000000000000000000",
+                    "py/object": "uuid.UUID"
+                }
+            }
+        ]
+    }
+
 
 Command Details
 ---------------
@@ -3839,769 +4078,3 @@ Options:
 --backuptargetid
 
 Unique identifier assigned to the backup target. 
-
-Nonstandard Parameters
-----------------------
-Below are some template strings for each of the nonstandard parameters. To run the command, you can use one of the methods listed above to get the current values and substitute some new ones, or you can copy/paste the below parameters.
-Note:
-- If running in a PowerShell window, surround the string like so: 'STRING'
-- If running in a Bash window, surround the string like so ^"STRING^"
-So, if I were running sfcli volume clonemultiple on windows, I could use the following command:
-sfcli --mvip 10.117.61.44 -k --username admin --password admin Volume CloneMultiple --volumes '[{\"volume_id\": 1979},{\"volume_id\": 1980}]'
-
---lunassignments
-
-    [
-        {
-            \"volume_id\": int        [Required],
-            \"lun\": int        [Required]
-        }
-    ]
-
---network
-
-    {
-        \"bond10_g\": {
-            \"_default\": true/false,
-            \"bond_master\": \"string\"        [Required],
-            \"virtual_network_tag\": \"string\",
-            \"address\": \"string\",
-            \"auto\": true/false,
-            \"bond_downdelay\": \"string\",
-            \"bond_fail_over_mac\": \"string\",
-            \"bond_primary_reselect\": \"string\",
-            \"bond_lacp_rate\": \"string\",
-            \"bond_miimon\": \"string\",
-            \"bond_mode\": \"string\",
-            \"bond_slaves\": \"string\",
-            \"bond_updelay\": \"string\",
-            \"broadcast\": \"string\",
-            \"dns_nameservers\": \"string\",
-            \"dns_search\": \"string\",
-            \"family\": \"string\",
-            \"gateway\": \"string\",
-            \"mac_address\": \"string\",
-            \"mac_address_permanent\": \"string\",
-            \"method\": \"string\",
-            \"mtu\": \"string\",
-            \"netmask\": \"string\",
-            \"network\": \"string\",
-            \"physical\": {
-                \"address\": \"string\",
-                \"mac_address\": \"string\",
-                \"mac_address_permanent\": \"string\",
-                \"mtu\": \"string\",
-                \"netmask\": \"string\",
-                \"network\": \"string\",
-                \"up_and_running\": true/false
-            },
-            \"routes\": [
-                \"string\"
-            ],
-            \"status\": \"string\",
-            \"symmetric_route_rules\": [
-                \"string\"
-            ],
-            \"up_and_running\": true/false
-        },
-        \"bond1_g\": {
-            \"_default\": true/false,
-            \"bond_master\": \"string\"        [Required],
-            \"virtual_network_tag\": \"string\",
-            \"address\": \"string\",
-            \"auto\": true/false,
-            \"bond_downdelay\": \"string\",
-            \"bond_fail_over_mac\": \"string\",
-            \"bond_primary_reselect\": \"string\",
-            \"bond_lacp_rate\": \"string\",
-            \"bond_miimon\": \"string\",
-            \"bond_mode\": \"string\",
-            \"bond_slaves\": \"string\",
-            \"bond_updelay\": \"string\",
-            \"broadcast\": \"string\",
-            \"dns_nameservers\": \"string\",
-            \"dns_search\": \"string\",
-            \"family\": \"string\",
-            \"gateway\": \"string\",
-            \"mac_address\": \"string\",
-            \"mac_address_permanent\": \"string\",
-            \"method\": \"string\",
-            \"mtu\": \"string\",
-            \"netmask\": \"string\",
-            \"network\": \"string\",
-            \"physical\": {
-                \"address\": \"string\",
-                \"mac_address\": \"string\",
-                \"mac_address_permanent\": \"string\",
-                \"mtu\": \"string\",
-                \"netmask\": \"string\",
-                \"network\": \"string\",
-                \"up_and_running\": true/false
-            },
-            \"routes\": [
-                \"string\"
-            ],
-            \"status\": \"string\",
-            \"symmetric_route_rules\": [
-                \"string\"
-            ],
-            \"up_and_running\": true/false
-        },
-        \"eth0\": {
-            \"_default\": true/false,
-            \"bond_master\": \"string\"        [Required],
-            \"virtual_network_tag\": \"string\",
-            \"address\": \"string\",
-            \"auto\": true/false,
-            \"bond_downdelay\": \"string\",
-            \"bond_fail_over_mac\": \"string\",
-            \"bond_primary_reselect\": \"string\",
-            \"bond_lacp_rate\": \"string\",
-            \"bond_miimon\": \"string\",
-            \"bond_mode\": \"string\",
-            \"bond_slaves\": \"string\",
-            \"bond_updelay\": \"string\",
-            \"broadcast\": \"string\",
-            \"dns_nameservers\": \"string\",
-            \"dns_search\": \"string\",
-            \"family\": \"string\",
-            \"gateway\": \"string\",
-            \"mac_address\": \"string\",
-            \"mac_address_permanent\": \"string\",
-            \"method\": \"string\",
-            \"mtu\": \"string\",
-            \"netmask\": \"string\",
-            \"network\": \"string\",
-            \"physical\": {
-                \"address\": \"string\",
-                \"mac_address\": \"string\",
-                \"mac_address_permanent\": \"string\",
-                \"mtu\": \"string\",
-                \"netmask\": \"string\",
-                \"network\": \"string\",
-                \"up_and_running\": true/false
-            },
-            \"routes\": [
-                \"string\"
-            ],
-            \"status\": \"string\",
-            \"symmetric_route_rules\": [
-                \"string\"
-            ],
-            \"up_and_running\": true/false
-        },
-        \"eth1\": {
-            \"_default\": true/false,
-            \"bond_master\": \"string\"        [Required],
-            \"virtual_network_tag\": \"string\",
-            \"address\": \"string\",
-            \"auto\": true/false,
-            \"bond_downdelay\": \"string\",
-            \"bond_fail_over_mac\": \"string\",
-            \"bond_primary_reselect\": \"string\",
-            \"bond_lacp_rate\": \"string\",
-            \"bond_miimon\": \"string\",
-            \"bond_mode\": \"string\",
-            \"bond_slaves\": \"string\",
-            \"bond_updelay\": \"string\",
-            \"broadcast\": \"string\",
-            \"dns_nameservers\": \"string\",
-            \"dns_search\": \"string\",
-            \"family\": \"string\",
-            \"gateway\": \"string\",
-            \"mac_address\": \"string\",
-            \"mac_address_permanent\": \"string\",
-            \"method\": \"string\",
-            \"mtu\": \"string\",
-            \"netmask\": \"string\",
-            \"network\": \"string\",
-            \"physical\": {
-                \"address\": \"string\",
-                \"mac_address\": \"string\",
-                \"mac_address_permanent\": \"string\",
-                \"mtu\": \"string\",
-                \"netmask\": \"string\",
-                \"network\": \"string\",
-                \"up_and_running\": true/false
-            },
-            \"routes\": [
-                \"string\"
-            ],
-            \"status\": \"string\",
-            \"symmetric_route_rules\": [
-                \"string\"
-            ],
-            \"up_and_running\": true/false
-        },
-        \"eth2\": {
-            \"_default\": true/false,
-            \"bond_master\": \"string\"        [Required],
-            \"virtual_network_tag\": \"string\",
-            \"address\": \"string\",
-            \"auto\": true/false,
-            \"bond_downdelay\": \"string\",
-            \"bond_fail_over_mac\": \"string\",
-            \"bond_primary_reselect\": \"string\",
-            \"bond_lacp_rate\": \"string\",
-            \"bond_miimon\": \"string\",
-            \"bond_mode\": \"string\",
-            \"bond_slaves\": \"string\",
-            \"bond_updelay\": \"string\",
-            \"broadcast\": \"string\",
-            \"dns_nameservers\": \"string\",
-            \"dns_search\": \"string\",
-            \"family\": \"string\",
-            \"gateway\": \"string\",
-            \"mac_address\": \"string\",
-            \"mac_address_permanent\": \"string\",
-            \"method\": \"string\",
-            \"mtu\": \"string\",
-            \"netmask\": \"string\",
-            \"network\": \"string\",
-            \"physical\": {
-                \"address\": \"string\",
-                \"mac_address\": \"string\",
-                \"mac_address_permanent\": \"string\",
-                \"mtu\": \"string\",
-                \"netmask\": \"string\",
-                \"network\": \"string\",
-                \"up_and_running\": true/false
-            },
-            \"routes\": [
-                \"string\"
-            ],
-            \"status\": \"string\",
-            \"symmetric_route_rules\": [
-                \"string\"
-            ],
-            \"up_and_running\": true/false
-        },
-        \"eth3\": {
-            \"_default\": true/false,
-            \"bond_master\": \"string\"        [Required],
-            \"virtual_network_tag\": \"string\",
-            \"address\": \"string\",
-            \"auto\": true/false,
-            \"bond_downdelay\": \"string\",
-            \"bond_fail_over_mac\": \"string\",
-            \"bond_primary_reselect\": \"string\",
-            \"bond_lacp_rate\": \"string\",
-            \"bond_miimon\": \"string\",
-            \"bond_mode\": \"string\",
-            \"bond_slaves\": \"string\",
-            \"bond_updelay\": \"string\",
-            \"broadcast\": \"string\",
-            \"dns_nameservers\": \"string\",
-            \"dns_search\": \"string\",
-            \"family\": \"string\",
-            \"gateway\": \"string\",
-            \"mac_address\": \"string\",
-            \"mac_address_permanent\": \"string\",
-            \"method\": \"string\",
-            \"mtu\": \"string\",
-            \"netmask\": \"string\",
-            \"network\": \"string\",
-            \"physical\": {
-                \"address\": \"string\",
-                \"mac_address\": \"string\",
-                \"mac_address_permanent\": \"string\",
-                \"mtu\": \"string\",
-                \"netmask\": \"string\",
-                \"network\": \"string\",
-                \"up_and_running\": true/false
-            },
-            \"routes\": [
-                \"string\"
-            ],
-            \"status\": \"string\",
-            \"symmetric_route_rules\": [
-                \"string\"
-            ],
-            \"up_and_running\": true/false
-        },
-        \"lo\": {
-            \"_default\": true/false,
-            \"bond_master\": \"string\"        [Required],
-            \"virtual_network_tag\": \"string\",
-            \"address\": \"string\",
-            \"auto\": true/false,
-            \"bond_downdelay\": \"string\",
-            \"bond_fail_over_mac\": \"string\",
-            \"bond_primary_reselect\": \"string\",
-            \"bond_lacp_rate\": \"string\",
-            \"bond_miimon\": \"string\",
-            \"bond_mode\": \"string\",
-            \"bond_slaves\": \"string\",
-            \"bond_updelay\": \"string\",
-            \"broadcast\": \"string\",
-            \"dns_nameservers\": \"string\",
-            \"dns_search\": \"string\",
-            \"family\": \"string\",
-            \"gateway\": \"string\",
-            \"mac_address\": \"string\",
-            \"mac_address_permanent\": \"string\",
-            \"method\": \"string\",
-            \"mtu\": \"string\",
-            \"netmask\": \"string\",
-            \"network\": \"string\",
-            \"physical\": {
-                \"address\": \"string\",
-                \"mac_address\": \"string\",
-                \"mac_address_permanent\": \"string\",
-                \"mtu\": \"string\",
-                \"netmask\": \"string\",
-                \"network\": \"string\",
-                \"up_and_running\": true/false
-            },
-            \"routes\": [
-                \"string\"
-            ],
-            \"status\": \"string\",
-            \"symmetric_route_rules\": [
-                \"string\"
-            ],
-            \"up_and_running\": true/false
-        }
-    }
-
---parameters
-
-    \"parameters\": { "arbitrary_key":"arbitrary_value" }
-
---schedule
-
-    {
-        \"frequency\": {
-        }        [Required],
-        \"has_error\": true/false,
-        \"last_run_status\": \"string\",
-        \"last_run_time_started\": \"string\",
-        \"paused\": true/false,
-        \"recurring\": true/false,
-        \"run_next_interval\": true/false,
-        \"schedule_id\": int,
-        \"schedule_info\": {
-            \"volume_ids\": [
-                int
-            ],
-            \"snapshot_name\": \"string\",
-            \"enable_remote_replication\": true/false,
-            \"retention\": \"string\"
-        }        [Required],
-        \"name\": \"string\"        [Required],
-        \"starting_date\": \"string\",
-        \"to_be_deleted\": true/false
-    }
-
---drives
-
-    [
-        {
-            \"drive_id\": int        [Required]
-        }
-    ]
-
---remotehosts
-
-    [
-        {
-            \"host\": \"string\"        [Required],
-            \"port\": int        [Required]
-        }
-    ]
-
---traprecipients
-
-    [
-        {
-            \"host\": \"string\"        [Required],
-            \"community\": \"string\"        [Required],
-            \"port\": int        [Required]
-        }
-    ]
-
---volumes
-
-    [
-        {
-            \"volume_id\": int        [Required],
-            \"access\": \"string\",
-            \"name\": \"string\",
-            \"new_account_id\": int,
-            \"new_size\": int,
-            \"attributes\": \"attributes\": { "arbitrary_key":"arbitrary_value" }
-        }
-    ]
-
---initiators
-
-    [
-        {
-            \"name\": \"string\"        [Required],
-            \"alias\": \"string\",
-            \"volume_access_group_id\": int,
-            \"attributes\": \"attributes\": { "arbitrary_key":"arbitrary_value" }
-        }
-    ]
-
---attributes
-
-    \"attributes\": { "arbitrary_key":"arbitrary_value" }
-
---usmusers
-
-    [
-        {
-            \"access\": \"string\"        [Required],
-            \"name\": \"string\"        [Required],
-            \"password\": \"string\"        [Required],
-            \"passphrase\": \"string\"        [Required],
-            \"sec_level\": \"string\"        [Required]
-        }
-    ]
-
---config
-
-    {
-        \"cluster\": {
-            \"cipi\": \"string\",
-            \"cluster\": \"string\",
-            \"ensemble\": [
-                \"string\"
-            ],
-            \"mipi\": \"string\",
-            \"name\": \"string\",
-            \"node_id\": int,
-            \"pending_node_id\": int,
-            \"role\": \"string\",
-            \"sipi\": \"string\",
-            \"state\": \"string\",
-            \"encryption_capable\": true/false,
-            \"has_local_admin\": true/false,
-            \"version\": \"string\"
-        }        [Required],
-        \"network\": {
-            \"bond10_g\": {
-                \"_default\": true/false,
-                \"bond_master\": \"string\"        [Required],
-                \"virtual_network_tag\": \"string\",
-                \"address\": \"string\",
-                \"auto\": true/false,
-                \"bond_downdelay\": \"string\",
-                \"bond_fail_over_mac\": \"string\",
-                \"bond_primary_reselect\": \"string\",
-                \"bond_lacp_rate\": \"string\",
-                \"bond_miimon\": \"string\",
-                \"bond_mode\": \"string\",
-                \"bond_slaves\": \"string\",
-                \"bond_updelay\": \"string\",
-                \"broadcast\": \"string\",
-                \"dns_nameservers\": \"string\",
-                \"dns_search\": \"string\",
-                \"family\": \"string\",
-                \"gateway\": \"string\",
-                \"mac_address\": \"string\",
-                \"mac_address_permanent\": \"string\",
-                \"method\": \"string\",
-                \"mtu\": \"string\",
-                \"netmask\": \"string\",
-                \"network\": \"string\",
-                \"physical\": {
-                    \"address\": \"string\",
-                    \"mac_address\": \"string\",
-                    \"mac_address_permanent\": \"string\",
-                    \"mtu\": \"string\",
-                    \"netmask\": \"string\",
-                    \"network\": \"string\",
-                    \"up_and_running\": true/false
-                },
-                \"routes\": [
-                    \"string\"
-                ],
-                \"status\": \"string\",
-                \"symmetric_route_rules\": [
-                    \"string\"
-                ],
-                \"up_and_running\": true/false
-            },
-            \"bond1_g\": {
-                \"_default\": true/false,
-                \"bond_master\": \"string\"        [Required],
-                \"virtual_network_tag\": \"string\",
-                \"address\": \"string\",
-                \"auto\": true/false,
-                \"bond_downdelay\": \"string\",
-                \"bond_fail_over_mac\": \"string\",
-                \"bond_primary_reselect\": \"string\",
-                \"bond_lacp_rate\": \"string\",
-                \"bond_miimon\": \"string\",
-                \"bond_mode\": \"string\",
-                \"bond_slaves\": \"string\",
-                \"bond_updelay\": \"string\",
-                \"broadcast\": \"string\",
-                \"dns_nameservers\": \"string\",
-                \"dns_search\": \"string\",
-                \"family\": \"string\",
-                \"gateway\": \"string\",
-                \"mac_address\": \"string\",
-                \"mac_address_permanent\": \"string\",
-                \"method\": \"string\",
-                \"mtu\": \"string\",
-                \"netmask\": \"string\",
-                \"network\": \"string\",
-                \"physical\": {
-                    \"address\": \"string\",
-                    \"mac_address\": \"string\",
-                    \"mac_address_permanent\": \"string\",
-                    \"mtu\": \"string\",
-                    \"netmask\": \"string\",
-                    \"network\": \"string\",
-                    \"up_and_running\": true/false
-                },
-                \"routes\": [
-                    \"string\"
-                ],
-                \"status\": \"string\",
-                \"symmetric_route_rules\": [
-                    \"string\"
-                ],
-                \"up_and_running\": true/false
-            },
-            \"eth0\": {
-                \"_default\": true/false,
-                \"bond_master\": \"string\"        [Required],
-                \"virtual_network_tag\": \"string\",
-                \"address\": \"string\",
-                \"auto\": true/false,
-                \"bond_downdelay\": \"string\",
-                \"bond_fail_over_mac\": \"string\",
-                \"bond_primary_reselect\": \"string\",
-                \"bond_lacp_rate\": \"string\",
-                \"bond_miimon\": \"string\",
-                \"bond_mode\": \"string\",
-                \"bond_slaves\": \"string\",
-                \"bond_updelay\": \"string\",
-                \"broadcast\": \"string\",
-                \"dns_nameservers\": \"string\",
-                \"dns_search\": \"string\",
-                \"family\": \"string\",
-                \"gateway\": \"string\",
-                \"mac_address\": \"string\",
-                \"mac_address_permanent\": \"string\",
-                \"method\": \"string\",
-                \"mtu\": \"string\",
-                \"netmask\": \"string\",
-                \"network\": \"string\",
-                \"physical\": {
-                    \"address\": \"string\",
-                    \"mac_address\": \"string\",
-                    \"mac_address_permanent\": \"string\",
-                    \"mtu\": \"string\",
-                    \"netmask\": \"string\",
-                    \"network\": \"string\",
-                    \"up_and_running\": true/false
-                },
-                \"routes\": [
-                    \"string\"
-                ],
-                \"status\": \"string\",
-                \"symmetric_route_rules\": [
-                    \"string\"
-                ],
-                \"up_and_running\": true/false
-            },
-            \"eth1\": {
-                \"_default\": true/false,
-                \"bond_master\": \"string\"        [Required],
-                \"virtual_network_tag\": \"string\",
-                \"address\": \"string\",
-                \"auto\": true/false,
-                \"bond_downdelay\": \"string\",
-                \"bond_fail_over_mac\": \"string\",
-                \"bond_primary_reselect\": \"string\",
-                \"bond_lacp_rate\": \"string\",
-                \"bond_miimon\": \"string\",
-                \"bond_mode\": \"string\",
-                \"bond_slaves\": \"string\",
-                \"bond_updelay\": \"string\",
-                \"broadcast\": \"string\",
-                \"dns_nameservers\": \"string\",
-                \"dns_search\": \"string\",
-                \"family\": \"string\",
-                \"gateway\": \"string\",
-                \"mac_address\": \"string\",
-                \"mac_address_permanent\": \"string\",
-                \"method\": \"string\",
-                \"mtu\": \"string\",
-                \"netmask\": \"string\",
-                \"network\": \"string\",
-                \"physical\": {
-                    \"address\": \"string\",
-                    \"mac_address\": \"string\",
-                    \"mac_address_permanent\": \"string\",
-                    \"mtu\": \"string\",
-                    \"netmask\": \"string\",
-                    \"network\": \"string\",
-                    \"up_and_running\": true/false
-                },
-                \"routes\": [
-                    \"string\"
-                ],
-                \"status\": \"string\",
-                \"symmetric_route_rules\": [
-                    \"string\"
-                ],
-                \"up_and_running\": true/false
-            },
-            \"eth2\": {
-                \"_default\": true/false,
-                \"bond_master\": \"string\"        [Required],
-                \"virtual_network_tag\": \"string\",
-                \"address\": \"string\",
-                \"auto\": true/false,
-                \"bond_downdelay\": \"string\",
-                \"bond_fail_over_mac\": \"string\",
-                \"bond_primary_reselect\": \"string\",
-                \"bond_lacp_rate\": \"string\",
-                \"bond_miimon\": \"string\",
-                \"bond_mode\": \"string\",
-                \"bond_slaves\": \"string\",
-                \"bond_updelay\": \"string\",
-                \"broadcast\": \"string\",
-                \"dns_nameservers\": \"string\",
-                \"dns_search\": \"string\",
-                \"family\": \"string\",
-                \"gateway\": \"string\",
-                \"mac_address\": \"string\",
-                \"mac_address_permanent\": \"string\",
-                \"method\": \"string\",
-                \"mtu\": \"string\",
-                \"netmask\": \"string\",
-                \"network\": \"string\",
-                \"physical\": {
-                    \"address\": \"string\",
-                    \"mac_address\": \"string\",
-                    \"mac_address_permanent\": \"string\",
-                    \"mtu\": \"string\",
-                    \"netmask\": \"string\",
-                    \"network\": \"string\",
-                    \"up_and_running\": true/false
-                },
-                \"routes\": [
-                    \"string\"
-                ],
-                \"status\": \"string\",
-                \"symmetric_route_rules\": [
-                    \"string\"
-                ],
-                \"up_and_running\": true/false
-            },
-            \"eth3\": {
-                \"_default\": true/false,
-                \"bond_master\": \"string\"        [Required],
-                \"virtual_network_tag\": \"string\",
-                \"address\": \"string\",
-                \"auto\": true/false,
-                \"bond_downdelay\": \"string\",
-                \"bond_fail_over_mac\": \"string\",
-                \"bond_primary_reselect\": \"string\",
-                \"bond_lacp_rate\": \"string\",
-                \"bond_miimon\": \"string\",
-                \"bond_mode\": \"string\",
-                \"bond_slaves\": \"string\",
-                \"bond_updelay\": \"string\",
-                \"broadcast\": \"string\",
-                \"dns_nameservers\": \"string\",
-                \"dns_search\": \"string\",
-                \"family\": \"string\",
-                \"gateway\": \"string\",
-                \"mac_address\": \"string\",
-                \"mac_address_permanent\": \"string\",
-                \"method\": \"string\",
-                \"mtu\": \"string\",
-                \"netmask\": \"string\",
-                \"network\": \"string\",
-                \"physical\": {
-                    \"address\": \"string\",
-                    \"mac_address\": \"string\",
-                    \"mac_address_permanent\": \"string\",
-                    \"mtu\": \"string\",
-                    \"netmask\": \"string\",
-                    \"network\": \"string\",
-                    \"up_and_running\": true/false
-                },
-                \"routes\": [
-                    \"string\"
-                ],
-                \"status\": \"string\",
-                \"symmetric_route_rules\": [
-                    \"string\"
-                ],
-                \"up_and_running\": true/false
-            },
-            \"lo\": {
-                \"_default\": true/false,
-                \"bond_master\": \"string\"        [Required],
-                \"virtual_network_tag\": \"string\",
-                \"address\": \"string\",
-                \"auto\": true/false,
-                \"bond_downdelay\": \"string\",
-                \"bond_fail_over_mac\": \"string\",
-                \"bond_primary_reselect\": \"string\",
-                \"bond_lacp_rate\": \"string\",
-                \"bond_miimon\": \"string\",
-                \"bond_mode\": \"string\",
-                \"bond_slaves\": \"string\",
-                \"bond_updelay\": \"string\",
-                \"broadcast\": \"string\",
-                \"dns_nameservers\": \"string\",
-                \"dns_search\": \"string\",
-                \"family\": \"string\",
-                \"gateway\": \"string\",
-                \"mac_address\": \"string\",
-                \"mac_address_permanent\": \"string\",
-                \"method\": \"string\",
-                \"mtu\": \"string\",
-                \"netmask\": \"string\",
-                \"network\": \"string\",
-                \"physical\": {
-                    \"address\": \"string\",
-                    \"mac_address\": \"string\",
-                    \"mac_address_permanent\": \"string\",
-                    \"mtu\": \"string\",
-                    \"netmask\": \"string\",
-                    \"network\": \"string\",
-                    \"up_and_running\": true/false
-                },
-                \"routes\": [
-                    \"string\"
-                ],
-                \"status\": \"string\",
-                \"symmetric_route_rules\": [
-                    \"string\"
-                ],
-                \"up_and_running\": true/false
-            }
-        }        [Required]
-    }
-
---networks
-
-    [
-        {
-            \"access\": \"string\"        [Required],
-            \"cidr\": int        [Required],
-            \"community\": \"string\"        [Required],
-            \"network\": \"string\"        [Required]
-        }
-    ]
-
---addressblocks
-
-    [
-        {
-            \"start\": \"string\"        [Required],
-            \"size\": int        [Required]
-        }
-    ]
-

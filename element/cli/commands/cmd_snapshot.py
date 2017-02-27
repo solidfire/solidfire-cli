@@ -802,13 +802,13 @@ def ModifySchedule(ctx,
     if freq:
         schedule.frequency = freq
     if volumeids:
-        schedule.scheduleInfo.volume_ids = volumeids
+        schedule.schedule_info.volume_ids = volumeids
     if snapshotname:
-        schedule.scheduleInfo.snapshot_name = snapshotname
+        schedule.schedule_info.snapshot_name = snapshotname
     if enableremotereplication:
-        schedule.scheduleInfo.enable_remote_replication = enableremotereplication
+        schedule.schedule_info.enable_remote_replication = enableremotereplication
     if retention:
-        schedule.scheduleInfo.retention = retention
+        schedule.schedule_info.retention = retention
     if name:
         schedule.name = name
     if startingdate:
