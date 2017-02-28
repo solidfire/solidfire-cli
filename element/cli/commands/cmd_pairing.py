@@ -193,20 +193,32 @@ def startvolume(ctx,
 
 
 @cli.command('listactivepairedvolumes', short_help="""ListActivePairedVolumes is used to list all of the active volumes paired with a volume. Volumes listed in the return for this method include volumes with active and pending pairings. """, cls=SolidFireCommand)
+@click.option('--startvolumeid',
+              type=int,
+              required=False,
+              help="""""")
+@click.option('--limit',
+              type=int,
+              required=False,
+              help="""""")
 @pass_context
-def listactivepairedvolumes(ctx):
+def listactivepairedvolumes(ctx,
+           # Optional main parameter
+           startvolumeid = None,
+           # Optional main parameter
+           limit = None):
     """ListActivePairedVolumes is used to list all of the active volumes paired with a volume."""
     """Volumes listed in the return for this method include volumes with active and pending pairings."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+        
     
 
-    ctx.logger.info("")
+    ctx.logger.info("""startvolumeid = """+str(startvolumeid)+""";"""+"""limit = """+str(limit)+""";"""+"")
     try:
-        _ListActivePairedVolumesResult = ctx.element.list_active_paired_volumes()
+        _ListActivePairedVolumesResult = ctx.element.list_active_paired_volumes(start_volume_id=startvolumeid, limit=limit)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -231,6 +243,10 @@ def listactivepairedvolumes(ctx):
               type=str,
               required=False,
               help="""Volume replication mode. Possible values: Async: Writes are acknowledged when they complete locally. The cluster does not wait for writes to be replicated to the target cluster. Sync: The source acknowledges the write when the data is stored locally and on the remote cluster. SnapshotsOnly: Only snapshots created on the source cluster will be replicated. Active writes from the source volume are not replicated. """)
+@click.option('--pauselimit',
+              type=int,
+              required=False,
+              help="""""")
 @pass_context
 def modifyvolumepair(ctx,
            # Mandatory main parameter
@@ -238,18 +254,20 @@ def modifyvolumepair(ctx,
            # Optional main parameter
            pausedmanual = None,
            # Optional main parameter
-           mode = None):
+           mode = None,
+           # Optional main parameter
+           pauselimit = None):
     """ModifyVolumePair is used to pause or restart replication between a pair of volumes."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-            
+                
     
 
-    ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""pausedmanual = """+str(pausedmanual)+""";"""+"""mode = """+str(mode)+""";"""+"")
+    ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""pausedmanual = """+str(pausedmanual)+""";"""+"""mode = """+str(mode)+""";"""+"""pauselimit = """+str(pauselimit)+""";"""+"")
     try:
-        _ModifyVolumePairResult = ctx.element.modify_volume_pair(volume_id=volumeid, paused_manual=pausedmanual, mode=mode)
+        _ModifyVolumePairResult = ctx.element.modify_volume_pair(volume_id=volumeid, paused_manual=pausedmanual, mode=mode, pause_limit=pauselimit)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()

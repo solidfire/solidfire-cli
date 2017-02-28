@@ -78,10 +78,14 @@ def services(ctx,
               type=bool,
               required=True,
               help="""The force parameter must be included in order to successfully reset the node. """)
-@click.option('--option',
+@click.option('--options',
               type=str,
               required=False,
               help="""Used to enter specifications for running the reset operation. """)
+@click.option('--reboot',
+              type=bool,
+              required=False,
+              help="""Should it be rebooted? """)
 @pass_context
 def resetnode(ctx,
            # Mandatory main parameter
@@ -89,18 +93,20 @@ def resetnode(ctx,
            # Mandatory main parameter
            force,
            # Optional main parameter
-           option = None):
+           options = None,
+           # Optional main parameter
+           reboot = None):
     """Allows you to reset a node to the SolidFire factory settings. All data will be deleted from the node when you call this method. A node participating in a cluster cannot be reset."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-            
+                
     
 
-    ctx.logger.info("""build = """+str(build)+""";"""+"""force = """+str(force)+""";"""+"""option = """+str(option)+""";"""+"")
+    ctx.logger.info("""build = """+str(build)+""";"""+"""force = """+str(force)+""";"""+"""options = """+str(options)+""";"""+"""reboot = """+str(reboot)+""";"""+"")
     try:
-        _ResetNodeResult = ctx.element.reset_node(build=build, force=force, option=option)
+        _ResetNodeResult = ctx.element.reset_node(build=build, force=force, options=options, reboot=reboot)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()

@@ -228,10 +228,16 @@ def liststats(ctx):
               type=str,
               required=True,
               help="""List of PendingNodeIDs for the Nodes to be added. You can obtain the list of Pending Nodes via the ListPendingNodes method. """)
+@click.option('--autoinstall',
+              type=bool,
+              required=False,
+              help="""Whether these nodes should be autoinstalled """)
 @pass_context
 def add(ctx,
            # Mandatory main parameter
-           pendingnodes):
+           pendingnodes,
+           # Optional main parameter
+           autoinstall = None):
     """AddNodes is used to add one or more new nodes to the cluster. When a node is not configured and starts up for the first time you are prompted to configure the node. Once a node is configured it is registered as a &quot;pending node&quot; with the cluster."""
     """"""
     """Adding a node to a cluster that has been set up for virtual networking will require a sufficient number of virtual storage IP addresses to allocate a virtual IP to the new node. If there are no virtual IP addresses available for the new node, the AddNode operation will not complete successfully. Use the &quot;ModifyVirtualNetwork&quot; method to add more storage IP addresses to your virtual network."""
@@ -247,12 +253,12 @@ def add(ctx,
 
     
 
-    pendingnodes = parser.parse_array(pendingnodes)
+    pendingnodes = parser.parse_array(pendingnodes)    
     
 
-    ctx.logger.info("""pendingnodes = """+str(pendingnodes)+""";"""+"")
+    ctx.logger.info("""pendingnodes = """+str(pendingnodes)+""";"""+"""autoinstall = """+str(autoinstall)+""";"""+"")
     try:
-        _AddNodesResult = ctx.element.add_nodes(pending_nodes=pendingnodes)
+        _AddNodesResult = ctx.element.add_nodes(pending_nodes=pendingnodes, auto_install=autoinstall)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()

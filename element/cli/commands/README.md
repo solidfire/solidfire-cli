@@ -639,6 +639,14 @@ ListActivePairedVolumes is used to list all of the active volumes paired with a 
 
 Options:
 
+--startvolumeid
+
+
+
+--limit
+
+
+
 ---------------------------------------------------------------
 #### modifyvolumepair ####
 Command:
@@ -662,6 +670,10 @@ Valid values that can be entered: true: to pause volume replication. false: to r
 --mode
 
 Volume replication mode. Possible values: Async: Writes are acknowledged when they complete locally. The cluster does not wait for writes to be replicated to the target cluster. Sync: The source acknowledges the write when the data is stored locally and on the remote cluster. SnapshotsOnly: Only snapshots created on the source cluster will be replicated. Active writes from the source volume are not replicated. 
+
+--pauselimit
+
+
 
 ---------------------------------------------------------------
 #### startcluster ####
@@ -1011,6 +1023,10 @@ The ID of the volume access group to modify.
 
 List of initiators to remove from the volume access group. 
 
+--deleteorphaninitiators
+
+
+
 ---------------------------------------------------------------
 #### getefficiency ####
 Command:
@@ -1168,6 +1184,10 @@ Options:
 --pendingnodes
 
 List of PendingNodeIDs for the Nodes to be added. You can obtain the list of Pending Nodes via the ListPendingNodes method. 
+
+--autoinstall
+
+Whether these nodes should be autoinstalled 
 
 ---------------------------------------------------------------
 #### setconfig ####
@@ -1579,6 +1599,10 @@ Options:
 
 A value that was returned from the original asynchronous method call. 
 
+--keepresult
+
+Should the result be kept after? 
+
 ---------------------------------------------------------------
 #### listasyncresults ####
 Command:
@@ -1662,6 +1686,10 @@ ID of the snapshot to use as the source of the clone. If unspecified, the clone 
 --attributes
 
 List of Name/Value pairs in JSON object format. 
+
+--enable512e
+
+Should the volume provide 512-byte sector emulation? 
 
 ---------------------------------------------------------------
 #### modify ####
@@ -2015,9 +2043,13 @@ Used to specify the URL to a remote Element software image to which the node wil
 
 The force parameter must be included in order to successfully reset the node. 
 
---option
+--options
 
 Used to enter specifications for running the reset operation. 
+
+--reboot
+
+Should it be rebooted? 
 
 ---------------------------------------------------------------
 #### networking ####
@@ -2413,6 +2445,10 @@ Options:
 
 List of driveIDs to remove from the cluster. 
 
+--forceduringupgrade
+
+If you want to remove a drive during upgrade, this must be set to true. 
+
 ---------------------------------------------------------------
 #### gethardwareinfo ####
 Command:
@@ -2556,28 +2592,24 @@ Use to set the time when the snapshot should be removed.
 Use to enable the snapshot created to be replicated to a remote SolidFire cluster. Possible values: true: the snapshot will be replicated to remote storage. false: Default. No replication. 
 
 ---------------------------------------------------------------
-#### modify ####
+#### list ####
 Command:
 
-    sfcli Snapshot modify <options>
+    sfcli Snapshot list <options>
 
 Description:
 
-ModifySnapshot is used to change the attributes currently assigned to a snapshot. Use this API method to enable the snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system. 
+ListSnapshots is used to return the attributes of each snapshot taken on the volume. 
 
 Options:
 
---snapshotid
+--volumeid
 
-ID of the snapshot. 
+The volume to list snapshots for. If not provided, all snapshots for all volumes are returned. 
 
---expirationtime
+--internal
 
-Use to set the time when the snapshot should be removed. 
 
---enableremotereplication
-
-Use to enable the snapshot created to be replicated to a remote SolidFire cluster. Possible values: true: the snapshot will be replicated to remote storage. false: Default. No replication. 
 
 ---------------------------------------------------------------
 #### create ####
@@ -2616,36 +2648,28 @@ The amount of time the snapshot will be retained. Enter in HH:mm:ss
 List of Name/Value pairs in JSON object format. 
 
 ---------------------------------------------------------------
-#### list ####
+#### modify ####
 Command:
 
-    sfcli Snapshot list <options>
+    sfcli Snapshot modify <options>
 
 Description:
 
-ListSnapshots is used to return the attributes of each snapshot taken on the volume. 
+ModifySnapshot is used to change the attributes currently assigned to a snapshot. Use this API method to enable the snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system. 
 
 Options:
 
---volumeid
+--snapshotid
 
-The volume to list snapshots for. If not provided, all snapshots for all volumes are returned. 
+ID of the snapshot. 
 
----------------------------------------------------------------
-#### createschedule ####
-Command:
+--expirationtime
 
-    sfcli Snapshot createschedule <options>
+Use to set the time when the snapshot should be removed. 
 
-Description:
+--enableremotereplication
 
-CreateSchedule is used to create a schedule that will autonomously make a snapshot of a volume at a defined interval.  The snapshot created can be used later as a backup or rollback to ensure the data on a volume or group of volumes is consistent for the point in time in which the snapshot was created.   Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. 
-
-Options:
-
---schedule
-
-The "Schedule" object will be used to create a new schedule. Do not set ScheduleID property, it will be ignored. Frequency property must be of type that inherits from Frequency. Valid types are: DaysOfMonthFrequency DaysOrWeekFrequency TimeIntervalFrequency 
+Use to enable the snapshot created to be replicated to a remote SolidFire cluster. Possible values: true: the snapshot will be replicated to remote storage. false: Default. No replication. 
 
 ---------------------------------------------------------------
 #### deletegroup ####
@@ -2666,6 +2690,22 @@ Unique ID of the group snapshot.
 --savemembers
 
 true: Snapshots are kept, but group association is removed. false: The group and snapshots are deleted. 
+
+---------------------------------------------------------------
+#### createschedule ####
+Command:
+
+    sfcli Snapshot createschedule <options>
+
+Description:
+
+CreateSchedule is used to create a schedule that will autonomously make a snapshot of a volume at a defined interval.  The snapshot created can be used later as a backup or rollback to ensure the data on a volume or group of volumes is consistent for the point in time in which the snapshot was created.   Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. 
+
+Options:
+
+--schedule
+
+The "Schedule" object will be used to create a new schedule. Do not set ScheduleID property, it will be ignored. Frequency property must be of type that inherits from Frequency. Valid types are: DaysOfMonthFrequency DaysOrWeekFrequency TimeIntervalFrequency 
 
 ---------------------------------------------------------------
 #### getschedule ####
@@ -3265,6 +3305,10 @@ ListClusterAdmins returns the list of all cluster administrators for the cluster
 
 Options:
 
+--showhidden
+
+
+
 ---------------------------------------------------------------
 #### create ####
 Command:
@@ -3429,6 +3473,10 @@ GetSnmpTrapInfo is used to return current SNMP trap configuration information.
 
 Options:
 
+--id
+
+
+
 ---------------------------------------------------------------
 #### listevents ####
 Command:
@@ -3490,28 +3538,16 @@ Options:
 ClusterAdminID for the Cluster Admin to remove. 
 
 ---------------------------------------------------------------
-#### modifyfullthreshold ####
+#### getstats ####
 Command:
 
-    sfcli Cluster modifyfullthreshold <options>
+    sfcli Cluster getstats <options>
 
 Description:
 
-ModifyClusterFullThreshold is used to change the level at which an event is generated when the storage cluster approaches the capacity utilization requested. The number entered in this setting is used to indicate the number of node failures the system is required to recover from. For example, on a 10 node cluster, if you want to be alerted when the system cannot recover from 3 nodes failures, enter the value of "3". When this number is reached, a message alert is sent to the Event Log in the Cluster Management Console. 
+GetClusterStats is used to return high-level activity measurements for the cluster. Values returned are cumulative from the creation of the cluster. 
 
 Options:
-
---stage2awarethreshold
-
-Number of nodes worth of capacity remaining on the cluster that triggers a notification. 
-
---stage3blockthresholdpercent
-
-Percent below "Error" state to raise a cluster "Warning" alert. 
-
---maxmetadataoverprovisionfactor
-
-A value representative of the number of times metadata space can be over provisioned relative to the amount of space available. For example, if there was enough metadata space to store 100 TiB of volumes and this number was set to 5, then 500 TiB worth of volumes could be created. 
 
 ---------------------------------------------------------------
 #### getlimits ####
@@ -3686,16 +3722,28 @@ Options:
 If set to "true", then SNMP v3 is enabled on each node in the cluster. If set to "false", then SNMP v2 is enabled. 
 
 ---------------------------------------------------------------
-#### getstats ####
+#### modifyfullthreshold ####
 Command:
 
-    sfcli Cluster getstats <options>
+    sfcli Cluster modifyfullthreshold <options>
 
 Description:
 
-GetClusterStats is used to return high-level activity measurements for the cluster. Values returned are cumulative from the creation of the cluster. 
+ModifyClusterFullThreshold is used to change the level at which an event is generated when the storage cluster approaches the capacity utilization requested. The number entered in this setting is used to indicate the number of node failures the system is required to recover from. For example, on a 10 node cluster, if you want to be alerted when the system cannot recover from 3 nodes failures, enter the value of "3". When this number is reached, a message alert is sent to the Event Log in the Cluster Management Console. 
 
 Options:
+
+--stage2awarethreshold
+
+Number of nodes worth of capacity remaining on the cluster that triggers a notification. 
+
+--stage3blockthresholdpercent
+
+Percent below "Error" state to raise a cluster "Warning" alert. 
+
+--maxmetadataoverprovisionfactor
+
+A value representative of the number of times metadata space can be over provisioned relative to the amount of space available. For example, if there was enough metadata space to store 100 TiB of volumes and this number was set to 5, then 500 TiB worth of volumes could be created. 
 
 ---------------------------------------------------------------
 #### getmasternodeid ####

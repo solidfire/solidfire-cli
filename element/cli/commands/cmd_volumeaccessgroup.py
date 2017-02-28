@@ -470,12 +470,18 @@ def addvolumesto(ctx,
               type=str,
               required=True,
               help="""List of initiators to remove from the volume access group. """)
+@click.option('--deleteorphaninitiators',
+              type=bool,
+              required=False,
+              help="""""")
 @pass_context
 def removeinitiatorsfrom(ctx,
            # Mandatory main parameter
            volumeaccessgroupid,
            # Mandatory main parameter
-           initiators):
+           initiators,
+           # Optional main parameter
+           deleteorphaninitiators = None):
     """Remove initiators from a volume access group."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
@@ -483,12 +489,12 @@ def removeinitiatorsfrom(ctx,
 
         
 
-    initiators = parser.parse_array(initiators)
+    initiators = parser.parse_array(initiators)    
     
 
-    ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"""initiators = """+str(initiators)+""";"""+"")
+    ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"""initiators = """+str(initiators)+""";"""+"""deleteorphaninitiators = """+str(deleteorphaninitiators)+""";"""+"")
     try:
-        _ModifyVolumeAccessGroupResult = ctx.element.remove_initiators_from_volume_access_group(volume_access_group_id=volumeaccessgroupid, initiators=initiators)
+        _ModifyVolumeAccessGroupResult = ctx.element.remove_initiators_from_volume_access_group(volume_access_group_id=volumeaccessgroupid, initiators=initiators, delete_orphan_initiators=deleteorphaninitiators)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()

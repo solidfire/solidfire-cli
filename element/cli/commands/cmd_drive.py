@@ -133,10 +133,16 @@ def list(ctx):
               type=str,
               required=True,
               help="""List of driveIDs to remove from the cluster. """)
+@click.option('--forceduringupgrade',
+              type=bool,
+              required=False,
+              help="""If you want to remove a drive during upgrade, this must be set to true. """)
 @pass_context
 def remove(ctx,
            # Mandatory main parameter
-           drives):
+           drives,
+           # Optional main parameter
+           forceduringupgrade = None):
     """You can use RemoveDrives to proactively remove drives that are part of the cluster."""
     """You may want to use this method when reducing cluster capacity or preparing to replace drives nearing the end of their service life."""
     """Any data on the drives is removed and migrated to other drives in the cluster before the drive is removed from the cluster. This is an asynchronous method."""
@@ -157,12 +163,12 @@ def remove(ctx,
 
     
 
-    drives = parser.parse_array(drives)
+    drives = parser.parse_array(drives)    
     
 
-    ctx.logger.info("""drives = """+str(drives)+""";"""+"")
+    ctx.logger.info("""drives = """+str(drives)+""";"""+"""forceduringupgrade = """+str(forceduringupgrade)+""";"""+"")
     try:
-        _AsyncHandleResult = ctx.element.remove_drives(drives=drives)
+        _AsyncHandleResult = ctx.element.remove_drives(drives=drives, force_during_upgrade=forceduringupgrade)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -210,9 +216,9 @@ def gethardwareinfo(ctx,
               cls=SolidFireOption,
               is_flag=True,
               multiple=True,
-              subparameters=["driveid", ],
+              subparameters=["driveid", "type", ],
               required=True,
-              help="""List of drives to add to the cluster.  Has the following subparameters: --driveid """)
+              help="""List of drives to add to the cluster.  Has the following subparameters: --driveid --type """)
 @click.option('--driveid',
               required=True,
               multiple=True,
@@ -220,6 +226,14 @@ def gethardwareinfo(ctx,
               default=None,
               is_sub_parameter=True,
               help="""[subparameter] A unique identifier for this drive.""",
+              cls=SolidFireOption)
+@click.option('--type',
+              required=False,
+              multiple=True,
+              type=str,
+              default=None,
+              is_sub_parameter=True,
+              help="""[subparameter] block or slice""",
               cls=SolidFireOption)
 @click.option('--forceduringupgrade',
               type=bool,
@@ -231,6 +245,8 @@ def add(ctx,
            drives,
            # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
            driveid,
+           # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
+           type = None,
            # Optional main parameter
            forceduringupgrade = None):
     """AddDrives is used to add one or more available drives to the cluster enabling the drives to host a portion of the cluster&#x27;s data."""
@@ -253,7 +269,7 @@ def add(ctx,
     if(drives is not None):
         try:
             for i, _drives in enumerate(drives):
-                drivesArray.append(NewDrive(drive_id=driveid[i], ))
+                drivesArray.append(NewDrive(drive_id=driveid[i], type=type[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)    

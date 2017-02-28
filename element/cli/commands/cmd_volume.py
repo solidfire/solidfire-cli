@@ -100,7 +100,7 @@ def liststatsbyaccount(ctx):
 @click.option('--scriptparameters',
               type=str,
               required=False,
-              help="""JSON parameters to pass to the script. """)
+              help="""JSON parameters to pass to the script.  Has the following subparameters: """)
 @click.option('--attributes',
               type=str,
               required=False,
@@ -126,7 +126,16 @@ def startbulkwrite(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-                    
+                
+
+    kwargsDict = None
+
+    if(scriptparameters is not None):
+        try:
+            kwargsDict = simplejson.loads(scriptparameters)
+        except Exception as e:
+            ctx.logger.error(e.__str__())
+            exit(1)    
 
     kwargsDict = None
 
@@ -140,7 +149,7 @@ def startbulkwrite(ctx,
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""format = """+str(format)+""";"""+"""script = """+str(script)+""";"""+"""scriptparameters = """+str(scriptparameters)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _StartBulkVolumeWriteResult = ctx.element.start_bulk_volume_write(volume_id=volumeid, format=format, script=script, script_parameters=scriptparameters, attributes=kwargsDict)
+        _StartBulkVolumeWriteResult = ctx.element.start_bulk_volume_write(volume_id=volumeid, format=format, script=script, script_parameters=kwargsDict, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -236,7 +245,7 @@ def updatebulkstatus(ctx,
 @click.option('--scriptparameters',
               type=str,
               required=False,
-              help="""JSON parameters to pass to the script. """)
+              help="""JSON parameters to pass to the script.  Has the following subparameters: """)
 @click.option('--attributes',
               type=str,
               required=False,
@@ -272,7 +281,16 @@ def startbulkread(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-                        
+                    
+
+    kwargsDict = None
+
+    if(scriptparameters is not None):
+        try:
+            kwargsDict = simplejson.loads(scriptparameters)
+        except Exception as e:
+            ctx.logger.error(e.__str__())
+            exit(1)    
 
     kwargsDict = None
 
@@ -286,7 +304,7 @@ def startbulkread(ctx,
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""format = """+str(format)+""";"""+"""snapshotid = """+str(snapshotid)+""";"""+"""script = """+str(script)+""";"""+"""scriptparameters = """+str(scriptparameters)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _StartBulkVolumeReadResult = ctx.element.start_bulk_volume_read(volume_id=volumeid, format=format, snapshot_id=snapshotid, script=script, script_parameters=scriptparameters, attributes=kwargsDict)
+        _StartBulkVolumeReadResult = ctx.element.start_bulk_volume_read(volume_id=volumeid, format=format, snapshot_id=snapshotid, script=script, script_parameters=kwargsDict, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -399,22 +417,26 @@ def liststatsby(ctx):
               type=bool,
               required=True,
               help="""Should the volume provides 512-byte sector emulation? """)
-@click.option('--qosminiops',
+@click.option('--volumeqosminiops',
               type=int,
               required=False,
-              help="""Desired minimum 4KB IOPS to guarantee. The allowed IOPS will only drop below this level if all volumes have been capped at their minimum IOPS value and there is still insufficient performance capacity. """)
-@click.option('--qosmaxiops',
+              help="""Desired minimum 4KB IOPS to guarantee. The allowed IOPS will only drop below this level if all volumes have been capped at their min IOPS value and there is still insufficient performance capacity. """)
+@click.option('--volumeqosmaxiops',
               type=int,
               required=False,
               help="""Desired maximum 4KB IOPS allowed over an extended period of time. """)
-@click.option('--qosburstiops',
+@click.option('--volumeqosburstiops',
               type=int,
               required=False,
               help="""Maximum "peak" 4KB IOPS allowed for short periods of time. Allows for bursts of I/O activity over the normal max IOPS value. """)
-@click.option('--qosbursttime',
+@click.option('--volumeqosbursttime',
               type=int,
               required=False,
               help="""The length of time burst IOPS is allowed. The value returned is represented in time units of seconds. Note: this value is calculated by the system based on IOPS set for QoS. """)
+@click.option('--volumeqoscurve',
+              type=int,
+              required=False,
+              help="""The curve is a set of key-value pairs. The keys are I/O sizes in bytes. The values represent the cost performing an IOP at a specific I/O size. The curve is calculated relative to a 4096 byte operation set at 100 IOPS. """)
 @click.option('--attributes',
               type=str,
               required=False,
@@ -434,13 +456,15 @@ def create(ctx,
            # Mandatory main parameter
            enable512e,
            # Optional subparameter of optional main parameter.
-           qosminiops = None,
+           volumeqosminiops = None,
            # Optional subparameter of optional main parameter.
-           qosmaxiops = None,
+           volumeqosmaxiops = None,
            # Optional subparameter of optional main parameter.
-           qosburstiops = None,
+           volumeqosburstiops = None,
            # Optional subparameter of optional main parameter.
-           qosbursttime = None,
+           volumeqosbursttime = None,
+           # Optional subparameter of optional main parameter.
+           volumeqoscurve = None,
            # Optional main parameter
            attributes = None,
            # Optional main parameter
@@ -454,21 +478,28 @@ def create(ctx,
                     
 
     qos = None
-    if(qosminiops is not None or
-       qosmaxiops is not None or
-       qosburstiops is not None or
-       qosbursttime is not None or
+    if(volumeqosminiops is not None or
+       volumeqosmaxiops is not None or
+       volumeqosburstiops is not None or
+       volumeqosbursttime is not None or
+       volumeqoscurve is not None or
        False):
-        if not ( True):
-            ctx.logger.error("""If you choose to provide qos, you must include all of the following parameters:
+        if not (volumeqos and volumeqos and volumeqos and volumeqos and volumeqos and  True):
+            ctx.logger.error("""If you choose to provide volumeqos, you must include all of the following parameters:
+volumeqosminiops
+volumeqosmaxiops
+volumeqosburstiops
+volumeqosbursttime
+volumeqoscurve
 """)
         kwargsDict = dict()
-        kwargsDict["min_iops"] = qosminiops
-        kwargsDict["max_iops"] = qosmaxiops
-        kwargsDict["burst_iops"] = qosburstiops
-        kwargsDict["burst_time"] = qosbursttime
+        kwargsDict["min_iops"] = volumeqosminiops
+        kwargsDict["max_iops"] = volumeqosmaxiops
+        kwargsDict["burst_iops"] = volumeqosburstiops
+        kwargsDict["burst_time"] = volumeqosbursttime
+        kwargsDict["curve"] = volumeqoscurve
 
-        qos = QoS(**kwargsDict)    
+        qos = VolumeQOS(**kwargsDict)    
 
     kwargsDict = None
 
@@ -555,10 +586,16 @@ def getdefaultqos(ctx):
               type=int,
               required=True,
               help="""A value that was returned from the original asynchronous method call. """)
+@click.option('--keepresult',
+              type=bool,
+              required=False,
+              help="""Should the result be kept after? """)
 @pass_context
 def getasyncresult(ctx,
            # Mandatory main parameter
-           asynchandle):
+           asynchandle,
+           # Optional main parameter
+           keepresult = None):
     """Used to retrieve the result of asynchronous method calls."""
     """Some method calls are long running and do not complete when the initial response is sent."""
     """To obtain the result of the method call, polling with GetAsyncResult is required."""
@@ -572,12 +609,12 @@ def getasyncresult(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-    
+        
     
 
-    ctx.logger.info("""asynchandle = """+str(asynchandle)+""";"""+"")
+    ctx.logger.info("""asynchandle = """+str(asynchandle)+""";"""+"""keepresult = """+str(keepresult)+""";"""+"")
     try:
-        _dict = ctx.element.get_async_result(async_handle=asynchandle)
+        _dict = ctx.element.get_async_result(async_handle=asynchandle, keep_result=keepresult)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -709,6 +746,10 @@ def listbulkjobs(ctx):
               type=str,
               required=False,
               help="""List of Name/Value pairs in JSON object format.  Has the following subparameters: """)
+@click.option('--enable512e',
+              type=bool,
+              required=False,
+              help="""Should the volume provide 512-byte sector emulation? """)
 @pass_context
 def clone(ctx,
            # Mandatory main parameter
@@ -724,7 +765,9 @@ def clone(ctx,
            # Optional main parameter
            snapshotid = None,
            # Optional main parameter
-           attributes = None):
+           attributes = None,
+           # Optional main parameter
+           enable512e = None):
     """CloneVolume is used to create a copy of the volume."""
     """This method is asynchronous and may take a variable amount of time to complete."""
     """The cloning process begins immediately when the CloneVolume request is made and is representative of the state of the volume when the API method is issued."""
@@ -748,12 +791,12 @@ def clone(ctx,
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1)
+            exit(1)    
     
 
-    ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""name = """+str(name)+""";"""+"""newaccountid = """+str(newaccountid)+""";"""+"""newsize = """+str(newsize)+""";"""+"""access = """+str(access)+""";"""+"""snapshotid = """+str(snapshotid)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
+    ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""name = """+str(name)+""";"""+"""newaccountid = """+str(newaccountid)+""";"""+"""newsize = """+str(newsize)+""";"""+"""access = """+str(access)+""";"""+"""snapshotid = """+str(snapshotid)+""";"""+"""attributes = """+str(attributes)+""";"""+"""enable512e = """+str(enable512e)+""";"""+"")
     try:
-        _CloneVolumeResult = ctx.element.clone_volume(volume_id=volumeid, name=name, new_account_id=newaccountid, new_size=newsize, access=access, snapshot_id=snapshotid, attributes=kwargsDict)
+        _CloneVolumeResult = ctx.element.clone_volume(volume_id=volumeid, name=name, new_account_id=newaccountid, new_size=newsize, access=access, snapshot_id=snapshotid, attributes=kwargsDict, enable512e=enable512e)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()

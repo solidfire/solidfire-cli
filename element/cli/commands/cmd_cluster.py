@@ -24,7 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """getinfo getapi getconfig getsnmpstate getsnmpinfo disablesnmp deleteallsupportbundles getsystemstatus setsnmptrapinfo listfaults listadmins create disableencryptionatrest addadmin setntpinfo setconfig modifyadmin getsnmptrapinfo listevents clearfaults removeadmin modifyfullthreshold getlimits getcurrentadmin createsupportbundle getcapacity getntpinfo listsyncjobs getversioninfo setsnmpacl snmpsendtesttraps getsnmpacl getstate enablesnmp getstats getmasternodeid setsnmpinfo getfullthreshold enableencryptionatrest """
+    """getinfo getapi getconfig getsnmpstate getsnmpinfo disablesnmp deleteallsupportbundles getsystemstatus setsnmptrapinfo listfaults listadmins create disableencryptionatrest addadmin setntpinfo setconfig modifyadmin getsnmptrapinfo listevents clearfaults removeadmin getstats getlimits getcurrentadmin createsupportbundle getcapacity getntpinfo listsyncjobs getversioninfo setsnmpacl snmpsendtesttraps getsnmpacl getstate enablesnmp modifyfullthreshold getmasternodeid setsnmpinfo getfullthreshold enableencryptionatrest """
 
 @cli.command('getinfo', short_help="""Return configuration information about the cluster. """, cls=SolidFireCommand)
 @pass_context
@@ -373,19 +373,25 @@ def listfaults(ctx,
 
 
 @cli.command('listadmins', short_help="""ListClusterAdmins returns the list of all cluster administrators for the cluster. There can be several cluster administrators that have different levels of permissions. There can be only one primary cluster administrator in the system. The primary Cluster Admin is the administrator that was created when the cluster was created. LDAP administrators can also be created when setting up an LDAP system on the cluster. """, cls=SolidFireCommand)
+@click.option('--showhidden',
+              type=bool,
+              required=False,
+              help="""""")
 @pass_context
-def listadmins(ctx):
+def listadmins(ctx,
+           # Optional main parameter
+           showhidden = None):
     """ListClusterAdmins returns the list of all cluster administrators for the cluster. There can be several cluster administrators that have different levels of permissions. There can be only one primary cluster administrator in the system. The primary Cluster Admin is the administrator that was created when the cluster was created. LDAP administrators can also be created when setting up an LDAP system on the cluster."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
-    ctx.logger.info("")
+    ctx.logger.info("""showhidden = """+str(showhidden)+""";"""+"")
     try:
-        _ListClusterAdminsResult = ctx.element.list_cluster_admins()
+        _ListClusterAdminsResult = ctx.element.list_cluster_admins(show_hidden=showhidden)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -818,19 +824,25 @@ def modifyadmin(ctx,
 
 
 @cli.command('getsnmptrapinfo', short_help="""GetSnmpTrapInfo is used to return current SNMP trap configuration information. """, cls=SolidFireCommand)
+@click.option('--id',
+              type=int,
+              required=False,
+              help="""""")
 @pass_context
-def getsnmptrapinfo(ctx):
+def getsnmptrapinfo(ctx,
+           # Optional main parameter
+           id = None):
     """GetSnmpTrapInfo is used to return current SNMP trap configuration information."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
-    ctx.logger.info("")
+    ctx.logger.info("""id = """+str(id)+""";"""+"")
     try:
-        _GetSnmpTrapInfoResult = ctx.element.get_snmp_trap_info()
+        _GetSnmpTrapInfoResult = ctx.element.get_snmp_trap_info(id=id)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -953,38 +965,20 @@ def removeadmin(ctx,
 
 
 
-@cli.command('modifyfullthreshold', short_help="""ModifyClusterFullThreshold is used to change the level at which an event is generated when the storage cluster approaches the capacity utilization requested. The number entered in this setting is used to indicate the number of node failures the system is required to recover from. For example, on a 10 node cluster, if you want to be alerted when the system cannot recover from 3 nodes failures, enter the value of "3". When this number is reached, a message alert is sent to the Event Log in the Cluster Management Console. """, cls=SolidFireCommand)
-@click.option('--stage2awarethreshold',
-              type=int,
-              required=False,
-              help="""Number of nodes worth of capacity remaining on the cluster that triggers a notification. """)
-@click.option('--stage3blockthresholdpercent',
-              type=int,
-              required=False,
-              help="""Percent below "Error" state to raise a cluster "Warning" alert. """)
-@click.option('--maxmetadataoverprovisionfactor',
-              type=int,
-              required=False,
-              help="""A value representative of the number of times metadata space can be over provisioned relative to the amount of space available. For example, if there was enough metadata space to store 100 TiB of volumes and this number was set to 5, then 500 TiB worth of volumes could be created. """)
+@cli.command('getstats', short_help="""GetClusterStats is used to return high-level activity measurements for the cluster. Values returned are cumulative from the creation of the cluster. """, cls=SolidFireCommand)
 @pass_context
-def modifyfullthreshold(ctx,
-           # Optional main parameter
-           stage2awarethreshold = None,
-           # Optional main parameter
-           stage3blockthresholdpercent = None,
-           # Optional main parameter
-           maxmetadataoverprovisionfactor = None):
-    """ModifyClusterFullThreshold is used to change the level at which an event is generated when the storage cluster approaches the capacity utilization requested. The number entered in this setting is used to indicate the number of node failures the system is required to recover from. For example, on a 10 node cluster, if you want to be alerted when the system cannot recover from 3 nodes failures, enter the value of &quot;3&quot;. When this number is reached, a message alert is sent to the Event Log in the Cluster Management Console."""
+def getstats(ctx):
+    """GetClusterStats is used to return high-level activity measurements for the cluster. Values returned are cumulative from the creation of the cluster."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-            
+
     
 
-    ctx.logger.info("""stage2awarethreshold = """+str(stage2awarethreshold)+""";"""+"""stage3blockthresholdpercent = """+str(stage3blockthresholdpercent)+""";"""+"""maxmetadataoverprovisionfactor = """+str(maxmetadataoverprovisionfactor)+""";"""+"")
+    ctx.logger.info("")
     try:
-        _ModifyClusterFullThresholdResult = ctx.element.modify_cluster_full_threshold(stage2_aware_threshold=stage2awarethreshold, stage3_block_threshold_percent=stage3blockthresholdpercent, max_metadata_over_provision_factor=maxmetadataoverprovisionfactor)
+        _GetClusterStatsResult = ctx.element.get_cluster_stats()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -992,7 +986,7 @@ def modifyfullthreshold(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_ModifyClusterFullThresholdResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_GetClusterStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1454,20 +1448,38 @@ def enablesnmp(ctx,
 
 
 
-@cli.command('getstats', short_help="""GetClusterStats is used to return high-level activity measurements for the cluster. Values returned are cumulative from the creation of the cluster. """, cls=SolidFireCommand)
+@cli.command('modifyfullthreshold', short_help="""ModifyClusterFullThreshold is used to change the level at which an event is generated when the storage cluster approaches the capacity utilization requested. The number entered in this setting is used to indicate the number of node failures the system is required to recover from. For example, on a 10 node cluster, if you want to be alerted when the system cannot recover from 3 nodes failures, enter the value of "3". When this number is reached, a message alert is sent to the Event Log in the Cluster Management Console. """, cls=SolidFireCommand)
+@click.option('--stage2awarethreshold',
+              type=int,
+              required=False,
+              help="""Number of nodes worth of capacity remaining on the cluster that triggers a notification. """)
+@click.option('--stage3blockthresholdpercent',
+              type=int,
+              required=False,
+              help="""Percent below "Error" state to raise a cluster "Warning" alert. """)
+@click.option('--maxmetadataoverprovisionfactor',
+              type=int,
+              required=False,
+              help="""A value representative of the number of times metadata space can be over provisioned relative to the amount of space available. For example, if there was enough metadata space to store 100 TiB of volumes and this number was set to 5, then 500 TiB worth of volumes could be created. """)
 @pass_context
-def getstats(ctx):
-    """GetClusterStats is used to return high-level activity measurements for the cluster. Values returned are cumulative from the creation of the cluster."""
+def modifyfullthreshold(ctx,
+           # Optional main parameter
+           stage2awarethreshold = None,
+           # Optional main parameter
+           stage3blockthresholdpercent = None,
+           # Optional main parameter
+           maxmetadataoverprovisionfactor = None):
+    """ModifyClusterFullThreshold is used to change the level at which an event is generated when the storage cluster approaches the capacity utilization requested. The number entered in this setting is used to indicate the number of node failures the system is required to recover from. For example, on a 10 node cluster, if you want to be alerted when the system cannot recover from 3 nodes failures, enter the value of &quot;3&quot;. When this number is reached, a message alert is sent to the Event Log in the Cluster Management Console."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+            
     
 
-    ctx.logger.info("")
+    ctx.logger.info("""stage2awarethreshold = """+str(stage2awarethreshold)+""";"""+"""stage3blockthresholdpercent = """+str(stage3blockthresholdpercent)+""";"""+"""maxmetadataoverprovisionfactor = """+str(maxmetadataoverprovisionfactor)+""";"""+"")
     try:
-        _GetClusterStatsResult = ctx.element.get_cluster_stats()
+        _ModifyClusterFullThresholdResult = ctx.element.modify_cluster_full_threshold(stage2_aware_threshold=stage2awarethreshold, stage3_block_threshold_percent=stage3blockthresholdpercent, max_metadata_over_provision_factor=maxmetadataoverprovisionfactor)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1475,7 +1487,7 @@ def getstats(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_GetClusterStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_ModifyClusterFullThresholdResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
