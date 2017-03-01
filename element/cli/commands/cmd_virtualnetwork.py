@@ -43,9 +43,9 @@ def cli(ctx):
               cls=SolidFireOption,
               is_flag=True,
               multiple=True,
-              subparameters=["start", "size", ],
+              subparameters=["start", "size", "available", ],
               required=False,
-              help="""New addressBlock to set for this Virtual Network object. This may contain new address blocks to add to the existing object or it may omit unused address blocks that need to be removed. Alternatively, existing address blocks may be extended or reduced in size. The size of the starting addressBlocks for a Virtual Network object can only be increased, and can never be decreased. Attributes for this parameter are: start: start of the IP address range. (String) size: numbre of IP addresses to include in the block. (Integer)  Has the following subparameters: --start --size """)
+              help="""New addressBlock to set for this Virtual Network object. This may contain new address blocks to add to the existing object or it may omit unused address blocks that need to be removed. Alternatively, existing address blocks may be extended or reduced in size. The size of the starting addressBlocks for a Virtual Network object can only be increased, and can never be decreased. Attributes for this parameter are: start: start of the IP address range. (String) size: numbre of IP addresses to include in the block. (Integer)  Has the following subparameters: --start --size --available """)
 @click.option('--start',
               required=False,
               multiple=True,
@@ -61,6 +61,14 @@ def cli(ctx):
               default=None,
               is_sub_parameter=True,
               help="""[subparameter] Number of IP addresses to include in the block.""",
+              cls=SolidFireOption)
+@click.option('--available',
+              required=False,
+              multiple=True,
+              type=str,
+              default=None,
+              is_sub_parameter=True,
+              help="""[subparameter] Nuber of available blocks""",
               cls=SolidFireOption)
 @click.option('--netmask',
               type=str,
@@ -96,6 +104,8 @@ def modify(ctx,
            start = None,
            # Optional subparameter of optional main parameter.
            size = None,
+           # Optional subparameter of optional main parameter.
+           available = None,
            # Optional main parameter
            netmask = None,
            # Optional main parameter
@@ -119,7 +129,7 @@ def modify(ctx,
     if(addressblocks is not None):
         try:
             for i, _addressblocks in enumerate(addressblocks):
-                addressblocksArray.append(AddressBlock(start=start[i], size=size[i], ))
+                addressblocksArray.append(AddressBlock(start=start[i], size=size[i], available=available[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)                    
@@ -161,9 +171,9 @@ def modify(ctx,
               cls=SolidFireOption,
               is_flag=True,
               multiple=True,
-              subparameters=["start", "size", ],
+              subparameters=["start", "size", "available", ],
               required=True,
-              help="""Unique Range of IP addresses to include in the virtual network. Attributes for this parameter are: start: start of the IP address range. (String) size: numbre of IP addresses to include in the block. (Integer)  Has the following subparameters: --start --size """)
+              help="""Unique Range of IP addresses to include in the virtual network. Attributes for this parameter are: start: start of the IP address range. (String) size: numbre of IP addresses to include in the block. (Integer)  Has the following subparameters: --start --size --available """)
 @click.option('--start',
               required=True,
               multiple=True,
@@ -179,6 +189,14 @@ def modify(ctx,
               default=None,
               is_sub_parameter=True,
               help="""[subparameter] Number of IP addresses to include in the block.""",
+              cls=SolidFireOption)
+@click.option('--available',
+              required=True,
+              multiple=True,
+              type=str,
+              default=None,
+              is_sub_parameter=True,
+              help="""[subparameter] Nuber of available blocks""",
               cls=SolidFireOption)
 @click.option('--netmask',
               type=str,
@@ -216,6 +234,8 @@ def add(ctx,
            start,
            # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
            size,
+           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
+           available,
            # Optional main parameter
            gateway = None,
            # Optional main parameter
@@ -235,7 +255,7 @@ def add(ctx,
     if(addressblocks is not None):
         try:
             for i, _addressblocks in enumerate(addressblocks):
-                addressblocksArray.append(AddressBlock(start=start[i], size=size[i], ))
+                addressblocksArray.append(AddressBlock(start=start[i], size=size[i], available=available[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)                    
