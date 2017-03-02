@@ -245,7 +245,7 @@ def getsystemstatus(ctx):
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter] The IP address or host name of the target network management station.""",
+              help="""[subparameter] The IP address or host name of the target network management station. """,
               cls=SolidFireOption)
 @click.option('--community',
               required=True,
@@ -253,7 +253,7 @@ def getsystemstatus(ctx):
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter] SNMP community string.""",
+              help="""[subparameter] SNMP community string. """,
               cls=SolidFireOption)
 @click.option('--port',
               required=True,
@@ -261,7 +261,7 @@ def getsystemstatus(ctx):
               type=int,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter] The UDP port number on the host where the trap is to be sent. Valid range is 1 - 65535. 0 (zero) is not a valid port number. Default is 162.""",
+              help="""[subparameter] The UDP port number on the host where the trap is to be sent. Valid range is 1 - 65535. 0 (zero) is not a valid port number. Default is 162. """,
               cls=SolidFireOption)
 @click.option('--clusterfaulttrapsenabled',
               type=bool,
@@ -1199,7 +1199,7 @@ def getversioninfo(ctx):
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter] ro: read-only access.* rw: for read-write access. rosys: for read-only access to a restricted set of system information *SolidFire recommends that all networks other than the default "localhost" be set to "ro" access, because all SolidFire MIB objects are read-only.""",
+              help="""[subparameter] ro: read-only access.* rw: for read-write access. rosys: for read-only access to a restricted set of system information *SolidFire recommends that all networks other than the default "localhost" be set to "ro" access, because all SolidFire MIB objects are read-only. """,
               cls=SolidFireOption)
 @click.option('--cidr',
               required=True,
@@ -1207,7 +1207,7 @@ def getversioninfo(ctx):
               type=int,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter] A CIDR network mask. This network mask must be an integer greater than or equal to 0, and less than or equal to 32. It must also not be equal to 31.""",
+              help="""[subparameter] A CIDR network mask. This network mask must be an integer greater than or equal to 0, and less than or equal to 32. It must also not be equal to 31. """,
               cls=SolidFireOption)
 @click.option('--community',
               required=True,
@@ -1215,7 +1215,7 @@ def getversioninfo(ctx):
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter] SNMP community string.""",
+              help="""[subparameter] SNMP community string. """,
               cls=SolidFireOption)
 @click.option('--network',
               required=True,
@@ -1223,7 +1223,7 @@ def getversioninfo(ctx):
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter] This parameter along with the cidr variable is used to control which network the access and community string apply to. The special value of "default" is used to specify an entry that applies to all networks. The cidr mask is ignored when network value is either a host name or default.""",
+              help="""[subparameter] This parameter along with the cidr variable is used to control which network the access and community string apply to. The special value of "default" is used to specify an entry that applies to all networks. The cidr mask is ignored when network value is either a host name or default. """,
               cls=SolidFireOption)
 @click.option('--usmusers',
               cls=SolidFireOption,
@@ -1238,7 +1238,7 @@ def getversioninfo(ctx):
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter] rouser: read-only access.* rwuser: for read-write access. rosys: for read-only access to a restricted set of system information *SolidFire recommends that all USM users be set to "rouser" access, because all SolidFire MIB objects are read-only.""",
+              help="""[subparameter] rouser: read-only access.* rwuser: for read-write access. rosys: for read-only access to a restricted set of system information *SolidFire recommends that all USM users be set to "rouser" access, because all SolidFire MIB objects are read-only. """,
               cls=SolidFireOption)
 @click.option('--name',
               required=True,
@@ -1246,7 +1246,7 @@ def getversioninfo(ctx):
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter] The name of the user. Must contain at least one character, but no more than 32 characters. Blank spaces are not allowed.""",
+              help="""[subparameter] The name of the user. Must contain at least one character, but no more than 32 characters. Blank spaces are not allowed. """,
               cls=SolidFireOption)
 @click.option('--password',
               required=True,
@@ -1254,7 +1254,7 @@ def getversioninfo(ctx):
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter] The password of the user. Must be between 8 and 255 characters long (inclusive). Blank spaces are not allowed. Required if "secLevel" is "auth" or "priv."""",
+              help="""[subparameter] The password of the user. Must be between 8 and 255 characters long (inclusive). Blank spaces are not allowed. Required if "secLevel" is "auth" or "priv." """,
               cls=SolidFireOption)
 @click.option('--passphrase',
               required=True,
@@ -1262,7 +1262,7 @@ def getversioninfo(ctx):
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter] The passphrase of the user. Must be between 8 and 255 characters long (inclusive). Blank spaces are not allowed. Required if "secLevel" is "priv."""",
+              help="""[subparameter] The passphrase of the user. Must be between 8 and 255 characters long (inclusive). Blank spaces are not allowed. Required if "secLevel" is "priv." """,
               cls=SolidFireOption)
 @click.option('--seclevel',
               required=True,
@@ -1270,7 +1270,7 @@ def getversioninfo(ctx):
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter] noauth: No password or passphrase is required. auth: A password is required for user access. priv: A password and passphrase is required for user access.""",
+              help="""[subparameter] noauth: No password or passphrase is required. auth: A password is required for user access. priv: A password and passphrase is required for user access. """,
               cls=SolidFireOption)
 @pass_context
 def setsnmpacl(ctx,
@@ -1530,7 +1530,7 @@ def getmasternodeid(ctx):
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter] ro: read-only access.* rw: for read-write access. rosys: for read-only access to a restricted set of system information *SolidFire recommends that all networks other than the default "localhost" be set to "ro" access, because all SolidFire MIB objects are read-only.""",
+              help="""[subparameter] ro: read-only access.* rw: for read-write access. rosys: for read-only access to a restricted set of system information *SolidFire recommends that all networks other than the default "localhost" be set to "ro" access, because all SolidFire MIB objects are read-only. """,
               cls=SolidFireOption)
 @click.option('--cidr',
               required=False,
@@ -1538,7 +1538,7 @@ def getmasternodeid(ctx):
               type=int,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter] A CIDR network mask. This network mask must be an integer greater than or equal to 0, and less than or equal to 32. It must also not be equal to 31.""",
+              help="""[subparameter] A CIDR network mask. This network mask must be an integer greater than or equal to 0, and less than or equal to 32. It must also not be equal to 31. """,
               cls=SolidFireOption)
 @click.option('--community',
               required=False,
@@ -1546,7 +1546,7 @@ def getmasternodeid(ctx):
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter] SNMP community string.""",
+              help="""[subparameter] SNMP community string. """,
               cls=SolidFireOption)
 @click.option('--network',
               required=False,
@@ -1554,7 +1554,7 @@ def getmasternodeid(ctx):
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter] This parameter along with the cidr variable is used to control which network the access and community string apply to. The special value of "default" is used to specify an entry that applies to all networks. The cidr mask is ignored when network value is either a host name or default.""",
+              help="""[subparameter] This parameter along with the cidr variable is used to control which network the access and community string apply to. The special value of "default" is used to specify an entry that applies to all networks. The cidr mask is ignored when network value is either a host name or default. """,
               cls=SolidFireOption)
 @click.option('--enabled',
               type=bool,
@@ -1577,7 +1577,7 @@ def getmasternodeid(ctx):
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter] rouser: read-only access.* rwuser: for read-write access. rosys: for read-only access to a restricted set of system information *SolidFire recommends that all USM users be set to "rouser" access, because all SolidFire MIB objects are read-only.""",
+              help="""[subparameter] rouser: read-only access.* rwuser: for read-write access. rosys: for read-only access to a restricted set of system information *SolidFire recommends that all USM users be set to "rouser" access, because all SolidFire MIB objects are read-only. """,
               cls=SolidFireOption)
 @click.option('--name',
               required=False,
@@ -1585,7 +1585,7 @@ def getmasternodeid(ctx):
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter] The name of the user. Must contain at least one character, but no more than 32 characters. Blank spaces are not allowed.""",
+              help="""[subparameter] The name of the user. Must contain at least one character, but no more than 32 characters. Blank spaces are not allowed. """,
               cls=SolidFireOption)
 @click.option('--password',
               required=False,
@@ -1593,7 +1593,7 @@ def getmasternodeid(ctx):
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter] The password of the user. Must be between 8 and 255 characters long (inclusive). Blank spaces are not allowed. Required if "secLevel" is "auth" or "priv."""",
+              help="""[subparameter] The password of the user. Must be between 8 and 255 characters long (inclusive). Blank spaces are not allowed. Required if "secLevel" is "auth" or "priv." """,
               cls=SolidFireOption)
 @click.option('--passphrase',
               required=False,
@@ -1601,7 +1601,7 @@ def getmasternodeid(ctx):
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter] The passphrase of the user. Must be between 8 and 255 characters long (inclusive). Blank spaces are not allowed. Required if "secLevel" is "priv."""",
+              help="""[subparameter] The passphrase of the user. Must be between 8 and 255 characters long (inclusive). Blank spaces are not allowed. Required if "secLevel" is "priv." """,
               cls=SolidFireOption)
 @click.option('--seclevel',
               required=False,
@@ -1609,7 +1609,7 @@ def getmasternodeid(ctx):
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter] noauth: No password or passphrase is required. auth: A password is required for user access. priv: A password and passphrase is required for user access.""",
+              help="""[subparameter] noauth: No password or passphrase is required. auth: A password is required for user access. priv: A password and passphrase is required for user access. """,
               cls=SolidFireOption)
 @pass_context
 def setsnmpinfo(ctx,
