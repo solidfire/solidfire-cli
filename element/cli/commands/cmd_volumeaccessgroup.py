@@ -280,6 +280,10 @@ def list(ctx,
               type=str,
               required=False,
               help="""List of initiators to include in the volume access group. If unspecified, the access group's configured initiators will not be modified. """)
+@click.option('--deleteorphaninitiators',
+              type=bool,
+              required=True,
+              help="""true: Delete initiator objects after they are removed from a volume access group. false: Do not delete initiator objects after they are removed from a volume access group. """)
 @click.option('--volumes',
               type=str,
               required=False,
@@ -292,6 +296,8 @@ def list(ctx,
 def modify(ctx,
            # Mandatory main parameter
            volumeaccessgroupid,
+           # Mandatory main parameter
+           deleteorphaninitiators,
            # Optional main parameter
            virtualnetworkid = None,
            # Optional main parameter
@@ -324,7 +330,7 @@ def modify(ctx,
 
     virtualnetworktags = parser.parse_array(virtualnetworktags)        
 
-    initiators = parser.parse_array(initiators)    
+    initiators = parser.parse_array(initiators)        
 
     volumes = parser.parse_array(volumes)    
 
@@ -338,9 +344,9 @@ def modify(ctx,
             exit(1)
     
 
-    ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"""virtualnetworkid = """+str(virtualnetworkid)+""";"""+"""virtualnetworktags = """+str(virtualnetworktags)+""";"""+"""name = """+str(name)+""";"""+"""initiators = """+str(initiators)+""";"""+"""volumes = """+str(volumes)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
+    ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"""virtualnetworkid = """+str(virtualnetworkid)+""";"""+"""virtualnetworktags = """+str(virtualnetworktags)+""";"""+"""name = """+str(name)+""";"""+"""initiators = """+str(initiators)+""";"""+"""deleteorphaninitiators = """+str(deleteorphaninitiators)+""";"""+"""volumes = """+str(volumes)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _ModifyVolumeAccessGroupResult = ctx.element.modify_volume_access_group(volume_access_group_id=volumeaccessgroupid, virtual_network_id=virtualnetworkid, virtual_network_tags=virtualnetworktags, name=name, initiators=initiators, volumes=volumes, attributes=kwargsDict)
+        _ModifyVolumeAccessGroupResult = ctx.element.modify_volume_access_group(volume_access_group_id=volumeaccessgroupid, delete_orphan_initiators=deleteorphaninitiators, virtual_network_id=virtualnetworkid, virtual_network_tags=virtualnetworktags, name=name, initiators=initiators, volumes=volumes, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -472,16 +478,16 @@ def addvolumesto(ctx,
               help="""List of initiators to remove from the volume access group. """)
 @click.option('--deleteorphaninitiators',
               type=bool,
-              required=False,
-              help="""""")
+              required=True,
+              help="""true: Delete initiator objects after they are removed from a volume access group. false: Do not delete initiator objects after they are removed from a volume access group. """)
 @pass_context
 def removeinitiatorsfrom(ctx,
            # Mandatory main parameter
            volumeaccessgroupid,
            # Mandatory main parameter
            initiators,
-           # Optional main parameter
-           deleteorphaninitiators = None):
+           # Mandatory main parameter
+           deleteorphaninitiators):
     """Remove initiators from a volume access group."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
@@ -542,21 +548,27 @@ def getefficiency(ctx,
               type=int,
               required=True,
               help="""The ID of the volume access group to delete. """)
+@click.option('--deleteorphaninitiators',
+              type=bool,
+              required=True,
+              help="""true: Delete initiator objects after they are removed from a volume access group. false: Do not delete initiator objects after they are removed from a volume access group. """)
 @pass_context
 def delete(ctx,
            # Mandatory main parameter
-           volumeaccessgroupid):
+           volumeaccessgroupid,
+           # Mandatory main parameter
+           deleteorphaninitiators):
     """Delete a volume access group from the system."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-    
+        
     
 
-    ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"")
+    ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"""deleteorphaninitiators = """+str(deleteorphaninitiators)+""";"""+"")
     try:
-        _DeleteVolumeAccessGroupResult = ctx.element.delete_volume_access_group(volume_access_group_id=volumeaccessgroupid)
+        _DeleteVolumeAccessGroupResult = ctx.element.delete_volume_access_group(volume_access_group_id=volumeaccessgroupid, delete_orphan_initiators=deleteorphaninitiators)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()

@@ -939,6 +939,10 @@ Name of the volume access group. It is not required to be unique, but recommende
 
 List of initiators to include in the volume access group. If unspecified, the access group's configured initiators will not be modified. 
 
+--deleteorphaninitiators
+
+true: Delete initiator objects after they are removed from a volume access group. false: Do not delete initiator objects after they are removed from a volume access group. 
+
 --volumes
 
 List of volumes to initially include in the volume access group. If unspecified, the access group's volumes will not be modified. 
@@ -1025,7 +1029,7 @@ List of initiators to remove from the volume access group.
 
 --deleteorphaninitiators
 
-
+true: Delete initiator objects after they are removed from a volume access group. false: Do not delete initiator objects after they are removed from a volume access group. 
 
 ---------------------------------------------------------------
 #### getefficiency ####
@@ -1058,6 +1062,10 @@ Options:
 --volumeaccessgroupid
 
 The ID of the volume access group to delete. 
+
+--deleteorphaninitiators
+
+true: Delete initiator objects after they are removed from a volume access group. false: Do not delete initiator objects after they are removed from a volume access group. 
 
 
 Node Commands 

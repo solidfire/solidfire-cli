@@ -624,54 +624,67 @@ def setntpinfo(ctx,
 
 
 @cli.command('setconfig', short_help="""The SetClusterConfig API method is used to set the configuration this node uses to communicate with the cluster it is associated with. To see the states in which these objects can be modified see Cluster Object on page 109. To display the current cluster interface settings for a node, run the GetClusterConfig API method.  Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
+
 @click.option('--clusterconfigcipi',
               type=str,
               required=False,
               help="""Network interface used for cluster communication. """)
+
 @click.option('--clusterconfigclustercluster',
               type=str,
               required=False,
               help="""Unique cluster name. """)
+
 @click.option('--clusterconfigensemble',
               type=str,
               required=False,
               help="""Nodes that are participating in the cluster. """)
+
 @click.option('--clusterconfigmipi',
               type=str,
               required=False,
               help="""Network interface used for node management. """)
+
 @click.option('--clusterconfigname',
               type=str,
               required=False,
               help="""Unique cluster name. """)
+
 @click.option('--clusterconfignodeid',
               type=int,
               required=False,
               help="""""")
+
 @click.option('--clusterconfigpendingnodeid',
               type=int,
               required=False,
               help="""""")
+
 @click.option('--clusterconfigrole',
               type=str,
               required=False,
               help="""Identifies the role of the node """)
+
 @click.option('--clusterconfigsipi',
               type=str,
               required=False,
               help="""Network interface used for storage. """)
+
 @click.option('--clusterconfigstate',
               type=str,
               required=False,
               help="""""")
+
 @click.option('--clusterconfigencryptioncapable',
               type=bool,
               required=False,
               help="""""")
+
 @click.option('--clusterconfighaslocaladmin',
               type=bool,
               required=False,
               help="""""")
+
 @click.option('--clusterconfigversion',
               type=str,
               required=False,
