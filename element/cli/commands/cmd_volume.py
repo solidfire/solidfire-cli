@@ -489,11 +489,8 @@ def create(ctx,
        volumeqosbursttime is not None or
        volumeqoscurve is not None or
        False):
-        if not (volumeqos and volumeqos and volumeqos and volumeqos and volumeqos and  True):
+        if not (volumeqos and volumeqos and  True):
             ctx.logger.error("""If you choose to provide volumeqos, you must include all of the following parameters:
-volumeqosminiops
-volumeqosmaxiops
-volumeqosburstiops
 volumeqosbursttime
 volumeqoscurve
 """)
