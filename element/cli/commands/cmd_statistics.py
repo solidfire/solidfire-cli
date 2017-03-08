@@ -40,7 +40,7 @@ def getcompletestats(ctx):
 
     ctx.logger.info("")
     try:
-        _str = ctx.element.get_complete_stats()
+        _str = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -65,7 +65,7 @@ def gethardwareinfo(ctx):
 
     ctx.logger.info("")
     try:
-        _GetHardwareInfoResult = ctx.element.get_hardware_info()
+        _GetHardwareInfoResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -91,7 +91,7 @@ def getrawstats(ctx):
 
     ctx.logger.info("")
     try:
-        _str = ctx.element.get_raw_stats()
+        _str = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -124,7 +124,7 @@ def listvolumestatsbyvirtualvolume(ctx,
 
     ctx.logger.info("""virtualvolumeids = """+str(virtualvolumeids)+""";"""+"")
     try:
-        _ListVolumeStatsByVirtualVolumeResult = ctx.element.list_volume_stats_by_virtual_volume(virtual_volume_ids=virtualvolumeids)
+        _ListVolumeStatsByVirtualVolumeResult = ctx.element.(virtual_volume_ids=virtualvolumeids)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -140,7 +140,7 @@ def listvolumestatsbyvirtualvolume(ctx,
 @click.option('--volumeids',
               type=str,
               required=False,
-              help="""""")
+              help=""" """)
 @pass_context
 def listvolumestats(ctx,
            # Optional main parameter
@@ -156,7 +156,7 @@ def listvolumestats(ctx,
 
     ctx.logger.info("""volumeids = """+str(volumeids)+""";"""+"")
     try:
-        _ListVolumeStatsResult = ctx.element.list_volume_stats(volume_ids=volumeids)
+        _ListVolumeStatsResult = ctx.element.(volume_ids=volumeids)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -189,7 +189,7 @@ def listdrivestats(ctx,
 
     ctx.logger.info("""drives = """+str(drives)+""";"""+"")
     try:
-        _ListDriveStatsResult = ctx.element.list_drive_stats(drives=drives)
+        _ListDriveStatsResult = ctx.element.(drives=drives)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()

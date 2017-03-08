@@ -46,7 +46,7 @@ def getefficiency(ctx,
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"")
     try:
-        _GetVolumeEfficiencyResult = ctx.element.get_volume_efficiency(volume_id=volumeid)
+        _GetVolumeEfficiencyResult = ctx.element.(volume_id=volumeid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -72,7 +72,7 @@ def liststatsbyaccount(ctx):
 
     ctx.logger.info("")
     try:
-        _ListVolumeStatsByAccountResult = ctx.element.list_volume_stats_by_account()
+        _ListVolumeStatsByAccountResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -149,7 +149,7 @@ def startbulkwrite(ctx,
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""format = """+str(format)+""";"""+"""script = """+str(script)+""";"""+"""scriptparameters = """+str(scriptparameters)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _StartBulkVolumeWriteResult = ctx.element.start_bulk_volume_write(volume_id=volumeid, format=format, script=script, script_parameters=kwargsDict, attributes=kwargsDict)
+        _StartBulkVolumeWriteResult = ctx.element.(volume_id=volumeid, format=format, script=script, script_parameters=kwargsDict, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -213,7 +213,7 @@ def updatebulkstatus(ctx,
 
     ctx.logger.info("""key = """+str(key)+""";"""+"""status = """+str(status)+""";"""+"""percentcomplete = """+str(percentcomplete)+""";"""+"""message = """+str(message)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _UpdateBulkVolumeStatusResult = ctx.element.update_bulk_volume_status(key=key, status=status, percent_complete=percentcomplete, message=message, attributes=kwargsDict)
+        _UpdateBulkVolumeStatusResult = ctx.element.(key=key, status=status, percent_complete=percentcomplete, message=message, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -304,7 +304,7 @@ def startbulkread(ctx,
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""format = """+str(format)+""";"""+"""snapshotid = """+str(snapshotid)+""";"""+"""script = """+str(script)+""";"""+"""scriptparameters = """+str(scriptparameters)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _StartBulkVolumeReadResult = ctx.element.start_bulk_volume_read(volume_id=volumeid, format=format, snapshot_id=snapshotid, script=script, script_parameters=kwargsDict, attributes=kwargsDict)
+        _StartBulkVolumeReadResult = ctx.element.(volume_id=volumeid, format=format, snapshot_id=snapshotid, script=script, script_parameters=kwargsDict, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -329,7 +329,7 @@ def listdeleted(ctx):
 
     ctx.logger.info("")
     try:
-        _ListDeletedVolumesResult = ctx.element.list_deleted_volumes()
+        _ListDeletedVolumesResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -362,7 +362,7 @@ def purgedeleted(ctx,
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"")
     try:
-        _PurgeDeletedVolumeResult = ctx.element.purge_deleted_volume(volume_id=volumeid)
+        _PurgeDeletedVolumeResult = ctx.element.(volume_id=volumeid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -388,7 +388,7 @@ def liststatsby(ctx):
 
     ctx.logger.info("")
     try:
-        _ListVolumeStatsByVolumeResult = ctx.element.list_volume_stats_by_volume()
+        _ListVolumeStatsByVolumeResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -449,7 +449,7 @@ def liststatsby(ctx):
 @click.option('--slicecount',
               type=int,
               required=False,
-              help="""""")
+              help=""" """)
 @pass_context
 def create(ctx,
            # Mandatory main parameter
@@ -518,7 +518,7 @@ volumeqoscurve
 
     ctx.logger.info("""name = """+str(name)+""";"""+"""accountid = """+str(accountid)+""";"""+"""totalsize = """+str(totalsize)+""";"""+"""enable512e = """+str(enable512e)+""";"""+"""qos = """+str(qos)+""";"""+"""attributes = """+str(attributes)+""";"""+"""slicecount = """+str(slicecount)+""";"""+"")
     try:
-        _CreateVolumeResult = ctx.element.create_volume(name=name, account_id=accountid, total_size=totalsize, enable512e=enable512e, qos=qos, attributes=kwargsDict, slice_count=slicecount)
+        _CreateVolumeResult = ctx.element.(name=name, account_id=accountid, total_size=totalsize, enable512e=enable512e, qos=qos, attributes=kwargsDict, slice_count=slicecount)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -534,7 +534,7 @@ volumeqoscurve
 @click.option('--cloneid',
               type=int,
               required=True,
-              help="""""")
+              help=""" """)
 @pass_context
 def cancelclone(ctx,
            # Mandatory main parameter
@@ -549,7 +549,7 @@ def cancelclone(ctx,
 
     ctx.logger.info("""cloneid = """+str(cloneid)+""";"""+"")
     try:
-        _CancelCloneResult = ctx.element.cancel_clone(clone_id=cloneid)
+        _CancelCloneResult = ctx.element.(clone_id=cloneid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -574,7 +574,7 @@ def getdefaultqos(ctx):
 
     ctx.logger.info("")
     try:
-        _VolumeQOS = ctx.element.get_default_qos()
+        _VolumeQOS = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -619,7 +619,7 @@ def getasyncresult(ctx,
 
     ctx.logger.info("""asynchandle = """+str(asynchandle)+""";"""+"""keepresult = """+str(keepresult)+""";"""+"")
     try:
-        _dict = ctx.element.get_async_result(async_handle=asynchandle, keep_result=keepresult)
+        _dict = ctx.element.(async_handle=asynchandle, keep_result=keepresult)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -652,7 +652,7 @@ def listasyncresults(ctx,
 
     ctx.logger.info("""asyncresulttypes = """+str(asyncresulttypes)+""";"""+"")
     try:
-        _ListAsyncResultsResult = ctx.element.list_async_results(async_result_types=asyncresulttypes)
+        _ListAsyncResultsResult = ctx.element.(async_result_types=asyncresulttypes)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -685,7 +685,7 @@ def liststatsbyaccessgroup(ctx,
 
     ctx.logger.info("""volumeaccessgroups = """+str(volumeaccessgroups)+""";"""+"")
     try:
-        _ListVolumeStatsByVolumeAccessGroupResult = ctx.element.list_volume_stats_by_volume_access_group(volume_access_groups=volumeaccessgroups)
+        _ListVolumeStatsByVolumeAccessGroupResult = ctx.element.(volume_access_groups=volumeaccessgroups)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -710,7 +710,7 @@ def listbulkjobs(ctx):
 
     ctx.logger.info("")
     try:
-        _ListBulkVolumeJobsResult = ctx.element.list_bulk_volume_jobs()
+        _ListBulkVolumeJobsResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -801,7 +801,7 @@ def clone(ctx,
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""name = """+str(name)+""";"""+"""newaccountid = """+str(newaccountid)+""";"""+"""newsize = """+str(newsize)+""";"""+"""access = """+str(access)+""";"""+"""snapshotid = """+str(snapshotid)+""";"""+"""attributes = """+str(attributes)+""";"""+"""enable512e = """+str(enable512e)+""";"""+"")
     try:
-        _CloneVolumeResult = ctx.element.clone_volume(volume_id=volumeid, name=name, new_account_id=newaccountid, new_size=newsize, access=access, snapshot_id=snapshotid, attributes=kwargsDict, enable512e=enable512e)
+        _CloneVolumeResult = ctx.element.(volume_id=volumeid, name=name, new_account_id=newaccountid, new_size=newsize, access=access, snapshot_id=snapshotid, attributes=kwargsDict, enable512e=enable512e)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -918,7 +918,7 @@ def modify(ctx,
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""accountid = """+str(accountid)+""";"""+"""access = """+str(access)+""";"""+"""qos = """+str(qos)+""";"""+"""totalsize = """+str(totalsize)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _ModifyVolumeResult = ctx.element.modify_volume(volume_id=volumeid, account_id=accountid, access=access, qos=qos, total_size=totalsize, attributes=kwargsDict)
+        _ModifyVolumeResult = ctx.element.(volume_id=volumeid, account_id=accountid, access=access, qos=qos, total_size=totalsize, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -950,7 +950,7 @@ def restoredeleted(ctx,
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"")
     try:
-        _RestoreDeletedVolumeResult = ctx.element.restore_deleted_volume(volume_id=volumeid)
+        _RestoreDeletedVolumeResult = ctx.element.(volume_id=volumeid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -993,7 +993,7 @@ def copy(ctx,
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""dstvolumeid = """+str(dstvolumeid)+""";"""+"""snapshotid = """+str(snapshotid)+""";"""+"")
     try:
-        _CopyVolumeResult = ctx.element.copy_volume(volume_id=volumeid, dst_volume_id=dstvolumeid, snapshot_id=snapshotid)
+        _CopyVolumeResult = ctx.element.(volume_id=volumeid, dst_volume_id=dstvolumeid, snapshot_id=snapshotid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1031,7 +1031,7 @@ def listactive(ctx,
 
     ctx.logger.info("""startvolumeid = """+str(startvolumeid)+""";"""+"""limit = """+str(limit)+""";"""+"")
     try:
-        _ListActiveVolumesResult = ctx.element.list_active_volumes(start_volume_id=startvolumeid, limit=limit)
+        _ListActiveVolumesResult = ctx.element.(start_volume_id=startvolumeid, limit=limit)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1097,7 +1097,7 @@ def list(ctx,
 
     ctx.logger.info("""startvolumeid = """+str(startvolumeid)+""";"""+"""limit = """+str(limit)+""";"""+"""volumestatus = """+str(volumestatus)+""";"""+"""accounts = """+str(accounts)+""";"""+"""ispaired = """+str(ispaired)+""";"""+"""volumeids = """+str(volumeids)+""";"""+"")
     try:
-        _ListVolumesResult = ctx.element.list_volumes(start_volume_id=startvolumeid, limit=limit, volume_status=volumestatus, accounts=accounts, is_paired=ispaired, volume_ids=volumeids)
+        _ListVolumesResult = ctx.element.(start_volume_id=startvolumeid, limit=limit, volume_status=volumestatus, accounts=accounts, is_paired=ispaired, volume_ids=volumeids)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1224,7 +1224,7 @@ def clonemultiple(ctx,
 
     ctx.logger.info("""volumes = """+str(volumes)+""";"""+"""access = """+str(access)+""";"""+"""groupsnapshotid = """+str(groupsnapshotid)+""";"""+"""newaccountid = """+str(newaccountid)+""";"""+"")
     try:
-        _CloneMultipleVolumesResult = ctx.element.clone_multiple_volumes(volumes=volumesArray, access=access, group_snapshot_id=groupsnapshotid, new_account_id=newaccountid)
+        _CloneMultipleVolumesResult = ctx.element.(volumes=volumesArray, access=access, group_snapshot_id=groupsnapshotid, new_account_id=newaccountid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1267,7 +1267,7 @@ def setdefaultqos(ctx,
 
     ctx.logger.info("""miniops = """+str(miniops)+""";"""+"""maxiops = """+str(maxiops)+""";"""+"""burstiops = """+str(burstiops)+""";"""+"")
     try:
-        _SetDefaultQoSResult = ctx.element.set_default_qos(min_iops=miniops, max_iops=maxiops, burst_iops=burstiops)
+        _SetDefaultQoSResult = ctx.element.(min_iops=miniops, max_iops=maxiops, burst_iops=burstiops)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1299,7 +1299,7 @@ def getstats(ctx,
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"")
     try:
-        _GetVolumeStatsResult = ctx.element.get_volume_stats(volume_id=volumeid)
+        _GetVolumeStatsResult = ctx.element.(volume_id=volumeid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1342,7 +1342,7 @@ def listforaccount(ctx,
 
     ctx.logger.info("""accountid = """+str(accountid)+""";"""+"""startvolumeid = """+str(startvolumeid)+""";"""+"""limit = """+str(limit)+""";"""+"")
     try:
-        _ListVolumesForAccountResult = ctx.element.list_volumes_for_account(account_id=accountid, start_volume_id=startvolumeid, limit=limit)
+        _ListVolumesForAccountResult = ctx.element.(account_id=accountid, start_volume_id=startvolumeid, limit=limit)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1367,7 +1367,7 @@ def getcount(ctx):
 
     ctx.logger.info("")
     try:
-        _GetVolumeCountResult = ctx.element.get_volume_count()
+        _GetVolumeCountResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1398,7 +1398,7 @@ def cancelgroupclone(ctx,
 
     ctx.logger.info("""groupcloneid = """+str(groupcloneid)+""";"""+"")
     try:
-        _CancelGroupCloneResult = ctx.element.cancel_group_clone(group_clone_id=groupcloneid)
+        _CancelGroupCloneResult = ctx.element.(group_clone_id=groupcloneid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1443,7 +1443,7 @@ def delete(ctx,
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"")
     try:
-        _DeleteVolumeResult = ctx.element.delete_volume(volume_id=volumeid)
+        _DeleteVolumeResult = ctx.element.(volume_id=volumeid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()

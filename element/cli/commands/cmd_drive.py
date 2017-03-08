@@ -53,7 +53,7 @@ def reset(ctx,
 
     ctx.logger.info("""drives = """+str(drives)+""";"""+"""force = """+str(force)+""";"""+"")
     try:
-        _ResetDrivesResult = ctx.element.reset_drives(drives=drives, force=force)
+        _ResetDrivesResult = ctx.element.(drives=drives, force=force)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -90,7 +90,7 @@ def secureerase(ctx,
 
     ctx.logger.info("""drives = """+str(drives)+""";"""+"")
     try:
-        _AsyncHandleResult = ctx.element.secure_erase_drives(drives=drives)
+        _AsyncHandleResult = ctx.element.(drives=drives)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -116,7 +116,7 @@ def list(ctx):
 
     ctx.logger.info("")
     try:
-        _ListDrivesResult = ctx.element.list_drives()
+        _ListDrivesResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -168,7 +168,7 @@ def remove(ctx,
 
     ctx.logger.info("""drives = """+str(drives)+""";"""+"""forceduringupgrade = """+str(forceduringupgrade)+""";"""+"")
     try:
-        _AsyncHandleResult = ctx.element.remove_drives(drives=drives, force_during_upgrade=forceduringupgrade)
+        _AsyncHandleResult = ctx.element.(drives=drives, force_during_upgrade=forceduringupgrade)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -199,7 +199,7 @@ def gethardwareinfo(ctx,
 
     ctx.logger.info("""driveid = """+str(driveid)+""";"""+"")
     try:
-        _GetDriveHardwareInfoResult = ctx.element.get_drive_hardware_info(drive_id=driveid)
+        _GetDriveHardwareInfoResult = ctx.element.(drive_id=driveid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -277,7 +277,7 @@ def add(ctx,
 
     ctx.logger.info("""drives = """+str(drives)+""";"""+"""forceduringupgrade = """+str(forceduringupgrade)+""";"""+"")
     try:
-        _AddDrivesResult = ctx.element.add_drives(drives=drivesArray, force_during_upgrade=forceduringupgrade)
+        _AddDrivesResult = ctx.element.(drives=drivesArray, force_during_upgrade=forceduringupgrade)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -309,7 +309,7 @@ def getstats(ctx,
 
     ctx.logger.info("""driveid = """+str(driveid)+""";"""+"")
     try:
-        _GetDriveStatsResult = ctx.element.get_drive_stats(drive_id=driveid)
+        _GetDriveStatsResult = ctx.element.(drive_id=driveid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -336,7 +336,7 @@ def getconfig(ctx):
 
     ctx.logger.info("")
     try:
-        _GetDriveConfigResult = ctx.element.get_drive_config()
+        _GetDriveConfigResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -371,7 +371,7 @@ def test(ctx,
 
     ctx.logger.info("""minutes = """+str(minutes)+""";"""+"")
     try:
-        _TestDrivesResult = ctx.element.test_drives(minutes=minutes)
+        _TestDrivesResult = ctx.element.(minutes=minutes)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -402,7 +402,7 @@ def listhardware(ctx,
 
     ctx.logger.info("""force = """+str(force)+""";"""+"")
     try:
-        _ListDriveHardwareResult = ctx.element.list_drive_hardware(force=force)
+        _ListDriveHardwareResult = ctx.element.(force=force)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()

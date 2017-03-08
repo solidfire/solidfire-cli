@@ -61,7 +61,7 @@ def invoke(ctx,
 
     ctx.logger.info("""method = """+str(method)+""";"""+"""parameters = """+str(parameters)+""";"""+"")
     try:
-        _str = ctx.element.invoke_sfapi(method=method, parameters=kwargsDict)
+        _str = ctx.element.(method=method, parameters=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()

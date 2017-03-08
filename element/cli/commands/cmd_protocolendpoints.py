@@ -30,7 +30,7 @@ def cli(ctx):
 @click.option('--protocolendpointids',
               type=str,
               required=False,
-              help="""""")
+              help=""" """)
 @pass_context
 def list(ctx,
            # Optional main parameter
@@ -49,7 +49,7 @@ def list(ctx,
 
     ctx.logger.info("""protocolendpointids = """+str(protocolendpointids)+""";"""+"")
     try:
-        _ListProtocolEndpointsResult = ctx.element.list_protocol_endpoints(protocol_endpoint_ids=protocolendpointids)
+        _ListProtocolEndpointsResult = ctx.element.(protocol_endpoint_ids=protocolendpointids)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()

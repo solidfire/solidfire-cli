@@ -40,7 +40,7 @@ def list(ctx):
 
     ctx.logger.info("")
     try:
-        _ListTestsResult = ctx.element.list_tests()
+        _ListTestsResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -96,7 +96,7 @@ def ping(ctx,
 
     ctx.logger.info("""attempts = """+str(attempts)+""";"""+"""hosts = """+str(hosts)+""";"""+"""totaltimeoutsec = """+str(totaltimeoutsec)+""";"""+"""packetsize = """+str(packetsize)+""";"""+"""pingtimeoutmsec = """+str(pingtimeoutmsec)+""";"""+"")
     try:
-        _TestPingResult = ctx.element.test_ping(attempts=attempts, hosts=hosts, total_timeout_sec=totaltimeoutsec, packet_size=packetsize, ping_timeout_msec=pingtimeoutmsec)
+        _TestPingResult = ctx.element.(attempts=attempts, hosts=hosts, total_timeout_sec=totaltimeoutsec, packet_size=packetsize, ping_timeout_msec=pingtimeoutmsec)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -128,7 +128,7 @@ def connectmvip(ctx,
 
     ctx.logger.info("""mvip = """+str(mvip)+""";"""+"")
     try:
-        _TestConnectMvipResult = ctx.element.test_connect_mvip(mvip=mvip)
+        _TestConnectMvipResult = ctx.element.(mvip=mvip)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -154,7 +154,7 @@ def listutilities(ctx):
 
     ctx.logger.info("")
     try:
-        _ListUtilitiesResult = ctx.element.list_utilities()
+        _ListUtilitiesResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -186,7 +186,7 @@ def connectensemble(ctx,
 
     ctx.logger.info("""ensemble = """+str(ensemble)+""";"""+"")
     try:
-        _TestConnectEnsembleResult = ctx.element.test_connect_ensemble(ensemble=ensemble)
+        _TestConnectEnsembleResult = ctx.element.(ensemble=ensemble)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -218,7 +218,7 @@ def connectsvip(ctx,
 
     ctx.logger.info("""svip = """+str(svip)+""";"""+"")
     try:
-        _TestConnectSvipResult = ctx.element.test_connect_svip(svip=svip)
+        _TestConnectSvipResult = ctx.element.(svip=svip)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()

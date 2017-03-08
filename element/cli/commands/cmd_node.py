@@ -24,7 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """setnetworkconfig listpending getorigin getbootstrapconfig remove listpendingactive getpendingoperation liststats add setconfig getnetworkconfig getstats getconfig listactive listall """
+    """setnetworkconfig listpending getorigin listpendingactive listall getpendingoperation liststats add setconfig getnetworkconfig getstats getconfig remove listactive getbootstrapconfig """
 # SetNewtorkConfig has been intentionally excluded from the python cli because
 # the input values would be too complex to reasonably support in a CLI.
 
@@ -43,7 +43,7 @@ def listpending(ctx):
 
     ctx.logger.info("")
     try:
-        _ListPendingNodesResult = ctx.element.list_pending_nodes()
+        _ListPendingNodesResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -59,7 +59,7 @@ def listpending(ctx):
 @click.option('--force',
               type=bool,
               required=True,
-              help="""""")
+              help=""" """)
 @pass_context
 def getorigin(ctx,
            # Mandatory main parameter
@@ -74,7 +74,7 @@ def getorigin(ctx,
 
     ctx.logger.info("""force = """+str(force)+""";"""+"")
     try:
-        _GetOriginResult = ctx.element.get_origin(force=force)
+        _GetOriginResult = ctx.element.(force=force)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -83,66 +83,6 @@ def getorigin(ctx,
         exit()
 
     cli_utils.print_result(_GetOriginResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getbootstrapconfig', short_help="""GetBootstrapConfig returns the cluster name and node name from the bootstrap configuration file. This API method should be performed on an individual node before it has been configured into a cluster. The resulting information from this method is used in the Cluster Configuration UI when the cluster is eventually created. """, cls=SolidFireCommand)
-@pass_context
-def getbootstrapconfig(ctx):
-    """GetBootstrapConfig returns the cluster name and node name from the bootstrap configuration file. This API method should be performed on an individual node before it has been configured into a cluster. The resulting information from this method is used in the Cluster Configuration UI when the cluster is eventually created."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-    
-
-    ctx.logger.info("")
-    try:
-        _GetBootstrapConfigResult = ctx.element.get_bootstrap_config()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_GetBootstrapConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('remove', short_help="""RemoveNodes is used to remove one or more nodes that should no longer participate in the cluster. Before removing a node, all drives it contains must first be removed with "RemoveDrives" method. A node cannot be removed until the RemoveDrives process has completed and all data has been migrated away from the node.  Once removed, a node registers itself as a pending node and can be added again, or shut down which removes it from the "Pending Node" list. """, cls=SolidFireCommand)
-@click.option('--nodes',
-              type=str,
-              required=True,
-              help="""List of NodeIDs for the nodes to be removed. """)
-@pass_context
-def remove(ctx,
-           # Mandatory main parameter
-           nodes):
-    """RemoveNodes is used to remove one or more nodes that should no longer participate in the cluster. Before removing a node, all drives it contains must first be removed with &quot;RemoveDrives&quot; method. A node cannot be removed until the RemoveDrives process has completed and all data has been migrated away from the node."""
-    """"""
-    """Once removed, a node registers itself as a pending node and can be added again, or shut down which removes it from the &quot;Pending Node&quot; list."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-    
-
-    nodes = parser.parse_array(nodes)
-    
-
-    ctx.logger.info("""nodes = """+str(nodes)+""";"""+"")
-    try:
-        _RemoveNodesResult = ctx.element.remove_nodes(nodes=nodes)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_RemoveNodesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -159,7 +99,7 @@ def listpendingactive(ctx):
 
     ctx.logger.info("")
     try:
-        _ListPendingActiveNodesResult = ctx.element.list_pending_active_nodes()
+        _ListPendingActiveNodesResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -168,6 +108,31 @@ def listpendingactive(ctx):
         exit()
 
     cli_utils.print_result(_ListPendingActiveNodesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('listall', short_help="""ListAllNodes enables you to retrieve a list of active and pending nodes in the cluster. """, cls=SolidFireCommand)
+@pass_context
+def listall(ctx):
+    """ListAllNodes enables you to retrieve a list of active and pending nodes in the cluster."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+    
+
+    ctx.logger.info("")
+    try:
+        _ListAllNodesResult = ctx.element.()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_ListAllNodesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -186,7 +151,7 @@ def getpendingoperation(ctx):
 
     ctx.logger.info("")
     try:
-        _GetPendingOperationResult = ctx.element.get_pending_operation()
+        _GetPendingOperationResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -211,7 +176,7 @@ def liststats(ctx):
 
     ctx.logger.info("")
     try:
-        _ListNodeStatsResult = ctx.element.list_node_stats()
+        _ListNodeStatsResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -258,7 +223,7 @@ def add(ctx,
 
     ctx.logger.info("""pendingnodes = """+str(pendingnodes)+""";"""+"""autoinstall = """+str(autoinstall)+""";"""+"")
     try:
-        _AddNodesResult = ctx.element.add_nodes(pending_nodes=pendingnodes, auto_install=autoinstall)
+        _AddNodesResult = ctx.element.(pending_nodes=pendingnodes, auto_install=autoinstall)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -288,7 +253,7 @@ def getnetworkconfig(ctx):
 
     ctx.logger.info("")
     try:
-        _GetNetworkConfigResult = ctx.element.get_network_config()
+        _GetNetworkConfigResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -319,7 +284,7 @@ def getstats(ctx,
 
     ctx.logger.info("""nodeid = """+str(nodeid)+""";"""+"")
     try:
-        _GetNodeStatsResult = ctx.element.get_node_stats(node_id=nodeid)
+        _GetNodeStatsResult = ctx.element.(node_id=nodeid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -346,7 +311,7 @@ def getconfig(ctx):
 
     ctx.logger.info("")
     try:
-        _GetConfigResult = ctx.element.get_config()
+        _GetConfigResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -355,6 +320,41 @@ def getconfig(ctx):
         exit()
 
     cli_utils.print_result(_GetConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('remove', short_help="""RemoveNodes is used to remove one or more nodes that should no longer participate in the cluster. Before removing a node, all drives it contains must first be removed with "RemoveDrives" method. A node cannot be removed until the RemoveDrives process has completed and all data has been migrated away from the node.  Once removed, a node registers itself as a pending node and can be added again, or shut down which removes it from the "Pending Node" list. """, cls=SolidFireCommand)
+@click.option('--nodes',
+              type=str,
+              required=True,
+              help="""List of NodeIDs for the nodes to be removed. """)
+@pass_context
+def remove(ctx,
+           # Mandatory main parameter
+           nodes):
+    """RemoveNodes is used to remove one or more nodes that should no longer participate in the cluster. Before removing a node, all drives it contains must first be removed with &quot;RemoveDrives&quot; method. A node cannot be removed until the RemoveDrives process has completed and all data has been migrated away from the node."""
+    """"""
+    """Once removed, a node registers itself as a pending node and can be added again, or shut down which removes it from the &quot;Pending Node&quot; list."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+    
+
+    nodes = parser.parse_array(nodes)
+    
+
+    ctx.logger.info("""nodes = """+str(nodes)+""";"""+"")
+    try:
+        _RemoveNodesResult = ctx.element.(nodes=nodes)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_RemoveNodesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -371,7 +371,7 @@ def listactive(ctx):
 
     ctx.logger.info("")
     try:
-        _ListActiveNodesResult = ctx.element.list_active_nodes()
+        _ListActiveNodesResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -383,10 +383,10 @@ def listactive(ctx):
 
 
 
-@cli.command('listall', short_help="""ListAllNodes enables you to retrieve a list of active and pending nodes in the cluster. """, cls=SolidFireCommand)
+@cli.command('getbootstrapconfig', short_help="""GetBootstrapConfig returns the cluster name and node name from the bootstrap configuration file. This API method should be performed on an individual node before it has been configured into a cluster. The resulting information from this method is used in the Cluster Configuration UI when the cluster is eventually created. """, cls=SolidFireCommand)
 @pass_context
-def listall(ctx):
-    """ListAllNodes enables you to retrieve a list of active and pending nodes in the cluster."""
+def getbootstrapconfig(ctx):
+    """GetBootstrapConfig returns the cluster name and node name from the bootstrap configuration file. This API method should be performed on an individual node before it has been configured into a cluster. The resulting information from this method is used in the Cluster Configuration UI when the cluster is eventually created."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -396,7 +396,7 @@ def listall(ctx):
 
     ctx.logger.info("")
     try:
-        _ListAllNodesResult = ctx.element.list_all_nodes()
+        _GetBootstrapConfigResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -404,5 +404,5 @@ def listall(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_ListAllNodesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_GetBootstrapConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

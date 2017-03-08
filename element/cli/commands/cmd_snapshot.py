@@ -24,7 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """listgroup modifygroup list create modify deletegroup createschedule getschedule rollbacktogroup rollbackto creategroup modifyschedule listschedules delete """
+    """listgroup modifygroup modify create list createschedule deletegroup getschedule rollbacktogroup rollbackto creategroup modifyschedule listschedules delete """
 
 @cli.command('listgroup', short_help="""ListGroupSnapshots is used to return information about all group snapshots that have been created. """, cls=SolidFireCommand)
 @click.option('--volumeid',
@@ -51,7 +51,7 @@ def listgroup(ctx,
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""groupsnapshotid = """+str(groupsnapshotid)+""";"""+"")
     try:
-        _ListGroupSnapshotsResult = ctx.element.list_group_snapshots(volume_id=volumeid, group_snapshot_id=groupsnapshotid)
+        _ListGroupSnapshotsResult = ctx.element.(volume_id=volumeid, group_snapshot_id=groupsnapshotid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -94,7 +94,7 @@ def modifygroup(ctx,
 
     ctx.logger.info("""groupsnapshotid = """+str(groupsnapshotid)+""";"""+"""expirationtime = """+str(expirationtime)+""";"""+"""enableremotereplication = """+str(enableremotereplication)+""";"""+"")
     try:
-        _ModifyGroupSnapshotResult = ctx.element.modify_group_snapshot(group_snapshot_id=groupsnapshotid, expiration_time=expirationtime, enable_remote_replication=enableremotereplication)
+        _ModifyGroupSnapshotResult = ctx.element.(group_snapshot_id=groupsnapshotid, expiration_time=expirationtime, enable_remote_replication=enableremotereplication)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -106,32 +106,39 @@ def modifygroup(ctx,
 
 
 
-@cli.command('list', short_help="""ListSnapshots is used to return the attributes of each snapshot taken on the volume. """, cls=SolidFireCommand)
-@click.option('--volumeid',
+@cli.command('modify', short_help="""ModifySnapshot is used to change the attributes currently assigned to a snapshot. Use this API method to enable the snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system. """, cls=SolidFireCommand)
+@click.option('--snapshotid',
               type=int,
+              required=True,
+              help="""ID of the snapshot. """)
+@click.option('--expirationtime',
+              type=str,
               required=False,
-              help="""The volume to list snapshots for. If not provided, all snapshots for all volumes are returned. """)
-@click.option('--internal',
+              help="""Use to set the time when the snapshot should be removed. """)
+@click.option('--enableremotereplication',
               type=bool,
               required=False,
-              help="""""")
+              help="""Use to enable the snapshot created to be replicated to a remote SolidFire cluster. Possible values: true: the snapshot will be replicated to remote storage. false: Default. No replication. """)
 @pass_context
-def list(ctx,
+def modify(ctx,
+           # Mandatory main parameter
+           snapshotid,
            # Optional main parameter
-           volumeid = None,
+           expirationtime = None,
            # Optional main parameter
-           internal = None):
-    """ListSnapshots is used to return the attributes of each snapshot taken on the volume."""
+           enableremotereplication = None):
+    """ModifySnapshot is used to change the attributes currently assigned to a snapshot."""
+    """Use this API method to enable the snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-        
+            
     
 
-    ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""internal = """+str(internal)+""";"""+"")
+    ctx.logger.info("""snapshotid = """+str(snapshotid)+""";"""+"""expirationtime = """+str(expirationtime)+""";"""+"""enableremotereplication = """+str(enableremotereplication)+""";"""+"")
     try:
-        _ListSnapshotsResult = ctx.element.list_snapshots(volume_id=volumeid, internal=internal)
+        _ModifySnapshotResult = ctx.element.(snapshot_id=snapshotid, expiration_time=expirationtime, enable_remote_replication=enableremotereplication)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -139,7 +146,7 @@ def list(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_ListSnapshotsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_ModifySnapshotResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -205,7 +212,7 @@ def create(ctx,
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""snapshotid = """+str(snapshotid)+""";"""+"""name = """+str(name)+""";"""+"""enableremotereplication = """+str(enableremotereplication)+""";"""+"""retention = """+str(retention)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _dict = ctx.element.create_snapshot(volume_id=volumeid, snapshot_id=snapshotid, name=name, enable_remote_replication=enableremotereplication, retention=retention, attributes=kwargsDict)
+        _dict = ctx.element.(volume_id=volumeid, snapshot_id=snapshotid, name=name, enable_remote_replication=enableremotereplication, retention=retention, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -217,68 +224,22 @@ def create(ctx,
 
 
 
-@cli.command('modify', short_help="""ModifySnapshot is used to change the attributes currently assigned to a snapshot. Use this API method to enable the snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system. """, cls=SolidFireCommand)
-@click.option('--snapshotid',
+@cli.command('list', short_help="""ListSnapshots is used to return the attributes of each snapshot taken on the volume. """, cls=SolidFireCommand)
+@click.option('--volumeid',
               type=int,
-              required=True,
-              help="""ID of the snapshot. """)
-@click.option('--expirationtime',
-              type=str,
               required=False,
-              help="""Use to set the time when the snapshot should be removed. """)
-@click.option('--enableremotereplication',
+              help="""The volume to list snapshots for. If not provided, all snapshots for all volumes are returned. """)
+@click.option('--internal',
               type=bool,
               required=False,
-              help="""Use to enable the snapshot created to be replicated to a remote SolidFire cluster. Possible values: true: the snapshot will be replicated to remote storage. false: Default. No replication. """)
+              help=""" """)
 @pass_context
-def modify(ctx,
-           # Mandatory main parameter
-           snapshotid,
+def list(ctx,
            # Optional main parameter
-           expirationtime = None,
+           volumeid = None,
            # Optional main parameter
-           enableremotereplication = None):
-    """ModifySnapshot is used to change the attributes currently assigned to a snapshot."""
-    """Use this API method to enable the snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-            
-    
-
-    ctx.logger.info("""snapshotid = """+str(snapshotid)+""";"""+"""expirationtime = """+str(expirationtime)+""";"""+"""enableremotereplication = """+str(enableremotereplication)+""";"""+"")
-    try:
-        _ModifySnapshotResult = ctx.element.modify_snapshot(snapshot_id=snapshotid, expiration_time=expirationtime, enable_remote_replication=enableremotereplication)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_ModifySnapshotResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('deletegroup', short_help="""DeleteGroupSnapshot is used to delete a group snapshot. The saveMembers parameter can be used to preserve all the snapshots that were made for the volumes in the group but the group association will be removed. """, cls=SolidFireCommand)
-@click.option('--groupsnapshotid',
-              type=int,
-              required=True,
-              help="""Unique ID of the group snapshot. """)
-@click.option('--savemembers',
-              type=bool,
-              required=True,
-              help="""true: Snapshots are kept, but group association is removed. false: The group and snapshots are deleted. """)
-@pass_context
-def deletegroup(ctx,
-           # Mandatory main parameter
-           groupsnapshotid,
-           # Mandatory main parameter
-           savemembers):
-    """DeleteGroupSnapshot is used to delete a group snapshot."""
-    """The saveMembers parameter can be used to preserve all the snapshots that"""
-    """were made for the volumes in the group but the group association will be removed."""
+           internal = None):
+    """ListSnapshots is used to return the attributes of each snapshot taken on the volume."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -286,9 +247,9 @@ def deletegroup(ctx,
         
     
 
-    ctx.logger.info("""groupsnapshotid = """+str(groupsnapshotid)+""";"""+"""savemembers = """+str(savemembers)+""";"""+"")
+    ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""internal = """+str(internal)+""";"""+"")
     try:
-        _DeleteGroupSnapshotResult = ctx.element.delete_group_snapshot(group_snapshot_id=groupsnapshotid, save_members=savemembers)
+        _ListSnapshotsResult = ctx.element.(volume_id=volumeid, internal=internal)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -296,7 +257,7 @@ def deletegroup(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_DeleteGroupSnapshotResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_ListSnapshotsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -437,6 +398,45 @@ def CreateSchedule(ctx,
     cli_utils.print_result(_CreateScheduleResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
+@cli.command('deletegroup', short_help="""DeleteGroupSnapshot is used to delete a group snapshot. The saveMembers parameter can be used to preserve all the snapshots that were made for the volumes in the group but the group association will be removed. """, cls=SolidFireCommand)
+@click.option('--groupsnapshotid',
+              type=int,
+              required=True,
+              help="""Unique ID of the group snapshot. """)
+@click.option('--savemembers',
+              type=bool,
+              required=True,
+              help="""true: Snapshots are kept, but group association is removed. false: The group and snapshots are deleted. """)
+@pass_context
+def deletegroup(ctx,
+           # Mandatory main parameter
+           groupsnapshotid,
+           # Mandatory main parameter
+           savemembers):
+    """DeleteGroupSnapshot is used to delete a group snapshot."""
+    """The saveMembers parameter can be used to preserve all the snapshots that"""
+    """were made for the volumes in the group but the group association will be removed."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+        
+    
+
+    ctx.logger.info("""groupsnapshotid = """+str(groupsnapshotid)+""";"""+"""savemembers = """+str(savemembers)+""";"""+"")
+    try:
+        _DeleteGroupSnapshotResult = ctx.element.(group_snapshot_id=groupsnapshotid, save_members=savemembers)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_DeleteGroupSnapshotResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
 @cli.command('getschedule', short_help="""GetSchedule is used to return information about a scheduled snapshot that has been created. You can see information about a specified schedule if there are many snapshot schedules in the system. You can include more than one schedule with this method by specifying additional scheduleIDs to the parameter. """, cls=SolidFireCommand)
 @click.option('--scheduleid',
               type=int,
@@ -456,7 +456,7 @@ def getschedule(ctx,
 
     ctx.logger.info("""scheduleid = """+str(scheduleid)+""";"""+"")
     try:
-        _GetScheduleResult = ctx.element.get_schedule(schedule_id=scheduleid)
+        _GetScheduleResult = ctx.element.(schedule_id=scheduleid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -517,7 +517,7 @@ def rollbacktogroup(ctx,
 
     ctx.logger.info("""groupsnapshotid = """+str(groupsnapshotid)+""";"""+"""savecurrentstate = """+str(savecurrentstate)+""";"""+"""name = """+str(name)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _CreateGroupSnapshotResult = ctx.element.rollback_to_group_snapshot(group_snapshot_id=groupsnapshotid, save_current_state=savecurrentstate, name=name, attributes=kwargsDict)
+        _CreateGroupSnapshotResult = ctx.element.(group_snapshot_id=groupsnapshotid, save_current_state=savecurrentstate, name=name, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -586,7 +586,7 @@ def rollbackto(ctx,
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""snapshotid = """+str(snapshotid)+""";"""+"""savecurrentstate = """+str(savecurrentstate)+""";"""+"""name = """+str(name)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _CreateSnapshotResult = ctx.element.rollback_to_snapshot(volume_id=volumeid, snapshot_id=snapshotid, save_current_state=savecurrentstate, name=name, attributes=kwargsDict)
+        _CreateSnapshotResult = ctx.element.(volume_id=volumeid, snapshot_id=snapshotid, save_current_state=savecurrentstate, name=name, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -656,7 +656,7 @@ def creategroup(ctx,
 
     ctx.logger.info("""volumes = """+str(volumes)+""";"""+"""name = """+str(name)+""";"""+"""enableremotereplication = """+str(enableremotereplication)+""";"""+"""retention = """+str(retention)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _CreateGroupSnapshotResult = ctx.element.create_group_snapshot(volumes=volumes, name=name, enable_remote_replication=enableremotereplication, retention=retention, attributes=kwargsDict)
+        _CreateGroupSnapshotResult = ctx.element.(volumes=volumes, name=name, enable_remote_replication=enableremotereplication, retention=retention, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -856,7 +856,7 @@ def listschedules(ctx):
 
     ctx.logger.info("")
     try:
-        _ListSchedulesResult = ctx.element.list_schedules()
+        _ListSchedulesResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -890,7 +890,7 @@ def delete(ctx,
 
     ctx.logger.info("""snapshotid = """+str(snapshotid)+""";"""+"")
     try:
-        _DeleteSnapshotResult = ctx.element.delete_snapshot(snapshot_id=snapshotid)
+        _DeleteSnapshotResult = ctx.element.(snapshot_id=snapshotid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()

@@ -30,15 +30,15 @@ def cli(ctx):
 @click.option('--storagecontainerid',
               type=str,
               required=True,
-              help="""""")
+              help=""" """)
 @click.option('--initiatorsecret',
               type=str,
               required=False,
-              help="""""")
+              help=""" """)
 @click.option('--targetsecret',
               type=str,
               required=False,
-              help="""""")
+              help=""" """)
 @pass_context
 def modifystoragecontainer(ctx,
            # Mandatory main parameter
@@ -57,7 +57,7 @@ def modifystoragecontainer(ctx,
 
     ctx.logger.info("""storagecontainerid = """+str(storagecontainerid)+""";"""+"""initiatorsecret = """+str(initiatorsecret)+""";"""+"""targetsecret = """+str(targetsecret)+""";"""+"")
     try:
-        _ModifyStorageContainerResult = ctx.element.modify_storage_container(storage_container_id=storagecontainerid, initiator_secret=initiatorsecret, target_secret=targetsecret)
+        _ModifyStorageContainerResult = ctx.element.(storage_container_id=storagecontainerid, initiator_secret=initiatorsecret, target_secret=targetsecret)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -90,7 +90,7 @@ def list(ctx,
 
     ctx.logger.info("""storagecontainerids = """+str(storagecontainerids)+""";"""+"")
     try:
-        _ListStorageContainersResult = ctx.element.list_storage_containers(storage_container_ids=storagecontainerids)
+        _ListStorageContainersResult = ctx.element.(storage_container_ids=storagecontainerids)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -121,7 +121,7 @@ def getstoragecontainerefficiency(ctx,
 
     ctx.logger.info("""storagecontainerid = """+str(storagecontainerid)+""";"""+"")
     try:
-        _GetStorageContainerEfficiencyResult = ctx.element.get_storage_container_efficiency(storage_container_id=storagecontainerid)
+        _GetStorageContainerEfficiencyResult = ctx.element.(storage_container_id=storagecontainerid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -164,7 +164,7 @@ def createstoragecontainer(ctx,
 
     ctx.logger.info("""name = """+str(name)+""";"""+"""initiatorsecret = """+str(initiatorsecret)+""";"""+"""targetsecret = """+str(targetsecret)+""";"""+"")
     try:
-        _CreateStorageContainerResult = ctx.element.create_storage_container(name=name, initiator_secret=initiatorsecret, target_secret=targetsecret)
+        _CreateStorageContainerResult = ctx.element.(name=name, initiator_secret=initiatorsecret, target_secret=targetsecret)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -197,7 +197,7 @@ def delete(ctx,
 
     ctx.logger.info("""storagecontainerids = """+str(storagecontainerids)+""";"""+"")
     try:
-        _DeleteStorageContainerResult = ctx.element.delete_storage_containers(storage_container_ids=storagecontainerids)
+        _DeleteStorageContainerResult = ctx.element.(storage_container_ids=storagecontainerids)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()

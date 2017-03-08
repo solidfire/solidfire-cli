@@ -24,13 +24,13 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """listhosts listtasks getfeaturestatus list listbindings getcount enablefeature """
+    """listhosts listtasks enablefeature list listbindings getcount getfeaturestatus """
 
 @cli.command('listhosts', short_help="""ListVirtualVolumeHosts returns a list of known ESX hosts. """, cls=SolidFireCommand)
 @click.option('--virtualvolumehostids',
               type=str,
               required=False,
-              help="""""")
+              help=""" """)
 @pass_context
 def listhosts(ctx,
            # Optional main parameter
@@ -47,7 +47,7 @@ def listhosts(ctx,
 
     ctx.logger.info("""virtualvolumehostids = """+str(virtualvolumehostids)+""";"""+"")
     try:
-        _ListVirtualVolumeHostsResult = ctx.element.list_virtual_volume_hosts(virtual_volume_host_ids=virtualvolumehostids)
+        _ListVirtualVolumeHostsResult = ctx.element.(virtual_volume_host_ids=virtualvolumehostids)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -63,7 +63,7 @@ def listhosts(ctx,
 @click.option('--virtualvolumetaskids',
               type=str,
               required=False,
-              help="""""")
+              help=""" """)
 @pass_context
 def listtasks(ctx,
            # Optional main parameter
@@ -80,7 +80,7 @@ def listtasks(ctx,
 
     ctx.logger.info("""virtualvolumetaskids = """+str(virtualvolumetaskids)+""";"""+"")
     try:
-        _ListVirtualVolumeTasksResult = ctx.element.list_virtual_volume_tasks(virtual_volume_task_ids=virtualvolumetaskids)
+        _ListVirtualVolumeTasksResult = ctx.element.(virtual_volume_task_ids=virtualvolumetaskids)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -92,16 +92,16 @@ def listtasks(ctx,
 
 
 
-@cli.command('getfeaturestatus', short_help="""GetFeatureStatus allows you to retrieve the status of a cluster feature. """, cls=SolidFireCommand)
+@cli.command('enablefeature', short_help="""EnableFeature allows you to enable cluster features that are disabled by default. """, cls=SolidFireCommand)
 @click.option('--feature',
               type=str,
-              required=False,
-              help="""Valid values: vvols: Find the status of the Virtual Volumes (VVOLs) cluster feature. """)
+              required=True,
+              help="""Valid values: vvols: Enable the Virtual Volumes (VVOLs) cluster feature. """)
 @pass_context
-def getfeaturestatus(ctx,
-           # Optional main parameter
-           feature = None):
-    """GetFeatureStatus allows you to retrieve the status of a cluster feature."""
+def enablefeature(ctx,
+           # Mandatory main parameter
+           feature):
+    """EnableFeature allows you to enable cluster features that are disabled by default."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -111,7 +111,7 @@ def getfeaturestatus(ctx,
 
     ctx.logger.info("""feature = """+str(feature)+""";"""+"")
     try:
-        _GetFeatureStatusResult = ctx.element.get_feature_status(feature=feature)
+        _EnableFeatureResult = ctx.element.(feature=feature)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -119,7 +119,7 @@ def getfeaturestatus(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_GetFeatureStatusResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_EnableFeatureResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -168,7 +168,7 @@ def list(ctx,
 
     ctx.logger.info("""details = """+str(details)+""";"""+"""limit = """+str(limit)+""";"""+"""recursive = """+str(recursive)+""";"""+"""startvirtualvolumeid = """+str(startvirtualvolumeid)+""";"""+"""virtualvolumeids = """+str(virtualvolumeids)+""";"""+"")
     try:
-        _ListVirtualVolumesResult = ctx.element.list_virtual_volumes(details=details, limit=limit, recursive=recursive, start_virtual_volume_id=startvirtualvolumeid, virtual_volume_ids=virtualvolumeids)
+        _ListVirtualVolumesResult = ctx.element.(details=details, limit=limit, recursive=recursive, start_virtual_volume_id=startvirtualvolumeid, virtual_volume_ids=virtualvolumeids)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -184,7 +184,7 @@ def list(ctx,
 @click.option('--virtualvolumebindingids',
               type=str,
               required=False,
-              help="""""")
+              help=""" """)
 @pass_context
 def listbindings(ctx,
            # Optional main parameter
@@ -201,7 +201,7 @@ def listbindings(ctx,
 
     ctx.logger.info("""virtualvolumebindingids = """+str(virtualvolumebindingids)+""";"""+"")
     try:
-        _ListVirtualVolumeBindingsResult = ctx.element.list_virtual_volume_bindings(virtual_volume_binding_ids=virtualvolumebindingids)
+        _ListVirtualVolumeBindingsResult = ctx.element.(virtual_volume_binding_ids=virtualvolumebindingids)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -226,7 +226,7 @@ def getcount(ctx):
 
     ctx.logger.info("")
     try:
-        _GetVirtualVolumeCountResult = ctx.element.get_virtual_volume_count()
+        _GetVirtualVolumeCountResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -238,16 +238,16 @@ def getcount(ctx):
 
 
 
-@cli.command('enablefeature', short_help="""EnableFeature allows you to enable cluster features that are disabled by default. """, cls=SolidFireCommand)
+@cli.command('getfeaturestatus', short_help="""GetFeatureStatus allows you to retrieve the status of a cluster feature. """, cls=SolidFireCommand)
 @click.option('--feature',
               type=str,
-              required=True,
-              help="""Valid values: vvols: Enable the Virtual Volumes (VVOLs) cluster feature. """)
+              required=False,
+              help="""Valid values: vvols: Find the status of the Virtual Volumes (VVOLs) cluster feature. """)
 @pass_context
-def enablefeature(ctx,
-           # Mandatory main parameter
-           feature):
-    """EnableFeature allows you to enable cluster features that are disabled by default."""
+def getfeaturestatus(ctx,
+           # Optional main parameter
+           feature = None):
+    """GetFeatureStatus allows you to retrieve the status of a cluster feature."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -257,7 +257,7 @@ def enablefeature(ctx,
 
     ctx.logger.info("""feature = """+str(feature)+""";"""+"")
     try:
-        _EnableFeatureResult = ctx.element.enable_feature(feature=feature)
+        _GetFeatureStatusResult = ctx.element.(feature=feature)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -265,5 +265,5 @@ def enablefeature(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_EnableFeatureResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_GetFeatureStatusResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

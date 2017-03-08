@@ -24,7 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """removevolumesfrom create modifylunassignments list modify addinitiatorsto getlunassignments addvolumesto removeinitiatorsfrom getefficiency delete """
+    """removevolumesfrom modify create modifylunassignments list addinitiatorsto getlunassignments addvolumesto removeinitiatorsfrom getefficiency delete """
 
 @cli.command('removevolumesfrom', short_help="""Remove volumes from a volume access group. """, cls=SolidFireCommand)
 @click.option('--volumeaccessgroupid',
@@ -53,7 +53,100 @@ def removevolumesfrom(ctx,
 
     ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"""volumes = """+str(volumes)+""";"""+"")
     try:
-        _ModifyVolumeAccessGroupResult = ctx.element.remove_volumes_from_volume_access_group(volume_access_group_id=volumeaccessgroupid, volumes=volumes)
+        _ModifyVolumeAccessGroupResult = ctx.element.(volume_access_group_id=volumeaccessgroupid, volumes=volumes)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_ModifyVolumeAccessGroupResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('modify', short_help="""Update initiators and add or remove volumes from a volume access group. A specified initiator or volume that duplicates an existing volume or initiator in a volume access group is left as-is. If a value is not specified for volumes or initiators, the current list of initiators and volumes are not changed.  Often, it is easier to use the convenience functions to modify initiators and volumes independently:  AddInitiatorsToVolumeAccessGroup RemoveInitiatorsFromVolumeAccessGroup AddVolumesToVolumeAccessGroup RemoveVolumesFromVolumeAccessGroup """, cls=SolidFireCommand)
+@click.option('--volumeaccessgroupid',
+              type=int,
+              required=True,
+              help="""The ID of the volume access group to modify. """)
+@click.option('--virtualnetworkid',
+              type=str,
+              required=False,
+              help="""The ID of the SolidFire Virtual Network ID to associate the volume access group with. """)
+@click.option('--virtualnetworktags',
+              type=str,
+              required=False,
+              help="""The ID of the VLAN Virtual Network Tag to associate the volume access group with. """)
+@click.option('--name',
+              type=str,
+              required=False,
+              help="""Name of the volume access group. It is not required to be unique, but recommended. """)
+@click.option('--initiators',
+              type=str,
+              required=False,
+              help="""List of initiators to include in the volume access group. If unspecified, the access group's configured initiators will not be modified. """)
+@click.option('--volumes',
+              type=str,
+              required=False,
+              help="""List of volumes to initially include in the volume access group. If unspecified, the access group's volumes will not be modified. """)
+@click.option('--attributes',
+              type=str,
+              required=False,
+              help="""List of Name/Value pairs in JSON object format.  Has the following subparameters: """)
+@pass_context
+def modify(ctx,
+           # Mandatory main parameter
+           volumeaccessgroupid,
+           # Optional main parameter
+           virtualnetworkid = None,
+           # Optional main parameter
+           virtualnetworktags = None,
+           # Optional main parameter
+           name = None,
+           # Optional main parameter
+           initiators = None,
+           # Optional main parameter
+           volumes = None,
+           # Optional main parameter
+           attributes = None):
+    """Update initiators and add or remove volumes from a volume access group."""
+    """A specified initiator or volume that duplicates an existing volume or initiator in a volume access group is left as-is."""
+    """If a value is not specified for volumes or initiators, the current list of initiators and volumes are not changed."""
+    """"""
+    """Often, it is easier to use the convenience functions to modify initiators and volumes independently:"""
+    """"""
+    """AddInitiatorsToVolumeAccessGroup"""
+    """RemoveInitiatorsFromVolumeAccessGroup"""
+    """AddVolumesToVolumeAccessGroup"""
+    """RemoveVolumesFromVolumeAccessGroup"""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+        
+
+    virtualnetworkid = parser.parse_array(virtualnetworkid)    
+
+    virtualnetworktags = parser.parse_array(virtualnetworktags)        
+
+    initiators = parser.parse_array(initiators)    
+
+    volumes = parser.parse_array(volumes)    
+
+    kwargsDict = None
+
+    if(attributes is not None):
+        try:
+            kwargsDict = simplejson.loads(attributes)
+        except Exception as e:
+            ctx.logger.error(e.__str__())
+            exit(1)
+    
+
+    ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"""virtualnetworkid = """+str(virtualnetworkid)+""";"""+"""virtualnetworktags = """+str(virtualnetworktags)+""";"""+"""name = """+str(name)+""";"""+"""initiators = """+str(initiators)+""";"""+"""volumes = """+str(volumes)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
+    try:
+        _ModifyVolumeAccessGroupResult = ctx.element.(volume_access_group_id=volumeaccessgroupid, virtual_network_id=virtualnetworkid, virtual_network_tags=virtualnetworktags, name=name, initiators=initiators, volumes=volumes, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -135,7 +228,7 @@ def create(ctx,
 
     ctx.logger.info("""name = """+str(name)+""";"""+"""initiators = """+str(initiators)+""";"""+"""volumes = """+str(volumes)+""";"""+"""virtualnetworkid = """+str(virtualnetworkid)+""";"""+"""virtualnetworktags = """+str(virtualnetworktags)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _CreateVolumeAccessGroupResult = ctx.element.create_volume_access_group(name=name, initiators=initiators, volumes=volumes, virtual_network_id=virtualnetworkid, virtual_network_tags=virtualnetworktags, attributes=kwargsDict)
+        _CreateVolumeAccessGroupResult = ctx.element.(name=name, initiators=initiators, volumes=volumes, virtual_network_id=virtualnetworkid, virtual_network_tags=virtualnetworktags, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -210,7 +303,7 @@ def modifylunassignments(ctx,
 
     ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"""lunassignments = """+str(lunassignments)+""";"""+"")
     try:
-        _ModifyVolumeAccessGroupLunAssignmentsResult = ctx.element.modify_volume_access_group_lun_assignments(volume_access_group_id=volumeaccessgroupid, lun_assignments=lunassignmentsArray)
+        _ModifyVolumeAccessGroupLunAssignmentsResult = ctx.element.(volume_access_group_id=volumeaccessgroupid, lun_assignments=lunassignmentsArray)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -247,7 +340,7 @@ def list(ctx,
 
     ctx.logger.info("""startvolumeaccessgroupid = """+str(startvolumeaccessgroupid)+""";"""+"""limit = """+str(limit)+""";"""+"")
     try:
-        _ListVolumeAccessGroupsResult = ctx.element.list_volume_access_groups(start_volume_access_group_id=startvolumeaccessgroupid, limit=limit)
+        _ListVolumeAccessGroupsResult = ctx.element.(start_volume_access_group_id=startvolumeaccessgroupid, limit=limit)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -256,105 +349,6 @@ def list(ctx,
         exit()
 
     cli_utils.print_result(_ListVolumeAccessGroupsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('modify', short_help="""Update initiators and add or remove volumes from a volume access group. A specified initiator or volume that duplicates an existing volume or initiator in a volume access group is left as-is. If a value is not specified for volumes or initiators, the current list of initiators and volumes are not changed.  Often, it is easier to use the convenience functions to modify initiators and volumes independently:  AddInitiatorsToVolumeAccessGroup RemoveInitiatorsFromVolumeAccessGroup AddVolumesToVolumeAccessGroup RemoveVolumesFromVolumeAccessGroup """, cls=SolidFireCommand)
-@click.option('--volumeaccessgroupid',
-              type=int,
-              required=True,
-              help="""The ID of the volume access group to modify. """)
-@click.option('--virtualnetworkid',
-              type=str,
-              required=False,
-              help="""The ID of the SolidFire Virtual Network ID to associate the volume access group with. """)
-@click.option('--virtualnetworktags',
-              type=str,
-              required=False,
-              help="""The ID of the VLAN Virtual Network Tag to associate the volume access group with. """)
-@click.option('--name',
-              type=str,
-              required=False,
-              help="""Name of the volume access group. It is not required to be unique, but recommended. """)
-@click.option('--initiators',
-              type=str,
-              required=False,
-              help="""List of initiators to include in the volume access group. If unspecified, the access group's configured initiators will not be modified. """)
-@click.option('--deleteorphaninitiators',
-              type=bool,
-              required=True,
-              help="""true: Delete initiator objects after they are removed from a volume access group. false: Do not delete initiator objects after they are removed from a volume access group. """)
-@click.option('--volumes',
-              type=str,
-              required=False,
-              help="""List of volumes to initially include in the volume access group. If unspecified, the access group's volumes will not be modified. """)
-@click.option('--attributes',
-              type=str,
-              required=False,
-              help="""List of Name/Value pairs in JSON object format.  Has the following subparameters: """)
-@pass_context
-def modify(ctx,
-           # Mandatory main parameter
-           volumeaccessgroupid,
-           # Mandatory main parameter
-           deleteorphaninitiators,
-           # Optional main parameter
-           virtualnetworkid = None,
-           # Optional main parameter
-           virtualnetworktags = None,
-           # Optional main parameter
-           name = None,
-           # Optional main parameter
-           initiators = None,
-           # Optional main parameter
-           volumes = None,
-           # Optional main parameter
-           attributes = None):
-    """Update initiators and add or remove volumes from a volume access group."""
-    """A specified initiator or volume that duplicates an existing volume or initiator in a volume access group is left as-is."""
-    """If a value is not specified for volumes or initiators, the current list of initiators and volumes are not changed."""
-    """"""
-    """Often, it is easier to use the convenience functions to modify initiators and volumes independently:"""
-    """"""
-    """AddInitiatorsToVolumeAccessGroup"""
-    """RemoveInitiatorsFromVolumeAccessGroup"""
-    """AddVolumesToVolumeAccessGroup"""
-    """RemoveVolumesFromVolumeAccessGroup"""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-        
-
-    virtualnetworkid = parser.parse_array(virtualnetworkid)    
-
-    virtualnetworktags = parser.parse_array(virtualnetworktags)        
-
-    initiators = parser.parse_array(initiators)        
-
-    volumes = parser.parse_array(volumes)    
-
-    kwargsDict = None
-
-    if(attributes is not None):
-        try:
-            kwargsDict = simplejson.loads(attributes)
-        except Exception as e:
-            ctx.logger.error(e.__str__())
-            exit(1)
-    
-
-    ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"""virtualnetworkid = """+str(virtualnetworkid)+""";"""+"""virtualnetworktags = """+str(virtualnetworktags)+""";"""+"""name = """+str(name)+""";"""+"""initiators = """+str(initiators)+""";"""+"""deleteorphaninitiators = """+str(deleteorphaninitiators)+""";"""+"""volumes = """+str(volumes)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
-    try:
-        _ModifyVolumeAccessGroupResult = ctx.element.modify_volume_access_group(volume_access_group_id=volumeaccessgroupid, delete_orphan_initiators=deleteorphaninitiators, virtual_network_id=virtualnetworkid, virtual_network_tags=virtualnetworktags, name=name, initiators=initiators, volumes=volumes, attributes=kwargsDict)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_ModifyVolumeAccessGroupResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -385,7 +379,7 @@ def addinitiatorsto(ctx,
 
     ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"""initiators = """+str(initiators)+""";"""+"")
     try:
-        _ModifyVolumeAccessGroupResult = ctx.element.add_initiators_to_volume_access_group(volume_access_group_id=volumeaccessgroupid, initiators=initiators)
+        _ModifyVolumeAccessGroupResult = ctx.element.(volume_access_group_id=volumeaccessgroupid, initiators=initiators)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -416,7 +410,7 @@ def getlunassignments(ctx,
 
     ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"")
     try:
-        _GetVolumeAccessGroupLunAssignmentsResult = ctx.element.get_volume_access_group_lun_assignments(volume_access_group_id=volumeaccessgroupid)
+        _GetVolumeAccessGroupLunAssignmentsResult = ctx.element.(volume_access_group_id=volumeaccessgroupid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -455,7 +449,7 @@ def addvolumesto(ctx,
 
     ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"""volumes = """+str(volumes)+""";"""+"")
     try:
-        _ModifyVolumeAccessGroupResult = ctx.element.add_volumes_to_volume_access_group(volume_access_group_id=volumeaccessgroupid, volumes=volumes)
+        _ModifyVolumeAccessGroupResult = ctx.element.(volume_access_group_id=volumeaccessgroupid, volumes=volumes)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -478,16 +472,16 @@ def addvolumesto(ctx,
               help="""List of initiators to remove from the volume access group. """)
 @click.option('--deleteorphaninitiators',
               type=bool,
-              required=True,
-              help="""true: Delete initiator objects after they are removed from a volume access group. false: Do not delete initiator objects after they are removed from a volume access group. """)
+              required=False,
+              help=""" """)
 @pass_context
 def removeinitiatorsfrom(ctx,
            # Mandatory main parameter
            volumeaccessgroupid,
            # Mandatory main parameter
            initiators,
-           # Mandatory main parameter
-           deleteorphaninitiators):
+           # Optional main parameter
+           deleteorphaninitiators = None):
     """Remove initiators from a volume access group."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
@@ -500,7 +494,7 @@ def removeinitiatorsfrom(ctx,
 
     ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"""initiators = """+str(initiators)+""";"""+"""deleteorphaninitiators = """+str(deleteorphaninitiators)+""";"""+"")
     try:
-        _ModifyVolumeAccessGroupResult = ctx.element.remove_initiators_from_volume_access_group(volume_access_group_id=volumeaccessgroupid, initiators=initiators, delete_orphan_initiators=deleteorphaninitiators)
+        _ModifyVolumeAccessGroupResult = ctx.element.(volume_access_group_id=volumeaccessgroupid, initiators=initiators, delete_orphan_initiators=deleteorphaninitiators)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -531,7 +525,7 @@ def getefficiency(ctx,
 
     ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"")
     try:
-        _GetEfficiencyResult = ctx.element.get_volume_access_group_efficiency(volume_access_group_id=volumeaccessgroupid)
+        _GetEfficiencyResult = ctx.element.(volume_access_group_id=volumeaccessgroupid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -548,27 +542,21 @@ def getefficiency(ctx,
               type=int,
               required=True,
               help="""The ID of the volume access group to delete. """)
-@click.option('--deleteorphaninitiators',
-              type=bool,
-              required=True,
-              help="""true: Delete initiator objects after they are removed from a volume access group. false: Do not delete initiator objects after they are removed from a volume access group. """)
 @pass_context
 def delete(ctx,
            # Mandatory main parameter
-           volumeaccessgroupid,
-           # Mandatory main parameter
-           deleteorphaninitiators):
+           volumeaccessgroupid):
     """Delete a volume access group from the system."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-        
+    
     
 
-    ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"""deleteorphaninitiators = """+str(deleteorphaninitiators)+""";"""+"")
+    ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"")
     try:
-        _DeleteVolumeAccessGroupResult = ctx.element.delete_volume_access_group(volume_access_group_id=volumeaccessgroupid, delete_orphan_initiators=deleteorphaninitiators)
+        _DeleteVolumeAccessGroupResult = ctx.element.(volume_access_group_id=volumeaccessgroupid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()

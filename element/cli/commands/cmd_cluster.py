@@ -24,7 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """getinfo getapi getconfig getsnmpstate getsnmpinfo disablesnmp deleteallsupportbundles getsystemstatus setsnmptrapinfo listfaults listadmins create disableencryptionatrest addadmin setntpinfo setconfig modifyadmin getsnmptrapinfo listevents clearfaults removeadmin getstats getlimits getcurrentadmin createsupportbundle getcapacity getntpinfo listsyncjobs getversioninfo setsnmpacl snmpsendtesttraps getsnmpacl getstate enablesnmp modifyfullthreshold getmasternodeid setsnmpinfo getfullthreshold enableencryptionatrest """
+    """getinfo getapi disablesnmp getsnmpstate getsnmpinfo getconfig deleteallsupportbundles getsystemstatus setsnmptrapinfo listfaults listadmins create disableencryptionatrest addadmin setntpinfo setconfig modifyadmin getsnmptrapinfo listevents snmpsendtesttraps removeadmin modifyfullthreshold getlimits getcurrentadmin createsupportbundle getcapacity getntpinfo enableencryptionatrest getversioninfo setsnmpacl clearfaults getsnmpacl getstate enablesnmp getstats getmasternodeid setsnmpinfo getfullthreshold listsyncjobs """
 
 @cli.command('getinfo', short_help="""Return configuration information about the cluster. """, cls=SolidFireCommand)
 @pass_context
@@ -39,7 +39,7 @@ def getinfo(ctx):
 
     ctx.logger.info("")
     try:
-        _GetClusterInfoResult = ctx.element.get_cluster_info()
+        _GetClusterInfoResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -64,7 +64,7 @@ def getapi(ctx):
 
     ctx.logger.info("")
     try:
-        _GetAPIResult = ctx.element.get_api()
+        _GetAPIResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -76,12 +76,10 @@ def getapi(ctx):
 
 
 
-@cli.command('getconfig', short_help="""The GetClusterConfig API method is used to return information about the cluster configuration this node uses to communicate with the cluster it is a part of.  Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
+@cli.command('disablesnmp', short_help="""DisableSnmp is used to disable SNMP on the cluster nodes. """, cls=SolidFireCommand)
 @pass_context
-def getconfig(ctx):
-    """The GetClusterConfig API method is used to return information about the cluster configuration this node uses to communicate with the cluster it is a part of."""
-    """"""
-    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
+def disablesnmp(ctx):
+    """DisableSnmp is used to disable SNMP on the cluster nodes."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -91,7 +89,7 @@ def getconfig(ctx):
 
     ctx.logger.info("")
     try:
-        _GetClusterConfigResult = ctx.element.get_cluster_config()
+        _DisableSnmpResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -99,7 +97,7 @@ def getconfig(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_GetClusterConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_DisableSnmpResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -118,7 +116,7 @@ def getsnmpstate(ctx):
 
     ctx.logger.info("")
     try:
-        _GetSnmpStateResult = ctx.element.get_snmp_state()
+        _GetSnmpStateResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -145,7 +143,7 @@ def getsnmpinfo(ctx):
 
     ctx.logger.info("")
     try:
-        _GetSnmpInfoResult = ctx.element.get_snmp_info()
+        _GetSnmpInfoResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -157,10 +155,12 @@ def getsnmpinfo(ctx):
 
 
 
-@cli.command('disablesnmp', short_help="""DisableSnmp is used to disable SNMP on the cluster nodes. """, cls=SolidFireCommand)
+@cli.command('getconfig', short_help="""The GetClusterConfig API method is used to return information about the cluster configuration this node uses to communicate with the cluster it is a part of.  Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
 @pass_context
-def disablesnmp(ctx):
-    """DisableSnmp is used to disable SNMP on the cluster nodes."""
+def getconfig(ctx):
+    """The GetClusterConfig API method is used to return information about the cluster configuration this node uses to communicate with the cluster it is a part of."""
+    """"""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -170,7 +170,7 @@ def disablesnmp(ctx):
 
     ctx.logger.info("")
     try:
-        _DisableSnmpResult = ctx.element.disable_snmp()
+        _GetClusterConfigResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -178,7 +178,7 @@ def disablesnmp(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_DisableSnmpResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_GetClusterConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -195,7 +195,7 @@ def deleteallsupportbundles(ctx):
 
     ctx.logger.info("")
     try:
-        _DeleteAllSupportBundlesResult = ctx.element.delete_all_support_bundles()
+        _DeleteAllSupportBundlesResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -219,7 +219,7 @@ def getsystemstatus(ctx):
 
     ctx.logger.info("")
     try:
-        _GetSystemStatusResult = ctx.element.get_system_status()
+        _GetSystemStatusResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -310,7 +310,7 @@ def setsnmptrapinfo(ctx,
 
     ctx.logger.info("""traprecipients = """+str(traprecipients)+""";"""+"""clusterfaulttrapsenabled = """+str(clusterfaulttrapsenabled)+""";"""+"""clusterfaultresolvedtrapsenabled = """+str(clusterfaultresolvedtrapsenabled)+""";"""+"""clustereventtrapsenabled = """+str(clustereventtrapsenabled)+""";"""+"")
     try:
-        _SetSnmpTrapInfoResult = ctx.element.set_snmp_trap_info(trap_recipients=traprecipientsArray, cluster_fault_traps_enabled=clusterfaulttrapsenabled, cluster_fault_resolved_traps_enabled=clusterfaultresolvedtrapsenabled, cluster_event_traps_enabled=clustereventtrapsenabled)
+        _SetSnmpTrapInfoResult = ctx.element.(trap_recipients=traprecipientsArray, cluster_fault_traps_enabled=clusterfaulttrapsenabled, cluster_fault_resolved_traps_enabled=clusterfaultresolvedtrapsenabled, cluster_event_traps_enabled=clustereventtrapsenabled)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -326,7 +326,7 @@ def setsnmptrapinfo(ctx,
 @click.option('--exceptions',
               type=bool,
               required=False,
-              help="""""")
+              help=""" """)
 @click.option('--bestpractices',
               type=bool,
               required=False,
@@ -334,7 +334,7 @@ def setsnmptrapinfo(ctx,
 @click.option('--update',
               type=bool,
               required=False,
-              help="""""")
+              help=""" """)
 @click.option('--faulttypes',
               type=str,
               required=False,
@@ -360,7 +360,7 @@ def listfaults(ctx,
 
     ctx.logger.info("""exceptions = """+str(exceptions)+""";"""+"""bestpractices = """+str(bestpractices)+""";"""+"""update = """+str(update)+""";"""+"""faulttypes = """+str(faulttypes)+""";"""+"")
     try:
-        _ListClusterFaultsResult = ctx.element.list_cluster_faults(exceptions=exceptions, best_practices=bestpractices, update=update, fault_types=faulttypes)
+        _ListClusterFaultsResult = ctx.element.(exceptions=exceptions, best_practices=bestpractices, update=update, fault_types=faulttypes)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -376,7 +376,7 @@ def listfaults(ctx,
 @click.option('--showhidden',
               type=bool,
               required=False,
-              help="""""")
+              help=""" """)
 @pass_context
 def listadmins(ctx,
            # Optional main parameter
@@ -391,7 +391,7 @@ def listadmins(ctx,
 
     ctx.logger.info("""showhidden = """+str(showhidden)+""";"""+"")
     try:
-        _ListClusterAdminsResult = ctx.element.list_cluster_admins(show_hidden=showhidden)
+        _ListClusterAdminsResult = ctx.element.(show_hidden=showhidden)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -477,7 +477,7 @@ def create(ctx,
 
     ctx.logger.info("""accepteula = """+str(accepteula)+""";"""+"""mvip = """+str(mvip)+""";"""+"""svip = """+str(svip)+""";"""+"""repcount = """+str(repcount)+""";"""+"""username = """+str(username)+""";"""+"""password = """+str(password)+""";"""+"""nodes = """+str(nodes)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _CreateClusterResult = ctx.element.create_cluster(mvip=mvip, svip=svip, rep_count=repcount, username=username, password=password, nodes=nodes, accept_eula=accepteula, attributes=kwargsDict)
+        _CreateClusterResult = ctx.element.(mvip=mvip, svip=svip, rep_count=repcount, username=username, password=password, nodes=nodes, accept_eula=accepteula, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -504,7 +504,7 @@ def disableencryptionatrest(ctx):
 
     ctx.logger.info("")
     try:
-        _DisableEncryptionAtRestResult = ctx.element.disable_encryption_at_rest()
+        _DisableEncryptionAtRestResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -572,7 +572,7 @@ def addadmin(ctx,
 
     ctx.logger.info("""username = """+str(username)+""";"""+"""password = """+str(password)+""";"""+"""access = """+str(access)+""";"""+"""accepteula = """+str(accepteula)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _AddClusterAdminResult = ctx.element.add_cluster_admin(username=username, password=password, access=access, accept_eula=accepteula, attributes=kwargsDict)
+        _AddClusterAdminResult = ctx.element.(username=username, password=password, access=access, accept_eula=accepteula, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -611,7 +611,7 @@ def setntpinfo(ctx,
 
     ctx.logger.info("""servers = """+str(servers)+""";"""+"""broadcastclient = """+str(broadcastclient)+""";"""+"")
     try:
-        _SetNtpInfoResult = ctx.element.set_ntp_info(servers=servers, broadcastclient=broadcastclient)
+        _SetNtpInfoResult = ctx.element.(servers=servers, broadcastclient=broadcastclient)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -653,12 +653,12 @@ def setntpinfo(ctx,
 @click.option('--clusterconfignodeid',
               type=int,
               required=False,
-              help="""""")
+              help=""" """)
 
 @click.option('--clusterconfigpendingnodeid',
               type=int,
               required=False,
-              help="""""")
+              help=""" """)
 
 @click.option('--clusterconfigrole',
               type=str,
@@ -673,22 +673,22 @@ def setntpinfo(ctx,
 @click.option('--clusterconfigstate',
               type=str,
               required=False,
-              help="""""")
+              help=""" """)
 
 @click.option('--clusterconfigencryptioncapable',
               type=bool,
               required=False,
-              help="""""")
+              help=""" """)
 
 @click.option('--clusterconfighaslocaladmin',
               type=bool,
               required=False,
-              help="""""")
+              help=""" """)
 
 @click.option('--clusterconfigversion',
               type=str,
               required=False,
-              help="""""")
+              help=""" """)
 @pass_context
 def setconfig(ctx,
            # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
@@ -764,7 +764,7 @@ def setconfig(ctx,
 
     ctx.logger.info("""cluster = """+str(cluster)+""";"""+"")
     try:
-        _SetClusterConfigResult = ctx.element.set_cluster_config(cluster=cluster)
+        _SetClusterConfigResult = ctx.element.(cluster=cluster)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -824,7 +824,7 @@ def modifyadmin(ctx,
 
     ctx.logger.info("""clusteradminid = """+str(clusteradminid)+""";"""+"""password = """+str(password)+""";"""+"""access = """+str(access)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _ModifyClusterAdminResult = ctx.element.modify_cluster_admin(cluster_admin_id=clusteradminid, password=password, access=access, attributes=kwargsDict)
+        _ModifyClusterAdminResult = ctx.element.(cluster_admin_id=clusteradminid, password=password, access=access, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -840,7 +840,7 @@ def modifyadmin(ctx,
 @click.option('--id',
               type=int,
               required=False,
-              help="""""")
+              help=""" """)
 @pass_context
 def getsnmptrapinfo(ctx,
            # Optional main parameter
@@ -855,7 +855,7 @@ def getsnmptrapinfo(ctx,
 
     ctx.logger.info("""id = """+str(id)+""";"""+"")
     try:
-        _GetSnmpTrapInfoResult = ctx.element.get_snmp_trap_info(id=id)
+        _GetSnmpTrapInfoResult = ctx.element.(id=id)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -883,7 +883,7 @@ def getsnmptrapinfo(ctx,
 @click.option('--eventqueuetype',
               type=str,
               required=False,
-              help="""""")
+              help=""" """)
 @pass_context
 def listevents(ctx,
            # Optional main parameter
@@ -904,7 +904,7 @@ def listevents(ctx,
 
     ctx.logger.info("""maxevents = """+str(maxevents)+""";"""+"""starteventid = """+str(starteventid)+""";"""+"""endeventid = """+str(endeventid)+""";"""+"""eventqueuetype = """+str(eventqueuetype)+""";"""+"")
     try:
-        _ListEventsResult = ctx.element.list_events(max_events=maxevents, start_event_id=starteventid, end_event_id=endeventid, event_queue_type=eventqueuetype)
+        _ListEventsResult = ctx.element.(max_events=maxevents, start_event_id=starteventid, end_event_id=endeventid, event_queue_type=eventqueuetype)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -916,26 +916,20 @@ def listevents(ctx,
 
 
 
-@cli.command('clearfaults', short_help="""ClearClusterFaults is used to clear information about both current faults that are resolved as well as faults that were previously detected and resolved can be cleared. """, cls=SolidFireCommand)
-@click.option('--faulttype',
-              type=str,
-              required=False,
-              help="""Determines the types of faults cleared: current: Faults that are currently detected and have not been resolved. resolved: Faults that were previously detected and resolved. all: Both current and resolved faults are cleared. The fault status can be determined by the "resolved" field of the fault object. """)
+@cli.command('snmpsendtesttraps', short_help="""SnmpSendTestTraps enables you to test SNMP functionality for a cluster. This method instructs the cluster to send test SNMP traps to the currently configured SNMP manager. """, cls=SolidFireCommand)
 @pass_context
-def clearfaults(ctx,
-           # Optional main parameter
-           faulttype = None):
-    """ClearClusterFaults is used to clear information about both current faults that are resolved as well as faults that were previously detected and resolved can be cleared."""
+def snmpsendtesttraps(ctx):
+    """SnmpSendTestTraps enables you to test SNMP functionality for a cluster. This method instructs the cluster to send test SNMP traps to the currently configured SNMP manager."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-    
+
     
 
-    ctx.logger.info("""faulttype = """+str(faulttype)+""";"""+"")
+    ctx.logger.info("")
     try:
-        _ClearClusterFaultsResult = ctx.element.clear_cluster_faults(fault_type=faulttype)
+        _SnmpSendTestTrapsResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -943,7 +937,7 @@ def clearfaults(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_ClearClusterFaultsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_SnmpSendTestTrapsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -966,7 +960,7 @@ def removeadmin(ctx,
 
     ctx.logger.info("""clusteradminid = """+str(clusteradminid)+""";"""+"")
     try:
-        _RemoveClusterAdminResult = ctx.element.remove_cluster_admin(cluster_admin_id=clusteradminid)
+        _RemoveClusterAdminResult = ctx.element.(cluster_admin_id=clusteradminid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -978,20 +972,38 @@ def removeadmin(ctx,
 
 
 
-@cli.command('getstats', short_help="""GetClusterStats is used to return high-level activity measurements for the cluster. Values returned are cumulative from the creation of the cluster. """, cls=SolidFireCommand)
+@cli.command('modifyfullthreshold', short_help="""ModifyClusterFullThreshold is used to change the level at which an event is generated when the storage cluster approaches the capacity utilization requested. The number entered in this setting is used to indicate the number of node failures the system is required to recover from. For example, on a 10 node cluster, if you want to be alerted when the system cannot recover from 3 nodes failures, enter the value of "3". When this number is reached, a message alert is sent to the Event Log in the Cluster Management Console. """, cls=SolidFireCommand)
+@click.option('--stage2awarethreshold',
+              type=int,
+              required=False,
+              help="""Number of nodes worth of capacity remaining on the cluster that triggers a notification. """)
+@click.option('--stage3blockthresholdpercent',
+              type=int,
+              required=False,
+              help="""Percent below "Error" state to raise a cluster "Warning" alert. """)
+@click.option('--maxmetadataoverprovisionfactor',
+              type=int,
+              required=False,
+              help="""A value representative of the number of times metadata space can be over provisioned relative to the amount of space available. For example, if there was enough metadata space to store 100 TiB of volumes and this number was set to 5, then 500 TiB worth of volumes could be created. """)
 @pass_context
-def getstats(ctx):
-    """GetClusterStats is used to return high-level activity measurements for the cluster. Values returned are cumulative from the creation of the cluster."""
+def modifyfullthreshold(ctx,
+           # Optional main parameter
+           stage2awarethreshold = None,
+           # Optional main parameter
+           stage3blockthresholdpercent = None,
+           # Optional main parameter
+           maxmetadataoverprovisionfactor = None):
+    """ModifyClusterFullThreshold is used to change the level at which an event is generated when the storage cluster approaches the capacity utilization requested. The number entered in this setting is used to indicate the number of node failures the system is required to recover from. For example, on a 10 node cluster, if you want to be alerted when the system cannot recover from 3 nodes failures, enter the value of &quot;3&quot;. When this number is reached, a message alert is sent to the Event Log in the Cluster Management Console."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+            
     
 
-    ctx.logger.info("")
+    ctx.logger.info("""stage2awarethreshold = """+str(stage2awarethreshold)+""";"""+"""stage3blockthresholdpercent = """+str(stage3blockthresholdpercent)+""";"""+"""maxmetadataoverprovisionfactor = """+str(maxmetadataoverprovisionfactor)+""";"""+"")
     try:
-        _GetClusterStatsResult = ctx.element.get_cluster_stats()
+        _ModifyClusterFullThresholdResult = ctx.element.(stage2_aware_threshold=stage2awarethreshold, stage3_block_threshold_percent=stage3blockthresholdpercent, max_metadata_over_provision_factor=maxmetadataoverprovisionfactor)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -999,7 +1011,7 @@ def getstats(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_GetClusterStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_ModifyClusterFullThresholdResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1016,7 +1028,7 @@ def getlimits(ctx):
 
     ctx.logger.info("")
     try:
-        _GetLimitsResult = ctx.element.get_limits()
+        _GetLimitsResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1041,7 +1053,7 @@ def getcurrentadmin(ctx):
 
     ctx.logger.info("")
     try:
-        _GetCurrentClusterAdminResult = ctx.element.get_current_cluster_admin()
+        _GetCurrentClusterAdminResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1084,7 +1096,7 @@ def createsupportbundle(ctx,
 
     ctx.logger.info("""bundlename = """+str(bundlename)+""";"""+"""extraargs = """+str(extraargs)+""";"""+"""timeoutsec = """+str(timeoutsec)+""";"""+"")
     try:
-        _CreateSupportBundleResult = ctx.element.create_support_bundle(bundle_name=bundlename, extra_args=extraargs, timeout_sec=timeoutsec)
+        _CreateSupportBundleResult = ctx.element.(bundle_name=bundlename, extra_args=extraargs, timeout_sec=timeoutsec)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1110,7 +1122,7 @@ def getcapacity(ctx):
 
     ctx.logger.info("")
     try:
-        _GetClusterCapacityResult = ctx.element.get_cluster_capacity()
+        _GetClusterCapacityResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1135,7 +1147,7 @@ def getntpinfo(ctx):
 
     ctx.logger.info("")
     try:
-        _GetNtpInfoResult = ctx.element.get_ntp_info()
+        _GetNtpInfoResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1147,10 +1159,12 @@ def getntpinfo(ctx):
 
 
 
-@cli.command('listsyncjobs', short_help="""ListSyncJobs is used to return information about synchronization jobs that are running on a SolidFire cluster. Synchronization jobs that are returned with this method are, "slice," "clone" and "remote." """, cls=SolidFireCommand)
+@cli.command('enableencryptionatrest', short_help="""The EnableEncryptionAtRest method is used to enable the Advanced Encryption Standard (AES) 256-bit encryption at rest on the cluster so that the cluster can manage the encryption key used for the drives on each node. This feature is not enabled by default. Enabling this operation allows the cluster to automatically manage encryption keys internally for the drives on each node in the cluster. Nodes do not store the keys to unlock drives and the keys are never passed over the network. Two nodes participating in a cluster are required to access the key to disable encryption on a drive. The encryption management does not affect performance or efficiency on the cluster. If an encryption-enabled drive or node is removed from the cluster with the API, all data is secure erased and any data left on the drive cannot be read or accessed. Enabling or disabling encryption should be performed when the cluster is running and in a healthy state. Encryption can be enabled or disabled at your discretion and can be performed as often as you need. Note: This process is asynchronous and returns a response before encryption is enabled. The GetClusterInfo method can be used to poll the system to see when the process has completed. """, cls=SolidFireCommand)
 @pass_context
-def listsyncjobs(ctx):
-    """ListSyncJobs is used to return information about synchronization jobs that are running on a SolidFire cluster. Synchronization jobs that are returned with this method are, &quot;slice,&quot; &quot;clone&quot; and &quot;remote.&quot;"""
+def enableencryptionatrest(ctx):
+    """The EnableEncryptionAtRest method is used to enable the Advanced Encryption Standard (AES) 256-bit encryption at rest on the cluster so that the cluster can manage the encryption key used for the drives on each node. This feature is not enabled by default. Enabling this operation allows the cluster to automatically manage encryption keys internally for the drives on each node in the cluster. Nodes do not store the keys to unlock drives and the keys are never passed over the network. Two nodes participating in a cluster are required to access the key to disable encryption on a drive. The encryption management does not affect performance or efficiency on the cluster. If an encryption-enabled drive or node is removed from the cluster with the API, all data is secure erased and any data left on the drive cannot be read or accessed."""
+    """Enabling or disabling encryption should be performed when the cluster is running and in a healthy state. Encryption can be enabled or disabled at your discretion and can be performed as often as you need."""
+    """Note: This process is asynchronous and returns a response before encryption is enabled. The GetClusterInfo method can be used to poll the system to see when the process has completed."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -1160,7 +1174,7 @@ def listsyncjobs(ctx):
 
     ctx.logger.info("")
     try:
-        _ListSyncJobsResult = ctx.element.list_sync_jobs()
+        _EnableEncryptionAtRestResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1168,7 +1182,7 @@ def listsyncjobs(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_ListSyncJobsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_EnableEncryptionAtRestResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1186,7 +1200,7 @@ def getversioninfo(ctx):
 
     ctx.logger.info("")
     try:
-        _GetClusterVersionInfoResult = ctx.element.get_cluster_version_info()
+        _GetClusterVersionInfoResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1337,7 +1351,7 @@ def setsnmpacl(ctx,
 
     ctx.logger.info("""networks = """+str(networks)+""";"""+"""usmusers = """+str(usmusers)+""";"""+"")
     try:
-        _SetSnmpACLResult = ctx.element.set_snmp_acl(networks=networksArray, usm_users=usmusersArray)
+        _SetSnmpACLResult = ctx.element.(networks=networksArray, usm_users=usmusersArray)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1349,20 +1363,26 @@ def setsnmpacl(ctx,
 
 
 
-@cli.command('snmpsendtesttraps', short_help="""SnmpSendTestTraps enables you to test SNMP functionality for a cluster. This method instructs the cluster to send test SNMP traps to the currently configured SNMP manager. """, cls=SolidFireCommand)
+@cli.command('clearfaults', short_help="""ClearClusterFaults is used to clear information about both current faults that are resolved as well as faults that were previously detected and resolved can be cleared. """, cls=SolidFireCommand)
+@click.option('--faulttype',
+              type=str,
+              required=False,
+              help="""Determines the types of faults cleared: current: Faults that are currently detected and have not been resolved. resolved: Faults that were previously detected and resolved. all: Both current and resolved faults are cleared. The fault status can be determined by the "resolved" field of the fault object. """)
 @pass_context
-def snmpsendtesttraps(ctx):
-    """SnmpSendTestTraps enables you to test SNMP functionality for a cluster. This method instructs the cluster to send test SNMP traps to the currently configured SNMP manager."""
+def clearfaults(ctx,
+           # Optional main parameter
+           faulttype = None):
+    """ClearClusterFaults is used to clear information about both current faults that are resolved as well as faults that were previously detected and resolved can be cleared."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
-    ctx.logger.info("")
+    ctx.logger.info("""faulttype = """+str(faulttype)+""";"""+"")
     try:
-        _SnmpSendTestTrapsResult = ctx.element.snmp_send_test_traps()
+        _ClearClusterFaultsResult = ctx.element.(fault_type=faulttype)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1370,7 +1390,7 @@ def snmpsendtesttraps(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_SnmpSendTestTrapsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_ClearClusterFaultsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1387,7 +1407,7 @@ def getsnmpacl(ctx):
 
     ctx.logger.info("")
     try:
-        _GetSnmpACLResult = ctx.element.get_snmp_acl()
+        _GetSnmpACLResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1418,7 +1438,7 @@ def getstate(ctx,
 
     ctx.logger.info("""force = """+str(force)+""";"""+"")
     try:
-        _GetClusterStateResult = ctx.element.get_cluster_state(force=force)
+        _GetClusterStateResult = ctx.element.(force=force)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1449,7 +1469,7 @@ def enablesnmp(ctx,
 
     ctx.logger.info("""snmpv3enabled = """+str(snmpv3enabled)+""";"""+"")
     try:
-        _EnableSnmpResult = ctx.element.enable_snmp(snmp_v3_enabled=snmpv3enabled)
+        _EnableSnmpResult = ctx.element.(snmp_v3_enabled=snmpv3enabled)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1461,38 +1481,20 @@ def enablesnmp(ctx,
 
 
 
-@cli.command('modifyfullthreshold', short_help="""ModifyClusterFullThreshold is used to change the level at which an event is generated when the storage cluster approaches the capacity utilization requested. The number entered in this setting is used to indicate the number of node failures the system is required to recover from. For example, on a 10 node cluster, if you want to be alerted when the system cannot recover from 3 nodes failures, enter the value of "3". When this number is reached, a message alert is sent to the Event Log in the Cluster Management Console. """, cls=SolidFireCommand)
-@click.option('--stage2awarethreshold',
-              type=int,
-              required=False,
-              help="""Number of nodes worth of capacity remaining on the cluster that triggers a notification. """)
-@click.option('--stage3blockthresholdpercent',
-              type=int,
-              required=False,
-              help="""Percent below "Error" state to raise a cluster "Warning" alert. """)
-@click.option('--maxmetadataoverprovisionfactor',
-              type=int,
-              required=False,
-              help="""A value representative of the number of times metadata space can be over provisioned relative to the amount of space available. For example, if there was enough metadata space to store 100 TiB of volumes and this number was set to 5, then 500 TiB worth of volumes could be created. """)
+@cli.command('getstats', short_help="""GetClusterStats is used to return high-level activity measurements for the cluster. Values returned are cumulative from the creation of the cluster. """, cls=SolidFireCommand)
 @pass_context
-def modifyfullthreshold(ctx,
-           # Optional main parameter
-           stage2awarethreshold = None,
-           # Optional main parameter
-           stage3blockthresholdpercent = None,
-           # Optional main parameter
-           maxmetadataoverprovisionfactor = None):
-    """ModifyClusterFullThreshold is used to change the level at which an event is generated when the storage cluster approaches the capacity utilization requested. The number entered in this setting is used to indicate the number of node failures the system is required to recover from. For example, on a 10 node cluster, if you want to be alerted when the system cannot recover from 3 nodes failures, enter the value of &quot;3&quot;. When this number is reached, a message alert is sent to the Event Log in the Cluster Management Console."""
+def getstats(ctx):
+    """GetClusterStats is used to return high-level activity measurements for the cluster. Values returned are cumulative from the creation of the cluster."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-            
+
     
 
-    ctx.logger.info("""stage2awarethreshold = """+str(stage2awarethreshold)+""";"""+"""stage3blockthresholdpercent = """+str(stage3blockthresholdpercent)+""";"""+"""maxmetadataoverprovisionfactor = """+str(maxmetadataoverprovisionfactor)+""";"""+"")
+    ctx.logger.info("")
     try:
-        _ModifyClusterFullThresholdResult = ctx.element.modify_cluster_full_threshold(stage2_aware_threshold=stage2awarethreshold, stage3_block_threshold_percent=stage3blockthresholdpercent, max_metadata_over_provision_factor=maxmetadataoverprovisionfactor)
+        _GetClusterStatsResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1500,7 +1502,7 @@ def modifyfullthreshold(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_ModifyClusterFullThresholdResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_GetClusterStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1517,7 +1519,7 @@ def getmasternodeid(ctx):
 
     ctx.logger.info("")
     try:
-        _GetClusterMasterNodeIDResult = ctx.element.get_cluster_master_node_id()
+        _GetClusterMasterNodeIDResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1682,7 +1684,7 @@ def setsnmpinfo(ctx,
 
     ctx.logger.info("""networks = """+str(networks)+""";"""+"""enabled = """+str(enabled)+""";"""+"""snmpv3enabled = """+str(snmpv3enabled)+""";"""+"""usmusers = """+str(usmusers)+""";"""+"")
     try:
-        _SetSnmpInfoResult = ctx.element.set_snmp_info(networks=networksArray, enabled=enabled, snmp_v3_enabled=snmpv3enabled, usm_users=usmusersArray)
+        _SetSnmpInfoResult = ctx.element.(networks=networksArray, enabled=enabled, snmp_v3_enabled=snmpv3enabled, usm_users=usmusersArray)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1707,7 +1709,7 @@ def getfullthreshold(ctx):
 
     ctx.logger.info("")
     try:
-        _GetClusterFullThresholdResult = ctx.element.get_cluster_full_threshold()
+        _GetClusterFullThresholdResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1719,12 +1721,10 @@ def getfullthreshold(ctx):
 
 
 
-@cli.command('enableencryptionatrest', short_help="""The EnableEncryptionAtRest method is used to enable the Advanced Encryption Standard (AES) 256-bit encryption at rest on the cluster so that the cluster can manage the encryption key used for the drives on each node. This feature is not enabled by default. Enabling this operation allows the cluster to automatically manage encryption keys internally for the drives on each node in the cluster. Nodes do not store the keys to unlock drives and the keys are never passed over the network. Two nodes participating in a cluster are required to access the key to disable encryption on a drive. The encryption management does not affect performance or efficiency on the cluster. If an encryption-enabled drive or node is removed from the cluster with the API, all data is secure erased and any data left on the drive cannot be read or accessed. Enabling or disabling encryption should be performed when the cluster is running and in a healthy state. Encryption can be enabled or disabled at your discretion and can be performed as often as you need. Note: This process is asynchronous and returns a response before encryption is enabled. The GetClusterInfo method can be used to poll the system to see when the process has completed. """, cls=SolidFireCommand)
+@cli.command('listsyncjobs', short_help="""ListSyncJobs is used to return information about synchronization jobs that are running on a SolidFire cluster. Synchronization jobs that are returned with this method are, "slice," "clone" and "remote." """, cls=SolidFireCommand)
 @pass_context
-def enableencryptionatrest(ctx):
-    """The EnableEncryptionAtRest method is used to enable the Advanced Encryption Standard (AES) 256-bit encryption at rest on the cluster so that the cluster can manage the encryption key used for the drives on each node. This feature is not enabled by default. Enabling this operation allows the cluster to automatically manage encryption keys internally for the drives on each node in the cluster. Nodes do not store the keys to unlock drives and the keys are never passed over the network. Two nodes participating in a cluster are required to access the key to disable encryption on a drive. The encryption management does not affect performance or efficiency on the cluster. If an encryption-enabled drive or node is removed from the cluster with the API, all data is secure erased and any data left on the drive cannot be read or accessed."""
-    """Enabling or disabling encryption should be performed when the cluster is running and in a healthy state. Encryption can be enabled or disabled at your discretion and can be performed as often as you need."""
-    """Note: This process is asynchronous and returns a response before encryption is enabled. The GetClusterInfo method can be used to poll the system to see when the process has completed."""
+def listsyncjobs(ctx):
+    """ListSyncJobs is used to return information about synchronization jobs that are running on a SolidFire cluster. Synchronization jobs that are returned with this method are, &quot;slice,&quot; &quot;clone&quot; and &quot;remote.&quot;"""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -1734,7 +1734,7 @@ def enableencryptionatrest(ctx):
 
     ctx.logger.info("")
     try:
-        _EnableEncryptionAtRestResult = ctx.element.enable_encryption_at_rest()
+        _ListSyncJobsResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1742,5 +1742,5 @@ def enableencryptionatrest(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_EnableEncryptionAtRestResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_ListSyncJobsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
