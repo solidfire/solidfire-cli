@@ -2958,18 +2958,126 @@ An object, normally a dictionary or hashtable of the key/value pairs, to be pass
 
 VirtualVolume Commands 
 ---------------------------------------------------------------
-#### listhosts ####
+#### gettaskupdate ####
 Command:
 
-    sfcli VirtualVolume listhosts <options>
+    sfcli VirtualVolume gettaskupdate <options>
 
 Description:
 
-ListVirtualVolumeHosts returns a list of known ESX hosts. 
+GetVirtualVolumeTaskUpdate checks the status of a VVol Async Task. 
 
 Options:
 
---virtualvolumehostids
+--virtualvolumetaskid
+
+The UUID of the VVol Task. 
+
+--callingvirtualvolumehostid
+
+ 
+
+---------------------------------------------------------------
+#### modifymetadata ####
+Command:
+
+    sfcli VirtualVolume modifymetadata <options>
+
+Description:
+
+ModifyVirtualVolumeMetadata is used to selectively modify the VVol metadata. 
+
+Options:
+
+--virtualvolumeid
+
+VvolVolumeID for the volume to be modified. 
+
+--metadata
+
+ 
+
+--removekeys
+
+ 
+
+--callingvirtualvolumehostid
+
+ 
+
+---------------------------------------------------------------
+#### modifyvasaproviderinfo ####
+Command:
+
+    sfcli VirtualVolume modifyvasaproviderinfo <options>
+
+Description:
+
+Update the Vasa Provider info 
+
+Options:
+
+--keystore
+
+Signed SSL certificate for the Vasa Provider 
+
+--vasaproviderid
+
+UUID identifying the vasa provider 
+
+--options
+
+ 
+
+---------------------------------------------------------------
+#### copydiffsto ####
+Command:
+
+    sfcli VirtualVolume copydiffsto <options>
+
+Description:
+
+CopyDiffsToVirtualVolume is a three-way merge function. 
+
+Options:
+
+--virtualvolumeid
+
+The ID of the snapshot Virtual Volume. 
+
+--basevirtualvolumeid
+
+The ID of the base Virtual Volume. 
+
+--dstvirtualvolumeid
+
+The ID of the Virtual Volume to be overwritten. 
+
+--callingvirtualvolumehostid
+
+ 
+
+---------------------------------------------------------------
+#### querymetadata ####
+Command:
+
+    sfcli VirtualVolume querymetadata <options>
+
+Description:
+
+QueryVirtualVolumeMetadata returns a list of VVols matching a metadata query. 
+
+Options:
+
+--queryconstraints
+
+ 
+
+--wildcardconstraints
+
+ 
+
+--callingvirtualvolumehostid
 
  
 
@@ -2990,20 +3098,384 @@ Options:
  
 
 ---------------------------------------------------------------
-#### enablefeature ####
+#### create ####
 Command:
 
-    sfcli VirtualVolume enablefeature <options>
+    sfcli VirtualVolume create <options>
 
 Description:
 
-EnableFeature allows you to enable cluster features that are disabled by default. 
+CreateVirtualVolume is used to create a new (empty) Virtual Volume on the cluster. When the volume is created successfully it is available for connection via PE. 
+
+Options:
+
+--name
+
+Name of the Virtual Volume. Not required to be unique, but it is recommended. May be 1 to 64 characters in length. 
+
+--storagecontainerid
+
+UUID for the Storage Container of this volume. 
+
+--virtualvolumetype
+
+VMW_TYPE value for this volume. 
+
+--totalsize
+
+Total size of the volume, in bytes. Size is rounded up to the nearest 1MB size. 
+
+--qos
+
+Initial quality of service settings for this volume.  Volumes created without specified QoS values are created with the default values for QoS. Default values for a volume can be found by running the GetDefaultQoS method. 
+
+--metadata
+
+List of name/value pairs to save in the volume's metadata. 
+
+--callingvirtualvolumehostid
+
+ 
+
+---------------------------------------------------------------
+#### fastclone ####
+Command:
+
+    sfcli VirtualVolume fastclone <options>
+
+Description:
+
+FastCloneVirtualVolume is used to execute a VMware Virtual Volume fast clone. 
+
+Options:
+
+--virtualvolumeid
+
+The ID of the Virtual Volume to clone. 
+
+--name
+
+The name for the newly-created volume. 
+
+--qos
+
+New quality of service settings for this volume. 
+
+--metadata
+
+ 
+
+--callingvirtualvolumehostid
+
+ 
+
+---------------------------------------------------------------
+#### canceltask ####
+Command:
+
+    sfcli VirtualVolume canceltask <options>
+
+Description:
+
+CancelVirtualVolumeTask attempts to cancel the VVol Async Task. 
+
+Options:
+
+--virtualvolumetaskid
+
+The UUID of the VVol Task to cancel. 
+
+--callingvirtualvolumehostid
+
+ 
+
+---------------------------------------------------------------
+#### getallocatedbitmap ####
+Command:
+
+    sfcli VirtualVolume getallocatedbitmap <options>
+
+Description:
+
+GetVirtualVolumeAllocatedBitmap returns a b64-encoded block of data  representing a bitmap where non-zero bits indicate the allocation of a  segment (LBA range) of the volume. 
+
+Options:
+
+--virtualvolumeid
+
+The ID of the Virtual Volume. 
+
+--segmentstart
+
+Byte offset. 
+
+--segmentlength
+
+Byte length adjusted to end on a chunk boundary. 
+
+--chunksize
+
+Number of bytes represented by one bit in the bitmap. 
+
+--callingvirtualvolumehostid
+
+ 
+
+---------------------------------------------------------------
+#### getunsharedbitmap ####
+Command:
+
+    sfcli VirtualVolume getunsharedbitmap <options>
+
+Description:
+
+GetVirtualVolumeAllocatedBitmap returns a b64-encoded block of data  representing a bitmap where non-zero bits indicate that data is not the same  between two volumes for a common segment (LBA range) of the volumes. 
+
+Options:
+
+--virtualvolumeid
+
+The ID of the Virtual Volume. 
+
+--basevirtualvolumeid
+
+The ID of the Virtual Volume to compare against. 
+
+--segmentstart
+
+Byte offset. 
+
+--segmentlength
+
+Byte length adjusted to end on a chunk boundary. 
+
+--chunksize
+
+Number of bytes represented by one bit in the bitmap. 
+
+--callingvirtualvolumehostid
+
+ 
+
+---------------------------------------------------------------
+#### listhosts ####
+Command:
+
+    sfcli VirtualVolume listhosts <options>
+
+Description:
+
+ListVirtualVolumeHosts returns a list of known ESX hosts. 
+
+Options:
+
+--virtualvolumehostids
+
+ 
+
+---------------------------------------------------------------
+#### rollback ####
+Command:
+
+    sfcli VirtualVolume rollback <options>
+
+Description:
+
+RollbackVirtualVolume is used to restore a VMware Virtual Volume snapshot. 
+
+Options:
+
+--srcvirtualvolumeid
+
+The ID of the Virtual Volume snapshot. 
+
+--dstvirtualvolumeid
+
+The ID of the Virtual Volume to restore to. 
+
+--callingvirtualvolumehostid
+
+ 
+
+---------------------------------------------------------------
+#### getunsharedchunks ####
+Command:
+
+    sfcli VirtualVolume getunsharedchunks <options>
+
+Description:
+
+GetVirtualVolumeAllocatedBitmap scans a VVol segment and returns the number of  chunks not shared between two volumes. This call will return results in less  than 30 seconds. If the specified VVol and the base VVil are not related, an  error is thrown. If the offset/length combination is invalid or out fo range  an error is thrown. 
+
+Options:
+
+--virtualvolumeid
+
+The ID of the Virtual Volume. 
+
+--basevirtualvolumeid
+
+The ID of the Virtual Volume to compare against. 
+
+--segmentstart
+
+Start Byte offset. 
+
+--segmentlength
+
+Length of the scan segment in bytes. 
+
+--chunksize
+
+Number of bytes represented by one bit in the bitmap. 
+
+--callingvirtualvolumehostid
+
+ 
+
+---------------------------------------------------------------
+#### clone ####
+Command:
+
+    sfcli VirtualVolume clone <options>
+
+Description:
+
+CloneVirtualVolume is used to execute a VMware Virtual Volume clone. 
+
+Options:
+
+--virtualvolumeid
+
+The ID of the Virtual Volume to clone. 
+
+--name
+
+The name for the newly-created volume. 
+
+--qos
+
+New quality of service settings for this volume. 
+
+--metadata
+
+ 
+
+--newcontainerid
+
+ 
+
+--callingvirtualvolumehostid
+
+ 
+
+---------------------------------------------------------------
+#### modify ####
+Command:
+
+    sfcli VirtualVolume modify <options>
+
+Description:
+
+ModifyVirtualVolume is used to modify settings on an existing virtual volume. 
+
+Options:
+
+--virtualvolumeid
+
+VvolVolumeID for the volume to be modified. 
+
+--qos
+
+New quality of service settings for this volume. 
+
+--totalsize
+
+New size of the volume in bytes. Size is rounded up to the nearest 1MiB size. This parameter can only be used to *increase* the size of a volume. 
+
+--callingvirtualvolumehostid
+
+ 
+
+---------------------------------------------------------------
+#### preparevirtualsnapshot ####
+Command:
+
+    sfcli VirtualVolume preparevirtualsnapshot <options>
+
+Description:
+
+PrepareVirtualSnapshot is used to set up VMware Virtual Volume snapshot. 
+
+Options:
+
+--virtualvolumeid
+
+The ID of the Virtual Volume to clone. 
+
+--name
+
+The name for the newly-created volume. 
+
+--writablesnapshot
+
+Will the snapshot be writable? 
+
+--callingvirtualvolumehostid
+
+ 
+
+---------------------------------------------------------------
+#### getfeaturestatus ####
+Command:
+
+    sfcli VirtualVolume getfeaturestatus <options>
+
+Description:
+
+GetFeatureStatus allows you to retrieve the status of a cluster feature. 
 
 Options:
 
 --feature
 
-Valid values: vvols: Enable the Virtual Volumes (VVOLs) cluster feature. 
+Valid values: vvols: Find the status of the Virtual Volumes (VVOLs) cluster feature. 
+
+---------------------------------------------------------------
+#### createhost ####
+Command:
+
+    sfcli VirtualVolume createhost <options>
+
+Description:
+
+CreateVirtualVolumeHost creates a new ESX host. 
+
+Options:
+
+--virtualvolumehostid
+
+The GUID of the ESX host. 
+
+--clusterid
+
+The GUID of the ESX Cluster. 
+
+--initiatornames
+
+ 
+
+--visibleprotocolendpointids
+
+A list of PEs the host is aware of. 
+
+--hostaddress
+
+IP or DNS name for the host. 
+
+--callingvirtualvolumehostid
+
+ 
 
 ---------------------------------------------------------------
 #### list ####
@@ -3038,6 +3510,46 @@ The ID of the virtual volume at which to begin the list.
 A list of virtual volume  IDs for which to retrieve information. If you specify this parameter, the method returns information about only these virtual volumes. 
 
 ---------------------------------------------------------------
+#### getvasaproviderinfo ####
+Command:
+
+    sfcli VirtualVolume getvasaproviderinfo <options>
+
+Description:
+
+Gets the Vasa Provider info 
+
+Options:
+
+---------------------------------------------------------------
+#### snapshot ####
+Command:
+
+    sfcli VirtualVolume snapshot <options>
+
+Description:
+
+SnapshotVirtualVolume is used to take a VMware Virtual Volume snapshot. 
+
+Options:
+
+--virtualvolumeid
+
+The ID of the Virtual Volume to clone. 
+
+--timeout
+
+Number of seconds to complete or fail. 
+
+--metadata
+
+ 
+
+--callingvirtualvolumehostid
+
+ 
+
+---------------------------------------------------------------
 #### listbindings ####
 Command:
 
@@ -3066,20 +3578,40 @@ Enables retrieval of the number of virtual volumes currently in the system.
 Options:
 
 ---------------------------------------------------------------
-#### getfeaturestatus ####
+#### enablefeature ####
 Command:
 
-    sfcli VirtualVolume getfeaturestatus <options>
+    sfcli VirtualVolume enablefeature <options>
 
 Description:
 
-GetFeatureStatus allows you to retrieve the status of a cluster feature. 
+EnableFeature allows you to enable cluster features that are disabled by default. 
 
 Options:
 
 --feature
 
-Valid values: vvols: Find the status of the Virtual Volumes (VVOLs) cluster feature. 
+Valid values: vvols: Enable the Virtual Volumes (VVOLs) cluster feature. 
+
+---------------------------------------------------------------
+#### delete ####
+Command:
+
+    sfcli VirtualVolume delete <options>
+
+Description:
+
+DeleteVirtualVolume marks an active volume for deletion. It is purged (permanently deleted) after the cleanup interval elapses. After making a request to delete a volume, any active iSCSI connections to the volume is immediately terminated and no further connections are allowed while the volume is in this state. It is not returned in target discovery requests.  Any snapshots of a volume that has been marked to delete are not affected. Snapshots are kept until the volume is purged from the system.  If a volume is marked for deletion, and it has a bulk volume read or bulk volume write operation in progress, the bulk volume operation is stopped.  If the volume you delete is paired with a volume, replication between the paired volumes is suspended and no data is transferred to it or from it while in a deleted state. The remote volume the deleted volume was paired with enters into a PausedMisconfigured state and data is no longer sent to it or from the deleted volume. Until the deleted volume is purged, it can be restored and data transfers resumes. If the deleted volume gets purged from the system, the volume it was paired with enters into a StoppedMisconfigured state and the volume pairing status is removed. The purged volume becomes permanently unavailable. 
+
+Options:
+
+--virtualvolumes
+
+The UUID of the volume to delete. 
+
+--callingvirtualvolumehostid
+
+ 
 
 
 Hardware Commands 
