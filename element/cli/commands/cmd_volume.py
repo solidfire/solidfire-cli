@@ -417,10 +417,26 @@ def liststatsby(ctx):
               type=bool,
               required=True,
               help="""Should the volume provides 512-byte sector emulation? """)
-@click.option('--qos',
-              type=Qos,
+
+@click.option('--qosminiops',
+              type=int,
               required=False,
-              help="""Initial quality of service settings for this volume.  Volumes created without specified QoS values are created with the default values for QoS. Default values for a volume can be found by running the GetDefaultQoS method. """)
+              help="""Desired minimum 4KB IOPS to guarantee. The allowed IOPS will only drop below this level if all volumes have been capped at their minimum IOPS value and there is still insufficient performance capacity. """)
+
+@click.option('--qosmaxiops',
+              type=int,
+              required=False,
+              help="""Desired maximum 4KB IOPS allowed over an extended period of time. """)
+
+@click.option('--qosburstiops',
+              type=int,
+              required=False,
+              help="""Maximum "peak" 4KB IOPS allowed for short periods of time. Allows for bursts of I/O activity over the normal max IOPS value. """)
+
+@click.option('--qosbursttime',
+              type=int,
+              required=False,
+              help="""The length of time burst IOPS is allowed. The value returned is represented in time units of seconds. Note: this value is calculated by the system based on IOPS set for QoS. """)
 @click.option('--attributes',
               type=str,
               required=False,
@@ -439,8 +455,14 @@ def create(ctx,
            totalsize,
            # Mandatory main parameter
            enable512e,
-           # Optional main parameter
-           qos = None,
+           # Optional subparameter of optional main parameter.
+           qosminiops = None,
+           # Optional subparameter of optional main parameter.
+           qosmaxiops = None,
+           # Optional subparameter of optional main parameter.
+           qosburstiops = None,
+           # Optional subparameter of optional main parameter.
+           qosbursttime = None,
            # Optional main parameter
            attributes = None,
            # Optional main parameter
@@ -451,7 +473,24 @@ def create(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-                        
+                    
+
+    qos = None
+    if(qosminiops is not None or
+       qosmaxiops is not None or
+       qosburstiops is not None or
+       qosbursttime is not None or
+       False):
+        if not ( True):
+            ctx.logger.error("""If you choose to provide qos, you must include all of the following parameters:
+""")
+        kwargsDict = dict()
+        kwargsDict["min_iops"] = qosminiops
+        kwargsDict["max_iops"] = qosmaxiops
+        kwargsDict["burst_iops"] = qosburstiops
+        kwargsDict["burst_time"] = qosbursttime
+
+        qos = QoS(**kwargsDict)    
 
     kwargsDict = None
 
