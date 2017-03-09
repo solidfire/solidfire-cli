@@ -417,31 +417,10 @@ def liststatsby(ctx):
               type=bool,
               required=True,
               help="""Should the volume provides 512-byte sector emulation? """)
-
-@click.option('--volumeqosminiops',
-              type=int,
+@click.option('--qos',
+              type=Qos,
               required=False,
-              help="""Desired minimum 4KB IOPS to guarantee. The allowed IOPS will only drop below this level if all volumes have been capped at their min IOPS value and there is still insufficient performance capacity. """)
-
-@click.option('--volumeqosmaxiops',
-              type=int,
-              required=False,
-              help="""Desired maximum 4KB IOPS allowed over an extended period of time. """)
-
-@click.option('--volumeqosburstiops',
-              type=int,
-              required=False,
-              help="""Maximum "peak" 4KB IOPS allowed for short periods of time. Allows for bursts of I/O activity over the normal max IOPS value. """)
-
-@click.option('--volumeqosbursttime',
-              type=int,
-              required=False,
-              help="""The length of time burst IOPS is allowed. The value returned is represented in time units of seconds. Note: this value is calculated by the system based on IOPS set for QoS. """)
-
-@click.option('--volumeqoscurve',
-              type=int,
-              required=False,
-              help="""The curve is a set of key-value pairs. The keys are I/O sizes in bytes. The values represent the cost performing an IOP at a specific I/O size. The curve is calculated relative to a 4096 byte operation set at 100 IOPS. """)
+              help="""Initial quality of service settings for this volume.  Volumes created without specified QoS values are created with the default values for QoS. Default values for a volume can be found by running the GetDefaultQoS method. """)
 @click.option('--attributes',
               type=str,
               required=False,
@@ -460,16 +439,8 @@ def create(ctx,
            totalsize,
            # Mandatory main parameter
            enable512e,
-           # Optional subparameter of optional main parameter.
-           volumeqosminiops = None,
-           # Optional subparameter of optional main parameter.
-           volumeqosmaxiops = None,
-           # Optional subparameter of optional main parameter.
-           volumeqosburstiops = None,
-           # Optional subparameter of optional main parameter.
-           volumeqosbursttime = None,
-           # Optional subparameter of optional main parameter.
-           volumeqoscurve = None,
+           # Optional main parameter
+           qos = None,
            # Optional main parameter
            attributes = None,
            # Optional main parameter
@@ -480,31 +451,7 @@ def create(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-                    
-
-    qos = None
-    if(volumeqosminiops is not None or
-       volumeqosmaxiops is not None or
-       volumeqosburstiops is not None or
-       volumeqosbursttime is not None or
-       volumeqoscurve is not None or
-       False):
-        if not (volumeqos and volumeqos and volumeqos and volumeqos and volumeqos and  True):
-            ctx.logger.error("""If you choose to provide volumeqos, you must include all of the following parameters:
-volumeqosminiops
-volumeqosmaxiops
-volumeqosburstiops
-volumeqosbursttime
-volumeqoscurve
-""")
-        kwargsDict = dict()
-        kwargsDict["min_iops"] = volumeqosminiops
-        kwargsDict["max_iops"] = volumeqosmaxiops
-        kwargsDict["burst_iops"] = volumeqosburstiops
-        kwargsDict["burst_time"] = volumeqosbursttime
-        kwargsDict["curve"] = volumeqoscurve
-
-        qos = VolumeQOS(**kwargsDict)    
+                        
 
     kwargsDict = None
 
