@@ -24,9 +24,56 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """setnetworkconfig listpending getorigin listpendingactive listall getpendingoperation liststats add setconfig getnetworkconfig getstats getconfig remove listactive getbootstrapconfig """
-# SetNewtorkConfig has been intentionally excluded from the python cli because
-# the input values would be too complex to reasonably support in a CLI.
+    """liststats listall listpending getorigin listpendingactive remove getpendingoperation setnetworkconfig add setconfig getnetworkconfig getstats getconfig listactive getbootstrapconfig """
+
+@cli.command('liststats', short_help="""ListNodeStats is used to return the high-level activity measurements for all nodes in a cluster. """, cls=SolidFireCommand)
+@pass_context
+def liststats(ctx):
+    """ListNodeStats is used to return the high-level activity measurements for all nodes in a cluster."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+    
+
+    ctx.logger.info("")
+    try:
+        _ListNodeStatsResult = ctx.element.()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_ListNodeStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('listall', short_help="""ListAllNodes enables you to retrieve a list of active and pending nodes in the cluster. """, cls=SolidFireCommand)
+@pass_context
+def listall(ctx):
+    """ListAllNodes enables you to retrieve a list of active and pending nodes in the cluster."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+    
+
+    ctx.logger.info("")
+    try:
+        _ListAllNodesResult = ctx.element.()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_ListAllNodesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
 
 
 @cli.command('listpending', short_help="""Gets the list of pending nodes. Pending nodes are running and configured to join the cluster, but have not been added via the AddNodes method. """, cls=SolidFireCommand)
@@ -111,20 +158,30 @@ def listpendingactive(ctx):
 
 
 
-@cli.command('listall', short_help="""ListAllNodes enables you to retrieve a list of active and pending nodes in the cluster. """, cls=SolidFireCommand)
+@cli.command('remove', short_help="""RemoveNodes is used to remove one or more nodes that should no longer participate in the cluster. Before removing a node, all drives it contains must first be removed with "RemoveDrives" method. A node cannot be removed until the RemoveDrives process has completed and all data has been migrated away from the node.  Once removed, a node registers itself as a pending node and can be added again, or shut down which removes it from the "Pending Node" list. """, cls=SolidFireCommand)
+@click.option('--nodes',
+              type=str,
+              required=True,
+              help="""List of NodeIDs for the nodes to be removed. """)
 @pass_context
-def listall(ctx):
-    """ListAllNodes enables you to retrieve a list of active and pending nodes in the cluster."""
+def remove(ctx,
+           # Mandatory main parameter
+           nodes):
+    """RemoveNodes is used to remove one or more nodes that should no longer participate in the cluster. Before removing a node, all drives it contains must first be removed with &quot;RemoveDrives&quot; method. A node cannot be removed until the RemoveDrives process has completed and all data has been migrated away from the node."""
+    """"""
+    """Once removed, a node registers itself as a pending node and can be added again, or shut down which removes it from the &quot;Pending Node&quot; list."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
     
 
-    ctx.logger.info("")
+    nodes = parser.parse_array(nodes)
+    
+
+    ctx.logger.info("""nodes = """+str(nodes)+""";"""+"")
     try:
-        _ListAllNodesResult = ctx.element.()
+        _RemoveNodesResult = ctx.element.(nodes=nodes)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -132,7 +189,7 @@ def listall(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_ListAllNodesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_RemoveNodesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -162,30 +219,8 @@ def getpendingoperation(ctx):
     cli_utils.print_result(_GetPendingOperationResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
-
-@cli.command('liststats', short_help="""ListNodeStats is used to return the high-level activity measurements for all nodes in a cluster. """, cls=SolidFireCommand)
-@pass_context
-def liststats(ctx):
-    """ListNodeStats is used to return the high-level activity measurements for all nodes in a cluster."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-    
-
-    ctx.logger.info("")
-    try:
-        _ListNodeStatsResult = ctx.element.()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_ListNodeStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
+# SetNewtorkConfig has been intentionally excluded from the python cli because
+# the input values would be too complex to reasonably support in a CLI.
 
 
 @cli.command('add', short_help="""AddNodes is used to add one or more new nodes to the cluster. When a node is not configured and starts up for the first time you are prompted to configure the node. Once a node is configured it is registered as a "pending node" with the cluster.  Adding a node to a cluster that has been set up for virtual networking will require a sufficient number of virtual storage IP addresses to allocate a virtual IP to the new node. If there are no virtual IP addresses available for the new node, the AddNode operation will not complete successfully. Use the "ModifyVirtualNetwork" method to add more storage IP addresses to your virtual network.  The software version on each node in a cluster must be compatible. Run the "ListAllNodes" API to see what versions of software are currently running on the cluster nodes. For an explanation of software version compatibility, see "Node Versioning and Compatibility" in the Element API guide.  Once a node has been added, the drives on the node are made available and can then be added via the "AddDrives" method to increase the storage capacity of the cluster.  Note: It may take several seconds after adding a new Node for it to start up and register the drives as being available. """, cls=SolidFireCommand)
@@ -320,41 +355,6 @@ def getconfig(ctx):
         exit()
 
     cli_utils.print_result(_GetConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('remove', short_help="""RemoveNodes is used to remove one or more nodes that should no longer participate in the cluster. Before removing a node, all drives it contains must first be removed with "RemoveDrives" method. A node cannot be removed until the RemoveDrives process has completed and all data has been migrated away from the node.  Once removed, a node registers itself as a pending node and can be added again, or shut down which removes it from the "Pending Node" list. """, cls=SolidFireCommand)
-@click.option('--nodes',
-              type=str,
-              required=True,
-              help="""List of NodeIDs for the nodes to be removed. """)
-@pass_context
-def remove(ctx,
-           # Mandatory main parameter
-           nodes):
-    """RemoveNodes is used to remove one or more nodes that should no longer participate in the cluster. Before removing a node, all drives it contains must first be removed with &quot;RemoveDrives&quot; method. A node cannot be removed until the RemoveDrives process has completed and all data has been migrated away from the node."""
-    """"""
-    """Once removed, a node registers itself as a pending node and can be added again, or shut down which removes it from the &quot;Pending Node&quot; list."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-    
-
-    nodes = parser.parse_array(nodes)
-    
-
-    ctx.logger.info("""nodes = """+str(nodes)+""";"""+"")
-    try:
-        _RemoveNodesResult = ctx.element.(nodes=nodes)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_RemoveNodesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 

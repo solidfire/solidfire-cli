@@ -24,7 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """getefficiency liststatsbyaccount startbulkwrite updatebulkstatus startbulkread listdeleted purgedeleted liststatsby create cancelclone getdefaultqos getasyncresult listasyncresults liststatsbyaccessgroup listbulkjobs clone modify restoredeleted copy listactive list clonemultiple setdefaultqos getstats listforaccount getcount cancelgroupclone delete """
+    """getefficiency liststatsbyaccount startbulkwrite startbulkread updatebulkstatus listdeleted purgedeleted liststatsby create cancelclone getdefaultqos getasyncresult listasyncresults liststatsbyaccessgroup listbulkjobs clone modify restoredeleted copy listactive list clonemultiple setdefaultqos getstats listforaccount getcount cancelgroupclone delete """
 
 @cli.command('getefficiency', short_help="""GetVolumeEfficiency is used to retrieve information about a volume. Only the volume given as a parameter in this API method is used to compute the capacity. """, cls=SolidFireCommand)
 @click.option('--volumeid',
@@ -161,70 +161,6 @@ def startbulkwrite(ctx,
 
 
 
-@cli.command('updatebulkstatus', short_help="""You can use UpdateBulkVolumeStatus in a script to return to the SolidFire system the status of a bulk volume job that you have started with the "StartBulkVolumeRead" or "StartBulkVolumeWrite" methods. """, cls=SolidFireCommand)
-@click.option('--key',
-              type=str,
-              required=True,
-              help="""The key assigned during initialization of a "StartBulkVolumeRead" or "StartBulkVolumeWrite" session. """)
-@click.option('--status',
-              type=str,
-              required=True,
-              help="""The SolidFire system sets the status of the given bulk volume job. Possible values: running: jobs that are still active. complete: jobs that are done. failed - jobs that have failed. failed: jobs that have failed. """)
-@click.option('--percentcomplete',
-              type=str,
-              required=False,
-              help="""The completed progress of the bulk volume job as a percentage. """)
-@click.option('--message',
-              type=str,
-              required=False,
-              help="""Returns the status of the bulk volume job when the job has completed. """)
-@click.option('--attributes',
-              type=str,
-              required=False,
-              help="""JSON attributes  updates what is on the bulk volume job.  Has the following subparameters: """)
-@pass_context
-def updatebulkstatus(ctx,
-           # Mandatory main parameter
-           key,
-           # Mandatory main parameter
-           status,
-           # Optional main parameter
-           percentcomplete = None,
-           # Optional main parameter
-           message = None,
-           # Optional main parameter
-           attributes = None):
-    """You can use UpdateBulkVolumeStatus in a script to return to the SolidFire system the status of a bulk volume job that you have started with the &quot;StartBulkVolumeRead&quot; or &quot;StartBulkVolumeWrite&quot; methods."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-                    
-
-    kwargsDict = None
-
-    if(attributes is not None):
-        try:
-            kwargsDict = simplejson.loads(attributes)
-        except Exception as e:
-            ctx.logger.error(e.__str__())
-            exit(1)
-    
-
-    ctx.logger.info("""key = """+str(key)+""";"""+"""status = """+str(status)+""";"""+"""percentcomplete = """+str(percentcomplete)+""";"""+"""message = """+str(message)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
-    try:
-        _UpdateBulkVolumeStatusResult = ctx.element.(key=key, status=status, percent_complete=percentcomplete, message=message, attributes=kwargsDict)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_UpdateBulkVolumeStatusResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
 @cli.command('startbulkread', short_help="""StartBulkVolumeRead allows you to initialize a bulk volume read session on a specified volume. Only two bulk volume processes can run simultaneously on a volume. When you initialize the session, data is read from a SolidFire storage volume for the purposes of storing the data on an external backup source. The external data is accessed by a web server running on a SolidFire node. Communications and server interaction information for external data access is passed by a script running on the SolidFire storage system.  At the start of a bulk volume read operation, a snapshot of the volume is made and the snapshot is deleted when the read has completed. You can also read a snapshot of the volume by entering the ID of the snapshot as a parameter. Reading a previous snapshot does not create a new snapshot of the volume, nor does the previous snapshot be deleted when the read completes.  Note: This process creates a new snapshot if the ID of an existing snapshot is not provided. Snapshots can be created if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """, cls=SolidFireCommand)
 @click.option('--volumeid',
               type=int,
@@ -313,6 +249,70 @@ def startbulkread(ctx,
         exit()
 
     cli_utils.print_result(_StartBulkVolumeReadResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('updatebulkstatus', short_help="""You can use UpdateBulkVolumeStatus in a script to return to the SolidFire system the status of a bulk volume job that you have started with the "StartBulkVolumeRead" or "StartBulkVolumeWrite" methods. """, cls=SolidFireCommand)
+@click.option('--key',
+              type=str,
+              required=True,
+              help="""The key assigned during initialization of a "StartBulkVolumeRead" or "StartBulkVolumeWrite" session. """)
+@click.option('--status',
+              type=str,
+              required=True,
+              help="""The SolidFire system sets the status of the given bulk volume job. Possible values: running: jobs that are still active. complete: jobs that are done. failed - jobs that have failed. failed: jobs that have failed. """)
+@click.option('--percentcomplete',
+              type=str,
+              required=False,
+              help="""The completed progress of the bulk volume job as a percentage. """)
+@click.option('--message',
+              type=str,
+              required=False,
+              help="""Returns the status of the bulk volume job when the job has completed. """)
+@click.option('--attributes',
+              type=str,
+              required=False,
+              help="""JSON attributes  updates what is on the bulk volume job.  Has the following subparameters: """)
+@pass_context
+def updatebulkstatus(ctx,
+           # Mandatory main parameter
+           key,
+           # Mandatory main parameter
+           status,
+           # Optional main parameter
+           percentcomplete = None,
+           # Optional main parameter
+           message = None,
+           # Optional main parameter
+           attributes = None):
+    """You can use UpdateBulkVolumeStatus in a script to return to the SolidFire system the status of a bulk volume job that you have started with the &quot;StartBulkVolumeRead&quot; or &quot;StartBulkVolumeWrite&quot; methods."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+                    
+
+    kwargsDict = None
+
+    if(attributes is not None):
+        try:
+            kwargsDict = simplejson.loads(attributes)
+        except Exception as e:
+            ctx.logger.error(e.__str__())
+            exit(1)
+    
+
+    ctx.logger.info("""key = """+str(key)+""";"""+"""status = """+str(status)+""";"""+"""percentcomplete = """+str(percentcomplete)+""";"""+"""message = """+str(message)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
+    try:
+        _UpdateBulkVolumeStatusResult = ctx.element.(key=key, status=status, percent_complete=percentcomplete, message=message, attributes=kwargsDict)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_UpdateBulkVolumeStatusResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
