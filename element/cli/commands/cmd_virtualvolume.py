@@ -24,7 +24,72 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """gettaskupdate modifymetadata modifyvasaproviderinfo copydiffsto querymetadata listtasks create fastclone canceltask getallocatedbitmap getunsharedbitmap listhosts rollback getunsharedchunks clone modify preparevirtualsnapshot getfeaturestatus createhost list getvasaproviderinfo snapshot listbindings getcount enablefeature delete """
+    """modifyhost gettaskupdate modifymetadata modifyvasaproviderinfo copydiffsto querymetadata listtasks create fastclone canceltask getallocatedbitmap getunsharedbitmap listhosts rollback getunsharedchunks clone modify preparevirtualsnapshot getfeaturestatus unbind createhost bind list getvasaproviderinfo snapshot listbindings getcount enablefeature delete """
+
+@cli.command('modifyhost', short_help="""ModifyVirtualVolumeHost changes an existing ESX host. """, cls=SolidFireCommand)
+@click.option('--virtualvolumehostid',
+              type=str,
+              required=True,
+              help="""The GUID of the ESX host. """)
+@click.option('--clusterid',
+              type=str,
+              required=False,
+              help="""The GUID of the ESX Cluster. """)
+@click.option('--visibleprotocolendpointids',
+              type=str,
+              required=False,
+              help="""A list of PEs the host is aware of. """)
+@click.option('--initiatornames',
+              type=str,
+              required=False,
+              help="""List of iSCSI initiator IQNs for the host. """)
+@click.option('--hostaddress',
+              type=str,
+              required=False,
+              help="""IP or DNS name for the host. """)
+@click.option('--callingvirtualvolumehostid',
+              type=str,
+              required=False,
+              help="""ModifyVirtualVolumeHost changes an existing ESX host. """)
+@pass_context
+def modifyhost(ctx,
+           # Mandatory main parameter
+           virtualvolumehostid,
+           # Optional main parameter
+           clusterid = None,
+           # Optional main parameter
+           visibleprotocolendpointids = None,
+           # Optional main parameter
+           initiatornames = None,
+           # Optional main parameter
+           hostaddress = None,
+           # Optional main parameter
+           callingvirtualvolumehostid = None):
+    """ModifyVirtualVolumeHost changes an existing ESX host."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+            
+
+    visibleprotocolendpointids = parser.parse_array(visibleprotocolendpointids)    
+
+    initiatornames = parser.parse_array(initiatornames)        
+    
+
+    ctx.logger.info("""virtualvolumehostid = """+str(virtualvolumehostid)+""";"""+"""clusterid = """+str(clusterid)+""";"""+"""visibleprotocolendpointids = """+str(visibleprotocolendpointids)+""";"""+"""initiatornames = """+str(initiatornames)+""";"""+"""hostaddress = """+str(hostaddress)+""";"""+"""callingvirtualvolumehostid = """+str(callingvirtualvolumehostid)+""";"""+"")
+    try:
+        _VirtualVolumeNullResult = ctx.element.(virtual_volume_host_id=virtualvolumehostid, cluster_id=clusterid, visible_protocol_endpoint_ids=visibleprotocolendpointids, initiator_names=initiatornames, host_address=hostaddress, calling_virtual_volume_host_id=callingvirtualvolumehostid)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_VirtualVolumeNullResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
 
 @cli.command('gettaskupdate', short_help="""GetVirtualVolumeTaskUpdate checks the status of a VVol Async Task. """, cls=SolidFireCommand)
 @click.option('--virtualvolumetaskid',
@@ -1105,6 +1170,53 @@ def getfeaturestatus(ctx,
 
 
 
+@cli.command('unbind', short_help="""UnbindGetVirtualVolume removes the VVol  Host binding. """, cls=SolidFireCommand)
+@click.option('--unbindcontext',
+              type=str,
+              required=True,
+              help="""Normal, Start, or End? """)
+@click.option('--virtualvolumehostid',
+              type=str,
+              required=True,
+              help="""UnbindGetVirtualVolume removes the VVol  Host binding. """)
+@click.option('--unbindargs',
+              type=str,
+              required=True,
+              help="""UnbindGetVirtualVolume removes the VVol  Host binding. """)
+@pass_context
+def unbind(ctx,
+           # Mandatory main parameter
+           unbindcontext,
+           # Mandatory main parameter
+           virtualvolumehostid,
+           # Mandatory main parameter
+           unbindargs):
+    """UnbindGetVirtualVolume removes the VVol  Host binding."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+        
+
+    virtualvolumehostid = parser.parse_array(virtualvolumehostid)    
+
+    unbindargs = parser.parse_array(unbindargs)
+    
+
+    ctx.logger.info("""unbindcontext = """+str(unbindcontext)+""";"""+"""virtualvolumehostid = """+str(virtualvolumehostid)+""";"""+"""unbindargs = """+str(unbindargs)+""";"""+"")
+    try:
+        _VirtualVolumeUnbindResult = ctx.element.(unbind_context=unbindcontext, virtual_volume_host_id=virtualvolumehostid, unbind_args=unbindargs)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_VirtualVolumeUnbindResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
 @cli.command('createhost', short_help="""CreateVirtualVolumeHost creates a new ESX host. """, cls=SolidFireCommand)
 @click.option('--virtualvolumehostid',
               type=str,
@@ -1167,6 +1279,51 @@ def createhost(ctx,
         exit()
 
     cli_utils.print_result(_VirtualVolumeNullResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('bind', short_help="""BindVirtualVolume binds a VVol with a Host. """, cls=SolidFireCommand)
+@click.option('--virtualvolumeids',
+              type=str,
+              required=True,
+              help="""The UUID of the VVol to bind. """)
+@click.option('--virtualvolumehostid',
+              type=str,
+              required=True,
+              help="""The UUID of the ESX host. """)
+@click.option('--bindcontext',
+              type=str,
+              required=True,
+              help="""Normal or Start? """)
+@pass_context
+def bind(ctx,
+           # Mandatory main parameter
+           virtualvolumeids,
+           # Mandatory main parameter
+           virtualvolumehostid,
+           # Mandatory main parameter
+           bindcontext):
+    """BindVirtualVolume binds a VVol with a Host."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+    
+
+    virtualvolumeids = parser.parse_array(virtualvolumeids)        
+    
+
+    ctx.logger.info("""virtualvolumeids = """+str(virtualvolumeids)+""";"""+"""virtualvolumehostid = """+str(virtualvolumehostid)+""";"""+"""bindcontext = """+str(bindcontext)+""";"""+"")
+    try:
+        _VirtualVolumeBindingListResult = ctx.element.(virtual_volume_ids=virtualvolumeids, virtual_volume_host_id=virtualvolumehostid, bind_context=bindcontext)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_VirtualVolumeBindingListResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 

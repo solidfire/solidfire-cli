@@ -2958,6 +2958,42 @@ An object, normally a dictionary or hashtable of the key/value pairs, to be pass
 
 VirtualVolume Commands 
 ---------------------------------------------------------------
+#### modifyhost ####
+Command:
+
+    sfcli VirtualVolume modifyhost <options>
+
+Description:
+
+ModifyVirtualVolumeHost changes an existing ESX host. 
+
+Options:
+
+--virtualvolumehostid
+
+The GUID of the ESX host. 
+
+--clusterid
+
+The GUID of the ESX Cluster. 
+
+--visibleprotocolendpointids
+
+A list of PEs the host is aware of. 
+
+--initiatornames
+
+List of iSCSI initiator IQNs for the host. 
+
+--hostaddress
+
+IP or DNS name for the host. 
+
+--callingvirtualvolumehostid
+
+ModifyVirtualVolumeHost changes an existing ESX host. 
+
+---------------------------------------------------------------
 #### gettaskupdate ####
 Command:
 
@@ -3442,6 +3478,30 @@ Options:
 Valid values: vvols: Find the status of the Virtual Volumes (VVOLs) cluster feature. 
 
 ---------------------------------------------------------------
+#### unbind ####
+Command:
+
+    sfcli VirtualVolume unbind <options>
+
+Description:
+
+UnbindGetVirtualVolume removes the VVol  Host binding. 
+
+Options:
+
+--unbindcontext
+
+Normal, Start, or End? 
+
+--virtualvolumehostid
+
+UnbindGetVirtualVolume removes the VVol  Host binding. 
+
+--unbindargs
+
+UnbindGetVirtualVolume removes the VVol  Host binding. 
+
+---------------------------------------------------------------
 #### createhost ####
 Command:
 
@@ -3476,6 +3536,30 @@ IP or DNS name for the host.
 --callingvirtualvolumehostid
 
  
+
+---------------------------------------------------------------
+#### bind ####
+Command:
+
+    sfcli VirtualVolume bind <options>
+
+Description:
+
+BindVirtualVolume binds a VVol with a Host. 
+
+Options:
+
+--virtualvolumeids
+
+The UUID of the VVol to bind. 
+
+--virtualvolumehostid
+
+The UUID of the ESX host. 
+
+--bindcontext
+
+Normal or Start? 
 
 ---------------------------------------------------------------
 #### list ####
