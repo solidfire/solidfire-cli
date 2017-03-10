@@ -24,7 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """getinfo getapi getconfig getsnmpstate getsnmpinfo disablesnmp deleteallsupportbundles getsystemstatus getversioninfo listfaults listadmins create disableencryptionatrest addadmin setntpinfo setconfig modifyadmin getsnmptrapinfo listevents clearfaults removeadmin getstats getlimits getcurrentadmin createsupportbundle enablesnmp getntpinfo listsyncjobs setsnmptrapinfo setsnmpacl snmpsendtesttraps getsnmpacl getstate getcapacity modifyfullthreshold getmasternodeid setsnmpinfo getfullthreshold enableencryptionatrest """
+    """getinfo getapi disablesnmp getsnmpstate getsnmpinfo getconfig deleteallsupportbundles getsystemstatus setsnmptrapinfo listfaults listadmins create disableencryptionatrest addadmin setntpinfo setconfig modifyadmin getsnmptrapinfo listevents snmpsendtesttraps removeadmin modifyfullthreshold getlimits getcurrentadmin createsupportbundle getcapacity getntpinfo enableencryptionatrest getversioninfo setsnmpacl clearfaults getsnmpacl getstate enablesnmp getstats getmasternodeid setsnmpinfo getfullthreshold listsyncjobs """
 
 @cli.command('getinfo', short_help="""Return configuration information about the cluster. """, cls=SolidFireCommand)
 @pass_context
@@ -76,12 +76,10 @@ def getapi(ctx):
 
 
 
-@cli.command('getconfig', short_help="""The GetClusterConfig API method is used to return information about the cluster configuration this node uses to communicate with the cluster it is a part of.  Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
+@cli.command('disablesnmp', short_help="""DisableSnmp is used to disable SNMP on the cluster nodes. """, cls=SolidFireCommand)
 @pass_context
-def getconfig(ctx):
-    """The GetClusterConfig API method is used to return information about the cluster configuration this node uses to communicate with the cluster it is a part of."""
-    """"""
-    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
+def disablesnmp(ctx):
+    """DisableSnmp is used to disable SNMP on the cluster nodes."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -91,7 +89,7 @@ def getconfig(ctx):
 
     ctx.logger.info("")
     try:
-        _GetClusterConfigResult = ctx.element.()
+        _DisableSnmpResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -99,7 +97,7 @@ def getconfig(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_GetClusterConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_DisableSnmpResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -157,10 +155,12 @@ def getsnmpinfo(ctx):
 
 
 
-@cli.command('disablesnmp', short_help="""DisableSnmp is used to disable SNMP on the cluster nodes. """, cls=SolidFireCommand)
+@cli.command('getconfig', short_help="""The GetClusterConfig API method is used to return information about the cluster configuration this node uses to communicate with the cluster it is a part of.  Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
 @pass_context
-def disablesnmp(ctx):
-    """DisableSnmp is used to disable SNMP on the cluster nodes."""
+def getconfig(ctx):
+    """The GetClusterConfig API method is used to return information about the cluster configuration this node uses to communicate with the cluster it is a part of."""
+    """"""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -170,7 +170,7 @@ def disablesnmp(ctx):
 
     ctx.logger.info("")
     try:
-        _DisableSnmpResult = ctx.element.()
+        _GetClusterConfigResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -178,7 +178,7 @@ def disablesnmp(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_DisableSnmpResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_GetClusterConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -231,21 +231,86 @@ def getsystemstatus(ctx):
 
 
 
-@cli.command('getversioninfo', short_help="""Return information about the Element software version running on each node in the cluster. Information about the nodes that are currently in the process of upgrading software is also returned. """, cls=SolidFireCommand)
+@cli.command('setsnmptrapinfo', short_help="""SetSnmpTrapInfo is used to enable and disable the generation of SolidFire SNMP notifications (traps) and to specify the set of network host computers that are to receive the notifications. The values passed with each SetSnmpTrapInfo method replaces all values set in any previous method to SetSnmpTrapInfo. """, cls=SolidFireCommand)
+@click.option('--traprecipients',
+              cls=SolidFireOption,
+              is_flag=True,
+              multiple=True,
+              subparameters=["host", "community", "port", ],
+              required=True,
+              help="""List of hosts that are to receive the traps generated by the Cluster Master. At least one object is required if any one of the trap types is enabled.  Has the following subparameters: --host --community --port """)
+@click.option('--host',
+              required=True,
+              multiple=True,
+              type=str,
+              default=None,
+              is_sub_parameter=True,
+              help="""[subparameter] The IP address or host name of the target network management station. """,
+              cls=SolidFireOption)
+@click.option('--community',
+              required=True,
+              multiple=True,
+              type=str,
+              default=None,
+              is_sub_parameter=True,
+              help="""[subparameter] SNMP community string. """,
+              cls=SolidFireOption)
+@click.option('--port',
+              required=True,
+              multiple=True,
+              type=int,
+              default=None,
+              is_sub_parameter=True,
+              help="""[subparameter] The UDP port number on the host where the trap is to be sent. Valid range is 1 - 65535. 0 (zero) is not a valid port number. Default is 162. """,
+              cls=SolidFireOption)
+@click.option('--clusterfaulttrapsenabled',
+              type=bool,
+              required=True,
+              help="""If "true", when a cluster fault is logged a corresponding solidFireClusterFaultNotification is sent to the configured list of trap recipients. """)
+@click.option('--clusterfaultresolvedtrapsenabled',
+              type=bool,
+              required=True,
+              help="""If "true", when a cluster fault is logged a corresponding solidFireClusterFaultResolvedNotification is sent to the configured list of trap recipients. """)
+@click.option('--clustereventtrapsenabled',
+              type=bool,
+              required=True,
+              help="""If "true", when a cluster fault is logged a corresponding solidFireClusterEventNotification is sent to the configured list of trap recipients. """)
 @pass_context
-def getversioninfo(ctx):
-    """Return information about the Element software version running on each node in the cluster."""
-    """Information about the nodes that are currently in the process of upgrading software is also returned."""
+def setsnmptrapinfo(ctx,
+           # Mandatory main parameter
+           traprecipients,
+           # Mandatory main parameter
+           clusterfaulttrapsenabled,
+           # Mandatory main parameter
+           clusterfaultresolvedtrapsenabled,
+           # Mandatory main parameter
+           clustereventtrapsenabled,
+           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
+           host,
+           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
+           community,
+           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
+           port):
+    """SetSnmpTrapInfo is used to enable and disable the generation of SolidFire SNMP notifications (traps) and to specify the set of network host computers that are to receive the notifications. The values passed with each SetSnmpTrapInfo method replaces all values set in any previous method to SetSnmpTrapInfo."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
     
 
-    ctx.logger.info("")
+    traprecipientsArray = []
+    if(traprecipients is not None):
+        try:
+            for i, _traprecipients in enumerate(traprecipients):
+                traprecipientsArray.append(SnmpTrapRecipient(host=host[i], community=community[i], port=port[i], ))
+        except Exception as e:
+            ctx.logger.error(e.__str__())
+            exit(1)            
+    
+
+    ctx.logger.info("""traprecipients = """+str(traprecipients)+""";"""+"""clusterfaulttrapsenabled = """+str(clusterfaulttrapsenabled)+""";"""+"""clusterfaultresolvedtrapsenabled = """+str(clusterfaultresolvedtrapsenabled)+""";"""+"""clustereventtrapsenabled = """+str(clustereventtrapsenabled)+""";"""+"")
     try:
-        _GetClusterVersionInfoResult = ctx.element.()
+        _SetSnmpTrapInfoResult = ctx.element.(trap_recipients=traprecipientsArray, cluster_fault_traps_enabled=clusterfaulttrapsenabled, cluster_fault_resolved_traps_enabled=clusterfaultresolvedtrapsenabled, cluster_event_traps_enabled=clustereventtrapsenabled)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -253,7 +318,7 @@ def getversioninfo(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_GetClusterVersionInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_SetSnmpTrapInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -851,26 +916,20 @@ def listevents(ctx,
 
 
 
-@cli.command('clearfaults', short_help="""ClearClusterFaults is used to clear information about both current faults that are resolved as well as faults that were previously detected and resolved can be cleared. """, cls=SolidFireCommand)
-@click.option('--faulttype',
-              type=str,
-              required=False,
-              help="""Determines the types of faults cleared: current: Faults that are currently detected and have not been resolved. resolved: Faults that were previously detected and resolved. all: Both current and resolved faults are cleared. The fault status can be determined by the "resolved" field of the fault object. """)
+@cli.command('snmpsendtesttraps', short_help="""SnmpSendTestTraps enables you to test SNMP functionality for a cluster. This method instructs the cluster to send test SNMP traps to the currently configured SNMP manager. """, cls=SolidFireCommand)
 @pass_context
-def clearfaults(ctx,
-           # Optional main parameter
-           faulttype = None):
-    """ClearClusterFaults is used to clear information about both current faults that are resolved as well as faults that were previously detected and resolved can be cleared."""
+def snmpsendtesttraps(ctx):
+    """SnmpSendTestTraps enables you to test SNMP functionality for a cluster. This method instructs the cluster to send test SNMP traps to the currently configured SNMP manager."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-    
+
     
 
-    ctx.logger.info("""faulttype = """+str(faulttype)+""";"""+"")
+    ctx.logger.info("")
     try:
-        _ClearClusterFaultsResult = ctx.element.(fault_type=faulttype)
+        _SnmpSendTestTrapsResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -878,7 +937,7 @@ def clearfaults(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_ClearClusterFaultsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_SnmpSendTestTrapsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -913,20 +972,38 @@ def removeadmin(ctx,
 
 
 
-@cli.command('getstats', short_help="""GetClusterStats is used to return high-level activity measurements for the cluster. Values returned are cumulative from the creation of the cluster. """, cls=SolidFireCommand)
+@cli.command('modifyfullthreshold', short_help="""ModifyClusterFullThreshold is used to change the level at which an event is generated when the storage cluster approaches the capacity utilization requested. The number entered in this setting is used to indicate the number of node failures the system is required to recover from. For example, on a 10 node cluster, if you want to be alerted when the system cannot recover from 3 nodes failures, enter the value of "3". When this number is reached, a message alert is sent to the Event Log in the Cluster Management Console. """, cls=SolidFireCommand)
+@click.option('--stage2awarethreshold',
+              type=int,
+              required=False,
+              help="""Number of nodes worth of capacity remaining on the cluster that triggers a notification. """)
+@click.option('--stage3blockthresholdpercent',
+              type=int,
+              required=False,
+              help="""Percent below "Error" state to raise a cluster "Warning" alert. """)
+@click.option('--maxmetadataoverprovisionfactor',
+              type=int,
+              required=False,
+              help="""A value representative of the number of times metadata space can be over provisioned relative to the amount of space available. For example, if there was enough metadata space to store 100 TiB of volumes and this number was set to 5, then 500 TiB worth of volumes could be created. """)
 @pass_context
-def getstats(ctx):
-    """GetClusterStats is used to return high-level activity measurements for the cluster. Values returned are cumulative from the creation of the cluster."""
+def modifyfullthreshold(ctx,
+           # Optional main parameter
+           stage2awarethreshold = None,
+           # Optional main parameter
+           stage3blockthresholdpercent = None,
+           # Optional main parameter
+           maxmetadataoverprovisionfactor = None):
+    """ModifyClusterFullThreshold is used to change the level at which an event is generated when the storage cluster approaches the capacity utilization requested. The number entered in this setting is used to indicate the number of node failures the system is required to recover from. For example, on a 10 node cluster, if you want to be alerted when the system cannot recover from 3 nodes failures, enter the value of &quot;3&quot;. When this number is reached, a message alert is sent to the Event Log in the Cluster Management Console."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+            
     
 
-    ctx.logger.info("")
+    ctx.logger.info("""stage2awarethreshold = """+str(stage2awarethreshold)+""";"""+"""stage3blockthresholdpercent = """+str(stage3blockthresholdpercent)+""";"""+"""maxmetadataoverprovisionfactor = """+str(maxmetadataoverprovisionfactor)+""";"""+"")
     try:
-        _GetClusterStatsResult = ctx.element.()
+        _ModifyClusterFullThresholdResult = ctx.element.(stage2_aware_threshold=stage2awarethreshold, stage3_block_threshold_percent=stage3blockthresholdpercent, max_metadata_over_provision_factor=maxmetadataoverprovisionfactor)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -934,7 +1011,7 @@ def getstats(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_GetClusterStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_ModifyClusterFullThresholdResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1031,26 +1108,21 @@ def createsupportbundle(ctx,
 
 
 
-@cli.command('enablesnmp', short_help="""EnableSnmp is used to enable SNMP on the cluster nodes. The values set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to EnableSnmp. """, cls=SolidFireCommand)
-@click.option('--snmpv3enabled',
-              type=bool,
-              required=True,
-              help="""If set to "true", then SNMP v3 is enabled on each node in the cluster. If set to "false", then SNMP v2 is enabled. """)
+@cli.command('getcapacity', short_help="""Return the high-level capacity measurements for an entire cluster. The fields returned from this method can be used to calculate the efficiency rates that are displayed in the Element User Interface. """, cls=SolidFireCommand)
 @pass_context
-def enablesnmp(ctx,
-           # Mandatory main parameter
-           snmpv3enabled):
-    """EnableSnmp is used to enable SNMP on the cluster nodes. The values set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to EnableSnmp."""
+def getcapacity(ctx):
+    """Return the high-level capacity measurements for an entire cluster."""
+    """The fields returned from this method can be used to calculate the efficiency rates that are displayed in the Element User Interface."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-    
+
     
 
-    ctx.logger.info("""snmpv3enabled = """+str(snmpv3enabled)+""";"""+"")
+    ctx.logger.info("")
     try:
-        _EnableSnmpResult = ctx.element.(snmp_v3_enabled=snmpv3enabled)
+        _GetClusterCapacityResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1058,7 +1130,7 @@ def enablesnmp(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_EnableSnmpResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_GetClusterCapacityResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1087,10 +1159,12 @@ def getntpinfo(ctx):
 
 
 
-@cli.command('listsyncjobs', short_help="""ListSyncJobs is used to return information about synchronization jobs that are running on a SolidFire cluster. Synchronization jobs that are returned with this method are, "slice," "clone" and "remote." """, cls=SolidFireCommand)
+@cli.command('enableencryptionatrest', short_help="""The EnableEncryptionAtRest method is used to enable the Advanced Encryption Standard (AES) 256-bit encryption at rest on the cluster so that the cluster can manage the encryption key used for the drives on each node. This feature is not enabled by default. Enabling this operation allows the cluster to automatically manage encryption keys internally for the drives on each node in the cluster. Nodes do not store the keys to unlock drives and the keys are never passed over the network. Two nodes participating in a cluster are required to access the key to disable encryption on a drive. The encryption management does not affect performance or efficiency on the cluster. If an encryption-enabled drive or node is removed from the cluster with the API, all data is secure erased and any data left on the drive cannot be read or accessed. Enabling or disabling encryption should be performed when the cluster is running and in a healthy state. Encryption can be enabled or disabled at your discretion and can be performed as often as you need. Note: This process is asynchronous and returns a response before encryption is enabled. The GetClusterInfo method can be used to poll the system to see when the process has completed. """, cls=SolidFireCommand)
 @pass_context
-def listsyncjobs(ctx):
-    """ListSyncJobs is used to return information about synchronization jobs that are running on a SolidFire cluster. Synchronization jobs that are returned with this method are, &quot;slice,&quot; &quot;clone&quot; and &quot;remote.&quot;"""
+def enableencryptionatrest(ctx):
+    """The EnableEncryptionAtRest method is used to enable the Advanced Encryption Standard (AES) 256-bit encryption at rest on the cluster so that the cluster can manage the encryption key used for the drives on each node. This feature is not enabled by default. Enabling this operation allows the cluster to automatically manage encryption keys internally for the drives on each node in the cluster. Nodes do not store the keys to unlock drives and the keys are never passed over the network. Two nodes participating in a cluster are required to access the key to disable encryption on a drive. The encryption management does not affect performance or efficiency on the cluster. If an encryption-enabled drive or node is removed from the cluster with the API, all data is secure erased and any data left on the drive cannot be read or accessed."""
+    """Enabling or disabling encryption should be performed when the cluster is running and in a healthy state. Encryption can be enabled or disabled at your discretion and can be performed as often as you need."""
+    """Note: This process is asynchronous and returns a response before encryption is enabled. The GetClusterInfo method can be used to poll the system to see when the process has completed."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -1100,7 +1174,7 @@ def listsyncjobs(ctx):
 
     ctx.logger.info("")
     try:
-        _ListSyncJobsResult = ctx.element.()
+        _EnableEncryptionAtRestResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1108,90 +1182,25 @@ def listsyncjobs(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_ListSyncJobsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_EnableEncryptionAtRestResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
-@cli.command('setsnmptrapinfo', short_help="""SetSnmpTrapInfo is used to enable and disable the generation of SolidFire SNMP notifications (traps) and to specify the set of network host computers that are to receive the notifications. The values passed with each SetSnmpTrapInfo method replaces all values set in any previous method to SetSnmpTrapInfo. """, cls=SolidFireCommand)
-@click.option('--traprecipients',
-              cls=SolidFireOption,
-              is_flag=True,
-              multiple=True,
-              subparameters=["host", "community", "port", ],
-              required=True,
-              help="""List of hosts that are to receive the traps generated by the Cluster Master. At least one object is required if any one of the trap types is enabled.  Has the following subparameters: --host --community --port """)
-@click.option('--host',
-              required=True,
-              multiple=True,
-              type=str,
-              default=None,
-              is_sub_parameter=True,
-              help="""[subparameter] The IP address or host name of the target network management station. """,
-              cls=SolidFireOption)
-@click.option('--community',
-              required=True,
-              multiple=True,
-              type=str,
-              default=None,
-              is_sub_parameter=True,
-              help="""[subparameter] SNMP community string. """,
-              cls=SolidFireOption)
-@click.option('--port',
-              required=True,
-              multiple=True,
-              type=int,
-              default=None,
-              is_sub_parameter=True,
-              help="""[subparameter] The UDP port number on the host where the trap is to be sent. Valid range is 1 - 65535. 0 (zero) is not a valid port number. Default is 162. """,
-              cls=SolidFireOption)
-@click.option('--clusterfaulttrapsenabled',
-              type=bool,
-              required=True,
-              help="""If "true", when a cluster fault is logged a corresponding solidFireClusterFaultNotification is sent to the configured list of trap recipients. """)
-@click.option('--clusterfaultresolvedtrapsenabled',
-              type=bool,
-              required=True,
-              help="""If "true", when a cluster fault is logged a corresponding solidFireClusterFaultResolvedNotification is sent to the configured list of trap recipients. """)
-@click.option('--clustereventtrapsenabled',
-              type=bool,
-              required=True,
-              help="""If "true", when a cluster fault is logged a corresponding solidFireClusterEventNotification is sent to the configured list of trap recipients. """)
+@cli.command('getversioninfo', short_help="""Return information about the Element software version running on each node in the cluster. Information about the nodes that are currently in the process of upgrading software is also returned. """, cls=SolidFireCommand)
 @pass_context
-def setsnmptrapinfo(ctx,
-           # Mandatory main parameter
-           traprecipients,
-           # Mandatory main parameter
-           clusterfaulttrapsenabled,
-           # Mandatory main parameter
-           clusterfaultresolvedtrapsenabled,
-           # Mandatory main parameter
-           clustereventtrapsenabled,
-           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
-           host,
-           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
-           community,
-           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
-           port):
-    """SetSnmpTrapInfo is used to enable and disable the generation of SolidFire SNMP notifications (traps) and to specify the set of network host computers that are to receive the notifications. The values passed with each SetSnmpTrapInfo method replaces all values set in any previous method to SetSnmpTrapInfo."""
+def getversioninfo(ctx):
+    """Return information about the Element software version running on each node in the cluster."""
+    """Information about the nodes that are currently in the process of upgrading software is also returned."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
+
     
 
-    traprecipientsArray = []
-    if(traprecipients is not None):
-        try:
-            for i, _traprecipients in enumerate(traprecipients):
-                traprecipientsArray.append(SnmpTrapRecipient(host=host[i], community=community[i], port=port[i], ))
-        except Exception as e:
-            ctx.logger.error(e.__str__())
-            exit(1)            
-    
-
-    ctx.logger.info("""traprecipients = """+str(traprecipients)+""";"""+"""clusterfaulttrapsenabled = """+str(clusterfaulttrapsenabled)+""";"""+"""clusterfaultresolvedtrapsenabled = """+str(clusterfaultresolvedtrapsenabled)+""";"""+"""clustereventtrapsenabled = """+str(clustereventtrapsenabled)+""";"""+"")
+    ctx.logger.info("")
     try:
-        _SetSnmpTrapInfoResult = ctx.element.(trap_recipients=traprecipientsArray, cluster_fault_traps_enabled=clusterfaulttrapsenabled, cluster_fault_resolved_traps_enabled=clusterfaultresolvedtrapsenabled, cluster_event_traps_enabled=clustereventtrapsenabled)
+        _GetClusterVersionInfoResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1199,7 +1208,7 @@ def setsnmptrapinfo(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_SetSnmpTrapInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_GetClusterVersionInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1354,20 +1363,26 @@ def setsnmpacl(ctx,
 
 
 
-@cli.command('snmpsendtesttraps', short_help="""SnmpSendTestTraps enables you to test SNMP functionality for a cluster. This method instructs the cluster to send test SNMP traps to the currently configured SNMP manager. """, cls=SolidFireCommand)
+@cli.command('clearfaults', short_help="""ClearClusterFaults is used to clear information about both current faults that are resolved as well as faults that were previously detected and resolved can be cleared. """, cls=SolidFireCommand)
+@click.option('--faulttype',
+              type=str,
+              required=False,
+              help="""Determines the types of faults cleared: current: Faults that are currently detected and have not been resolved. resolved: Faults that were previously detected and resolved. all: Both current and resolved faults are cleared. The fault status can be determined by the "resolved" field of the fault object. """)
 @pass_context
-def snmpsendtesttraps(ctx):
-    """SnmpSendTestTraps enables you to test SNMP functionality for a cluster. This method instructs the cluster to send test SNMP traps to the currently configured SNMP manager."""
+def clearfaults(ctx,
+           # Optional main parameter
+           faulttype = None):
+    """ClearClusterFaults is used to clear information about both current faults that are resolved as well as faults that were previously detected and resolved can be cleared."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
-    ctx.logger.info("")
+    ctx.logger.info("""faulttype = """+str(faulttype)+""";"""+"")
     try:
-        _SnmpSendTestTrapsResult = ctx.element.()
+        _ClearClusterFaultsResult = ctx.element.(fault_type=faulttype)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1375,7 +1390,7 @@ def snmpsendtesttraps(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_SnmpSendTestTrapsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_ClearClusterFaultsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1435,11 +1450,41 @@ def getstate(ctx,
 
 
 
-@cli.command('getcapacity', short_help="""Return the high-level capacity measurements for an entire cluster. The fields returned from this method can be used to calculate the efficiency rates that are displayed in the Element User Interface. """, cls=SolidFireCommand)
+@cli.command('enablesnmp', short_help="""EnableSnmp is used to enable SNMP on the cluster nodes. The values set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to EnableSnmp. """, cls=SolidFireCommand)
+@click.option('--snmpv3enabled',
+              type=bool,
+              required=True,
+              help="""If set to "true", then SNMP v3 is enabled on each node in the cluster. If set to "false", then SNMP v2 is enabled. """)
 @pass_context
-def getcapacity(ctx):
-    """Return the high-level capacity measurements for an entire cluster."""
-    """The fields returned from this method can be used to calculate the efficiency rates that are displayed in the Element User Interface."""
+def enablesnmp(ctx,
+           # Mandatory main parameter
+           snmpv3enabled):
+    """EnableSnmp is used to enable SNMP on the cluster nodes. The values set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to EnableSnmp."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+    
+    
+
+    ctx.logger.info("""snmpv3enabled = """+str(snmpv3enabled)+""";"""+"")
+    try:
+        _EnableSnmpResult = ctx.element.(snmp_v3_enabled=snmpv3enabled)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_EnableSnmpResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getstats', short_help="""GetClusterStats is used to return high-level activity measurements for the cluster. Values returned are cumulative from the creation of the cluster. """, cls=SolidFireCommand)
+@pass_context
+def getstats(ctx):
+    """GetClusterStats is used to return high-level activity measurements for the cluster. Values returned are cumulative from the creation of the cluster."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -1449,7 +1494,7 @@ def getcapacity(ctx):
 
     ctx.logger.info("")
     try:
-        _GetClusterCapacityResult = ctx.element.()
+        _GetClusterStatsResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1457,50 +1502,7 @@ def getcapacity(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_GetClusterCapacityResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('modifyfullthreshold', short_help="""ModifyClusterFullThreshold is used to change the level at which an event is generated when the storage cluster approaches the capacity utilization requested. The number entered in this setting is used to indicate the number of node failures the system is required to recover from. For example, on a 10 node cluster, if you want to be alerted when the system cannot recover from 3 nodes failures, enter the value of "3". When this number is reached, a message alert is sent to the Event Log in the Cluster Management Console. """, cls=SolidFireCommand)
-@click.option('--stage2awarethreshold',
-              type=int,
-              required=False,
-              help="""Number of nodes worth of capacity remaining on the cluster that triggers a notification. """)
-@click.option('--stage3blockthresholdpercent',
-              type=int,
-              required=False,
-              help="""Percent below "Error" state to raise a cluster "Warning" alert. """)
-@click.option('--maxmetadataoverprovisionfactor',
-              type=int,
-              required=False,
-              help="""A value representative of the number of times metadata space can be over provisioned relative to the amount of space available. For example, if there was enough metadata space to store 100 TiB of volumes and this number was set to 5, then 500 TiB worth of volumes could be created. """)
-@pass_context
-def modifyfullthreshold(ctx,
-           # Optional main parameter
-           stage2awarethreshold = None,
-           # Optional main parameter
-           stage3blockthresholdpercent = None,
-           # Optional main parameter
-           maxmetadataoverprovisionfactor = None):
-    """ModifyClusterFullThreshold is used to change the level at which an event is generated when the storage cluster approaches the capacity utilization requested. The number entered in this setting is used to indicate the number of node failures the system is required to recover from. For example, on a 10 node cluster, if you want to be alerted when the system cannot recover from 3 nodes failures, enter the value of &quot;3&quot;. When this number is reached, a message alert is sent to the Event Log in the Cluster Management Console."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-            
-    
-
-    ctx.logger.info("""stage2awarethreshold = """+str(stage2awarethreshold)+""";"""+"""stage3blockthresholdpercent = """+str(stage3blockthresholdpercent)+""";"""+"""maxmetadataoverprovisionfactor = """+str(maxmetadataoverprovisionfactor)+""";"""+"")
-    try:
-        _ModifyClusterFullThresholdResult = ctx.element.(stage2_aware_threshold=stage2awarethreshold, stage3_block_threshold_percent=stage3blockthresholdpercent, max_metadata_over_provision_factor=maxmetadataoverprovisionfactor)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_ModifyClusterFullThresholdResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_GetClusterStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1719,12 +1721,10 @@ def getfullthreshold(ctx):
 
 
 
-@cli.command('enableencryptionatrest', short_help="""The EnableEncryptionAtRest method is used to enable the Advanced Encryption Standard (AES) 256-bit encryption at rest on the cluster so that the cluster can manage the encryption key used for the drives on each node. This feature is not enabled by default. Enabling this operation allows the cluster to automatically manage encryption keys internally for the drives on each node in the cluster. Nodes do not store the keys to unlock drives and the keys are never passed over the network. Two nodes participating in a cluster are required to access the key to disable encryption on a drive. The encryption management does not affect performance or efficiency on the cluster. If an encryption-enabled drive or node is removed from the cluster with the API, all data is secure erased and any data left on the drive cannot be read or accessed. Enabling or disabling encryption should be performed when the cluster is running and in a healthy state. Encryption can be enabled or disabled at your discretion and can be performed as often as you need. Note: This process is asynchronous and returns a response before encryption is enabled. The GetClusterInfo method can be used to poll the system to see when the process has completed. """, cls=SolidFireCommand)
+@cli.command('listsyncjobs', short_help="""ListSyncJobs is used to return information about synchronization jobs that are running on a SolidFire cluster. Synchronization jobs that are returned with this method are, "slice," "clone" and "remote." """, cls=SolidFireCommand)
 @pass_context
-def enableencryptionatrest(ctx):
-    """The EnableEncryptionAtRest method is used to enable the Advanced Encryption Standard (AES) 256-bit encryption at rest on the cluster so that the cluster can manage the encryption key used for the drives on each node. This feature is not enabled by default. Enabling this operation allows the cluster to automatically manage encryption keys internally for the drives on each node in the cluster. Nodes do not store the keys to unlock drives and the keys are never passed over the network. Two nodes participating in a cluster are required to access the key to disable encryption on a drive. The encryption management does not affect performance or efficiency on the cluster. If an encryption-enabled drive or node is removed from the cluster with the API, all data is secure erased and any data left on the drive cannot be read or accessed."""
-    """Enabling or disabling encryption should be performed when the cluster is running and in a healthy state. Encryption can be enabled or disabled at your discretion and can be performed as often as you need."""
-    """Note: This process is asynchronous and returns a response before encryption is enabled. The GetClusterInfo method can be used to poll the system to see when the process has completed."""
+def listsyncjobs(ctx):
+    """ListSyncJobs is used to return information about synchronization jobs that are running on a SolidFire cluster. Synchronization jobs that are returned with this method are, &quot;slice,&quot; &quot;clone&quot; and &quot;remote.&quot;"""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -1734,7 +1734,7 @@ def enableencryptionatrest(ctx):
 
     ctx.logger.info("")
     try:
-        _EnableEncryptionAtRestResult = ctx.element.()
+        _ListSyncJobsResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1742,5 +1742,5 @@ def enableencryptionatrest(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_EnableEncryptionAtRestResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_ListSyncJobsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

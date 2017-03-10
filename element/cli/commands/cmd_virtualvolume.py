@@ -24,7 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """modifyhost gettaskupdate modifymetadata modifyvasaproviderinfo copydiffsto querymetadata listtasks create fastclone canceltask getallocatedbitmap getunsharedbitmap listhosts rollback getunsharedchunks clone modify preparevirtualsnapshot getfeaturestatus unbind createhost bind list getvasaproviderinfo snapshot listbindings getcount enablefeature delete """
+    """modifyhost gettaskupdate unbindallfromhost modifymetadata modifyvasaproviderinfo copydiffsto querymetadata listtasks create fastclone canceltask getallocatedbitmap getunsharedbitmap listhosts rollback getunsharedchunks clone modify preparevirtualsnapshot getfeaturestatus unbind createhost bind list getvasaproviderinfo snapshot listbindings getcount enablefeature delete """
 
 @cli.command('modifyhost', short_help="""ModifyVirtualVolumeHost changes an existing ESX host. """, cls=SolidFireCommand)
 @click.option('--virtualvolumehostid',
@@ -125,6 +125,37 @@ def gettaskupdate(ctx,
         exit()
 
     cli_utils.print_result(_VirtualVolumeTaskResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('unbindallfromhost', short_help="""UnbindAllVirtualVolumesFromHost removes all VVol  Host binding. """, cls=SolidFireCommand)
+@click.option('--virtualvolumehostid',
+              type=str,
+              required=True,
+              help="""UnbindAllVirtualVolumesFromHost removes all VVol  Host binding. """)
+@pass_context
+def unbindallfromhost(ctx,
+           # Mandatory main parameter
+           virtualvolumehostid):
+    """UnbindAllVirtualVolumesFromHost removes all VVol  Host binding."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+    
+    
+
+    ctx.logger.info("""virtualvolumehostid = """+str(virtualvolumehostid)+""";"""+"")
+    try:
+        _UnbindAllVirtualVolumesFromHostResult = ctx.element.(virtual_volume_host_id=virtualvolumehostid)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_UnbindAllVirtualVolumesFromHostResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
