@@ -572,7 +572,7 @@ def getdefaultqos(ctx):
 
 
 
-@cli.command('getasyncresult', short_help="""Used to retrieve the result of asynchronous method calls. Some method calls are long running and do not complete when the initial response is sent. To obtain the result of the method call, polling with GetAsyncResult is required.  GetAsyncResult returns the overall status of the operation (in progress, completed, or error) in a standard fashion, but the actual data returned for the operation depends on the original method call and the return data is documented with each method.  The result for a completed asynchronous method call can only be retrieved once. Once the final result has been returned, later attempts returns an error. """, cls=SolidFireCommand)
+@cli.command('getasyncresult', short_help="""Used to retrieve the result of asynchronous method calls. Some method calls are integer running and do not complete when the initial response is sent. To obtain the result of the method call, polling with GetAsyncResult is required.  GetAsyncResult returns the overall status of the operation (in progress, completed, or error) in a standard fashion, but the actual data returned for the operation depends on the original method call and the return data is documented with each method.  The result for a completed asynchronous method call can only be retrieved once. Once the final result has been returned, later attempts returns an error. """, cls=SolidFireCommand)
 @click.option('--asynchandle',
               type=int,
               required=True,
@@ -588,7 +588,7 @@ def getasyncresult(ctx,
            # Optional main parameter
            keepresult = None):
     """Used to retrieve the result of asynchronous method calls."""
-    """Some method calls are long running and do not complete when the initial response is sent."""
+    """Some method calls are integer running and do not complete when the initial response is sent."""
     """To obtain the result of the method call, polling with GetAsyncResult is required."""
     """"""
     """GetAsyncResult returns the overall status of the operation (in progress, completed, or error) in a standard fashion,"""
@@ -1045,7 +1045,7 @@ def listactive(ctx,
 @click.option('--accounts',
               type=str,
               required=False,
-              help="""If specified, only fetch volumes which belong to the provided accounts. By default, list volumes for all accounts. """)
+              help="""If specified, only fetch volumes which beinteger to the provided accounts. By default, list volumes for all accounts. """)
 @click.option('--ispaired',
               type=bool,
               required=False,
@@ -1396,7 +1396,7 @@ def cancelgroupclone(ctx,
 
 
 
-@cli.command('delete', short_help="""DeleteVolume marks an active volume for deletion. It is purged (permanently deleted) after the cleanup interval elapses. After making a request to delete a volume, any active iSCSI connections to the volume is immediately terminated and no further connections are allowed while the volume is in this state. It is not returned in target discovery requests.  Any snapshots of a volume that has been marked to delete are not affected. Snapshots are kept until the volume is purged from the system.  If a volume is marked for deletion, and it has a bulk volume read or bulk volume write operation in progress, the bulk volume operation is stopped.  If the volume you delete is paired with a volume, replication between the paired volumes is suspended and no data is transferred to it or from it while in a deleted state. The remote volume the deleted volume was paired with enters into a PausedMisconfigured state and data is no longer sent to it or from the deleted volume. Until the deleted volume is purged, it can be restored and data transfers resumes. If the deleted volume gets purged from the system, the volume it was paired with enters into a StoppedMisconfigured state and the volume pairing status is removed. The purged volume becomes permanently unavailable. """, cls=SolidFireCommand)
+@cli.command('delete', short_help="""DeleteVolume marks an active volume for deletion. It is purged (permanently deleted) after the cleanup interval elapses. After making a request to delete a volume, any active iSCSI connections to the volume is immediately terminated and no further connections are allowed while the volume is in this state. It is not returned in target discovery requests.  Any snapshots of a volume that has been marked to delete are not affected. Snapshots are kept until the volume is purged from the system.  If a volume is marked for deletion, and it has a bulk volume read or bulk volume write operation in progress, the bulk volume operation is stopped.  If the volume you delete is paired with a volume, replication between the paired volumes is suspended and no data is transferred to it or from it while in a deleted state. The remote volume the deleted volume was paired with enters into a PausedMisconfigured state and data is no integerer sent to it or from the deleted volume. Until the deleted volume is purged, it can be restored and data transfers resumes. If the deleted volume gets purged from the system, the volume it was paired with enters into a StoppedMisconfigured state and the volume pairing status is removed. The purged volume becomes permanently unavailable. """, cls=SolidFireCommand)
 @click.option('--volumeid',
               type=int,
               required=True,
@@ -1416,7 +1416,7 @@ def delete(ctx,
     """If a volume is marked for deletion, and it has a bulk volume read or bulk volume write operation in progress, the bulk volume operation is stopped."""
     """"""
     """If the volume you delete is paired with a volume, replication between the paired volumes is suspended and no data is transferred to it or from it while in a deleted state."""
-    """The remote volume the deleted volume was paired with enters into a PausedMisconfigured state and data is no longer sent to it or from the deleted volume."""
+    """The remote volume the deleted volume was paired with enters into a PausedMisconfigured state and data is no integerer sent to it or from the deleted volume."""
     """Until the deleted volume is purged, it can be restored and data transfers resumes."""
     """If the deleted volume gets purged from the system, the volume it was paired with enters into a StoppedMisconfigured state and the volume pairing status is removed."""
     """The purged volume becomes permanently unavailable."""

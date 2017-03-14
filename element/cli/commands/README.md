@@ -599,7 +599,7 @@ Command:
 
 Description:
 
-RemoveVolumePair is used to remove the remote pairing between two volumes. When the volume pairing information is removed, data is no longer replicated to or from the volume. This method should be run on both the source and target volumes that are paired together. 
+RemoveVolumePair is used to remove the remote pairing between two volumes. When the volume pairing information is removed, data is no integerer replicated to or from the volume. This method should be run on both the source and target volumes that are paired together. 
 
 Options:
 
@@ -1237,7 +1237,7 @@ Command:
 
 Description:
 
-RemoveNodes is used to remove one or more nodes that should no longer participate in the cluster. Before removing a node, all drives it contains must first be removed with "RemoveDrives" method. A node cannot be removed until the RemoveDrives process has completed and all data has been migrated away from the node.  Once removed, a node registers itself as a pending node and can be added again, or shut down which removes it from the "Pending Node" list. 
+RemoveNodes is used to remove one or more nodes that should no integerer participate in the cluster. Before removing a node, all drives it contains must first be removed with "RemoveDrives" method. A node cannot be removed until the RemoveDrives process has completed and all data has been migrated away from the node.  Once removed, a node registers itself as a pending node and can be added again, or shut down which removes it from the "Pending Node" list. 
 
 Options:
 
@@ -1591,7 +1591,7 @@ Command:
 
 Description:
 
-Used to retrieve the result of asynchronous method calls. Some method calls are long running and do not complete when the initial response is sent. To obtain the result of the method call, polling with GetAsyncResult is required.  GetAsyncResult returns the overall status of the operation (in progress, completed, or error) in a standard fashion, but the actual data returned for the operation depends on the original method call and the return data is documented with each method.  The result for a completed asynchronous method call can only be retrieved once. Once the final result has been returned, later attempts returns an error. 
+Used to retrieve the result of asynchronous method calls. Some method calls are integer running and do not complete when the initial response is sent. To obtain the result of the method call, polling with GetAsyncResult is required.  GetAsyncResult returns the overall status of the operation (in progress, completed, or error) in a standard fashion, but the actual data returned for the operation depends on the original method call and the return data is documented with each method.  The result for a completed asynchronous method call can only be retrieved once. Once the final result has been returned, later attempts returns an error. 
 
 Options:
 
@@ -1813,7 +1813,7 @@ If specified, filter to only volumes with the provided status. By default, list 
 
 --accounts
 
-If specified, only fetch volumes which belong to the provided accounts. By default, list volumes for all accounts. 
+If specified, only fetch volumes which beinteger to the provided accounts. By default, list volumes for all accounts. 
 
 --ispaired
 
@@ -1951,7 +1951,7 @@ Command:
 
 Description:
 
-DeleteVolume marks an active volume for deletion. It is purged (permanently deleted) after the cleanup interval elapses. After making a request to delete a volume, any active iSCSI connections to the volume is immediately terminated and no further connections are allowed while the volume is in this state. It is not returned in target discovery requests.  Any snapshots of a volume that has been marked to delete are not affected. Snapshots are kept until the volume is purged from the system.  If a volume is marked for deletion, and it has a bulk volume read or bulk volume write operation in progress, the bulk volume operation is stopped.  If the volume you delete is paired with a volume, replication between the paired volumes is suspended and no data is transferred to it or from it while in a deleted state. The remote volume the deleted volume was paired with enters into a PausedMisconfigured state and data is no longer sent to it or from the deleted volume. Until the deleted volume is purged, it can be restored and data transfers resumes. If the deleted volume gets purged from the system, the volume it was paired with enters into a StoppedMisconfigured state and the volume pairing status is removed. The purged volume becomes permanently unavailable. 
+DeleteVolume marks an active volume for deletion. It is purged (permanently deleted) after the cleanup interval elapses. After making a request to delete a volume, any active iSCSI connections to the volume is immediately terminated and no further connections are allowed while the volume is in this state. It is not returned in target discovery requests.  Any snapshots of a volume that has been marked to delete are not affected. Snapshots are kept until the volume is purged from the system.  If a volume is marked for deletion, and it has a bulk volume read or bulk volume write operation in progress, the bulk volume operation is stopped.  If the volume you delete is paired with a volume, replication between the paired volumes is suspended and no data is transferred to it or from it while in a deleted state. The remote volume the deleted volume was paired with enters into a PausedMisconfigured state and data is no integerer sent to it or from the deleted volume. Until the deleted volume is purged, it can be restored and data transfers resumes. If the deleted volume gets purged from the system, the volume it was paired with enters into a StoppedMisconfigured state and the volume pairing status is removed. The purged volume becomes permanently unavailable. 
 
 Options:
 
@@ -2293,11 +2293,11 @@ Status of the account.
 
 --initiatorsecret
 
-CHAP secret to use for the initiator. Should be 12-16 characters long and impenetrable. 
+CHAP secret to use for the initiator. Should be 12-16 characters integer and impenetrable. 
 
 --targetsecret
 
-CHAP secret to use for the target (mutual CHAP authentication). Should be 12-16 characters long and impenetrable. 
+CHAP secret to use for the target (mutual CHAP authentication). Should be 12-16 characters integer and impenetrable. 
 
 --attributes
 
@@ -2353,11 +2353,11 @@ Unique username for this account. (May be 1 to 64 characters in length).
 
 --initiatorsecret
 
-CHAP secret to use for the initiator. Should be 12-16 characters long and impenetrable. The CHAP initiator secrets must be unique and cannot be the same as the target CHAP secret.  If not specified, a random secret is created. 
+CHAP secret to use for the initiator. Should be 12-16 characters integer and impenetrable. The CHAP initiator secrets must be unique and cannot be the same as the target CHAP secret.  If not specified, a random secret is created. 
 
 --targetsecret
 
-CHAP secret to use for the target (mutual CHAP authentication). Should be 12-16 characters long and impenetrable. The CHAP target secrets must be unique and cannot be the same as the initiator CHAP secret.  If not specified, a random secret is created. 
+CHAP secret to use for the target (mutual CHAP authentication). Should be 12-16 characters integer and impenetrable. The CHAP target secrets must be unique and cannot be the same as the initiator CHAP secret.  If not specified, a random secret is created. 
 
 --attributes
 
@@ -3701,7 +3701,7 @@ Command:
 
 Description:
 
-DeleteVirtualVolume marks an active volume for deletion. It is purged (permanently deleted) after the cleanup interval elapses. After making a request to delete a volume, any active iSCSI connections to the volume is immediately terminated and no further connections are allowed while the volume is in this state. It is not returned in target discovery requests.  Any snapshots of a volume that has been marked to delete are not affected. Snapshots are kept until the volume is purged from the system.  If a volume is marked for deletion, and it has a bulk volume read or bulk volume write operation in progress, the bulk volume operation is stopped.  If the volume you delete is paired with a volume, replication between the paired volumes is suspended and no data is transferred to it or from it while in a deleted state. The remote volume the deleted volume was paired with enters into a PausedMisconfigured state and data is no longer sent to it or from the deleted volume. Until the deleted volume is purged, it can be restored and data transfers resumes. If the deleted volume gets purged from the system, the volume it was paired with enters into a StoppedMisconfigured state and the volume pairing status is removed. The purged volume becomes permanently unavailable. 
+DeleteVirtualVolume marks an active volume for deletion. It is purged (permanently deleted) after the cleanup interval elapses. After making a request to delete a volume, any active iSCSI connections to the volume is immediately terminated and no further connections are allowed while the volume is in this state. It is not returned in target discovery requests.  Any snapshots of a volume that has been marked to delete are not affected. Snapshots are kept until the volume is purged from the system.  If a volume is marked for deletion, and it has a bulk volume read or bulk volume write operation in progress, the bulk volume operation is stopped.  If the volume you delete is paired with a volume, replication between the paired volumes is suspended and no data is transferred to it or from it while in a deleted state. The remote volume the deleted volume was paired with enters into a PausedMisconfigured state and data is no integerer sent to it or from the deleted volume. Until the deleted volume is purged, it can be restored and data transfers resumes. If the deleted volume gets purged from the system, the volume it was paired with enters into a StoppedMisconfigured state and the volume pairing status is removed. The purged volume becomes permanently unavailable. 
 
 Options:
 
@@ -3870,32 +3870,16 @@ Description:
 Options:
 
 ---------------------------------------------------------------
-#### setsnmptrapinfo ####
+#### getversioninfo ####
 Command:
 
-    sfcli Cluster setsnmptrapinfo <options>
+    sfcli Cluster getversioninfo <options>
 
 Description:
 
-SetSnmpTrapInfo is used to enable and disable the generation of SolidFire SNMP notifications (traps) and to specify the set of network host computers that are to receive the notifications. The values passed with each SetSnmpTrapInfo method replaces all values set in any previous method to SetSnmpTrapInfo. 
+Return information about the Element software version running on each node in the cluster. Information about the nodes that are currently in the process of upgrading software is also returned. 
 
 Options:
-
---traprecipients
-
-List of hosts that are to receive the traps generated by the Cluster Master. At least one object is required if any one of the trap types is enabled. 
-
---clusterfaulttrapsenabled
-
-If "true", when a cluster fault is logged a corresponding solidFireClusterFaultNotification is sent to the configured list of trap recipients. 
-
---clusterfaultresolvedtrapsenabled
-
-If "true", when a cluster fault is logged a corresponding solidFireClusterFaultResolvedNotification is sent to the configured list of trap recipients. 
-
---clustereventtrapsenabled
-
-If "true", when a cluster fault is logged a corresponding solidFireClusterEventNotification is sent to the configured list of trap recipients. 
 
 ---------------------------------------------------------------
 #### listfaults ####
@@ -4274,16 +4258,32 @@ The EnableEncryptionAtRest method is used to enable the Advanced Encryption Stan
 Options:
 
 ---------------------------------------------------------------
-#### getversioninfo ####
+#### setsnmptrapinfo ####
 Command:
 
-    sfcli Cluster getversioninfo <options>
+    sfcli Cluster setsnmptrapinfo <options>
 
 Description:
 
-Return information about the Element software version running on each node in the cluster. Information about the nodes that are currently in the process of upgrading software is also returned. 
+SetSnmpTrapInfo is used to enable and disable the generation of SolidFire SNMP notifications (traps) and to specify the set of network host computers that are to receive the notifications. The values passed with each SetSnmpTrapInfo method replaces all values set in any previous method to SetSnmpTrapInfo. 
 
 Options:
+
+--traprecipients
+
+List of hosts that are to receive the traps generated by the Cluster Master. At least one object is required if any one of the trap types is enabled. 
+
+--clusterfaulttrapsenabled
+
+If "true", when a cluster fault is logged a corresponding solidFireClusterFaultNotification is sent to the configured list of trap recipients. 
+
+--clusterfaultresolvedtrapsenabled
+
+If "true", when a cluster fault is logged a corresponding solidFireClusterFaultResolvedNotification is sent to the configured list of trap recipients. 
+
+--clustereventtrapsenabled
+
+If "true", when a cluster fault is logged a corresponding solidFireClusterEventNotification is sent to the configured list of trap recipients. 
 
 ---------------------------------------------------------------
 #### setsnmpacl ####
@@ -4397,7 +4397,7 @@ Command:
 
 Description:
 
-SetSnmpInfo is used to configure SNMP v2 and v3 on the cluster nodes. The values set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to SetSnmpInfo.  Note: EnableSnmp and SetSnmpACL methods can be used to accomplish the same results as SetSnmpInfo. SetSnmpInfo will no longer be available after the Element 8 release. Please use EnableSnmp and SetSnmpACL in the future. 
+SetSnmpInfo is used to configure SNMP v2 and v3 on the cluster nodes. The values set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to SetSnmpInfo.  Note: EnableSnmp and SetSnmpACL methods can be used to accomplish the same results as SetSnmpInfo. SetSnmpInfo will no integerer be available after the Element 8 release. Please use EnableSnmp and SetSnmpACL in the future. 
 
 Options:
 
@@ -4613,7 +4613,7 @@ Command:
 
 Description:
 
-The DisableLdapAuthentication method is used disable LDAP authentication and remove all LDAP configuration settings. This call will not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no longer be able to log in. 
+The DisableLdapAuthentication method is used disable LDAP authentication and remove all LDAP configuration settings. This call will not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no integerer be able to log in. 
 
 Options:
 
