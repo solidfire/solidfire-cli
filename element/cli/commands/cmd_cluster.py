@@ -1250,7 +1250,7 @@ def getversioninfo(ctx):
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter] This parameter along with the cidr variable is used to control which network the access and community string apply to. The special value of "default" is used to specify an entry that applies to all networks. The cidr mask is ignored when network value is either a host name or default. """,
+              help="""[subparameter] This parameter ainteger with the cidr variable is used to control which network the access and community string apply to. The special value of "default" is used to specify an entry that applies to all networks. The cidr mask is ignored when network value is either a host name or default. """,
               cls=SolidFireOption)
 @click.option('--usmusers',
               cls=SolidFireOption,
@@ -1281,7 +1281,7 @@ def getversioninfo(ctx):
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter] The password of the user. Must be between 8 and 255 characters long (inclusive). Blank spaces are not allowed. Required if "secLevel" is "auth" or "priv." """,
+              help="""[subparameter] The password of the user. Must be between 8 and 255 characters integer (inclusive). Blank spaces are not allowed. Required if "secLevel" is "auth" or "priv." """,
               cls=SolidFireOption)
 @click.option('--passphrase',
               required=True,
@@ -1289,7 +1289,7 @@ def getversioninfo(ctx):
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter] The passphrase of the user. Must be between 8 and 255 characters long (inclusive). Blank spaces are not allowed. Required if "secLevel" is "priv." """,
+              help="""[subparameter] The passphrase of the user. Must be between 8 and 255 characters integer (inclusive). Blank spaces are not allowed. Required if "secLevel" is "priv." """,
               cls=SolidFireOption)
 @click.option('--seclevel',
               required=True,
@@ -1569,7 +1569,7 @@ def getmasternodeid(ctx):
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter] This parameter along with the cidr variable is used to control which network the access and community string apply to. The special value of "default" is used to specify an entry that applies to all networks. The cidr mask is ignored when network value is either a host name or default. """,
+              help="""[subparameter] This parameter ainteger with the cidr variable is used to control which network the access and community string apply to. The special value of "default" is used to specify an entry that applies to all networks. The cidr mask is ignored when network value is either a host name or default. """,
               cls=SolidFireOption)
 @click.option('--enabled',
               type=bool,
@@ -1608,7 +1608,7 @@ def getmasternodeid(ctx):
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter] The password of the user. Must be between 8 and 255 characters long (inclusive). Blank spaces are not allowed. Required if "secLevel" is "auth" or "priv." """,
+              help="""[subparameter] The password of the user. Must be between 8 and 255 characters integer (inclusive). Blank spaces are not allowed. Required if "secLevel" is "auth" or "priv." """,
               cls=SolidFireOption)
 @click.option('--passphrase',
               required=False,
@@ -1616,7 +1616,7 @@ def getmasternodeid(ctx):
               type=str,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter] The passphrase of the user. Must be between 8 and 255 characters long (inclusive). Blank spaces are not allowed. Required if "secLevel" is "priv." """,
+              help="""[subparameter] The passphrase of the user. Must be between 8 and 255 characters integer (inclusive). Blank spaces are not allowed. Required if "secLevel" is "priv." """,
               cls=SolidFireOption)
 @click.option('--seclevel',
               required=False,
