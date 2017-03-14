@@ -24,75 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """list getefficiency modify remove getbyname add getbyid """
-
-@cli.command('list', short_help="""Returns the entire list of accounts, with optional paging support. """, cls=SolidFireCommand)
-@click.option('--startaccountid',
-              type=int,
-              required=False,
-              help="""Starting AccountID to return. If no Account exists with this AccountID, the next Account by AccountID order is used as the start of the list. To page through the list, pass the AccountID of the last Account in the previous response + 1 """)
-@click.option('--limit',
-              type=int,
-              required=False,
-              help="""Maximum number of AccountInfo objects to return. """)
-@pass_context
-def list(ctx,
-           # Optional main parameter
-           startaccountid = None,
-           # Optional main parameter
-           limit = None):
-    """Returns the entire list of accounts, with optional paging support."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-        
-    
-
-    ctx.logger.info("""startaccountid = """+str(startaccountid)+""";"""+"""limit = """+str(limit)+""";"""+"")
-    try:
-        _ListAccountsResult = ctx.element.(start_account_id=startaccountid, limit=limit)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_ListAccountsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getefficiency', short_help="""GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity. """, cls=SolidFireCommand)
-@click.option('--accountid',
-              type=int,
-              required=True,
-              help="""Specifies the volume account for which capacity is computed. """)
-@pass_context
-def getefficiency(ctx,
-           # Mandatory main parameter
-           accountid):
-    """GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-    
-    
-
-    ctx.logger.info("""accountid = """+str(accountid)+""";"""+"")
-    try:
-        _GetEfficiencyResult = ctx.element.(account_id=accountid)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_GetEfficiencyResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
+    """modify getefficiency list remove getbyname add getbyid """
 
 @cli.command('modify', short_help="""Used to modify an existing account. When locking an account, any existing connections from that account are immediately terminated. When changing CHAP settings, any existing connections continue to be active, and the new CHAP values are only used on subsequent connection or reconnection. """, cls=SolidFireCommand)
 @click.option('--accountid',
@@ -168,6 +100,74 @@ def modify(ctx,
         exit()
 
     cli_utils.print_result(_ModifyAccountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getefficiency', short_help="""GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity. """, cls=SolidFireCommand)
+@click.option('--accountid',
+              type=int,
+              required=True,
+              help="""Specifies the volume account for which capacity is computed. """)
+@pass_context
+def getefficiency(ctx,
+           # Mandatory main parameter
+           accountid):
+    """GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+    
+    
+
+    ctx.logger.info("""accountid = """+str(accountid)+""";"""+"")
+    try:
+        _GetEfficiencyResult = ctx.element.(account_id=accountid)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_GetEfficiencyResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('list', short_help="""Returns the entire list of accounts, with optional paging support. """, cls=SolidFireCommand)
+@click.option('--startaccountid',
+              type=int,
+              required=False,
+              help="""Starting AccountID to return. If no Account exists with this AccountID, the next Account by AccountID order is used as the start of the list. To page through the list, pass the AccountID of the last Account in the previous response + 1 """)
+@click.option('--limit',
+              type=int,
+              required=False,
+              help="""Maximum number of AccountInfo objects to return. """)
+@pass_context
+def list(ctx,
+           # Optional main parameter
+           startaccountid = None,
+           # Optional main parameter
+           limit = None):
+    """Returns the entire list of accounts, with optional paging support."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+        
+    
+
+    ctx.logger.info("""startaccountid = """+str(startaccountid)+""";"""+"""limit = """+str(limit)+""";"""+"")
+    try:
+        _ListAccountsResult = ctx.element.(start_account_id=startaccountid, limit=limit)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_ListAccountsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 

@@ -832,80 +832,20 @@ The ID of the volume access group to modify.
 List of volumes to remove from this volume access group. 
 
 ---------------------------------------------------------------
-#### modify ####
+#### getefficiency ####
 Command:
 
-    sfcli VolumeAccessGroup modify <options>
+    sfcli VolumeAccessGroup getefficiency <options>
 
 Description:
 
-Update initiators and add or remove volumes from a volume access group. A specified initiator or volume that duplicates an existing volume or initiator in a volume access group is left as-is. If a value is not specified for volumes or initiators, the current list of initiators and volumes are not changed.  Often, it is easier to use the convenience functions to modify initiators and volumes independently:  AddInitiatorsToVolumeAccessGroup RemoveInitiatorsFromVolumeAccessGroup AddVolumesToVolumeAccessGroup RemoveVolumesFromVolumeAccessGroup 
+GetVolumeAccessGroupEfficiency is used to retrieve efficiency information about a volume access group. Only the volume access group provided as parameters in this API method is used to compute the capacity. 
 
 Options:
 
 --volumeaccessgroupid
 
-The ID of the volume access group to modify. 
-
---virtualnetworkid
-
-The ID of the SolidFire Virtual Network ID to associate the volume access group with. 
-
---virtualnetworktags
-
-The ID of the VLAN Virtual Network Tag to associate the volume access group with. 
-
---name
-
-Name of the volume access group. It is not required to be unique, but recommended. 
-
---initiators
-
-List of initiators to include in the volume access group. If unspecified, the access group's configured initiators will not be modified. 
-
---volumes
-
-List of volumes to initially include in the volume access group. If unspecified, the access group's volumes will not be modified. 
-
---attributes
-
-List of Name/Value pairs in JSON object format. 
-
----------------------------------------------------------------
-#### create ####
-Command:
-
-    sfcli VolumeAccessGroup create <options>
-
-Description:
-
-Creates a new volume access group. The new volume access group must be given a name when it is created. Entering initiators and volumes are optional when creating a volume access group. Once the group is created volumes and initiator IQNs can be added. Any initiator IQN that is successfully added to the volume access group is able to access any volume in the group without CHAP authentication. 
-
-Options:
-
---name
-
-Name of the volume access group. It is not required to be unique, but recommended. 
-
---initiators
-
-List of initiators to include in the volume access group. If unspecified, the access group will start out without configured initiators. 
-
---volumes
-
-List of volumes to initially include in the volume access group. If unspecified, the access group will start without any volumes. 
-
---virtualnetworkid
-
-The ID of the SolidFire Virtual Network ID to associate the volume access group with. 
-
---virtualnetworktags
-
-The ID of the VLAN Virtual Network Tag to associate the volume access group with. 
-
---attributes
-
-List of Name/Value pairs in JSON object format. 
+Specifies the volume access group for which capacity is computed. 
 
 ---------------------------------------------------------------
 #### modifylunassignments ####
@@ -946,6 +886,46 @@ The lowest VolumeAccessGroupID to return. This can be useful for paging. If unsp
 --limit
 
 The maximum number of results to return. This can be useful for paging. 
+
+---------------------------------------------------------------
+#### modify ####
+Command:
+
+    sfcli VolumeAccessGroup modify <options>
+
+Description:
+
+Update initiators and add or remove volumes from a volume access group. A specified initiator or volume that duplicates an existing volume or initiator in a volume access group is left as-is. If a value is not specified for volumes or initiators, the current list of initiators and volumes are not changed.  Often, it is easier to use the convenience functions to modify initiators and volumes independently:  AddInitiatorsToVolumeAccessGroup RemoveInitiatorsFromVolumeAccessGroup AddVolumesToVolumeAccessGroup RemoveVolumesFromVolumeAccessGroup 
+
+Options:
+
+--volumeaccessgroupid
+
+The ID of the volume access group to modify. 
+
+--virtualnetworkid
+
+The ID of the SolidFire Virtual Network ID to associate the volume access group with. 
+
+--virtualnetworktags
+
+The ID of the VLAN Virtual Network Tag to associate the volume access group with. 
+
+--name
+
+Name of the volume access group. It is not required to be unique, but recommended. 
+
+--initiators
+
+List of initiators to include in the volume access group. If unspecified, the access group's configured initiators will not be modified. 
+
+--volumes
+
+List of volumes to initially include in the volume access group. If unspecified, the access group's volumes will not be modified. 
+
+--attributes
+
+List of Name/Value pairs in JSON object format. 
 
 ---------------------------------------------------------------
 #### addinitiatorsto ####
@@ -1028,20 +1008,40 @@ List of initiators to remove from the volume access group.
  
 
 ---------------------------------------------------------------
-#### getefficiency ####
+#### create ####
 Command:
 
-    sfcli VolumeAccessGroup getefficiency <options>
+    sfcli VolumeAccessGroup create <options>
 
 Description:
 
-GetVolumeAccessGroupEfficiency is used to retrieve efficiency information about a volume access group. Only the volume access group provided as parameters in this API method is used to compute the capacity. 
+Creates a new volume access group. The new volume access group must be given a name when it is created. Entering initiators and volumes are optional when creating a volume access group. Once the group is created volumes and initiator IQNs can be added. Any initiator IQN that is successfully added to the volume access group is able to access any volume in the group without CHAP authentication. 
 
 Options:
 
---volumeaccessgroupid
+--name
 
-Specifies the volume access group for which capacity is computed. 
+Name of the volume access group. It is not required to be unique, but recommended. 
+
+--initiators
+
+List of initiators to include in the volume access group. If unspecified, the access group will start out without configured initiators. 
+
+--volumes
+
+List of volumes to initially include in the volume access group. If unspecified, the access group will start without any volumes. 
+
+--virtualnetworkid
+
+The ID of the SolidFire Virtual Network ID to associate the volume access group with. 
+
+--virtualnetworktags
+
+The ID of the VLAN Virtual Network Tag to associate the volume access group with. 
+
+--attributes
+
+List of Name/Value pairs in JSON object format. 
 
 ---------------------------------------------------------------
 #### delete ####
@@ -2232,42 +2232,6 @@ Network Tag that identifies the virtual network to remove.
 
 Account Commands 
 ---------------------------------------------------------------
-#### list ####
-Command:
-
-    sfcli Account list <options>
-
-Description:
-
-Returns the entire list of accounts, with optional paging support. 
-
-Options:
-
---startaccountid
-
-Starting AccountID to return. If no Account exists with this AccountID, the next Account by AccountID order is used as the start of the list. To page through the list, pass the AccountID of the last Account in the previous response + 1 
-
---limit
-
-Maximum number of AccountInfo objects to return. 
-
----------------------------------------------------------------
-#### getefficiency ####
-Command:
-
-    sfcli Account getefficiency <options>
-
-Description:
-
-GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity. 
-
-Options:
-
---accountid
-
-Specifies the volume account for which capacity is computed. 
-
----------------------------------------------------------------
 #### modify ####
 Command:
 
@@ -2302,6 +2266,42 @@ CHAP secret to use for the target (mutual CHAP authentication). Should be 12-16 
 --attributes
 
 List of Name/Value pairs in JSON object format. 
+
+---------------------------------------------------------------
+#### getefficiency ####
+Command:
+
+    sfcli Account getefficiency <options>
+
+Description:
+
+GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity. 
+
+Options:
+
+--accountid
+
+Specifies the volume account for which capacity is computed. 
+
+---------------------------------------------------------------
+#### list ####
+Command:
+
+    sfcli Account list <options>
+
+Description:
+
+Returns the entire list of accounts, with optional paging support. 
+
+Options:
+
+--startaccountid
+
+Starting AccountID to return. If no Account exists with this AccountID, the next Account by AccountID order is used as the start of the list. To page through the list, pass the AccountID of the last Account in the previous response + 1 
+
+--limit
+
+Maximum number of AccountInfo objects to return. 
 
 ---------------------------------------------------------------
 #### remove ####
