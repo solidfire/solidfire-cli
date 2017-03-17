@@ -24,7 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """getinfo getapi disablesnmp getsnmpstate getsnmpinfo getconfig deleteallsupportbundles getsystemstatus setsnmptrapinfo listfaults listadmins create disableencryptionatrest addadmin setntpinfo setconfig modifyadmin getsnmptrapinfo listevents snmpsendtesttraps removeadmin modifyfullthreshold getlimits getcurrentadmin createsupportbundle getcapacity getntpinfo enableencryptionatrest getversioninfo setsnmpacl clearfaults getsnmpacl getstate enablesnmp getstats getmasternodeid setsnmpinfo getfullthreshold listsyncjobs """
+    """getinfo getapi disablesnmp getsnmpstate getsnmpinfo getconfig deleteallsupportbundles getsystemstatus setsnmptrapinfo listfaults listadmins create disableencryptionatrest addadmin setntpinfo setconfig modifyadmin getsnmptrapinfo listevents clearfaults removeadmin modifyfullthreshold getlimits getcurrentadmin createsupportbundle getcapacity getntpinfo enableencryptionatrest getversioninfo setsnmpacl snmpsendtesttraps getsnmpacl getstate enablesnmp getstats getmasternodeid setsnmpinfo getfullthreshold listsyncjobs """
 
 @cli.command('getinfo', short_help="""Return configuration information about the cluster. """, cls=SolidFireCommand)
 @pass_context
@@ -916,20 +916,26 @@ def listevents(ctx,
 
 
 
-@cli.command('snmpsendtesttraps', short_help="""SnmpSendTestTraps enables you to test SNMP functionality for a cluster. This method instructs the cluster to send test SNMP traps to the currently configured SNMP manager. """, cls=SolidFireCommand)
+@cli.command('clearfaults', short_help="""ClearClusterFaults is used to clear information about both current faults that are resolved as well as faults that were previously detected and resolved can be cleared. """, cls=SolidFireCommand)
+@click.option('--faulttypes',
+              type=str,
+              required=False,
+              help="""Determines the types of faults cleared: current: Faults that are currently detected and have not been resolved. resolved: Faults that were previously detected and resolved. all: Both current and resolved faults are cleared. The fault status can be determined by the "resolved" field of the fault object. """)
 @pass_context
-def snmpsendtesttraps(ctx):
-    """SnmpSendTestTraps enables you to test SNMP functionality for a cluster. This method instructs the cluster to send test SNMP traps to the currently configured SNMP manager."""
+def clearfaults(ctx,
+           # Optional main parameter
+           faulttypes = None):
+    """ClearClusterFaults is used to clear information about both current faults that are resolved as well as faults that were previously detected and resolved can be cleared."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
-    ctx.logger.info("")
+    ctx.logger.info("""faulttypes = """+str(faulttypes)+""";"""+"")
     try:
-        _SnmpSendTestTrapsResult = ctx.element.()
+        _ClearClusterFaultsResult = ctx.element.(fault_types=faulttypes)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -937,7 +943,7 @@ def snmpsendtesttraps(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_SnmpSendTestTrapsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_ClearClusterFaultsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1363,26 +1369,20 @@ def setsnmpacl(ctx,
 
 
 
-@cli.command('clearfaults', short_help="""ClearClusterFaults is used to clear information about both current faults that are resolved as well as faults that were previously detected and resolved can be cleared. """, cls=SolidFireCommand)
-@click.option('--faulttype',
-              type=str,
-              required=False,
-              help="""Determines the types of faults cleared: current: Faults that are currently detected and have not been resolved. resolved: Faults that were previously detected and resolved. all: Both current and resolved faults are cleared. The fault status can be determined by the "resolved" field of the fault object. """)
+@cli.command('snmpsendtesttraps', short_help="""SnmpSendTestTraps enables you to test SNMP functionality for a cluster. This method instructs the cluster to send test SNMP traps to the currently configured SNMP manager. """, cls=SolidFireCommand)
 @pass_context
-def clearfaults(ctx,
-           # Optional main parameter
-           faulttype = None):
-    """ClearClusterFaults is used to clear information about both current faults that are resolved as well as faults that were previously detected and resolved can be cleared."""
+def snmpsendtesttraps(ctx):
+    """SnmpSendTestTraps enables you to test SNMP functionality for a cluster. This method instructs the cluster to send test SNMP traps to the currently configured SNMP manager."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-    
+
     
 
-    ctx.logger.info("""faulttype = """+str(faulttype)+""";"""+"")
+    ctx.logger.info("")
     try:
-        _ClearClusterFaultsResult = ctx.element.(fault_type=faulttype)
+        _SnmpSendTestTrapsResult = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1390,7 +1390,7 @@ def clearfaults(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_ClearClusterFaultsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_SnmpSendTestTrapsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 

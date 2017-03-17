@@ -4138,16 +4138,20 @@ Identifies the end of a range of events to return.
  
 
 ---------------------------------------------------------------
-#### snmpsendtesttraps ####
+#### clearfaults ####
 Command:
 
-    sfcli Cluster snmpsendtesttraps <options>
+    sfcli Cluster clearfaults <options>
 
 Description:
 
-SnmpSendTestTraps enables you to test SNMP functionality for a cluster. This method instructs the cluster to send test SNMP traps to the currently configured SNMP manager. 
+ClearClusterFaults is used to clear information about both current faults that are resolved as well as faults that were previously detected and resolved can be cleared. 
 
 Options:
+
+--faulttypes
+
+Determines the types of faults cleared: current: Faults that are currently detected and have not been resolved. resolved: Faults that were previously detected and resolved. all: Both current and resolved faults are cleared. The fault status can be determined by the "resolved" field of the fault object. 
 
 ---------------------------------------------------------------
 #### removeadmin ####
@@ -4306,20 +4310,16 @@ List of networks and what type of access they have to the SNMP servers running o
 List of users and the type of access they have to the SNMP servers running on the cluster nodes. REQUIRED if SNMP v3 is enabled. 
 
 ---------------------------------------------------------------
-#### clearfaults ####
+#### snmpsendtesttraps ####
 Command:
 
-    sfcli Cluster clearfaults <options>
+    sfcli Cluster snmpsendtesttraps <options>
 
 Description:
 
-ClearClusterFaults is used to clear information about both current faults that are resolved as well as faults that were previously detected and resolved can be cleared. 
+SnmpSendTestTraps enables you to test SNMP functionality for a cluster. This method instructs the cluster to send test SNMP traps to the currently configured SNMP manager. 
 
 Options:
-
---faulttype
-
-Determines the types of faults cleared: current: Faults that are currently detected and have not been resolved. resolved: Faults that were previously detected and resolved. all: Both current and resolved faults are cleared. The fault status can be determined by the "resolved" field of the fault object. 
 
 ---------------------------------------------------------------
 #### getsnmpacl ####
