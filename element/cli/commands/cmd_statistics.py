@@ -40,7 +40,7 @@ def getcompletestats(ctx):
 
     ctx.logger.info("")
     try:
-        _str = ctx.element.()
+        _dict = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -48,7 +48,7 @@ def getcompletestats(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_str, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_dict, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -91,7 +91,7 @@ def getrawstats(ctx):
 
     ctx.logger.info("")
     try:
-        _str = ctx.element.()
+        _dict = ctx.element.()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -99,7 +99,7 @@ def getrawstats(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_str, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_dict, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 

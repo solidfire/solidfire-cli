@@ -832,46 +832,6 @@ The ID of the volume access group to modify.
 List of volumes to remove from this volume access group. 
 
 ---------------------------------------------------------------
-#### modify ####
-Command:
-
-    sfcli VolumeAccessGroup modify <options>
-
-Description:
-
-Update initiators and add or remove volumes from a volume access group. A specified initiator or volume that duplicates an existing volume or initiator in a volume access group is left as-is. If a value is not specified for volumes or initiators, the current list of initiators and volumes are not changed.  Often, it is easier to use the convenience functions to modify initiators and volumes independently:  AddInitiatorsToVolumeAccessGroup RemoveInitiatorsFromVolumeAccessGroup AddVolumesToVolumeAccessGroup RemoveVolumesFromVolumeAccessGroup 
-
-Options:
-
---volumeaccessgroupid
-
-The ID of the volume access group to modify. 
-
---virtualnetworkid
-
-The ID of the SolidFire Virtual Network ID to associate the volume access group with. 
-
---virtualnetworktags
-
-The ID of the VLAN Virtual Network Tag to associate the volume access group with. 
-
---name
-
-Name of the volume access group. It is not required to be unique, but recommended. 
-
---initiators
-
-List of initiators to include in the volume access group. If unspecified, the access group's configured initiators will not be modified. 
-
---volumes
-
-List of volumes to initially include in the volume access group. If unspecified, the access group's volumes will not be modified. 
-
---attributes
-
-List of Name/Value pairs in JSON object format. 
-
----------------------------------------------------------------
 #### create ####
 Command:
 
@@ -946,6 +906,50 @@ The lowest VolumeAccessGroupID to return. This can be useful for paging. If unsp
 --limit
 
 The maximum number of results to return. This can be useful for paging. 
+
+---------------------------------------------------------------
+#### modify ####
+Command:
+
+    sfcli VolumeAccessGroup modify <options>
+
+Description:
+
+Update initiators and add or remove volumes from a volume access group. A specified initiator or volume that duplicates an existing volume or initiator in a volume access group is left as-is. If a value is not specified for volumes or initiators, the current list of initiators and volumes are not changed.  Often, it is easier to use the convenience functions to modify initiators and volumes independently:  AddInitiatorsToVolumeAccessGroup RemoveInitiatorsFromVolumeAccessGroup AddVolumesToVolumeAccessGroup RemoveVolumesFromVolumeAccessGroup 
+
+Options:
+
+--volumeaccessgroupid
+
+The ID of the volume access group to modify. 
+
+--virtualnetworkid
+
+The ID of the SolidFire Virtual Network ID to associate the volume access group with. 
+
+--virtualnetworktags
+
+The ID of the VLAN Virtual Network Tag to associate the volume access group with. 
+
+--name
+
+Name of the volume access group. It is not required to be unique, but recommended. 
+
+--initiators
+
+List of initiators to include in the volume access group. If unspecified, the access group's configured initiators will not be modified. 
+
+--volumes
+
+List of volumes to initially include in the volume access group. If unspecified, the access group's volumes will not be modified. 
+
+--deleteorphaninitiators
+
+true: Delete initiator objects after they are removed from a volume access group. false: Do not delete initiator objects after they are removed from a volume access group. 
+
+--attributes
+
+List of Name/Value pairs in JSON object format. 
 
 ---------------------------------------------------------------
 #### addinitiatorsto ####
