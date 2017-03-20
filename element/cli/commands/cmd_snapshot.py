@@ -24,7 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """listgroup modifygroup modify create list createschedule deletegroup getschedule rollbacktogroup rollbackto creategroup modifyschedule listschedules delete """
+    """listgroup modifygroup modify create list deletegroup createschedule getschedule rollbacktogroup rollbackto creategroup modifyschedule listschedules delete """
 
 @cli.command('listgroup', short_help="""ListGroupSnapshots is used to return information about all group snapshots that have been created. """, cls=SolidFireCommand)
 @click.option('--volumeid',
@@ -261,6 +261,45 @@ def list(ctx,
 
 
 
+@cli.command('deletegroup', short_help="""DeleteGroupSnapshot is used to delete a group snapshot. The saveMembers parameter can be used to preserve all the snapshots that were made for the volumes in the group but the group association will be removed. """, cls=SolidFireCommand)
+@click.option('--groupsnapshotid',
+              type=int,
+              required=True,
+              help="""Unique ID of the group snapshot. """)
+@click.option('--savemembers',
+              type=bool,
+              required=True,
+              help="""true: Snapshots are kept, but group association is removed. false: The group and snapshots are deleted. """)
+@pass_context
+def deletegroup(ctx,
+           # Mandatory main parameter
+           groupsnapshotid,
+           # Mandatory main parameter
+           savemembers):
+    """DeleteGroupSnapshot is used to delete a group snapshot."""
+    """The saveMembers parameter can be used to preserve all the snapshots that"""
+    """were made for the volumes in the group but the group association will be removed."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+        
+    
+
+    ctx.logger.info("""groupsnapshotid = """+str(groupsnapshotid)+""";"""+"""savemembers = """+str(savemembers)+""";"""+"")
+    try:
+        _DeleteGroupSnapshotResult = ctx.element.(group_snapshot_id=groupsnapshotid, save_members=savemembers)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_DeleteGroupSnapshotResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
 @cli.command('createschedule', short_help="""CreateSchedule is used to create a schedule that will autonomously make a snapshot of a volume at a defined interval.  The snapshot created can be used later as a backup or rollback to ensure the data on a volume or group of volumes is consistent for the point in time in which the snapshot was created.   Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """)
 @click.option('--minutes',
               type=int,
@@ -396,45 +435,6 @@ def CreateSchedule(ctx,
         exit()
 
     cli_utils.print_result(_CreateScheduleResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-@cli.command('deletegroup', short_help="""DeleteGroupSnapshot is used to delete a group snapshot. The saveMembers parameter can be used to preserve all the snapshots that were made for the volumes in the group but the group association will be removed. """, cls=SolidFireCommand)
-@click.option('--groupsnapshotid',
-              type=int,
-              required=True,
-              help="""Unique ID of the group snapshot. """)
-@click.option('--savemembers',
-              type=bool,
-              required=True,
-              help="""true: Snapshots are kept, but group association is removed. false: The group and snapshots are deleted. """)
-@pass_context
-def deletegroup(ctx,
-           # Mandatory main parameter
-           groupsnapshotid,
-           # Mandatory main parameter
-           savemembers):
-    """DeleteGroupSnapshot is used to delete a group snapshot."""
-    """The saveMembers parameter can be used to preserve all the snapshots that"""
-    """were made for the volumes in the group but the group association will be removed."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-        
-    
-
-    ctx.logger.info("""groupsnapshotid = """+str(groupsnapshotid)+""";"""+"""savemembers = """+str(savemembers)+""";"""+"")
-    try:
-        _DeleteGroupSnapshotResult = ctx.element.(group_snapshot_id=groupsnapshotid, save_members=savemembers)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_DeleteGroupSnapshotResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
 
 
 @cli.command('getschedule', short_help="""GetSchedule is used to return information about a scheduled snapshot that has been created. You can see information about a specified schedule if there are many snapshot schedules in the system. You can include more than one schedule with this method by specifying additional scheduleIDs to the parameter. """, cls=SolidFireCommand)

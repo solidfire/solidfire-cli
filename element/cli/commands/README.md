@@ -2676,22 +2676,6 @@ The volume to list snapshots for. If not provided, all snapshots for all volumes
  
 
 ---------------------------------------------------------------
-#### createschedule ####
-Command:
-
-    sfcli Snapshot createschedule <options>
-
-Description:
-
-CreateSchedule is used to create a schedule that will autonomously make a snapshot of a volume at a defined interval.  The snapshot created can be used later as a backup or rollback to ensure the data on a volume or group of volumes is consistent for the point in time in which the snapshot was created.   Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. 
-
-Options:
-
---schedule
-
-The "Schedule" object will be used to create a new schedule. Do not set ScheduleID property, it will be ignored. Frequency property must be of type that inherits from Frequency. Valid types are: DaysOfMonthFrequency DaysOrWeekFrequency TimeIntervalFrequency 
-
----------------------------------------------------------------
 #### deletegroup ####
 Command:
 
@@ -2710,6 +2694,22 @@ Unique ID of the group snapshot.
 --savemembers
 
 true: Snapshots are kept, but group association is removed. false: The group and snapshots are deleted. 
+
+---------------------------------------------------------------
+#### createschedule ####
+Command:
+
+    sfcli Snapshot createschedule <options>
+
+Description:
+
+CreateSchedule is used to create a schedule that will autonomously make a snapshot of a volume at a defined interval.  The snapshot created can be used later as a backup or rollback to ensure the data on a volume or group of volumes is consistent for the point in time in which the snapshot was created.   Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. 
+
+Options:
+
+--schedule
+
+The "Schedule" object will be used to create a new schedule. Do not set ScheduleID property, it will be ignored. Frequency property must be of type that inherits from Frequency. Valid types are: DaysOfMonthFrequency DaysOrWeekFrequency TimeIntervalFrequency 
 
 ---------------------------------------------------------------
 #### getschedule ####
