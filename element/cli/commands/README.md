@@ -2028,22 +2028,6 @@ Service name to be restarted.
 Action to perform on the service (start, stop, restart). 
 
 ---------------------------------------------------------------
-#### networking ####
-Command:
-
-    sfcli Restart networking <options>
-
-Description:
-
-The RestartNetworking API method is used to restart the networking services on a node.WARNING! This method restarts all networking services on a node, causing temporary loss of networking connectivity. Exercise caution when using this method. 
-
-Options:
-
---force
-
-The "force" parameter must be included on this method to successfully restart the networking. 
-
----------------------------------------------------------------
 #### resetnode ####
 Command:
 
@@ -2070,6 +2054,22 @@ Used to enter specifications for running the reset operation.
 --reboot
 
 Should it be rebooted? 
+
+---------------------------------------------------------------
+#### networking ####
+Command:
+
+    sfcli Restart networking <options>
+
+Description:
+
+The RestartNetworking API method is used to restart the networking services on a node.WARNING! This method restarts all networking services on a node, causing temporary loss of networking connectivity. Exercise caution when using this method. 
+
+Options:
+
+--force
+
+The "force" parameter must be included on this method to successfully restart the networking. 
 
 ---------------------------------------------------------------
 #### shutdown ####
@@ -2596,28 +2596,20 @@ Use to set the time when the snapshot should be removed.
 Use to enable the snapshot created to be replicated to a remote SolidFire cluster. Possible values: true: the snapshot will be replicated to remote storage. false: Default. No replication. 
 
 ---------------------------------------------------------------
-#### modify ####
+#### list ####
 Command:
 
-    sfcli Snapshot modify <options>
+    sfcli Snapshot list <options>
 
 Description:
 
-ModifySnapshot is used to change the attributes currently assigned to a snapshot. Use this API method to enable the snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system. 
+ListSnapshots is used to return the attributes of each snapshot taken on the volume. 
 
 Options:
 
---snapshotid
+--volumeid
 
-ID of the snapshot. 
-
---expirationtime
-
-Use to set the time when the snapshot should be removed. 
-
---enableremotereplication
-
-Use to enable the snapshot created to be replicated to a remote SolidFire cluster. Possible values: true: the snapshot will be replicated to remote storage. false: Default. No replication. 
+The volume to list snapshots for. If not provided, all snapshots for all volumes are returned. 
 
 ---------------------------------------------------------------
 #### create ####
@@ -2656,24 +2648,28 @@ The amount of time the snapshot will be retained. Enter in HH:mm:ss
 List of Name/Value pairs in JSON object format. 
 
 ---------------------------------------------------------------
-#### list ####
+#### modify ####
 Command:
 
-    sfcli Snapshot list <options>
+    sfcli Snapshot modify <options>
 
 Description:
 
-ListSnapshots is used to return the attributes of each snapshot taken on the volume. 
+ModifySnapshot is used to change the attributes currently assigned to a snapshot. Use this API method to enable the snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system. 
 
 Options:
 
---volumeid
+--snapshotid
 
-The volume to list snapshots for. If not provided, all snapshots for all volumes are returned. 
+ID of the snapshot. 
 
---internal
+--expirationtime
 
- 
+Use to set the time when the snapshot should be removed. 
+
+--enableremotereplication
+
+Use to enable the snapshot created to be replicated to a remote SolidFire cluster. Possible values: true: the snapshot will be replicated to remote storage. false: Default. No replication. 
 
 ---------------------------------------------------------------
 #### deletegroup ####

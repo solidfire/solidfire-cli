@@ -24,7 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """listgroup modifygroup modify create list deletegroup createschedule getschedule rollbacktogroup rollbackto creategroup modifyschedule listschedules delete """
+    """listgroup modifygroup list create modify deletegroup createschedule getschedule rollbacktogroup rollbackto creategroup modifyschedule listschedules delete """
 
 @cli.command('listgroup', short_help="""ListGroupSnapshots is used to return information about all group snapshots that have been created. """, cls=SolidFireCommand)
 @click.option('--volumeid',
@@ -106,39 +106,26 @@ def modifygroup(ctx,
 
 
 
-@cli.command('modify', short_help="""ModifySnapshot is used to change the attributes currently assigned to a snapshot. Use this API method to enable the snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system. """, cls=SolidFireCommand)
-@click.option('--snapshotid',
+@cli.command('list', short_help="""ListSnapshots is used to return the attributes of each snapshot taken on the volume. """, cls=SolidFireCommand)
+@click.option('--volumeid',
               type=int,
-              required=True,
-              help="""ID of the snapshot. """)
-@click.option('--expirationtime',
-              type=str,
               required=False,
-              help="""Use to set the time when the snapshot should be removed. """)
-@click.option('--enableremotereplication',
-              type=bool,
-              required=False,
-              help="""Use to enable the snapshot created to be replicated to a remote SolidFire cluster. Possible values: true: the snapshot will be replicated to remote storage. false: Default. No replication. """)
+              help="""The volume to list snapshots for. If not provided, all snapshots for all volumes are returned. """)
 @pass_context
-def modify(ctx,
-           # Mandatory main parameter
-           snapshotid,
+def list(ctx,
            # Optional main parameter
-           expirationtime = None,
-           # Optional main parameter
-           enableremotereplication = None):
-    """ModifySnapshot is used to change the attributes currently assigned to a snapshot."""
-    """Use this API method to enable the snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system."""
+           volumeid = None):
+    """ListSnapshots is used to return the attributes of each snapshot taken on the volume."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-            
+    
     
 
-    ctx.logger.info("""snapshotid = """+str(snapshotid)+""";"""+"""expirationtime = """+str(expirationtime)+""";"""+"""enableremotereplication = """+str(enableremotereplication)+""";"""+"")
+    ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"")
     try:
-        _ModifySnapshotResult = ctx.element.(snapshot_id=snapshotid, expiration_time=expirationtime, enable_remote_replication=enableremotereplication)
+        _ListSnapshotsResult = ctx.element.(volume_id=volumeid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -146,7 +133,7 @@ def modify(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_ModifySnapshotResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_ListSnapshotsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -224,32 +211,39 @@ def create(ctx,
 
 
 
-@cli.command('list', short_help="""ListSnapshots is used to return the attributes of each snapshot taken on the volume. """, cls=SolidFireCommand)
-@click.option('--volumeid',
+@cli.command('modify', short_help="""ModifySnapshot is used to change the attributes currently assigned to a snapshot. Use this API method to enable the snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system. """, cls=SolidFireCommand)
+@click.option('--snapshotid',
               type=int,
+              required=True,
+              help="""ID of the snapshot. """)
+@click.option('--expirationtime',
+              type=str,
               required=False,
-              help="""The volume to list snapshots for. If not provided, all snapshots for all volumes are returned. """)
-@click.option('--internal',
+              help="""Use to set the time when the snapshot should be removed. """)
+@click.option('--enableremotereplication',
               type=bool,
               required=False,
-              help=""" """)
+              help="""Use to enable the snapshot created to be replicated to a remote SolidFire cluster. Possible values: true: the snapshot will be replicated to remote storage. false: Default. No replication. """)
 @pass_context
-def list(ctx,
+def modify(ctx,
+           # Mandatory main parameter
+           snapshotid,
            # Optional main parameter
-           volumeid = None,
+           expirationtime = None,
            # Optional main parameter
-           internal = None):
-    """ListSnapshots is used to return the attributes of each snapshot taken on the volume."""
+           enableremotereplication = None):
+    """ModifySnapshot is used to change the attributes currently assigned to a snapshot."""
+    """Use this API method to enable the snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-        
+            
     
 
-    ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""internal = """+str(internal)+""";"""+"")
+    ctx.logger.info("""snapshotid = """+str(snapshotid)+""";"""+"""expirationtime = """+str(expirationtime)+""";"""+"""enableremotereplication = """+str(enableremotereplication)+""";"""+"")
     try:
-        _ListSnapshotsResult = ctx.element.(volume_id=volumeid, internal=internal)
+        _ModifySnapshotResult = ctx.element.(snapshot_id=snapshotid, expiration_time=expirationtime, enable_remote_replication=enableremotereplication)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -257,7 +251,7 @@ def list(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_ListSnapshotsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_ModifySnapshotResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
