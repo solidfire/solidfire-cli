@@ -39,7 +39,7 @@ def list(ctx):
 
     ctx.logger.info("")
     try:
-        _ListServicesResult = ctx.element.()
+        _ListServicesResult = ctx.element.list_services()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()

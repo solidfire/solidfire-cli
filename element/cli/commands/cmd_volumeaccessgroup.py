@@ -53,7 +53,7 @@ def removevolumesfrom(ctx,
 
     ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"""volumes = """+str(volumes)+""";"""+"")
     try:
-        _ModifyVolumeAccessGroupResult = ctx.element.(volume_access_group_id=volumeaccessgroupid, volumes=volumes)
+        _ModifyVolumeAccessGroupResult = ctx.element.remove_volumes_from_volume_access_group(volume_access_group_id=volumeaccessgroupid, volumes=volumes)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -135,7 +135,7 @@ def create(ctx,
 
     ctx.logger.info("""name = """+str(name)+""";"""+"""initiators = """+str(initiators)+""";"""+"""volumes = """+str(volumes)+""";"""+"""virtualnetworkid = """+str(virtualnetworkid)+""";"""+"""virtualnetworktags = """+str(virtualnetworktags)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _CreateVolumeAccessGroupResult = ctx.element.(name=name, initiators=initiators, volumes=volumes, virtual_network_id=virtualnetworkid, virtual_network_tags=virtualnetworktags, attributes=kwargsDict)
+        _CreateVolumeAccessGroupResult = ctx.element.create_volume_access_group(name=name, initiators=initiators, volumes=volumes, virtual_network_id=virtualnetworkid, virtual_network_tags=virtualnetworktags, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -210,7 +210,7 @@ def modifylunassignments(ctx,
 
     ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"""lunassignments = """+str(lunassignments)+""";"""+"")
     try:
-        _ModifyVolumeAccessGroupLunAssignmentsResult = ctx.element.(volume_access_group_id=volumeaccessgroupid, lun_assignments=lunassignmentsArray)
+        _ModifyVolumeAccessGroupLunAssignmentsResult = ctx.element.modify_volume_access_group_lun_assignments(volume_access_group_id=volumeaccessgroupid, lun_assignments=lunassignmentsArray)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -247,7 +247,7 @@ def list(ctx,
 
     ctx.logger.info("""startvolumeaccessgroupid = """+str(startvolumeaccessgroupid)+""";"""+"""limit = """+str(limit)+""";"""+"")
     try:
-        _ListVolumeAccessGroupsResult = ctx.element.(start_volume_access_group_id=startvolumeaccessgroupid, limit=limit)
+        _ListVolumeAccessGroupsResult = ctx.element.list_volume_access_groups(start_volume_access_group_id=startvolumeaccessgroupid, limit=limit)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -346,7 +346,7 @@ def modify(ctx,
 
     ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"""virtualnetworkid = """+str(virtualnetworkid)+""";"""+"""virtualnetworktags = """+str(virtualnetworktags)+""";"""+"""name = """+str(name)+""";"""+"""initiators = """+str(initiators)+""";"""+"""volumes = """+str(volumes)+""";"""+"""deleteorphaninitiators = """+str(deleteorphaninitiators)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _ModifyVolumeAccessGroupResult = ctx.element.(volume_access_group_id=volumeaccessgroupid, virtual_network_id=virtualnetworkid, virtual_network_tags=virtualnetworktags, name=name, initiators=initiators, volumes=volumes, delete_orphan_initiators=deleteorphaninitiators, attributes=kwargsDict)
+        _ModifyVolumeAccessGroupResult = ctx.element.modify_volume_access_group(volume_access_group_id=volumeaccessgroupid, virtual_network_id=virtualnetworkid, virtual_network_tags=virtualnetworktags, name=name, initiators=initiators, volumes=volumes, delete_orphan_initiators=deleteorphaninitiators, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -385,7 +385,7 @@ def addinitiatorsto(ctx,
 
     ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"""initiators = """+str(initiators)+""";"""+"")
     try:
-        _ModifyVolumeAccessGroupResult = ctx.element.(volume_access_group_id=volumeaccessgroupid, initiators=initiators)
+        _ModifyVolumeAccessGroupResult = ctx.element.add_initiators_to_volume_access_group(volume_access_group_id=volumeaccessgroupid, initiators=initiators)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -416,7 +416,7 @@ def getlunassignments(ctx,
 
     ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"")
     try:
-        _GetVolumeAccessGroupLunAssignmentsResult = ctx.element.(volume_access_group_id=volumeaccessgroupid)
+        _GetVolumeAccessGroupLunAssignmentsResult = ctx.element.get_volume_access_group_lun_assignments(volume_access_group_id=volumeaccessgroupid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -455,7 +455,7 @@ def addvolumesto(ctx,
 
     ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"""volumes = """+str(volumes)+""";"""+"")
     try:
-        _ModifyVolumeAccessGroupResult = ctx.element.(volume_access_group_id=volumeaccessgroupid, volumes=volumes)
+        _ModifyVolumeAccessGroupResult = ctx.element.add_volumes_to_volume_access_group(volume_access_group_id=volumeaccessgroupid, volumes=volumes)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -500,7 +500,7 @@ def removeinitiatorsfrom(ctx,
 
     ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"""initiators = """+str(initiators)+""";"""+"""deleteorphaninitiators = """+str(deleteorphaninitiators)+""";"""+"")
     try:
-        _ModifyVolumeAccessGroupResult = ctx.element.(volume_access_group_id=volumeaccessgroupid, initiators=initiators, delete_orphan_initiators=deleteorphaninitiators)
+        _ModifyVolumeAccessGroupResult = ctx.element.remove_initiators_from_volume_access_group(volume_access_group_id=volumeaccessgroupid, initiators=initiators, delete_orphan_initiators=deleteorphaninitiators)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -531,7 +531,7 @@ def getefficiency(ctx,
 
     ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"")
     try:
-        _GetEfficiencyResult = ctx.element.(volume_access_group_id=volumeaccessgroupid)
+        _GetEfficiencyResult = ctx.element.get_volume_access_group_efficiency(volume_access_group_id=volumeaccessgroupid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -562,7 +562,7 @@ def delete(ctx,
 
     ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"")
     try:
-        _DeleteVolumeAccessGroupResult = ctx.element.(volume_access_group_id=volumeaccessgroupid)
+        _DeleteVolumeAccessGroupResult = ctx.element.delete_volume_access_group(volume_access_group_id=volumeaccessgroupid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()

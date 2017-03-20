@@ -51,7 +51,7 @@ def listgroup(ctx,
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""groupsnapshotid = """+str(groupsnapshotid)+""";"""+"")
     try:
-        _ListGroupSnapshotsResult = ctx.element.(volume_id=volumeid, group_snapshot_id=groupsnapshotid)
+        _ListGroupSnapshotsResult = ctx.element.list_group_snapshots(volume_id=volumeid, group_snapshot_id=groupsnapshotid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -94,7 +94,7 @@ def modifygroup(ctx,
 
     ctx.logger.info("""groupsnapshotid = """+str(groupsnapshotid)+""";"""+"""expirationtime = """+str(expirationtime)+""";"""+"""enableremotereplication = """+str(enableremotereplication)+""";"""+"")
     try:
-        _ModifyGroupSnapshotResult = ctx.element.(group_snapshot_id=groupsnapshotid, expiration_time=expirationtime, enable_remote_replication=enableremotereplication)
+        _ModifyGroupSnapshotResult = ctx.element.modify_group_snapshot(group_snapshot_id=groupsnapshotid, expiration_time=expirationtime, enable_remote_replication=enableremotereplication)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -125,7 +125,7 @@ def list(ctx,
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"")
     try:
-        _ListSnapshotsResult = ctx.element.(volume_id=volumeid)
+        _ListSnapshotsResult = ctx.element.list_snapshots(volume_id=volumeid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -199,7 +199,7 @@ def create(ctx,
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""snapshotid = """+str(snapshotid)+""";"""+"""name = """+str(name)+""";"""+"""enableremotereplication = """+str(enableremotereplication)+""";"""+"""retention = """+str(retention)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _CreateSnapshotResult = ctx.element.(volume_id=volumeid, snapshot_id=snapshotid, name=name, enable_remote_replication=enableremotereplication, retention=retention, attributes=kwargsDict)
+        _CreateSnapshotResult = ctx.element.create_snapshot(volume_id=volumeid, snapshot_id=snapshotid, name=name, enable_remote_replication=enableremotereplication, retention=retention, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -243,7 +243,7 @@ def modify(ctx,
 
     ctx.logger.info("""snapshotid = """+str(snapshotid)+""";"""+"""expirationtime = """+str(expirationtime)+""";"""+"""enableremotereplication = """+str(enableremotereplication)+""";"""+"")
     try:
-        _ModifySnapshotResult = ctx.element.(snapshot_id=snapshotid, expiration_time=expirationtime, enable_remote_replication=enableremotereplication)
+        _ModifySnapshotResult = ctx.element.modify_snapshot(snapshot_id=snapshotid, expiration_time=expirationtime, enable_remote_replication=enableremotereplication)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -282,7 +282,7 @@ def deletegroup(ctx,
 
     ctx.logger.info("""groupsnapshotid = """+str(groupsnapshotid)+""";"""+"""savemembers = """+str(savemembers)+""";"""+"")
     try:
-        _DeleteGroupSnapshotResult = ctx.element.(group_snapshot_id=groupsnapshotid, save_members=savemembers)
+        _DeleteGroupSnapshotResult = ctx.element.delete_group_snapshot(group_snapshot_id=groupsnapshotid, save_members=savemembers)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -450,7 +450,7 @@ def getschedule(ctx,
 
     ctx.logger.info("""scheduleid = """+str(scheduleid)+""";"""+"")
     try:
-        _GetScheduleResult = ctx.element.(schedule_id=scheduleid)
+        _GetScheduleResult = ctx.element.get_schedule(schedule_id=scheduleid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -511,7 +511,7 @@ def rollbacktogroup(ctx,
 
     ctx.logger.info("""groupsnapshotid = """+str(groupsnapshotid)+""";"""+"""savecurrentstate = """+str(savecurrentstate)+""";"""+"""name = """+str(name)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _CreateGroupSnapshotResult = ctx.element.(group_snapshot_id=groupsnapshotid, save_current_state=savecurrentstate, name=name, attributes=kwargsDict)
+        _CreateGroupSnapshotResult = ctx.element.rollback_to_group_snapshot(group_snapshot_id=groupsnapshotid, save_current_state=savecurrentstate, name=name, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -580,7 +580,7 @@ def rollbackto(ctx,
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""snapshotid = """+str(snapshotid)+""";"""+"""savecurrentstate = """+str(savecurrentstate)+""";"""+"""name = """+str(name)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _CreateSnapshotResult = ctx.element.(volume_id=volumeid, snapshot_id=snapshotid, save_current_state=savecurrentstate, name=name, attributes=kwargsDict)
+        _CreateSnapshotResult = ctx.element.rollback_to_snapshot(volume_id=volumeid, snapshot_id=snapshotid, save_current_state=savecurrentstate, name=name, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -650,7 +650,7 @@ def creategroup(ctx,
 
     ctx.logger.info("""volumes = """+str(volumes)+""";"""+"""name = """+str(name)+""";"""+"""enableremotereplication = """+str(enableremotereplication)+""";"""+"""retention = """+str(retention)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _CreateGroupSnapshotResult = ctx.element.(volumes=volumes, name=name, enable_remote_replication=enableremotereplication, retention=retention, attributes=kwargsDict)
+        _CreateGroupSnapshotResult = ctx.element.create_group_snapshot(volumes=volumes, name=name, enable_remote_replication=enableremotereplication, retention=retention, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -850,7 +850,7 @@ def listschedules(ctx):
 
     ctx.logger.info("")
     try:
-        _ListSchedulesResult = ctx.element.()
+        _ListSchedulesResult = ctx.element.list_schedules()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -884,7 +884,7 @@ def delete(ctx,
 
     ctx.logger.info("""snapshotid = """+str(snapshotid)+""";"""+"")
     try:
-        _DeleteSnapshotResult = ctx.element.(snapshot_id=snapshotid)
+        _DeleteSnapshotResult = ctx.element.delete_snapshot(snapshot_id=snapshotid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()

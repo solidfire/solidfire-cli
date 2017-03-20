@@ -43,7 +43,7 @@ def listpending(ctx):
 
     ctx.logger.info("")
     try:
-        _ListPendingNodesResult = ctx.element.()
+        _ListPendingNodesResult = ctx.element.list_pending_nodes()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -74,7 +74,7 @@ def getorigin(ctx,
 
     ctx.logger.info("""force = """+str(force)+""";"""+"")
     try:
-        _GetOriginResult = ctx.element.(force=force)
+        _GetOriginResult = ctx.element.get_origin(force=force)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -99,7 +99,7 @@ def listpendingactive(ctx):
 
     ctx.logger.info("")
     try:
-        _ListPendingActiveNodesResult = ctx.element.()
+        _ListPendingActiveNodesResult = ctx.element.list_pending_active_nodes()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -124,7 +124,7 @@ def listall(ctx):
 
     ctx.logger.info("")
     try:
-        _ListAllNodesResult = ctx.element.()
+        _ListAllNodesResult = ctx.element.list_all_nodes()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -151,7 +151,7 @@ def getpendingoperation(ctx):
 
     ctx.logger.info("")
     try:
-        _GetPendingOperationResult = ctx.element.()
+        _GetPendingOperationResult = ctx.element.get_pending_operation()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -176,7 +176,7 @@ def liststats(ctx):
 
     ctx.logger.info("")
     try:
-        _ListNodeStatsResult = ctx.element.()
+        _ListNodeStatsResult = ctx.element.list_node_stats()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -223,7 +223,7 @@ def add(ctx,
 
     ctx.logger.info("""pendingnodes = """+str(pendingnodes)+""";"""+"""autoinstall = """+str(autoinstall)+""";"""+"")
     try:
-        _AddNodesResult = ctx.element.(pending_nodes=pendingnodes, auto_install=autoinstall)
+        _AddNodesResult = ctx.element.add_nodes(pending_nodes=pendingnodes, auto_install=autoinstall)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -253,7 +253,7 @@ def getnetworkconfig(ctx):
 
     ctx.logger.info("")
     try:
-        _GetNetworkConfigResult = ctx.element.()
+        _GetNetworkConfigResult = ctx.element.get_network_config()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -284,7 +284,7 @@ def getstats(ctx,
 
     ctx.logger.info("""nodeid = """+str(nodeid)+""";"""+"")
     try:
-        _GetNodeStatsResult = ctx.element.(node_id=nodeid)
+        _GetNodeStatsResult = ctx.element.get_node_stats(node_id=nodeid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -311,7 +311,7 @@ def getconfig(ctx):
 
     ctx.logger.info("")
     try:
-        _GetConfigResult = ctx.element.()
+        _GetConfigResult = ctx.element.get_config()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -346,7 +346,7 @@ def remove(ctx,
 
     ctx.logger.info("""nodes = """+str(nodes)+""";"""+"")
     try:
-        _RemoveNodesResult = ctx.element.(nodes=nodes)
+        _RemoveNodesResult = ctx.element.remove_nodes(nodes=nodes)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -371,7 +371,7 @@ def listactive(ctx):
 
     ctx.logger.info("")
     try:
-        _ListActiveNodesResult = ctx.element.()
+        _ListActiveNodesResult = ctx.element.list_active_nodes()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -396,7 +396,7 @@ def getbootstrapconfig(ctx):
 
     ctx.logger.info("")
     try:
-        _GetBootstrapConfigResult = ctx.element.()
+        _GetBootstrapConfigResult = ctx.element.get_bootstrap_config()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()

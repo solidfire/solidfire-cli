@@ -79,7 +79,7 @@ def modifyhost(ctx,
 
     ctx.logger.info("""virtualvolumehostid = """+str(virtualvolumehostid)+""";"""+"""clusterid = """+str(clusterid)+""";"""+"""visibleprotocolendpointids = """+str(visibleprotocolendpointids)+""";"""+"""initiatornames = """+str(initiatornames)+""";"""+"""hostaddress = """+str(hostaddress)+""";"""+"""callingvirtualvolumehostid = """+str(callingvirtualvolumehostid)+""";"""+"")
     try:
-        _VirtualVolumeNullResult = ctx.element.(virtual_volume_host_id=virtualvolumehostid, cluster_id=clusterid, visible_protocol_endpoint_ids=visibleprotocolendpointids, initiator_names=initiatornames, host_address=hostaddress, calling_virtual_volume_host_id=callingvirtualvolumehostid)
+        _VirtualVolumeNullResult = ctx.element.modify_virtual_volume_host(virtual_volume_host_id=virtualvolumehostid, cluster_id=clusterid, visible_protocol_endpoint_ids=visibleprotocolendpointids, initiator_names=initiatornames, host_address=hostaddress, calling_virtual_volume_host_id=callingvirtualvolumehostid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -116,7 +116,7 @@ def gettaskupdate(ctx,
 
     ctx.logger.info("""virtualvolumetaskid = """+str(virtualvolumetaskid)+""";"""+"""callingvirtualvolumehostid = """+str(callingvirtualvolumehostid)+""";"""+"")
     try:
-        _VirtualVolumeTaskResult = ctx.element.(virtual_volume_task_id=virtualvolumetaskid, calling_virtual_volume_host_id=callingvirtualvolumehostid)
+        _VirtualVolumeTaskResult = ctx.element.get_virtual_volume_task_update(virtual_volume_task_id=virtualvolumetaskid, calling_virtual_volume_host_id=callingvirtualvolumehostid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -147,7 +147,7 @@ def unbindallfromhost(ctx,
 
     ctx.logger.info("""virtualvolumehostid = """+str(virtualvolumehostid)+""";"""+"")
     try:
-        _UnbindAllVirtualVolumesFromHostResult = ctx.element.(virtual_volume_host_id=virtualvolumehostid)
+        _UnbindAllVirtualVolumesFromHostResult = ctx.element.unbind_all_virtual_volumes_from_host(virtual_volume_host_id=virtualvolumehostid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -207,7 +207,7 @@ def modifymetadata(ctx,
 
     ctx.logger.info("""virtualvolumeid = """+str(virtualvolumeid)+""";"""+"""metadata = """+str(metadata)+""";"""+"""removekeys = """+str(removekeys)+""";"""+"""callingvirtualvolumehostid = """+str(callingvirtualvolumehostid)+""";"""+"")
     try:
-        _VirtualVolumeNullResult = ctx.element.(virtual_volume_id=virtualvolumeid, metadata=kwargsDict, remove_keys=removekeys, calling_virtual_volume_host_id=callingvirtualvolumehostid)
+        _VirtualVolumeNullResult = ctx.element.modify_virtual_volume_metadata(virtual_volume_id=virtualvolumeid, metadata=kwargsDict, remove_keys=removekeys, calling_virtual_volume_host_id=callingvirtualvolumehostid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -259,7 +259,7 @@ def modifyvasaproviderinfo(ctx,
 
     ctx.logger.info("""keystore = """+str(keystore)+""";"""+"""vasaproviderid = """+str(vasaproviderid)+""";"""+"""options = """+str(options)+""";"""+"")
     try:
-        _VirtualVolumeNullResult = ctx.element.(keystore=keystore, vasa_provider_id=vasaproviderid, options=kwargsDict)
+        _VirtualVolumeNullResult = ctx.element.modify_vasa_provider_info(keystore=keystore, vasa_provider_id=vasaproviderid, options=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -308,7 +308,7 @@ def copydiffsto(ctx,
 
     ctx.logger.info("""virtualvolumeid = """+str(virtualvolumeid)+""";"""+"""basevirtualvolumeid = """+str(basevirtualvolumeid)+""";"""+"""dstvirtualvolumeid = """+str(dstvirtualvolumeid)+""";"""+"""callingvirtualvolumehostid = """+str(callingvirtualvolumehostid)+""";"""+"")
     try:
-        _VirtualVolumeAsyncResult = ctx.element.(virtual_volume_id=virtualvolumeid, base_virtual_volume_id=basevirtualvolumeid, dst_virtual_volume_id=dstvirtualvolumeid, calling_virtual_volume_host_id=callingvirtualvolumehostid)
+        _VirtualVolumeAsyncResult = ctx.element.copy_diffs_to_virtual_volume(virtual_volume_id=virtualvolumeid, base_virtual_volume_id=basevirtualvolumeid, dst_virtual_volume_id=dstvirtualvolumeid, calling_virtual_volume_host_id=callingvirtualvolumehostid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -362,7 +362,7 @@ def querymetadata(ctx,
 
     ctx.logger.info("""queryconstraints = """+str(queryconstraints)+""";"""+"""wildcardconstraints = """+str(wildcardconstraints)+""";"""+"""callingvirtualvolumehostid = """+str(callingvirtualvolumehostid)+""";"""+"")
     try:
-        _QueryVirtualVolumeMetadataResult = ctx.element.(query_constraints=kwargsDict, wildcard_constraints=wildcardconstraints, calling_virtual_volume_host_id=callingvirtualvolumehostid)
+        _QueryVirtualVolumeMetadataResult = ctx.element.query_virtual_volume_metadata(query_constraints=kwargsDict, wildcard_constraints=wildcardconstraints, calling_virtual_volume_host_id=callingvirtualvolumehostid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -395,7 +395,7 @@ def listtasks(ctx,
 
     ctx.logger.info("""virtualvolumetaskids = """+str(virtualvolumetaskids)+""";"""+"")
     try:
-        _ListVirtualVolumeTasksResult = ctx.element.(virtual_volume_task_ids=virtualvolumetaskids)
+        _ListVirtualVolumeTasksResult = ctx.element.list_virtual_volume_tasks(virtual_volume_task_ids=virtualvolumetaskids)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -511,7 +511,7 @@ def create(ctx,
 
     ctx.logger.info("""name = """+str(name)+""";"""+"""storagecontainerid = """+str(storagecontainerid)+""";"""+"""virtualvolumetype = """+str(virtualvolumetype)+""";"""+"""totalsize = """+str(totalsize)+""";"""+"""qos = """+str(qos)+""";"""+"""metadata = """+str(metadata)+""";"""+"""callingvirtualvolumehostid = """+str(callingvirtualvolumehostid)+""";"""+"")
     try:
-        _VirtualVolumeSyncResult = ctx.element.(name=name, storage_container_id=storagecontainerid, virtual_volume_type=virtualvolumetype, total_size=totalsize, qos=qos, metadata=kwargsDict, calling_virtual_volume_host_id=callingvirtualvolumehostid)
+        _VirtualVolumeSyncResult = ctx.element.create_virtual_volume(name=name, storage_container_id=storagecontainerid, virtual_volume_type=virtualvolumetype, total_size=totalsize, qos=qos, metadata=kwargsDict, calling_virtual_volume_host_id=callingvirtualvolumehostid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -614,7 +614,7 @@ def fastclone(ctx,
 
     ctx.logger.info("""virtualvolumeid = """+str(virtualvolumeid)+""";"""+"""name = """+str(name)+""";"""+"""qos = """+str(qos)+""";"""+"""metadata = """+str(metadata)+""";"""+"""callingvirtualvolumehostid = """+str(callingvirtualvolumehostid)+""";"""+"")
     try:
-        _VirtualVolumeAsyncResult = ctx.element.(virtual_volume_id=virtualvolumeid, name=name, qos=qos, metadata=kwargsDict, calling_virtual_volume_host_id=callingvirtualvolumehostid)
+        _VirtualVolumeAsyncResult = ctx.element.fast_clone_virtual_volume(virtual_volume_id=virtualvolumeid, name=name, qos=qos, metadata=kwargsDict, calling_virtual_volume_host_id=callingvirtualvolumehostid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -651,7 +651,7 @@ def canceltask(ctx,
 
     ctx.logger.info("""virtualvolumetaskid = """+str(virtualvolumetaskid)+""";"""+"""callingvirtualvolumehostid = """+str(callingvirtualvolumehostid)+""";"""+"")
     try:
-        _VirtualVolumeNullResult = ctx.element.(virtual_volume_task_id=virtualvolumetaskid, calling_virtual_volume_host_id=callingvirtualvolumehostid)
+        _VirtualVolumeNullResult = ctx.element.cancel_virtual_volume_task(virtual_volume_task_id=virtualvolumetaskid, calling_virtual_volume_host_id=callingvirtualvolumehostid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -708,7 +708,7 @@ def getallocatedbitmap(ctx,
 
     ctx.logger.info("""virtualvolumeid = """+str(virtualvolumeid)+""";"""+"""segmentstart = """+str(segmentstart)+""";"""+"""segmentlength = """+str(segmentlength)+""";"""+"""chunksize = """+str(chunksize)+""";"""+"""callingvirtualvolumehostid = """+str(callingvirtualvolumehostid)+""";"""+"")
     try:
-        _VirtualVolumeBitmapResult = ctx.element.(virtual_volume_id=virtualvolumeid, segment_start=segmentstart, segment_length=segmentlength, chunk_size=chunksize, calling_virtual_volume_host_id=callingvirtualvolumehostid)
+        _VirtualVolumeBitmapResult = ctx.element.get_virtual_volume_allocated_bitmap(virtual_volume_id=virtualvolumeid, segment_start=segmentstart, segment_length=segmentlength, chunk_size=chunksize, calling_virtual_volume_host_id=callingvirtualvolumehostid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -771,7 +771,7 @@ def getunsharedbitmap(ctx,
 
     ctx.logger.info("""virtualvolumeid = """+str(virtualvolumeid)+""";"""+"""basevirtualvolumeid = """+str(basevirtualvolumeid)+""";"""+"""segmentstart = """+str(segmentstart)+""";"""+"""segmentlength = """+str(segmentlength)+""";"""+"""chunksize = """+str(chunksize)+""";"""+"""callingvirtualvolumehostid = """+str(callingvirtualvolumehostid)+""";"""+"")
     try:
-        _VirtualVolumeBitmapResult = ctx.element.(virtual_volume_id=virtualvolumeid, base_virtual_volume_id=basevirtualvolumeid, segment_start=segmentstart, segment_length=segmentlength, chunk_size=chunksize, calling_virtual_volume_host_id=callingvirtualvolumehostid)
+        _VirtualVolumeBitmapResult = ctx.element.get_virtual_volume_unshared_bitmap(virtual_volume_id=virtualvolumeid, base_virtual_volume_id=basevirtualvolumeid, segment_start=segmentstart, segment_length=segmentlength, chunk_size=chunksize, calling_virtual_volume_host_id=callingvirtualvolumehostid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -804,7 +804,7 @@ def listhosts(ctx,
 
     ctx.logger.info("""virtualvolumehostids = """+str(virtualvolumehostids)+""";"""+"")
     try:
-        _ListVirtualVolumeHostsResult = ctx.element.(virtual_volume_host_ids=virtualvolumehostids)
+        _ListVirtualVolumeHostsResult = ctx.element.list_virtual_volume_hosts(virtual_volume_host_ids=virtualvolumehostids)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -847,7 +847,7 @@ def rollback(ctx,
 
     ctx.logger.info("""srcvirtualvolumeid = """+str(srcvirtualvolumeid)+""";"""+"""dstvirtualvolumeid = """+str(dstvirtualvolumeid)+""";"""+"""callingvirtualvolumehostid = """+str(callingvirtualvolumehostid)+""";"""+"")
     try:
-        _VirtualVolumeAsyncResult = ctx.element.(src_virtual_volume_id=srcvirtualvolumeid, dst_virtual_volume_id=dstvirtualvolumeid, calling_virtual_volume_host_id=callingvirtualvolumehostid)
+        _VirtualVolumeAsyncResult = ctx.element.rollback_virtual_volume(src_virtual_volume_id=srcvirtualvolumeid, dst_virtual_volume_id=dstvirtualvolumeid, calling_virtual_volume_host_id=callingvirtualvolumehostid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -912,7 +912,7 @@ def getunsharedchunks(ctx,
 
     ctx.logger.info("""virtualvolumeid = """+str(virtualvolumeid)+""";"""+"""basevirtualvolumeid = """+str(basevirtualvolumeid)+""";"""+"""segmentstart = """+str(segmentstart)+""";"""+"""segmentlength = """+str(segmentlength)+""";"""+"""chunksize = """+str(chunksize)+""";"""+"""callingvirtualvolumehostid = """+str(callingvirtualvolumehostid)+""";"""+"")
     try:
-        _VirtualVolumeUnsharedChunkResult = ctx.element.(virtual_volume_id=virtualvolumeid, base_virtual_volume_id=basevirtualvolumeid, segment_start=segmentstart, segment_length=segmentlength, chunk_size=chunksize, calling_virtual_volume_host_id=callingvirtualvolumehostid)
+        _VirtualVolumeUnsharedChunkResult = ctx.element.get_virtual_volume_unshared_chunks(virtual_volume_id=virtualvolumeid, base_virtual_volume_id=basevirtualvolumeid, segment_start=segmentstart, segment_length=segmentlength, chunk_size=chunksize, calling_virtual_volume_host_id=callingvirtualvolumehostid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1021,7 +1021,7 @@ def clone(ctx,
 
     ctx.logger.info("""virtualvolumeid = """+str(virtualvolumeid)+""";"""+"""name = """+str(name)+""";"""+"""qos = """+str(qos)+""";"""+"""metadata = """+str(metadata)+""";"""+"""newcontainerid = """+str(newcontainerid)+""";"""+"""callingvirtualvolumehostid = """+str(callingvirtualvolumehostid)+""";"""+"")
     try:
-        _VirtualVolumeAsyncResult = ctx.element.(virtual_volume_id=virtualvolumeid, name=name, qos=qos, metadata=kwargsDict, new_container_id=newcontainerid, calling_virtual_volume_host_id=callingvirtualvolumehostid)
+        _VirtualVolumeAsyncResult = ctx.element.clone_virtual_volume(virtual_volume_id=virtualvolumeid, name=name, qos=qos, metadata=kwargsDict, new_container_id=newcontainerid, calling_virtual_volume_host_id=callingvirtualvolumehostid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1109,7 +1109,7 @@ def modify(ctx,
 
     ctx.logger.info("""virtualvolumeid = """+str(virtualvolumeid)+""";"""+"""qos = """+str(qos)+""";"""+"""totalsize = """+str(totalsize)+""";"""+"""callingvirtualvolumehostid = """+str(callingvirtualvolumehostid)+""";"""+"")
     try:
-        _VirtualVolumeNullResult = ctx.element.(virtual_volume_id=virtualvolumeid, qos=qos, total_size=totalsize, calling_virtual_volume_host_id=callingvirtualvolumehostid)
+        _VirtualVolumeNullResult = ctx.element.modify_virtual_volume(virtual_volume_id=virtualvolumeid, qos=qos, total_size=totalsize, calling_virtual_volume_host_id=callingvirtualvolumehostid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1158,7 +1158,7 @@ def preparevirtualsnapshot(ctx,
 
     ctx.logger.info("""virtualvolumeid = """+str(virtualvolumeid)+""";"""+"""name = """+str(name)+""";"""+"""writablesnapshot = """+str(writablesnapshot)+""";"""+"""callingvirtualvolumehostid = """+str(callingvirtualvolumehostid)+""";"""+"")
     try:
-        _PrepareVirtualSnapshotResult = ctx.element.(virtual_volume_id=virtualvolumeid, name=name, writable_snapshot=writablesnapshot, calling_virtual_volume_host_id=callingvirtualvolumehostid)
+        _PrepareVirtualSnapshotResult = ctx.element.prepare_virtual_snapshot(virtual_volume_id=virtualvolumeid, name=name, writable_snapshot=writablesnapshot, calling_virtual_volume_host_id=callingvirtualvolumehostid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1189,7 +1189,7 @@ def getfeaturestatus(ctx,
 
     ctx.logger.info("""feature = """+str(feature)+""";"""+"")
     try:
-        _GetFeatureStatusResult = ctx.element.(feature=feature)
+        _GetFeatureStatusResult = ctx.element.get_feature_status(feature=feature)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1236,7 +1236,7 @@ def unbind(ctx,
 
     ctx.logger.info("""unbindcontext = """+str(unbindcontext)+""";"""+"""virtualvolumehostid = """+str(virtualvolumehostid)+""";"""+"""unbindargs = """+str(unbindargs)+""";"""+"")
     try:
-        _VirtualVolumeUnbindResult = ctx.element.(unbind_context=unbindcontext, virtual_volume_host_id=virtualvolumehostid, unbind_args=unbindargs)
+        _VirtualVolumeUnbindResult = ctx.element.unbind_virtual_volumes(unbind_context=unbindcontext, virtual_volume_host_id=virtualvolumehostid, unbind_args=unbindargs)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1301,7 +1301,7 @@ def createhost(ctx,
 
     ctx.logger.info("""virtualvolumehostid = """+str(virtualvolumehostid)+""";"""+"""clusterid = """+str(clusterid)+""";"""+"""initiatornames = """+str(initiatornames)+""";"""+"""visibleprotocolendpointids = """+str(visibleprotocolendpointids)+""";"""+"""hostaddress = """+str(hostaddress)+""";"""+"""callingvirtualvolumehostid = """+str(callingvirtualvolumehostid)+""";"""+"")
     try:
-        _VirtualVolumeNullResult = ctx.element.(virtual_volume_host_id=virtualvolumehostid, cluster_id=clusterid, initiator_names=initiatornames, visible_protocol_endpoint_ids=visibleprotocolendpointids, host_address=hostaddress, calling_virtual_volume_host_id=callingvirtualvolumehostid)
+        _VirtualVolumeNullResult = ctx.element.create_virtual_volume_host(virtual_volume_host_id=virtualvolumehostid, cluster_id=clusterid, initiator_names=initiatornames, visible_protocol_endpoint_ids=visibleprotocolendpointids, host_address=hostaddress, calling_virtual_volume_host_id=callingvirtualvolumehostid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1346,7 +1346,7 @@ def bind(ctx,
 
     ctx.logger.info("""virtualvolumeids = """+str(virtualvolumeids)+""";"""+"""virtualvolumehostid = """+str(virtualvolumehostid)+""";"""+"""bindcontext = """+str(bindcontext)+""";"""+"")
     try:
-        _VirtualVolumeBindingListResult = ctx.element.(virtual_volume_ids=virtualvolumeids, virtual_volume_host_id=virtualvolumehostid, bind_context=bindcontext)
+        _VirtualVolumeBindingListResult = ctx.element.bind_virtual_volumes(virtual_volume_ids=virtualvolumeids, virtual_volume_host_id=virtualvolumehostid, bind_context=bindcontext)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1403,7 +1403,7 @@ def list(ctx,
 
     ctx.logger.info("""details = """+str(details)+""";"""+"""limit = """+str(limit)+""";"""+"""recursive = """+str(recursive)+""";"""+"""startvirtualvolumeid = """+str(startvirtualvolumeid)+""";"""+"""virtualvolumeids = """+str(virtualvolumeids)+""";"""+"")
     try:
-        _ListVirtualVolumesResult = ctx.element.(details=details, limit=limit, recursive=recursive, start_virtual_volume_id=startvirtualvolumeid, virtual_volume_ids=virtualvolumeids)
+        _ListVirtualVolumesResult = ctx.element.list_virtual_volumes(details=details, limit=limit, recursive=recursive, start_virtual_volume_id=startvirtualvolumeid, virtual_volume_ids=virtualvolumeids)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1428,7 +1428,7 @@ def getvasaproviderinfo(ctx):
 
     ctx.logger.info("")
     try:
-        _VasaProviderInfoResult = ctx.element.()
+        _VasaProviderInfoResult = ctx.element.get_vasa_provider_info()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1486,7 +1486,7 @@ def snapshot(ctx,
 
     ctx.logger.info("""virtualvolumeid = """+str(virtualvolumeid)+""";"""+"""timeout = """+str(timeout)+""";"""+"""metadata = """+str(metadata)+""";"""+"""callingvirtualvolumehostid = """+str(callingvirtualvolumehostid)+""";"""+"")
     try:
-        _SnapshotVirtualVolumeResult = ctx.element.(virtual_volume_id=virtualvolumeid, timeout=timeout, metadata=kwargsDict, calling_virtual_volume_host_id=callingvirtualvolumehostid)
+        _SnapshotVirtualVolumeResult = ctx.element.snapshot_virtual_volume(virtual_volume_id=virtualvolumeid, timeout=timeout, metadata=kwargsDict, calling_virtual_volume_host_id=callingvirtualvolumehostid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1519,7 +1519,7 @@ def listbindings(ctx,
 
     ctx.logger.info("""virtualvolumebindingids = """+str(virtualvolumebindingids)+""";"""+"")
     try:
-        _ListVirtualVolumeBindingsResult = ctx.element.(virtual_volume_binding_ids=virtualvolumebindingids)
+        _ListVirtualVolumeBindingsResult = ctx.element.list_virtual_volume_bindings(virtual_volume_binding_ids=virtualvolumebindingids)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1544,7 +1544,7 @@ def getcount(ctx):
 
     ctx.logger.info("")
     try:
-        _GetVirtualVolumeCountResult = ctx.element.()
+        _GetVirtualVolumeCountResult = ctx.element.get_virtual_volume_count()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1575,7 +1575,7 @@ def enablefeature(ctx,
 
     ctx.logger.info("""feature = """+str(feature)+""";"""+"")
     try:
-        _EnableFeatureResult = ctx.element.(feature=feature)
+        _EnableFeatureResult = ctx.element.enable_feature(feature=feature)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1628,7 +1628,7 @@ def delete(ctx,
 
     ctx.logger.info("""virtualvolumes = """+str(virtualvolumes)+""";"""+"""callingvirtualvolumehostid = """+str(callingvirtualvolumehostid)+""";"""+"")
     try:
-        _VirtualVolumeNullResult = ctx.element.(virtual_volumes=virtualvolumes, calling_virtual_volume_host_id=callingvirtualvolumehostid)
+        _VirtualVolumeNullResult = ctx.element.delete_virtual_volumes(virtual_volumes=virtualvolumes, calling_virtual_volume_host_id=callingvirtualvolumehostid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()

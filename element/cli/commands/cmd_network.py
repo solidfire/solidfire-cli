@@ -39,7 +39,7 @@ def listnodefibrechannelportinfo(ctx):
 
     ctx.logger.info("")
     try:
-        _ListNodeFibreChannelPortInfoResult = ctx.element.()
+        _ListNodeFibreChannelPortInfoResult = ctx.element.list_node_fibre_channel_port_info()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -64,7 +64,7 @@ def listfibrechannelsessions(ctx):
 
     ctx.logger.info("")
     try:
-        _ListFibreChannelSessionsResult = ctx.element.()
+        _ListFibreChannelSessionsResult = ctx.element.list_fibre_channel_sessions()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -89,7 +89,7 @@ def listfibrechannelportinfo(ctx):
 
     ctx.logger.info("")
     try:
-        _ListFibreChannelPortInfoResult = ctx.element.()
+        _ListFibreChannelPortInfoResult = ctx.element.list_fibre_channel_port_info()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -114,7 +114,7 @@ def listiscsisessions(ctx):
 
     ctx.logger.info("")
     try:
-        _ListISCSISessionsResult = ctx.element.()
+        _ListISCSISessionsResult = ctx.element.list_iscsisessions()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -139,7 +139,7 @@ def listinterfaces(ctx):
 
     ctx.logger.info("")
     try:
-        _ListNetworkInterfacesResult = ctx.element.()
+        _ListNetworkInterfacesResult = ctx.element.list_network_interfaces()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()

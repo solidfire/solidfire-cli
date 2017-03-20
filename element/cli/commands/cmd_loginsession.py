@@ -39,7 +39,7 @@ def getremotelogginghosts(ctx):
 
     ctx.logger.info("")
     try:
-        _GetRemoteLoggingHostsResult = ctx.element.()
+        _GetRemoteLoggingHostsResult = ctx.element.get_remote_logging_hosts()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -102,7 +102,7 @@ def setremotelogginghosts(ctx,
 
     ctx.logger.info("""remotehosts = """+str(remotehosts)+""";"""+"")
     try:
-        _SetRemoteLoggingHostsResult = ctx.element.(remote_hosts=remotehostsArray)
+        _SetRemoteLoggingHostsResult = ctx.element.set_remote_logging_hosts(remote_hosts=remotehostsArray)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -133,7 +133,7 @@ def setinfo(ctx,
 
     ctx.logger.info("""timeout = """+str(timeout)+""";"""+"")
     try:
-        _SetLoginSessionInfoResult = ctx.element.(timeout=timeout)
+        _SetLoginSessionInfoResult = ctx.element.set_login_session_info(timeout=timeout)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -158,7 +158,7 @@ def getinfo(ctx):
 
     ctx.logger.info("")
     try:
-        _GetLoginSessionInfoResult = ctx.element.()
+        _GetLoginSessionInfoResult = ctx.element.get_login_session_info()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()

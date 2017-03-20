@@ -39,7 +39,7 @@ def getnvraminfo(ctx):
 
     ctx.logger.info("")
     try:
-        _GetNvramInfoResult = ctx.element.()
+        _GetNvramInfoResult = ctx.element.get_nvram_info()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -70,7 +70,7 @@ def getnodeinfo(ctx,
 
     ctx.logger.info("""nodeid = """+str(nodeid)+""";"""+"")
     try:
-        _GetNodeHardwareInfoResult = ctx.element.(node_id=nodeid)
+        _GetNodeHardwareInfoResult = ctx.element.get_node_hardware_info(node_id=nodeid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -101,7 +101,7 @@ def getclusterinfo(ctx,
 
     ctx.logger.info("""type = """+str(type)+""";"""+"")
     try:
-        _GetClusterHardwareInfoResult = ctx.element.(type=type)
+        _GetClusterHardwareInfoResult = ctx.element.get_cluster_hardware_info(type=type)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -126,7 +126,7 @@ def getconfig(ctx):
 
     ctx.logger.info("")
     try:
-        _GetHardwareConfigResult = ctx.element.()
+        _GetHardwareConfigResult = ctx.element.get_hardware_config()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()

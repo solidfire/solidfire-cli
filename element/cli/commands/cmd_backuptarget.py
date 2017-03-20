@@ -66,7 +66,7 @@ def modify(ctx,
 
     ctx.logger.info("""backuptargetid = """+str(backuptargetid)+""";"""+"""name = """+str(name)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _ModifyBackupTargetResult = ctx.element.(backup_target_id=backuptargetid, name=name, attributes=kwargsDict)
+        _ModifyBackupTargetResult = ctx.element.modify_backup_target(backup_target_id=backuptargetid, name=name, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -112,7 +112,7 @@ def create(ctx,
 
     ctx.logger.info("""name = """+str(name)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _CreateBackupTargetResult = ctx.element.(name=name, attributes=kwargsDict)
+        _CreateBackupTargetResult = ctx.element.create_backup_target(name=name, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -137,7 +137,7 @@ def list(ctx):
 
     ctx.logger.info("")
     try:
-        _ListBackupTargetsResult = ctx.element.()
+        _ListBackupTargetsResult = ctx.element.list_backup_targets()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -168,7 +168,7 @@ def remove(ctx,
 
     ctx.logger.info("""backuptargetid = """+str(backuptargetid)+""";"""+"")
     try:
-        _RemoveBackupTargetResult = ctx.element.(backup_target_id=backuptargetid)
+        _RemoveBackupTargetResult = ctx.element.remove_backup_target(backup_target_id=backuptargetid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -199,7 +199,7 @@ def get(ctx,
 
     ctx.logger.info("""backuptargetid = """+str(backuptargetid)+""";"""+"")
     try:
-        _GetBackupTargetResult = ctx.element.(backup_target_id=backuptargetid)
+        _GetBackupTargetResult = ctx.element.get_backup_target(backup_target_id=backuptargetid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()

@@ -146,7 +146,7 @@ def modify(ctx,
 
     ctx.logger.info("""virtualnetworkid = """+str(virtualnetworkid)+""";"""+"""virtualnetworktag = """+str(virtualnetworktag)+""";"""+"""name = """+str(name)+""";"""+"""addressblocks = """+str(addressblocks)+""";"""+"""netmask = """+str(netmask)+""";"""+"""svip = """+str(svip)+""";"""+"""gateway = """+str(gateway)+""";"""+"""namespace = """+str(namespace)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _AddVirtualNetworkResult = ctx.element.(virtual_network_id=virtualnetworkid, virtual_network_tag=virtualnetworktag, name=name, address_blocks=addressblocksArray, netmask=netmask, svip=svip, gateway=gateway, namespace=namespace, attributes=kwargsDict)
+        _AddVirtualNetworkResult = ctx.element.modify_virtual_network(virtual_network_id=virtualnetworkid, virtual_network_tag=virtualnetworktag, name=name, address_blocks=addressblocksArray, netmask=netmask, svip=svip, gateway=gateway, namespace=namespace, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -272,7 +272,7 @@ def add(ctx,
 
     ctx.logger.info("""virtualnetworktag = """+str(virtualnetworktag)+""";"""+"""name = """+str(name)+""";"""+"""addressblocks = """+str(addressblocks)+""";"""+"""netmask = """+str(netmask)+""";"""+"""svip = """+str(svip)+""";"""+"""gateway = """+str(gateway)+""";"""+"""namespace = """+str(namespace)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _AddVirtualNetworkResult = ctx.element.(virtual_network_tag=virtualnetworktag, name=name, address_blocks=addressblocksArray, netmask=netmask, svip=svip, gateway=gateway, namespace=namespace, attributes=kwargsDict)
+        _AddVirtualNetworkResult = ctx.element.add_virtual_network(virtual_network_tag=virtualnetworktag, name=name, address_blocks=addressblocksArray, netmask=netmask, svip=svip, gateway=gateway, namespace=namespace, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -327,7 +327,7 @@ def list(ctx,
 
     ctx.logger.info("""virtualnetworkid = """+str(virtualnetworkid)+""";"""+"""virtualnetworktag = """+str(virtualnetworktag)+""";"""+"""virtualnetworkids = """+str(virtualnetworkids)+""";"""+"""virtualnetworktags = """+str(virtualnetworktags)+""";"""+"")
     try:
-        _ListVirtualNetworksResult = ctx.element.(virtual_network_id=virtualnetworkid, virtual_network_tag=virtualnetworktag, virtual_network_ids=virtualnetworkids, virtual_network_tags=virtualnetworktags)
+        _ListVirtualNetworksResult = ctx.element.list_virtual_networks(virtual_network_id=virtualnetworkid, virtual_network_tag=virtualnetworktag, virtual_network_ids=virtualnetworkids, virtual_network_tags=virtualnetworktags)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -366,7 +366,7 @@ def remove(ctx,
 
     ctx.logger.info("""virtualnetworkid = """+str(virtualnetworkid)+""";"""+"""virtualnetworktag = """+str(virtualnetworktag)+""";"""+"")
     try:
-        _RemoveVirtualNetworkResult = ctx.element.(virtual_network_id=virtualnetworkid, virtual_network_tag=virtualnetworktag)
+        _RemoveVirtualNetworkResult = ctx.element.remove_virtual_network(virtual_network_id=virtualnetworkid, virtual_network_tag=virtualnetworktag)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()

@@ -52,7 +52,7 @@ def invoke(ctx,
 
     ctx.logger.info("""method = """+str(method)+""";"""+"""parameters = """+str(parameters)+""";"""+"")
     try:
-        _dict = ctx.element.(method=method, parameters=parameters)
+        _dict = ctx.element.invoke_sfapi(method=method, parameters=parameters)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()

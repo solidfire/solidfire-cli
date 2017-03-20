@@ -39,7 +39,7 @@ def getinfo(ctx):
 
     ctx.logger.info("")
     try:
-        _GetClusterInfoResult = ctx.element.()
+        _GetClusterInfoResult = ctx.element.get_cluster_info()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -64,7 +64,7 @@ def getapi(ctx):
 
     ctx.logger.info("")
     try:
-        _GetAPIResult = ctx.element.()
+        _GetAPIResult = ctx.element.get_api()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -89,7 +89,7 @@ def disablesnmp(ctx):
 
     ctx.logger.info("")
     try:
-        _DisableSnmpResult = ctx.element.()
+        _DisableSnmpResult = ctx.element.disable_snmp()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -116,7 +116,7 @@ def getsnmpstate(ctx):
 
     ctx.logger.info("")
     try:
-        _GetSnmpStateResult = ctx.element.()
+        _GetSnmpStateResult = ctx.element.get_snmp_state()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -143,7 +143,7 @@ def getsnmpinfo(ctx):
 
     ctx.logger.info("")
     try:
-        _GetSnmpInfoResult = ctx.element.()
+        _GetSnmpInfoResult = ctx.element.get_snmp_info()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -170,7 +170,7 @@ def getconfig(ctx):
 
     ctx.logger.info("")
     try:
-        _GetClusterConfigResult = ctx.element.()
+        _GetClusterConfigResult = ctx.element.get_cluster_config()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -195,7 +195,7 @@ def deleteallsupportbundles(ctx):
 
     ctx.logger.info("")
     try:
-        _DeleteAllSupportBundlesResult = ctx.element.()
+        _DeleteAllSupportBundlesResult = ctx.element.delete_all_support_bundles()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -219,7 +219,7 @@ def getsystemstatus(ctx):
 
     ctx.logger.info("")
     try:
-        _GetSystemStatusResult = ctx.element.()
+        _GetSystemStatusResult = ctx.element.get_system_status()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -310,7 +310,7 @@ def setsnmptrapinfo(ctx,
 
     ctx.logger.info("""traprecipients = """+str(traprecipients)+""";"""+"""clusterfaulttrapsenabled = """+str(clusterfaulttrapsenabled)+""";"""+"""clusterfaultresolvedtrapsenabled = """+str(clusterfaultresolvedtrapsenabled)+""";"""+"""clustereventtrapsenabled = """+str(clustereventtrapsenabled)+""";"""+"")
     try:
-        _SetSnmpTrapInfoResult = ctx.element.(trap_recipients=traprecipientsArray, cluster_fault_traps_enabled=clusterfaulttrapsenabled, cluster_fault_resolved_traps_enabled=clusterfaultresolvedtrapsenabled, cluster_event_traps_enabled=clustereventtrapsenabled)
+        _SetSnmpTrapInfoResult = ctx.element.set_snmp_trap_info(trap_recipients=traprecipientsArray, cluster_fault_traps_enabled=clusterfaulttrapsenabled, cluster_fault_resolved_traps_enabled=clusterfaultresolvedtrapsenabled, cluster_event_traps_enabled=clustereventtrapsenabled)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -360,7 +360,7 @@ def listfaults(ctx,
 
     ctx.logger.info("""exceptions = """+str(exceptions)+""";"""+"""bestpractices = """+str(bestpractices)+""";"""+"""update = """+str(update)+""";"""+"""faulttypes = """+str(faulttypes)+""";"""+"")
     try:
-        _ListClusterFaultsResult = ctx.element.(exceptions=exceptions, best_practices=bestpractices, update=update, fault_types=faulttypes)
+        _ListClusterFaultsResult = ctx.element.list_cluster_faults(exceptions=exceptions, best_practices=bestpractices, update=update, fault_types=faulttypes)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -391,7 +391,7 @@ def listadmins(ctx,
 
     ctx.logger.info("""showhidden = """+str(showhidden)+""";"""+"")
     try:
-        _ListClusterAdminsResult = ctx.element.(show_hidden=showhidden)
+        _ListClusterAdminsResult = ctx.element.list_cluster_admins(show_hidden=showhidden)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -477,7 +477,7 @@ def create(ctx,
 
     ctx.logger.info("""accepteula = """+str(accepteula)+""";"""+"""mvip = """+str(mvip)+""";"""+"""svip = """+str(svip)+""";"""+"""repcount = """+str(repcount)+""";"""+"""username = """+str(username)+""";"""+"""password = """+str(password)+""";"""+"""nodes = """+str(nodes)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _CreateClusterResult = ctx.element.(mvip=mvip, svip=svip, rep_count=repcount, username=username, password=password, nodes=nodes, accept_eula=accepteula, attributes=kwargsDict)
+        _CreateClusterResult = ctx.element.create_cluster(mvip=mvip, svip=svip, rep_count=repcount, username=username, password=password, nodes=nodes, accept_eula=accepteula, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -504,7 +504,7 @@ def disableencryptionatrest(ctx):
 
     ctx.logger.info("")
     try:
-        _DisableEncryptionAtRestResult = ctx.element.()
+        _DisableEncryptionAtRestResult = ctx.element.disable_encryption_at_rest()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -572,7 +572,7 @@ def addadmin(ctx,
 
     ctx.logger.info("""username = """+str(username)+""";"""+"""password = """+str(password)+""";"""+"""access = """+str(access)+""";"""+"""accepteula = """+str(accepteula)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _AddClusterAdminResult = ctx.element.(username=username, password=password, access=access, accept_eula=accepteula, attributes=kwargsDict)
+        _AddClusterAdminResult = ctx.element.add_cluster_admin(username=username, password=password, access=access, accept_eula=accepteula, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -611,7 +611,7 @@ def setntpinfo(ctx,
 
     ctx.logger.info("""servers = """+str(servers)+""";"""+"""broadcastclient = """+str(broadcastclient)+""";"""+"")
     try:
-        _SetNtpInfoResult = ctx.element.(servers=servers, broadcastclient=broadcastclient)
+        _SetNtpInfoResult = ctx.element.set_ntp_info(servers=servers, broadcastclient=broadcastclient)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -764,7 +764,7 @@ def setconfig(ctx,
 
     ctx.logger.info("""cluster = """+str(cluster)+""";"""+"")
     try:
-        _SetClusterConfigResult = ctx.element.(cluster=cluster)
+        _SetClusterConfigResult = ctx.element.set_cluster_config(cluster=cluster)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -824,7 +824,7 @@ def modifyadmin(ctx,
 
     ctx.logger.info("""clusteradminid = """+str(clusteradminid)+""";"""+"""password = """+str(password)+""";"""+"""access = """+str(access)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _ModifyClusterAdminResult = ctx.element.(cluster_admin_id=clusteradminid, password=password, access=access, attributes=kwargsDict)
+        _ModifyClusterAdminResult = ctx.element.modify_cluster_admin(cluster_admin_id=clusteradminid, password=password, access=access, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -855,7 +855,7 @@ def getsnmptrapinfo(ctx,
 
     ctx.logger.info("""id = """+str(id)+""";"""+"")
     try:
-        _GetSnmpTrapInfoResult = ctx.element.(id=id)
+        _GetSnmpTrapInfoResult = ctx.element.get_snmp_trap_info(id=id)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -904,7 +904,7 @@ def listevents(ctx,
 
     ctx.logger.info("""maxevents = """+str(maxevents)+""";"""+"""starteventid = """+str(starteventid)+""";"""+"""endeventid = """+str(endeventid)+""";"""+"""eventqueuetype = """+str(eventqueuetype)+""";"""+"")
     try:
-        _ListEventsResult = ctx.element.(max_events=maxevents, start_event_id=starteventid, end_event_id=endeventid, event_queue_type=eventqueuetype)
+        _ListEventsResult = ctx.element.list_events(max_events=maxevents, start_event_id=starteventid, end_event_id=endeventid, event_queue_type=eventqueuetype)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -935,7 +935,7 @@ def clearfaults(ctx,
 
     ctx.logger.info("""faulttypes = """+str(faulttypes)+""";"""+"")
     try:
-        _ClearClusterFaultsResult = ctx.element.(fault_types=faulttypes)
+        _ClearClusterFaultsResult = ctx.element.clear_cluster_faults(fault_types=faulttypes)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -966,7 +966,7 @@ def removeadmin(ctx,
 
     ctx.logger.info("""clusteradminid = """+str(clusteradminid)+""";"""+"")
     try:
-        _RemoveClusterAdminResult = ctx.element.(cluster_admin_id=clusteradminid)
+        _RemoveClusterAdminResult = ctx.element.remove_cluster_admin(cluster_admin_id=clusteradminid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1009,7 +1009,7 @@ def modifyfullthreshold(ctx,
 
     ctx.logger.info("""stage2awarethreshold = """+str(stage2awarethreshold)+""";"""+"""stage3blockthresholdpercent = """+str(stage3blockthresholdpercent)+""";"""+"""maxmetadataoverprovisionfactor = """+str(maxmetadataoverprovisionfactor)+""";"""+"")
     try:
-        _ModifyClusterFullThresholdResult = ctx.element.(stage2_aware_threshold=stage2awarethreshold, stage3_block_threshold_percent=stage3blockthresholdpercent, max_metadata_over_provision_factor=maxmetadataoverprovisionfactor)
+        _ModifyClusterFullThresholdResult = ctx.element.modify_cluster_full_threshold(stage2_aware_threshold=stage2awarethreshold, stage3_block_threshold_percent=stage3blockthresholdpercent, max_metadata_over_provision_factor=maxmetadataoverprovisionfactor)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1034,7 +1034,7 @@ def getlimits(ctx):
 
     ctx.logger.info("")
     try:
-        _GetLimitsResult = ctx.element.()
+        _GetLimitsResult = ctx.element.get_limits()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1059,7 +1059,7 @@ def getcurrentadmin(ctx):
 
     ctx.logger.info("")
     try:
-        _GetCurrentClusterAdminResult = ctx.element.()
+        _GetCurrentClusterAdminResult = ctx.element.get_current_cluster_admin()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1102,7 +1102,7 @@ def createsupportbundle(ctx,
 
     ctx.logger.info("""bundlename = """+str(bundlename)+""";"""+"""extraargs = """+str(extraargs)+""";"""+"""timeoutsec = """+str(timeoutsec)+""";"""+"")
     try:
-        _CreateSupportBundleResult = ctx.element.(bundle_name=bundlename, extra_args=extraargs, timeout_sec=timeoutsec)
+        _CreateSupportBundleResult = ctx.element.create_support_bundle(bundle_name=bundlename, extra_args=extraargs, timeout_sec=timeoutsec)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1128,7 +1128,7 @@ def getcapacity(ctx):
 
     ctx.logger.info("")
     try:
-        _GetClusterCapacityResult = ctx.element.()
+        _GetClusterCapacityResult = ctx.element.get_cluster_capacity()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1153,7 +1153,7 @@ def getntpinfo(ctx):
 
     ctx.logger.info("")
     try:
-        _GetNtpInfoResult = ctx.element.()
+        _GetNtpInfoResult = ctx.element.get_ntp_info()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1180,7 +1180,7 @@ def enableencryptionatrest(ctx):
 
     ctx.logger.info("")
     try:
-        _EnableEncryptionAtRestResult = ctx.element.()
+        _EnableEncryptionAtRestResult = ctx.element.enable_encryption_at_rest()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1206,7 +1206,7 @@ def getversioninfo(ctx):
 
     ctx.logger.info("")
     try:
-        _GetClusterVersionInfoResult = ctx.element.()
+        _GetClusterVersionInfoResult = ctx.element.get_cluster_version_info()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1357,7 +1357,7 @@ def setsnmpacl(ctx,
 
     ctx.logger.info("""networks = """+str(networks)+""";"""+"""usmusers = """+str(usmusers)+""";"""+"")
     try:
-        _SetSnmpACLResult = ctx.element.(networks=networksArray, usm_users=usmusersArray)
+        _SetSnmpACLResult = ctx.element.set_snmp_acl(networks=networksArray, usm_users=usmusersArray)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1382,7 +1382,7 @@ def snmpsendtesttraps(ctx):
 
     ctx.logger.info("")
     try:
-        _SnmpSendTestTrapsResult = ctx.element.()
+        _SnmpSendTestTrapsResult = ctx.element.snmp_send_test_traps()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1407,7 +1407,7 @@ def getsnmpacl(ctx):
 
     ctx.logger.info("")
     try:
-        _GetSnmpACLResult = ctx.element.()
+        _GetSnmpACLResult = ctx.element.get_snmp_acl()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1438,7 +1438,7 @@ def getstate(ctx,
 
     ctx.logger.info("""force = """+str(force)+""";"""+"")
     try:
-        _GetClusterStateResult = ctx.element.(force=force)
+        _GetClusterStateResult = ctx.element.get_cluster_state(force=force)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1469,7 +1469,7 @@ def enablesnmp(ctx,
 
     ctx.logger.info("""snmpv3enabled = """+str(snmpv3enabled)+""";"""+"")
     try:
-        _EnableSnmpResult = ctx.element.(snmp_v3_enabled=snmpv3enabled)
+        _EnableSnmpResult = ctx.element.enable_snmp(snmp_v3_enabled=snmpv3enabled)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1494,7 +1494,7 @@ def getstats(ctx):
 
     ctx.logger.info("")
     try:
-        _GetClusterStatsResult = ctx.element.()
+        _GetClusterStatsResult = ctx.element.get_cluster_stats()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1519,7 +1519,7 @@ def getmasternodeid(ctx):
 
     ctx.logger.info("")
     try:
-        _GetClusterMasterNodeIDResult = ctx.element.()
+        _GetClusterMasterNodeIDResult = ctx.element.get_cluster_master_node_id()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1684,7 +1684,7 @@ def setsnmpinfo(ctx,
 
     ctx.logger.info("""networks = """+str(networks)+""";"""+"""enabled = """+str(enabled)+""";"""+"""snmpv3enabled = """+str(snmpv3enabled)+""";"""+"""usmusers = """+str(usmusers)+""";"""+"")
     try:
-        _SetSnmpInfoResult = ctx.element.(networks=networksArray, enabled=enabled, snmp_v3_enabled=snmpv3enabled, usm_users=usmusersArray)
+        _SetSnmpInfoResult = ctx.element.set_snmp_info(networks=networksArray, enabled=enabled, snmp_v3_enabled=snmpv3enabled, usm_users=usmusersArray)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1709,7 +1709,7 @@ def getfullthreshold(ctx):
 
     ctx.logger.info("")
     try:
-        _GetClusterFullThresholdResult = ctx.element.()
+        _GetClusterFullThresholdResult = ctx.element.get_cluster_full_threshold()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1734,7 +1734,7 @@ def listsyncjobs(ctx):
 
     ctx.logger.info("")
     try:
-        _ListSyncJobsResult = ctx.element.()
+        _ListSyncJobsResult = ctx.element.list_sync_jobs()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()

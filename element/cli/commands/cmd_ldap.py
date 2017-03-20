@@ -76,7 +76,7 @@ def addclusteradmin(ctx,
 
     ctx.logger.info("""username = """+str(username)+""";"""+"""access = """+str(access)+""";"""+"""accepteula = """+str(accepteula)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _AddLdapClusterAdminResult = ctx.element.(username=username, access=access, accept_eula=accepteula, attributes=kwargsDict)
+        _AddLdapClusterAdminResult = ctx.element.add_ldap_cluster_admin(username=username, access=access, accept_eula=accepteula, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -101,7 +101,7 @@ def getconfiguration(ctx):
 
     ctx.logger.info("")
     try:
-        _GetLdapConfigurationResult = ctx.element.()
+        _GetLdapConfigurationResult = ctx.element.get_ldap_configuration()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -247,7 +247,7 @@ ldapconfigurationusersearchfilter
 
     ctx.logger.info("""username = """+str(username)+""";"""+"""password = """+str(password)+""";"""+"""ldapconfiguration = """+str(ldapconfiguration)+""";"""+"")
     try:
-        _TestLdapAuthenticationResult = ctx.element.(username=username, password=password, ldap_configuration=ldapconfiguration)
+        _TestLdapAuthenticationResult = ctx.element.test_ldap_authentication(username=username, password=password, ldap_configuration=ldapconfiguration)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -272,7 +272,7 @@ def disableauthentication(ctx):
 
     ctx.logger.info("")
     try:
-        _DisableLdapAuthenticationResult = ctx.element.()
+        _DisableLdapAuthenticationResult = ctx.element.disable_ldap_authentication()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -359,7 +359,7 @@ def enableauthentication(ctx,
 
     ctx.logger.info("""authtype = """+str(authtype)+""";"""+"""groupsearchbasedn = """+str(groupsearchbasedn)+""";"""+"""groupsearchcustomfilter = """+str(groupsearchcustomfilter)+""";"""+"""groupsearchtype = """+str(groupsearchtype)+""";"""+"""searchbinddn = """+str(searchbinddn)+""";"""+"""searchbindpassword = """+str(searchbindpassword)+""";"""+"""serveruris = """+str(serveruris)+""";"""+"""userdntemplate = """+str(userdntemplate)+""";"""+"""usersearchbasedn = """+str(usersearchbasedn)+""";"""+"""usersearchfilter = """+str(usersearchfilter)+""";"""+"")
     try:
-        _EnableLdapAuthenticationResult = ctx.element.(server_uris=serveruris, auth_type=authtype, group_search_base_dn=groupsearchbasedn, group_search_custom_filter=groupsearchcustomfilter, group_search_type=groupsearchtype, search_bind_dn=searchbinddn, search_bind_password=searchbindpassword, user_dntemplate=userdntemplate, user_search_base_dn=usersearchbasedn, user_search_filter=usersearchfilter)
+        _EnableLdapAuthenticationResult = ctx.element.enable_ldap_authentication(server_uris=serveruris, auth_type=authtype, group_search_base_dn=groupsearchbasedn, group_search_custom_filter=groupsearchcustomfilter, group_search_type=groupsearchtype, search_bind_dn=searchbinddn, search_bind_password=searchbindpassword, user_dntemplate=userdntemplate, user_search_base_dn=usersearchbasedn, user_search_filter=usersearchfilter)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()

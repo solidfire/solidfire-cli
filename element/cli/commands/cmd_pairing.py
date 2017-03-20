@@ -46,7 +46,7 @@ def completecluster(ctx,
 
     ctx.logger.info("""clusterpairingkey = """+str(clusterpairingkey)+""";"""+"")
     try:
-        _CompleteClusterPairingResult = ctx.element.(cluster_pairing_key=clusterpairingkey)
+        _CompleteClusterPairingResult = ctx.element.complete_cluster_pairing(cluster_pairing_key=clusterpairingkey)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -83,7 +83,7 @@ def completevolume(ctx,
 
     ctx.logger.info("""volumepairingkey = """+str(volumepairingkey)+""";"""+"""volumeid = """+str(volumeid)+""";"""+"")
     try:
-        _CompleteVolumePairingResult = ctx.element.(volume_pairing_key=volumepairingkey, volume_id=volumeid)
+        _CompleteVolumePairingResult = ctx.element.complete_volume_pairing(volume_pairing_key=volumepairingkey, volume_id=volumeid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -109,7 +109,7 @@ def listclusterpairs(ctx):
 
     ctx.logger.info("")
     try:
-        _ListClusterPairsResult = ctx.element.()
+        _ListClusterPairsResult = ctx.element.list_cluster_pairs()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -142,7 +142,7 @@ def removevolumepair(ctx,
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"")
     try:
-        _RemoveVolumePairResult = ctx.element.(volume_id=volumeid)
+        _RemoveVolumePairResult = ctx.element.remove_volume_pair(volume_id=volumeid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -180,7 +180,7 @@ def startvolume(ctx,
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""mode = """+str(mode)+""";"""+"")
     try:
-        _StartVolumePairingResult = ctx.element.(volume_id=volumeid, mode=mode)
+        _StartVolumePairingResult = ctx.element.start_volume_pairing(volume_id=volumeid, mode=mode)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -218,7 +218,7 @@ def listactivepairedvolumes(ctx,
 
     ctx.logger.info("""startvolumeid = """+str(startvolumeid)+""";"""+"""limit = """+str(limit)+""";"""+"")
     try:
-        _ListActivePairedVolumesResult = ctx.element.(start_volume_id=startvolumeid, limit=limit)
+        _ListActivePairedVolumesResult = ctx.element.list_active_paired_volumes(start_volume_id=startvolumeid, limit=limit)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -267,7 +267,7 @@ def modifyvolumepair(ctx,
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""pausedmanual = """+str(pausedmanual)+""";"""+"""mode = """+str(mode)+""";"""+"""pauselimit = """+str(pauselimit)+""";"""+"")
     try:
-        _ModifyVolumePairResult = ctx.element.(volume_id=volumeid, paused_manual=pausedmanual, mode=mode, pause_limit=pauselimit)
+        _ModifyVolumePairResult = ctx.element.modify_volume_pair(volume_id=volumeid, paused_manual=pausedmanual, mode=mode, pause_limit=pauselimit)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -294,7 +294,7 @@ def startcluster(ctx):
 
     ctx.logger.info("")
     try:
-        _StartClusterPairingResult = ctx.element.()
+        _StartClusterPairingResult = ctx.element.start_cluster_pairing()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -326,7 +326,7 @@ def removeclusterpair(ctx,
 
     ctx.logger.info("""clusterpairid = """+str(clusterpairid)+""";"""+"")
     try:
-        _RemoveClusterPairResult = ctx.element.(cluster_pair_id=clusterpairid)
+        _RemoveClusterPairResult = ctx.element.remove_cluster_pair(cluster_pair_id=clusterpairid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
