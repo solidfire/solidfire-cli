@@ -3798,14 +3798,14 @@ Retrieves the current version of the API and a list of all supported versions.
 Options:
 
 ---------------------------------------------------------------
-#### disablesnmp ####
+#### getconfig ####
 Command:
 
-    sfcli Cluster disablesnmp <options>
+    sfcli Cluster getconfig <options>
 
 Description:
 
-DisableSnmp is used to disable SNMP on the cluster nodes. 
+The GetClusterConfig API method is used to return information about the cluster configuration this node uses to communicate with the cluster it is a part of.  Note: This method is available only through the per-node API endpoint 5.0 or later. 
 
 Options:
 
@@ -3834,14 +3834,14 @@ GetSnmpInfo is used to return the current simple network management protocol (SN
 Options:
 
 ---------------------------------------------------------------
-#### getconfig ####
+#### disablesnmp ####
 Command:
 
-    sfcli Cluster getconfig <options>
+    sfcli Cluster disablesnmp <options>
 
 Description:
 
-The GetClusterConfig API method is used to return information about the cluster configuration this node uses to communicate with the cluster it is a part of.  Note: This method is available only through the per-node API endpoint 5.0 or later. 
+DisableSnmp is used to disable SNMP on the cluster nodes. 
 
 Options:
 

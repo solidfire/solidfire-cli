@@ -24,7 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """getinfo getapi disablesnmp getsnmpstate getsnmpinfo getconfig deleteallsupportbundles getsystemstatus setsnmptrapinfo listfaults listadmins create disableencryptionatrest addadmin setntpinfo setconfig modifyadmin getsnmptrapinfo listevents clearfaults removeadmin modifyfullthreshold getlimits getcurrentadmin createsupportbundle getcapacity getntpinfo enableencryptionatrest getversioninfo setsnmpacl snmpsendtesttraps getsnmpacl getstate enablesnmp getstats getmasternodeid setsnmpinfo getfullthreshold listsyncjobs """
+    """getinfo getapi getconfig getsnmpstate getsnmpinfo disablesnmp deleteallsupportbundles getsystemstatus setsnmptrapinfo listfaults listadmins create disableencryptionatrest addadmin setntpinfo setconfig modifyadmin getsnmptrapinfo listevents clearfaults removeadmin modifyfullthreshold getlimits getcurrentadmin createsupportbundle getcapacity getntpinfo enableencryptionatrest getversioninfo setsnmpacl snmpsendtesttraps getsnmpacl getstate enablesnmp getstats getmasternodeid setsnmpinfo getfullthreshold listsyncjobs """
 
 @cli.command('getinfo', short_help="""Return configuration information about the cluster. """, cls=SolidFireCommand)
 @pass_context
@@ -76,10 +76,12 @@ def getapi(ctx):
 
 
 
-@cli.command('disablesnmp', short_help="""DisableSnmp is used to disable SNMP on the cluster nodes. """, cls=SolidFireCommand)
+@cli.command('getconfig', short_help="""The GetClusterConfig API method is used to return information about the cluster configuration this node uses to communicate with the cluster it is a part of.  Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
 @pass_context
-def disablesnmp(ctx):
-    """DisableSnmp is used to disable SNMP on the cluster nodes."""
+def getconfig(ctx):
+    """The GetClusterConfig API method is used to return information about the cluster configuration this node uses to communicate with the cluster it is a part of."""
+    """"""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -89,7 +91,7 @@ def disablesnmp(ctx):
 
     ctx.logger.info("")
     try:
-        _DisableSnmpResult = ctx.element.disable_snmp()
+        _GetClusterConfigResult = ctx.element.get_cluster_config()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -97,7 +99,7 @@ def disablesnmp(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_DisableSnmpResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_GetClusterConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -155,12 +157,10 @@ def getsnmpinfo(ctx):
 
 
 
-@cli.command('getconfig', short_help="""The GetClusterConfig API method is used to return information about the cluster configuration this node uses to communicate with the cluster it is a part of.  Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
+@cli.command('disablesnmp', short_help="""DisableSnmp is used to disable SNMP on the cluster nodes. """, cls=SolidFireCommand)
 @pass_context
-def getconfig(ctx):
-    """The GetClusterConfig API method is used to return information about the cluster configuration this node uses to communicate with the cluster it is a part of."""
-    """"""
-    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
+def disablesnmp(ctx):
+    """DisableSnmp is used to disable SNMP on the cluster nodes."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -170,7 +170,7 @@ def getconfig(ctx):
 
     ctx.logger.info("")
     try:
-        _GetClusterConfigResult = ctx.element.get_cluster_config()
+        _DisableSnmpResult = ctx.element.disable_snmp()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -178,7 +178,7 @@ def getconfig(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_GetClusterConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_DisableSnmpResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
