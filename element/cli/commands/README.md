@@ -1082,6 +1082,18 @@ Options:
 Objects that will be changed for the node network settings. 
 
 ---------------------------------------------------------------
+#### getconfig ####
+Command:
+
+    sfcli Node getconfig <options>
+
+Description:
+
+The GetConfig API method is used to retrieve all the configuration information for the node. This one API method includes the same information available in both "GetClusterConfig" and "GetNetworkConfig" methods.  Note: This method is available only through the per-node API endpoint 5.0 or later. 
+
+Options:
+
+---------------------------------------------------------------
 #### listpending ####
 Command:
 
@@ -1220,18 +1232,6 @@ Options:
 --nodeid
 
 Specifies the node for which statistics are gathered. 
-
----------------------------------------------------------------
-#### getconfig ####
-Command:
-
-    sfcli Node getconfig <options>
-
-Description:
-
-The GetConfig API method is used to retrieve all the configuration information for the node. This one API method includes the same information available in both "GetClusterConfig" and "GetNetworkConfig" methods.  Note: This method is available only through the per-node API endpoint 5.0 or later. 
-
-Options:
 
 ---------------------------------------------------------------
 #### remove ####
@@ -3728,20 +3728,16 @@ GetNvramInfo allows you to retrieve information from each node about the NVRAM c
 Options:
 
 ---------------------------------------------------------------
-#### getnodeinfo ####
+#### getconfig ####
 Command:
 
-    sfcli Hardware getnodeinfo <options>
+    sfcli Hardware getconfig <options>
 
 Description:
 
-GetNodeHardwareInfo is used to return all the hardware info and status for the node specified. This generally includes manufacturers, vendors, versions, and other associated hardware identification information. 
+GetHardwareConfig enables you to display the hardware configuration information for a node. NOTE: This method is available only through the per-node API endpoint 5.0 or later. 
 
 Options:
-
---nodeid
-
-The ID of the node for which hardware information is being requested.  Information about a  node is returned if a   node is specified. 
 
 ---------------------------------------------------------------
 #### getclusterinfo ####
@@ -3760,16 +3756,20 @@ Options:
 Include only a certain type of hardware information in the response. Can be one of the following:drives: List only drive information in the response.nodes: List only node information in the response.all: Include both drive and node information in the response.If this parameter is omitted, a type of "all" is assumed. 
 
 ---------------------------------------------------------------
-#### getconfig ####
+#### getnodeinfo ####
 Command:
 
-    sfcli Hardware getconfig <options>
+    sfcli Hardware getnodeinfo <options>
 
 Description:
 
-GetHardwareConfig enables you to display the hardware configuration information for a node. NOTE: This method is available only through the per-node API endpoint 5.0 or later. 
+GetNodeHardwareInfo is used to return all the hardware info and status for the node specified. This generally includes manufacturers, vendors, versions, and other associated hardware identification information. 
 
 Options:
+
+--nodeid
+
+The ID of the node for which hardware information is being requested.  Information about a  node is returned if a   node is specified. 
 
 
 Cluster Commands 

@@ -24,7 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """getnvraminfo getnodeinfo getclusterinfo getconfig """
+    """getnvraminfo getconfig getclusterinfo getnodeinfo """
 
 @cli.command('getnvraminfo', short_help="""GetNvramInfo allows you to retrieve information from each node about the NVRAM card.   """, cls=SolidFireCommand)
 @pass_context
@@ -51,26 +51,20 @@ def getnvraminfo(ctx):
 
 
 
-@cli.command('getnodeinfo', short_help="""GetNodeHardwareInfo is used to return all the hardware info and status for the node specified. This generally includes manufacturers, vendors, versions, and other associated hardware identification information. """, cls=SolidFireCommand)
-@click.option('--nodeid',
-              type=int,
-              required=True,
-              help="""The ID of the node for which hardware information is being requested.  Information about a  node is returned if a   node is specified. """)
+@cli.command('getconfig', short_help="""GetHardwareConfig enables you to display the hardware configuration information for a node. NOTE: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
 @pass_context
-def getnodeinfo(ctx,
-           # Mandatory main parameter
-           nodeid):
-    """GetNodeHardwareInfo is used to return all the hardware info and status for the node specified. This generally includes manufacturers, vendors, versions, and other associated hardware identification information."""
+def getconfig(ctx):
+    """GetHardwareConfig enables you to display the hardware configuration information for a node. NOTE: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-    
+
     
 
-    ctx.logger.info("""nodeid = """+str(nodeid)+""";"""+"")
+    ctx.logger.info("")
     try:
-        _GetNodeHardwareInfoResult = ctx.element.get_node_hardware_info(node_id=nodeid)
+        _GetHardwareConfigResult = ctx.element.get_hardware_config()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -78,7 +72,7 @@ def getnodeinfo(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_GetNodeHardwareInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_GetHardwareConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -113,20 +107,26 @@ def getclusterinfo(ctx,
 
 
 
-@cli.command('getconfig', short_help="""GetHardwareConfig enables you to display the hardware configuration information for a node. NOTE: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
+@cli.command('getnodeinfo', short_help="""GetNodeHardwareInfo is used to return all the hardware info and status for the node specified. This generally includes manufacturers, vendors, versions, and other associated hardware identification information. """, cls=SolidFireCommand)
+@click.option('--nodeid',
+              type=int,
+              required=True,
+              help="""The ID of the node for which hardware information is being requested.  Information about a  node is returned if a   node is specified. """)
 @pass_context
-def getconfig(ctx):
-    """GetHardwareConfig enables you to display the hardware configuration information for a node. NOTE: This method is available only through the per-node API endpoint 5.0 or later."""
+def getnodeinfo(ctx,
+           # Mandatory main parameter
+           nodeid):
+    """GetNodeHardwareInfo is used to return all the hardware info and status for the node specified. This generally includes manufacturers, vendors, versions, and other associated hardware identification information."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
-    ctx.logger.info("")
+    ctx.logger.info("""nodeid = """+str(nodeid)+""";"""+"")
     try:
-        _GetHardwareConfigResult = ctx.element.get_hardware_config()
+        _GetNodeHardwareInfoResult = ctx.element.get_node_hardware_info(node_id=nodeid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -134,5 +134,5 @@ def getconfig(ctx):
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_GetHardwareConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_GetNodeHardwareInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
