@@ -1227,9 +1227,7 @@ def unbind(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-        
-
-    virtualvolumehostid = parser.parse_array(virtualvolumehostid)    
+            
 
     unbindargs = parser.parse_array(unbindargs)
     
