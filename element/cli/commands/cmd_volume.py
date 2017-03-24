@@ -813,30 +813,25 @@ def clone(ctx,
               required=False,
               help="""Access allowed for the volume. readOnly: Only read operations are allowed. readWrite: Reads and writes are allowed. locked: No reads or writes are allowed. replicationTarget: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked.  If unspecified, the access settings of the clone will be the same as the source. """)
 
-@click.option('--volumeqosminiops',
+@click.option('--qosminiops',
               type=int,
               required=False,
-              help="""Desired minimum 4KB IOPS to guarantee. The allowed IOPS will only drop below this level if all volumes have been capped at their min IOPS value and there is still insufficient performance capacity. """)
+              help="""Desired minimum 4KB IOPS to guarantee. The allowed IOPS will only drop below this level if all volumes have been capped at their minimum IOPS value and there is still insufficient performance capacity. """)
 
-@click.option('--volumeqosmaxiops',
+@click.option('--qosmaxiops',
               type=int,
               required=False,
               help="""Desired maximum 4KB IOPS allowed over an extended period of time. """)
 
-@click.option('--volumeqosburstiops',
+@click.option('--qosburstiops',
               type=int,
               required=False,
               help="""Maximum "peak" 4KB IOPS allowed for short periods of time. Allows for bursts of I/O activity over the normal max IOPS value. """)
 
-@click.option('--volumeqosbursttime',
+@click.option('--qosbursttime',
               type=int,
               required=False,
               help="""The length of time burst IOPS is allowed. The value returned is represented in time units of seconds. Note: this value is calculated by the system based on IOPS set for QoS. """)
-
-@click.option('--volumeqoscurve',
-              type=int,
-              required=False,
-              help="""The curve is a set of key-value pairs. The keys are I/O sizes in bytes. The values represent the cost performing an IOP at a specific I/O size. The curve is calculated relative to a 4096 byte operation set at 100 IOPS. """)
 @click.option('--totalsize',
               type=int,
               required=False,
@@ -854,15 +849,13 @@ def modify(ctx,
            # Optional main parameter
            access = None,
            # Optional subparameter of optional main parameter.
-           volumeqosminiops = None,
+           qosminiops = None,
            # Optional subparameter of optional main parameter.
-           volumeqosmaxiops = None,
+           qosmaxiops = None,
            # Optional subparameter of optional main parameter.
-           volumeqosburstiops = None,
+           qosburstiops = None,
            # Optional subparameter of optional main parameter.
-           volumeqosbursttime = None,
-           # Optional subparameter of optional main parameter.
-           volumeqoscurve = None,
+           qosbursttime = None,
            # Optional main parameter
            totalsize = None,
            # Optional main parameter
@@ -883,28 +876,21 @@ def modify(ctx,
                 
 
     qos = None
-    if(volumeqosminiops is not None or
-       volumeqosmaxiops is not None or
-       volumeqosburstiops is not None or
-       volumeqosbursttime is not None or
-       volumeqoscurve is not None or
+    if(qosminiops is not None or
+       qosmaxiops is not None or
+       qosburstiops is not None or
+       qosbursttime is not None or
        False):
-        if not (volumeqos and volumeqos and volumeqos and volumeqos and volumeqos and  True):
-            ctx.logger.error("""If you choose to provide volumeqos, you must include all of the following parameters:
-volumeqosminiops
-volumeqosmaxiops
-volumeqosburstiops
-volumeqosbursttime
-volumeqoscurve
+        if not ( True):
+            ctx.logger.error("""If you choose to provide qos, you must include all of the following parameters:
 """)
         kwargsDict = dict()
-        kwargsDict["min_iops"] = volumeqosminiops
-        kwargsDict["max_iops"] = volumeqosmaxiops
-        kwargsDict["burst_iops"] = volumeqosburstiops
-        kwargsDict["burst_time"] = volumeqosbursttime
-        kwargsDict["curve"] = volumeqoscurve
+        kwargsDict["min_iops"] = qosminiops
+        kwargsDict["max_iops"] = qosmaxiops
+        kwargsDict["burst_iops"] = qosburstiops
+        kwargsDict["burst_time"] = qosbursttime
 
-        qos = VolumeQOS(**kwargsDict)        
+        qos = QoS(**kwargsDict)        
 
     kwargsDict = None
 
