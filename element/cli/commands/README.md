@@ -447,7 +447,7 @@ Options:
 
 --volumeids
 
-A list of volumes from which to retrieve activity information. 
+A list of volume IDs of volumes from which to retrieve activity information. 
 
 ---------------------------------------------------------------
 #### listdrivestats ####
@@ -641,11 +641,11 @@ Options:
 
 --startvolumeid
 
- 
+The beginning of the range of active paired volumes to return. 
 
 --limit
 
- 
+Maximum number of active paired volumes to return. 
 
 ---------------------------------------------------------------
 #### modifyvolumepair ####
@@ -673,7 +673,7 @@ Specifies the volume replication mode. Possible values are: Async: Writes are ac
 
 --pauselimit
 
- 
+Internal use only. 
 
 ---------------------------------------------------------------
 #### startcluster ####
@@ -1293,7 +1293,7 @@ Options:
 
 --protocolendpointids
 
-A list of protocol endpoint IDs for which to retrieve information. If unspecified, the method returns information about all protocol endpoints. 
+A list of protocol endpoint IDs for which to retrieve information. If you omit this parameter, the method returns information about all protocol endpoints. 
 
 
 LoginSession Commands 
@@ -2179,7 +2179,7 @@ The storage virtual IP address for this virtual network. The svip for a virtual 
 
 --gateway
 
-The IP address of a gateway of the virtual network. This parameter is valid only if the "namespace" parameter is set to true. 
+The IP address of a gateway of the virtual network. This parameter is only valid if the "namespace" parameter is set to true. 
 
 --namespace
 
@@ -2223,7 +2223,7 @@ Unique storage IP address for the virtual network being created.
 
 --gateway
 
-The IP address of a gateway of the virtual network. This parameter is only valid if the namespace parameter is set to true. 
+The IP address of a gateway of the virtual network. This parameter is only valid if the "namespace" parameter is set to true. 
 
 --namespace
 
@@ -3203,7 +3203,7 @@ Options:
 
 --virtualvolumetaskids
 
-A list of virtual volume task IDs for which to retrieve information. If unspecified, the method returns information about all virtual volume tasks. 
+A list of virtual volume task IDs for which to retrieve information. If you omit this parameter, the method returns information about all virtual volume tasks. 
 
 ---------------------------------------------------------------
 #### create ####
@@ -3379,7 +3379,7 @@ Options:
 
 --virtualvolumehostids
 
-A list of virtual volume host IDs for which to retrieve information. If unspecified, the method returns information about all virtual volume hosts. 
+A list of virtual volume host IDs for which to retrieve information. If you omit this parameter, the method returns information about all virtual volume hosts. 
 
 ---------------------------------------------------------------
 #### rollback ####
@@ -3719,7 +3719,7 @@ Options:
 
 --virtualvolumebindingids
 
-A list of virtual volume binding IDs for which to retrieve information. If unspecified, the method returns information about all virtual volume bindings. 
+A list of virtual volume binding IDs for which to retrieve information. If you omit this parameter, the method returns information about all virtual volume bindings. 
 
 ---------------------------------------------------------------
 #### getcount ####

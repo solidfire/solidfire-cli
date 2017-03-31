@@ -378,7 +378,7 @@ def querymetadata(ctx,
 @click.option('--virtualvolumetaskids',
               type=str,
               required=False,
-              help="""A list of virtual volume task IDs for which to retrieve information. If unspecified, the method returns information about all virtual volume tasks. """)
+              help="""A list of virtual volume task IDs for which to retrieve information. If you omit this parameter, the method returns information about all virtual volume tasks. """)
 @pass_context
 def listtasks(ctx,
            # Optional main parameter
@@ -787,7 +787,7 @@ def getunsharedbitmap(ctx,
 @click.option('--virtualvolumehostids',
               type=str,
               required=False,
-              help="""A list of virtual volume host IDs for which to retrieve information. If unspecified, the method returns information about all virtual volume hosts. """)
+              help="""A list of virtual volume host IDs for which to retrieve information. If you omit this parameter, the method returns information about all virtual volume hosts. """)
 @pass_context
 def listhosts(ctx,
            # Optional main parameter
@@ -1502,7 +1502,7 @@ def snapshot(ctx,
 @click.option('--virtualvolumebindingids',
               type=str,
               required=False,
-              help="""A list of virtual volume binding IDs for which to retrieve information. If unspecified, the method returns information about all virtual volume bindings. """)
+              help="""A list of virtual volume binding IDs for which to retrieve information. If you omit this parameter, the method returns information about all virtual volume bindings. """)
 @pass_context
 def listbindings(ctx,
            # Optional main parameter

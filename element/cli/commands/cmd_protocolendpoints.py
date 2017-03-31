@@ -30,7 +30,7 @@ def cli(ctx):
 @click.option('--protocolendpointids',
               type=str,
               required=False,
-              help="""A list of protocol endpoint IDs for which to retrieve information. If unspecified, the method returns information about all protocol endpoints. """)
+              help="""A list of protocol endpoint IDs for which to retrieve information. If you omit this parameter, the method returns information about all protocol endpoints. """)
 @pass_context
 def list(ctx,
            # Optional main parameter

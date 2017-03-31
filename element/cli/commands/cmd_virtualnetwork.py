@@ -81,7 +81,7 @@ def cli(ctx):
 @click.option('--gateway',
               type=str,
               required=False,
-              help="""The IP address of a gateway of the virtual network. This parameter is valid only if the "namespace" parameter is set to true. """)
+              help="""The IP address of a gateway of the virtual network. This parameter is only valid if the "namespace" parameter is set to true. """)
 @click.option('--namespace',
               type=bool,
               required=False,
@@ -213,7 +213,7 @@ def modify(ctx,
 @click.option('--gateway',
               type=str,
               required=False,
-              help="""The IP address of a gateway of the virtual network. This parameter is only valid if the namespace parameter is set to true. """)
+              help="""The IP address of a gateway of the virtual network. This parameter is only valid if the "namespace" parameter is set to true. """)
 @click.option('--namespace',
               type=bool,
               required=False,

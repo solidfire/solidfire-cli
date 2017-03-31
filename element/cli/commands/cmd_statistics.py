@@ -140,7 +140,7 @@ def listvolumestatsbyvirtualvolume(ctx,
 @click.option('--volumeids',
               type=str,
               required=False,
-              help="""A list of volumes from which to retrieve activity information. """)
+              help="""A list of volume IDs of volumes from which to retrieve activity information. """)
 @pass_context
 def listvolumestats(ctx,
            # Optional main parameter

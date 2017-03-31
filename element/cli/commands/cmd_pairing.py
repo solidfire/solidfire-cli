@@ -192,11 +192,11 @@ def startvolume(ctx,
 @click.option('--startvolumeid',
               type=int,
               required=False,
-              help=""" """)
+              help="""The beginning of the range of active paired volumes to return. """)
 @click.option('--limit',
               type=int,
               required=False,
-              help=""" """)
+              help="""Maximum number of active paired volumes to return. """)
 @pass_context
 def listactivepairedvolumes(ctx,
            # Optional main parameter
@@ -241,7 +241,7 @@ def listactivepairedvolumes(ctx,
 @click.option('--pauselimit',
               type=int,
               required=False,
-              help=""" """)
+              help="""Internal use only. """)
 @pass_context
 def modifyvolumepair(ctx,
            # Mandatory main parameter
