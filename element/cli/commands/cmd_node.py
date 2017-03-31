@@ -24,43 +24,15 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """setnetworkconfig getconfig listpending getorigin listpendingactive listall getpendingoperation liststats add setconfig getnetworkconfig getstats remove listactive getbootstrapconfig """
+    """setnetworkconfig listpending getorigin listpendingactive listall getpendingoperation liststats add setconfig getnetworkconfig getstats getconfig remove listactive getbootstrapconfig """
 # SetNewtorkConfig has been intentionally excluded from the python cli because
 # the input values would be too complex to reasonably support in a CLI.
 
 
-@cli.command('getconfig', short_help="""The GetConfig API method is used to retrieve all the configuration information for the node. This one API method includes the same information available in both "GetClusterConfig" and "GetNetworkConfig" methods.  Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
-@pass_context
-def getconfig(ctx):
-    """The GetConfig API method is used to retrieve all the configuration information for the node. This one API method includes the same information available in both &quot;GetClusterConfig&quot; and &quot;GetNetworkConfig&quot; methods."""
-    """"""
-    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-    
-
-    ctx.logger.info("")
-    try:
-        _GetConfigResult = ctx.element.get_config()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_GetConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('listpending', short_help="""Gets the list of pending nodes. Pending nodes are running and configured to join the cluster, but have not been added via the AddNodes method. """, cls=SolidFireCommand)
+@cli.command('listpending', short_help="""ListPendingNodes returns a list of the currently pending nodes in the system. Pending nodes are nodes that are running and configured to join the cluster, but have not yet been added via the AddNodes API method. """, cls=SolidFireCommand)
 @pass_context
 def listpending(ctx):
-    """Gets the list of pending nodes."""
-    """Pending nodes are running and configured to join the cluster, but have not been added via the AddNodes method."""
+    """ListPendingNodes returns a list of the currently pending nodes in the system. Pending nodes are nodes that are running and configured to join the cluster, but have not yet been added via the AddNodes API method."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -82,7 +54,7 @@ def listpending(ctx):
 
 
 
-@cli.command('getorigin', short_help="""GetOrigin enables you to retrieve the origination certificate for where the node was built.NOTE: The GetOrigin method may return "null" if there is no origination certification. """, cls=SolidFireCommand)
+@cli.command('getorigin', short_help="""GetOrigin enables you to retrieve the origination certificate for where the node was built. This method might return null if there is no origination certification. """, cls=SolidFireCommand)
 @click.option('--force',
               type=bool,
               required=True,
@@ -91,7 +63,7 @@ def listpending(ctx):
 def getorigin(ctx,
            # Mandatory main parameter
            force):
-    """GetOrigin enables you to retrieve the origination certificate for where the node was built.NOTE: The GetOrigin method may return &quot;null&quot; if there is no origination certification."""
+    """GetOrigin enables you to retrieve the origination certificate for where the node was built. This method might return null if there is no origination certification."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -163,12 +135,11 @@ def listall(ctx):
 
 
 
-@cli.command('getpendingoperation', short_help="""GetPendingOperation is used to detect an operation on a node that is currently in progress. This method can also be used to report back when an operation has completed.  Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
+@cli.command('getpendingoperation', short_help="""You can use GetPendingOperation to detect an operation on a node that is currently in progress. You can also use this method to report back when an operation has completed.  Note: method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
 @pass_context
 def getpendingoperation(ctx):
-    """GetPendingOperation is used to detect an operation on a node that is currently in progress. This method can also be used to report back when an operation has completed."""
-    """"""
-    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
+    """You can use GetPendingOperation to detect an operation on a node that is currently in progress. You can also use this method to report back when an operation has completed. """
+    """Note: method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -190,10 +161,10 @@ def getpendingoperation(ctx):
 
 
 
-@cli.command('liststats', short_help="""ListNodeStats is used to return the high-level activity measurements for all nodes in a cluster. """, cls=SolidFireCommand)
+@cli.command('liststats', short_help="""ListNodeStats enables you to view the high-level activity measurements for all nodes in a cluster. """, cls=SolidFireCommand)
 @pass_context
 def liststats(ctx):
-    """ListNodeStats is used to return the high-level activity measurements for all nodes in a cluster."""
+    """ListNodeStats enables you to view the high-level activity measurements for all nodes in a cluster."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -215,11 +186,11 @@ def liststats(ctx):
 
 
 
-@cli.command('add', short_help="""AddNodes is used to add one or more new nodes to the cluster. When a node is not configured and starts up for the first time you are prompted to configure the node. Once a node is configured it is registered as a "pending node" with the cluster.  Adding a node to a cluster that has been set up for virtual networking will require a sufficient number of virtual storage IP addresses to allocate a virtual IP to the new node. If there are no virtual IP addresses available for the new node, the AddNode operation will not complete successfully. Use the "ModifyVirtualNetwork" method to add more storage IP addresses to your virtual network.  The software version on each node in a cluster must be compatible. Run the "ListAllNodes" API to see what versions of software are currently running on the cluster nodes. For an explanation of software version compatibility, see "Node Versioning and Compatibility" in the Element API guide.  Once a node has been added, the drives on the node are made available and can then be added via the "AddDrives" method to increase the storage capacity of the cluster.  Note: It may take several seconds after adding a new Node for it to start up and register the drives as being available. """, cls=SolidFireCommand)
+@cli.command('add', short_help="""AddNodes enables you to add one or more new nodes to a cluster. When a node that is not configured starts up for the first time, you are prompted to configure the node. After you configure the node, it is registered as a "pending node" with the cluster.  Note: It might take several seconds after adding a new node for it to start up and register its drives as available. """, cls=SolidFireCommand)
 @click.option('--pendingnodes',
               type=str,
               required=True,
-              help="""List of PendingNodeIDs for the Nodes to be added. You can obtain the list of Pending Nodes via the ListPendingNodes method. """)
+              help=""" List of pending NodeIDs for the nodes to be added. You can  obtain the list of pending nodes using the ListPendingNodes method. """)
 @click.option('--autoinstall',
               type=bool,
               required=False,
@@ -230,15 +201,8 @@ def add(ctx,
            pendingnodes,
            # Optional main parameter
            autoinstall = None):
-    """AddNodes is used to add one or more new nodes to the cluster. When a node is not configured and starts up for the first time you are prompted to configure the node. Once a node is configured it is registered as a &quot;pending node&quot; with the cluster."""
-    """"""
-    """Adding a node to a cluster that has been set up for virtual networking will require a sufficient number of virtual storage IP addresses to allocate a virtual IP to the new node. If there are no virtual IP addresses available for the new node, the AddNode operation will not complete successfully. Use the &quot;ModifyVirtualNetwork&quot; method to add more storage IP addresses to your virtual network."""
-    """"""
-    """The software version on each node in a cluster must be compatible. Run the &quot;ListAllNodes&quot; API to see what versions of software are currently running on the cluster nodes. For an explanation of software version compatibility, see &quot;Node Versioning and Compatibility&quot; in the Element API guide."""
-    """"""
-    """Once a node has been added, the drives on the node are made available and can then be added via the &quot;AddDrives&quot; method to increase the storage capacity of the cluster."""
-    """"""
-    """Note: It may take several seconds after adding a new Node for it to start up and register the drives as being available."""
+    """AddNodes enables you to add one or more new nodes to a cluster. When a node that is not configured starts up for the first time, you are prompted to configure the node. After you configure the node, it is registered as a &quot;pending node&quot; with the cluster. """
+    """Note: It might take several seconds after adding a new node for it to start up and register its drives as available."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -265,11 +229,10 @@ def add(ctx,
 # the input values would be too complex to reasonably support in a CLI.
 
 
-@cli.command('getnetworkconfig', short_help="""The GetNetworkConfig API method is used to display the network configuration information for a node.  Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
+@cli.command('getnetworkconfig', short_help="""The GetNetworkConfig API method enables you to display the network configuration information for a node. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
 @pass_context
 def getnetworkconfig(ctx):
-    """The GetNetworkConfig API method is used to display the network configuration information for a node."""
-    """"""
+    """The GetNetworkConfig API method enables you to display the network configuration information for a node."""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
@@ -292,7 +255,7 @@ def getnetworkconfig(ctx):
 
 
 
-@cli.command('getstats', short_help="""GetNodeStats is used to return the high-level activity measurements for a single node. """, cls=SolidFireCommand)
+@cli.command('getstats', short_help="""GetNodeStats enables you to retrieve the high-level activity measurements for a single node. """, cls=SolidFireCommand)
 @click.option('--nodeid',
               type=int,
               required=True,
@@ -301,7 +264,7 @@ def getnetworkconfig(ctx):
 def getstats(ctx,
            # Mandatory main parameter
            nodeid):
-    """GetNodeStats is used to return the high-level activity measurements for a single node."""
+    """GetNodeStats enables you to retrieve the high-level activity measurements for a single node."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -323,7 +286,33 @@ def getstats(ctx,
 
 
 
-@cli.command('remove', short_help="""RemoveNodes is used to remove one or more nodes that should no integerer participate in the cluster. Before removing a node, all drives it contains must first be removed with "RemoveDrives" method. A node cannot be removed until the RemoveDrives process has completed and all data has been migrated away from the node.  Once removed, a node registers itself as a pending node and can be added again, or shut down which removes it from the "Pending Node" list. """, cls=SolidFireCommand)
+@cli.command('getconfig', short_help="""The GetConfig API method enables you to retrieve all configuration information for a node. This method includes the same information available in both the GetClusterConfig and GetNetworkConfig API methods. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
+@pass_context
+def getconfig(ctx):
+    """The GetConfig API method enables you to retrieve all configuration information for a node. This method includes the same information available in both the GetClusterConfig and GetNetworkConfig API methods."""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+    
+
+    ctx.logger.info("")
+    try:
+        _GetConfigResult = ctx.element.get_config()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_GetConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('remove', short_help="""You can use RemoveNodes to remove one or more nodes that should no longer participate in the cluster. Before removing a node, you must remove all drives the node contains using the RemoveDrives method. You cannot remove a node until the RemoveDrives process has completed and all data has been migrated away from the node. After you remove a node, it registers itself as a pending node. You can add the node again or shut it down (shutting the node down removes it from the Pending Node list). """, cls=SolidFireCommand)
 @click.option('--nodes',
               type=str,
               required=True,
@@ -332,9 +321,8 @@ def getstats(ctx,
 def remove(ctx,
            # Mandatory main parameter
            nodes):
-    """RemoveNodes is used to remove one or more nodes that should no integerer participate in the cluster. Before removing a node, all drives it contains must first be removed with &quot;RemoveDrives&quot; method. A node cannot be removed until the RemoveDrives process has completed and all data has been migrated away from the node."""
-    """"""
-    """Once removed, a node registers itself as a pending node and can be added again, or shut down which removes it from the &quot;Pending Node&quot; list."""
+    """You can use RemoveNodes to remove one or more nodes that should no longer participate in the cluster. Before removing a node, you must remove all drives the node contains using the RemoveDrives method. You cannot remove a node until the RemoveDrives process has completed and all data has been migrated away from the node."""
+    """After you remove a node, it registers itself as a pending node. You can add the node again or shut it down (shutting the node down removes it from the Pending Node list)."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -383,10 +371,10 @@ def listactive(ctx):
 
 
 
-@cli.command('getbootstrapconfig', short_help="""GetBootstrapConfig returns the cluster name and node name from the bootstrap configuration file. This API method should be performed on an individual node before it has been configured into a cluster. The resulting information from this method is used in the Cluster Configuration UI when the cluster is eventually created. """, cls=SolidFireCommand)
+@cli.command('getbootstrapconfig', short_help="""GetBootstrapConfig returns cluster and node information from the bootstrap configuration file. Use this API method on an individual node before it has been joined with a cluster. You can use the information this method returns in the cluster configuration interface when you create a cluster. """, cls=SolidFireCommand)
 @pass_context
 def getbootstrapconfig(ctx):
-    """GetBootstrapConfig returns the cluster name and node name from the bootstrap configuration file. This API method should be performed on an individual node before it has been configured into a cluster. The resulting information from this method is used in the Cluster Configuration UI when the cluster is eventually created."""
+    """GetBootstrapConfig returns cluster and node information from the bootstrap configuration file. Use this API method on an individual node before it has been joined with a cluster. You can use the information this method returns in the cluster configuration interface when you create a cluster."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()

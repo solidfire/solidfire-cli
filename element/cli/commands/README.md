@@ -389,7 +389,7 @@ Command:
 
 Description:
 
-The GetCompleteStats API method is used by SolidFire engineering to troubleshoot new features. The data returned from GetCompleteStats is not documented, changes frequently, and is not guaranteed to be accurate. It is not recommended to ever use GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster. The data returned from GetCompleteStats changes frequently, and is not guaranteed to accurately show performance from the system. It is not recommended to ever use GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster. 
+NetApp engineering uses the GetCompleteStats API method to troubleshoot new features. The data returned from GetCompleteStats is not documented, changes frequently, and is not guaranteed to be accurate. NetApp does not recommend using GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster. 
 
 Options:
 
@@ -401,7 +401,7 @@ Command:
 
 Description:
 
-GetHardwareInfo allows you to return hardware information and status for a single node. This generally includes manufacturers, vendors, versions, drives, and other associated hardware identification information. 
+The GetHardwareInfo API method enables you to return hardware information and status for a single node. This generally includes details about manufacturers, vendors, versions, drives, and other associated hardware identification information. 
 
 Options:
 
@@ -413,7 +413,7 @@ Command:
 
 Description:
 
-The GetRawStats call is used by SolidFire engineering to troubleshoot new features. The data returned from GetRawStats is not documented, it changes frequently, and is not guaranteed to be accurate. It is not recommended to ever use GetRawStats for collecting performance data or any other management integration with a SolidFire cluster. The data returned from GetRawStats changes frequently, and is not guaranteed to accurately show performance from the system. It is not recommended to ever use GetRawStats for collecting performance data or any other management integration with a SolidFire cluster. 
+NetApp engineering uses the GetRawStats API method to troubleshoot new features. The data returned from GetRawStats is not documented, changes frequently, and is not guaranteed to be accurate. NetApp does not recommend using GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster. 
 
 Options:
 
@@ -425,13 +425,13 @@ Command:
 
 Description:
 
-ListVolumeStatsByVirtualVolume enables you to list statistics for volumes, sorted by virtual volumes. 
+ListVolumeStatsByVirtualVolume enables you to list volume statistics for any volumes in the system that are associated with virtual volumes. Statistics are cumulative from the creation of the volume. 
 
 Options:
 
 --virtualvolumeids
 
-A list of virtual volume  IDs for which to retrieve information. If you specify this parameter, the method returns information about only these virtual volumes. 
+A list of one or more virtual volume IDs for which to retrieve information. If you specify this parameter, the method returns information about only these virtual volumes. 
 
 ---------------------------------------------------------------
 #### listvolumestats ####
@@ -441,13 +441,13 @@ Command:
 
 Description:
 
-
+ListVolumeStats returns high-level activity measurements for a single volume, list of volumes, or all volumes (if you omit the volumeIDs parameter). Measurement values are cumulative from the creation of the volume. 
 
 Options:
 
 --volumeids
 
- 
+A list of volumes from which to retrieve activity information. 
 
 ---------------------------------------------------------------
 #### listdrivestats ####
@@ -457,7 +457,7 @@ Command:
 
 Description:
 
-ListDriveStats enables you to retrieve  high-level activity measurements for multiple drives in the cluster. By default, this method returns statistics for all drives in the cluster, and these measurements are cumulative from the addition of the drive to the cluster. Some values this method returns are specific to block drives, and some are specific to metadata drives. For more information on what data each drive type returns, see the response examples for the GetDriveStats method. 
+ListDriveStats enables you to retrieve high-level activity measurements for multiple drives in the cluster. By default, this method returns statistics for all drives in the cluster, and these measurements are cumulative from the addition of the drive to the cluster. Some values this method returns are specific to block drives, and some are specific to metadata drives. 
 
 Options:
 
@@ -475,7 +475,7 @@ Command:
 
 Description:
 
-The ListNodeFibreChannelPortInfo is used to return information about the Fibre Channel ports. The API method is intended for use on individual nodes; userid and password is required for access to individual Fibre Channel nodes. 
+The ListNodeFibreChannelPortInfo API method enables you to retrieve information about the Fibre Channel ports on a node. The API method is intended for use on individual nodes; userid and password authentication is required for access to individual Fibre Channel nodes. 
 
 Options:
 
@@ -487,7 +487,7 @@ Command:
 
 Description:
 
-The ListFibreChannelSessions is used to return information about the active Fibre Channel sessions on a cluster. 
+ListFibreChannelSessions enables you to retrieve information about the active Fibre Channel sessions on a cluster.  
 
 Options:
 
@@ -499,7 +499,7 @@ Command:
 
 Description:
 
-The ListFibreChannelPortInfo is used to return information about the Fibre Channel ports. The API method is intended for use on individual nodes; userid and password is required for access to individual Fibre Channel nodes. 
+ListFibreChannelPortInfo enables you to retrieve information about the Fibre Channel ports on a node.  The API method is intended for use on individual nodes; userid and password authentication is required for access to individual Fibre Channel nodes. 
 
 Options:
 
@@ -511,7 +511,7 @@ Command:
 
 Description:
 
-ListISCSISessions is used to return iSCSI connection information for volumes in the cluster. 
+You can use ListISCSISessions to return iSCSI information for volumes in the cluster. 
 
 Options:
 
@@ -523,7 +523,7 @@ Command:
 
 Description:
 
-The ListNetworkInterfaces API method is used to return information about each network interface on a node. The API method is intended for use on individual nodes.  
+ListNetworkInterfaces enables you to retrieve information about each network interface on a node. The API method is intended for use on individual nodes; userid and password authentication is required for access to individual nodes. 
 
 Options:
 
@@ -537,7 +537,7 @@ Command:
 
 Description:
 
-List the services in the cluster. 
+You can use ListServices to return the services information for nodes, drives, current software, and other services that are running on the cluster. 
 
 Options:
 
@@ -551,7 +551,7 @@ Command:
 
 Description:
 
-The CompleteClusterPairing method is the second step in the cluster pairing process. Use this method with the encoded key received from the "StartClusterPairing" API method to complete the cluster pairing process. 
+You can use the CompleteClusterPairing method with the encoded key received from the  StartClusterPairing method to complete the cluster pairing process. The CompleteClusterPairing method is the second step in the cluster pairing process.  
 
 Options:
 
@@ -567,17 +567,17 @@ Command:
 
 Description:
 
-CompleteVolumePairing is used to complete the pairing of two volumes. 
+You can use the CompleteVolumePairing method to complete the pairing of two volumes. 
 
 Options:
 
 --volumepairingkey
 
-The key returned from the "StartVolumePairing" API method. 
+The key returned from the StartVolumePairing method. 
 
 --volumeid
 
-The ID of volume on which to complete the pairing process. 
+The ID of the volume on which to complete the pairing process. 
 
 ---------------------------------------------------------------
 #### listclusterpairs ####
@@ -587,7 +587,7 @@ Command:
 
 Description:
 
-ListClusterPairs is used to list all of the clusters a cluster is paired with. This method returns information about active and pending cluster pairings, such as statistics about the current pairing as well as the connectivity and latency (in milliseconds) of the cluster pairing. 
+You can use the ListClusterPairs method to list all the clusters that a cluster is paired with. This method returns information about active and pending cluster pairings, such as statistics about the current pairing as well as the connectivity and latency (in milliseconds) of the cluster pairing. 
 
 Options:
 
@@ -599,13 +599,13 @@ Command:
 
 Description:
 
-RemoveVolumePair is used to remove the remote pairing between two volumes. When the volume pairing information is removed, data is no integerer replicated to or from the volume. This method should be run on both the source and target volumes that are paired together. 
+RemoveVolumePair enables you to remove the remote pairing between two volumes. Use this method on both the source and target volumes that are paired together. When you remove the volume pairing information, data is no longer replicated to or from the volume. 
 
 Options:
 
 --volumeid
 
-ID of the volume on which to stop the replication process. 
+The ID of the volume on which to stop the replication process. 
 
 ---------------------------------------------------------------
 #### startvolume ####
@@ -615,7 +615,7 @@ Command:
 
 Description:
 
-StartVolumePairing is used to create an encoded key from a volume that is used to pair with another volume. The key that this method creates is used in the "CompleteVolumePairing" API method to establish a volume pairing. 
+StartVolumePairing enables you to create an encoded key from a volume that is used to pair with another volume. The key that this method creates is used in the CompleteVolumePairing API method to establish a volume pairing. 
 
 Options:
 
@@ -625,7 +625,7 @@ The ID of the volume on which to start the pairing process.
 
 --mode
 
-The mode of the volume on which to start the pairing process. The mode can only be set if the volume is the source volume. Possible values: Async: (default if no mode parameter specified) Writes are acknowledged when they complete locally. The cluster does not wait for writes to be replicated to the target cluster. Sync: Source acknowledges write when the data is stored locally and on the remote cluster. SnapshotsOnly: Only snapshots created on the source cluster will be replicated. Active writes from the source volume will not be replicated. 
+The mode of the volume on which to start the pairing process. The mode can only be set if the volume is the source volume. Possible values are: Async: (default if no mode parameter specified) Writes are acknowledged when they complete locally. The cluster does not wait for writes to be replicated to the target cluster. Sync: Source acknowledges write when the data is stored locally and on the remote cluster. SnapshotsOnly: Only snapshots created on the source cluster will be replicated. Active writes from the source volume are not replicated. 
 
 ---------------------------------------------------------------
 #### listactivepairedvolumes ####
@@ -635,7 +635,7 @@ Command:
 
 Description:
 
-ListActivePairedVolumes is used to list all of the active volumes paired with a volume. Volumes listed in the return for this method include volumes with active and pending pairings. 
+ListActivePairedVolumes enables you to list all the active volumes paired with a volume. This method returns information about volumes with active and pending pairings. 
 
 Options:
 
@@ -655,21 +655,21 @@ Command:
 
 Description:
 
-ModifyVolumePair is used to pause or restart replication between a pair of volumes. 
+ModifyVolumePair enables you to pause or restart replication between a pair of volumes. 
 
 Options:
 
 --volumeid
 
-Identification number of the volume to be modified. 
+The ID of the volume to be modified. 
 
 --pausedmanual
 
-Valid values that can be entered: true: to pause volume replication. false: to restart volume replication. If no value is specified, no change in replication is performed. 
+Specifies whether to pause or restart volume replication process. Valid values are:  true: Pauses volume replication false: Restarts volume replication 
 
 --mode
 
-Volume replication mode. Possible values: Async: Writes are acknowledged when they complete locally. The cluster does not wait for writes to be replicated to the target cluster. Sync: The source acknowledges the write when the data is stored locally and on the remote cluster. SnapshotsOnly: Only snapshots created on the source cluster will be replicated. Active writes from the source volume are not replicated. 
+Specifies the volume replication mode. Possible values are: Async: Writes are acknowledged when they complete locally. The cluster does not wait for writes to be replicated to the target cluster. Sync: The source acknowledges the write when the data is stored locally and on the remote cluster. SnapshotsOnly: Only snapshots created on the source cluster are replicated. Active writes from the source volume are not replicated. 
 
 --pauselimit
 
@@ -683,7 +683,7 @@ Command:
 
 Description:
 
-StartClusterPairing is used to create an encoded key from a cluster that is used to pair with another cluster. The key created from this API method is used in the "CompleteClusterPairing" API method to establish a cluster pairing. You can pair a cluster with a maximum of four other SolidFire clusters. 
+You can use the StartClusterPairing method to create an encoded key from a cluster that is used to pair with another cluster. The key created from this API method is used in the CompleteClusterPairing API method to establish a cluster pairing. You can pair a cluster with a maximum of four other clusters.  
 
 Options:
 
@@ -713,7 +713,7 @@ Command:
 
 Description:
 
-The ListTests API method is used to return the tests that are available to run on a node. Note: This method is available only through the per-node API endpoint 5.0 or later. 
+You can use the ListTests API method to return the tests that are available to run on a node. Note: This method is available only through the per-node API endpoint 5.0 or later. 
 
 Options:
 
@@ -725,17 +725,17 @@ Command:
 
 Description:
 
-The TestPing API method is used to validate the connection to all nodes in the cluster on both 1G and 10G interfaces using ICMP packets. The test uses the appropriate MTU sizes for each packet based on the MTU settings in the network configuration. Note: This method is available only through the per-node API endpoint 5.0 or later. 
+You can use the TestPing API method to validate the connection to all the nodes in a cluster on both 1G and 10G interfaces by using ICMP packets. The test uses the appropriate MTU sizes for each packet based on the MTU settings in the network configuration. Note: This method is available only through the per-node API endpoint 5.0 or later. 
 
 Options:
 
 --attempts
 
-Specifies the number of times the system should repeat the test ping. Default is 5. 
+Specifies the number of times the system should repeat the test ping. The default value is 5. 
 
 --hosts
 
-Specify address or hostnames of devices to ping. 
+Specifies a comma-separated list of addresses or hostnames of devices to ping. 
 
 --totaltimeoutsec
 
@@ -743,11 +743,15 @@ Specifies the length of time the ping should wait for a system response before i
 
 --packetsize
 
-Specify the number of bytes to send in the ICMP packet sent to each IP. Number be less than the maximum MTU specified in the network configuration. 
+Specifies the number of bytes to send in the ICMP packet that is sent to each IP. The number must be less than the maximum MTU specified in the network configuration. 
 
 --pingtimeoutmsec
 
-Specify the number of milliseconds to wait for each individual ping response. Default is 500ms. 
+Specifies the number of milliseconds to wait for each individual ping response. The default value is 500 ms. 
+
+--prohibitfragmentation
+
+Specifies that the Do not Fragment (DF) flag is enabled for the ICMP packets. 
 
 ---------------------------------------------------------------
 #### connectmvip ####
@@ -757,13 +761,13 @@ Command:
 
 Description:
 
-The TestConnectMvip API method is used to test the management connection to the cluster. The test pings the MVIP and executes a simple API method to verify connectivity. Note: This method is available only through the per-node API endpoint 5.0 or later. 
+The TestConnectMvip API method enables you to test the management connection to the cluster. The test pings the MVIP and executes a simple API method to verify connectivity. Note: This method is available only through the per-node API endpoint 5.0 or later. 
 
 Options:
 
 --mvip
 
-Optionally, use to test the management connection of a different MVIP. This is not needed to test the connection to the target cluster. 
+If specified, tests the management connection of a different MVIP. You do not need to use this value when testing the connection to the target cluster. This parameter is optional. 
 
 ---------------------------------------------------------------
 #### listutilities ####
@@ -773,7 +777,7 @@ Command:
 
 Description:
 
-The ListUtilities API method is used to return the tests that are available to run on a node. Note: This method is available only through the per-node API endpoint 5.0 or later. 
+You can use the ListUtilities API method to return the operations that are available to run on a node.  Note: This method is available only through the per-node API endpoint 5.0 or later. 
 
 Options:
 
@@ -785,13 +789,13 @@ Command:
 
 Description:
 
-The TestConnectEnsemble API method is used to verify connectivity with a sepcified database ensemble. By default it uses the ensemble for the cluster the node is associated with. Alternatively you can provide a different ensemble to test connectivity with. Note: This method is available only through the per-node API endpoint 5.0 or later. 
+The TestConnectEnsemble API method enables you to verify connectivity with a specified database ensemble. By default, it uses the ensemble for the cluster that the node is associated with. Alternatively, you can provide a different ensemble to test connectivity with. Note: This method is available only through the per-node API endpoint 5.0 or later. 
 
 Options:
 
 --ensemble
 
-A comma-separated list of ensemble node CIPs for connectivity testing 
+Uses a comma-separated list of ensemble node cluster IP addresses to test connectivity. This parameter is optional. 
 
 ---------------------------------------------------------------
 #### connectsvip ####
@@ -801,13 +805,13 @@ Command:
 
 Description:
 
-The TestConnectSvip API method is used to test the storage connection to the cluster. The test pings the SVIP using ICMP packets and when successful connects as an iSCSI initiator. Note: This method is available only through the per-node API endpoint 5.0 or later. 
+The TestConnectSvip API method enables you to test the storage connection to the cluster. The test pings the SVIP using ICMP packets, and when successful, connects as an iSCSI initiator. Note: This method is available only through the per-node API endpoint 5.0 or later. 
 
 Options:
 
 --svip
 
-Optionally, use to test the storage connection of a different SVIP. This is not needed to test the connection to the target cluster. 
+If specified, tests the storage connection of a different SVIP. You do not need to use this value when testing the connection to the target cluster. This parameter is optional. 
 
 
 VolumeAccessGroup Commands 
@@ -819,7 +823,27 @@ Command:
 
 Description:
 
-Remove volumes from a volume access group. 
+The RemoveVolumeFromVolumeAccessGroup method enables you to remove volumes from a volume access group. 
+
+Options:
+
+--volumeaccessgroupid
+
+The ID of the volume access group to remove volumes from. 
+
+--volumes
+
+The ID of the volume access group to remove volumes from. 
+
+---------------------------------------------------------------
+#### modify ####
+Command:
+
+    sfcli VolumeAccessGroup modify <options>
+
+Description:
+
+You can use ModifyVolumeAccessGroup to update initiators and add or remove volumes from a volume access group. If a specified initiator or volume is a duplicate of what currently exists, the volume access group is left as-is. If you do not specify a value for volumes or initiators, the current list of initiators and volumes is not changed. 
 
 Options:
 
@@ -827,9 +851,33 @@ Options:
 
 The ID of the volume access group to modify. 
 
+--virtualnetworkid
+
+The ID of the SolidFire virtual network to associate the volume access group with. 
+
+--virtualnetworktags
+
+The ID of the SolidFire virtual network to associate the volume access group with. 
+
+--name
+
+The new name for this volume access group. Not required to be unique, but recommended. 
+
+--initiators
+
+List of initiators to include in the volume access group. If unspecified, the access group's configured initiators are not modified. 
+
 --volumes
 
-List of volumes to remove from this volume access group. 
+List of volumes to initially include in the volume access group. If unspecified, the access group's volumes are not modified. 
+
+--deleteorphaninitiators
+
+true: Delete initiator objects after they are removed from a volume access group. false: Do not delete initiator objects after they are removed from a volume access group. 
+
+--attributes
+
+List of name-value pairs in JSON object format. 
 
 ---------------------------------------------------------------
 #### create ####
@@ -839,33 +887,33 @@ Command:
 
 Description:
 
-Creates a new volume access group. The new volume access group must be given a name when it is created. Entering initiators and volumes are optional when creating a volume access group. Once the group is created volumes and initiator IQNs can be added. Any initiator IQN that is successfully added to the volume access group is able to access any volume in the group without CHAP authentication. 
+You can use CreateVolumeAccessGroup to create a new volume access group. When you create the volume access group, you need to give it a name, and you can optionally enter initiators and volumes. After you create the group, you can add volumes and initiator IQNs. Any initiator IQN that you add to the volume access group is able to access any volume in the group without CHAP authentication. 
 
 Options:
 
 --name
 
-Name of the volume access group. It is not required to be unique, but recommended. 
+The name for this volume access group. Not required to be unique, but recommended. 
 
 --initiators
 
-List of initiators to include in the volume access group. If unspecified, the access group will start out without configured initiators. 
+List of initiators to include in the volume access group. If unspecified, the access group's configured initiators are not modified. 
 
 --volumes
 
-List of volumes to initially include in the volume access group. If unspecified, the access group will start without any volumes. 
+List of volumes to initially include in the volume access group. If unspecified, the access group's volumes are not modified. 
 
 --virtualnetworkid
 
-The ID of the SolidFire Virtual Network ID to associate the volume access group with. 
+The ID of the SolidFire virtual network to associate the volume access group with. 
 
 --virtualnetworktags
 
-The ID of the VLAN Virtual Network Tag to associate the volume access group with. 
+The ID of the SolidFire virtual network to associate the volume access group with. 
 
 --attributes
 
-List of Name/Value pairs in JSON object format. 
+List of name-value pairs in JSON object format. 
 
 ---------------------------------------------------------------
 #### modifylunassignments ####
@@ -875,13 +923,13 @@ Command:
 
 Description:
 
-The ModifytVolumeAccessGroupLunAssignments is used to define custom LUN assignments for specific volumes. Only LUN values set on the lunAssignments parameter will be changed in the volume access group. All other LUN assignments will remain unchanged.  LUN assignment values must be unique for volumes in a volume access group. An exception will be seen if LUN assignments are duplicated in a volume access group. However, the same LUN values can be used again in different volume access groups.  Note: Correct LUN values are 0 - 16383. An exception will be seen if an incorrect LUN value is passed. None of the specified LUN assignments will be modified if there is an exception.  Caution: If a LUN assignment is changed for a volume with active I/O, the I/O could be disrupted. Changes to the server configuration may be required in order to change volume LUN assignments. 
+The ModifyVolumeAccessGroupLunAssignments method enables you to define custom LUN assignments for specific volumes. This method changes only LUN values set on the lunAssignments parameter in the volume access group. All other LUN assignments remain unchanged. LUN assignment values must be unique for volumes in a volume access group. You cannot define duplicate LUN values within a volume access group. However, you can use the same LUN values again in different volume access groups.  Note: Correct LUN values are 0 through 16383. The system generates an exception if you pass a LUN value outside of this range. None of the specified LUN assignments are modified if there is an exception.  Caution: If you change a LUN assignment for a volume with active I/O, the I/O can be disrupted. You might need to change the server configuration before changing volume LUN assignments. 
 
 Options:
 
 --volumeaccessgroupid
 
-Unique volume access group ID for which the LUN assignments will be modified. 
+The ID of the volume access group for which the LUN assignments will be modified. 
 
 --lunassignments
 
@@ -895,61 +943,17 @@ Command:
 
 Description:
 
-ListVolumeAccessGroups is used to return information about the volume access groups that are currently in the system. 
+ListVolumeAccessGroups enables you to return information about the volume access groups that are currently in the system. 
 
 Options:
 
 --startvolumeaccessgroupid
 
-The lowest VolumeAccessGroupID to return. This can be useful for paging. If unspecified, there is no lower limit (implicitly 0). 
+The volume access group ID at which to begin the listing. If unspecified, there is no lower limit (implicitly 0). 
 
 --limit
 
 The maximum number of results to return. This can be useful for paging. 
-
----------------------------------------------------------------
-#### modify ####
-Command:
-
-    sfcli VolumeAccessGroup modify <options>
-
-Description:
-
-Update initiators and add or remove volumes from a volume access group. A specified initiator or volume that duplicates an existing volume or initiator in a volume access group is left as-is. If a value is not specified for volumes or initiators, the current list of initiators and volumes are not changed.  Often, it is easier to use the convenience functions to modify initiators and volumes independently:  AddInitiatorsToVolumeAccessGroup RemoveInitiatorsFromVolumeAccessGroup AddVolumesToVolumeAccessGroup RemoveVolumesFromVolumeAccessGroup 
-
-Options:
-
---volumeaccessgroupid
-
-The ID of the volume access group to modify. 
-
---virtualnetworkid
-
-The ID of the SolidFire Virtual Network ID to associate the volume access group with. 
-
---virtualnetworktags
-
-The ID of the VLAN Virtual Network Tag to associate the volume access group with. 
-
---name
-
-Name of the volume access group. It is not required to be unique, but recommended. 
-
---initiators
-
-List of initiators to include in the volume access group. If unspecified, the access group's configured initiators will not be modified. 
-
---volumes
-
-List of volumes to initially include in the volume access group. If unspecified, the access group's volumes will not be modified. 
-
---deleteorphaninitiators
-
-true: Delete initiator objects after they are removed from a volume access group. false: Do not delete initiator objects after they are removed from a volume access group. 
-
---attributes
-
-List of Name/Value pairs in JSON object format. 
 
 ---------------------------------------------------------------
 #### addinitiatorsto ####
@@ -959,7 +963,7 @@ Command:
 
 Description:
 
-Add initiators to a volume access group. 
+AddInitiatorsToVolumeAccessGroup enables you to add initiators to a specified volume access group. 
 
 Options:
 
@@ -969,7 +973,7 @@ The ID of the volume access group to modify.
 
 --initiators
 
-List of initiators to add to the volume access group. 
+The list of initiators to add to the volume access group. 
 
 ---------------------------------------------------------------
 #### getlunassignments ####
@@ -979,13 +983,13 @@ Command:
 
 Description:
 
-The GetVolumeAccessGroupLunAssignments is used to return information LUN mappings of a specified volume access group. 
+The GetVolumeAccessGroupLunAssignments method enables you to retrieve details on LUN mappings of a specified volume access group. 
 
 Options:
 
 --volumeaccessgroupid
 
-Unique volume access group ID used to return information. 
+The unique volume access group ID used to return information. 
 
 ---------------------------------------------------------------
 #### addvolumesto ####
@@ -995,17 +999,17 @@ Command:
 
 Description:
 
-Add volumes to a volume access group. 
+AddVolumesToVolumeAccessGroup enables you to add volumes to a specified volume access group. 
 
 Options:
 
 --volumeaccessgroupid
 
-The ID of the volume access group to modify. 
+The ID of the volume access group to which volumes are added. 
 
 --volumes
 
-List of volumes to add to this volume access group. 
+The list of volumes to add to the volume access group. 
 
 ---------------------------------------------------------------
 #### removeinitiatorsfrom ####
@@ -1015,17 +1019,17 @@ Command:
 
 Description:
 
-Remove initiators from a volume access group. 
+RemoveInitiatorsFromVolumeAccessGroup enables you to remove initiators from a specified volume access group. 
 
 Options:
 
 --volumeaccessgroupid
 
-The ID of the volume access group to modify. 
+The ID of the volume access group from which the initiators are removed. 
 
 --initiators
 
-List of initiators to remove from the volume access group. 
+The list of initiators to remove from the volume access group. 
 
 --deleteorphaninitiators
 
@@ -1039,13 +1043,13 @@ Command:
 
 Description:
 
-GetVolumeAccessGroupEfficiency is used to retrieve efficiency information about a volume access group. Only the volume access group provided as parameters in this API method is used to compute the capacity. 
+GetVolumeAccessGroupEfficiency enables you to retrieve efficiency information about a volume access group. Only the volume access group you provide as the parameter in this API method is used to compute the capacity. 
 
 Options:
 
 --volumeaccessgroupid
 
-Specifies the volume access group for which capacity is computed. 
+The volume access group for which capacity is computed. 
 
 ---------------------------------------------------------------
 #### delete ####
@@ -1055,13 +1059,13 @@ Command:
 
 Description:
 
-Delete a volume access group from the system. 
+DeleteVolumeAccessGroup enables you to delete a volume access group. 
 
 Options:
 
 --volumeaccessgroupid
 
-The ID of the volume access group to delete. 
+The ID of the volume access group to be deleted. 
 
 
 Node Commands 
@@ -1073,25 +1077,13 @@ Command:
 
 Description:
 
-The "SetNetworkConfig" method is used to set the network configuration for a node. To see the states in which these objects can be modified, see "Network Object for 1G and 10G Interfaces" on page 109 of the Element API. To display the current network settings for a node, run the "GetNetworkConfig" method.  WARNING! Changing the "bond-mode" on a node can cause a temporary loss of network connectivity. Caution should be taken when using this method.  Note: This method is available only through the per-node API endpoint 5.0 or later. 
+The SetNetworkConfig API method enables you to set the network configuration for a node. To display the current network settings for a node, run the GetNetworkConfig API method.  Note: This method is available only through the per-node API endpoint 5.0 or later. Changing the "bond-mode" on a node can cause a temporary loss of network connectivity. Exercise caution when using this method. 
 
 Options:
 
 --network
 
-Objects that will be changed for the node network settings. 
-
----------------------------------------------------------------
-#### getconfig ####
-Command:
-
-    sfcli Node getconfig <options>
-
-Description:
-
-The GetConfig API method is used to retrieve all the configuration information for the node. This one API method includes the same information available in both "GetClusterConfig" and "GetNetworkConfig" methods.  Note: This method is available only through the per-node API endpoint 5.0 or later. 
-
-Options:
+An object containing node network settings to modify. 
 
 ---------------------------------------------------------------
 #### listpending ####
@@ -1101,7 +1093,7 @@ Command:
 
 Description:
 
-Gets the list of pending nodes. Pending nodes are running and configured to join the cluster, but have not been added via the AddNodes method. 
+ListPendingNodes returns a list of the currently pending nodes in the system. Pending nodes are nodes that are running and configured to join the cluster, but have not yet been added via the AddNodes API method. 
 
 Options:
 
@@ -1113,7 +1105,7 @@ Command:
 
 Description:
 
-GetOrigin enables you to retrieve the origination certificate for where the node was built.NOTE: The GetOrigin method may return "null" if there is no origination certification. 
+GetOrigin enables you to retrieve the origination certificate for where the node was built. This method might return null if there is no origination certification. 
 
 Options:
 
@@ -1153,7 +1145,7 @@ Command:
 
 Description:
 
-GetPendingOperation is used to detect an operation on a node that is currently in progress. This method can also be used to report back when an operation has completed.  Note: This method is available only through the per-node API endpoint 5.0 or later. 
+You can use GetPendingOperation to detect an operation on a node that is currently in progress. You can also use this method to report back when an operation has completed.  Note: method is available only through the per-node API endpoint 5.0 or later. 
 
 Options:
 
@@ -1165,7 +1157,7 @@ Command:
 
 Description:
 
-ListNodeStats is used to return the high-level activity measurements for all nodes in a cluster. 
+ListNodeStats enables you to view the high-level activity measurements for all nodes in a cluster. 
 
 Options:
 
@@ -1177,13 +1169,13 @@ Command:
 
 Description:
 
-AddNodes is used to add one or more new nodes to the cluster. When a node is not configured and starts up for the first time you are prompted to configure the node. Once a node is configured it is registered as a "pending node" with the cluster.  Adding a node to a cluster that has been set up for virtual networking will require a sufficient number of virtual storage IP addresses to allocate a virtual IP to the new node. If there are no virtual IP addresses available for the new node, the AddNode operation will not complete successfully. Use the "ModifyVirtualNetwork" method to add more storage IP addresses to your virtual network.  The software version on each node in a cluster must be compatible. Run the "ListAllNodes" API to see what versions of software are currently running on the cluster nodes. For an explanation of software version compatibility, see "Node Versioning and Compatibility" in the Element API guide.  Once a node has been added, the drives on the node are made available and can then be added via the "AddDrives" method to increase the storage capacity of the cluster.  Note: It may take several seconds after adding a new Node for it to start up and register the drives as being available. 
+AddNodes enables you to add one or more new nodes to a cluster. When a node that is not configured starts up for the first time, you are prompted to configure the node. After you configure the node, it is registered as a "pending node" with the cluster.  Note: It might take several seconds after adding a new node for it to start up and register its drives as available. 
 
 Options:
 
 --pendingnodes
 
-List of PendingNodeIDs for the Nodes to be added. You can obtain the list of Pending Nodes via the ListPendingNodes method. 
+ List of pending NodeIDs for the nodes to be added. You can  obtain the list of pending nodes using the ListPendingNodes method. 
 
 --autoinstall
 
@@ -1197,7 +1189,7 @@ Command:
 
 Description:
 
-The SetConfig API method is used to set all the configuration information for the node. This includes the same information available via calls to SetClusterConfig and SetNetworkConfig in one API method.  Warning! Changing the 'bond-mode' on a node can cause a temporary loss of network connectivity. Caution should be taken when using this method.  Note: This method is available only through the per-node API endpoint 5.0 or later. 
+The SetConfig API method enables you to set all the configuration information for the node. This includes the same information available via calls to SetClusterConfig and SetNetworkConfig in one API method.  Note: This method is available only through the per-node API endpoint 5.0 or later. Caution: Changing the "bond-mode" on a node can cause a temporary loss of network connectivity. Exercise caution when using this method. 
 
 Options:
 
@@ -1213,7 +1205,7 @@ Command:
 
 Description:
 
-The GetNetworkConfig API method is used to display the network configuration information for a node.  Note: This method is available only through the per-node API endpoint 5.0 or later. 
+The GetNetworkConfig API method enables you to display the network configuration information for a node. Note: This method is available only through the per-node API endpoint 5.0 or later. 
 
 Options:
 
@@ -1225,13 +1217,25 @@ Command:
 
 Description:
 
-GetNodeStats is used to return the high-level activity measurements for a single node. 
+GetNodeStats enables you to retrieve the high-level activity measurements for a single node. 
 
 Options:
 
 --nodeid
 
 Specifies the node for which statistics are gathered. 
+
+---------------------------------------------------------------
+#### getconfig ####
+Command:
+
+    sfcli Node getconfig <options>
+
+Description:
+
+The GetConfig API method enables you to retrieve all configuration information for a node. This method includes the same information available in both the GetClusterConfig and GetNetworkConfig API methods. Note: This method is available only through the per-node API endpoint 5.0 or later. 
+
+Options:
 
 ---------------------------------------------------------------
 #### remove ####
@@ -1241,7 +1245,7 @@ Command:
 
 Description:
 
-RemoveNodes is used to remove one or more nodes that should no integerer participate in the cluster. Before removing a node, all drives it contains must first be removed with "RemoveDrives" method. A node cannot be removed until the RemoveDrives process has completed and all data has been migrated away from the node.  Once removed, a node registers itself as a pending node and can be added again, or shut down which removes it from the "Pending Node" list. 
+You can use RemoveNodes to remove one or more nodes that should no longer participate in the cluster. Before removing a node, you must remove all drives the node contains using the RemoveDrives method. You cannot remove a node until the RemoveDrives process has completed and all data has been migrated away from the node. After you remove a node, it registers itself as a pending node. You can add the node again or shut it down (shutting the node down removes it from the Pending Node list). 
 
 Options:
 
@@ -1269,7 +1273,7 @@ Command:
 
 Description:
 
-GetBootstrapConfig returns the cluster name and node name from the bootstrap configuration file. This API method should be performed on an individual node before it has been configured into a cluster. The resulting information from this method is used in the Cluster Configuration UI when the cluster is eventually created. 
+GetBootstrapConfig returns cluster and node information from the bootstrap configuration file. Use this API method on an individual node before it has been joined with a cluster. You can use the information this method returns in the cluster configuration interface when you create a cluster. 
 
 Options:
 

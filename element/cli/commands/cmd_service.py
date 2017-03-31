@@ -26,10 +26,10 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 def cli(ctx):
     """list """
 
-@cli.command('list', short_help="""List the services in the cluster. """, cls=SolidFireCommand)
+@cli.command('list', short_help="""You can use ListServices to return the services information for nodes, drives, current software, and other services that are running on the cluster. """, cls=SolidFireCommand)
 @pass_context
 def list(ctx):
-    """List the services in the cluster."""
+    """You can use ListServices to return the services information for nodes, drives, current software, and other services that are running on the cluster."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
