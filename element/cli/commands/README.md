@@ -880,40 +880,20 @@ true: Delete initiator objects after they are removed from a volume access group
 List of name-value pairs in JSON object format. 
 
 ---------------------------------------------------------------
-#### create ####
+#### getefficiency ####
 Command:
 
-    sfcli VolumeAccessGroup create <options>
+    sfcli VolumeAccessGroup getefficiency <options>
 
 Description:
 
-You can use CreateVolumeAccessGroup to create a new volume access group. When you create the volume access group, you need to give it a name, and you can optionally enter initiators and volumes. After you create the group, you can add volumes and initiator IQNs. Any initiator IQN that you add to the volume access group is able to access any volume in the group without CHAP authentication. 
+GetVolumeAccessGroupEfficiency enables you to retrieve efficiency information about a volume access group. Only the volume access group you provide as the parameter in this API method is used to compute the capacity. 
 
 Options:
 
---name
+--volumeaccessgroupid
 
-The name for this volume access group. Not required to be unique, but recommended. 
-
---initiators
-
-List of initiators to include in the volume access group. If unspecified, the access group's configured initiators are not modified. 
-
---volumes
-
-List of volumes to initially include in the volume access group. If unspecified, the access group's volumes are not modified. 
-
---virtualnetworkid
-
-The ID of the SolidFire virtual network to associate the volume access group with. 
-
---virtualnetworktags
-
-The ID of the SolidFire virtual network to associate the volume access group with. 
-
---attributes
-
-List of name-value pairs in JSON object format. 
+The volume access group for which capacity is computed. 
 
 ---------------------------------------------------------------
 #### modifylunassignments ####
@@ -1033,23 +1013,43 @@ The list of initiators to remove from the volume access group.
 
 --deleteorphaninitiators
 
- 
+true: Delete initiator objects after they are removed from a volume access group. false: Do not delete initiator objects after they are removed from a volume access group. 
 
 ---------------------------------------------------------------
-#### getefficiency ####
+#### create ####
 Command:
 
-    sfcli VolumeAccessGroup getefficiency <options>
+    sfcli VolumeAccessGroup create <options>
 
 Description:
 
-GetVolumeAccessGroupEfficiency enables you to retrieve efficiency information about a volume access group. Only the volume access group you provide as the parameter in this API method is used to compute the capacity. 
+You can use CreateVolumeAccessGroup to create a new volume access group. When you create the volume access group, you need to give it a name, and you can optionally enter initiators and volumes. After you create the group, you can add volumes and initiator IQNs. Any initiator IQN that you add to the volume access group is able to access any volume in the group without CHAP authentication. 
 
 Options:
 
---volumeaccessgroupid
+--name
 
-The volume access group for which capacity is computed. 
+The name for this volume access group. Not required to be unique, but recommended. 
+
+--initiators
+
+List of initiators to include in the volume access group. If unspecified, the access group's configured initiators are not modified. 
+
+--volumes
+
+List of volumes to initially include in the volume access group. If unspecified, the access group's volumes are not modified. 
+
+--virtualnetworkid
+
+The ID of the SolidFire virtual network to associate the volume access group with. 
+
+--virtualnetworktags
+
+The ID of the SolidFire virtual network to associate the volume access group with. 
+
+--attributes
+
+List of name-value pairs in JSON object format. 
 
 ---------------------------------------------------------------
 #### delete ####
