@@ -1383,6 +1383,14 @@ ListVolumeStatsByAccount returns high-level activity measurements for every acco
 
 Options:
 
+--accounts
+
+One or more account ids to filter by. 
+
+--includevirtualvolumes
+
+ListVolumeStatsByAccount returns high-level activity measurements for every account. Values are summed from all the volumes owned by the account. 
+
 ---------------------------------------------------------------
 #### startbulkwrite ####
 Command:
@@ -1495,6 +1503,10 @@ ListDeletedVolumes is used to return the entire list of volumes that have been m
 
 Options:
 
+--includevirtualvolumes
+
+ListDeletedVolumes is used to return the entire list of volumes that have been marked for deletion and is purged from the system. 
+
 ---------------------------------------------------------------
 #### purgedeleted ####
 Command:
@@ -1522,6 +1534,10 @@ Description:
 ListVolumeStatsByVolume returns high-level activity measurements for every volume, by volume. Values are cumulative from the creation of the volume. 
 
 Options:
+
+--includevirtualvolumes
+
+ListVolumeStatsByVolume returns high-level activity measurements for every volume, by volume. Values are cumulative from the creation of the volume. 
 
 ---------------------------------------------------------------
 #### create ####
@@ -1643,6 +1659,10 @@ Options:
 
 An array of VolumeAccessGroupIDs for which volume activity is returned. If no VolumeAccessGroupID is specified, stats for all volume access groups is returned. 
 
+--includevirtualvolumes
+
+ListVolumeStatsByVolumeAccessGroup is used to get total activity measurements for all of the volumes that are a member of the specified volume access group(s). 
+
 ---------------------------------------------------------------
 #### listbulkjobs ####
 Command:
@@ -1731,6 +1751,14 @@ New quality of service settings for this volume.
 
 New size of the volume in bytes. Size is rounded up to the nearest 1MiB size. This parameter can only be used to *increase* the size of a volume. 
 
+--setcreatetime
+
+ModifyVolume is used to modify settings on an existing volume. Modifications can be made to one volume at a time and changes take place immediately. If an optional parameter is left unspecified, the value will not be changed.  Extending the size of a volume that is being replicated should be done in an order. The target (Replication Target) volume should first be increased in size, then the source (Read/Write) volume can be resized. It is recommended that both the target and the source volumes be the same size.  Note: If you change access status to locked or target all existing iSCSI connections are terminated. 
+
+--createtime
+
+ModifyVolume is used to modify settings on an existing volume. Modifications can be made to one volume at a time and changes take place immediately. If an optional parameter is left unspecified, the value will not be changed.  Extending the size of a volume that is being replicated should be done in an order. The target (Replication Target) volume should first be increased in size, then the source (Read/Write) volume can be resized. It is recommended that both the target and the source volumes be the same size.  Note: If you change access status to locked or target all existing iSCSI connections are terminated. 
+
 --attributes
 
 List of Name/Value pairs in JSON object format. 
@@ -1795,6 +1823,10 @@ The ID of the first volume to list. This can be useful for paging results. By de
 
 The maximum number of volumes to return from the API. 
 
+--includevirtualvolumes
+
+ListActiveVolumes is used to return the list of active volumes currently in the system. The list of volumes is returned sorted in VolumeID order and can be returned in multiple parts (pages). 
+
 ---------------------------------------------------------------
 #### list ####
 Command:
@@ -1830,6 +1862,14 @@ If specified, only fetch volumes which are paired (if true) or non-paired (if fa
 --volumeids
 
 If specified, only fetch volumes specified in this list. This option cannot be specified if startVolumeID, limit, or accounts option is specified. 
+
+--volumename
+
+The ListVolumes method is used to return a list of volumes that are in a cluster. You can specify the volumes you want to return in the list by using the available parameters. 
+
+--includevirtualvolumes
+
+The ListVolumes method is used to return a list of volumes that are in a cluster. You can specify the volumes you want to return in the list by using the available parameters. 
 
 ---------------------------------------------------------------
 #### clonemultiple ####
@@ -1922,6 +1962,10 @@ The ID of the first volume to list. This can be useful for paging results. By de
 --limit
 
 The maximum number of volumes to return from the API. 
+
+--includevirtualvolumes
+
+ListVolumesForAccount returns the list of active AND (pending) deleted volumes for an account. 
 
 ---------------------------------------------------------------
 #### getcount ####
@@ -2247,17 +2291,21 @@ Command:
 
 Description:
 
-Returns the entire list of accounts, with optional paging support. 
+ListAccounts returns the entire list of accounts, with optional paging support. 
 
 Options:
 
 --startaccountid
 
-Starting AccountID to return. If no Account exists with this AccountID, the next Account by AccountID order is used as the start of the list. To page through the list, pass the AccountID of the last Account in the previous response + 1 
+Starting AccountID to return. If no account exists with this AccountID, the next account by AccountID order is used as the start of the list. To page through the list, pass the AccountID of the last account in the previous response + 1. 
 
 --limit
 
 Maximum number of AccountInfo objects to return. 
+
+--includestoragecontainers
+
+Includes storage containers in the response by default. To exclude storage containers, set to false. 
 
 ---------------------------------------------------------------
 #### getefficiency ####
@@ -2267,13 +2315,13 @@ Command:
 
 Description:
 
-GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity. 
+GetAccountEfficiency enables you to retrieve efficiency statistics about a volume account. This method returns efficiency information only for the account you specify as a parameter. 
 
 Options:
 
 --accountid
 
-Specifies the volume account for which capacity is computed. 
+Specifies the volume account for which efficiency statistics are returned. 
 
 ---------------------------------------------------------------
 #### modify ####
@@ -2283,33 +2331,33 @@ Command:
 
 Description:
 
-Used to modify an existing account. When locking an account, any existing connections from that account are immediately terminated. When changing CHAP settings, any existing connections continue to be active, and the new CHAP values are only used on subsequent connection or reconnection. 
+ModifyAccount enables you to modify an existing account. When you lock an account, any existing connections from that account are immediately terminated. When you change an account's CHAP settings, any existing connections remain active, and the new CHAP settings are used on subsequent connections or reconnections. To clear an account's attributes, specify {} for the attributes parameter. 
 
 Options:
 
 --accountid
 
-AccountID for the account to modify. 
+Specifies the AccountID for the account to be modified. 
 
 --username
 
-Change the username of the account to this value. 
+Specifies the username associated with the account. (Might be 1 to 64 characters in length). 
 
 --status
 
-Status of the account. 
+Sets the status for the account. Possible values are: active: The account is active and connections are allowed. locked: The account is locked and connections are refused. 
 
 --initiatorsecret
 
-CHAP secret to use for the initiator. Should be 12-16 characters integer and impenetrable. 
+Specifies the CHAP secret to use for the initiator. This secret must be 12-16 characters in length and should be impenetrable. The initiator CHAP secret must be unique and cannot be the same as the target CHAP secret. 
 
 --targetsecret
 
-CHAP secret to use for the target (mutual CHAP authentication). Should be 12-16 characters integer and impenetrable. 
+Specifies the CHAP secret to use for the target (mutual CHAP authentication). This secret must be 12-16 characters in length and should be impenetrable. The target CHAP secret must be unique and cannot be the same as the initiator CHAP secret. 
 
 --attributes
 
-List of Name/Value pairs in JSON object format. 
+List of name-value pairs in JSON object format. 
 
 ---------------------------------------------------------------
 #### remove ####
@@ -2319,13 +2367,13 @@ Command:
 
 Description:
 
-Used to remove an existing account. All Volumes must be deleted and purged on the account before it can be removed. If volumes on the account are still pending deletion, RemoveAccount cannot be used until DeleteVolume to delete and purge the volumes. 
+RemoveAccount enables you to remove an existing account. You must delete and purge all volumes associated with the account using DeleteVolume before you can remove the account. If volumes on the account are still pending deletion, you cannot use RemoveAccount to remove the account. 
 
 Options:
 
 --accountid
 
-AccountID for the account to remove. 
+Specifies the AccountID for the account to be removed. 
 
 ---------------------------------------------------------------
 #### getbyname ####
@@ -2335,7 +2383,7 @@ Command:
 
 Description:
 
-Returns details about an account, given its Username. 
+GetAccountByName enables you to retrieve details about a specific account, given its username. 
 
 Options:
 
@@ -2351,25 +2399,25 @@ Command:
 
 Description:
 
-Used to add a new account to the system. New volumes can be created under the new account. The CHAP settings specified for the account applies to all volumes owned by the account. 
+You can use AddAccount to add a new account to the system. You can create new volumes under the new account. The CHAP settings you specify for the account apply to all volumes owned by the account. 
 
 Options:
 
 --username
 
-Unique username for this account. (May be 1 to 64 characters in length). 
+Specifies the username for this account. (Might be 1 to 64 characters in length). 
 
 --initiatorsecret
 
-CHAP secret to use for the initiator. Should be 12-16 characters integer and impenetrable. The CHAP initiator secrets must be unique and cannot be the same as the target CHAP secret.  If not specified, a random secret is created. 
+The CHAP secret to use for the initiator. This secret must be 12-16 characters in length and should be impenetrable. The initiator CHAP secret must be unique and cannot be the same as the target CHAP secret. If unspecified, a random secret is created. 
 
 --targetsecret
 
-CHAP secret to use for the target (mutual CHAP authentication). Should be 12-16 characters integer and impenetrable. The CHAP target secrets must be unique and cannot be the same as the initiator CHAP secret.  If not specified, a random secret is created. 
+The CHAP secret to use for the target (mutual CHAP authentication). This secret must be 12-16 characters in length and should be impenetrable. The target CHAP secret must be unique and cannot be the same as the initiator CHAP secret. If unspecified, a random secret is created. 
 
 --attributes
 
-List of Name/Value pairs in JSON object format. 
+List of name-value pairs in JSON object format. 
 
 ---------------------------------------------------------------
 #### getbyid ####
@@ -2379,7 +2427,7 @@ Command:
 
 Description:
 
-Returns details about an account, given its AccountID. 
+GetAccountByID enables you to return details about a specific account, given its accountID. 
 
 Options:
 
@@ -2614,6 +2662,10 @@ Options:
 --volumeid
 
 The volume to list snapshots for. If not provided, all snapshots for all volumes are returned. 
+
+--snapshotid
+
+ListSnapshots is used to return the attributes of each snapshot taken on the volume. 
 
 ---------------------------------------------------------------
 #### create ####
@@ -3731,6 +3783,10 @@ GetNvramInfo allows you to retrieve information from each node about the NVRAM c
 
 Options:
 
+--force
+
+GetNvramInfo allows you to retrieve information from each node about the NVRAM card.   
+
 ---------------------------------------------------------------
 #### getconfig ####
 Command:
@@ -3785,7 +3841,7 @@ Command:
 
 Description:
 
-Return configuration information about the cluster. 
+GetClusterInfo enables you to return configuration information about the cluster. 
 
 Options:
 
@@ -3797,43 +3853,7 @@ Command:
 
 Description:
 
-Retrieves the current version of the API and a list of all supported versions. 
-
-Options:
-
----------------------------------------------------------------
-#### getconfig ####
-Command:
-
-    sfcli Cluster getconfig <options>
-
-Description:
-
-The GetClusterConfig API method is used to return information about the cluster configuration this node uses to communicate with the cluster it is a part of.  Note: This method is available only through the per-node API endpoint 5.0 or later. 
-
-Options:
-
----------------------------------------------------------------
-#### getsnmpstate ####
-Command:
-
-    sfcli Cluster getsnmpstate <options>
-
-Description:
-
-GetSnmpState is used to return the current state of the SNMP feature.  Note: GetSnmpState is new for Element OS 8. Please use this method and SetSnmpACL to migrate your SNMP functionality in the future. 
-
-Options:
-
----------------------------------------------------------------
-#### getsnmpinfo ####
-Command:
-
-    sfcli Cluster getsnmpinfo <options>
-
-Description:
-
-GetSnmpInfo is used to return the current simple network management protocol (SNMP) configuration information.  Note: GetSnmpInfo will be available for Element OS 8 and prior releases. It will be deprecated after Element OS 8. There are two new SNMP API methods that you should migrate over to. They are GetSnmpState and GetSnmpACL. Please see details in this document for their descriptions and usage. 
+You can use the GetAPI method to return a list of all the API methods and supported API endpoints that can be used in the system. 
 
 Options:
 
@@ -3845,7 +3865,43 @@ Command:
 
 Description:
 
-DisableSnmp is used to disable SNMP on the cluster nodes. 
+You can use DisableSnmp to disable SNMP on the cluster nodes. 
+
+Options:
+
+---------------------------------------------------------------
+#### getsnmpstate ####
+Command:
+
+    sfcli Cluster getsnmpstate <options>
+
+Description:
+
+You can use GetSnmpState to return the current state of the SNMP feature. 
+
+Options:
+
+---------------------------------------------------------------
+#### getsnmpinfo ####
+Command:
+
+    sfcli Cluster getsnmpinfo <options>
+
+Description:
+
+GetSnmpInfo enables you to retrieve the current simple network management protocol (SNMP) configuration information. Note: GetSnmpInfo is available for Element OS 8 and prior releases. It is deprecated for versions later than Element OS 8. NetApp recommends that you migrate to the GetSnmpState and SetSnmpACL methods. See details in the Element API Reference Guide for their descriptions and usage. 
+
+Options:
+
+---------------------------------------------------------------
+#### getconfig ####
+Command:
+
+    sfcli Cluster getconfig <options>
+
+Description:
+
+The GetClusterConfig API method enables you to return information about the cluster configuration this node uses to communicate with the cluster that it is a part of. 
 
 Options:
 
@@ -3857,7 +3913,7 @@ Command:
 
 Description:
 
-DeleteAllSupportBundles is used to delete all support bundles generated with the CreateSupportBundle API method. 
+DeleteAllSupportBundles enables you to delete all support bundles generated with the CreateSupportBundle API method. 
 
 Options:
 
@@ -3869,37 +3925,21 @@ Command:
 
 Description:
 
-
+GetSystemStatus enables you to return whether a reboot ir required or not. 
 
 Options:
 
 ---------------------------------------------------------------
-#### setsnmptrapinfo ####
+#### getversioninfo ####
 Command:
 
-    sfcli Cluster setsnmptrapinfo <options>
+    sfcli Cluster getversioninfo <options>
 
 Description:
 
-SetSnmpTrapInfo is used to enable and disable the generation of SolidFire SNMP notifications (traps) and to specify the set of network host computers that are to receive the notifications. The values passed with each SetSnmpTrapInfo method replaces all values set in any previous method to SetSnmpTrapInfo. 
+GetClusterVersionInfo enables you to retrieve information about the Element software version running on each node in the cluster. This method also returns information about nodes that are currently in the process of upgrading software. 
 
 Options:
-
---traprecipients
-
-List of hosts that are to receive the traps generated by the Cluster Master. At least one object is required if any one of the trap types is enabled. 
-
---clusterfaulttrapsenabled
-
-If "true", when a cluster fault is logged a corresponding solidFireClusterFaultNotification is sent to the configured list of trap recipients. 
-
---clusterfaultresolvedtrapsenabled
-
-If "true", when a cluster fault is logged a corresponding solidFireClusterFaultResolvedNotification is sent to the configured list of trap recipients. 
-
---clustereventtrapsenabled
-
-If "true", when a cluster fault is logged a corresponding solidFireClusterEventNotification is sent to the configured list of trap recipients. 
 
 ---------------------------------------------------------------
 #### listfaults ####
@@ -3937,7 +3977,7 @@ Command:
 
 Description:
 
-ListClusterAdmins returns the list of all cluster administrators for the cluster. There can be several cluster administrators that have different levels of permissions. There can be only one primary cluster administrator in the system. The primary Cluster Admin is the administrator that was created when the cluster was created. LDAP administrators can also be created when setting up an LDAP system on the cluster. 
+ListClusterAdmins returns the list of all cluster administrators for the cluster. There can be several cluster administrator accounts with different levels of permissions. There can be only one primary cluster administrator in the system. The primary Cluster Admin is the administrator that was created when the cluster was created. You can also create LDAP administrators when setting up an LDAP system on the cluster. 
 
 Options:
 
@@ -3953,13 +3993,13 @@ Command:
 
 Description:
 
-The CreateCluster method is used to initialize the node in a cluster that has ownership of the "mvip" and "svip" addresses. Each new cluster is initialized using the MIP of the first node in the cluster. This method also automatically adds all the nodes being configured into the cluster. The method is used only once each time a new cluster is initialized.  Note: You need to log into the node that is used as the master node for the cluster. Once logged in, run the GetBootstrapConfig method on the node to get the IP addresses for the rest of the nodes that you want to include in the cluster. Then run the CreateCluster method. 
+The CreateCluster method enables you to initialize the node in a cluster that has ownership of the "mvip" and "svip" addresses. Each new cluster is initialized using the management IP (MIP) of the first node in the cluster. This method also automatically adds all the nodes being configured into the cluster. You only need to use this method once each time a new cluster is initialized. Note: You need to log in to the node that is used as the master node for the cluster. After you log in, run the GetBootstrapConfig method on the node to get the IP addresses for the rest of the nodes that you want to include in the cluster. Then, run the CreateCluster method. 
 
 Options:
 
 --accepteula
 
-Indicate your acceptance of the End User License Agreement when creating this cluster. To accept the EULA, set this parameter to true. 
+Required to indicate your acceptance of the End User License Agreement when creating this cluster. To accept the EULA, set this parameter to true. 
 
 --mvip
 
@@ -3975,7 +4015,7 @@ Number of replicas of each piece of data to store in the cluster. Valid value is
 
 --username
 
-User name for the cluster admin. 
+Username for the cluster admin. 
 
 --password
 
@@ -3987,7 +4027,7 @@ CIP/SIP addresses of the initial set of nodes making up the cluster. This node's
 
 --attributes
 
-List of Name/Value pairs in JSON object format. 
+List of name-value pairs in JSON object format. 
 
 ---------------------------------------------------------------
 #### disableencryptionatrest ####
@@ -4009,29 +4049,29 @@ Command:
 
 Description:
 
-AddClusterAdmin adds a new Cluster Admin. A Cluster Admin can be used to manage the cluster via the API and management tools. Cluster Admins are completely separate and unrelated to standard tenant accounts.  Each Cluster Admin can be restricted to a sub-set of the API. SolidFire recommends using multiple Cluster Admins for different users and applications. Each Cluster Admin should be given the minimal permissions necessary to reduce the potential impact of credential compromise. 
+You can use AddClusterAdmin to add a new cluster admin account. A cluster ddmin can manage the cluster using the API and management tools. Cluster admins are completely separate and unrelated to standard tenant accounts. Each cluster admin can be restricted to a subset of the API. NetApp recommends using multiple cluster admin accounts for different users and applications. You should give each cluster admin the minimal permissions necessary; this reduces the potential impact of credential compromise. You must accept the End User License Agreement (EULA) by setting the acceptEula parameter to true to add a cluster administrator account to the system. 
 
 Options:
 
 --username
 
-Unique username for this Cluster Admin. 
+Unique username for this cluster admin. Must be between 1 and 1024 characters in length. 
 
 --password
 
-Password used to authenticate this Cluster Admin. 
+Password used to authenticate this cluster admin. 
 
 --access
 
-Controls which methods this Cluster Admin can use. For more details on the levels of access, see "Access Control" in the Element API Guide. 
+Controls which methods this cluster admin can use. For more details on the levels of access, see Access Control in the Element API Reference Guide. 
 
 --accepteula
 
-Indicate your acceptance of the End User License Agreement when creating this cluster admin. To accept the EULA, set this parameter to true. 
+Required to indicate your acceptance of the End User License Agreement when creating this cluster. To accept the EULA, set this parameter to true. 
 
 --attributes
 
-List of Name/Value pairs in JSON object format. 
+List of name-value pairs in JSON object format. 
 
 ---------------------------------------------------------------
 #### setntpinfo ####
@@ -4105,7 +4145,7 @@ Command:
 
 Description:
 
-GetSnmpTrapInfo is used to return current SNMP trap configuration information. 
+You can use GetSnmpTrapInfo to return current SNMP trap configuration information. 
 
 Options:
 
@@ -4174,28 +4214,16 @@ Options:
 ClusterAdminID for the Cluster Admin to remove. 
 
 ---------------------------------------------------------------
-#### modifyfullthreshold ####
+#### getstats ####
 Command:
 
-    sfcli Cluster modifyfullthreshold <options>
+    sfcli Cluster getstats <options>
 
 Description:
 
-ModifyClusterFullThreshold is used to change the level at which an event is generated when the storage cluster approaches the capacity utilization requested. The number entered in this setting is used to indicate the number of node failures the system is required to recover from. For example, on a 10 node cluster, if you want to be alerted when the system cannot recover from 3 nodes failures, enter the value of "3". When this number is reached, a message alert is sent to the Event Log in the Cluster Management Console. 
+GetClusterStats enables you to retrieve high-level activity measurements for the cluster. Values returned are cumulative from the creation of the cluster. 
 
 Options:
-
---stage2awarethreshold
-
-Number of nodes worth of capacity remaining on the cluster that triggers a notification. 
-
---stage3blockthresholdpercent
-
-Percent below "Error" state to raise a cluster "Warning" alert. 
-
---maxmetadataoverprovisionfactor
-
-A value representative of the number of times metadata space can be over provisioned relative to the amount of space available. For example, if there was enough metadata space to store 100 TiB of volumes and this number was set to 5, then 500 TiB worth of volumes could be created. 
 
 ---------------------------------------------------------------
 #### getlimits ####
@@ -4205,7 +4233,7 @@ Command:
 
 Description:
 
-GetLimits enables you to retrieve the limit values set by the API. These values might change between releases of  Element, but do not change without an update to the system. Knowing the limit values set by the API can be useful when writing API scripts for user-facing tools.NOTE: The GetLimits method returns the limits for the current software version regardless of the API endpoint version used to pass the method. 
+GetLimits enables you to retrieve the limit values set by the API. These values might change between releases of Element OS, but do not change without an update to the system. Knowing the limit values set by the API can be useful when writing API scripts for user-facing tools. Note: The GetLimits method returns the limits for the current software version regardless of the API endpoint version used to pass the method. 
 
 Options:
 
@@ -4217,7 +4245,7 @@ Command:
 
 Description:
 
-GetCurrentClusterAdmin returns information for the current primary cluster administrator. The primary Cluster Admin was ncreated when the cluster was created. 
+GetCurrentClusterAdmin returns information for the current primary cluster administrator. The primary Cluster Admin was created when the cluster was created. 
 
 Options:
 
@@ -4229,33 +4257,37 @@ Command:
 
 Description:
 
-CreateSupportBundle is used to create a support bundle file under the node's directory. When the bundle has been successfully created, the bundle is stored on the node as a tar.gz file. 
+CreateSupportBundle enables you to create a support bundle file under the node's directory. After creation, the bundle is stored on the node as a tar.gz file. 
 
 Options:
 
 --bundlename
 
-Unique name for each support bundle created. If no name is provided, then 'supportbundle' and the node name is used as a file name. 
+The unique name for the support bundle. If no name is provided, "supportbundle" and the node name are used as the filename. 
 
 --extraargs
 
-This parameter is fed to the sf_make_support_bundle script. Should be used only at the request of SolidFire Support. 
+Passed to the sf_make_support_bundle script. You should use this parameter only at the request of NetApp SolidFire Support. 
 
 --timeoutsec
 
-The number of seconds to let the support bundle script run before timing out and stopping. Default is 1500 seconds. 
+The number of seconds to allow the support bundle script to run before stopping. The default value is 1500 seconds. 
 
 ---------------------------------------------------------------
-#### getcapacity ####
+#### enablesnmp ####
 Command:
 
-    sfcli Cluster getcapacity <options>
+    sfcli Cluster enablesnmp <options>
 
 Description:
 
-Return the high-level capacity measurements for an entire cluster. The fields returned from this method can be used to calculate the efficiency rates that are displayed in the Element User Interface. 
+EnableSnmp enables you to enable SNMP on cluster nodes. When you enable SNMP, the action applies to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to EnableSnmp. 
 
 Options:
+
+--snmpv3enabled
+
+If set to "true", then SNMP v3 is enabled on each node in the cluster. If set to "false", then SNMP v2 is enabled. 
 
 ---------------------------------------------------------------
 #### getntpinfo ####
@@ -4265,33 +4297,49 @@ Command:
 
 Description:
 
-GetNtpInfo is used to return the current network time protocol (NTP) configuration information. 
+GetNtpInfo enables you to return the current network time protocol (NTP) configuration information. 
 
 Options:
 
 ---------------------------------------------------------------
-#### enableencryptionatrest ####
+#### listsyncjobs ####
 Command:
 
-    sfcli Cluster enableencryptionatrest <options>
+    sfcli Cluster listsyncjobs <options>
 
 Description:
 
-The EnableEncryptionAtRest method is used to enable the Advanced Encryption Standard (AES) 256-bit encryption at rest on the cluster so that the cluster can manage the encryption key used for the drives on each node. This feature is not enabled by default. Enabling this operation allows the cluster to automatically manage encryption keys internally for the drives on each node in the cluster. Nodes do not store the keys to unlock drives and the keys are never passed over the network. Two nodes participating in a cluster are required to access the key to disable encryption on a drive. The encryption management does not affect performance or efficiency on the cluster. If an encryption-enabled drive or node is removed from the cluster with the API, all data is secure erased and any data left on the drive cannot be read or accessed. Enabling or disabling encryption should be performed when the cluster is running and in a healthy state. Encryption can be enabled or disabled at your discretion and can be performed as often as you need. Note: This process is asynchronous and returns a response before encryption is enabled. The GetClusterInfo method can be used to poll the system to see when the process has completed. 
+ListSyncJobs is used to return information about synchronization jobs that are running on a SolidFire cluster. Synchronization jobs that are returned with this method are, "slice," "clone" and "remote." 
 
 Options:
 
 ---------------------------------------------------------------
-#### getversioninfo ####
+#### setsnmptrapinfo ####
 Command:
 
-    sfcli Cluster getversioninfo <options>
+    sfcli Cluster setsnmptrapinfo <options>
 
 Description:
 
-Return information about the Element software version running on each node in the cluster. Information about the nodes that are currently in the process of upgrading software is also returned. 
+SetSnmpTrapInfo is used to enable and disable the generation of SolidFire SNMP notifications (traps) and to specify the set of network host computers that are to receive the notifications. The values passed with each SetSnmpTrapInfo method replaces all values set in any previous method to SetSnmpTrapInfo. 
 
 Options:
+
+--traprecipients
+
+List of hosts that are to receive the traps generated by the Cluster Master. At least one object is required if any one of the trap types is enabled. 
+
+--clusterfaulttrapsenabled
+
+If "true", when a cluster fault is logged a corresponding solidFireClusterFaultNotification is sent to the configured list of trap recipients. 
+
+--clusterfaultresolvedtrapsenabled
+
+If "true", when a cluster fault is logged a corresponding solidFireClusterFaultResolvedNotification is sent to the configured list of trap recipients. 
+
+--clustereventtrapsenabled
+
+If "true", when a cluster fault is logged a corresponding solidFireClusterEventNotification is sent to the configured list of trap recipients. 
 
 ---------------------------------------------------------------
 #### setsnmpacl ####
@@ -4333,7 +4381,7 @@ Command:
 
 Description:
 
-GetSnmpACL is used to return the current SNMP access permissions on the cluster nodes. 
+GetSnmpACL enables you to return the current SNMP access permissions on the cluster nodes. 
 
 Options:
 
@@ -4345,7 +4393,7 @@ Command:
 
 Description:
 
-The GetClusterState method is used to indicate if a node is part of a cluster or not. The three states are: Available: Node has not been configured with a cluster name.Pending: Node is pending for a specific named cluster and can be added.Active: Node is active and a member of a cluster and may not be added to another cluster. 
+The GetClusterState API method enables you to indicate if a node is part of a cluster or not. The three states are: Available: Node has not been configured with a cluster name. Pending: Node is pending for a specific named cluster and can be added. Active: Node is an active member of a cluster and may not be added to another cluster. Note: This method is available only through the per-node API endpoint 5.0 or later. 
 
 Options:
 
@@ -4354,32 +4402,40 @@ Options:
 To run this command, the force parameter must be set to true. 
 
 ---------------------------------------------------------------
-#### enablesnmp ####
+#### getcapacity ####
 Command:
 
-    sfcli Cluster enablesnmp <options>
+    sfcli Cluster getcapacity <options>
 
 Description:
 
-EnableSnmp is used to enable SNMP on the cluster nodes. The values set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to EnableSnmp. 
+You can use the GetClusterCapacity method to return the high-level capacity measurements for an entire cluster. You can use the fields returned from this method to calculate the efficiency rates that are displayed in the Element OS Web UI. You can use the following calculations in scripts to return the efficiency rates for thin provisioning, deduplication, compression, and overall efficiency. 
 
 Options:
-
---snmpv3enabled
-
-If set to "true", then SNMP v3 is enabled on each node in the cluster. If set to "false", then SNMP v2 is enabled. 
 
 ---------------------------------------------------------------
-#### getstats ####
+#### modifyfullthreshold ####
 Command:
 
-    sfcli Cluster getstats <options>
+    sfcli Cluster modifyfullthreshold <options>
 
 Description:
 
-GetClusterStats is used to return high-level activity measurements for the cluster. Values returned are cumulative from the creation of the cluster. 
+ModifyClusterFullThreshold is used to change the level at which an event is generated when the storage cluster approaches the capacity utilization requested. The number entered in this setting is used to indicate the number of node failures the system is required to recover from. For example, on a 10 node cluster, if you want to be alerted when the system cannot recover from 3 nodes failures, enter the value of "3". When this number is reached, a message alert is sent to the Event Log in the Cluster Management Console. 
 
 Options:
+
+--stage2awarethreshold
+
+Number of nodes worth of capacity remaining on the cluster that triggers a notification. 
+
+--stage3blockthresholdpercent
+
+Percent below "Error" state to raise a cluster "Warning" alert. 
+
+--maxmetadataoverprovisionfactor
+
+A value representative of the number of times metadata space can be over provisioned relative to the amount of space available. For example, if there was enough metadata space to store 100 TiB of volumes and this number was set to 5, then 500 TiB worth of volumes could be created. 
 
 ---------------------------------------------------------------
 #### getmasternodeid ####
@@ -4389,7 +4445,7 @@ Command:
 
 Description:
 
-GetClusterMasterNodeID is used to return the ID of the node that can perform cluster-wide administration tasks and holds the storage virtual IP (SVIP) and management virtual IP (MVIP). 
+GetClusterMasterNodeID enables you to retrieve the ID of the node that can perform cluster-wide administration tasks and holds the storage virtual IP address (SVIP) and management virtual IP address (MVIP). 
 
 Options:
 
@@ -4429,19 +4485,19 @@ Command:
 
 Description:
 
-GetClusterFullThreshold is used to view the stages set for cluster fullness levels. All levels are returned when this method is entered. 
+You can use GetClusterFullThreshold to view the stages set for cluster fullness levels. This method returns all fullness metrics for the cluster. Note: When a cluster reaches the Error stage of block cluster fullness, the maximum IOPS on all volumes are reduced linearly to the volume's minimum IOPS as the cluster approaches the Critical stage. This helps prevent the cluster from reaching the Critical stage of block cluster fullness. 
 
 Options:
 
 ---------------------------------------------------------------
-#### listsyncjobs ####
+#### enableencryptionatrest ####
 Command:
 
-    sfcli Cluster listsyncjobs <options>
+    sfcli Cluster enableencryptionatrest <options>
 
 Description:
 
-ListSyncJobs is used to return information about synchronization jobs that are running on a SolidFire cluster. Synchronization jobs that are returned with this method are, "slice," "clone" and "remote." 
+You can use the EnableEncryptionAtRest method to enable the Advanced Encryption Standard (AES) 256-bit encryption at rest on the cluster, so that the cluster can manage the encryption key used for the drives on each node. This feature is not enabled by default. When you enable Encryption at Rest, the cluster automatically manages encryption keys internally for the drives on each node in the cluster. Nodes do not store the keys to unlock drives and the keys are never passed over the network. Two nodes participating in a cluster are required to access the key to disable encryption on a drive. The encryption management does not affect performance or efficiency on the cluster. If an encryption-enabled drive or node is removed from the cluster with the API, Encryption at Rest is disabled and the data is not secure erased. Data can be secure erased using the SecureEraseDrives API method. Note: If you have a node type with a model number ending in "-NE", the EnableEncryptionAtRest method call fails with a response of "Encryption not allowed. Cluster detected non-encryptable node". You should only enable or disable encryption when the cluster is running and in a healthy state. You can enable or disable encryption at your discretion and as often as you need. Note: This process is asynchronous and returns a response before encryption is enabled. You can use the GetClusterInfo method to poll the system to see when the process has completed. 
 
 Options:
 
@@ -4488,22 +4544,6 @@ Options:
 List of storage containers to get 
 
 ---------------------------------------------------------------
-#### getstoragecontainerefficiency ####
-Command:
-
-    sfcli StorageContainers getstoragecontainerefficiency <options>
-
-Description:
-
-GetStorageContainerEfficiency enables you to retrieve efficiency information about a virtual volume storage container. 
-
-Options:
-
---storagecontainerid
-
-The ID of the storage container for which to retrieve efficiency information. 
-
----------------------------------------------------------------
 #### createstoragecontainer ####
 Command:
 
@@ -4526,6 +4566,26 @@ The secret for CHAP authentication for the initiator
 --targetsecret
 
 The secret for CHAP authentication for the target 
+
+--accountid
+
+Creates a new VVols storage container. 
+
+---------------------------------------------------------------
+#### getstoragecontainerefficiency ####
+Command:
+
+    sfcli StorageContainers getstoragecontainerefficiency <options>
+
+Description:
+
+GetStorageContainerEfficiency enables you to retrieve efficiency information about a virtual volume storage container. 
+
+Options:
+
+--storagecontainerid
+
+The ID of the storage container for which to retrieve efficiency information. 
 
 ---------------------------------------------------------------
 #### delete ####
@@ -4683,21 +4743,21 @@ Command:
 
 Description:
 
-ModifyBackupTarget is used to change attributes of a backup target. 
+ModifyBackupTarget enables you to change attributes of a backup target. 
 
 Options:
 
 --backuptargetid
 
-Unique identifier assigned to the backup target. 
+The unique target ID for the target to modify. 
 
 --name
 
-Name for the backup target. 
+The new name for the backup target. 
 
 --attributes
 
-List of Name/Value pairs in JSON object format. 
+List of name-value pairs in JSON object format. 
 
 ---------------------------------------------------------------
 #### create ####
@@ -4707,17 +4767,17 @@ Command:
 
 Description:
 
-CreateBackupTarget allows you to create and store backup target information so that you do not need to re-enter it each time a backup is created. 
+CreateBackupTarget enables you to create and store backup target information so that you do not need to re-enter it each time a backup is created. 
 
 Options:
 
 --name
 
-Name for the backup target. 
+The name of the backup target. 
 
 --attributes
 
-List of Name/Value pairs in JSON object format. 
+List of name-value pairs in JSON object format. 
 
 ---------------------------------------------------------------
 #### list ####
@@ -4745,7 +4805,7 @@ Options:
 
 --backuptargetid
 
-Unique target ID of the target to remove. 
+The unique target ID of the target to remove. 
 
 ---------------------------------------------------------------
 #### get ####
@@ -4755,10 +4815,10 @@ Command:
 
 Description:
 
-GetBackupTarget allows you to return information about a specific backup target that has been created. 
+GetBackupTarget enables you to return information about a specific backup target that you have created. 
 
 Options:
 
 --backuptargetid
 
-Unique identifier assigned to the backup target. 
+The unique identifier assigned to the backup target. 

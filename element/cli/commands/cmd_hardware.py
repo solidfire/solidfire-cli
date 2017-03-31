@@ -27,19 +27,25 @@ def cli(ctx):
     """getnvraminfo getconfig getclusterinfo getnodeinfo """
 
 @cli.command('getnvraminfo', short_help="""GetNvramInfo allows you to retrieve information from each node about the NVRAM card.   """, cls=SolidFireCommand)
+@click.option('--force',
+              type=bool,
+              required=False,
+              help="""GetNvramInfo allows you to retrieve information from each node about the NVRAM card.   """)
 @pass_context
-def getnvraminfo(ctx):
+def getnvraminfo(ctx,
+           # Optional main parameter
+           force = None):
     """GetNvramInfo allows you to retrieve information from each node about the NVRAM card.  """
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
-    ctx.logger.info("")
+    ctx.logger.info("""force = """+str(force)+""";"""+"")
     try:
-        _GetNvramInfoResult = ctx.element.get_nvram_info()
+        _GetNvramInfoResult = ctx.element.get_nvram_info(force=force)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()

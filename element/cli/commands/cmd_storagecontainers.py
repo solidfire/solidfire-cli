@@ -24,7 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """modifystoragecontainer list getstoragecontainerefficiency createstoragecontainer delete """
+    """modifystoragecontainer list createstoragecontainer getstoragecontainerefficiency delete """
 
 @cli.command('modifystoragecontainer', short_help="""Modifies an existing storage container. """, cls=SolidFireCommand)
 @click.option('--storagecontainerid',
@@ -102,6 +102,55 @@ def list(ctx,
 
 
 
+@cli.command('createstoragecontainer', short_help="""Creates a new VVols storage container. """, cls=SolidFireCommand)
+@click.option('--name',
+              type=str,
+              required=True,
+              help="""Name of the storage container. """)
+@click.option('--initiatorsecret',
+              type=str,
+              required=False,
+              help="""The secret for CHAP authentication for the initiator """)
+@click.option('--targetsecret',
+              type=str,
+              required=False,
+              help="""The secret for CHAP authentication for the target """)
+@click.option('--accountid',
+              type=int,
+              required=False,
+              help="""Creates a new VVols storage container. """)
+@pass_context
+def createstoragecontainer(ctx,
+           # Mandatory main parameter
+           name,
+           # Optional main parameter
+           initiatorsecret = None,
+           # Optional main parameter
+           targetsecret = None,
+           # Optional main parameter
+           accountid = None):
+    """Creates a new VVols storage container."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+                
+    
+
+    ctx.logger.info("""name = """+str(name)+""";"""+"""initiatorsecret = """+str(initiatorsecret)+""";"""+"""targetsecret = """+str(targetsecret)+""";"""+"""accountid = """+str(accountid)+""";"""+"")
+    try:
+        _CreateStorageContainerResult = ctx.element.create_storage_container(name=name, initiator_secret=initiatorsecret, target_secret=targetsecret, account_id=accountid)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_CreateStorageContainerResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
 @cli.command('getstoragecontainerefficiency', short_help="""GetStorageContainerEfficiency enables you to retrieve efficiency information about a virtual volume storage container. """, cls=SolidFireCommand)
 @click.option('--storagecontainerid',
               type=str,
@@ -130,49 +179,6 @@ def getstoragecontainerefficiency(ctx,
         exit()
 
     cli_utils.print_result(_GetStorageContainerEfficiencyResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('createstoragecontainer', short_help="""Creates a new VVols storage container. """, cls=SolidFireCommand)
-@click.option('--name',
-              type=str,
-              required=True,
-              help="""Name of the storage container. """)
-@click.option('--initiatorsecret',
-              type=str,
-              required=False,
-              help="""The secret for CHAP authentication for the initiator """)
-@click.option('--targetsecret',
-              type=str,
-              required=False,
-              help="""The secret for CHAP authentication for the target """)
-@pass_context
-def createstoragecontainer(ctx,
-           # Mandatory main parameter
-           name,
-           # Optional main parameter
-           initiatorsecret = None,
-           # Optional main parameter
-           targetsecret = None):
-    """Creates a new VVols storage container."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-            
-    
-
-    ctx.logger.info("""name = """+str(name)+""";"""+"""initiatorsecret = """+str(initiatorsecret)+""";"""+"""targetsecret = """+str(targetsecret)+""";"""+"")
-    try:
-        _CreateStorageContainerResult = ctx.element.create_storage_container(name=name, initiator_secret=initiatorsecret, target_secret=targetsecret)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_CreateStorageContainerResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 

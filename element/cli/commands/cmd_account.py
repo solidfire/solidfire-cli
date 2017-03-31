@@ -26,32 +26,38 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 def cli(ctx):
     """list getefficiency modify remove getbyname add getbyid """
 
-@cli.command('list', short_help="""Returns the entire list of accounts, with optional paging support. """, cls=SolidFireCommand)
+@cli.command('list', short_help="""ListAccounts returns the entire list of accounts, with optional paging support. """, cls=SolidFireCommand)
 @click.option('--startaccountid',
               type=int,
               required=False,
-              help="""Starting AccountID to return. If no Account exists with this AccountID, the next Account by AccountID order is used as the start of the list. To page through the list, pass the AccountID of the last Account in the previous response + 1 """)
+              help="""Starting AccountID to return. If no account exists with this AccountID, the next account by AccountID order is used as the start of the list. To page through the list, pass the AccountID of the last account in the previous response + 1. """)
 @click.option('--limit',
               type=int,
               required=False,
               help="""Maximum number of AccountInfo objects to return. """)
+@click.option('--includestoragecontainers',
+              type=bool,
+              required=False,
+              help="""Includes storage containers in the response by default. To exclude storage containers, set to false. """)
 @pass_context
 def list(ctx,
            # Optional main parameter
            startaccountid = None,
            # Optional main parameter
-           limit = None):
-    """Returns the entire list of accounts, with optional paging support."""
+           limit = None,
+           # Optional main parameter
+           includestoragecontainers = None):
+    """ListAccounts returns the entire list of accounts, with optional paging support."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-        
+            
     
 
-    ctx.logger.info("""startaccountid = """+str(startaccountid)+""";"""+"""limit = """+str(limit)+""";"""+"")
+    ctx.logger.info("""startaccountid = """+str(startaccountid)+""";"""+"""limit = """+str(limit)+""";"""+"""includestoragecontainers = """+str(includestoragecontainers)+""";"""+"")
     try:
-        _ListAccountsResult = ctx.element.list_accounts(start_account_id=startaccountid, limit=limit)
+        _ListAccountsResult = ctx.element.list_accounts(start_account_id=startaccountid, limit=limit, include_storage_containers=includestoragecontainers)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -63,16 +69,17 @@ def list(ctx,
 
 
 
-@cli.command('getefficiency', short_help="""GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity. """, cls=SolidFireCommand)
+@cli.command('getefficiency', short_help="""GetAccountEfficiency enables you to retrieve efficiency statistics about a volume account. This method returns efficiency information only for the account you specify as a parameter. """, cls=SolidFireCommand)
 @click.option('--accountid',
               type=int,
               required=True,
-              help="""Specifies the volume account for which capacity is computed. """)
+              help="""Specifies the volume account for which efficiency statistics are returned. """)
 @pass_context
 def getefficiency(ctx,
            # Mandatory main parameter
            accountid):
-    """GetAccountEfficiency is used to retrieve information about a volume account. Only the account given as a parameter in this API method is used to compute the capacity."""
+    """GetAccountEfficiency enables you to retrieve efficiency statistics about a volume account. This method returns efficiency information"""
+    """only for the account you specify as a parameter."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -94,31 +101,31 @@ def getefficiency(ctx,
 
 
 
-@cli.command('modify', short_help="""Used to modify an existing account. When locking an account, any existing connections from that account are immediately terminated. When changing CHAP settings, any existing connections continue to be active, and the new CHAP values are only used on subsequent connection or reconnection. """, cls=SolidFireCommand)
+@cli.command('modify', short_help="""ModifyAccount enables you to modify an existing account. When you lock an account, any existing connections from that account are immediately terminated. When you change an account's CHAP settings, any existing connections remain active, and the new CHAP settings are used on subsequent connections or reconnections. To clear an account's attributes, specify {} for the attributes parameter. """, cls=SolidFireCommand)
 @click.option('--accountid',
               type=int,
               required=True,
-              help="""AccountID for the account to modify. """)
+              help="""Specifies the AccountID for the account to be modified. """)
 @click.option('--username',
               type=str,
               required=False,
-              help="""Change the username of the account to this value. """)
+              help="""Specifies the username associated with the account. (Might be 1 to 64 characters in length). """)
 @click.option('--status',
               type=str,
               required=False,
-              help="""Status of the account. """)
+              help="""Sets the status for the account. Possible values are: active: The account is active and connections are allowed. locked: The account is locked and connections are refused. """)
 @click.option('--initiatorsecret',
               type=str,
               required=False,
-              help="""CHAP secret to use for the initiator. Should be 12-16 characters integer and impenetrable. """)
+              help="""Specifies the CHAP secret to use for the initiator. This secret must be 12-16 characters in length and should be impenetrable. The initiator CHAP secret must be unique and cannot be the same as the target CHAP secret. """)
 @click.option('--targetsecret',
               type=str,
               required=False,
-              help="""CHAP secret to use for the target (mutual CHAP authentication). Should be 12-16 characters integer and impenetrable. """)
+              help="""Specifies the CHAP secret to use for the target (mutual CHAP authentication). This secret must be 12-16 characters in length and should be impenetrable. The target CHAP secret must be unique and cannot be the same as the initiator CHAP secret. """)
 @click.option('--attributes',
               type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format.  Has the following subparameters: """)
+              help="""List of name-value pairs in JSON object format.  Has the following subparameters: """)
 @pass_context
 def modify(ctx,
            # Mandatory main parameter
@@ -133,10 +140,11 @@ def modify(ctx,
            targetsecret = None,
            # Optional main parameter
            attributes = None):
-    """Used to modify an existing account."""
-    """When locking an account, any existing connections from that account are immediately terminated."""
-    """When changing CHAP settings, any existing connections continue to be active,"""
-    """and the new CHAP values are only used on subsequent connection or reconnection."""
+    """ModifyAccount enables you to modify an existing account."""
+    """When you lock an account, any existing connections from that account are immediately terminated. When you change an account&#x27;s"""
+    """CHAP settings, any existing connections remain active, and the new CHAP settings are used on subsequent connections or"""
+    """reconnections."""
+    """To clear an account&#x27;s attributes, specify {} for the attributes parameter."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -171,18 +179,18 @@ def modify(ctx,
 
 
 
-@cli.command('remove', short_help="""Used to remove an existing account. All Volumes must be deleted and purged on the account before it can be removed. If volumes on the account are still pending deletion, RemoveAccount cannot be used until DeleteVolume to delete and purge the volumes. """, cls=SolidFireCommand)
+@cli.command('remove', short_help="""RemoveAccount enables you to remove an existing account. You must delete and purge all volumes associated with the account using DeleteVolume before you can remove the account. If volumes on the account are still pending deletion, you cannot use RemoveAccount to remove the account. """, cls=SolidFireCommand)
 @click.option('--accountid',
               type=int,
               required=True,
-              help="""AccountID for the account to remove. """)
+              help="""Specifies the AccountID for the account to be removed. """)
 @pass_context
 def remove(ctx,
            # Mandatory main parameter
            accountid):
-    """Used to remove an existing account."""
-    """All Volumes must be deleted and purged on the account before it can be removed."""
-    """If volumes on the account are still pending deletion, RemoveAccount cannot be used until DeleteVolume to delete and purge the volumes."""
+    """RemoveAccount enables you to remove an existing account. You must delete and purge all volumes associated with the account"""
+    """using DeleteVolume before you can remove the account. If volumes on the account are still pending deletion, you cannot use"""
+    """RemoveAccount to remove the account."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -204,7 +212,7 @@ def remove(ctx,
 
 
 
-@cli.command('getbyname', short_help="""Returns details about an account, given its Username. """, cls=SolidFireCommand)
+@cli.command('getbyname', short_help="""GetAccountByName enables you to retrieve details about a specific account, given its username. """, cls=SolidFireCommand)
 @click.option('--username',
               type=str,
               required=True,
@@ -213,7 +221,7 @@ def remove(ctx,
 def getbyname(ctx,
            # Mandatory main parameter
            username):
-    """Returns details about an account, given its Username."""
+    """GetAccountByName enables you to retrieve details about a specific account, given its username."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -235,23 +243,23 @@ def getbyname(ctx,
 
 
 
-@cli.command('add', short_help="""Used to add a new account to the system. New volumes can be created under the new account. The CHAP settings specified for the account applies to all volumes owned by the account. """, cls=SolidFireCommand)
+@cli.command('add', short_help="""You can use AddAccount to add a new account to the system. You can create new volumes under the new account. The CHAP settings you specify for the account apply to all volumes owned by the account. """, cls=SolidFireCommand)
 @click.option('--username',
               type=str,
               required=True,
-              help="""Unique username for this account. (May be 1 to 64 characters in length). """)
+              help="""Specifies the username for this account. (Might be 1 to 64 characters in length). """)
 @click.option('--initiatorsecret',
               type=str,
               required=False,
-              help="""CHAP secret to use for the initiator. Should be 12-16 characters integer and impenetrable. The CHAP initiator secrets must be unique and cannot be the same as the target CHAP secret.  If not specified, a random secret is created. """)
+              help="""The CHAP secret to use for the initiator. This secret must be 12-16 characters in length and should be impenetrable. The initiator CHAP secret must be unique and cannot be the same as the target CHAP secret. If unspecified, a random secret is created. """)
 @click.option('--targetsecret',
               type=str,
               required=False,
-              help="""CHAP secret to use for the target (mutual CHAP authentication). Should be 12-16 characters integer and impenetrable. The CHAP target secrets must be unique and cannot be the same as the initiator CHAP secret.  If not specified, a random secret is created. """)
+              help="""The CHAP secret to use for the target (mutual CHAP authentication). This secret must be 12-16 characters in length and should be impenetrable. The target CHAP secret must be unique and cannot be the same as the initiator CHAP secret. If unspecified, a random secret is created. """)
 @click.option('--attributes',
               type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format.  Has the following subparameters: """)
+              help="""List of name-value pairs in JSON object format.  Has the following subparameters: """)
 @pass_context
 def add(ctx,
            # Mandatory main parameter
@@ -262,9 +270,7 @@ def add(ctx,
            targetsecret = None,
            # Optional main parameter
            attributes = None):
-    """Used to add a new account to the system."""
-    """New volumes can be created under the new account."""
-    """The CHAP settings specified for the account applies to all volumes owned by the account."""
+    """You can use AddAccount to add a new account to the system. You can create new volumes under the new account. The CHAP settings you specify for the account apply to all volumes owned by the account."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -299,7 +305,7 @@ def add(ctx,
 
 
 
-@cli.command('getbyid', short_help="""Returns details about an account, given its AccountID. """, cls=SolidFireCommand)
+@cli.command('getbyid', short_help="""GetAccountByID enables you to return details about a specific account, given its accountID. """, cls=SolidFireCommand)
 @click.option('--accountid',
               type=int,
               required=True,
@@ -308,7 +314,7 @@ def add(ctx,
 def getbyid(ctx,
            # Mandatory main parameter
            accountid):
-    """Returns details about an account, given its AccountID."""
+    """GetAccountByID enables you to return details about a specific account, given its accountID."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()

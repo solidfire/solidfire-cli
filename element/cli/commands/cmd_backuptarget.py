@@ -26,19 +26,19 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 def cli(ctx):
     """modify create list remove get """
 
-@cli.command('modify', short_help="""ModifyBackupTarget is used to change attributes of a backup target. """, cls=SolidFireCommand)
+@cli.command('modify', short_help="""ModifyBackupTarget enables you to change attributes of a backup target. """, cls=SolidFireCommand)
 @click.option('--backuptargetid',
               type=int,
               required=True,
-              help="""Unique identifier assigned to the backup target. """)
+              help="""The unique target ID for the target to modify. """)
 @click.option('--name',
               type=str,
               required=False,
-              help="""Name for the backup target. """)
+              help="""The new name for the backup target. """)
 @click.option('--attributes',
               type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format.  Has the following subparameters: """)
+              help="""List of name-value pairs in JSON object format.  Has the following subparameters: """)
 @pass_context
 def modify(ctx,
            # Mandatory main parameter
@@ -47,7 +47,7 @@ def modify(ctx,
            name = None,
            # Optional main parameter
            attributes = None):
-    """ModifyBackupTarget is used to change attributes of a backup target."""
+    """ModifyBackupTarget enables you to change attributes of a backup target."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -78,22 +78,22 @@ def modify(ctx,
 
 
 
-@cli.command('create', short_help="""CreateBackupTarget allows you to create and store backup target information so that you do not need to re-enter it each time a backup is created. """, cls=SolidFireCommand)
+@cli.command('create', short_help="""CreateBackupTarget enables you to create and store backup target information so that you do not need to re-enter it each time a backup is created. """, cls=SolidFireCommand)
 @click.option('--name',
               type=str,
               required=True,
-              help="""Name for the backup target. """)
+              help="""The name of the backup target. """)
 @click.option('--attributes',
               type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format.  Has the following subparameters: """)
+              help="""List of name-value pairs in JSON object format.  Has the following subparameters: """)
 @pass_context
 def create(ctx,
            # Mandatory main parameter
            name,
            # Optional main parameter
            attributes = None):
-    """CreateBackupTarget allows you to create and store backup target information so that you do not need to re-enter it each time a backup is created."""
+    """CreateBackupTarget enables you to create and store backup target information so that you do not need to re-enter it each time a backup is created."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -153,7 +153,7 @@ def list(ctx):
 @click.option('--backuptargetid',
               type=int,
               required=True,
-              help="""Unique target ID of the target to remove. """)
+              help="""The unique target ID of the target to remove. """)
 @pass_context
 def remove(ctx,
            # Mandatory main parameter
@@ -180,16 +180,16 @@ def remove(ctx,
 
 
 
-@cli.command('get', short_help="""GetBackupTarget allows you to return information about a specific backup target that has been created. """, cls=SolidFireCommand)
+@cli.command('get', short_help="""GetBackupTarget enables you to return information about a specific backup target that you have created. """, cls=SolidFireCommand)
 @click.option('--backuptargetid',
               type=int,
               required=True,
-              help="""Unique identifier assigned to the backup target. """)
+              help="""The unique identifier assigned to the backup target. """)
 @pass_context
 def get(ctx,
            # Mandatory main parameter
            backuptargetid):
-    """GetBackupTarget allows you to return information about a specific backup target that has been created."""
+    """GetBackupTarget enables you to return information about a specific backup target that you have created."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()

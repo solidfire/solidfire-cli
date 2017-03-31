@@ -111,21 +111,27 @@ def modifygroup(ctx,
               type=int,
               required=False,
               help="""The volume to list snapshots for. If not provided, all snapshots for all volumes are returned. """)
+@click.option('--snapshotid',
+              type=int,
+              required=False,
+              help="""ListSnapshots is used to return the attributes of each snapshot taken on the volume. """)
 @pass_context
 def list(ctx,
            # Optional main parameter
-           volumeid = None):
+           volumeid = None,
+           # Optional main parameter
+           snapshotid = None):
     """ListSnapshots is used to return the attributes of each snapshot taken on the volume."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-    
+        
     
 
-    ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"")
+    ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""snapshotid = """+str(snapshotid)+""";"""+"")
     try:
-        _ListSnapshotsResult = ctx.element.list_snapshots(volume_id=volumeid)
+        _ListSnapshotsResult = ctx.element.list_snapshots(volume_id=volumeid, snapshot_id=snapshotid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()

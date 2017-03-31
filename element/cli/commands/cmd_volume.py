@@ -59,20 +59,34 @@ def getefficiency(ctx,
 
 
 @cli.command('liststatsbyaccount', short_help="""ListVolumeStatsByAccount returns high-level activity measurements for every account. Values are summed from all the volumes owned by the account. """, cls=SolidFireCommand)
+@click.option('--accounts',
+              type=str,
+              required=False,
+              help="""One or more account ids to filter by. """)
+@click.option('--includevirtualvolumes',
+              type=bool,
+              required=False,
+              help="""ListVolumeStatsByAccount returns high-level activity measurements for every account. Values are summed from all the volumes owned by the account. """)
 @pass_context
-def liststatsbyaccount(ctx):
+def liststatsbyaccount(ctx,
+           # Optional main parameter
+           accounts = None,
+           # Optional main parameter
+           includevirtualvolumes = None):
     """ListVolumeStatsByAccount returns high-level activity measurements for every account."""
     """Values are summed from all the volumes owned by the account."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
     
 
-    ctx.logger.info("")
+    accounts = parser.parse_array(accounts)    
+    
+
+    ctx.logger.info("""accounts = """+str(accounts)+""";"""+"""includevirtualvolumes = """+str(includevirtualvolumes)+""";"""+"")
     try:
-        _ListVolumeStatsByAccountResult = ctx.element.list_volume_stats_by_account()
+        _ListVolumeStatsByAccountResult = ctx.element.list_volume_stats_by_account(accounts=accounts, include_virtual_volumes=includevirtualvolumes)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -317,19 +331,25 @@ def startbulkread(ctx,
 
 
 @cli.command('listdeleted', short_help="""ListDeletedVolumes is used to return the entire list of volumes that have been marked for deletion and is purged from the system. """, cls=SolidFireCommand)
+@click.option('--includevirtualvolumes',
+              type=bool,
+              required=False,
+              help="""ListDeletedVolumes is used to return the entire list of volumes that have been marked for deletion and is purged from the system. """)
 @pass_context
-def listdeleted(ctx):
+def listdeleted(ctx,
+           # Optional main parameter
+           includevirtualvolumes = None):
     """ListDeletedVolumes is used to return the entire list of volumes that have been marked for deletion and is purged from the system."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
-    ctx.logger.info("")
+    ctx.logger.info("""includevirtualvolumes = """+str(includevirtualvolumes)+""";"""+"")
     try:
-        _ListDeletedVolumesResult = ctx.element.list_deleted_volumes()
+        _ListDeletedVolumesResult = ctx.element.list_deleted_volumes(include_virtual_volumes=includevirtualvolumes)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -375,20 +395,26 @@ def purgedeleted(ctx,
 
 
 @cli.command('liststatsby', short_help="""ListVolumeStatsByVolume returns high-level activity measurements for every volume, by volume. Values are cumulative from the creation of the volume. """, cls=SolidFireCommand)
+@click.option('--includevirtualvolumes',
+              type=bool,
+              required=False,
+              help="""ListVolumeStatsByVolume returns high-level activity measurements for every volume, by volume. Values are cumulative from the creation of the volume. """)
 @pass_context
-def liststatsby(ctx):
+def liststatsby(ctx,
+           # Optional main parameter
+           includevirtualvolumes = None):
     """ListVolumeStatsByVolume returns high-level activity measurements for every volume, by volume."""
     """Values are cumulative from the creation of the volume."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-
+    
     
 
-    ctx.logger.info("")
+    ctx.logger.info("""includevirtualvolumes = """+str(includevirtualvolumes)+""";"""+"")
     try:
-        _ListVolumeStatsByVolumeResult = ctx.element.list_volume_stats_by_volume()
+        _ListVolumeStatsByVolumeResult = ctx.element.list_volume_stats_by_volume(include_virtual_volumes=includevirtualvolumes)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -655,10 +681,16 @@ def listasyncresults(ctx,
               type=str,
               required=False,
               help="""An array of VolumeAccessGroupIDs for which volume activity is returned. If no VolumeAccessGroupID is specified, stats for all volume access groups is returned. """)
+@click.option('--includevirtualvolumes',
+              type=bool,
+              required=False,
+              help="""ListVolumeStatsByVolumeAccessGroup is used to get total activity measurements for all of the volumes that are a member of the specified volume access group(s). """)
 @pass_context
 def liststatsbyaccessgroup(ctx,
            # Optional main parameter
-           volumeaccessgroups = None):
+           volumeaccessgroups = None,
+           # Optional main parameter
+           includevirtualvolumes = None):
     """ListVolumeStatsByVolumeAccessGroup is used to get total activity measurements for all of the volumes that are a member of the specified volume access group(s)."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
@@ -666,12 +698,12 @@ def liststatsbyaccessgroup(ctx,
 
     
 
-    volumeaccessgroups = parser.parse_array(volumeaccessgroups)
+    volumeaccessgroups = parser.parse_array(volumeaccessgroups)    
     
 
-    ctx.logger.info("""volumeaccessgroups = """+str(volumeaccessgroups)+""";"""+"")
+    ctx.logger.info("""volumeaccessgroups = """+str(volumeaccessgroups)+""";"""+"""includevirtualvolumes = """+str(includevirtualvolumes)+""";"""+"")
     try:
-        _ListVolumeStatsByVolumeAccessGroupResult = ctx.element.list_volume_stats_by_volume_access_group(volume_access_groups=volumeaccessgroups)
+        _ListVolumeStatsByVolumeAccessGroupResult = ctx.element.list_volume_stats_by_volume_access_group(volume_access_groups=volumeaccessgroups, include_virtual_volumes=includevirtualvolumes)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -836,6 +868,14 @@ def clone(ctx,
               type=int,
               required=False,
               help="""New size of the volume in bytes. Size is rounded up to the nearest 1MiB size. This parameter can only be used to *increase* the size of a volume. """)
+@click.option('--setcreatetime',
+              type=bool,
+              required=False,
+              help="""ModifyVolume is used to modify settings on an existing volume. Modifications can be made to one volume at a time and changes take place immediately. If an optional parameter is left unspecified, the value will not be changed.  Extending the size of a volume that is being replicated should be done in an order. The target (Replication Target) volume should first be increased in size, then the source (Read/Write) volume can be resized. It is recommended that both the target and the source volumes be the same size.  Note: If you change access status to locked or target all existing iSCSI connections are terminated. """)
+@click.option('--createtime',
+              type=str,
+              required=False,
+              help="""ModifyVolume is used to modify settings on an existing volume. Modifications can be made to one volume at a time and changes take place immediately. If an optional parameter is left unspecified, the value will not be changed.  Extending the size of a volume that is being replicated should be done in an order. The target (Replication Target) volume should first be increased in size, then the source (Read/Write) volume can be resized. It is recommended that both the target and the source volumes be the same size.  Note: If you change access status to locked or target all existing iSCSI connections are terminated. """)
 @click.option('--attributes',
               type=str,
               required=False,
@@ -858,6 +898,10 @@ def modify(ctx,
            qosbursttime = None,
            # Optional main parameter
            totalsize = None,
+           # Optional main parameter
+           setcreatetime = None,
+           # Optional main parameter
+           createtime = None,
            # Optional main parameter
            attributes = None):
     """ModifyVolume is used to modify settings on an existing volume."""
@@ -890,7 +934,7 @@ def modify(ctx,
         kwargsDict["burst_iops"] = qosburstiops
         kwargsDict["burst_time"] = qosbursttime
 
-        qos = QoS(**kwargsDict)        
+        qos = QoS(**kwargsDict)                
 
     kwargsDict = None
 
@@ -902,9 +946,9 @@ def modify(ctx,
             exit(1)
     
 
-    ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""accountid = """+str(accountid)+""";"""+"""access = """+str(access)+""";"""+"""qos = """+str(qos)+""";"""+"""totalsize = """+str(totalsize)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
+    ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""accountid = """+str(accountid)+""";"""+"""access = """+str(access)+""";"""+"""qos = """+str(qos)+""";"""+"""totalsize = """+str(totalsize)+""";"""+"""setcreatetime = """+str(setcreatetime)+""";"""+"""createtime = """+str(createtime)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _ModifyVolumeResult = ctx.element.modify_volume(volume_id=volumeid, account_id=accountid, access=access, qos=qos, total_size=totalsize, attributes=kwargsDict)
+        _ModifyVolumeResult = ctx.element.modify_volume(volume_id=volumeid, account_id=accountid, access=access, qos=qos, total_size=totalsize, set_create_time=setcreatetime, create_time=createtime, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1000,24 +1044,30 @@ def copy(ctx,
               type=int,
               required=False,
               help="""The maximum number of volumes to return from the API. """)
+@click.option('--includevirtualvolumes',
+              type=bool,
+              required=False,
+              help="""ListActiveVolumes is used to return the list of active volumes currently in the system. The list of volumes is returned sorted in VolumeID order and can be returned in multiple parts (pages). """)
 @pass_context
 def listactive(ctx,
            # Optional main parameter
            startvolumeid = None,
            # Optional main parameter
-           limit = None):
+           limit = None,
+           # Optional main parameter
+           includevirtualvolumes = None):
     """ListActiveVolumes is used to return the list of active volumes currently in the system."""
     """The list of volumes is returned sorted in VolumeID order and can be returned in multiple parts (pages)."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-        
+            
     
 
-    ctx.logger.info("""startvolumeid = """+str(startvolumeid)+""";"""+"""limit = """+str(limit)+""";"""+"")
+    ctx.logger.info("""startvolumeid = """+str(startvolumeid)+""";"""+"""limit = """+str(limit)+""";"""+"""includevirtualvolumes = """+str(includevirtualvolumes)+""";"""+"")
     try:
-        _ListActiveVolumesResult = ctx.element.list_active_volumes(start_volume_id=startvolumeid, limit=limit)
+        _ListActiveVolumesResult = ctx.element.list_active_volumes(start_volume_id=startvolumeid, limit=limit, include_virtual_volumes=includevirtualvolumes)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1054,6 +1104,14 @@ def listactive(ctx,
               type=str,
               required=False,
               help="""If specified, only fetch volumes specified in this list. This option cannot be specified if startVolumeID, limit, or accounts option is specified. """)
+@click.option('--volumename',
+              type=str,
+              required=False,
+              help="""The ListVolumes method is used to return a list of volumes that are in a cluster. You can specify the volumes you want to return in the list by using the available parameters. """)
+@click.option('--includevirtualvolumes',
+              type=bool,
+              required=False,
+              help="""The ListVolumes method is used to return a list of volumes that are in a cluster. You can specify the volumes you want to return in the list by using the available parameters. """)
 @pass_context
 def list(ctx,
            # Optional main parameter
@@ -1067,7 +1125,11 @@ def list(ctx,
            # Optional main parameter
            ispaired = None,
            # Optional main parameter
-           volumeids = None):
+           volumeids = None,
+           # Optional main parameter
+           volumename = None,
+           # Optional main parameter
+           includevirtualvolumes = None):
     """The ListVolumes method is used to return a list of volumes that are in a cluster."""
     """You can specify the volumes you want to return in the list by using the available parameters."""
     if ctx.element is None:
@@ -1078,12 +1140,12 @@ def list(ctx,
 
     accounts = parser.parse_array(accounts)        
 
-    volumeids = parser.parse_array(volumeids)
+    volumeids = parser.parse_array(volumeids)        
     
 
-    ctx.logger.info("""startvolumeid = """+str(startvolumeid)+""";"""+"""limit = """+str(limit)+""";"""+"""volumestatus = """+str(volumestatus)+""";"""+"""accounts = """+str(accounts)+""";"""+"""ispaired = """+str(ispaired)+""";"""+"""volumeids = """+str(volumeids)+""";"""+"")
+    ctx.logger.info("""startvolumeid = """+str(startvolumeid)+""";"""+"""limit = """+str(limit)+""";"""+"""volumestatus = """+str(volumestatus)+""";"""+"""accounts = """+str(accounts)+""";"""+"""ispaired = """+str(ispaired)+""";"""+"""volumeids = """+str(volumeids)+""";"""+"""volumename = """+str(volumename)+""";"""+"""includevirtualvolumes = """+str(includevirtualvolumes)+""";"""+"")
     try:
-        _ListVolumesResult = ctx.element.list_volumes(start_volume_id=startvolumeid, limit=limit, volume_status=volumestatus, accounts=accounts, is_paired=ispaired, volume_ids=volumeids)
+        _ListVolumesResult = ctx.element.list_volumes(start_volume_id=startvolumeid, limit=limit, volume_status=volumestatus, accounts=accounts, is_paired=ispaired, volume_ids=volumeids, volume_name=volumename, include_virtual_volumes=includevirtualvolumes)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1310,6 +1372,10 @@ def getstats(ctx,
               type=int,
               required=False,
               help="""The maximum number of volumes to return from the API. """)
+@click.option('--includevirtualvolumes',
+              type=bool,
+              required=False,
+              help="""ListVolumesForAccount returns the list of active AND (pending) deleted volumes for an account. """)
 @pass_context
 def listforaccount(ctx,
            # Mandatory main parameter
@@ -1317,18 +1383,20 @@ def listforaccount(ctx,
            # Optional main parameter
            startvolumeid = None,
            # Optional main parameter
-           limit = None):
+           limit = None,
+           # Optional main parameter
+           includevirtualvolumes = None):
     """ListVolumesForAccount returns the list of active AND (pending) deleted volumes for an account."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-            
+                
     
 
-    ctx.logger.info("""accountid = """+str(accountid)+""";"""+"""startvolumeid = """+str(startvolumeid)+""";"""+"""limit = """+str(limit)+""";"""+"")
+    ctx.logger.info("""accountid = """+str(accountid)+""";"""+"""startvolumeid = """+str(startvolumeid)+""";"""+"""limit = """+str(limit)+""";"""+"""includevirtualvolumes = """+str(includevirtualvolumes)+""";"""+"")
     try:
-        _ListVolumesForAccountResult = ctx.element.list_volumes_for_account(account_id=accountid, start_volume_id=startvolumeid, limit=limit)
+        _ListVolumesForAccountResult = ctx.element.list_volumes_for_account(account_id=accountid, start_volume_id=startvolumeid, limit=limit, include_virtual_volumes=includevirtualvolumes)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
