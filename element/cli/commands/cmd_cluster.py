@@ -321,18 +321,10 @@ def setsnmptrapinfo(ctx,
 
 
 @cli.command('listfaults', short_help="""ListClusterFaults enables you to retrieve information about any faults detected on the cluster. With this method, you can retrieve both current faults as well as faults that have been resolved. The system caches faults every 30 seconds. """, cls=SolidFireCommand)
-@click.option('--exceptions',
-              type=bool,
-              required=False,
-              help=""" """)
 @click.option('--bestpractices',
               type=bool,
               required=False,
               help="""Specifies whether to include faults triggered by suboptimal system configuration. Possible values are: true false """)
-@click.option('--update',
-              type=bool,
-              required=False,
-              help=""" """)
 @click.option('--faulttypes',
               type=str,
               required=False,
@@ -340,11 +332,7 @@ def setsnmptrapinfo(ctx,
 @pass_context
 def listfaults(ctx,
            # Optional main parameter
-           exceptions = None,
-           # Optional main parameter
            bestpractices = None,
-           # Optional main parameter
-           update = None,
            # Optional main parameter
            faulttypes = None):
     """ListClusterFaults enables you to retrieve information about any faults detected on the cluster. With this method, you can retrieve both current faults as well as faults that have been resolved. The system caches faults every 30 seconds."""
@@ -352,12 +340,12 @@ def listfaults(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-                
+        
     
 
-    ctx.logger.info("""exceptions = """+str(exceptions)+""";"""+"""bestpractices = """+str(bestpractices)+""";"""+"""update = """+str(update)+""";"""+"""faulttypes = """+str(faulttypes)+""";"""+"")
+    ctx.logger.info("""bestpractices = """+str(bestpractices)+""";"""+"""faulttypes = """+str(faulttypes)+""";"""+"")
     try:
-        _ListClusterFaultsResult = ctx.element.list_cluster_faults(exceptions=exceptions, best_practices=bestpractices, update=update, fault_types=faulttypes)
+        _ListClusterFaultsResult = ctx.element.list_cluster_faults(best_practices=bestpractices, fault_types=faulttypes)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -370,25 +358,19 @@ def listfaults(ctx,
 
 
 @cli.command('listadmins', short_help="""ListClusterAdmins returns the list of all cluster administrators for the cluster. There can be several cluster administrator accounts with different levels of permissions. There can be only one primary cluster administrator in the system. The primary Cluster Admin is the administrator that was created when the cluster was created. You can also create LDAP administrators when setting up an LDAP system on the cluster. """, cls=SolidFireCommand)
-@click.option('--showhidden',
-              type=bool,
-              required=False,
-              help=""" """)
 @pass_context
-def listadmins(ctx,
-           # Optional main parameter
-           showhidden = None):
+def listadmins(ctx):
     """ListClusterAdmins returns the list of all cluster administrators for the cluster. There can be several cluster administrator accounts with different levels of permissions. There can be only one primary cluster administrator in the system. The primary Cluster Admin is the administrator that was created when the cluster was created. You can also create LDAP administrators when setting up an LDAP system on the cluster."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-    
+
     
 
-    ctx.logger.info("""showhidden = """+str(showhidden)+""";"""+"")
+    ctx.logger.info("")
     try:
-        _ListClusterAdminsResult = ctx.element.list_cluster_admins(show_hidden=showhidden)
+        _ListClusterAdminsResult = ctx.element.list_cluster_admins()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -833,25 +815,19 @@ def modifyadmin(ctx,
 
 
 @cli.command('getsnmptrapinfo', short_help="""You can use GetSnmpTrapInfo to return current SNMP trap configuration information. """, cls=SolidFireCommand)
-@click.option('--id',
-              type=int,
-              required=False,
-              help=""" """)
 @pass_context
-def getsnmptrapinfo(ctx,
-           # Optional main parameter
-           id = None):
+def getsnmptrapinfo(ctx):
     """You can use GetSnmpTrapInfo to return current SNMP trap configuration information."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-    
+
     
 
-    ctx.logger.info("""id = """+str(id)+""";"""+"")
+    ctx.logger.info("")
     try:
-        _GetSnmpTrapInfoResult = ctx.element.get_snmp_trap_info(id=id)
+        _GetSnmpTrapInfoResult = ctx.element.get_snmp_trap_info()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -876,10 +852,6 @@ def getsnmptrapinfo(ctx,
               type=int,
               required=False,
               help="""Identifies the end of a range of events to return. """)
-@click.option('--eventqueuetype',
-              type=str,
-              required=False,
-              help=""" """)
 @pass_context
 def listevents(ctx,
            # Optional main parameter
@@ -887,20 +859,18 @@ def listevents(ctx,
            # Optional main parameter
            starteventid = None,
            # Optional main parameter
-           endeventid = None,
-           # Optional main parameter
-           eventqueuetype = None):
+           endeventid = None):
     """ListEvents returns events detected on the cluster, sorted from oldest to newest."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-                
+            
     
 
-    ctx.logger.info("""maxevents = """+str(maxevents)+""";"""+"""starteventid = """+str(starteventid)+""";"""+"""endeventid = """+str(endeventid)+""";"""+"""eventqueuetype = """+str(eventqueuetype)+""";"""+"")
+    ctx.logger.info("""maxevents = """+str(maxevents)+""";"""+"""starteventid = """+str(starteventid)+""";"""+"""endeventid = """+str(endeventid)+""";"""+"")
     try:
-        _ListEventsResult = ctx.element.list_events(max_events=maxevents, start_event_id=starteventid, end_event_id=endeventid, event_queue_type=eventqueuetype)
+        _ListEventsResult = ctx.element.list_events(max_events=maxevents, start_event_id=starteventid, end_event_id=endeventid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()

@@ -55,25 +55,19 @@ def listpending(ctx):
 
 
 @cli.command('getorigin', short_help="""GetOrigin enables you to retrieve the origination certificate for where the node was built. This method might return null if there is no origination certification. """, cls=SolidFireCommand)
-@click.option('--force',
-              type=bool,
-              required=True,
-              help=""" """)
 @pass_context
-def getorigin(ctx,
-           # Mandatory main parameter
-           force):
+def getorigin(ctx):
     """GetOrigin enables you to retrieve the origination certificate for where the node was built. This method might return null if there is no origination certification."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-    
+
     
 
-    ctx.logger.info("""force = """+str(force)+""";"""+"")
+    ctx.logger.info("")
     try:
-        _GetOriginResult = ctx.element.get_origin(force=force)
+        _GetOriginResult = ctx.element.get_origin()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()

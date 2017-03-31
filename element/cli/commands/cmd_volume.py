@@ -458,10 +458,6 @@ def liststatsby(ctx,
               type=str,
               required=False,
               help="""The list of name-value pairs in JSON object format. Total attribute size must be less than 1000B, or 1KB, including JSON formatting characters.  Has the following subparameters: """)
-@click.option('--slicecount',
-              type=int,
-              required=False,
-              help=""" """)
 @pass_context
 def create(ctx,
            # Mandatory main parameter
@@ -481,9 +477,7 @@ def create(ctx,
            # Optional subparameter of optional main parameter.
            qosbursttime = None,
            # Optional main parameter
-           attributes = None,
-           # Optional main parameter
-           slicecount = None):
+           attributes = None):
     """CreateVolume enables you to create a new (empty) volume on the cluster. As soon as the volume creation is complete, the volume is"""
     """available for connection via iSCSI."""
     if ctx.element is None:
@@ -516,12 +510,12 @@ def create(ctx,
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1)    
+            exit(1)
     
 
-    ctx.logger.info("""name = """+str(name)+""";"""+"""accountid = """+str(accountid)+""";"""+"""totalsize = """+str(totalsize)+""";"""+"""enable512e = """+str(enable512e)+""";"""+"""qos = """+str(qos)+""";"""+"""attributes = """+str(attributes)+""";"""+"""slicecount = """+str(slicecount)+""";"""+"")
+    ctx.logger.info("""name = """+str(name)+""";"""+"""accountid = """+str(accountid)+""";"""+"""totalsize = """+str(totalsize)+""";"""+"""enable512e = """+str(enable512e)+""";"""+"""qos = """+str(qos)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _CreateVolumeResult = ctx.element.create_volume(name=name, account_id=accountid, total_size=totalsize, enable512e=enable512e, qos=qos, attributes=kwargsDict, slice_count=slicecount)
+        _CreateVolumeResult = ctx.element.create_volume(name=name, account_id=accountid, total_size=totalsize, enable512e=enable512e, qos=qos, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()

@@ -1109,10 +1109,6 @@ GetOrigin enables you to retrieve the origination certificate for where the node
 
 Options:
 
---force
-
- 
-
 ---------------------------------------------------------------
 #### listpendingactive ####
 Command:
@@ -1575,10 +1571,6 @@ Initial quality of service settings for this volume. Default values are used if 
 
 The list of name-value pairs in JSON object format. Total attribute size must be less than 1000B, or 1KB, including JSON formatting characters. 
 
---slicecount
-
- 
-
 ---------------------------------------------------------------
 #### cancelclone ####
 Command:
@@ -2025,10 +2017,6 @@ GetIpmiInfo enables you to display a detailed reporting of sensors (objects) for
 
 Options:
 
---force
-
- 
-
 ---------------------------------------------------------------
 #### getipmiconfig ####
 Command:
@@ -2044,10 +2032,6 @@ Options:
 --chassistype
 
 Displays information for each node chassis type. Valid values are: all: Returns sensor information for each chassis type. {chassis type}: Returns sensor information for a specified chassis type. 
-
---force
-
- 
 
 
 Restart Commands 
@@ -2640,24 +2624,28 @@ Options:
 Specifies the unique ID of the schedule or multiple schedules to display. 
 
 ---------------------------------------------------------------
-#### list ####
+#### modify ####
 Command:
 
-    sfcli Snapshot list <options>
+    sfcli Snapshot modify <options>
 
 Description:
 
-ListSnapshots enables you to return the attributes of each snapshot taken on the volume. Information about snapshots that reside on the target cluster is displayed on the source cluster when this method is called from the source cluster. 
+ModifySnapshot enables you to change the attributes currently assigned to a snapshot. You can use this method to enable snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system. 
 
 Options:
 
---volumeid
-
-Retrieves snapshots for a volume. If volumeID is not provided, all snapshots for all volumes are returned. 
-
 --snapshotid
 
-Retrieves information for a specific snapshot ID. 
+Specifies the ID of the snapshot. 
+
+--expirationtime
+
+Sets the time when the snapshot should be removed. 
+
+--enableremotereplication
+
+Replicates the snapshot created to a remote cluster. Possible values are: true: The snapshot is replicated to remote storage. false: Default. The snapshot is not replicated. 
 
 ---------------------------------------------------------------
 #### create ####
@@ -2696,28 +2684,24 @@ Specifies the amount of time for which the snapshot is retained. The format is H
 List of name-value pairs in JSON object format. 
 
 ---------------------------------------------------------------
-#### modify ####
+#### list ####
 Command:
 
-    sfcli Snapshot modify <options>
+    sfcli Snapshot list <options>
 
 Description:
 
-ModifySnapshot enables you to change the attributes currently assigned to a snapshot. You can use this method to enable snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system. 
+ListSnapshots enables you to return the attributes of each snapshot taken on the volume. Information about snapshots that reside on the target cluster is displayed on the source cluster when this method is called from the source cluster. 
 
 Options:
 
+--volumeid
+
+Retrieves snapshots for a volume. If volumeID is not provided, all snapshots for all volumes are returned. 
+
 --snapshotid
 
-Specifies the ID of the snapshot. 
-
---expirationtime
-
-Sets the time when the snapshot should be removed. 
-
---enableremotereplication
-
-Replicates the snapshot created to a remote cluster. Possible values are: true: The snapshot is replicated to remote storage. false: Default. The snapshot is not replicated. 
+Retrieves information for a specific snapshot ID. 
 
 ---------------------------------------------------------------
 #### createschedule ####
@@ -3045,10 +3029,6 @@ List of iSCSI initiator IQNs for the host.
 
 IP or DNS name for the host. 
 
---callingvirtualvolumehostid
-
-ModifyVirtualVolumeHost changes an existing ESX host. 
-
 ---------------------------------------------------------------
 #### gettaskupdate ####
 Command:
@@ -3065,10 +3045,6 @@ Options:
 
 The UUID of the VVol Task. 
 
---callingvirtualvolumehostid
-
- 
-
 ---------------------------------------------------------------
 #### unbindallfromhost ####
 Command:
@@ -3080,10 +3056,6 @@ Description:
 UnbindAllVirtualVolumesFromHost removes all VVol  Host binding. 
 
 Options:
-
---virtualvolumehostid
-
-UnbindAllVirtualVolumesFromHost removes all VVol  Host binding. 
 
 ---------------------------------------------------------------
 #### modifymetadata ####
@@ -3100,18 +3072,6 @@ Options:
 --virtualvolumeid
 
 VvolVolumeID for the volume to be modified. 
-
---metadata
-
- 
-
---removekeys
-
- 
-
---callingvirtualvolumehostid
-
- 
 
 ---------------------------------------------------------------
 #### modifyvasaproviderinfo ####
@@ -3133,37 +3093,37 @@ Signed SSL certificate for the Vasa Provider
 
 UUID identifying the vasa provider 
 
---options
-
- 
-
 ---------------------------------------------------------------
-#### copydiffsto ####
+#### getunsharedchunks ####
 Command:
 
-    sfcli VirtualVolume copydiffsto <options>
+    sfcli VirtualVolume getunsharedchunks <options>
 
 Description:
 
-CopyDiffsToVirtualVolume is a three-way merge function. 
+GetVirtualVolumeAllocatedBitmap scans a VVol segment and returns the number of  chunks not shared between two volumes. This call will return results in less  than 30 seconds. If the specified VVol and the base VVil are not related, an  error is thrown. If the offset/length combination is invalid or out fo range  an error is thrown. 
 
 Options:
 
 --virtualvolumeid
 
-The ID of the snapshot Virtual Volume. 
+The ID of the Virtual Volume. 
 
 --basevirtualvolumeid
 
-The ID of the base Virtual Volume. 
+The ID of the Virtual Volume to compare against. 
 
---dstvirtualvolumeid
+--segmentstart
 
-The ID of the Virtual Volume to be overwritten. 
+Start Byte offset. 
 
---callingvirtualvolumehostid
+--segmentlength
 
- 
+Length of the scan segment in bytes. 
+
+--chunksize
+
+Number of bytes represented by one bit in the bitmap. 
 
 ---------------------------------------------------------------
 #### querymetadata ####
@@ -3176,18 +3136,6 @@ Description:
 QueryVirtualVolumeMetadata returns a list of VVols matching a metadata query. 
 
 Options:
-
---queryconstraints
-
- 
-
---wildcardconstraints
-
- 
-
---callingvirtualvolumehostid
-
- 
 
 ---------------------------------------------------------------
 #### listtasks ####
@@ -3241,10 +3189,6 @@ Initial quality of service settings for this volume.  Volumes created without sp
 
 List of name/value pairs to save in the volume's metadata. 
 
---callingvirtualvolumehostid
-
- 
-
 ---------------------------------------------------------------
 #### fastclone ####
 Command:
@@ -3269,14 +3213,6 @@ The name for the newly-created volume.
 
 New quality of service settings for this volume. 
 
---metadata
-
- 
-
---callingvirtualvolumehostid
-
- 
-
 ---------------------------------------------------------------
 #### canceltask ####
 Command:
@@ -3292,10 +3228,6 @@ Options:
 --virtualvolumetaskid
 
 The UUID of the VVol Task to cancel. 
-
---callingvirtualvolumehostid
-
- 
 
 ---------------------------------------------------------------
 #### getallocatedbitmap ####
@@ -3324,10 +3256,6 @@ Byte length adjusted to end on a chunk boundary.
 --chunksize
 
 Number of bytes represented by one bit in the bitmap. 
-
---callingvirtualvolumehostid
-
- 
 
 ---------------------------------------------------------------
 #### getunsharedbitmap ####
@@ -3360,10 +3288,6 @@ Byte length adjusted to end on a chunk boundary.
 --chunksize
 
 Number of bytes represented by one bit in the bitmap. 
-
---callingvirtualvolumehostid
-
- 
 
 ---------------------------------------------------------------
 #### listhosts ####
@@ -3401,45 +3325,29 @@ The ID of the Virtual Volume snapshot.
 
 The ID of the Virtual Volume to restore to. 
 
---callingvirtualvolumehostid
-
- 
-
 ---------------------------------------------------------------
-#### getunsharedchunks ####
+#### copydiffsto ####
 Command:
 
-    sfcli VirtualVolume getunsharedchunks <options>
+    sfcli VirtualVolume copydiffsto <options>
 
 Description:
 
-GetVirtualVolumeAllocatedBitmap scans a VVol segment and returns the number of  chunks not shared between two volumes. This call will return results in less  than 30 seconds. If the specified VVol and the base VVil are not related, an  error is thrown. If the offset/length combination is invalid or out fo range  an error is thrown. 
+CopyDiffsToVirtualVolume is a three-way merge function. 
 
 Options:
 
 --virtualvolumeid
 
-The ID of the Virtual Volume. 
+The ID of the snapshot Virtual Volume. 
 
 --basevirtualvolumeid
 
-The ID of the Virtual Volume to compare against. 
+The ID of the base Virtual Volume. 
 
---segmentstart
+--dstvirtualvolumeid
 
-Start Byte offset. 
-
---segmentlength
-
-Length of the scan segment in bytes. 
-
---chunksize
-
-Number of bytes represented by one bit in the bitmap. 
-
---callingvirtualvolumehostid
-
- 
+The ID of the Virtual Volume to be overwritten. 
 
 ---------------------------------------------------------------
 #### clone ####
@@ -3465,18 +3373,6 @@ The name for the newly-created volume.
 
 New quality of service settings for this volume. 
 
---metadata
-
- 
-
---newcontainerid
-
- 
-
---callingvirtualvolumehostid
-
- 
-
 ---------------------------------------------------------------
 #### modify ####
 Command:
@@ -3501,10 +3397,6 @@ New quality of service settings for this volume.
 
 New size of the volume in bytes. Size is rounded up to the nearest 1MiB size. This parameter can only be used to *increase* the size of a volume. 
 
---callingvirtualvolumehostid
-
- 
-
 ---------------------------------------------------------------
 #### preparevirtualsnapshot ####
 Command:
@@ -3528,10 +3420,6 @@ The name for the newly-created volume.
 --writablesnapshot
 
 Will the snapshot be writable? 
-
---callingvirtualvolumehostid
-
- 
 
 ---------------------------------------------------------------
 #### getfeaturestatus ####
@@ -3565,14 +3453,6 @@ Options:
 
 Normal, Start, or End? 
 
---virtualvolumehostid
-
-UnbindGetVirtualVolume removes the VVol  Host binding. 
-
---unbindargs
-
-UnbindGetVirtualVolume removes the VVol  Host binding. 
-
 ---------------------------------------------------------------
 #### createhost ####
 Command:
@@ -3593,10 +3473,6 @@ The GUID of the ESX host.
 
 The GUID of the ESX Cluster. 
 
---initiatornames
-
- 
-
 --visibleprotocolendpointids
 
 A list of PEs the host is aware of. 
@@ -3604,10 +3480,6 @@ A list of PEs the host is aware of.
 --hostaddress
 
 IP or DNS name for the host. 
-
---callingvirtualvolumehostid
-
- 
 
 ---------------------------------------------------------------
 #### bind ####
@@ -3697,14 +3569,6 @@ The ID of the Virtual Volume to clone.
 
 Number of seconds to complete or fail. 
 
---metadata
-
- 
-
---callingvirtualvolumehostid
-
- 
-
 ---------------------------------------------------------------
 #### listbindings ####
 Command:
@@ -3764,10 +3628,6 @@ Options:
 --virtualvolumes
 
 The UUID of the volume to delete. 
-
---callingvirtualvolumehostid
-
- 
 
 
 Hardware Commands 
@@ -3969,17 +3829,9 @@ ListClusterFaults enables you to retrieve information about any faults detected 
 
 Options:
 
---exceptions
-
- 
-
 --bestpractices
 
 Specifies whether to include faults triggered by suboptimal system configuration. Possible values are: true false 
-
---update
-
- 
 
 --faulttypes
 
@@ -3996,10 +3848,6 @@ Description:
 ListClusterAdmins returns the list of all cluster administrators for the cluster. There can be several cluster administrator accounts with different levels of permissions. There can be only one primary cluster administrator in the system. The primary Cluster Admin is the administrator that was created when the cluster was created. You can also create LDAP administrators when setting up an LDAP system on the cluster. 
 
 Options:
-
---showhidden
-
- 
 
 ---------------------------------------------------------------
 #### create ####
@@ -4165,10 +4013,6 @@ You can use GetSnmpTrapInfo to return current SNMP trap configuration informatio
 
 Options:
 
---id
-
- 
-
 ---------------------------------------------------------------
 #### listevents ####
 Command:
@@ -4192,10 +4036,6 @@ Identifies the beginning of a range of events to return.
 --endeventid
 
 Identifies the end of a range of events to return. 
-
---eventqueuetype
-
- 
 
 ---------------------------------------------------------------
 #### clearfaults ####

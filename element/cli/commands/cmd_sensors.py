@@ -27,25 +27,19 @@ def cli(ctx):
     """getipmiinfo getipmiconfig """
 
 @cli.command('getipmiinfo', short_help="""GetIpmiInfo enables you to display a detailed reporting of sensors (objects) for node fans, intake and exhaust temperatures, and power supplies that are monitored by the system. """, cls=SolidFireCommand)
-@click.option('--force',
-              type=bool,
-              required=True,
-              help=""" """)
 @pass_context
-def getipmiinfo(ctx,
-           # Mandatory main parameter
-           force):
+def getipmiinfo(ctx):
     """GetIpmiInfo enables you to display a detailed reporting of sensors (objects) for node fans, intake and exhaust temperatures, and power supplies that are monitored by the system."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-    
+
     
 
-    ctx.logger.info("""force = """+str(force)+""";"""+"")
+    ctx.logger.info("")
     try:
-        _GetIpmiInfoResult = ctx.element.get_ipmi_info(force=force)
+        _GetIpmiInfoResult = ctx.element.get_ipmi_info()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -62,14 +56,8 @@ def getipmiinfo(ctx,
               type=str,
               required=False,
               help="""Displays information for each node chassis type. Valid values are: all: Returns sensor information for each chassis type. {chassis type}: Returns sensor information for a specified chassis type. """)
-@click.option('--force',
-              type=bool,
-              required=True,
-              help=""" """)
 @pass_context
 def getipmiconfig(ctx,
-           # Mandatory main parameter
-           force,
            # Optional main parameter
            chassistype = None):
     """GetIpmiConfig enables you to retrieve hardware sensor information from sensors that are in your node."""
@@ -77,12 +65,12 @@ def getipmiconfig(ctx,
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-        
+    
     
 
-    ctx.logger.info("""chassistype = """+str(chassistype)+""";"""+"""force = """+str(force)+""";"""+"")
+    ctx.logger.info("""chassistype = """+str(chassistype)+""";"""+"")
     try:
-        _GetIpmiConfigResult = ctx.element.get_ipmi_config(force=force, chassis_type=chassistype)
+        _GetIpmiConfigResult = ctx.element.get_ipmi_config(chassis_type=chassistype)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
