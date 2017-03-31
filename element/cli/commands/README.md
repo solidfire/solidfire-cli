@@ -1287,13 +1287,13 @@ Command:
 
 Description:
 
-Gets protocol endpoints in the system If protocolEndpointIDs isn't specified all protocol endpoints are returned. Else the supplied protocolEndpointIDs are. 
+ListProtocolEndpoints enables you to retrieve information about all protocol endpoints in the cluster. Protocol endpoints govern access to their associated virtual volume storage containers. 
 
 Options:
 
 --protocolendpointids
 
- 
+A list of protocol endpoint IDs for which to retrieve information. If unspecified, the method returns information about all protocol endpoints. 
 
 
 LoginSession Commands 
@@ -1305,7 +1305,7 @@ Command:
 
 Description:
 
-GetRemoteLoggingHosts is used to retrieve the current list of log servers. 
+GetRemoteLoggingHosts enables you to retrieve the current list of log servers. 
 
 Options:
 
@@ -1317,13 +1317,13 @@ Command:
 
 Description:
 
-RemoteLoggingHosts is used to configure remote logging from the nodes in the storage cluster to a centralized log server or servers. Remote logging is performed over TCP using the default port 514. This API does not add to the existing logging hosts. Rather, it replaces what currently exists with new values specified by this API method. You can use the GetRemoteLoggingHosts to determine what the current logging hosts are and then use the SetRemoteLoggingHosts to set the desired list of current and new logging hosts. 
+SetRemoteLoggingHosts enables you to configure remote logging from the nodes in the storage cluster to a centralized log server or servers. Remote logging is performed over TCP using the default port 514. This API does not add to the existing logging hosts. Rather, it replaces what currently exists with new values specified by this API method. You can use GetRemoteLoggingHosts to determine what the current logging hosts are, and then use SetRemoteLoggingHosts to set the desired list of current and new logging hosts. 
 
 Options:
 
 --remotehosts
 
-List of hosts to send log messages to. 
+A list of hosts to send log messages to. 
 
 ---------------------------------------------------------------
 #### setinfo ####
@@ -1333,13 +1333,13 @@ Command:
 
 Description:
 
-SetLoginSessionInfo is used to set the period of time a log in authentication is valid. After the log in period elapses without activity on the system the authentication will expire. New log in credentials will be required for continued access to the cluster once the timeout period has elapsed. 
+You can use SetLoginSessionInfo to set the period of time that a session's login authentication is valid. After the log in period elapses without activity on the system, the authentication expires. New login credentials are required for continued access to the cluster after the timeout period has elapsed. 
 
 Options:
 
 --timeout
 
-Cluster authentication expiration period. Formatted in HH:mm:ss. For example: 01:30:00, 00:90:00, and 00:00:5400 can all be used to equal a 90 minute timeout period. Default is 30 minutes. 
+Cluster authentication expiration period. Formatted in HH:mm:ss. For example, 01:30:00, 00:90:00, and 00:00:5400 can be used to equal a 90 minute timeout period. The default value is 30 minutes. 
 
 ---------------------------------------------------------------
 #### getinfo ####
@@ -1349,7 +1349,7 @@ Command:
 
 Description:
 
-GetLoginSessionInfo is used to return the period of time a log in authentication is valid for both log in shells and the TUI. 
+GetLoginSessionInfo enables you to return the period of time a log in authentication session is valid for both log in shells and the TUI. 
 
 Options:
 
@@ -1363,7 +1363,7 @@ Command:
 
 Description:
 
-GetVolumeEfficiency is used to retrieve information about a volume. Only the volume given as a parameter in this API method is used to compute the capacity. 
+GetVolumeEfficiency enables you to retrieve information about a volume. Only the volume you give as a parameter in this API method is used to compute the capacity. 
 
 Options:
 
@@ -1385,11 +1385,11 @@ Options:
 
 --accounts
 
-One or more account ids to filter by. 
+One or more account ids by which to filter the result. 
 
 --includevirtualvolumes
 
-ListVolumeStatsByAccount returns high-level activity measurements for every account. Values are summed from all the volumes owned by the account. 
+Includes virtual volumes in the response by default. To exclude virtual volumes, set to false. 
 
 ---------------------------------------------------------------
 #### startbulkwrite ####
@@ -1399,21 +1399,21 @@ Command:
 
 Description:
 
-StartBulkVolumeWrite allows you to initialize a bulk volume write session on a specified volume. Only two bulk volume processes can run simultaneously on a volume. When the session is initialized, data can be written to a SolidFire storage volume from an external backup source. The external data is accessed by a web server running on a SolidFire node. Communications and server interaction information for external data access is passed by a script running on the SolidFire storage system. 
+StartBulkVolumeWrite enables you to initialize a bulk volume write session on a specified volume. Only two bulk volume processes can run simultaneously on a volume. When you initialize the write session, data is written to a SolidFire storage volume from an external backup source. The external data is accessed by a web server running on an SF-series node. Communications and server interaction information for external data access is passed by a script running on the storage system. 
 
 Options:
 
 --volumeid
 
-ID of the volume to be written to. 
+The ID of the volume to be written to. 
 
 --format
 
-The format of the volume data. Can be either: uncompressed: every byte of the volume is returned without any compression. native: opaque data is returned that is smaller and more efficiently stored and written on a subsequent bulk volume write 
+The format of the volume data. It can be either of the following formats: uncompressed: Every byte of the volume is returned without any compression. native: Opaque data is returned that is smaller and more efficiently stored and written on a subsequent bulk volume write. 
 
 --script
 
-Executable name of a script. If no script name is given then the key and URL are necessary to access SolidFire nodes. The script runs on the primary node and the key and URL is returned to the script so the local web server can be contacted. 
+The executable name of a script. If unspecified, the key and URL are necessary to access SF-series nodes. The script runs on the primary node and the key and URL is returned to the script, so the local web server can be contacted. 
 
 --scriptparameters
 
@@ -1431,29 +1431,29 @@ Command:
 
 Description:
 
-You can use UpdateBulkVolumeStatus in a script to return to the SolidFire system the status of a bulk volume job that you have started with the "StartBulkVolumeRead" or "StartBulkVolumeWrite" methods. 
+You can use UpdateBulkVolumeStatus in a script to update the status of a bulk volume job that you started with the StartBulkVolumeRead or StartBulkVolumeWrite methods. 
 
 Options:
 
 --key
 
-The key assigned during initialization of a "StartBulkVolumeRead" or "StartBulkVolumeWrite" session. 
+The key assigned during initialization of a StartBulkVolumeRead or StartBulkVolumeWrite session. 
 
 --status
 
-The SolidFire system sets the status of the given bulk volume job. Possible values: running: jobs that are still active. complete: jobs that are done. failed - jobs that have failed. failed: jobs that have failed. 
+The status of the given bulk volume job. The system sets the status. Possible values are:  running: Jobs that are still active. complete: Jobs that are done. failed: Jobs that failed. 
 
 --percentcomplete
 
-The completed progress of the bulk volume job as a percentage. 
+The completed progress of the bulk volume job as a percentage value. 
 
 --message
 
-Returns the status of the bulk volume job when the job has completed. 
+The message returned indicating the status of the bulk volume job after the job is complete. 
 
 --attributes
 
-JSON attributes  updates what is on the bulk volume job. 
+JSON attributes; updates what is on the bulk volume job. 
 
 ---------------------------------------------------------------
 #### startbulkread ####
@@ -1463,25 +1463,25 @@ Command:
 
 Description:
 
-StartBulkVolumeRead allows you to initialize a bulk volume read session on a specified volume. Only two bulk volume processes can run simultaneously on a volume. When you initialize the session, data is read from a SolidFire storage volume for the purposes of storing the data on an external backup source. The external data is accessed by a web server running on a SolidFire node. Communications and server interaction information for external data access is passed by a script running on the SolidFire storage system.  At the start of a bulk volume read operation, a snapshot of the volume is made and the snapshot is deleted when the read has completed. You can also read a snapshot of the volume by entering the ID of the snapshot as a parameter. Reading a previous snapshot does not create a new snapshot of the volume, nor does the previous snapshot be deleted when the read completes.  Note: This process creates a new snapshot if the ID of an existing snapshot is not provided. Snapshots can be created if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. 
+StartBulkVolumeRead enables you to initialize a bulk volume read session on a specified volume. Only two bulk volume processes can run simultaneously on a volume. When you initialize the session, data is read from a SolidFire storage volume for the purposes of storing the data on an external backup source. The external data is accessed by a web server running on an SF-series node. Communications and server interaction information for external data access is passed by a script running on the storage system. At the start of a bulk volume read operation, a snapshot of the volume is made and the snapshot is deleted when the read is complete. You can also read a snapshot of the volume by entering the ID of the snapshot as a parameter. When you read a previous snapshot, the system does not create a new snapshot of the volume or delete the previous snapshot when the read completes. Note: This process creates a new snapshot if the ID of an existing snapshot is not provided. Snapshots can be created if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. 
 
 Options:
 
 --volumeid
 
-ID of the volume to be read. 
+The ID of the volume to be read. 
 
 --format
 
-The format of the volume data. Can be either: uncompressed: every byte of the volume is returned without any compression. native: opaque data is returned that is smaller and more efficiently stored and written on a subsequent bulk volume write. 
+The format of the volume data. It can be either of the following formats: uncompressed: Every byte of the volume is returned without any compression. native: Opaque data is returned that is smaller and more efficiently stored and written on a subsequent bulk volume write. 
 
 --snapshotid
 
-ID of a previously created snapshot used for bulk volume reads. If no ID is entered, a snapshot of the current active volume image is made. 
+The ID of a previously created snapshot used for bulk volume reads. If no ID is entered, a snapshot of the current active volume image is made. 
 
 --script
 
-Executable name of a script. If no script name is given then the key and URL is necessary to access SolidFire nodes. The script is run on the primary node and the key and URL is returned to the script so the local web server can be contacted. 
+The executable name of a script. If unspecified, the key and URL is necessary to access SF-series nodes. The script is run on the primary node and the key and URL is returned to the script so the local web server can be contacted. 
 
 --scriptparameters
 
@@ -1499,13 +1499,13 @@ Command:
 
 Description:
 
-ListDeletedVolumes is used to return the entire list of volumes that have been marked for deletion and is purged from the system. 
+ListDeletedVolumes enables you to retrieve the list of volumes that have been marked for deletion and purged from the system. 
 
 Options:
 
 --includevirtualvolumes
 
-ListDeletedVolumes is used to return the entire list of volumes that have been marked for deletion and is purged from the system. 
+Specifies that virtual volumes are included in the response by default. To exclude virtual volumes, set to false. 
 
 ---------------------------------------------------------------
 #### purgedeleted ####
@@ -1515,13 +1515,13 @@ Command:
 
 Description:
 
-PurgeDeletedVolume immediately and permanently purges a volume which has been deleted. A volume must be deleted using DeleteVolume before it can be purged. Volumes are purged automatically after a period of time, so usage of this method is not typically required. 
+PurgeDeletedVolume immediately and permanently purges a volume that has been deleted. You must delete a volume using DeleteVolume before it can be purged. Volumes are purged automatically after a period of time, so usage of this method is not typically required. 
 
 Options:
 
 --volumeid
 
-The ID of the volume to purge. 
+The ID of the volume to be purged. 
 
 ---------------------------------------------------------------
 #### liststatsby ####
@@ -1537,7 +1537,7 @@ Options:
 
 --includevirtualvolumes
 
-ListVolumeStatsByVolume returns high-level activity measurements for every volume, by volume. Values are cumulative from the creation of the volume. 
+Specifies that virtual volumes are included in the response by default. To exclude virtual volumes, set to false. 
 
 ---------------------------------------------------------------
 #### create ####
@@ -1547,13 +1547,13 @@ Command:
 
 Description:
 
-CreateVolume is used to create a new (empty) volume on the cluster. When the volume is created successfully it is available for connection via iSCSI. 
+CreateVolume enables you to create a new (empty) volume on the cluster. As soon as the volume creation is complete, the volume is available for connection via iSCSI. 
 
 Options:
 
 --name
 
-Name of the volume. Not required to be unique, but it is recommended. May be 1 to 64 characters in length. 
+The name of the volume access group (might be user specified). Not required to be unique, but recommended. Might be 1 to 64 characters in length. 
 
 --accountid
 
@@ -1565,15 +1565,15 @@ Total size of the volume, in bytes. Size is rounded up to the nearest 1MB size.
 
 --enable512e
 
-Should the volume provides 512-byte sector emulation? 
+Specifies whether 512e emulation is enabled or not. Possible values are: true: The volume provides 512-byte sector emulation. false: 512e emulation is not enabled. 
 
 --qos
 
-Initial quality of service settings for this volume.  Volumes created without specified QoS values are created with the default values for QoS. Default values for a volume can be found by running the GetDefaultQoS method. 
+Initial quality of service settings for this volume. Default values are used if none are specified. Valid settings are: minIOPS maxIOPS burstIOPS You can get the default values for a volume by using the GetDefaultQoS method. 
 
 --attributes
 
-List of Name/Value pairs in JSON object format. 
+The list of name-value pairs in JSON object format. Total attribute size must be less than 1000B, or 1KB, including JSON formatting characters. 
 
 --slicecount
 
@@ -1587,13 +1587,13 @@ Command:
 
 Description:
 
-Cancels a currently running clone operation. This method does not return anything. 
+CancelClone enables you to stop an ongoing CloneVolume or CopyVolume process. When you cancel a group clone operation, the system completes and removes the operation's associated asyncHandle. 
 
 Options:
 
 --cloneid
 
- 
+The cloneID for the ongoing clone process. 
 
 ---------------------------------------------------------------
 #### getdefaultqos ####
@@ -1603,7 +1603,7 @@ Command:
 
 Description:
 
-GetDefaultQoS is used to retrieve the default QoS values that are set for a volume if QoS is not supplied. 
+GetDefaultQoS enables you to retrieve the default QoS values for a newly created volume. 
 
 Options:
 
@@ -1615,7 +1615,7 @@ Command:
 
 Description:
 
-Used to retrieve the result of asynchronous method calls. Some method calls are integer running and do not complete when the initial response is sent. To obtain the result of the method call, polling with GetAsyncResult is required.  GetAsyncResult returns the overall status of the operation (in progress, completed, or error) in a standard fashion, but the actual data returned for the operation depends on the original method call and the return data is documented with each method.  The result for a completed asynchronous method call can only be retrieved once. Once the final result has been returned, later attempts returns an error. 
+You can use GetAsyncResult to retrieve the result of asynchronous method calls. Some method calls require some time to run, and might not be finished when the system sends the initial response. To obtain the status or result of the method call, use GetAsyncResult to poll the asyncHandle value returned by the method. GetAsyncResult returns the overall status of the operation (in progress, completed, or error) in a standard fashion, but the actual data returned for the operation depends on the original method call and the return data is documented with each method. 
 
 Options:
 
@@ -1625,7 +1625,7 @@ A value that was returned from the original asynchronous method call.
 
 --keepresult
 
-Should the result be kept after? 
+If true, GetAsyncResult does not remove the asynchronous result upon returning it, enabling future queries to that asyncHandle. 
 
 ---------------------------------------------------------------
 #### listasyncresults ####
@@ -1641,7 +1641,7 @@ Options:
 
 --asyncresulttypes
 
-An optional list of types of results. You can use this list to restrict the results to only these types of operations. Possible values:BulkVolume: Copy operations between volumes, such as backups or restores.Clone: Volume cloning operations.DriveRemoval: Operations involving the system copying data from a drive in preparation to remove it from the cluster.RtfiPendingNode: Operations involving the system installing compatible software on a node before adding it to the cluster. 
+An optional list of types of results. You can use this list to restrict the results to only these types of operations. Possible values are: BulkVolume: Copy operations between volumes, such as backups or restores. Clone: Volume cloning operations. DriveRemoval: Operations involving the system copying data from a drive in preparation to remove it from the cluster. RtfiPendingNode: Operations involving the system installing compatible software on a node before adding it to the cluster 
 
 ---------------------------------------------------------------
 #### liststatsbyaccessgroup ####
@@ -1651,17 +1651,17 @@ Command:
 
 Description:
 
-ListVolumeStatsByVolumeAccessGroup is used to get total activity measurements for all of the volumes that are a member of the specified volume access group(s). 
+ListVolumeStatsByVolumeAccessGroup enables you to get total activity measurements for all of the volumes that are a member of the specified volume access group(s). 
 
 Options:
 
 --volumeaccessgroups
 
-An array of VolumeAccessGroupIDs for which volume activity is returned. If no VolumeAccessGroupID is specified, stats for all volume access groups is returned. 
+An array of VolumeAccessGroupIDs for which volume activity is returned. If omitted, statistics for all volume access groups are returned. 
 
 --includevirtualvolumes
 
-ListVolumeStatsByVolumeAccessGroup is used to get total activity measurements for all of the volumes that are a member of the specified volume access group(s). 
+Specifies that virtual volumes are included in the response by default. To exclude virtual volumes, set to false. 
 
 ---------------------------------------------------------------
 #### listbulkjobs ####
@@ -1671,7 +1671,7 @@ Command:
 
 Description:
 
-ListBulkVolumeJobs is used to return information about each bulk volume read or write operation that is occurring in the system. 
+ListBulkVolumeJobs enables you to retrieve information about each bulk volume read or write operation that is occurring in the system. 
 
 Options:
 
@@ -1683,37 +1683,37 @@ Command:
 
 Description:
 
-CloneVolume is used to create a copy of the volume. This method is asynchronous and may take a variable amount of time to complete. The cloning process begins immediately when the CloneVolume request is made and is representative of the state of the volume when the API method is issued. GetAsyncResults can be used to determine when the cloning process is complete and the new volume is available for connections. ListSyncJobs can be used to see the progress of creating the clone.  Note: The initial attributes and quality of service settings for the volume are inherited from the volume being cloned. If different settings are required, they can be changed via ModifyVolume.  Note: Cloned volumes do not inherit volume access group memberships from the source volume. 
+CloneVolume enables you to create a copy of a volume. This method is asynchronous and might take a variable amount of time to complete. The cloning process begins immediately when you make the CloneVolume request and is representative of the state of the volume when the API method is issued. You can use the GetAsyncResult method to determine when the cloning process is complete and the new volume is available for connections. You can use ListSyncJobs to see the progress of creating the clone. Note: The initial attributes and QoS settings for the volume are inherited from the volume being cloned. You can change these settings with ModifyVolume. Note: Cloned volumes do not inherit volume access group memberships from the source volume. 
 
 Options:
 
 --volumeid
 
-The ID of the volume to clone. 
+VolumeID for the volume to be cloned. 
 
 --name
 
-The name for the newly-created volume. 
+The name of the new cloned volume. Might be 1 to 64 characters in length. 
 
 --newaccountid
 
-AccountID for the owner of the new volume. If unspecified, the AccountID of the owner of the volume being cloned is used. 
+AccountID for the owner of the new volume. If unspecified, the accountID of the owner of the volume being cloned is used. 
 
 --newsize
 
-New size of the volume, in bytes. May be greater or less than the size of the volume being cloned. If unspecified, the clone's volume size will be the same as the source volume. Size is rounded up to the nearest 1 MiB. 
+New size of the volume, in bytes. Might be greater or less than the size of the volume being cloned. If unspecified, the volume size is not changed. Size is rounded to the nearest 1MB. 
 
 --access
 
-Access settings for the new volume. readOnly: Only read operations are allowed. readWrite: Reads and writes are allowed. locked: No reads or writes are allowed. replicationTarget: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked.  If unspecified, the access settings of the clone will be the same as the source. 
+Specifies the level of access allowed for the new volume. Possible values are: readOnly: Only read operations are allowed. readWrite: Reads and writes are allowed. locked: No reads or writes are allowed. If unspecified, the level of access of the volume being cloned is used. replicationTarget: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked. If a value is not specified, the access value does not change. 
 
 --snapshotid
 
-ID of the snapshot to use as the source of the clone. If unspecified, the clone will be created with a snapshot of the active volume. 
+ID of the snapshot that is used as the source of the clone. If no ID is provided, the current active volume is used. 
 
 --attributes
 
-List of Name/Value pairs in JSON object format. 
+List of name-value pairs in JSON object format. 
 
 --enable512e
 
@@ -1727,7 +1727,7 @@ Command:
 
 Description:
 
-ModifyVolume is used to modify settings on an existing volume. Modifications can be made to one volume at a time and changes take place immediately. If an optional parameter is left unspecified, the value will not be changed.  Extending the size of a volume that is being replicated should be done in an order. The target (Replication Target) volume should first be increased in size, then the source (Read/Write) volume can be resized. It is recommended that both the target and the source volumes be the same size.  Note: If you change access status to locked or target all existing iSCSI connections are terminated. 
+ModifyVolume enables you to modify settings on an existing volume. You can make modifications to one volume at a time and changes take place immediately. If you do not specify QoS values when you modify a volume, they remain the same as before the modification. You can retrieve default QoS values for a newly created volume by running the GetDefaultQoS method. When you need to increase the size of a volume that is being replicated, do so in the following order to prevent replication errors: 1. Increase the size of the "Replication Target" volume. 2. Increase the size of the source or "Read / Write" volume. NetApp recommends that both the target and source volumes are the same size. Note: If you change the "access" status to locked or target, all existing iSCSI connections are terminated. 
 
 Options:
 
@@ -1737,31 +1737,31 @@ VolumeID for the volume to be modified.
 
 --accountid
 
-AccountID to which the volume is reassigned. If none is specified, the previous account name is used. 
+AccountID to which the volume is reassigned. If unspecified, the previous account name is used. 
 
 --access
 
-Access allowed for the volume. readOnly: Only read operations are allowed. readWrite: Reads and writes are allowed. locked: No reads or writes are allowed. replicationTarget: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked.  If unspecified, the access settings of the clone will be the same as the source. 
+Specifies the access allowed for the volume. Possible values are: readOnly: Only read operations are allowed. readWrite: Reads and writes are allowed. locked: No reads or writes are allowed. If not specified, the access value does not change. replicationTarget: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked. If a value is not specified, the access value does not change. 
 
 --qos
 
-New quality of service settings for this volume. 
+New QoS settings for this volume. If not specified, the QoS settings are not changed. 
 
 --totalsize
 
-New size of the volume in bytes. Size is rounded up to the nearest 1MiB size. This parameter can only be used to *increase* the size of a volume. 
+New size of the volume in bytes. 1000000000 is equal to 1GB. Size is rounded up to the nearest 1MB. This parameter can only be used to increase the size of a volume. 
 
 --setcreatetime
 
-ModifyVolume is used to modify settings on an existing volume. Modifications can be made to one volume at a time and changes take place immediately. If an optional parameter is left unspecified, the value will not be changed.  Extending the size of a volume that is being replicated should be done in an order. The target (Replication Target) volume should first be increased in size, then the source (Read/Write) volume can be resized. It is recommended that both the target and the source volumes be the same size.  Note: If you change access status to locked or target all existing iSCSI connections are terminated. 
+If set to true, changes the recorded date of volume creation. 
 
 --createtime
 
-ModifyVolume is used to modify settings on an existing volume. Modifications can be made to one volume at a time and changes take place immediately. If an optional parameter is left unspecified, the value will not be changed.  Extending the size of a volume that is being replicated should be done in an order. The target (Replication Target) volume should first be increased in size, then the source (Read/Write) volume can be resized. It is recommended that both the target and the source volumes be the same size.  Note: If you change access status to locked or target all existing iSCSI connections are terminated. 
+An ISO 8601 date string to set as the new volume creation date. Required if "setCreateTime" is set to true. 
 
 --attributes
 
-List of Name/Value pairs in JSON object format. 
+List of name-value pairs in JSON object format. 
 
 ---------------------------------------------------------------
 #### restoredeleted ####
@@ -1777,7 +1777,7 @@ Options:
 
 --volumeid
 
-VolumeID for the deleted volume to restore. 
+VolumeID of the deleted volume to be restored. 
 
 ---------------------------------------------------------------
 #### copy ####
@@ -1787,21 +1787,21 @@ Command:
 
 Description:
 
-Copies one volume to another. 
+CopyVolume enables you to overwrite the data contents of an existing volume with the data contents of another volume (or snapshot). Attributes of the destination volume such as IQN, QoS settings, size, account, and volume access group membership are not changed. The destination volume must already exist and must be the same size as the source volume. NetApp strongly recommends that clients unmount the destination volume before the CopyVolume operation begins. If the destination volume is modified during the copy operation, the changes will be lost. This method is asynchronous and may take a variable amount of time to complete. You can use the GetAsyncResult method to determine when the process has finished, and ListSyncJobs to see the progress of the copy. 
 
 Options:
 
 --volumeid
 
-Source volume to copy. 
+VolumeID of the volume to be read from. 
 
 --dstvolumeid
 
-Destination volume for the copy. 
+VolumeID of the volume to be overwritten. 
 
 --snapshotid
 
-Snapshot ID of the source volume to create the copy from. 
+ID of the snapshot that is used as the source of the clone. If no ID is provided, the current active volume is used. 
 
 ---------------------------------------------------------------
 #### listactive ####
@@ -1811,21 +1811,21 @@ Command:
 
 Description:
 
-ListActiveVolumes is used to return the list of active volumes currently in the system. The list of volumes is returned sorted in VolumeID order and can be returned in multiple parts (pages). 
+ListActiveVolumes enables you to return the list of active volumes currently in the system. The list of volumes is returned sorted in VolumeID order and can be returned in multiple parts (pages). 
 
 Options:
 
 --startvolumeid
 
-The ID of the first volume to list. This can be useful for paging results. By default, this starts at the lowest VolumeID. 
+Starting VolumeID to return. If no volume exists with this VolumeID, the next volume by VolumeID order is used as the start of the list. To page through the list, pass the VolumeID of the last volume in the previous response + 1. 
 
 --limit
 
-The maximum number of volumes to return from the API. 
+Maximum number of Volume Info objects to return. A value of 0 (zero) returns all volumes (unlimited). 
 
 --includevirtualvolumes
 
-ListActiveVolumes is used to return the list of active volumes currently in the system. The list of volumes is returned sorted in VolumeID order and can be returned in multiple parts (pages). 
+Specifies that virtual volumes are included in the response by default. To exclude virtual volumes, set to false. 
 
 ---------------------------------------------------------------
 #### list ####
@@ -1835,41 +1835,41 @@ Command:
 
 Description:
 
-The ListVolumes method is used to return a list of volumes that are in a cluster. You can specify the volumes you want to return in the list by using the available parameters. 
+The ListVolumes method enables you to retrieve a list of volumes that are in a cluster. You can specify the volumes you want to return in the list by using the available parameters. 
 
 Options:
 
 --startvolumeid
 
-The ID of the first volume to list. This can be useful for paging results. By default, this starts at the lowest VolumeID. 
+Only volumes with an ID greater than or equal to this value are returned. Mutually exclusive with the volumeIDs parameter. 
 
 --limit
 
-The maximum number of volumes to return from the API. 
+Specifies the maximum number of volume results that are returned. Mutually exclusive with the volumeIDs parameter. 
 
 --volumestatus
 
-If specified, filter to only volumes with the provided status. By default, list all volumes. 
+Only volumes with a status equal to the status value are returned. Possible values are: creating snapshotting active deleted 
 
 --accounts
 
-If specified, only fetch volumes which beinteger to the provided accounts. By default, list volumes for all accounts. 
+Returns only the volumes owned by the accounts you specify here. Mutually exclusive with the volumeIDs parameter. 
 
 --ispaired
 
-If specified, only fetch volumes which are paired (if true) or non-paired (if false). By default, list all volumes regardless of their pairing status. 
+Returns volumes that are paired or not paired. Possible values are: true: Returns all paired volumes. false: Returns all volumes that are not paired. 
 
 --volumeids
 
-If specified, only fetch volumes specified in this list. This option cannot be specified if startVolumeID, limit, or accounts option is specified. 
+A list of volume IDs. If you supply this parameter, other parameters operate only on this set of volumes. Mutually exclusive with the accounts, startVolumeID, and limit parameters. 
 
 --volumename
 
-The ListVolumes method is used to return a list of volumes that are in a cluster. You can specify the volumes you want to return in the list by using the available parameters. 
+Only volume object information matching the volume name is returned. 
 
 --includevirtualvolumes
 
-The ListVolumes method is used to return a list of volumes that are in a cluster. You can specify the volumes you want to return in the list by using the available parameters. 
+Specifies that virtual volumes are included in the response by default. To exclude virtual volumes, set to false. 
 
 ---------------------------------------------------------------
 #### clonemultiple ####
@@ -1879,17 +1879,17 @@ Command:
 
 Description:
 
-CloneMultipleVolumes is used to create a clone of a group of specified volumes. A consistent set of characteristics can be assigned to a group of multiple volume when they are cloned together. If groupSnapshotID is going to be used to clone the volumes in a group snapshot, the group snapshot must be created first using the CreateGroupSnapshot API method or the SolidFire Element WebUI. Using groupSnapshotID is optional when cloning multiple volumes.  Note: Cloning multiple volumes is allowed if cluster fullness is at stage 2 or 3. Clones are not created when cluster fullness is at stage 4 or 5. 
+CloneMultipleVolumes enables you to create a clone of a group of specified volumes. You can assign a consistent set of characteristics to a group of multiple volumes when they are cloned together. Before using groupSnapshotID to clone the volumes in a group snapshot, you must create the group snapshot by using the CreateGroupSnapshot API method or the Element OS Web UI. Using groupSnapshotID is optional when cloning multiple volumes. Note: Cloning multiple volumes is allowed if cluster fullness is at stage 2 or 3. Clones are not created when cluster fullness is at stage 4 or 5. 
 
 Options:
 
 --volumes
 
-Array of Unique ID for each volume to include in the clone with optional parameters. If optional parameters are not specified, the values will be inherited from the source volumes. 
+Unique ID for each volume to include in the clone. If optional parameters are not specified, the values are inherited from the source volumes. Required parameter for "volumes" array: volumeID Optional parameters for "volumes" array: access: Can be one of readOnly, readWrite, locked, or replicationTarget attributes: List of name-value pairs in JSON object format. name: New name for the clone. newAccountID: Account ID for the new volumes. newSize: New size Total size of the volume, in bytes. Size is rounded up to the nearest 1MB. 
 
 --access
 
-New default access method for the new volumes if not overridden by information passed in the volumes array. readOnly: Only read operations are allowed. readWrite: Reads and writes are allowed. locked: No reads or writes are allowed. replicationTarget: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked.  If unspecified, the access settings of the clone will be the same as the source. 
+New default access method for the new volumes if not overridden by information passed in the volume's array. 
 
 --groupsnapshotid
 
@@ -1907,17 +1907,17 @@ Command:
 
 Description:
 
-SetDefaultQoS enables you to configure the default Quality of Service (QoS) values (measured in inputs and outputs per second, or IOPS) for all volumes not yet created. 
+SetDefaultQoS enables you to configure the default Quality of Service (QoS) values (measured in inputs and outputs per second, or IOPS) for a volume. For more information about QoS in a SolidFire cluster, see the User Guide. 
 
 Options:
 
 --miniops
 
-The minimum number of sustained IOPS that are provided by the cluster to a volume. 
+The minimum number of sustained IOPS provided by the cluster to a volume. 
 
 --maxiops
 
-The maximum number of sustained IOPS that are provided by the cluster to a volume. 
+The maximum number of sustained IOPS provided by the cluster to a volume. 
 
 --burstiops
 
@@ -1931,13 +1931,13 @@ Command:
 
 Description:
 
-GetVolumeStats is used to retrieve high-level activity measurements for a single volume. Values are cumulative from the creation of the volume. 
+GetVolumeStats enables  you to retrieve high-level activity measurements for a single volume. Values are cumulative from the creation of the volume. 
 
 Options:
 
 --volumeid
 
-Specifies the volume for which statistics is gathered. 
+Specifies the volume for which statistics are gathered. 
 
 ---------------------------------------------------------------
 #### listforaccount ####
@@ -1947,13 +1947,13 @@ Command:
 
 Description:
 
-ListVolumesForAccount returns the list of active AND (pending) deleted volumes for an account. 
+ListVolumesForAccount returns the list of active and (pending) deleted volumes for an account. 
 
 Options:
 
 --accountid
 
-The ID of the account to list the volumes for. 
+Returns all volumes owned by this AccountID. 
 
 --startvolumeid
 
@@ -1965,7 +1965,7 @@ The maximum number of volumes to return from the API.
 
 --includevirtualvolumes
 
-ListVolumesForAccount returns the list of active AND (pending) deleted volumes for an account. 
+Specifies that virtual volumes are included in the response by default. To exclude virtual volumes, set to false. 
 
 ---------------------------------------------------------------
 #### getcount ####
@@ -1987,13 +1987,13 @@ Command:
 
 Description:
 
-CancelGroupClone enables you to stop an ongoing CloneMultipleVolumes process for a group of clones. When you cancel a group clone operation, the system completes and removes the operation's associated asyncHandle. This method does not return anything. 
+CancelGroupClone enables you to stop an ongoing CloneMultipleVolumes process occurring on a group of volumes. When you cancel a group clone operation, the system completes and removes the operation's associated asyncHandle. 
 
 Options:
 
 --groupcloneid
 
-cloneID for the ongoing clone process. 
+The cloneID for the ongoing clone process. 
 
 ---------------------------------------------------------------
 #### delete ####
@@ -2003,13 +2003,13 @@ Command:
 
 Description:
 
-DeleteVolume marks an active volume for deletion. It is purged (permanently deleted) after the cleanup interval elapses. After making a request to delete a volume, any active iSCSI connections to the volume is immediately terminated and no further connections are allowed while the volume is in this state. It is not returned in target discovery requests.  Any snapshots of a volume that has been marked to delete are not affected. Snapshots are kept until the volume is purged from the system.  If a volume is marked for deletion, and it has a bulk volume read or bulk volume write operation in progress, the bulk volume operation is stopped.  If the volume you delete is paired with a volume, replication between the paired volumes is suspended and no data is transferred to it or from it while in a deleted state. The remote volume the deleted volume was paired with enters into a PausedMisconfigured state and data is no integerer sent to it or from the deleted volume. Until the deleted volume is purged, it can be restored and data transfers resumes. If the deleted volume gets purged from the system, the volume it was paired with enters into a StoppedMisconfigured state and the volume pairing status is removed. The purged volume becomes permanently unavailable. 
+DeleteVolume marks an active volume for deletion. When marked, the volume is purged (permanently deleted) after the cleanup interval elapses. After making a request to delete a volume, any active iSCSI connections to the volume are immediately terminated and no further connections are allowed while the volume is in this state. A marked volume is not returned in target discovery requests. Any snapshots of a volume that has been marked for deletion are not affected. Snapshots are kept until the volume is purged from the system. If a volume is marked for deletion and has a bulk volume read or bulk volume write operation in progress, the bulk volume read or write operation is stopped. If the volume you delete is paired with a volume, replication between the paired volumes is suspended and no data is transferred to it or from it while in a deleted state. The remote volume that the deleted volume was paired with enters into a PausedMisconfigured state and data is no longer sent to it or from the deleted volume. Until the deleted volume is purged, it can be restored and data transfers resume. If the deleted volume gets purged from the system, the volume it was paired with enters into a StoppedMisconfigured state and the volume pairing status is removed. The purged volume becomes permanently unavailable. 
 
 Options:
 
 --volumeid
 
-The ID of the volume to delete. 
+The ID of the volume to be deleted. 
 
 
 Sensors Commands 
@@ -2021,7 +2021,7 @@ Command:
 
 Description:
 
-GetIpmiInfo allows you to display a detailed reporting of sensors (objects) for node fans, intake and exhaust temperatures, and power supplies  that are monitored by .  
+GetIpmiInfo enables you to display a detailed reporting of sensors (objects) for node fans, intake and exhaust temperatures, and power supplies that are monitored by the system. 
 
 Options:
 
@@ -2043,7 +2043,7 @@ Options:
 
 --chassistype
 
-Used to display information for each node chassis type. Valid values:all - returns sensor information for each chassis type. {chassis type} - returns sensor information for a specified chassis type. 
+Displays information for each node chassis type. Valid values are: all: Returns sensor information for each chassis type. {chassis type}: Returns sensor information for a specified chassis type. 
 
 --force
 
@@ -2059,13 +2059,13 @@ Command:
 
 Description:
 
-The RestartServices API method is used to restart the  Element services on a node.Caution: This method causes temporary node services interruption. Exercise caution when using this method. 
+The RestartServices API method enables you to restart the services on a node. Caution: This method causes temporary node services interruption. Exercise caution when using this method. Note: This method is available only through the per-node API endpoint 5.0 or later. 
 
 Options:
 
 --force
 
-The "force" parameter must be included on this method to successfully restart services on a node.    
+Required parameter to successfully restart services on a node. 
 
 --service
 
@@ -2076,34 +2076,6 @@ Service name to be restarted.
 Action to perform on the service (start, stop, restart). 
 
 ---------------------------------------------------------------
-#### resetnode ####
-Command:
-
-    sfcli Restart resetnode <options>
-
-Description:
-
-Allows you to reset a node to the SolidFire factory settings. All data will be deleted from the node when you call this method. A node participating in a cluster cannot be reset. 
-
-Options:
-
---build
-
-Used to specify the URL to a remote Element software image to which the node will be reset. 
-
---force
-
-The force parameter must be included in order to successfully reset the node. 
-
---options
-
-Used to enter specifications for running the reset operation. 
-
---reboot
-
-Should it be rebooted? 
-
----------------------------------------------------------------
 #### networking ####
 Command:
 
@@ -2111,13 +2083,41 @@ Command:
 
 Description:
 
-The RestartNetworking API method is used to restart the networking services on a node.WARNING! This method restarts all networking services on a node, causing temporary loss of networking connectivity. Exercise caution when using this method. 
+The RestartNetworking API method enables you to restart the networking services on a node. Warning: This method restarts all networking services on a node, causing temporary loss of networking connectivity. Exercise caution when using this method. Note: This method is available only through the per-node API endpoint 5.0 or later. 
 
 Options:
 
 --force
 
-The "force" parameter must be included on this method to successfully restart the networking. 
+Required parameter to successfully reset the node. 
+
+---------------------------------------------------------------
+#### resetnode ####
+Command:
+
+    sfcli Restart resetnode <options>
+
+Description:
+
+The ResetNode API method enables you to reset a node to the factory settings. All data, packages (software upgrades, and so on), configurations, and log files are deleted from the node when you call this method. However, network settings for the node are preserved during this operation. Nodes that are participating in a cluster cannot be reset to the factory settings. The ResetNode API can only be used on nodes that are in an "Available" state. It cannot be used on nodes that are "Active" in a cluster, or in a "Pending" state. Caution: This method clears any data that is on the node. Exercise caution when using this method. Note: This method is available only through the per-node API endpoint 5.0 or later. 
+
+Options:
+
+--build
+
+Specifies the URL to a remote Element software image to which the node will be reset. 
+
+--force
+
+Required parameter to successfully reset the node. 
+
+--options
+
+Specifications for running the reset operation. 
+
+--reboot
+
+Should it be rebooted? 
 
 ---------------------------------------------------------------
 #### shutdown ####
@@ -2127,7 +2127,7 @@ Command:
 
 Description:
 
-The Shutdown API method enables you to restart or shutdown a node that has not yet been added to a cluster. To use this method, login in to the MIP for the pending node and enter the "shutdown" method with either the "restart" or "halt" options in the following table. 
+The Shutdown API method enables you to restart or shutdown a node that has not yet been added to a cluster. To use this method, log in to the MIP for the pending node, and enter the "shutdown" method with either the "restart" or "halt" options. 
 
 Options:
 
@@ -2137,7 +2137,7 @@ List of NodeIDs for the nodes to be shutdown.
 
 --option
 
-Action to take for the node shutdown:restart: Restarts the node.halt: Performs full power-off of the node. 
+Specifies the action to take for the node shutdown. Possible values are: restart: Restarts the node. halt: Shuts down the node. 
 
 
 VirtualNetwork Commands 
@@ -2149,45 +2149,45 @@ Command:
 
 Description:
 
-ModifyVirtualNetwork is used to change various attributes of a VirtualNetwork object. This method can be used to add or remove address blocks, change the netmask IP, or modify the name or description of the virtual network.  Note: This method requires either the VirtualNetworkID or the VirtualNetworkTag as a parameter, but not both. 
+You can use ModifyVirtualNetwork to change the attributes of an existing virtual network. This method enables you to add or remove address blocks, change the netmask, or modify the name or description of the virtual network. You can also use it to enable or disable namespaces, as well as add or remove a gateway if namespaces are enabled on the virtual network. Note: This method requires either the VirtualNetworkID or the VirtualNetworkTag as a parameter, but not both. Caution: Enabling or disabling the Routable Storage VLANs functionality for an existing virtual network by changing the "namespace" parameter disrupts any traffic handled by the virtual network. NetApp strongly recommends changing the "namespace" parameter only during a scheduled maintenance window. 
 
 Options:
 
 --virtualnetworkid
 
-Unique identifier of the virtual network to modify. This is the virtual network ID assigned by the SolidFire cluster. 
+The unique identifier of the virtual network to modify. This is the virtual network ID assigned by the cluster.  Note: This parameter is optional but either virtualNetworkID or virtualNetworkTag must be specified with this API method. 
 
 --virtualnetworktag
 
-Network Tag that identifies the virtual network to modify. 
+The network tag that identifies the virtual network to modify. Note: This parameter is optional but either virtualNetworkID or virtualNetworkTag must be specified with this API method. 
 
 --name
 
-New name for the virtual network. 
+The new name for the virtual network. 
 
 --addressblocks
 
-New addressBlock to set for this Virtual Network object. This may contain new address blocks to add to the existing object or it may omit unused address blocks that need to be removed. Alternatively, existing address blocks may be extended or reduced in size. The size of the starting addressBlocks for a Virtual Network object can only be increased, and can never be decreased. Attributes for this parameter are: start: start of the IP address range. (String) size: numbre of IP addresses to include in the block. (Integer) 
+The new addressBlock to set for this virtual network. This might contain new address blocks to add to the existing object or omit unused address blocks that need to be removed. Alternatively, you can extend or reduce the size of existing address blocks. You can only increase the size of the starting addressBlocks for a virtual network object; you can never decrease it. Attributes for this parameter are: start: The start of the IP address range. (String) size: The number of IP addresses to include in the block. (Integer) 
 
 --netmask
 
-New netmask for this virtual network. 
+New network mask for this virtual network. 
 
 --svip
 
-The storage virtual IP address for this virtual network. The svip for Virtual Network cannot be changed. A new Virtual Network must be created in order to use a different svip address. 
+The storage virtual IP address for this virtual network. The svip for a virtual network cannot be changed. You must create a new virtual network to use a different svip address. 
 
 --gateway
 
- 
+The IP address of a gateway of the virtual network. This parameter is valid only if the "namespace" parameter is set to true. 
 
 --namespace
 
- 
+When set to true, enables Routable Storage VLANs functionality by recreating the virtual network and configuring a namespace to contain it. When set to false, disables the VRF functionality for the virtual network. Changing this value disrupts traffic running through this virtual network. 
 
 --attributes
 
-A new list of Name/Value pairs in JSON object format. 
+A new list of name-value pairs in JSON object format. 
 
 ---------------------------------------------------------------
 #### add ####
@@ -2197,25 +2197,25 @@ Command:
 
 Description:
 
-AddVirtualNetwork is used to add a new virtual network to a cluster configuration. When a virtual network is added, an interface for each node is created and each will require a virtual network IP address. The number of IP addresses specified as a parameter for this API method must be equal to or greater than the number of nodes in the cluster. Virtual network addresses are bulk provisioned by SolidFire and assigned to individual nodes automatically. Virtual network addresses do not need to be assigned to nodes manually.  Note: The AddVirtualNetwork method is used only to create a new virtual network. If you want to make changes to a virtual network, please use the ModifyVirtualNetwork method. 
+You can use the AddVirtualNetwork method to add a new virtual network to a cluster configuration. When you add a virtual network, an interface for each node is created and each interface will require a virtual network IP address. The number of IP addresses you specify as a parameter for this API method must be equal to or greater than the number of nodes in the cluster. The system bulk provisions virtual network addresses and assigns them to individual nodes automatically. You do not need to assign virtual network addresses to nodes manually. Note: You can use AddVirtualNetwork only to create a new virtual network. If you want to make changes to an existing virtual network, use ModifyVirtualNetwork. Note: Virtual network parameters must be unique to each virtual network when setting the namespace parameter to false. 
 
 Options:
 
 --virtualnetworktag
 
-A unique virtual network (VLAN) tag. Supported values are 1 to 4095 (the number zero (0) is not supported). 
+A unique virtual network (VLAN) tag. Supported values are 1 through 4094.The number zero (0) is not supported. 
 
 --name
 
-User defined name for the new virtual network. 
+A user-defined name for the new virtual network. 
 
 --addressblocks
 
-Unique Range of IP addresses to include in the virtual network. Attributes for this parameter are: start: start of the IP address range. (String) size: numbre of IP addresses to include in the block. (Integer) 
+Unique range of IP addresses to include in the virtual network. Attributes for this parameter are: start: The start of the IP address range. (String) size: The number of IP addresses to include in the block. (Integer) 
 
 --netmask
 
-Unique netmask for the virtual network being created. 
+Unique network mask for the virtual network being created. 
 
 --svip
 
@@ -2223,15 +2223,15 @@ Unique storage IP address for the virtual network being created.
 
 --gateway
 
- 
+The IP address of a gateway of the virtual network. This parameter is only valid if the namespace parameter is set to true. 
 
 --namespace
 
- 
+When set to true, enables the Routable Storage VLANs functionality by creating and configuring a namespace and the virtual network contained by it. 
 
 --attributes
 
-List of Name/Value pairs in JSON object format. 
+List of name-value pairs in JSON object format. 
 
 ---------------------------------------------------------------
 #### list ####
@@ -2241,25 +2241,25 @@ Command:
 
 Description:
 
-ListVirtualNetworks is used to get a list of all the configured virtual networks for the cluster. This method can be used to verify the virtual network settings in the cluster.  This method does not require any parameters to be passed. But, one or more VirtualNetworkIDs or VirtualNetworkTags can be passed in order to filter the results. 
+ListVirtualNetworks enables you to list all configured virtual networks for the cluster. You can use this method to verify the virtual network settings in the cluster. There are no required parameters for this method. However, to filter the results, you can pass one or more VirtualNetworkID or VirtualNetworkTag values. 
 
 Options:
 
 --virtualnetworkid
 
-Network ID to filter the list for a single virtual network 
+Network ID to filter the list for a single virtual network. 
 
 --virtualnetworktag
 
-Network Tag to filter the list for a single virtual network 
+Network tag to filter the list for a single virtual network. 
 
 --virtualnetworkids
 
-NetworkIDs to include in the list. 
+Network IDs to include in the list. 
 
 --virtualnetworktags
 
-Network Tags to include in the list. 
+Network tag to include in the list. 
 
 ---------------------------------------------------------------
 #### remove ####
@@ -2269,7 +2269,7 @@ Command:
 
 Description:
 
-RemoveVirtualNetwork is used to remove a previously added virtual network.  Note: This method requires either the VirtualNetworkID of the VirtualNetworkTag as a parameter, but not both. 
+RemoveVirtualNetwork enables you to remove a previously added virtual network. Note: This method requires either the virtualNetworkID or the virtualNetworkTag as a parameter, but not both. 
 
 Options:
 
@@ -2279,7 +2279,7 @@ Network ID that identifies the virtual network to remove.
 
 --virtualnetworktag
 
-Network Tag that identifies the virtual network to remove. 
+Network tag that identifies the virtual network to remove. 
 
 
 Account Commands 
@@ -2445,7 +2445,7 @@ Command:
 
 Description:
 
-ResetDrives is used to pro-actively initialize drives and remove all data currently residing on the drive. The drive can then be reused in an existing node or used in an upgraded SolidFire node. This method requires the force=true parameter to be included in the method call.  Note: This method is available only through the per-node API endpoint 5.0 or later. 
+ResetDrives enables you to proactively initialize drives and remove all data currently residing on a drive. The drive can then be reused in an existing node or used in an upgraded node. This method requires the force parameter to be included in the method call. 
 
 Options:
 
@@ -2455,7 +2455,7 @@ List of device names (not driveIDs) to reset.
 
 --force
 
-The "force" parameter must be included on this method to successfully reset a drive. 
+Required parameter to successfully reset a drive. 
 
 ---------------------------------------------------------------
 #### secureerase ####
@@ -2465,13 +2465,13 @@ Command:
 
 Description:
 
-SecureEraseDrives is used to remove any residual data from drives that have a status of "available." For example, when replacing a drive at its end-of-life that contained sensitive data. It uses a Security Erase Unit command to write a predetermined pattern to the drive and resets the encryption key on the drive. The method may take up to two minutes to complete, so it is an asynchronous method. The GetAsyncResult method can be used to check on the status of the secure erase operation.  Use the "ListDrives" method to obtain the driveIDs for the drives you want to secure erase. 
+SecureEraseDrives enables you to remove any residual data from drives that have a status of "available." You might want to use this method when replacing a drive nearing the end of its service life that contained sensitive data. This method uses a Security Erase Unit command to write a predetermined pattern to the drive and resets the encryption key on the drive. This asynchronous method might take up to two minutes to complete. You can use GetAsyncResult to check on the status of the secure erase operation. You can use the ListDrives method to obtain the driveIDs for the drives you want to secure erase. 
 
 Options:
 
 --drives
 
-List of driveIDs to secure erase. 
+List of driveIDs to be secure erased. 
 
 ---------------------------------------------------------------
 #### list ####
@@ -2481,7 +2481,7 @@ Command:
 
 Description:
 
-ListDrives allows you to retrieve the list of the drives that exist in the cluster's active nodes. This method returns drives that have been added as volume metadata or block drives as well as drives that have not been added and are available. 
+ListDrives enables you to retrieve the list of the drives that exist in the cluster's active nodes. This method returns drives that have been added as volume metadata or block drives as well as drives that have not been added and are available. 
 
 Options:
 
@@ -2493,7 +2493,7 @@ Command:
 
 Description:
 
-You can use RemoveDrives to proactively remove drives that are part of the cluster. You may want to use this method when reducing cluster capacity or preparing to replace drives nearing the end of their service life. Any data on the drives is removed and migrated to other drives in the cluster before the drive is removed from the cluster. This is an asynchronous method. Depending on the total capacity of the drives being removed, it may take several minutes to migrate all of the data. Use the "GetAsyncResult" method to check the status of the remove operation.  When removing multiple drives, use a single "RemoveDrives" method call rather than multiple individual methods with a single drive each. This reduces the amount of data balancing that must occur to even stabilize the storage load on the cluster.  You can also remove drives with a "failed" status using "RemoveDrives". When you remove a drive with a "failed" status it is not returned to an "available" or "active" status. The drive is unavailable for use in the cluster.  Use the "ListDrives" method to obtain the driveIDs for the drives you want to remove. 
+You can use RemoveDrives to proactively remove drives that are part of the cluster. You might want to use this method when reducing cluster capacity or preparing to replace drives nearing the end of their service life. Any data on the drives is removed and migrated to other drives in the cluster before the drive is removed from the cluster. This is an asynchronous method. Depending on the total capacity of the drives being removed, it might take several minutes to migrate all of the data. Use the GetAsyncResult method to check the status of the remove operation. When removing multiple drives, use a single RemoveDrives method call rather than multiple individual methods with a single drive each. This reduces the amount of data balancing that must occur to even stabilize the storage load on the cluster. You can also remove drives with a "failed" status using RemoveDrives. When you remove a drive with a "failed" status it is not returned to an "available" or active status. The drive is unavailable for use in the cluster. Use the ListDrives method to obtain the driveIDs for the drives you want to remove. 
 
 Options:
 
@@ -2513,13 +2513,13 @@ Command:
 
 Description:
 
-GetDriveHardwareInfo returns all the hardware info for the given drive. This generally includes manufacturers, vendors, versions, and other associated hardware identification information. 
+GetDriveHardwareInfo returns all the hardware information for the given drive. This generally includes details about manufacturers, vendors, versions, and other associated hardware identification information. 
 
 Options:
 
 --driveid
 
-DriveID for the drive information requested. DriveIDs can be obtained via the "ListDrives" method. 
+DriveID for the drive information requested. You can get DriveIDs by using the ListDrives method. 
 
 ---------------------------------------------------------------
 #### add ####
@@ -2529,13 +2529,13 @@ Command:
 
 Description:
 
-AddDrives is used to add one or more available drives to the cluster enabling the drives to host a portion of the cluster's data. When you add a node to the cluster or install new drives in an existing node, the new drives are marked as "available" and must be added via AddDrives before they can be utilized. Use the "ListDrives" method to display drives that are "available" to be added. When you add multiple drives, it is more efficient to add them in a single "AddDrives" method call rather than multiple individual methods with a single drive each. This reduces the amount of data balancing that must occur to stabilize the storage load on the cluster.  When you add a drive, the system automatically determines the "type" of drive it should be.  The method returns immediately. However, it may take some time for the data in the cluster to be rebalanced using the newly added drives. As the new drive(s) are syncing on the system, you can use the "ListSyncJobs" method to see how the drive(s) are being rebalanced and the progress of adding the new drive. 
+AddDrives enables you to add one or more available drives to the cluster, enabling the drives to host a portion of the cluster's data. When you add a node to the cluster or install new drives in an existing node, the new drives are marked as "available" and must be added via AddDrives before they can be utilized. Use the ListDrives method to display drives that are "available" to be added. When you add multiple drives, it is more efficient to add them in a single AddDrives method call rather than multiple individual methods with a single drive each. This reduces the amount of data balancing that must occur to stabilize the storage load on the cluster. When you add a drive, the system automatically determines the "type" of drive it should be. The method is asynchronous and returns immediately. However, it can take some time for the data in the cluster to be rebalanced using the newly added drives. As the new drives are syncing on the system, you can use the ListSyncJobs method to see how the drives are being rebalanced and the progress of adding the new drive. You can also use the GetAsyncResult method to query the method's returned asyncHandle. 
 
 Options:
 
 --drives
 
-List of drives to add to the cluster. 
+Returns information about each drive to be added to the cluster. Possible values are: driveID: The ID of the drive to add. (Integer) type: (Optional) The type of drive to add. Valid values are "slice" or "block". If omitted, the system assigns the correct type. (String) 
 
 --forceduringupgrade
 
@@ -2549,7 +2549,7 @@ Command:
 
 Description:
 
-GetDriveStats return high-level activity measurements for a single drive. Values are cumulative from the addition of the drive to the cluster. Some values are specific to Block Drives. Statistical data may not be returned for both block and metadata drives when running this method. For more information on which drive type returns which data, see Response Example (Block Drive) and Response Example (Volume Metadata Drive) in the SolidFire API guide. 
+GetDriveStats returns high-level activity measurements for a single drive. Values are cumulative from the addition of the drive to the cluster. Some values are specific to block drives. You might not obtain statistical data for both block and metadata drives when you run this method.  
 
 Options:
 
@@ -2565,7 +2565,7 @@ Command:
 
 Description:
 
-GetDriveConfig is used to display drive information for expected slice and block drive counts as well as the number of slices and block drives that are currently connected to the node.  Note: This method is available only through the per-node API endpoint 5.0 or later. 
+GetDriveConfig enables you to display drive information for expected slice and block drive counts as well as the number of slices and block drives that are currently connected to the node. Note: This method is available only through the per-node API endpoint 5.0 or later. 
 
 Options:
 
@@ -2577,13 +2577,13 @@ Command:
 
 Description:
 
-The TestDrives API method is used to run a hardware validation on all the drives on the node. Hardware failures on the drives are detected if present and they are reported in the results of the validation tests.  Note: This test takes approximately 10 minutes.  Note: This method is available only through the per-node API endpoint 5.0 or later. 
+You can use the TestDrives API method to run a hardware validation on all drives on the node. This method detects hardware failures on the drives (if present) and reports them in the results of the validation tests. You can only use the TestDrives method on nodes that are not "active" in a cluster. Note: This test takes approximately 10 minutes. Note: This method is available only through the per-node API endpoint 5.0 or later. 
 
 Options:
 
 --minutes
 
-The number of minutes to run the test can be specified. 
+Specifies the number of minutes to run the test. 
 
 ---------------------------------------------------------------
 #### listhardware ####
@@ -2593,7 +2593,7 @@ Command:
 
 Description:
 
-ListDriveHardware returns all the drives connected to a node. Use this method on the cluster to return drive hardware information for all the drives on all nodes. 
+ListDriveHardware returns all the drives connected to a node. Use this method on individual nodes to return drive hardware information or use this method on the cluster master node MVIP to see information for all the drives on all nodes. Note: The "securitySupported": true line of the method response does not imply that the drives are capable of encryption; only that the security status can be queried. If you have a node type with a model number ending in "-NE", commands to enable security features on these drives will fail. See the EnableEncryptionAtRest method for more information. 
 
 Options:
 
@@ -2611,157 +2611,17 @@ Command:
 
 Description:
 
-ListGroupSnapshots is used to return information about all group snapshots that have been created. 
+ListGroupSnapshots enables you to get information about all group snapshots that have been created. 
 
 Options:
 
 --volumeid
 
-An array of unique volume IDs to query. If this parameter is not specified, all group snapshots on the cluster will be included. 
+An array of unique volume IDs to query. If you do not specify this parameter, all group snapshots on the cluster are included. 
 
 --groupsnapshotid
 
-Get info about individual snapshot 
-
----------------------------------------------------------------
-#### modifygroup ####
-Command:
-
-    sfcli Snapshot modifygroup <options>
-
-Description:
-
-ModifyGroupSnapshot is used to change the attributes currently assigned to a group snapshot. 
-
-Options:
-
---groupsnapshotid
-
-ID of the snapshot. 
-
---expirationtime
-
-Use to set the time when the snapshot should be removed. 
-
---enableremotereplication
-
-Use to enable the snapshot created to be replicated to a remote SolidFire cluster. Possible values: true: the snapshot will be replicated to remote storage. false: Default. No replication. 
-
----------------------------------------------------------------
-#### list ####
-Command:
-
-    sfcli Snapshot list <options>
-
-Description:
-
-ListSnapshots is used to return the attributes of each snapshot taken on the volume. 
-
-Options:
-
---volumeid
-
-The volume to list snapshots for. If not provided, all snapshots for all volumes are returned. 
-
---snapshotid
-
-ListSnapshots is used to return the attributes of each snapshot taken on the volume. 
-
----------------------------------------------------------------
-#### create ####
-Command:
-
-    sfcli Snapshot create <options>
-
-Description:
-
-CreateSnapshot is used to create a point-in-time copy of a volume. A snapshot can be created from any volume or from an existing snapshot.  Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. 
-
-Options:
-
---volumeid
-
-ID of the volume image from which to copy. 
-
---snapshotid
-
-Unique ID of a snapshot from which the new snapshot is made. The snapshotID passed must be a snapshot on the given volume. If a SnapshotID is not provided, a snapshot is created from the volume's active branch. 
-
---name
-
-A name for the snapshot. If no name is provided, the date and time the snapshot was taken is used. 
-
---enableremotereplication
-
-Identifies if snapshot is enabled for remote replication. 
-
---retention
-
-The amount of time the snapshot will be retained. Enter in HH:mm:ss 
-
---attributes
-
-List of Name/Value pairs in JSON object format. 
-
----------------------------------------------------------------
-#### modify ####
-Command:
-
-    sfcli Snapshot modify <options>
-
-Description:
-
-ModifySnapshot is used to change the attributes currently assigned to a snapshot. Use this API method to enable the snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system. 
-
-Options:
-
---snapshotid
-
-ID of the snapshot. 
-
---expirationtime
-
-Use to set the time when the snapshot should be removed. 
-
---enableremotereplication
-
-Use to enable the snapshot created to be replicated to a remote SolidFire cluster. Possible values: true: the snapshot will be replicated to remote storage. false: Default. No replication. 
-
----------------------------------------------------------------
-#### deletegroup ####
-Command:
-
-    sfcli Snapshot deletegroup <options>
-
-Description:
-
-DeleteGroupSnapshot is used to delete a group snapshot. The saveMembers parameter can be used to preserve all the snapshots that were made for the volumes in the group but the group association will be removed. 
-
-Options:
-
---groupsnapshotid
-
-Unique ID of the group snapshot. 
-
---savemembers
-
-true: Snapshots are kept, but group association is removed. false: The group and snapshots are deleted. 
-
----------------------------------------------------------------
-#### createschedule ####
-Command:
-
-    sfcli Snapshot createschedule <options>
-
-Description:
-
-CreateSchedule is used to create a schedule that will autonomously make a snapshot of a volume at a defined interval.  The snapshot created can be used later as a backup or rollback to ensure the data on a volume or group of volumes is consistent for the point in time in which the snapshot was created.   Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. 
-
-Options:
-
---schedule
-
-The "Schedule" object will be used to create a new schedule. Do not set ScheduleID property, it will be ignored. Frequency property must be of type that inherits from Frequency. Valid types are: DaysOfMonthFrequency DaysOrWeekFrequency TimeIntervalFrequency 
+Retrieves information for a specific group snapshot ID. 
 
 ---------------------------------------------------------------
 #### getschedule ####
@@ -2771,13 +2631,153 @@ Command:
 
 Description:
 
-GetSchedule is used to return information about a scheduled snapshot that has been created. You can see information about a specified schedule if there are many snapshot schedules in the system. You can include more than one schedule with this method by specifying additional scheduleIDs to the parameter. 
+You can use the GetSchedule method to retrieve information about a scheduled snapshot. You can see information about a specific schedule if there are many snapshot schedules in the system. You also retrieve information about more than one schedule with this method by specifying additional scheduleIDs in the parameter. 
 
 Options:
 
 --scheduleid
 
-Unique ID of the schedule or multiple schedules to display 
+Specifies the unique ID of the schedule or multiple schedules to display. 
+
+---------------------------------------------------------------
+#### list ####
+Command:
+
+    sfcli Snapshot list <options>
+
+Description:
+
+ListSnapshots enables you to return the attributes of each snapshot taken on the volume. Information about snapshots that reside on the target cluster is displayed on the source cluster when this method is called from the source cluster. 
+
+Options:
+
+--volumeid
+
+Retrieves snapshots for a volume. If volumeID is not provided, all snapshots for all volumes are returned. 
+
+--snapshotid
+
+Retrieves information for a specific snapshot ID. 
+
+---------------------------------------------------------------
+#### create ####
+Command:
+
+    sfcli Snapshot create <options>
+
+Description:
+
+CreateSnapshot enables you to create a point-in-time copy of a volume. You can create a snapshot from any volume or from an existing snapshot. If you do not provide a SnapshotID with this API method, a snapshot is created from the volume's active branch. If the volume from which the snapshot is created is being replicated to a remote cluster, the snapshot can also be replicated to the same target. Use the enableRemoteReplication parameter to enable snapshot replication. Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. 
+
+Options:
+
+--volumeid
+
+Specifies the unique ID of the volume image from which to copy. 
+
+--snapshotid
+
+Specifies the unique ID of a snapshot from which the new snapshot is made. The snapshotID passed must be a snapshot on the given volume. 
+
+--name
+
+Specifies a name for the snapshot. If unspecified, the date and time the snapshot was taken is used. 
+
+--enableremotereplication
+
+Replicates the snapshot created to a remote cluster. Possible values are: true: The snapshot is replicated to remote storage. false: Default. The snapshot is not replicated. 
+
+--retention
+
+Specifies the amount of time for which the snapshot is retained. The format is HH:mm:ss. 
+
+--attributes
+
+List of name-value pairs in JSON object format. 
+
+---------------------------------------------------------------
+#### modify ####
+Command:
+
+    sfcli Snapshot modify <options>
+
+Description:
+
+ModifySnapshot enables you to change the attributes currently assigned to a snapshot. You can use this method to enable snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system. 
+
+Options:
+
+--snapshotid
+
+Specifies the ID of the snapshot. 
+
+--expirationtime
+
+Sets the time when the snapshot should be removed. 
+
+--enableremotereplication
+
+Replicates the snapshot created to a remote cluster. Possible values are: true: The snapshot is replicated to remote storage. false: Default. The snapshot is not replicated. 
+
+---------------------------------------------------------------
+#### createschedule ####
+Command:
+
+    sfcli Snapshot createschedule <options>
+
+Description:
+
+CreateSchedule enables you to schedule an automatic snapshot of a volume at a defined interval. You can use the created snapshot later as a backup or rollback to ensure the data on a volume or group of volumes is consistent for the point in time in which the snapshot was created. If you schedule a snapshot to run at a time period that is not divisible by 5 minutes, the snapshot runs at the next time period that is divisible by 5 minutes. For example, if you schedule a snapshot to run at 12:42:00 UTC, it runs at 12:45:00 UTC. Note: You can create snapshots if cluster fullness is at stage 1, 2 or 3. You cannot create snapshots after cluster fullness reaches stage 4 or 5. 
+
+Options:
+
+--schedule
+
+The "Schedule" object will be used to create a new schedule. Do not set ScheduleID property, it will be ignored. Frequency property must be of type that inherits from Frequency. Valid types are: DaysOfMonthFrequency DaysOrWeekFrequency TimeIntervalFrequency 
+
+---------------------------------------------------------------
+#### deletegroup ####
+Command:
+
+    sfcli Snapshot deletegroup <options>
+
+Description:
+
+DeleteGroupSnapshot enables you to delete a group snapshot. You can use the saveMembers parameter to preserve all the snapshots that were made for the volumes in the group, but the group association is removed. 
+
+Options:
+
+--groupsnapshotid
+
+Specifies the unique ID of the group snapshot. 
+
+--savemembers
+
+Specifies whether to preserve snapshots or delete them. Valid values are: true: Snapshots are preserved, but group association is removed. false: The group and snapshots are deleted. 
+
+---------------------------------------------------------------
+#### modifygroup ####
+Command:
+
+    sfcli Snapshot modifygroup <options>
+
+Description:
+
+ModifyGroupSnapshot enables you to change the attributes of a group of snapshots. You can also use this method to enable snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system. 
+
+Options:
+
+--groupsnapshotid
+
+Specifies the ID of the group of snapshots. 
+
+--expirationtime
+
+Sets the time when the snapshot should be removed. If unspecified, the current time is used. 
+
+--enableremotereplication
+
+Replicates the snapshot created to a remote cluster. Possible values are: true: The snapshot is replicated to remote storage. false: Default. The snapshot is not replicated. 
 
 ---------------------------------------------------------------
 #### rollbacktogroup ####
@@ -2787,25 +2787,25 @@ Command:
 
 Description:
 
-RollbackToGroupSnapshot is used to roll back each individual volume in a snapshot group to a copy of their individual snapshots.  Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. 
+RollbackToGroupSnapshot enables you to roll back all individual volumes in a snapshot group to each volume's individual snapshot. Note: Rolling back to a group snapshot creates a temporary snapshot of each volume within the group snapshot. Snapshots are allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. 
 
 Options:
 
 --groupsnapshotid
 
-Unique ID of the group snapshot. 
+Specifies the unique ID of the group snapshot. 
 
 --savecurrentstate
 
-true: The previous active volume image is kept. false: (default) The previous active volume image is deleted. 
+Specifies whether to save an active volume image or delete it. Values are: true: The previous active volume image is kept. false: (default) The previous active volume image is deleted. 
 
 --name
 
-Name for the snapshot. If no name is given, then the name of the snapshot being rolled back to is used with  "-copy" appended to the end of the name. 
+Name for the group snapshot of the volume's current state that is created if "saveCurrentState" is set to true. If you do not give a name, the name of the snapshots (group and individual volume) are set to a timestamp of the time that the rollback occurred. 
 
 --attributes
 
-List of Name/Value pairs in JSON object format 
+List of name-value pairs in JSON object format. 
 
 ---------------------------------------------------------------
 #### rollbackto ####
@@ -2815,7 +2815,7 @@ Command:
 
 Description:
 
-RollbackToSnapshot is used to make an existing snapshot the "active" volume image. This method creates a new  snapshot from an existing snapshot. The new snapshot becomes "active" and the existing snapshot is preserved until  it is manually deleted. The previously "active" snapshot is deleted unless the parameter saveCurrentState is set with  a value of "true." Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. 
+RollbackToSnapshot enables you to make an existing snapshot of the "active" volume image. This method creates a new snapshot from an existing snapshot. The new snapshot becomes "active" and the existing snapshot is preserved until you delete it. The previously "active" snapshot is deleted unless you set the parameter saveCurrentState to true. Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. 
 
 Options:
 
@@ -2825,19 +2825,19 @@ VolumeID for the volume.
 
 --snapshotid
 
-ID of a previously created snapshot on the given volume. 
+The ID of a previously created snapshot on the given volume. 
 
 --savecurrentstate
 
-true: The previous active volume image is kept. false: (default) The previous active volume image is deleted. 
+Specifies whether to save an active volume image or delete it. Values are: true: The previous active volume image is kept. false: (default) The previous active volume image is deleted. 
 
 --name
 
-Name for the snapshot. If no name is given, then the name of the snapshot being rolled back to is used with  "-copy" appended to the end of the name. 
+Name for the snapshot. If unspecified, the name of the snapshot being rolled back to is used with "- copy" appended to the end of the name. 
 
 --attributes
 
-List of Name/Value pairs in JSON object format 
+List of name-value pairs in JSON object format. 
 
 ---------------------------------------------------------------
 #### creategroup ####
@@ -2847,7 +2847,7 @@ Command:
 
 Description:
 
-CreateGroupSnapshot is used to create a point-in-time copy of a group of volumes. The snapshot created can then be used later as a backup or rollback to ensure the data on the group of volumes is consistent for the point in time in which the snapshot was created.  Note: Creating a group snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. 
+CreateGroupSnapshot enables you to create a point-in-time copy of a group of volumes. You can use this snapshot later as a backup or rollback to ensure the data on the group of volumes is consistent for the point in time that you created the snapshot. Note: Creating a group snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. 
 
 Options:
 
@@ -2857,19 +2857,19 @@ Unique ID of the volume image from which to copy.
 
 --name
 
-A name for the snapshot. If no name is provided, the date and time the snapshot was taken is used. 
+Name for the group snapshot. If unspecified, the date and time the group snapshot was taken is used. 
 
 --enableremotereplication
 
-Identifies if snapshot is enabled for remote replication. 
+Replicates the snapshot created to remote storage. Possible values are: true: The snapshot is replicated to remote storage. false: Default. The snapshot is not replicated. 
 
 --retention
 
-The amount of time the snapshot will be retained. Enter in HH:mm:ss 
+Specifies the amount of time for which the snapshots are retained. The format is HH:mm:ss. 
 
 --attributes
 
-List of Name/Value pairs in JSON object format. 
+List of name-value pairs in JSON object format. 
 
 ---------------------------------------------------------------
 #### modifyschedule ####
@@ -2879,7 +2879,7 @@ Command:
 
 Description:
 
-ModifySchedule is used to change the intervals at which a scheduled snapshot occurs. This allows for adjustment to the snapshot frequency and retention. 
+ModifySchedule enables you to change the intervals at which a scheduled snapshot occurs. This allows for adjustment to the snapshot frequency and retention. 
 
 Options:
 
@@ -2895,7 +2895,7 @@ Command:
 
 Description:
 
-ListSchedule is used to return information about all scheduled snapshots that have been created. 
+ListSchedule enables you to retrieve information about all scheduled snapshots that have been created. 
 
 Options:
 
@@ -2907,13 +2907,13 @@ Command:
 
 Description:
 
-DeleteSnapshot is used to delete a snapshot. A snapshot that is currently the "active" snapshot cannot be deleted. You must rollback and make another snapshot "active" before the current snapshot can be deleted. To rollback a snapshot, use RollbackToSnapshot. 
+DeleteSnapshot enables you to delete a snapshot. A snapshot that is currently the "active" snapshot cannot be deleted. You must rollback and make another snapshot "active" before the current snapshot can be deleted. For more details on rolling back snapshots, see RollbackToSnapshot. 
 
 Options:
 
 --snapshotid
 
-The ID of the snapshot to delete. 
+The ID of the snapshot to be deleted. 
 
 
 Initiators Commands 
@@ -2925,13 +2925,13 @@ Command:
 
 Description:
 
-ModifyInitiators enables you to change the attributes of an existing initiator. You cannot change the name of an existing initiator. If you need to change the name of an initiator, delete the existing initiator with DeleteInitiators and create a new one with CreateInitiators. If ModifyInitiators fails to change one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible). 
+ModifyInitiators enables you to change the attributes of one or more existing initiators. You cannot change the name of an existing initiator. If you need to change the name of an initiator, delete it first with DeleteInitiators and create a new one with CreateInitiators. If ModifyInitiators fails to change one of the initiators provided in the parameter, the method returns an error and does not modify any initiators (no partial completion is possible). 
 
 Options:
 
 --initiators
 
-A list of Initiator objects containing characteristics of each initiator to modify. 
+A list of objects containing characteristics of each initiator to modify. Values are: initiatorID: (Required) The ID of the initiator to modify. (Integer) alias: (Optional) A new friendly name to assign to the initiator. (String) attributes: (Optional) A new set of JSON attributes to assign to the initiator. (JSON Object) volumeAccessGroupID: (Optional) The ID of the volume access group into to which the initiator should be added. If the initiator was previously in a different volume access group, it is removed from the old volume access group. If this key is present but null, the initiator is removed from its current volume access group, but not placed in any new volume access group. (Integer) 
 
 ---------------------------------------------------------------
 #### create ####
@@ -2947,7 +2947,7 @@ Options:
 
 --initiators
 
-A list of Initiator objects containing characteristics of each new initiator 
+A list of objects containing characteristics of each new initiator. Values are: name: (Required) The name of the initiator (IQN or WWPN) to create. (String) alias: (Optional) The friendly name to assign to this initiator. (String) attributes: (Optional) A set of JSON attributes to assign to this initiator. (JSON Object) volumeAccessGroupID: (Optional) The ID of the volume access group into to which this newly created initiator will be added. (Integer) 
 
 ---------------------------------------------------------------
 #### list ####
@@ -2971,7 +2971,7 @@ The maximum number of initiator objects to return.
 
 --initiators
 
-A list of initiator IDs to retrieve. You can supply this parameter or the "startInitiatorID" parameter, but not both. 
+A list of initiator IDs to retrieve. You can provide a value for this parameter or the "startInitiatorID" parameter, but not both. 
 
 ---------------------------------------------------------------
 #### delete ####
@@ -3197,13 +3197,13 @@ Command:
 
 Description:
 
-ListVirtualVolumeTasks returns a list of VVol Async Tasks. 
+ListVirtualVolumeTasks returns a list of virtual volume tasks in the system. 
 
 Options:
 
 --virtualvolumetaskids
 
- 
+A list of virtual volume task IDs for which to retrieve information. If unspecified, the method returns information about all virtual volume tasks. 
 
 ---------------------------------------------------------------
 #### create ####
@@ -3373,13 +3373,13 @@ Command:
 
 Description:
 
-ListVirtualVolumeHosts returns a list of known ESX hosts. 
+ListVirtualVolumeHosts returns a list of all virtual volume hosts known to the cluster. A virtual volume host is a VMware ESX host that has initiated a session with the VASA API provider. 
 
 Options:
 
 --virtualvolumehostids
 
- 
+A list of virtual volume host IDs for which to retrieve information. If unspecified, the method returns information about all virtual volume hosts. 
 
 ---------------------------------------------------------------
 #### rollback ####
@@ -3541,13 +3541,13 @@ Command:
 
 Description:
 
-GetFeatureStatus allows you to retrieve the status of a cluster feature. 
+GetFeatureStatus enables you to retrieve the status of a cluster feature. 
 
 Options:
 
 --feature
 
-Valid values: vvols: Find the status of the Virtual Volumes (VVOLs) cluster feature. 
+Specifies the feature for which the status is returned. Valid value is: vvols: Retrieve status for the NetApp SolidFire VVols cluster feature. 
 
 ---------------------------------------------------------------
 #### unbind ####
@@ -3647,7 +3647,7 @@ Options:
 
 --details
 
-Possible values:true: Include more details about each VVOL in the response.false: Include the standard level of detail about each VVOL in the response. 
+Specifies the level of detail about each virtual volume that is returned. Possible values are: true: Include more details about each virtual volume in the response. false: Include the standard level of detail about each virtual volume in the response. 
 
 --limit
 
@@ -3655,7 +3655,7 @@ The maximum number of virtual volumes to list.
 
 --recursive
 
-Possible values:true: Include information about the children of each VVOL in the response.false: Do not include information about the children of each VVOL in the response. 
+Specifies whether to include information about the children of each virtual volume in the response. Possible values are: true: Include information about the children of each virtual volume in the response. false: Do not include information about the children of each virtual volume in the response. 
 
 --startvirtualvolumeid
 
@@ -3663,7 +3663,7 @@ The ID of the virtual volume at which to begin the list.
 
 --virtualvolumeids
 
-A list of virtual volume  IDs for which to retrieve information. If you specify this parameter, the method returns information about only these virtual volumes. 
+A list of virtual volume IDs for which to retrieve information. If you specify this parameter, the method returns information about only these virtual volumes. 
 
 ---------------------------------------------------------------
 #### getvasaproviderinfo ####
@@ -3713,13 +3713,13 @@ Command:
 
 Description:
 
-ListVirtualVolumeBindings returns a list of VVol bindings. 
+ListVirtualVolumeBindings returns a list of all virtual volumes in the cluster that are bound to protocol endpoints. 
 
 Options:
 
 --virtualvolumebindingids
 
- 
+A list of virtual volume binding IDs for which to retrieve information. If unspecified, the method returns information about all virtual volume bindings. 
 
 ---------------------------------------------------------------
 #### getcount ####
@@ -3741,13 +3741,13 @@ Command:
 
 Description:
 
-EnableFeature allows you to enable cluster features that are disabled by default. 
+You can use EnableFeature to enable cluster features that are disabled by default. 
 
 Options:
 
 --feature
 
-Valid values: vvols: Enable the Virtual Volumes (VVOLs) cluster feature. 
+Indicates which feature to enable. Valid value is: vvols: Enable the NetApp SolidFire VVols cluster feature. 
 
 ---------------------------------------------------------------
 #### delete ####
@@ -3779,41 +3779,13 @@ Command:
 
 Description:
 
-GetNvramInfo allows you to retrieve information from each node about the NVRAM card.   
+GetNvramInfo enables you to retrieve information from each node about the NVRAM card. 
 
 Options:
 
 --force
 
-GetNvramInfo allows you to retrieve information from each node about the NVRAM card.   
-
----------------------------------------------------------------
-#### getconfig ####
-Command:
-
-    sfcli Hardware getconfig <options>
-
-Description:
-
-GetHardwareConfig enables you to display the hardware configuration information for a node. NOTE: This method is available only through the per-node API endpoint 5.0 or later. 
-
-Options:
-
----------------------------------------------------------------
-#### getclusterinfo ####
-Command:
-
-    sfcli Hardware getclusterinfo <options>
-
-Description:
-
-You can use the GetClusterHardwareInfo method to retrieve the hardware status and information for all Fibre Channel nodes, iSCSI nodes and drives in the cluster. This generally includes manufacturers, vendors, versions, and other associated hardware identification information. 
-
-Options:
-
---type
-
-Include only a certain type of hardware information in the response. Can be one of the following:drives: List only drive information in the response.nodes: List only node information in the response.all: Include both drive and node information in the response.If this parameter is omitted, a type of "all" is assumed. 
+Required parameter to successfully run on all nodes in the cluster. 
 
 ---------------------------------------------------------------
 #### getnodeinfo ####
@@ -3823,13 +3795,41 @@ Command:
 
 Description:
 
-GetNodeHardwareInfo is used to return all the hardware info and status for the node specified. This generally includes manufacturers, vendors, versions, and other associated hardware identification information. 
+GetNodeHardwareInfo enables you to return all the hardware information and status for the node specified. This generally includes details about manufacturers, vendors, versions, and other associated hardware identification information. 
 
 Options:
 
 --nodeid
 
-The ID of the node for which hardware information is being requested.  Information about a  node is returned if a   node is specified. 
+The ID of the node for which hardware information is being requested. Information about a Fibre Channel node is returned if a Fibre Channel node is specified. 
+
+---------------------------------------------------------------
+#### getclusterinfo ####
+Command:
+
+    sfcli Hardware getclusterinfo <options>
+
+Description:
+
+You can use the GetClusterHardwareInfo method to retrieve the hardware status and information for all Fibre Channel nodes, iSCSI nodes and drives in the cluster. This generally includes details about manufacturers, vendors, versions, and other associated hardware identification information. 
+
+Options:
+
+--type
+
+Includes only a certain type of hardware information in the response. Possible values are: drives: List only drive information in the response. nodes: List only node information in the response. all: Include both drive and node information in the response. If this parameter is omitted, a type of "all" is assumed. 
+
+---------------------------------------------------------------
+#### getconfig ####
+Command:
+
+    sfcli Hardware getconfig <options>
+
+Description:
+
+GetHardwareConfig enables you to display the hardware configuration information for a node. Note: This method is available only through the per-node API endpoint 5.0 or later. 
+
+Options:
 
 
 Cluster Commands 
@@ -3930,16 +3930,32 @@ GetSystemStatus enables you to return whether a reboot ir required or not.
 Options:
 
 ---------------------------------------------------------------
-#### getversioninfo ####
+#### setsnmptrapinfo ####
 Command:
 
-    sfcli Cluster getversioninfo <options>
+    sfcli Cluster setsnmptrapinfo <options>
 
 Description:
 
-GetClusterVersionInfo enables you to retrieve information about the Element software version running on each node in the cluster. This method also returns information about nodes that are currently in the process of upgrading software. 
+You can use SetSnmpTrapInfo to enable and disable the generation of cluster SNMP notifications (traps) and to specify the set of network host computers that receive the notifications. The values you pass with each SetSnmpTrapInfo method call replace all values set in any previous call to SetSnmpTrapInfo. 
 
 Options:
+
+--traprecipients
+
+List of hosts that are to receive the traps generated by the Cluster Master. At least one object is required if any one of the trap types is enabled. 
+
+--clusterfaulttrapsenabled
+
+If the value is set to true, a corresponding solidFireClusterFaultNotification is sent to the configured list of trap recipients when a cluster fault is logged. The default value is false. 
+
+--clusterfaultresolvedtrapsenabled
+
+If the value is set to true, a corresponding solidFireClusterFaultResolvedNotification is sent to the configured list of trap recipients when a cluster fault is resolved. The default value is false. 
+
+--clustereventtrapsenabled
+
+If the value is set to true, a corresponding solidFireClusterEventNotification is sent to the configured list of trap recipients when a cluster event is logged. The default value is false. 
 
 ---------------------------------------------------------------
 #### listfaults ####
@@ -3949,7 +3965,7 @@ Command:
 
 Description:
 
-ListClusterFaults is used to retrieve information about any faults detected on the cluster. With this method, both current and resolved faults can be retrieved. The system caches faults every 30 seconds. 
+ListClusterFaults enables you to retrieve information about any faults detected on the cluster. With this method, you can retrieve both current faults as well as faults that have been resolved. The system caches faults every 30 seconds. 
 
 Options:
 
@@ -3959,7 +3975,7 @@ Options:
 
 --bestpractices
 
-Include faults triggered by sub-optimal system configuration. Possible values: true, false 
+Specifies whether to include faults triggered by suboptimal system configuration. Possible values are: true false 
 
 --update
 
@@ -3967,7 +3983,7 @@ Include faults triggered by sub-optimal system configuration. Possible values: t
 
 --faulttypes
 
-Determines the types of faults returned: current: List active, unresolved faults. resolved: List faults that were previously detected and resolved. all: (Default) List both current and resolved faults. You can see the fault status in the 'resolved' field of the Cluster Fault object. 
+Determines the types of faults returned. Possible values are: current: List active, unresolved faults. resolved: List faults that were previously detected and resolved. all: (Default) List both current and resolved faults. You can see the fault status in the resolved field of the Cluster Fault object. 
 
 ---------------------------------------------------------------
 #### listadmins ####
@@ -4081,17 +4097,17 @@ Command:
 
 Description:
 
-SetNtpInfo is used to configure the NTP on cluster nodes. The values set with this interface apply to all nodes in the cluster. The nodes can only be configured as a server where a host is selected to administrate the networking and/or a broadcast client where each host sends each message to each peer. 
+SetNtpInfo enables you to configure NTP on cluster nodes. The values you set with this interface apply to all nodes in the cluster. If an NTP broadcast server periodically broadcasts time information on your network, you can optionally configure nodes as broadcast clients. Note: NetApp recommends using NTP servers that are internal to your network, rather than the installation defaults. 
 
 Options:
 
 --servers
 
-List of NTP servers to add to each node's NTP configuration. 
+List of NTP servers to add to each nodes NTP configuration. 
 
 --broadcastclient
 
-Enable every node in the cluster as a broadcase client. 
+Enables every node in the cluster as a broadcast client. 
 
 ---------------------------------------------------------------
 #### setconfig ####
@@ -4101,13 +4117,13 @@ Command:
 
 Description:
 
-The SetClusterConfig API method is used to set the configuration this node uses to communicate with the cluster it is associated with. To see the states in which these objects can be modified see Cluster Object on page 109. To display the current cluster interface settings for a node, run the GetClusterConfig API method.  Note: This method is available only through the per-node API endpoint 5.0 or later. 
+The SetClusterConfig API method enables you to set the configuration this node uses to communicate with the cluster it is associated with. To see the states in which these objects can be modified, see Cluster Object Attributes. To display the current cluster interface settings for a node, run the GetClusterConfig API method. Note: This method is available only through the per-node API endpoint 5.0 or later. 
 
 Options:
 
 --cluster
 
-Objects that are changed for the cluster interface settings. Only the fields you want changed need to be added to this method as objects in the "cluster" parameter. 
+Objects that are changed for the cluster interface settings. 
 
 ---------------------------------------------------------------
 #### modifyadmin ####
@@ -4117,25 +4133,25 @@ Command:
 
 Description:
 
-ModifyClusterAdmin is used to change the settings for a Cluster Admin or LDAP Cluster Admin. Access for the administrator Cluster Admin account cannot be changed. 
+You can use ModifyClusterAdmin to change the settings for a cluster admin or LDAP cluster admin. You cannot change access for the administrator cluster admin account. 
 
 Options:
 
 --clusteradminid
 
-ClusterAdminID for the Cluster Admin or LDAP Cluster Admin to modify. 
+ClusterAdminID for the cluster admin or LDAP cluster admin to modify. 
 
 --password
 
-Password used to authenticate this Cluster Admin. 
+Password used to authenticate this cluster admin. 
 
 --access
 
-Controls which methods this Cluster Admin can use. For more details on the levels of access, see "Access Control" in the Element API Guide. 
+Controls which methods this cluster admin can use. For more details, see Access Control in the Element API Reference Guide. 
 
 --attributes
 
-List of Name/Value pairs in JSON object format. 
+List of name-value pairs in JSON object format. 
 
 ---------------------------------------------------------------
 #### getsnmptrapinfo ####
@@ -4189,13 +4205,13 @@ Command:
 
 Description:
 
-ClearClusterFaults is used to clear information about both current faults that are resolved as well as faults that were previously detected and resolved can be cleared. 
+You can use the ClearClusterFaults method to clear information about both current and previously detected faults. Both resolved and unresolved faults can be cleared. 
 
 Options:
 
 --faulttypes
 
-Determines the types of faults cleared: current: Faults that are currently detected and have not been resolved. resolved: Faults that were previously detected and resolved. all: Both current and resolved faults are cleared. The fault status can be determined by the "resolved" field of the fault object. 
+Determines the types of faults cleared. Possible values are: current: Faults that are currently detected and have not been resolved. resolved: (Default) Faults that were previously detected and resolved. all: Both current and resolved faults are cleared. The fault status can be determined by the resolved field of the fault object. 
 
 ---------------------------------------------------------------
 #### removeadmin ####
@@ -4205,13 +4221,13 @@ Command:
 
 Description:
 
-RemoveClusterAdmin is used to remove a Cluster Admin. The "admin" Cluster Admin cannot be removed. 
+You can use RemoveClusterAdmin to remove a Cluster Admin. You cannot remove the administrator cluster admin account. 
 
 Options:
 
 --clusteradminid
 
-ClusterAdminID for the Cluster Admin to remove. 
+ClusterAdminID for the cluster admin to remove. 
 
 ---------------------------------------------------------------
 #### getstats ####
@@ -4309,37 +4325,21 @@ Command:
 
 Description:
 
-ListSyncJobs is used to return information about synchronization jobs that are running on a SolidFire cluster. Synchronization jobs that are returned with this method are, "slice," "clone" and "remote." 
+ListSyncJobs enables you to return information about synchronization jobs that are running on a SolidFire cluster. The type of synchronization jobs that are returned with this method are slice, clone, and remote. 
 
 Options:
 
 ---------------------------------------------------------------
-#### setsnmptrapinfo ####
+#### getversioninfo ####
 Command:
 
-    sfcli Cluster setsnmptrapinfo <options>
+    sfcli Cluster getversioninfo <options>
 
 Description:
 
-SetSnmpTrapInfo is used to enable and disable the generation of SolidFire SNMP notifications (traps) and to specify the set of network host computers that are to receive the notifications. The values passed with each SetSnmpTrapInfo method replaces all values set in any previous method to SetSnmpTrapInfo. 
+GetClusterVersionInfo enables you to retrieve information about the Element software version running on each node in the cluster. This method also returns information about nodes that are currently in the process of upgrading software. 
 
 Options:
-
---traprecipients
-
-List of hosts that are to receive the traps generated by the Cluster Master. At least one object is required if any one of the trap types is enabled. 
-
---clusterfaulttrapsenabled
-
-If "true", when a cluster fault is logged a corresponding solidFireClusterFaultNotification is sent to the configured list of trap recipients. 
-
---clusterfaultresolvedtrapsenabled
-
-If "true", when a cluster fault is logged a corresponding solidFireClusterFaultResolvedNotification is sent to the configured list of trap recipients. 
-
---clustereventtrapsenabled
-
-If "true", when a cluster fault is logged a corresponding solidFireClusterEventNotification is sent to the configured list of trap recipients. 
 
 ---------------------------------------------------------------
 #### setsnmpacl ####
@@ -4349,17 +4349,17 @@ Command:
 
 Description:
 
-SetSnmpACL is used to configure SNMP access permissions on the cluster nodes. The values set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to SetSnmpACL. Also note that the values set with this interface replace all "network" or "usmUsers" values set with the older SetSnmpInfo. 
+SetSnmpACL enables you to configure SNMP access permissions on the cluster nodes. The values you set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to SetSnmpACL. Also note that the values set with this interface replace all network or usmUsers values set with the older SetSnmpInfo. 
 
 Options:
 
 --networks
 
-List of networks and what type of access they have to the SNMP servers running on the cluster nodes. See SNMP Network Object for possible "networks" values. REQUIRED if SNMP v# is disabled. 
+List of networks and what type of access they have to the SNMP servers running on the cluster nodes. See SNMP Network Object for possible "networks" values. This parameter is required if SNMP v3 is disabled. 
 
 --usmusers
 
-List of users and the type of access they have to the SNMP servers running on the cluster nodes. REQUIRED if SNMP v3 is enabled. 
+List of users and the type of access they have to the SNMP servers running on the cluster nodes. 
 
 ---------------------------------------------------------------
 #### snmpsendtesttraps ####
@@ -4421,21 +4421,21 @@ Command:
 
 Description:
 
-ModifyClusterFullThreshold is used to change the level at which an event is generated when the storage cluster approaches the capacity utilization requested. The number entered in this setting is used to indicate the number of node failures the system is required to recover from. For example, on a 10 node cluster, if you want to be alerted when the system cannot recover from 3 nodes failures, enter the value of "3". When this number is reached, a message alert is sent to the Event Log in the Cluster Management Console. 
+You can use ModifyClusterFullThreshold to change the level at which the system generates an event when the storage cluster approaches a certain capacity utilization. You can use the threshold setting to indicate the acceptable amount of utilized block storage before the system generates a warning. For example, if you want to be alerted when the system reaches 3% below the "Error" level block storage utilization, enter a value of "3" for the stage3BlockThresholdPercent parameter. If this level is reached, the system sends an alert to the Event Log in the Cluster Management Console. 
 
 Options:
 
 --stage2awarethreshold
 
-Number of nodes worth of capacity remaining on the cluster that triggers a notification. 
+The number of nodes of capacity remaining in the cluster before the system triggers a capacity notification. 
 
 --stage3blockthresholdpercent
 
-Percent below "Error" state to raise a cluster "Warning" alert. 
+The percentage of block storage utilization below the "Error" threshold that causes the system to trigger a cluster "Warning" alert. 
 
 --maxmetadataoverprovisionfactor
 
-A value representative of the number of times metadata space can be over provisioned relative to the amount of space available. For example, if there was enough metadata space to store 100 TiB of volumes and this number was set to 5, then 500 TiB worth of volumes could be created. 
+A value representative of the number of times metadata space can be overprovisioned relative to the amount of space available. For example, if there was enough metadata space to store 100 TiB of volumes and this number was set to 5, then 500 TiB worth of volumes can be created. 
 
 ---------------------------------------------------------------
 #### getmasternodeid ####
@@ -4457,25 +4457,25 @@ Command:
 
 Description:
 
-SetSnmpInfo is used to configure SNMP v2 and v3 on the cluster nodes. The values set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to SetSnmpInfo.  Note: EnableSnmp and SetSnmpACL methods can be used to accomplish the same results as SetSnmpInfo. SetSnmpInfo will no integerer be available after the Element 8 release. Please use EnableSnmp and SetSnmpACL in the future. 
+SetSnmpInfo enables you to configure SNMP version 2 and version 3 on cluster nodes. The values you set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to SetSnmpInfo. Note: SetSnmpInfo is deprecated. Use the EnableSnmp and SetSnmpACL methods instead. 
 
 Options:
 
 --networks
 
-List of networks and what type of access they have to the SNMP servers running on the cluster nodes. See SNMP Network Object for possible "networks" values. SNMP v2 only. 
+List of networks and what type of access they have to the SNMP servers running on the cluster nodes. See the SNMP Network Object for possible "networks" values. This parameter is required only for SNMP v2. 
 
 --enabled
 
-If set to "true", then SNMP is enabled on each node in the cluster. 
+If set to true, SNMP is enabled on each node in the cluster. 
 
 --snmpv3enabled
 
-If set to "true", then SNMP v3 is enabled on each node in the cluster. 
+If set to true, SNMP v3 is enabled on each node in the cluster. 
 
 --usmusers
 
-If SNMP v3 is enabled, this value must be passed in place of the "networks" parameter. SNMP v3 only. 
+If SNMP v3 is enabled, this value must be passed in place of the networks parameter. This parameter is required only for SNMP v3. 
 
 ---------------------------------------------------------------
 #### getfullthreshold ####
@@ -4511,21 +4511,21 @@ Command:
 
 Description:
 
-Modifies an existing storage container. 
+ModifyStorageContainer enables you to make changes to an existing virtual volume storage container. 
 
 Options:
 
 --storagecontainerid
 
- 
+The unique ID of the virtual volume storage container to modify. 
 
 --initiatorsecret
 
- 
+The new secret for CHAP authentication for the initiator. 
 
 --targetsecret
 
- 
+The new secret for CHAP authentication for the target. 
 
 ---------------------------------------------------------------
 #### list ####
@@ -4535,41 +4535,13 @@ Command:
 
 Description:
 
-Gets information for all storage containers currently in the system. 
+ListStorageContainers enables you to retrieve information about all virtual volume storage containers known to the system. 
 
 Options:
 
 --storagecontainerids
 
-List of storage containers to get 
-
----------------------------------------------------------------
-#### createstoragecontainer ####
-Command:
-
-    sfcli StorageContainers createstoragecontainer <options>
-
-Description:
-
-Creates a new VVols storage container. 
-
-Options:
-
---name
-
-Name of the storage container. 
-
---initiatorsecret
-
-The secret for CHAP authentication for the initiator 
-
---targetsecret
-
-The secret for CHAP authentication for the target 
-
---accountid
-
-Creates a new VVols storage container. 
+A list of storage container IDs for which to retrieve information. If you omit this parameter, the method returns information about all storage containers in the system. 
 
 ---------------------------------------------------------------
 #### getstoragecontainerefficiency ####
@@ -4588,6 +4560,34 @@ Options:
 The ID of the storage container for which to retrieve efficiency information. 
 
 ---------------------------------------------------------------
+#### createstoragecontainer ####
+Command:
+
+    sfcli StorageContainers createstoragecontainer <options>
+
+Description:
+
+CreateStorageContainer enables you to create a Virtual Volume (VVol) storage container. Storage containers are associated with a SolidFire storage system account, and are used for reporting and resource allocation. Storage containers can only be associated with virtual volumes. You need at least one storage container to use the Virtual Volumes feature. 
+
+Options:
+
+--name
+
+The name of the storage container. Follows SolidFire account naming restrictions. 
+
+--initiatorsecret
+
+The secret for CHAP authentication for the initiator. 
+
+--targetsecret
+
+The secret for CHAP authentication for the target. 
+
+--accountid
+
+Non-storage container account that will become a storage container. 
+
+---------------------------------------------------------------
 #### delete ####
 Command:
 
@@ -4595,13 +4595,13 @@ Command:
 
 Description:
 
-Deletes a storage container from the system. 
+DeleteStorageContainers enables you to remove up to 2000 Virtual Volume (VVol) storage containers from the system at one time. The storage containers you remove must not contain any VVols. 
 
 Options:
 
 --storagecontainerids
 
-list of storageContainerID of the storage container to delete. 
+A list of IDs of the storage containers to delete. You can specify up to 2000 IDs in the list. 
 
 
 LDAP Commands 
@@ -4613,7 +4613,7 @@ Command:
 
 Description:
 
-AddLdapClusterAdmin is used to add a new LDAP Cluster Admin. An LDAP Cluster Admin can be used to manage the cluster via the API and management tools. LDAP Cluster Admins are completely separate and unrelated to standard tenant accounts.  An LDAP group that has been defined in Active Directory can also be added using this API method. The access level that is given to the group will be passed to the individual users in the LDAP group. 
+AddLdapClusterAdmin enables you to add a new LDAP cluster administrator user. An LDAP cluster administrator can manage the cluster via the API and management tools. LDAP cluster admin accounts are completely separate and unrelated to standard tenant accounts. You can also use this method to add an LDAP group that has been defined in Active Directory. The access level that is given to the group is passed to the individual users in the LDAP group. 
 
 Options:
 
@@ -4627,11 +4627,11 @@ Controls which methods this Cluster Admin can use. For more details on the level
 
 --accepteula
 
-Indicate your acceptance of the End User License Agreement when creating this cluster admin. To accept the EULA, set this parameter to true. 
+Accept the End User License Agreement. Set to true to add a cluster administrator account to the system. If omitted or set to false, the method call fails. 
 
 --attributes
 
-List of Name/Value pairs in JSON object format. 
+List of name-value pairs in JSON object format. 
 
 ---------------------------------------------------------------
 #### getconfiguration ####
@@ -4641,7 +4641,7 @@ Command:
 
 Description:
 
-The GetLdapConfiguration is used to get the LDAP configuration currently active on the cluster. 
+The GetLdapConfiguration method enables you to get the currently active LDAP configuration on the cluster. 
 
 Options:
 
@@ -4653,7 +4653,7 @@ Command:
 
 Description:
 
-The TestLdapAuthentication is used to verify the currently enabled LDAP authentication configuration settings are correct. If the configuration settings are correct, the API call returns a list of the groups the tested user is a member of. 
+The TestLdapAuthentication method enables you to validate the currently enabled LDAP authentication settings. If the configuration is correct, the API call returns the group membership of the tested user. 
 
 Options:
 
@@ -4663,11 +4663,11 @@ The username to be tested.
 
 --password
 
-The password for the username to be tester. 
+The password for the username to be tested. 
 
 --ldapconfiguration
 
-An ldapConfiguration object to be tested. If this parameter is provided, the API call will test the provided configuration even if LDAP authentication is currently disabled. 
+An ldapConfiguration object to be tested. If specified, the API call tests the provided configuration even if LDAP authentication is disabled. 
 
 ---------------------------------------------------------------
 #### disableauthentication ####
@@ -4677,7 +4677,7 @@ Command:
 
 Description:
 
-The DisableLdapAuthentication method is used disable LDAP authentication and remove all LDAP configuration settings. This call will not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no integerer be able to log in. 
+The DisableLdapAuthentication method enables you to disable LDAP authentication and remove all LDAP configuration settings. This method does not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no longer be able to log in. 
 
 Options:
 
@@ -4689,13 +4689,13 @@ Command:
 
 Description:
 
-The EnableLdapAuthentication method is used to configure an LDAP server connection to use for LDAP authentication to a SolidFire cluster. Users that are members on the LDAP server can then log in to a SolidFire storage system using their LDAP authentication userid and password. 
+The EnableLdapAuthentication method enables you to configure an LDAP directory connection to use for LDAP authentication to a cluster. Users that are members of the LDAP directory can then log in to the storage system using their LDAP credentials. 
 
 Options:
 
 --authtype
 
-Identifies which user authentcation method will be used.  Must be one of the following: DirectBind SearchAndBind (default) 
+Identifies which user authentication method to use. Must be one of the following: DirectBind SearchAndBind 
 
 --groupsearchbasedn
 
@@ -4703,35 +4703,35 @@ The base DN of the tree to start the group search (will do a subtree search from
 
 --groupsearchcustomfilter
 
-REQUIRED for CustomFilter For use with the CustomFilter search type, an LDAP filter to use to return the DNs of a user's groups. The string can have placeholder text of %USERNAME% and %USERDN% to be replaced with their username and full userDN as needed. 
+For use with the CustomFilter search type, an LDAP filter to use to return the DNs of a users groups. The string can have placeholder text of %USERNAME% and %USERDN% to be replaced with their username and full userDN as needed. 
 
 --groupsearchtype
 
-Controls the default group search filter used, can be one of the following: NoGroups: No group support. ActiveDirectory: (default) Nested membership of all of a user's AD groups. MemberDN: MemberDN style groups (single-level). 
+Controls the default group search filter used, and must be one of the following: NoGroups: No group support. ActiveDirectory: Nested membership of all of a users AD groups. MemberDN: MemberDN style groups (single level). 
 
 --searchbinddn
 
-REQUIRED for SearchAndBind A fully qualified DN to log in with to perform an LDAP search for the user (needs read access to the LDAP directory). 
+A fully qualified DN to log in with to perform an LDAP search for the user (needs read access to the LDAP directory). 
 
 --searchbindpassword
 
-REQUIRED for SearchAndBind The password for the searchBindDN account used for searching. 
+The password for the searchBindDN account used for searching. 
 
 --serveruris
 
-A list of LDAP server URIs (examples: "ldap://1.2.3.4" and ldaps://1.2.3.4:123") 
+A comma-separated list of LDAP server URIs (examples: "ldap://1.2.3.4" and ldaps://1.2.3.4:123") 
 
 --userdntemplate
 
-REQUIRED for DirectBind A string that is used to form a fully qualified user DN. The string should have the placeholder text "%USERNAME%" which will be replaced with the username of the authenticating user. 
+A string that is used to form a fully qualified user DN. The string should have the placeholder text %USERNAME%, which is replaced with the username of the authenticating user. 
 
 --usersearchbasedn
 
-REQUIRED for SearchAndBind The base DN of the tree used to start the search (will do a subtree search from here). 
+The base DN of the tree to start the search (will do a subtree search from here). 
 
 --usersearchfilter
 
-REQUIRED for SearchAndBind. The LDAP filter to use. The string should have the placeholder text "%USERNAME%" which will be replaced with the username of the authenticating user. Example: (&(objectClass=person) (sAMAccountName=%USERNAME%)) will use the sAMAccountName field in Active Directory to match the nusername entered at cluster login. 
+The LDAP filter to use. The string should have the placeholder text %USERNAME% which is replaced with the username of the authenticating user. Example: (&(objectClass=person)(sAMAccountName=%USERNAME%)) will use the sAMAccountName field in Active Directory to match the username entered at cluster login. 
 
 
 BackupTarget Commands 

@@ -26,26 +26,26 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 def cli(ctx):
     """modify add list remove """
 
-@cli.command('modify', short_help="""ModifyVirtualNetwork is used to change various attributes of a VirtualNetwork object. This method can be used to add or remove address blocks, change the netmask IP, or modify the name or description of the virtual network.  Note: This method requires either the VirtualNetworkID or the VirtualNetworkTag as a parameter, but not both. """, cls=SolidFireCommand)
+@cli.command('modify', short_help="""You can use ModifyVirtualNetwork to change the attributes of an existing virtual network. This method enables you to add or remove address blocks, change the netmask, or modify the name or description of the virtual network. You can also use it to enable or disable namespaces, as well as add or remove a gateway if namespaces are enabled on the virtual network. Note: This method requires either the VirtualNetworkID or the VirtualNetworkTag as a parameter, but not both. Caution: Enabling or disabling the Routable Storage VLANs functionality for an existing virtual network by changing the "namespace" parameter disrupts any traffic handled by the virtual network. NetApp strongly recommends changing the "namespace" parameter only during a scheduled maintenance window. """, cls=SolidFireCommand)
 @click.option('--virtualnetworkid',
               type=int,
               required=False,
-              help="""Unique identifier of the virtual network to modify. This is the virtual network ID assigned by the SolidFire cluster. """)
+              help="""The unique identifier of the virtual network to modify. This is the virtual network ID assigned by the cluster.  Note: This parameter is optional but either virtualNetworkID or virtualNetworkTag must be specified with this API method. """)
 @click.option('--virtualnetworktag',
               type=int,
               required=False,
-              help="""Network Tag that identifies the virtual network to modify. """)
+              help="""The network tag that identifies the virtual network to modify. Note: This parameter is optional but either virtualNetworkID or virtualNetworkTag must be specified with this API method. """)
 @click.option('--name',
               type=str,
               required=False,
-              help="""New name for the virtual network. """)
+              help="""The new name for the virtual network. """)
 @click.option('--addressblocks',
               cls=SolidFireOption,
               is_flag=True,
               multiple=True,
               subparameters=["start", "size", "available", ],
               required=False,
-              help="""New addressBlock to set for this Virtual Network object. This may contain new address blocks to add to the existing object or it may omit unused address blocks that need to be removed. Alternatively, existing address blocks may be extended or reduced in size. The size of the starting addressBlocks for a Virtual Network object can only be increased, and can never be decreased. Attributes for this parameter are: start: start of the IP address range. (String) size: numbre of IP addresses to include in the block. (Integer)  Has the following subparameters: --start --size --available """)
+              help="""The new addressBlock to set for this virtual network. This might contain new address blocks to add to the existing object or omit unused address blocks that need to be removed. Alternatively, you can extend or reduce the size of existing address blocks. You can only increase the size of the starting addressBlocks for a virtual network object; you can never decrease it. Attributes for this parameter are: start: The start of the IP address range. (String) size: The number of IP addresses to include in the block. (Integer)  Has the following subparameters: --start --size --available """)
 @click.option('--start',
               required=False,
               multiple=True,
@@ -73,23 +73,23 @@ def cli(ctx):
 @click.option('--netmask',
               type=str,
               required=False,
-              help="""New netmask for this virtual network. """)
+              help="""New network mask for this virtual network. """)
 @click.option('--svip',
               type=str,
               required=False,
-              help="""The storage virtual IP address for this virtual network. The svip for Virtual Network cannot be changed. A new Virtual Network must be created in order to use a different svip address. """)
+              help="""The storage virtual IP address for this virtual network. The svip for a virtual network cannot be changed. You must create a new virtual network to use a different svip address. """)
 @click.option('--gateway',
               type=str,
               required=False,
-              help=""" """)
+              help="""The IP address of a gateway of the virtual network. This parameter is valid only if the "namespace" parameter is set to true. """)
 @click.option('--namespace',
               type=bool,
               required=False,
-              help=""" """)
+              help="""When set to true, enables Routable Storage VLANs functionality by recreating the virtual network and configuring a namespace to contain it. When set to false, disables the VRF functionality for the virtual network. Changing this value disrupts traffic running through this virtual network. """)
 @click.option('--attributes',
               type=str,
               required=False,
-              help="""A new list of Name/Value pairs in JSON object format.  Has the following subparameters: """)
+              help="""A new list of name-value pairs in JSON object format.  Has the following subparameters: """)
 @pass_context
 def modify(ctx,
            # Optional main parameter
@@ -116,9 +116,13 @@ def modify(ctx,
            namespace = None,
            # Optional main parameter
            attributes = None):
-    """ModifyVirtualNetwork is used to change various attributes of a VirtualNetwork object. This method can be used to add or remove address blocks, change the netmask IP, or modify the name or description of the virtual network."""
-    """"""
+    """You can use ModifyVirtualNetwork to change the attributes of an existing virtual network. This method enables you to add or remove"""
+    """address blocks, change the netmask, or modify the name or description of the virtual network. You can also use it to enable or"""
+    """disable namespaces, as well as add or remove a gateway if namespaces are enabled on the virtual network."""
     """Note: This method requires either the VirtualNetworkID or the VirtualNetworkTag as a parameter, but not both."""
+    """Caution: Enabling or disabling the Routable Storage VLANs functionality for an existing virtual network by changing the"""
+    """&quot;namespace&quot; parameter disrupts any traffic handled by the virtual network. NetApp strongly recommends changing the"""
+    """&quot;namespace&quot; parameter only during a scheduled maintenance window."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -158,22 +162,22 @@ def modify(ctx,
 
 
 
-@cli.command('add', short_help="""AddVirtualNetwork is used to add a new virtual network to a cluster configuration. When a virtual network is added, an interface for each node is created and each will require a virtual network IP address. The number of IP addresses specified as a parameter for this API method must be equal to or greater than the number of nodes in the cluster. Virtual network addresses are bulk provisioned by SolidFire and assigned to individual nodes automatically. Virtual network addresses do not need to be assigned to nodes manually.  Note: The AddVirtualNetwork method is used only to create a new virtual network. If you want to make changes to a virtual network, please use the ModifyVirtualNetwork method. """, cls=SolidFireCommand)
+@cli.command('add', short_help="""You can use the AddVirtualNetwork method to add a new virtual network to a cluster configuration. When you add a virtual network, an interface for each node is created and each interface will require a virtual network IP address. The number of IP addresses you specify as a parameter for this API method must be equal to or greater than the number of nodes in the cluster. The system bulk provisions virtual network addresses and assigns them to individual nodes automatically. You do not need to assign virtual network addresses to nodes manually. Note: You can use AddVirtualNetwork only to create a new virtual network. If you want to make changes to an existing virtual network, use ModifyVirtualNetwork. Note: Virtual network parameters must be unique to each virtual network when setting the namespace parameter to false. """, cls=SolidFireCommand)
 @click.option('--virtualnetworktag',
               type=int,
               required=True,
-              help="""A unique virtual network (VLAN) tag. Supported values are 1 to 4095 (the number zero (0) is not supported). """)
+              help="""A unique virtual network (VLAN) tag. Supported values are 1 through 4094.The number zero (0) is not supported. """)
 @click.option('--name',
               type=str,
               required=True,
-              help="""User defined name for the new virtual network. """)
+              help="""A user-defined name for the new virtual network. """)
 @click.option('--addressblocks',
               cls=SolidFireOption,
               is_flag=True,
               multiple=True,
               subparameters=["start", "size", "available", ],
               required=True,
-              help="""Unique Range of IP addresses to include in the virtual network. Attributes for this parameter are: start: start of the IP address range. (String) size: numbre of IP addresses to include in the block. (Integer)  Has the following subparameters: --start --size --available """)
+              help="""Unique range of IP addresses to include in the virtual network. Attributes for this parameter are: start: The start of the IP address range. (String) size: The number of IP addresses to include in the block. (Integer)  Has the following subparameters: --start --size --available """)
 @click.option('--start',
               required=True,
               multiple=True,
@@ -201,7 +205,7 @@ def modify(ctx,
 @click.option('--netmask',
               type=str,
               required=True,
-              help="""Unique netmask for the virtual network being created. """)
+              help="""Unique network mask for the virtual network being created. """)
 @click.option('--svip',
               type=str,
               required=True,
@@ -209,15 +213,15 @@ def modify(ctx,
 @click.option('--gateway',
               type=str,
               required=False,
-              help=""" """)
+              help="""The IP address of a gateway of the virtual network. This parameter is only valid if the namespace parameter is set to true. """)
 @click.option('--namespace',
               type=bool,
               required=False,
-              help=""" """)
+              help="""When set to true, enables the Routable Storage VLANs functionality by creating and configuring a namespace and the virtual network contained by it. """)
 @click.option('--attributes',
               type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format.  Has the following subparameters: """)
+              help="""List of name-value pairs in JSON object format.  Has the following subparameters: """)
 @pass_context
 def add(ctx,
            # Mandatory main parameter
@@ -242,9 +246,14 @@ def add(ctx,
            namespace = None,
            # Optional main parameter
            attributes = None):
-    """AddVirtualNetwork is used to add a new virtual network to a cluster configuration. When a virtual network is added, an interface for each node is created and each will require a virtual network IP address. The number of IP addresses specified as a parameter for this API method must be equal to or greater than the number of nodes in the cluster. Virtual network addresses are bulk provisioned by SolidFire and assigned to individual nodes automatically. Virtual network addresses do not need to be assigned to nodes manually."""
-    """"""
-    """Note: The AddVirtualNetwork method is used only to create a new virtual network. If you want to make changes to a virtual network, please use the ModifyVirtualNetwork method."""
+    """You can use the AddVirtualNetwork method to add a new virtual network to a cluster configuration. When you add a virtual network,"""
+    """an interface for each node is created and each interface will require a virtual network IP address. The number of IP addresses you"""
+    """specify as a parameter for this API method must be equal to or greater than the number of nodes in the cluster. The system bulk"""
+    """provisions virtual network addresses and assigns them to individual nodes automatically. You do not need to assign virtual"""
+    """network addresses to nodes manually."""
+    """Note: You can use AddVirtualNetwork only to create a new virtual network. If you want to make changes to an"""
+    """existing virtual network, use ModifyVirtualNetwork."""
+    """Note: Virtual network parameters must be unique to each virtual network when setting the namespace parameter to false."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -284,23 +293,23 @@ def add(ctx,
 
 
 
-@cli.command('list', short_help="""ListVirtualNetworks is used to get a list of all the configured virtual networks for the cluster. This method can be used to verify the virtual network settings in the cluster.  This method does not require any parameters to be passed. But, one or more VirtualNetworkIDs or VirtualNetworkTags can be passed in order to filter the results. """, cls=SolidFireCommand)
+@cli.command('list', short_help="""ListVirtualNetworks enables you to list all configured virtual networks for the cluster. You can use this method to verify the virtual network settings in the cluster. There are no required parameters for this method. However, to filter the results, you can pass one or more VirtualNetworkID or VirtualNetworkTag values. """, cls=SolidFireCommand)
 @click.option('--virtualnetworkid',
               type=int,
               required=False,
-              help="""Network ID to filter the list for a single virtual network """)
+              help="""Network ID to filter the list for a single virtual network. """)
 @click.option('--virtualnetworktag',
               type=int,
               required=False,
-              help="""Network Tag to filter the list for a single virtual network """)
+              help="""Network tag to filter the list for a single virtual network. """)
 @click.option('--virtualnetworkids',
               type=str,
               required=False,
-              help="""NetworkIDs to include in the list. """)
+              help="""Network IDs to include in the list. """)
 @click.option('--virtualnetworktags',
               type=str,
               required=False,
-              help="""Network Tags to include in the list. """)
+              help="""Network tag to include in the list. """)
 @pass_context
 def list(ctx,
            # Optional main parameter
@@ -311,9 +320,10 @@ def list(ctx,
            virtualnetworkids = None,
            # Optional main parameter
            virtualnetworktags = None):
-    """ListVirtualNetworks is used to get a list of all the configured virtual networks for the cluster. This method can be used to verify the virtual network settings in the cluster."""
-    """"""
-    """This method does not require any parameters to be passed. But, one or more VirtualNetworkIDs or VirtualNetworkTags can be passed in order to filter the results."""
+    """ListVirtualNetworks enables you to list all configured virtual networks for the cluster. You can use this method to verify the virtual"""
+    """network settings in the cluster."""
+    """There are no required parameters for this method. However, to filter the results, you can pass one or more VirtualNetworkID or"""
+    """VirtualNetworkTag values."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -339,7 +349,7 @@ def list(ctx,
 
 
 
-@cli.command('remove', short_help="""RemoveVirtualNetwork is used to remove a previously added virtual network.  Note: This method requires either the VirtualNetworkID of the VirtualNetworkTag as a parameter, but not both. """, cls=SolidFireCommand)
+@cli.command('remove', short_help="""RemoveVirtualNetwork enables you to remove a previously added virtual network. Note: This method requires either the virtualNetworkID or the virtualNetworkTag as a parameter, but not both. """, cls=SolidFireCommand)
 @click.option('--virtualnetworkid',
               type=int,
               required=False,
@@ -347,16 +357,15 @@ def list(ctx,
 @click.option('--virtualnetworktag',
               type=int,
               required=False,
-              help="""Network Tag that identifies the virtual network to remove. """)
+              help="""Network tag that identifies the virtual network to remove. """)
 @pass_context
 def remove(ctx,
            # Optional main parameter
            virtualnetworkid = None,
            # Optional main parameter
            virtualnetworktag = None):
-    """RemoveVirtualNetwork is used to remove a previously added virtual network."""
-    """"""
-    """Note: This method requires either the VirtualNetworkID of the VirtualNetworkTag as a parameter, but not both."""
+    """RemoveVirtualNetwork enables you to remove a previously added virtual network."""
+    """Note: This method requires either the virtualNetworkID or the virtualNetworkTag as a parameter, but not both."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()

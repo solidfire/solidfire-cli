@@ -26,18 +26,17 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 def cli(ctx):
     """list """
 
-@cli.command('list', short_help="""Gets protocol endpoints in the system If protocolEndpointIDs isn't specified all protocol endpoints are returned. Else the supplied protocolEndpointIDs are. """, cls=SolidFireCommand)
+@cli.command('list', short_help="""ListProtocolEndpoints enables you to retrieve information about all protocol endpoints in the cluster. Protocol endpoints govern access to their associated virtual volume storage containers. """, cls=SolidFireCommand)
 @click.option('--protocolendpointids',
               type=str,
               required=False,
-              help=""" """)
+              help="""A list of protocol endpoint IDs for which to retrieve information. If unspecified, the method returns information about all protocol endpoints. """)
 @pass_context
 def list(ctx,
            # Optional main parameter
            protocolendpointids = None):
-    """Gets protocol endpoints in the system"""
-    """If protocolEndpointIDs isn&#x27;t specified all protocol endpoints"""
-    """are returned. Else the supplied protocolEndpointIDs are."""
+    """ListProtocolEndpoints enables you to retrieve information about all protocol endpoints in the cluster. Protocol endpoints govern"""
+    """access to their associated virtual volume storage containers."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()

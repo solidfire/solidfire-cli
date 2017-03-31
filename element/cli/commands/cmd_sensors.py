@@ -26,7 +26,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 def cli(ctx):
     """getipmiinfo getipmiconfig """
 
-@cli.command('getipmiinfo', short_help="""GetIpmiInfo allows you to display a detailed reporting of sensors (objects) for node fans, intake and exhaust temperatures, and power supplies  that are monitored by .  """, cls=SolidFireCommand)
+@cli.command('getipmiinfo', short_help="""GetIpmiInfo enables you to display a detailed reporting of sensors (objects) for node fans, intake and exhaust temperatures, and power supplies that are monitored by the system. """, cls=SolidFireCommand)
 @click.option('--force',
               type=bool,
               required=True,
@@ -35,7 +35,7 @@ def cli(ctx):
 def getipmiinfo(ctx,
            # Mandatory main parameter
            force):
-    """GetIpmiInfo allows you to display a detailed reporting of sensors (objects) for node fans, intake and exhaust temperatures, and power supplies  that are monitored by . """
+    """GetIpmiInfo enables you to display a detailed reporting of sensors (objects) for node fans, intake and exhaust temperatures, and power supplies that are monitored by the system."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -61,7 +61,7 @@ def getipmiinfo(ctx,
 @click.option('--chassistype',
               type=str,
               required=False,
-              help="""Used to display information for each node chassis type. Valid values:all - returns sensor information for each chassis type. {chassis type} - returns sensor information for a specified chassis type. """)
+              help="""Displays information for each node chassis type. Valid values are: all: Returns sensor information for each chassis type. {chassis type}: Returns sensor information for a specified chassis type. """)
 @click.option('--force',
               type=bool,
               required=True,

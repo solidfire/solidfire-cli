@@ -24,13 +24,13 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """services resetnode networking shutdown """
+    """services networking resetnode shutdown """
 
-@cli.command('services', short_help="""The RestartServices API method is used to restart the  Element services on a node.Caution: This method causes temporary node services interruption. Exercise caution when using this method. """, cls=SolidFireCommand)
+@cli.command('services', short_help="""The RestartServices API method enables you to restart the services on a node. Caution: This method causes temporary node services interruption. Exercise caution when using this method. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
 @click.option('--force',
               type=bool,
               required=True,
-              help="""The "force" parameter must be included on this method to successfully restart services on a node.    """)
+              help="""Required parameter to successfully restart services on a node. """)
 @click.option('--service',
               type=str,
               required=False,
@@ -47,7 +47,9 @@ def services(ctx,
            service = None,
            # Optional main parameter
            action = None):
-    """The RestartServices API method is used to restart the  Element services on a node.Caution: This method causes temporary node services interruption. Exercise caution when using this method."""
+    """The RestartServices API method enables you to restart the services on a node."""
+    """Caution: This method causes temporary node services interruption. Exercise caution when using this method."""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -69,65 +71,19 @@ def services(ctx,
 
 
 
-@cli.command('resetnode', short_help="""Allows you to reset a node to the SolidFire factory settings. All data will be deleted from the node when you call this method. A node participating in a cluster cannot be reset. """, cls=SolidFireCommand)
-@click.option('--build',
-              type=str,
-              required=True,
-              help="""Used to specify the URL to a remote Element software image to which the node will be reset. """)
+@cli.command('networking', short_help="""The RestartNetworking API method enables you to restart the networking services on a node. Warning: This method restarts all networking services on a node, causing temporary loss of networking connectivity. Exercise caution when using this method. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
 @click.option('--force',
               type=bool,
               required=True,
-              help="""The force parameter must be included in order to successfully reset the node. """)
-@click.option('--options',
-              type=str,
-              required=False,
-              help="""Used to enter specifications for running the reset operation. """)
-@click.option('--reboot',
-              type=bool,
-              required=False,
-              help="""Should it be rebooted? """)
-@pass_context
-def resetnode(ctx,
-           # Mandatory main parameter
-           build,
-           # Mandatory main parameter
-           force,
-           # Optional main parameter
-           options = None,
-           # Optional main parameter
-           reboot = None):
-    """Allows you to reset a node to the SolidFire factory settings. All data will be deleted from the node when you call this method. A node participating in a cluster cannot be reset."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-                
-    
-
-    ctx.logger.info("""build = """+str(build)+""";"""+"""force = """+str(force)+""";"""+"""options = """+str(options)+""";"""+"""reboot = """+str(reboot)+""";"""+"")
-    try:
-        _ResetNodeResult = ctx.element.reset_node(build=build, force=force, options=options, reboot=reboot)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_ResetNodeResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('networking', short_help="""The RestartNetworking API method is used to restart the networking services on a node.WARNING! This method restarts all networking services on a node, causing temporary loss of networking connectivity. Exercise caution when using this method. """, cls=SolidFireCommand)
-@click.option('--force',
-              type=bool,
-              required=True,
-              help="""The "force" parameter must be included on this method to successfully restart the networking. """)
+              help="""Required parameter to successfully reset the node. """)
 @pass_context
 def networking(ctx,
            # Mandatory main parameter
            force):
-    """The RestartNetworking API method is used to restart the networking services on a node.WARNING! This method restarts all networking services on a node, causing temporary loss of networking connectivity. Exercise caution when using this method."""
+    """The RestartNetworking API method enables you to restart the networking services on a node."""
+    """Warning: This method restarts all networking services on a node, causing temporary loss of networking connectivity."""
+    """Exercise caution when using this method."""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -149,7 +105,62 @@ def networking(ctx,
 
 
 
-@cli.command('shutdown', short_help="""The Shutdown API method enables you to restart or shutdown a node that has not yet been added to a cluster. To use this method, login in to the MIP for the pending node and enter the "shutdown" method with either the "restart" or "halt" options in the following table. """, cls=SolidFireCommand)
+@cli.command('resetnode', short_help="""The ResetNode API method enables you to reset a node to the factory settings. All data, packages (software upgrades, and so on), configurations, and log files are deleted from the node when you call this method. However, network settings for the node are preserved during this operation. Nodes that are participating in a cluster cannot be reset to the factory settings. The ResetNode API can only be used on nodes that are in an "Available" state. It cannot be used on nodes that are "Active" in a cluster, or in a "Pending" state. Caution: This method clears any data that is on the node. Exercise caution when using this method. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
+@click.option('--build',
+              type=str,
+              required=True,
+              help="""Specifies the URL to a remote Element software image to which the node will be reset. """)
+@click.option('--force',
+              type=bool,
+              required=True,
+              help="""Required parameter to successfully reset the node. """)
+@click.option('--options',
+              type=str,
+              required=False,
+              help="""Specifications for running the reset operation. """)
+@click.option('--reboot',
+              type=bool,
+              required=False,
+              help="""Should it be rebooted? """)
+@pass_context
+def resetnode(ctx,
+           # Mandatory main parameter
+           build,
+           # Mandatory main parameter
+           force,
+           # Optional main parameter
+           options = None,
+           # Optional main parameter
+           reboot = None):
+    """The ResetNode API method enables you to reset a node to the factory settings. All data, packages (software upgrades, and so on),"""
+    """configurations, and log files are deleted from the node when you call this method. However, network settings for the node are"""
+    """preserved during this operation. Nodes that are participating in a cluster cannot be reset to the factory settings."""
+    """The ResetNode API can only be used on nodes that are in an &quot;Available&quot; state. It cannot be used on nodes that are &quot;Active&quot; in a"""
+    """cluster, or in a &quot;Pending&quot; state."""
+    """Caution: This method clears any data that is on the node. Exercise caution when using this method."""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+                
+    
+
+    ctx.logger.info("""build = """+str(build)+""";"""+"""force = """+str(force)+""";"""+"""options = """+str(options)+""";"""+"""reboot = """+str(reboot)+""";"""+"")
+    try:
+        _ResetNodeResult = ctx.element.reset_node(build=build, force=force, options=options, reboot=reboot)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_ResetNodeResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('shutdown', short_help="""The Shutdown API method enables you to restart or shutdown a node that has not yet been added to a cluster. To use this method, log in to the MIP for the pending node, and enter the "shutdown" method with either the "restart" or "halt" options. """, cls=SolidFireCommand)
 @click.option('--nodes',
               type=str,
               required=True,
@@ -157,14 +168,15 @@ def networking(ctx,
 @click.option('--option',
               type=str,
               required=False,
-              help="""Action to take for the node shutdown:restart: Restarts the node.halt: Performs full power-off of the node. """)
+              help="""Specifies the action to take for the node shutdown. Possible values are: restart: Restarts the node. halt: Shuts down the node. """)
 @pass_context
 def shutdown(ctx,
            # Mandatory main parameter
            nodes,
            # Optional main parameter
            option = None):
-    """The Shutdown API method enables you to restart or shutdown a node that has not yet been added to a cluster. To use this method, login in to the MIP for the pending node and enter the &quot;shutdown&quot; method with either the &quot;restart&quot; or &quot;halt&quot; options in the following table."""
+    """The Shutdown API method enables you to restart or shutdown a node that has not yet been added to a cluster. To use this method,"""
+    """log in to the MIP for the pending node, and enter the &quot;shutdown&quot; method with either the &quot;restart&quot; or &quot;halt&quot; options."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()

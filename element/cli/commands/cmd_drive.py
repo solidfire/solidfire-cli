@@ -26,7 +26,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 def cli(ctx):
     """reset secureerase list remove gethardwareinfo add getstats getconfig test listhardware """
 
-@cli.command('reset', short_help="""ResetDrives is used to pro-actively initialize drives and remove all data currently residing on the drive. The drive can then be reused in an existing node or used in an upgraded SolidFire node. This method requires the force=true parameter to be included in the method call.  Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
+@cli.command('reset', short_help="""ResetDrives enables you to proactively initialize drives and remove all data currently residing on a drive. The drive can then be reused in an existing node or used in an upgraded node. This method requires the force parameter to be included in the method call. """, cls=SolidFireCommand)
 @click.option('--drives',
               type=str,
               required=True,
@@ -34,16 +34,15 @@ def cli(ctx):
 @click.option('--force',
               type=bool,
               required=True,
-              help="""The "force" parameter must be included on this method to successfully reset a drive. """)
+              help="""Required parameter to successfully reset a drive. """)
 @pass_context
 def reset(ctx,
            # Mandatory main parameter
            drives,
            # Mandatory main parameter
            force):
-    """ResetDrives is used to pro-actively initialize drives and remove all data currently residing on the drive. The drive can then be reused in an existing node or used in an upgraded SolidFire node. This method requires the force=true parameter to be included in the method call."""
-    """"""
-    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
+    """ResetDrives enables you to proactively initialize drives and remove all data currently residing on a drive. The drive can then be reused"""
+    """in an existing node or used in an upgraded node. This method requires the force parameter to be included in the method call."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -65,20 +64,17 @@ def reset(ctx,
 
 
 
-@cli.command('secureerase', short_help="""SecureEraseDrives is used to remove any residual data from drives that have a status of "available." For example, when replacing a drive at its end-of-life that contained sensitive data. It uses a Security Erase Unit command to write a predetermined pattern to the drive and resets the encryption key on the drive. The method may take up to two minutes to complete, so it is an asynchronous method. The GetAsyncResult method can be used to check on the status of the secure erase operation.  Use the "ListDrives" method to obtain the driveIDs for the drives you want to secure erase. """, cls=SolidFireCommand)
+@cli.command('secureerase', short_help="""SecureEraseDrives enables you to remove any residual data from drives that have a status of "available." You might want to use this method when replacing a drive nearing the end of its service life that contained sensitive data. This method uses a Security Erase Unit command to write a predetermined pattern to the drive and resets the encryption key on the drive. This asynchronous method might take up to two minutes to complete. You can use GetAsyncResult to check on the status of the secure erase operation. You can use the ListDrives method to obtain the driveIDs for the drives you want to secure erase. """, cls=SolidFireCommand)
 @click.option('--drives',
               type=str,
               required=True,
-              help="""List of driveIDs to secure erase. """)
+              help="""List of driveIDs to be secure erased. """)
 @pass_context
 def secureerase(ctx,
            # Mandatory main parameter
            drives):
-    """SecureEraseDrives is used to remove any residual data from drives that have a status of &quot;available.&quot; For example, when replacing a drive at its end-of-life that contained sensitive data."""
-    """It uses a Security Erase Unit command to write a predetermined pattern to the drive and resets the encryption key on the drive. The method may take up to two minutes to complete, so it is an asynchronous method."""
-    """The GetAsyncResult method can be used to check on the status of the secure erase operation."""
-    """"""
-    """Use the &quot;ListDrives&quot; method to obtain the driveIDs for the drives you want to secure erase."""
+    """SecureEraseDrives enables you to remove any residual data from drives that have a status of &quot;available.&quot; You might want to use this method when replacing a drive nearing the end of its service life that contained sensitive data. This method uses a Security Erase Unit command to write a predetermined pattern to the drive and resets the encryption key on the drive. This asynchronous method might take up to two minutes to complete. You can use GetAsyncResult to check on the status of the secure erase operation."""
+    """You can use the ListDrives method to obtain the driveIDs for the drives you want to secure erase."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -102,11 +98,11 @@ def secureerase(ctx,
 
 
 
-@cli.command('list', short_help="""ListDrives allows you to retrieve the list of the drives that exist in the cluster's active nodes. This method returns drives that have been added as volume metadata or block drives as well as drives that have not been added and are available. """, cls=SolidFireCommand)
+@cli.command('list', short_help="""ListDrives enables you to retrieve the list of the drives that exist in the cluster's active nodes. This method returns drives that have been added as volume metadata or block drives as well as drives that have not been added and are available. """, cls=SolidFireCommand)
 @pass_context
 def list(ctx):
-    """ListDrives allows you to retrieve the list of the drives that exist in the cluster&#x27;s active nodes."""
-    """This method returns drives that have been added as volume metadata or block drives as well as drives that have not been added and are available."""
+    """ListDrives enables you to retrieve the list of the drives that exist in the cluster&#x27;s active nodes. This method returns drives that have"""
+    """been added as volume metadata or block drives as well as drives that have not been added and are available."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -128,7 +124,7 @@ def list(ctx):
 
 
 
-@cli.command('remove', short_help="""You can use RemoveDrives to proactively remove drives that are part of the cluster. You may want to use this method when reducing cluster capacity or preparing to replace drives nearing the end of their service life. Any data on the drives is removed and migrated to other drives in the cluster before the drive is removed from the cluster. This is an asynchronous method. Depending on the total capacity of the drives being removed, it may take several minutes to migrate all of the data. Use the "GetAsyncResult" method to check the status of the remove operation.  When removing multiple drives, use a single "RemoveDrives" method call rather than multiple individual methods with a single drive each. This reduces the amount of data balancing that must occur to even stabilize the storage load on the cluster.  You can also remove drives with a "failed" status using "RemoveDrives". When you remove a drive with a "failed" status it is not returned to an "available" or "active" status. The drive is unavailable for use in the cluster.  Use the "ListDrives" method to obtain the driveIDs for the drives you want to remove. """, cls=SolidFireCommand)
+@cli.command('remove', short_help="""You can use RemoveDrives to proactively remove drives that are part of the cluster. You might want to use this method when reducing cluster capacity or preparing to replace drives nearing the end of their service life. Any data on the drives is removed and migrated to other drives in the cluster before the drive is removed from the cluster. This is an asynchronous method. Depending on the total capacity of the drives being removed, it might take several minutes to migrate all of the data. Use the GetAsyncResult method to check the status of the remove operation. When removing multiple drives, use a single RemoveDrives method call rather than multiple individual methods with a single drive each. This reduces the amount of data balancing that must occur to even stabilize the storage load on the cluster. You can also remove drives with a "failed" status using RemoveDrives. When you remove a drive with a "failed" status it is not returned to an "available" or active status. The drive is unavailable for use in the cluster. Use the ListDrives method to obtain the driveIDs for the drives you want to remove. """, cls=SolidFireCommand)
 @click.option('--drives',
               type=str,
               required=True,
@@ -143,20 +139,16 @@ def remove(ctx,
            drives,
            # Optional main parameter
            forceduringupgrade = None):
-    """You can use RemoveDrives to proactively remove drives that are part of the cluster."""
-    """You may want to use this method when reducing cluster capacity or preparing to replace drives nearing the end of their service life."""
-    """Any data on the drives is removed and migrated to other drives in the cluster before the drive is removed from the cluster. This is an asynchronous method."""
-    """Depending on the total capacity of the drives being removed, it may take several minutes to migrate all of the data."""
-    """Use the &quot;GetAsyncResult&quot; method to check the status of the remove operation."""
-    """"""
-    """When removing multiple drives, use a single &quot;RemoveDrives&quot; method call rather than multiple individual methods with a single drive each."""
-    """This reduces the amount of data balancing that must occur to even stabilize the storage load on the cluster."""
-    """"""
-    """You can also remove drives with a &quot;failed&quot; status using &quot;RemoveDrives&quot;."""
-    """When you remove a drive with a &quot;failed&quot; status it is not returned to an &quot;available&quot; or &quot;active&quot; status."""
-    """The drive is unavailable for use in the cluster."""
-    """"""
-    """Use the &quot;ListDrives&quot; method to obtain the driveIDs for the drives you want to remove."""
+    """You can use RemoveDrives to proactively remove drives that are part of the cluster. You might want to use this method when"""
+    """reducing cluster capacity or preparing to replace drives nearing the end of their service life. Any data on the drives is removed and"""
+    """migrated to other drives in the cluster before the drive is removed from the cluster. This is an asynchronous method. Depending on"""
+    """the total capacity of the drives being removed, it might take several minutes to migrate all of the data. Use the GetAsyncResult"""
+    """method to check the status of the remove operation."""
+    """When removing multiple drives, use a single RemoveDrives method call rather than multiple individual methods with a single drive"""
+    """each. This reduces the amount of data balancing that must occur to even stabilize the storage load on the cluster."""
+    """You can also remove drives with a &quot;failed&quot; status using RemoveDrives. When you remove a drive with a &quot;failed&quot; status it is not"""
+    """returned to an &quot;available&quot; or active status. The drive is unavailable for use in the cluster."""
+    """Use the ListDrives method to obtain the driveIDs for the drives you want to remove."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -180,16 +172,17 @@ def remove(ctx,
 
 
 
-@cli.command('gethardwareinfo', short_help="""GetDriveHardwareInfo returns all the hardware info for the given drive. This generally includes manufacturers, vendors, versions, and other associated hardware identification information. """, cls=SolidFireCommand)
+@cli.command('gethardwareinfo', short_help="""GetDriveHardwareInfo returns all the hardware information for the given drive. This generally includes details about manufacturers, vendors, versions, and other associated hardware identification information. """, cls=SolidFireCommand)
 @click.option('--driveid',
               type=int,
               required=True,
-              help="""DriveID for the drive information requested. DriveIDs can be obtained via the "ListDrives" method. """)
+              help="""DriveID for the drive information requested. You can get DriveIDs by using the ListDrives method. """)
 @pass_context
 def gethardwareinfo(ctx,
            # Mandatory main parameter
            driveid):
-    """GetDriveHardwareInfo returns all the hardware info for the given drive. This generally includes manufacturers, vendors, versions, and other associated hardware identification information."""
+    """GetDriveHardwareInfo returns all the hardware information for the given drive. This generally includes details about manufacturers, vendors, versions, and"""
+    """other associated hardware identification information."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -211,14 +204,14 @@ def gethardwareinfo(ctx,
 
 
 
-@cli.command('add', short_help="""AddDrives is used to add one or more available drives to the cluster enabling the drives to host a portion of the cluster's data. When you add a node to the cluster or install new drives in an existing node, the new drives are marked as "available" and must be added via AddDrives before they can be utilized. Use the "ListDrives" method to display drives that are "available" to be added. When you add multiple drives, it is more efficient to add them in a single "AddDrives" method call rather than multiple individual methods with a single drive each. This reduces the amount of data balancing that must occur to stabilize the storage load on the cluster.  When you add a drive, the system automatically determines the "type" of drive it should be.  The method returns immediately. However, it may take some time for the data in the cluster to be rebalanced using the newly added drives. As the new drive(s) are syncing on the system, you can use the "ListSyncJobs" method to see how the drive(s) are being rebalanced and the progress of adding the new drive. """, cls=SolidFireCommand)
+@cli.command('add', short_help="""AddDrives enables you to add one or more available drives to the cluster, enabling the drives to host a portion of the cluster's data. When you add a node to the cluster or install new drives in an existing node, the new drives are marked as "available" and must be added via AddDrives before they can be utilized. Use the ListDrives method to display drives that are "available" to be added. When you add multiple drives, it is more efficient to add them in a single AddDrives method call rather than multiple individual methods with a single drive each. This reduces the amount of data balancing that must occur to stabilize the storage load on the cluster. When you add a drive, the system automatically determines the "type" of drive it should be. The method is asynchronous and returns immediately. However, it can take some time for the data in the cluster to be rebalanced using the newly added drives. As the new drives are syncing on the system, you can use the ListSyncJobs method to see how the drives are being rebalanced and the progress of adding the new drive. You can also use the GetAsyncResult method to query the method's returned asyncHandle. """, cls=SolidFireCommand)
 @click.option('--drives',
               cls=SolidFireOption,
               is_flag=True,
               multiple=True,
               subparameters=["driveid", "type", ],
               required=True,
-              help="""List of drives to add to the cluster.  Has the following subparameters: --driveid --type """)
+              help="""Returns information about each drive to be added to the cluster. Possible values are: driveID: The ID of the drive to add. (Integer) type: (Optional) The type of drive to add. Valid values are "slice" or "block". If omitted, the system assigns the correct type. (String)  Has the following subparameters: --driveid --type """)
 @click.option('--driveid',
               required=True,
               multiple=True,
@@ -249,16 +242,16 @@ def add(ctx,
            type = None,
            # Optional main parameter
            forceduringupgrade = None):
-    """AddDrives is used to add one or more available drives to the cluster enabling the drives to host a portion of the cluster&#x27;s data."""
-    """When you add a node to the cluster or install new drives in an existing node, the new drives are marked as &quot;available&quot; and must be added via AddDrives before they can be utilized."""
-    """Use the &quot;ListDrives&quot; method to display drives that are &quot;available&quot; to be added."""
-    """When you add multiple drives, it is more efficient to add them in a single &quot;AddDrives&quot; method call rather than multiple individual methods with a single drive each."""
-    """This reduces the amount of data balancing that must occur to stabilize the storage load on the cluster."""
-    """"""
+    """AddDrives enables you to add one or more available drives to the cluster, enabling the drives to host a portion of the cluster&#x27;s data."""
+    """When you add a node to the cluster or install new drives in an existing node, the new drives are marked as &quot;available&quot; and must be"""
+    """added via AddDrives before they can be utilized. Use the ListDrives method to display drives that are &quot;available&quot; to be added. When"""
+    """you add multiple drives, it is more efficient to add them in a single AddDrives method call rather than multiple individual methods"""
+    """with a single drive each. This reduces the amount of data balancing that must occur to stabilize the storage load on the cluster."""
     """When you add a drive, the system automatically determines the &quot;type&quot; of drive it should be."""
-    """"""
-    """The method returns immediately. However, it may take some time for the data in the cluster to be rebalanced using the newly added drives."""
-    """As the new drive(s) are syncing on the system, you can use the &quot;ListSyncJobs&quot; method to see how the drive(s) are being rebalanced and the progress of adding the new drive."""
+    """The method is asynchronous and returns immediately. However, it can take some time for the data in the cluster to be rebalanced"""
+    """using the newly added drives. As the new drives are syncing on the system, you can use the ListSyncJobs method to see how the"""
+    """drives are being rebalanced and the progress of adding the new drive. You can also use the GetAsyncResult method to query the"""
+    """method&#x27;s returned asyncHandle."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -289,7 +282,7 @@ def add(ctx,
 
 
 
-@cli.command('getstats', short_help="""GetDriveStats return high-level activity measurements for a single drive. Values are cumulative from the addition of the drive to the cluster. Some values are specific to Block Drives. Statistical data may not be returned for both block and metadata drives when running this method. For more information on which drive type returns which data, see Response Example (Block Drive) and Response Example (Volume Metadata Drive) in the SolidFire API guide. """, cls=SolidFireCommand)
+@cli.command('getstats', short_help="""GetDriveStats returns high-level activity measurements for a single drive. Values are cumulative from the addition of the drive to the cluster. Some values are specific to block drives. You might not obtain statistical data for both block and metadata drives when you run this method.  """, cls=SolidFireCommand)
 @click.option('--driveid',
               type=int,
               required=True,
@@ -298,8 +291,9 @@ def add(ctx,
 def getstats(ctx,
            # Mandatory main parameter
            driveid):
-    """GetDriveStats return high-level activity measurements for a single drive. Values are cumulative from the addition of the drive to the cluster. Some values are specific to Block Drives. Statistical data may not be returned for both block and metadata drives when running this method."""
-    """For more information on which drive type returns which data, see Response Example (Block Drive) and Response Example (Volume Metadata Drive) in the SolidFire API guide."""
+    """GetDriveStats returns high-level activity measurements for a single drive. Values are cumulative from the addition of the drive to the"""
+    """cluster. Some values are specific to block drives. You might not obtain statistical data for both block and metadata drives when you"""
+    """run this method. """
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -321,11 +315,11 @@ def getstats(ctx,
 
 
 
-@cli.command('getconfig', short_help="""GetDriveConfig is used to display drive information for expected slice and block drive counts as well as the number of slices and block drives that are currently connected to the node.  Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
+@cli.command('getconfig', short_help="""GetDriveConfig enables you to display drive information for expected slice and block drive counts as well as the number of slices and block drives that are currently connected to the node. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
 @pass_context
 def getconfig(ctx):
-    """GetDriveConfig is used to display drive information for expected slice and block drive counts as well as the number of slices and block drives that are currently connected to the node."""
-    """"""
+    """GetDriveConfig enables you to display drive information for expected slice and block drive counts as well as the number of slices"""
+    """and block drives that are currently connected to the node."""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
@@ -348,19 +342,19 @@ def getconfig(ctx):
 
 
 
-@cli.command('test', short_help="""The TestDrives API method is used to run a hardware validation on all the drives on the node. Hardware failures on the drives are detected if present and they are reported in the results of the validation tests.  Note: This test takes approximately 10 minutes.  Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
+@cli.command('test', short_help="""You can use the TestDrives API method to run a hardware validation on all drives on the node. This method detects hardware failures on the drives (if present) and reports them in the results of the validation tests. You can only use the TestDrives method on nodes that are not "active" in a cluster. Note: This test takes approximately 10 minutes. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
 @click.option('--minutes',
               type=int,
               required=False,
-              help="""The number of minutes to run the test can be specified. """)
+              help="""Specifies the number of minutes to run the test. """)
 @pass_context
 def test(ctx,
            # Optional main parameter
            minutes = None):
-    """The TestDrives API method is used to run a hardware validation on all the drives on the node. Hardware failures on the drives are detected if present and they are reported in the results of the validation tests."""
-    """"""
+    """You can use the TestDrives API method to run a hardware validation on all drives on the node. This method detects hardware"""
+    """failures on the drives (if present) and reports them in the results of the validation tests."""
+    """You can only use the TestDrives method on nodes that are not &quot;active&quot; in a cluster."""
     """Note: This test takes approximately 10 minutes."""
-    """"""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
@@ -383,7 +377,7 @@ def test(ctx,
 
 
 
-@cli.command('listhardware', short_help="""ListDriveHardware returns all the drives connected to a node. Use this method on the cluster to return drive hardware information for all the drives on all nodes. """, cls=SolidFireCommand)
+@cli.command('listhardware', short_help="""ListDriveHardware returns all the drives connected to a node. Use this method on individual nodes to return drive hardware information or use this method on the cluster master node MVIP to see information for all the drives on all nodes. Note: The "securitySupported": true line of the method response does not imply that the drives are capable of encryption; only that the security status can be queried. If you have a node type with a model number ending in "-NE", commands to enable security features on these drives will fail. See the EnableEncryptionAtRest method for more information. """, cls=SolidFireCommand)
 @click.option('--force',
               type=bool,
               required=True,
@@ -392,7 +386,11 @@ def test(ctx,
 def listhardware(ctx,
            # Mandatory main parameter
            force):
-    """ListDriveHardware returns all the drives connected to a node. Use this method on the cluster to return drive hardware information for all the drives on all nodes."""
+    """ListDriveHardware returns all the drives connected to a node. Use this method on individual nodes to return drive hardware"""
+    """information or use this method on the cluster master node MVIP to see information for all the drives on all nodes."""
+    """Note: The &quot;securitySupported&quot;: true line of the method response does not imply that the drives are capable of"""
+    """encryption; only that the security status can be queried. If you have a node type with a model number ending in &quot;-NE&quot;,"""
+    """commands to enable security features on these drives will fail. See the EnableEncryptionAtRest method for more information."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()

@@ -26,7 +26,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 def cli(ctx):
     """getefficiency liststatsbyaccount startbulkwrite updatebulkstatus startbulkread listdeleted purgedeleted liststatsby create cancelclone getdefaultqos getasyncresult listasyncresults liststatsbyaccessgroup listbulkjobs clone modify restoredeleted copy listactive list clonemultiple setdefaultqos getstats listforaccount getcount cancelgroupclone delete """
 
-@cli.command('getefficiency', short_help="""GetVolumeEfficiency is used to retrieve information about a volume. Only the volume given as a parameter in this API method is used to compute the capacity. """, cls=SolidFireCommand)
+@cli.command('getefficiency', short_help="""GetVolumeEfficiency enables you to retrieve information about a volume. Only the volume you give as a parameter in this API method is used to compute the capacity. """, cls=SolidFireCommand)
 @click.option('--volumeid',
               type=int,
               required=True,
@@ -35,8 +35,7 @@ def cli(ctx):
 def getefficiency(ctx,
            # Mandatory main parameter
            volumeid):
-    """GetVolumeEfficiency is used to retrieve information about a volume."""
-    """Only the volume given as a parameter in this API method is used to compute the capacity."""
+    """GetVolumeEfficiency enables you to retrieve information about a volume. Only the volume you give as a parameter in this API method is used to compute the capacity."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -62,19 +61,18 @@ def getefficiency(ctx,
 @click.option('--accounts',
               type=str,
               required=False,
-              help="""One or more account ids to filter by. """)
+              help="""One or more account ids by which to filter the result. """)
 @click.option('--includevirtualvolumes',
               type=bool,
               required=False,
-              help="""ListVolumeStatsByAccount returns high-level activity measurements for every account. Values are summed from all the volumes owned by the account. """)
+              help="""Includes virtual volumes in the response by default. To exclude virtual volumes, set to false. """)
 @pass_context
 def liststatsbyaccount(ctx,
            # Optional main parameter
            accounts = None,
            # Optional main parameter
            includevirtualvolumes = None):
-    """ListVolumeStatsByAccount returns high-level activity measurements for every account."""
-    """Values are summed from all the volumes owned by the account."""
+    """ListVolumeStatsByAccount returns high-level activity measurements for every account. Values are summed from all the volumes owned by the account."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -98,19 +96,19 @@ def liststatsbyaccount(ctx,
 
 
 
-@cli.command('startbulkwrite', short_help="""StartBulkVolumeWrite allows you to initialize a bulk volume write session on a specified volume. Only two bulk volume processes can run simultaneously on a volume. When the session is initialized, data can be written to a SolidFire storage volume from an external backup source. The external data is accessed by a web server running on a SolidFire node. Communications and server interaction information for external data access is passed by a script running on the SolidFire storage system. """, cls=SolidFireCommand)
+@cli.command('startbulkwrite', short_help="""StartBulkVolumeWrite enables you to initialize a bulk volume write session on a specified volume. Only two bulk volume processes can run simultaneously on a volume. When you initialize the write session, data is written to a SolidFire storage volume from an external backup source. The external data is accessed by a web server running on an SF-series node. Communications and server interaction information for external data access is passed by a script running on the storage system. """, cls=SolidFireCommand)
 @click.option('--volumeid',
               type=int,
               required=True,
-              help="""ID of the volume to be written to. """)
+              help="""The ID of the volume to be written to. """)
 @click.option('--format',
               type=str,
               required=True,
-              help="""The format of the volume data. Can be either: uncompressed: every byte of the volume is returned without any compression. native: opaque data is returned that is smaller and more efficiently stored and written on a subsequent bulk volume write """)
+              help="""The format of the volume data. It can be either of the following formats: uncompressed: Every byte of the volume is returned without any compression. native: Opaque data is returned that is smaller and more efficiently stored and written on a subsequent bulk volume write. """)
 @click.option('--script',
               type=str,
               required=False,
-              help="""Executable name of a script. If no script name is given then the key and URL are necessary to access SolidFire nodes. The script runs on the primary node and the key and URL is returned to the script so the local web server can be contacted. """)
+              help="""The executable name of a script. If unspecified, the key and URL are necessary to access SF-series nodes. The script runs on the primary node and the key and URL is returned to the script, so the local web server can be contacted. """)
 @click.option('--scriptparameters',
               type=str,
               required=False,
@@ -131,11 +129,8 @@ def startbulkwrite(ctx,
            scriptparameters = None,
            # Optional main parameter
            attributes = None):
-    """StartBulkVolumeWrite allows you to initialize a bulk volume write session on a specified volume."""
-    """Only two bulk volume processes can run simultaneously on a volume."""
-    """When the session is initialized, data can be written to a SolidFire storage volume from an external backup source."""
-    """The external data is accessed by a web server running on a SolidFire node."""
-    """Communications and server interaction information for external data access is passed by a script running on the SolidFire storage system."""
+    """StartBulkVolumeWrite enables you to initialize a bulk volume write session on a specified volume. Only two bulk volume processes can run simultaneously on a volume. When you initialize the write session, data is written to a SolidFire storage volume from an external backup source. The external data is accessed by a web server running on an SF-series node. Communications and server"""
+    """interaction information for external data access is passed by a script running on the storage system."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -175,27 +170,27 @@ def startbulkwrite(ctx,
 
 
 
-@cli.command('updatebulkstatus', short_help="""You can use UpdateBulkVolumeStatus in a script to return to the SolidFire system the status of a bulk volume job that you have started with the "StartBulkVolumeRead" or "StartBulkVolumeWrite" methods. """, cls=SolidFireCommand)
+@cli.command('updatebulkstatus', short_help="""You can use UpdateBulkVolumeStatus in a script to update the status of a bulk volume job that you started with the StartBulkVolumeRead or StartBulkVolumeWrite methods. """, cls=SolidFireCommand)
 @click.option('--key',
               type=str,
               required=True,
-              help="""The key assigned during initialization of a "StartBulkVolumeRead" or "StartBulkVolumeWrite" session. """)
+              help="""The key assigned during initialization of a StartBulkVolumeRead or StartBulkVolumeWrite session. """)
 @click.option('--status',
               type=str,
               required=True,
-              help="""The SolidFire system sets the status of the given bulk volume job. Possible values: running: jobs that are still active. complete: jobs that are done. failed - jobs that have failed. failed: jobs that have failed. """)
+              help="""The status of the given bulk volume job. The system sets the status. Possible values are:  running: Jobs that are still active. complete: Jobs that are done. failed: Jobs that failed. """)
 @click.option('--percentcomplete',
               type=str,
               required=False,
-              help="""The completed progress of the bulk volume job as a percentage. """)
+              help="""The completed progress of the bulk volume job as a percentage value. """)
 @click.option('--message',
               type=str,
               required=False,
-              help="""Returns the status of the bulk volume job when the job has completed. """)
+              help="""The message returned indicating the status of the bulk volume job after the job is complete. """)
 @click.option('--attributes',
               type=str,
               required=False,
-              help="""JSON attributes  updates what is on the bulk volume job.  Has the following subparameters: """)
+              help="""JSON attributes; updates what is on the bulk volume job.  Has the following subparameters: """)
 @pass_context
 def updatebulkstatus(ctx,
            # Mandatory main parameter
@@ -208,7 +203,8 @@ def updatebulkstatus(ctx,
            message = None,
            # Optional main parameter
            attributes = None):
-    """You can use UpdateBulkVolumeStatus in a script to return to the SolidFire system the status of a bulk volume job that you have started with the &quot;StartBulkVolumeRead&quot; or &quot;StartBulkVolumeWrite&quot; methods."""
+    """You can use UpdateBulkVolumeStatus in a script to update the status of a bulk volume job that you started with the"""
+    """StartBulkVolumeRead or StartBulkVolumeWrite methods."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -239,23 +235,23 @@ def updatebulkstatus(ctx,
 
 
 
-@cli.command('startbulkread', short_help="""StartBulkVolumeRead allows you to initialize a bulk volume read session on a specified volume. Only two bulk volume processes can run simultaneously on a volume. When you initialize the session, data is read from a SolidFire storage volume for the purposes of storing the data on an external backup source. The external data is accessed by a web server running on a SolidFire node. Communications and server interaction information for external data access is passed by a script running on the SolidFire storage system.  At the start of a bulk volume read operation, a snapshot of the volume is made and the snapshot is deleted when the read has completed. You can also read a snapshot of the volume by entering the ID of the snapshot as a parameter. Reading a previous snapshot does not create a new snapshot of the volume, nor does the previous snapshot be deleted when the read completes.  Note: This process creates a new snapshot if the ID of an existing snapshot is not provided. Snapshots can be created if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """, cls=SolidFireCommand)
+@cli.command('startbulkread', short_help="""StartBulkVolumeRead enables you to initialize a bulk volume read session on a specified volume. Only two bulk volume processes can run simultaneously on a volume. When you initialize the session, data is read from a SolidFire storage volume for the purposes of storing the data on an external backup source. The external data is accessed by a web server running on an SF-series node. Communications and server interaction information for external data access is passed by a script running on the storage system. At the start of a bulk volume read operation, a snapshot of the volume is made and the snapshot is deleted when the read is complete. You can also read a snapshot of the volume by entering the ID of the snapshot as a parameter. When you read a previous snapshot, the system does not create a new snapshot of the volume or delete the previous snapshot when the read completes. Note: This process creates a new snapshot if the ID of an existing snapshot is not provided. Snapshots can be created if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """, cls=SolidFireCommand)
 @click.option('--volumeid',
               type=int,
               required=True,
-              help="""ID of the volume to be read. """)
+              help="""The ID of the volume to be read. """)
 @click.option('--format',
               type=str,
               required=True,
-              help="""The format of the volume data. Can be either: uncompressed: every byte of the volume is returned without any compression. native: opaque data is returned that is smaller and more efficiently stored and written on a subsequent bulk volume write. """)
+              help="""The format of the volume data. It can be either of the following formats: uncompressed: Every byte of the volume is returned without any compression. native: Opaque data is returned that is smaller and more efficiently stored and written on a subsequent bulk volume write. """)
 @click.option('--snapshotid',
               type=int,
               required=False,
-              help="""ID of a previously created snapshot used for bulk volume reads. If no ID is entered, a snapshot of the current active volume image is made. """)
+              help="""The ID of a previously created snapshot used for bulk volume reads. If no ID is entered, a snapshot of the current active volume image is made. """)
 @click.option('--script',
               type=str,
               required=False,
-              help="""Executable name of a script. If no script name is given then the key and URL is necessary to access SolidFire nodes. The script is run on the primary node and the key and URL is returned to the script so the local web server can be contacted. """)
+              help="""The executable name of a script. If unspecified, the key and URL is necessary to access SF-series nodes. The script is run on the primary node and the key and URL is returned to the script so the local web server can be contacted. """)
 @click.option('--scriptparameters',
               type=str,
               required=False,
@@ -278,19 +274,14 @@ def startbulkread(ctx,
            scriptparameters = None,
            # Optional main parameter
            attributes = None):
-    """StartBulkVolumeRead allows you to initialize a bulk volume read session on a specified volume."""
-    """Only two bulk volume processes can run simultaneously on a volume."""
-    """When you initialize the session, data is read from a SolidFire storage volume for the purposes of storing the data on an external backup source."""
-    """The external data is accessed by a web server running on a SolidFire node."""
-    """Communications and server interaction information for external data access is passed by a script running on the SolidFire storage system."""
-    """"""
-    """At the start of a bulk volume read operation, a snapshot of the volume is made and the snapshot is deleted when the read has completed."""
-    """You can also read a snapshot of the volume by entering the ID of the snapshot as a parameter."""
-    """Reading a previous snapshot does not create a new snapshot of the volume, nor does the previous snapshot be deleted when the read completes."""
-    """"""
-    """Note: This process creates a new snapshot if the ID of an existing snapshot is not provided."""
-    """Snapshots can be created if cluster fullness is at stage 2 or 3."""
-    """Snapshots are not created when cluster fullness is at stage 4 or 5."""
+    """StartBulkVolumeRead enables you to initialize a bulk volume read session on a specified volume. Only two bulk volume processes"""
+    """can run simultaneously on a volume. When you initialize the session, data is read from a SolidFire storage volume for the purposes"""
+    """of storing the data on an external backup source. The external data is accessed by a web server running on an SF-series node."""
+    """Communications and server interaction information for external data access is passed by a script running on the storage system."""
+    """At the start of a bulk volume read operation, a snapshot of the volume is made and the snapshot is deleted when the read is complete. You can also read a snapshot of the volume by entering the ID of the snapshot as a parameter. When you read a"""
+    """previous snapshot, the system does not create a new snapshot of the volume or delete the previous snapshot when the"""
+    """read completes."""
+    """Note: This process creates a new snapshot if the ID of an existing snapshot is not provided. Snapshots can be created if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -330,16 +321,16 @@ def startbulkread(ctx,
 
 
 
-@cli.command('listdeleted', short_help="""ListDeletedVolumes is used to return the entire list of volumes that have been marked for deletion and is purged from the system. """, cls=SolidFireCommand)
+@cli.command('listdeleted', short_help="""ListDeletedVolumes enables you to retrieve the list of volumes that have been marked for deletion and purged from the system. """, cls=SolidFireCommand)
 @click.option('--includevirtualvolumes',
               type=bool,
               required=False,
-              help="""ListDeletedVolumes is used to return the entire list of volumes that have been marked for deletion and is purged from the system. """)
+              help="""Specifies that virtual volumes are included in the response by default. To exclude virtual volumes, set to false. """)
 @pass_context
 def listdeleted(ctx,
            # Optional main parameter
            includevirtualvolumes = None):
-    """ListDeletedVolumes is used to return the entire list of volumes that have been marked for deletion and is purged from the system."""
+    """ListDeletedVolumes enables you to retrieve the list of volumes that have been marked for deletion and purged from the system."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -361,18 +352,18 @@ def listdeleted(ctx,
 
 
 
-@cli.command('purgedeleted', short_help="""PurgeDeletedVolume immediately and permanently purges a volume which has been deleted. A volume must be deleted using DeleteVolume before it can be purged. Volumes are purged automatically after a period of time, so usage of this method is not typically required. """, cls=SolidFireCommand)
+@cli.command('purgedeleted', short_help="""PurgeDeletedVolume immediately and permanently purges a volume that has been deleted. You must delete a volume using DeleteVolume before it can be purged. Volumes are purged automatically after a period of time, so usage of this method is not typically required. """, cls=SolidFireCommand)
 @click.option('--volumeid',
               type=int,
               required=True,
-              help="""The ID of the volume to purge. """)
+              help="""The ID of the volume to be purged. """)
 @pass_context
 def purgedeleted(ctx,
            # Mandatory main parameter
            volumeid):
-    """PurgeDeletedVolume immediately and permanently purges a volume which has been deleted."""
-    """A volume must be deleted using DeleteVolume before it can be purged."""
-    """Volumes are purged automatically after a period of time, so usage of this method is not typically required."""
+    """PurgeDeletedVolume immediately and permanently purges a volume that has been deleted. You must delete a volume using"""
+    """DeleteVolume before it can be purged. Volumes are purged automatically after a period of time, so usage of this method is not"""
+    """typically required."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -398,13 +389,13 @@ def purgedeleted(ctx,
 @click.option('--includevirtualvolumes',
               type=bool,
               required=False,
-              help="""ListVolumeStatsByVolume returns high-level activity measurements for every volume, by volume. Values are cumulative from the creation of the volume. """)
+              help="""Specifies that virtual volumes are included in the response by default. To exclude virtual volumes, set to false. """)
 @pass_context
 def liststatsby(ctx,
            # Optional main parameter
            includevirtualvolumes = None):
-    """ListVolumeStatsByVolume returns high-level activity measurements for every volume, by volume."""
-    """Values are cumulative from the creation of the volume."""
+    """ListVolumeStatsByVolume returns high-level activity measurements for every volume, by volume. Values are cumulative from the"""
+    """creation of the volume."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -426,11 +417,11 @@ def liststatsby(ctx,
 
 
 
-@cli.command('create', short_help="""CreateVolume is used to create a new (empty) volume on the cluster. When the volume is created successfully it is available for connection via iSCSI. """, cls=SolidFireCommand)
+@cli.command('create', short_help="""CreateVolume enables you to create a new (empty) volume on the cluster. As soon as the volume creation is complete, the volume is available for connection via iSCSI. """, cls=SolidFireCommand)
 @click.option('--name',
               type=str,
               required=True,
-              help="""Name of the volume. Not required to be unique, but it is recommended. May be 1 to 64 characters in length. """)
+              help="""The name of the volume access group (might be user specified). Not required to be unique, but recommended. Might be 1 to 64 characters in length. """)
 @click.option('--accountid',
               type=int,
               required=True,
@@ -442,7 +433,7 @@ def liststatsby(ctx,
 @click.option('--enable512e',
               type=bool,
               required=True,
-              help="""Should the volume provides 512-byte sector emulation? """)
+              help="""Specifies whether 512e emulation is enabled or not. Possible values are: true: The volume provides 512-byte sector emulation. false: 512e emulation is not enabled. """)
 
 @click.option('--qosminiops',
               type=int,
@@ -466,7 +457,7 @@ def liststatsby(ctx,
 @click.option('--attributes',
               type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format.  Has the following subparameters: """)
+              help="""The list of name-value pairs in JSON object format. Total attribute size must be less than 1000B, or 1KB, including JSON formatting characters.  Has the following subparameters: """)
 @click.option('--slicecount',
               type=int,
               required=False,
@@ -493,8 +484,8 @@ def create(ctx,
            attributes = None,
            # Optional main parameter
            slicecount = None):
-    """CreateVolume is used to create a new (empty) volume on the cluster."""
-    """When the volume is created successfully it is available for connection via iSCSI."""
+    """CreateVolume enables you to create a new (empty) volume on the cluster. As soon as the volume creation is complete, the volume is"""
+    """available for connection via iSCSI."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -542,16 +533,17 @@ def create(ctx,
 
 
 
-@cli.command('cancelclone', short_help="""Cancels a currently running clone operation. This method does not return anything. """, cls=SolidFireCommand)
+@cli.command('cancelclone', short_help="""CancelClone enables you to stop an ongoing CloneVolume or CopyVolume process. When you cancel a group clone operation, the system completes and removes the operation's associated asyncHandle. """, cls=SolidFireCommand)
 @click.option('--cloneid',
               type=int,
               required=True,
-              help=""" """)
+              help="""The cloneID for the ongoing clone process. """)
 @pass_context
 def cancelclone(ctx,
            # Mandatory main parameter
            cloneid):
-    """Cancels a currently running clone operation. This method does not return anything."""
+    """CancelClone enables you to stop an ongoing CloneVolume or CopyVolume process. When you cancel a group clone operation, the"""
+    """system completes and removes the operation&#x27;s associated asyncHandle."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -573,10 +565,10 @@ def cancelclone(ctx,
 
 
 
-@cli.command('getdefaultqos', short_help="""GetDefaultQoS is used to retrieve the default QoS values that are set for a volume if QoS is not supplied. """, cls=SolidFireCommand)
+@cli.command('getdefaultqos', short_help="""GetDefaultQoS enables you to retrieve the default QoS values for a newly created volume. """, cls=SolidFireCommand)
 @pass_context
 def getdefaultqos(ctx):
-    """GetDefaultQoS is used to retrieve the default QoS values that are set for a volume if QoS is not supplied."""
+    """GetDefaultQoS enables you to retrieve the default QoS values for a newly created volume."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -598,7 +590,7 @@ def getdefaultqos(ctx):
 
 
 
-@cli.command('getasyncresult', short_help="""Used to retrieve the result of asynchronous method calls. Some method calls are integer running and do not complete when the initial response is sent. To obtain the result of the method call, polling with GetAsyncResult is required.  GetAsyncResult returns the overall status of the operation (in progress, completed, or error) in a standard fashion, but the actual data returned for the operation depends on the original method call and the return data is documented with each method.  The result for a completed asynchronous method call can only be retrieved once. Once the final result has been returned, later attempts returns an error. """, cls=SolidFireCommand)
+@cli.command('getasyncresult', short_help="""You can use GetAsyncResult to retrieve the result of asynchronous method calls. Some method calls require some time to run, and might not be finished when the system sends the initial response. To obtain the status or result of the method call, use GetAsyncResult to poll the asyncHandle value returned by the method. GetAsyncResult returns the overall status of the operation (in progress, completed, or error) in a standard fashion, but the actual data returned for the operation depends on the original method call and the return data is documented with each method. """, cls=SolidFireCommand)
 @click.option('--asynchandle',
               type=int,
               required=True,
@@ -606,22 +598,18 @@ def getdefaultqos(ctx):
 @click.option('--keepresult',
               type=bool,
               required=False,
-              help="""Should the result be kept after? """)
+              help="""If true, GetAsyncResult does not remove the asynchronous result upon returning it, enabling future queries to that asyncHandle. """)
 @pass_context
 def getasyncresult(ctx,
            # Mandatory main parameter
            asynchandle,
            # Optional main parameter
            keepresult = None):
-    """Used to retrieve the result of asynchronous method calls."""
-    """Some method calls are integer running and do not complete when the initial response is sent."""
-    """To obtain the result of the method call, polling with GetAsyncResult is required."""
-    """"""
-    """GetAsyncResult returns the overall status of the operation (in progress, completed, or error) in a standard fashion,"""
-    """but the actual data returned for the operation depends on the original method call and the return data is documented with each method."""
-    """"""
-    """The result for a completed asynchronous method call can only be retrieved once."""
-    """Once the final result has been returned, later attempts returns an error."""
+    """You can use GetAsyncResult to retrieve the result of asynchronous method calls. Some method calls require some time to run, and"""
+    """might not be finished when the system sends the initial response. To obtain the status or result of the method call, use"""
+    """GetAsyncResult to poll the asyncHandle value returned by the method."""
+    """GetAsyncResult returns the overall status of the operation (in progress, completed, or error) in a standard fashion, but the actual"""
+    """data returned for the operation depends on the original method call and the return data is documented with each method."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -647,12 +635,14 @@ def getasyncresult(ctx,
 @click.option('--asyncresulttypes',
               type=str,
               required=False,
-              help="""An optional list of types of results. You can use this list to restrict the results to only these types of operations. Possible values:BulkVolume: Copy operations between volumes, such as backups or restores.Clone: Volume cloning operations.DriveRemoval: Operations involving the system copying data from a drive in preparation to remove it from the cluster.RtfiPendingNode: Operations involving the system installing compatible software on a node before adding it to the cluster. """)
+              help="""An optional list of types of results. You can use this list to restrict the results to only these types of operations. Possible values are: BulkVolume: Copy operations between volumes, such as backups or restores. Clone: Volume cloning operations. DriveRemoval: Operations involving the system copying data from a drive in preparation to remove it from the cluster. RtfiPendingNode: Operations involving the system installing compatible software on a node before adding it to the cluster """)
 @pass_context
 def listasyncresults(ctx,
            # Optional main parameter
            asyncresulttypes = None):
-    """You can use ListAsyncResults to list the results of all currently running and completed asynchronous methods on the system. Querying asynchronous results with ListAsyncResults does not cause completed asyncHandles to expire; you can use GetAsyncResult to query any of the asyncHandles returned by ListAsyncResults."""
+    """You can use ListAsyncResults to list the results of all currently running and completed asynchronous methods on the system."""
+    """Querying asynchronous results with ListAsyncResults does not cause completed asyncHandles to expire; you can use GetAsyncResult"""
+    """to query any of the asyncHandles returned by ListAsyncResults."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -676,22 +666,23 @@ def listasyncresults(ctx,
 
 
 
-@cli.command('liststatsbyaccessgroup', short_help="""ListVolumeStatsByVolumeAccessGroup is used to get total activity measurements for all of the volumes that are a member of the specified volume access group(s). """, cls=SolidFireCommand)
+@cli.command('liststatsbyaccessgroup', short_help="""ListVolumeStatsByVolumeAccessGroup enables you to get total activity measurements for all of the volumes that are a member of the specified volume access group(s). """, cls=SolidFireCommand)
 @click.option('--volumeaccessgroups',
               type=str,
               required=False,
-              help="""An array of VolumeAccessGroupIDs for which volume activity is returned. If no VolumeAccessGroupID is specified, stats for all volume access groups is returned. """)
+              help="""An array of VolumeAccessGroupIDs for which volume activity is returned. If omitted, statistics for all volume access groups are returned. """)
 @click.option('--includevirtualvolumes',
               type=bool,
               required=False,
-              help="""ListVolumeStatsByVolumeAccessGroup is used to get total activity measurements for all of the volumes that are a member of the specified volume access group(s). """)
+              help="""Specifies that virtual volumes are included in the response by default. To exclude virtual volumes, set to false. """)
 @pass_context
 def liststatsbyaccessgroup(ctx,
            # Optional main parameter
            volumeaccessgroups = None,
            # Optional main parameter
            includevirtualvolumes = None):
-    """ListVolumeStatsByVolumeAccessGroup is used to get total activity measurements for all of the volumes that are a member of the specified volume access group(s)."""
+    """ListVolumeStatsByVolumeAccessGroup enables you to get total activity measurements for all of the volumes that are a member of the"""
+    """specified volume access group(s)."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -715,10 +706,11 @@ def liststatsbyaccessgroup(ctx,
 
 
 
-@cli.command('listbulkjobs', short_help="""ListBulkVolumeJobs is used to return information about each bulk volume read or write operation that is occurring in the system. """, cls=SolidFireCommand)
+@cli.command('listbulkjobs', short_help="""ListBulkVolumeJobs enables you to retrieve information about each bulk volume read or write operation that is occurring in the system. """, cls=SolidFireCommand)
 @pass_context
 def listbulkjobs(ctx):
-    """ListBulkVolumeJobs is used to return information about each bulk volume read or write operation that is occurring in the system."""
+    """ListBulkVolumeJobs enables you to retrieve information about each bulk volume read or write operation that is occurring in the"""
+    """system."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -740,35 +732,35 @@ def listbulkjobs(ctx):
 
 
 
-@cli.command('clone', short_help="""CloneVolume is used to create a copy of the volume. This method is asynchronous and may take a variable amount of time to complete. The cloning process begins immediately when the CloneVolume request is made and is representative of the state of the volume when the API method is issued. GetAsyncResults can be used to determine when the cloning process is complete and the new volume is available for connections. ListSyncJobs can be used to see the progress of creating the clone.  Note: The initial attributes and quality of service settings for the volume are inherited from the volume being cloned. If different settings are required, they can be changed via ModifyVolume.  Note: Cloned volumes do not inherit volume access group memberships from the source volume. """, cls=SolidFireCommand)
+@cli.command('clone', short_help="""CloneVolume enables you to create a copy of a volume. This method is asynchronous and might take a variable amount of time to complete. The cloning process begins immediately when you make the CloneVolume request and is representative of the state of the volume when the API method is issued. You can use the GetAsyncResult method to determine when the cloning process is complete and the new volume is available for connections. You can use ListSyncJobs to see the progress of creating the clone. Note: The initial attributes and QoS settings for the volume are inherited from the volume being cloned. You can change these settings with ModifyVolume. Note: Cloned volumes do not inherit volume access group memberships from the source volume. """, cls=SolidFireCommand)
 @click.option('--volumeid',
               type=int,
               required=True,
-              help="""The ID of the volume to clone. """)
+              help="""VolumeID for the volume to be cloned. """)
 @click.option('--name',
               type=str,
               required=True,
-              help="""The name for the newly-created volume. """)
+              help="""The name of the new cloned volume. Might be 1 to 64 characters in length. """)
 @click.option('--newaccountid',
               type=int,
               required=False,
-              help="""AccountID for the owner of the new volume. If unspecified, the AccountID of the owner of the volume being cloned is used. """)
+              help="""AccountID for the owner of the new volume. If unspecified, the accountID of the owner of the volume being cloned is used. """)
 @click.option('--newsize',
               type=int,
               required=False,
-              help="""New size of the volume, in bytes. May be greater or less than the size of the volume being cloned. If unspecified, the clone's volume size will be the same as the source volume. Size is rounded up to the nearest 1 MiB. """)
+              help="""New size of the volume, in bytes. Might be greater or less than the size of the volume being cloned. If unspecified, the volume size is not changed. Size is rounded to the nearest 1MB. """)
 @click.option('--access',
               type=str,
               required=False,
-              help="""Access settings for the new volume. readOnly: Only read operations are allowed. readWrite: Reads and writes are allowed. locked: No reads or writes are allowed. replicationTarget: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked.  If unspecified, the access settings of the clone will be the same as the source. """)
+              help="""Specifies the level of access allowed for the new volume. Possible values are: readOnly: Only read operations are allowed. readWrite: Reads and writes are allowed. locked: No reads or writes are allowed. If unspecified, the level of access of the volume being cloned is used. replicationTarget: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked. If a value is not specified, the access value does not change. """)
 @click.option('--snapshotid',
               type=int,
               required=False,
-              help="""ID of the snapshot to use as the source of the clone. If unspecified, the clone will be created with a snapshot of the active volume. """)
+              help="""ID of the snapshot that is used as the source of the clone. If no ID is provided, the current active volume is used. """)
 @click.option('--attributes',
               type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format.  Has the following subparameters: """)
+              help="""List of name-value pairs in JSON object format.  Has the following subparameters: """)
 @click.option('--enable512e',
               type=bool,
               required=False,
@@ -791,15 +783,8 @@ def clone(ctx,
            attributes = None,
            # Optional main parameter
            enable512e = None):
-    """CloneVolume is used to create a copy of the volume."""
-    """This method is asynchronous and may take a variable amount of time to complete."""
-    """The cloning process begins immediately when the CloneVolume request is made and is representative of the state of the volume when the API method is issued."""
-    """GetAsyncResults can be used to determine when the cloning process is complete and the new volume is available for connections."""
-    """ListSyncJobs can be used to see the progress of creating the clone."""
-    """"""
-    """Note: The initial attributes and quality of service settings for the volume are inherited from the volume being cloned."""
-    """If different settings are required, they can be changed via ModifyVolume."""
-    """"""
+    """CloneVolume enables you to create a copy of a volume. This method is asynchronous and might take a variable amount of time to complete. The cloning process begins immediately when you make the CloneVolume request and is representative of the state of the volume when the API method is issued. You can use the GetAsyncResult method to determine when the cloning process is complete and the new volume is available for connections. You can use ListSyncJobs to see the progress of creating the clone."""
+    """Note: The initial attributes and QoS settings for the volume are inherited from the volume being cloned. You can change these settings with ModifyVolume."""
     """Note: Cloned volumes do not inherit volume access group memberships from the source volume."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
@@ -831,7 +816,7 @@ def clone(ctx,
 
 
 
-@cli.command('modify', short_help="""ModifyVolume is used to modify settings on an existing volume. Modifications can be made to one volume at a time and changes take place immediately. If an optional parameter is left unspecified, the value will not be changed.  Extending the size of a volume that is being replicated should be done in an order. The target (Replication Target) volume should first be increased in size, then the source (Read/Write) volume can be resized. It is recommended that both the target and the source volumes be the same size.  Note: If you change access status to locked or target all existing iSCSI connections are terminated. """, cls=SolidFireCommand)
+@cli.command('modify', short_help="""ModifyVolume enables you to modify settings on an existing volume. You can make modifications to one volume at a time and changes take place immediately. If you do not specify QoS values when you modify a volume, they remain the same as before the modification. You can retrieve default QoS values for a newly created volume by running the GetDefaultQoS method. When you need to increase the size of a volume that is being replicated, do so in the following order to prevent replication errors: 1. Increase the size of the "Replication Target" volume. 2. Increase the size of the source or "Read / Write" volume. NetApp recommends that both the target and source volumes are the same size. Note: If you change the "access" status to locked or target, all existing iSCSI connections are terminated. """, cls=SolidFireCommand)
 @click.option('--volumeid',
               type=int,
               required=True,
@@ -839,11 +824,11 @@ def clone(ctx,
 @click.option('--accountid',
               type=int,
               required=False,
-              help="""AccountID to which the volume is reassigned. If none is specified, the previous account name is used. """)
+              help="""AccountID to which the volume is reassigned. If unspecified, the previous account name is used. """)
 @click.option('--access',
               type=str,
               required=False,
-              help="""Access allowed for the volume. readOnly: Only read operations are allowed. readWrite: Reads and writes are allowed. locked: No reads or writes are allowed. replicationTarget: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked.  If unspecified, the access settings of the clone will be the same as the source. """)
+              help="""Specifies the access allowed for the volume. Possible values are: readOnly: Only read operations are allowed. readWrite: Reads and writes are allowed. locked: No reads or writes are allowed. If not specified, the access value does not change. replicationTarget: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked. If a value is not specified, the access value does not change. """)
 
 @click.option('--qosminiops',
               type=int,
@@ -867,19 +852,19 @@ def clone(ctx,
 @click.option('--totalsize',
               type=int,
               required=False,
-              help="""New size of the volume in bytes. Size is rounded up to the nearest 1MiB size. This parameter can only be used to *increase* the size of a volume. """)
+              help="""New size of the volume in bytes. 1000000000 is equal to 1GB. Size is rounded up to the nearest 1MB. This parameter can only be used to increase the size of a volume. """)
 @click.option('--setcreatetime',
               type=bool,
               required=False,
-              help="""ModifyVolume is used to modify settings on an existing volume. Modifications can be made to one volume at a time and changes take place immediately. If an optional parameter is left unspecified, the value will not be changed.  Extending the size of a volume that is being replicated should be done in an order. The target (Replication Target) volume should first be increased in size, then the source (Read/Write) volume can be resized. It is recommended that both the target and the source volumes be the same size.  Note: If you change access status to locked or target all existing iSCSI connections are terminated. """)
+              help="""If set to true, changes the recorded date of volume creation. """)
 @click.option('--createtime',
               type=str,
               required=False,
-              help="""ModifyVolume is used to modify settings on an existing volume. Modifications can be made to one volume at a time and changes take place immediately. If an optional parameter is left unspecified, the value will not be changed.  Extending the size of a volume that is being replicated should be done in an order. The target (Replication Target) volume should first be increased in size, then the source (Read/Write) volume can be resized. It is recommended that both the target and the source volumes be the same size.  Note: If you change access status to locked or target all existing iSCSI connections are terminated. """)
+              help="""An ISO 8601 date string to set as the new volume creation date. Required if "setCreateTime" is set to true. """)
 @click.option('--attributes',
               type=str,
               required=False,
-              help="""List of Name/Value pairs in JSON object format.  Has the following subparameters: """)
+              help="""List of name-value pairs in JSON object format.  Has the following subparameters: """)
 @pass_context
 def modify(ctx,
            # Mandatory main parameter
@@ -904,15 +889,14 @@ def modify(ctx,
            createtime = None,
            # Optional main parameter
            attributes = None):
-    """ModifyVolume is used to modify settings on an existing volume."""
-    """Modifications can be made to one volume at a time and changes take place immediately."""
-    """If an optional parameter is left unspecified, the value will not be changed."""
-    """"""
-    """Extending the size of a volume that is being replicated should be done in an order."""
-    """The target (Replication Target) volume should first be increased in size, then the source (Read/Write) volume can be resized."""
-    """It is recommended that both the target and the source volumes be the same size."""
-    """"""
-    """Note: If you change access status to locked or target all existing iSCSI connections are terminated."""
+    """ModifyVolume enables you to modify settings on an existing volume. You can make modifications to one volume at a time and"""
+    """changes take place immediately. If you do not specify QoS values when you modify a volume, they remain the same as before the modification. You can retrieve"""
+    """default QoS values for a newly created volume by running the GetDefaultQoS method."""
+    """When you need to increase the size of a volume that is being replicated, do so in the following order to prevent replication errors:"""
+    """1. Increase the size of the &quot;Replication Target&quot; volume."""
+    """2. Increase the size of the source or &quot;Read / Write&quot; volume."""
+    """NetApp recommends that both the target and source volumes are the same size."""
+    """Note: If you change the &quot;access&quot; status to locked or target, all existing iSCSI connections are terminated."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -964,13 +948,12 @@ def modify(ctx,
 @click.option('--volumeid',
               type=int,
               required=True,
-              help="""VolumeID for the deleted volume to restore. """)
+              help="""VolumeID of the deleted volume to be restored. """)
 @pass_context
 def restoredeleted(ctx,
            # Mandatory main parameter
            volumeid):
-    """RestoreDeletedVolume marks a deleted volume as active again."""
-    """This action makes the volume immediately available for iSCSI connection."""
+    """RestoreDeletedVolume marks a deleted volume as active again. This action makes the volume immediately available for iSCSI connection."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -992,19 +975,19 @@ def restoredeleted(ctx,
 
 
 
-@cli.command('copy', short_help="""Copies one volume to another. """, cls=SolidFireCommand)
+@cli.command('copy', short_help="""CopyVolume enables you to overwrite the data contents of an existing volume with the data contents of another volume (or snapshot). Attributes of the destination volume such as IQN, QoS settings, size, account, and volume access group membership are not changed. The destination volume must already exist and must be the same size as the source volume. NetApp strongly recommends that clients unmount the destination volume before the CopyVolume operation begins. If the destination volume is modified during the copy operation, the changes will be lost. This method is asynchronous and may take a variable amount of time to complete. You can use the GetAsyncResult method to determine when the process has finished, and ListSyncJobs to see the progress of the copy. """, cls=SolidFireCommand)
 @click.option('--volumeid',
               type=int,
               required=True,
-              help="""Source volume to copy. """)
+              help="""VolumeID of the volume to be read from. """)
 @click.option('--dstvolumeid',
               type=int,
               required=True,
-              help="""Destination volume for the copy. """)
+              help="""VolumeID of the volume to be overwritten. """)
 @click.option('--snapshotid',
               type=int,
               required=False,
-              help="""Snapshot ID of the source volume to create the copy from. """)
+              help="""ID of the snapshot that is used as the source of the clone. If no ID is provided, the current active volume is used. """)
 @pass_context
 def copy(ctx,
            # Mandatory main parameter
@@ -1013,7 +996,13 @@ def copy(ctx,
            dstvolumeid,
            # Optional main parameter
            snapshotid = None):
-    """Copies one volume to another."""
+    """CopyVolume enables you to overwrite the data contents of an existing volume with the data contents of another volume (or"""
+    """snapshot). Attributes of the destination volume such as IQN, QoS settings, size, account, and volume access group membership are"""
+    """not changed. The destination volume must already exist and must be the same size as the source volume."""
+    """NetApp strongly recommends that clients unmount the destination volume before the CopyVolume operation begins. If the"""
+    """destination volume is modified during the copy operation, the changes will be lost."""
+    """This method is asynchronous and may take a variable amount of time to complete. You can use the GetAsyncResult method to"""
+    """determine when the process has finished, and ListSyncJobs to see the progress of the copy."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -1035,19 +1024,19 @@ def copy(ctx,
 
 
 
-@cli.command('listactive', short_help="""ListActiveVolumes is used to return the list of active volumes currently in the system. The list of volumes is returned sorted in VolumeID order and can be returned in multiple parts (pages). """, cls=SolidFireCommand)
+@cli.command('listactive', short_help="""ListActiveVolumes enables you to return the list of active volumes currently in the system. The list of volumes is returned sorted in VolumeID order and can be returned in multiple parts (pages). """, cls=SolidFireCommand)
 @click.option('--startvolumeid',
               type=int,
               required=False,
-              help="""The ID of the first volume to list. This can be useful for paging results. By default, this starts at the lowest VolumeID. """)
+              help="""Starting VolumeID to return. If no volume exists with this VolumeID, the next volume by VolumeID order is used as the start of the list. To page through the list, pass the VolumeID of the last volume in the previous response + 1. """)
 @click.option('--limit',
               type=int,
               required=False,
-              help="""The maximum number of volumes to return from the API. """)
+              help="""Maximum number of Volume Info objects to return. A value of 0 (zero) returns all volumes (unlimited). """)
 @click.option('--includevirtualvolumes',
               type=bool,
               required=False,
-              help="""ListActiveVolumes is used to return the list of active volumes currently in the system. The list of volumes is returned sorted in VolumeID order and can be returned in multiple parts (pages). """)
+              help="""Specifies that virtual volumes are included in the response by default. To exclude virtual volumes, set to false. """)
 @pass_context
 def listactive(ctx,
            # Optional main parameter
@@ -1056,8 +1045,8 @@ def listactive(ctx,
            limit = None,
            # Optional main parameter
            includevirtualvolumes = None):
-    """ListActiveVolumes is used to return the list of active volumes currently in the system."""
-    """The list of volumes is returned sorted in VolumeID order and can be returned in multiple parts (pages)."""
+    """ListActiveVolumes enables you to return the list of active volumes currently in the system. The list of volumes is returned sorted in"""
+    """VolumeID order and can be returned in multiple parts (pages)."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -1079,39 +1068,39 @@ def listactive(ctx,
 
 
 
-@cli.command('list', short_help="""The ListVolumes method is used to return a list of volumes that are in a cluster. You can specify the volumes you want to return in the list by using the available parameters. """, cls=SolidFireCommand)
+@cli.command('list', short_help="""The ListVolumes method enables you to retrieve a list of volumes that are in a cluster. You can specify the volumes you want to return in the list by using the available parameters. """, cls=SolidFireCommand)
 @click.option('--startvolumeid',
               type=int,
               required=False,
-              help="""The ID of the first volume to list. This can be useful for paging results. By default, this starts at the lowest VolumeID. """)
+              help="""Only volumes with an ID greater than or equal to this value are returned. Mutually exclusive with the volumeIDs parameter. """)
 @click.option('--limit',
               type=int,
               required=False,
-              help="""The maximum number of volumes to return from the API. """)
+              help="""Specifies the maximum number of volume results that are returned. Mutually exclusive with the volumeIDs parameter. """)
 @click.option('--volumestatus',
               type=str,
               required=False,
-              help="""If specified, filter to only volumes with the provided status. By default, list all volumes. """)
+              help="""Only volumes with a status equal to the status value are returned. Possible values are: creating snapshotting active deleted """)
 @click.option('--accounts',
               type=str,
               required=False,
-              help="""If specified, only fetch volumes which beinteger to the provided accounts. By default, list volumes for all accounts. """)
+              help="""Returns only the volumes owned by the accounts you specify here. Mutually exclusive with the volumeIDs parameter. """)
 @click.option('--ispaired',
               type=bool,
               required=False,
-              help="""If specified, only fetch volumes which are paired (if true) or non-paired (if false). By default, list all volumes regardless of their pairing status. """)
+              help="""Returns volumes that are paired or not paired. Possible values are: true: Returns all paired volumes. false: Returns all volumes that are not paired. """)
 @click.option('--volumeids',
               type=str,
               required=False,
-              help="""If specified, only fetch volumes specified in this list. This option cannot be specified if startVolumeID, limit, or accounts option is specified. """)
+              help="""A list of volume IDs. If you supply this parameter, other parameters operate only on this set of volumes. Mutually exclusive with the accounts, startVolumeID, and limit parameters. """)
 @click.option('--volumename',
               type=str,
               required=False,
-              help="""The ListVolumes method is used to return a list of volumes that are in a cluster. You can specify the volumes you want to return in the list by using the available parameters. """)
+              help="""Only volume object information matching the volume name is returned. """)
 @click.option('--includevirtualvolumes',
               type=bool,
               required=False,
-              help="""The ListVolumes method is used to return a list of volumes that are in a cluster. You can specify the volumes you want to return in the list by using the available parameters. """)
+              help="""Specifies that virtual volumes are included in the response by default. To exclude virtual volumes, set to false. """)
 @pass_context
 def list(ctx,
            # Optional main parameter
@@ -1130,8 +1119,8 @@ def list(ctx,
            volumename = None,
            # Optional main parameter
            includevirtualvolumes = None):
-    """The ListVolumes method is used to return a list of volumes that are in a cluster."""
-    """You can specify the volumes you want to return in the list by using the available parameters."""
+    """The ListVolumes method enables you to retrieve a list of volumes that are in a cluster. You can specify the volumes you want to"""
+    """return in the list by using the available parameters."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -1157,14 +1146,14 @@ def list(ctx,
 
 
 
-@cli.command('clonemultiple', short_help="""CloneMultipleVolumes is used to create a clone of a group of specified volumes. A consistent set of characteristics can be assigned to a group of multiple volume when they are cloned together. If groupSnapshotID is going to be used to clone the volumes in a group snapshot, the group snapshot must be created first using the CreateGroupSnapshot API method or the SolidFire Element WebUI. Using groupSnapshotID is optional when cloning multiple volumes.  Note: Cloning multiple volumes is allowed if cluster fullness is at stage 2 or 3. Clones are not created when cluster fullness is at stage 4 or 5. """, cls=SolidFireCommand)
+@cli.command('clonemultiple', short_help="""CloneMultipleVolumes enables you to create a clone of a group of specified volumes. You can assign a consistent set of characteristics to a group of multiple volumes when they are cloned together. Before using groupSnapshotID to clone the volumes in a group snapshot, you must create the group snapshot by using the CreateGroupSnapshot API method or the Element OS Web UI. Using groupSnapshotID is optional when cloning multiple volumes. Note: Cloning multiple volumes is allowed if cluster fullness is at stage 2 or 3. Clones are not created when cluster fullness is at stage 4 or 5. """, cls=SolidFireCommand)
 @click.option('--volumes',
               cls=SolidFireOption,
               is_flag=True,
               multiple=True,
               subparameters=["volumeid", "accessvolumes", "name", "newaccountidvolumes", "newsize", "attributes", ],
               required=True,
-              help="""Array of Unique ID for each volume to include in the clone with optional parameters. If optional parameters are not specified, the values will be inherited from the source volumes.  Has the following subparameters: --volumeid --accessvolumes --name --newaccountidvolumes --newsize --attributes """)
+              help="""Unique ID for each volume to include in the clone. If optional parameters are not specified, the values are inherited from the source volumes. Required parameter for "volumes" array: volumeID Optional parameters for "volumes" array: access: Can be one of readOnly, readWrite, locked, or replicationTarget attributes: List of name-value pairs in JSON object format. name: New name for the clone. newAccountID: Account ID for the new volumes. newSize: New size Total size of the volume, in bytes. Size is rounded up to the nearest 1MB.  Has the following subparameters: --volumeid --accessvolumes --name --newaccountidvolumes --newsize --attributes """)
 @click.option('--volumeid',
               required=True,
               multiple=True,
@@ -1216,7 +1205,7 @@ def list(ctx,
 @click.option('--access',
               type=str,
               required=False,
-              help="""New default access method for the new volumes if not overridden by information passed in the volumes array. readOnly: Only read operations are allowed. readWrite: Reads and writes are allowed. locked: No reads or writes are allowed. replicationTarget: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked.  If unspecified, the access settings of the clone will be the same as the source. """)
+              help="""New default access method for the new volumes if not overridden by information passed in the volume's array. """)
 @click.option('--groupsnapshotid',
               type=int,
               required=False,
@@ -1247,10 +1236,12 @@ def clonemultiple(ctx,
            groupsnapshotid = None,
            # Optional main parameter
            newaccountid = None):
-    """CloneMultipleVolumes is used to create a clone of a group of specified volumes. A consistent set of characteristics can be assigned to a group of multiple volume when they are cloned together."""
-    """If groupSnapshotID is going to be used to clone the volumes in a group snapshot, the group snapshot must be created first using the CreateGroupSnapshot API method or the SolidFire Element WebUI. Using groupSnapshotID is optional when cloning multiple volumes."""
-    """"""
-    """Note: Cloning multiple volumes is allowed if cluster fullness is at stage 2 or 3. Clones are not created when cluster fullness is at stage 4 or 5."""
+    """CloneMultipleVolumes enables you to create a clone of a group of specified volumes. You can assign a consistent set of characteristics"""
+    """to a group of multiple volumes when they are cloned together."""
+    """Before using groupSnapshotID to clone the volumes in a group snapshot, you must create the group snapshot by using the"""
+    """CreateGroupSnapshot API method or the Element OS Web UI. Using groupSnapshotID is optional when cloning multiple volumes."""
+    """Note: Cloning multiple volumes is allowed if cluster fullness is at stage 2 or 3. Clones are not created when cluster fullness is"""
+    """at stage 4 or 5."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -1284,15 +1275,15 @@ def clonemultiple(ctx,
 
 
 
-@cli.command('setdefaultqos', short_help="""SetDefaultQoS enables you to configure the default Quality of Service (QoS) values (measured in inputs and outputs per second, or IOPS) for all volumes not yet created. """, cls=SolidFireCommand)
+@cli.command('setdefaultqos', short_help="""SetDefaultQoS enables you to configure the default Quality of Service (QoS) values (measured in inputs and outputs per second, or IOPS) for a volume. For more information about QoS in a SolidFire cluster, see the User Guide. """, cls=SolidFireCommand)
 @click.option('--miniops',
               type=int,
               required=False,
-              help="""The minimum number of sustained IOPS that are provided by the cluster to a volume. """)
+              help="""The minimum number of sustained IOPS provided by the cluster to a volume. """)
 @click.option('--maxiops',
               type=int,
               required=False,
-              help="""The maximum number of sustained IOPS that are provided by the cluster to a volume. """)
+              help="""The maximum number of sustained IOPS provided by the cluster to a volume. """)
 @click.option('--burstiops',
               type=int,
               required=False,
@@ -1305,7 +1296,8 @@ def setdefaultqos(ctx,
            maxiops = None,
            # Optional main parameter
            burstiops = None):
-    """SetDefaultQoS enables you to configure the default Quality of Service (QoS) values (measured in inputs and outputs per second, or IOPS) for all volumes not yet created."""
+    """SetDefaultQoS enables you to configure the default Quality of Service (QoS) values (measured in inputs and outputs per second, or"""
+    """IOPS) for a volume. For more information about QoS in a SolidFire cluster, see the User Guide."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -1327,17 +1319,16 @@ def setdefaultqos(ctx,
 
 
 
-@cli.command('getstats', short_help="""GetVolumeStats is used to retrieve high-level activity measurements for a single volume. Values are cumulative from the creation of the volume. """, cls=SolidFireCommand)
+@cli.command('getstats', short_help="""GetVolumeStats enables  you to retrieve high-level activity measurements for a single volume. Values are cumulative from the creation of the volume. """, cls=SolidFireCommand)
 @click.option('--volumeid',
               type=int,
               required=True,
-              help="""Specifies the volume for which statistics is gathered. """)
+              help="""Specifies the volume for which statistics are gathered. """)
 @pass_context
 def getstats(ctx,
            # Mandatory main parameter
            volumeid):
-    """GetVolumeStats is used to retrieve high-level activity measurements for a single volume."""
-    """Values are cumulative from the creation of the volume."""
+    """GetVolumeStats enables  you to retrieve high-level activity measurements for a single volume. Values are cumulative from the creation of the volume."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -1359,11 +1350,11 @@ def getstats(ctx,
 
 
 
-@cli.command('listforaccount', short_help="""ListVolumesForAccount returns the list of active AND (pending) deleted volumes for an account. """, cls=SolidFireCommand)
+@cli.command('listforaccount', short_help="""ListVolumesForAccount returns the list of active and (pending) deleted volumes for an account. """, cls=SolidFireCommand)
 @click.option('--accountid',
               type=int,
               required=True,
-              help="""The ID of the account to list the volumes for. """)
+              help="""Returns all volumes owned by this AccountID. """)
 @click.option('--startvolumeid',
               type=int,
               required=False,
@@ -1375,7 +1366,7 @@ def getstats(ctx,
 @click.option('--includevirtualvolumes',
               type=bool,
               required=False,
-              help="""ListVolumesForAccount returns the list of active AND (pending) deleted volumes for an account. """)
+              help="""Specifies that virtual volumes are included in the response by default. To exclude virtual volumes, set to false. """)
 @pass_context
 def listforaccount(ctx,
            # Mandatory main parameter
@@ -1386,7 +1377,7 @@ def listforaccount(ctx,
            limit = None,
            # Optional main parameter
            includevirtualvolumes = None):
-    """ListVolumesForAccount returns the list of active AND (pending) deleted volumes for an account."""
+    """ListVolumesForAccount returns the list of active and (pending) deleted volumes for an account."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -1433,16 +1424,17 @@ def getcount(ctx):
 
 
 
-@cli.command('cancelgroupclone', short_help="""CancelGroupClone enables you to stop an ongoing CloneMultipleVolumes process for a group of clones. When you cancel a group clone operation, the system completes and removes the operation's associated asyncHandle. This method does not return anything. """, cls=SolidFireCommand)
+@cli.command('cancelgroupclone', short_help="""CancelGroupClone enables you to stop an ongoing CloneMultipleVolumes process occurring on a group of volumes. When you cancel a group clone operation, the system completes and removes the operation's associated asyncHandle. """, cls=SolidFireCommand)
 @click.option('--groupcloneid',
               type=int,
               required=True,
-              help="""cloneID for the ongoing clone process. """)
+              help="""The cloneID for the ongoing clone process. """)
 @pass_context
 def cancelgroupclone(ctx,
            # Mandatory main parameter
            groupcloneid):
-    """CancelGroupClone enables you to stop an ongoing CloneMultipleVolumes process for a group of clones. When you cancel a group clone operation, the system completes and removes the operation&#x27;s associated asyncHandle. This method does not return anything."""
+    """CancelGroupClone enables you to stop an ongoing CloneMultipleVolumes process occurring on a group of volumes. When you cancel"""
+    """a group clone operation, the system completes and removes the operation&#x27;s associated asyncHandle."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -1464,30 +1456,25 @@ def cancelgroupclone(ctx,
 
 
 
-@cli.command('delete', short_help="""DeleteVolume marks an active volume for deletion. It is purged (permanently deleted) after the cleanup interval elapses. After making a request to delete a volume, any active iSCSI connections to the volume is immediately terminated and no further connections are allowed while the volume is in this state. It is not returned in target discovery requests.  Any snapshots of a volume that has been marked to delete are not affected. Snapshots are kept until the volume is purged from the system.  If a volume is marked for deletion, and it has a bulk volume read or bulk volume write operation in progress, the bulk volume operation is stopped.  If the volume you delete is paired with a volume, replication between the paired volumes is suspended and no data is transferred to it or from it while in a deleted state. The remote volume the deleted volume was paired with enters into a PausedMisconfigured state and data is no integerer sent to it or from the deleted volume. Until the deleted volume is purged, it can be restored and data transfers resumes. If the deleted volume gets purged from the system, the volume it was paired with enters into a StoppedMisconfigured state and the volume pairing status is removed. The purged volume becomes permanently unavailable. """, cls=SolidFireCommand)
+@cli.command('delete', short_help="""DeleteVolume marks an active volume for deletion. When marked, the volume is purged (permanently deleted) after the cleanup interval elapses. After making a request to delete a volume, any active iSCSI connections to the volume are immediately terminated and no further connections are allowed while the volume is in this state. A marked volume is not returned in target discovery requests. Any snapshots of a volume that has been marked for deletion are not affected. Snapshots are kept until the volume is purged from the system. If a volume is marked for deletion and has a bulk volume read or bulk volume write operation in progress, the bulk volume read or write operation is stopped. If the volume you delete is paired with a volume, replication between the paired volumes is suspended and no data is transferred to it or from it while in a deleted state. The remote volume that the deleted volume was paired with enters into a PausedMisconfigured state and data is no longer sent to it or from the deleted volume. Until the deleted volume is purged, it can be restored and data transfers resume. If the deleted volume gets purged from the system, the volume it was paired with enters into a StoppedMisconfigured state and the volume pairing status is removed. The purged volume becomes permanently unavailable. """, cls=SolidFireCommand)
 @click.option('--volumeid',
               type=int,
               required=True,
-              help="""The ID of the volume to delete. """)
+              help="""The ID of the volume to be deleted. """)
 @pass_context
 def delete(ctx,
            # Mandatory main parameter
            volumeid):
-    """DeleteVolume marks an active volume for deletion."""
-    """It is purged (permanently deleted) after the cleanup interval elapses."""
-    """After making a request to delete a volume, any active iSCSI connections to the volume is immediately terminated and no further connections are allowed while the volume is in this state."""
-    """It is not returned in target discovery requests."""
-    """"""
-    """Any snapshots of a volume that has been marked to delete are not affected."""
-    """Snapshots are kept until the volume is purged from the system."""
-    """"""
-    """If a volume is marked for deletion, and it has a bulk volume read or bulk volume write operation in progress, the bulk volume operation is stopped."""
-    """"""
-    """If the volume you delete is paired with a volume, replication between the paired volumes is suspended and no data is transferred to it or from it while in a deleted state."""
-    """The remote volume the deleted volume was paired with enters into a PausedMisconfigured state and data is no integerer sent to it or from the deleted volume."""
-    """Until the deleted volume is purged, it can be restored and data transfers resumes."""
-    """If the deleted volume gets purged from the system, the volume it was paired with enters into a StoppedMisconfigured state and the volume pairing status is removed."""
-    """The purged volume becomes permanently unavailable."""
+    """DeleteVolume marks an active volume for deletion. When marked, the volume is purged (permanently deleted) after the cleanup"""
+    """interval elapses. After making a request to delete a volume, any active iSCSI connections to the volume are immediately terminated"""
+    """and no further connections are allowed while the volume is in this state. A marked volume is not returned in target discovery"""
+    """requests."""
+    """Any snapshots of a volume that has been marked for deletion are not affected. Snapshots are kept until the volume is purged from"""
+    """the system."""
+    """If a volume is marked for deletion and has a bulk volume read or bulk volume write operation in progress, the bulk volume read or"""
+    """write operation is stopped."""
+    """If the volume you delete is paired with a volume, replication between the paired volumes is suspended and no data is transferred"""
+    """to it or from it while in a deleted state. The remote volume that the deleted volume was paired with enters into a PausedMisconfigured state and data is no longer sent to it or from the deleted volume. Until the deleted volume is purged, it can be restored and data transfers resume. If the deleted volume gets purged from the system, the volume it was paired with enters into a StoppedMisconfigured state and the volume pairing status is removed. The purged volume becomes permanently unavailable."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()

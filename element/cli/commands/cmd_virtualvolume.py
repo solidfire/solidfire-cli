@@ -374,16 +374,16 @@ def querymetadata(ctx,
 
 
 
-@cli.command('listtasks', short_help="""ListVirtualVolumeTasks returns a list of VVol Async Tasks. """, cls=SolidFireCommand)
+@cli.command('listtasks', short_help="""ListVirtualVolumeTasks returns a list of virtual volume tasks in the system. """, cls=SolidFireCommand)
 @click.option('--virtualvolumetaskids',
               type=str,
               required=False,
-              help=""" """)
+              help="""A list of virtual volume task IDs for which to retrieve information. If unspecified, the method returns information about all virtual volume tasks. """)
 @pass_context
 def listtasks(ctx,
            # Optional main parameter
            virtualvolumetaskids = None):
-    """ListVirtualVolumeTasks returns a list of VVol Async Tasks."""
+    """ListVirtualVolumeTasks returns a list of virtual volume tasks in the system."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -783,16 +783,17 @@ def getunsharedbitmap(ctx,
 
 
 
-@cli.command('listhosts', short_help="""ListVirtualVolumeHosts returns a list of known ESX hosts. """, cls=SolidFireCommand)
+@cli.command('listhosts', short_help="""ListVirtualVolumeHosts returns a list of all virtual volume hosts known to the cluster. A virtual volume host is a VMware ESX host that has initiated a session with the VASA API provider. """, cls=SolidFireCommand)
 @click.option('--virtualvolumehostids',
               type=str,
               required=False,
-              help=""" """)
+              help="""A list of virtual volume host IDs for which to retrieve information. If unspecified, the method returns information about all virtual volume hosts. """)
 @pass_context
 def listhosts(ctx,
            # Optional main parameter
            virtualvolumehostids = None):
-    """ListVirtualVolumeHosts returns a list of known ESX hosts."""
+    """ListVirtualVolumeHosts returns a list of all virtual volume hosts known to the cluster. A virtual volume host is a VMware ESX host"""
+    """that has initiated a session with the VASA API provider."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -1170,16 +1171,16 @@ def preparevirtualsnapshot(ctx,
 
 
 
-@cli.command('getfeaturestatus', short_help="""GetFeatureStatus allows you to retrieve the status of a cluster feature. """, cls=SolidFireCommand)
+@cli.command('getfeaturestatus', short_help="""GetFeatureStatus enables you to retrieve the status of a cluster feature. """, cls=SolidFireCommand)
 @click.option('--feature',
               type=str,
               required=False,
-              help="""Valid values: vvols: Find the status of the Virtual Volumes (VVOLs) cluster feature. """)
+              help="""Specifies the feature for which the status is returned. Valid value is: vvols: Retrieve status for the NetApp SolidFire VVols cluster feature. """)
 @pass_context
 def getfeaturestatus(ctx,
            # Optional main parameter
            feature = None):
-    """GetFeatureStatus allows you to retrieve the status of a cluster feature."""
+    """GetFeatureStatus enables you to retrieve the status of a cluster feature."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -1360,7 +1361,7 @@ def bind(ctx,
 @click.option('--details',
               type=bool,
               required=False,
-              help="""Possible values:true: Include more details about each VVOL in the response.false: Include the standard level of detail about each VVOL in the response. """)
+              help="""Specifies the level of detail about each virtual volume that is returned. Possible values are: true: Include more details about each virtual volume in the response. false: Include the standard level of detail about each virtual volume in the response. """)
 @click.option('--limit',
               type=int,
               required=False,
@@ -1368,7 +1369,7 @@ def bind(ctx,
 @click.option('--recursive',
               type=bool,
               required=False,
-              help="""Possible values:true: Include information about the children of each VVOL in the response.false: Do not include information about the children of each VVOL in the response. """)
+              help="""Specifies whether to include information about the children of each virtual volume in the response. Possible values are: true: Include information about the children of each virtual volume in the response. false: Do not include information about the children of each virtual volume in the response. """)
 @click.option('--startvirtualvolumeid',
               type=str,
               required=False,
@@ -1376,7 +1377,7 @@ def bind(ctx,
 @click.option('--virtualvolumeids',
               type=str,
               required=False,
-              help="""A list of virtual volume  IDs for which to retrieve information. If you specify this parameter, the method returns information about only these virtual volumes. """)
+              help="""A list of virtual volume IDs for which to retrieve information. If you specify this parameter, the method returns information about only these virtual volumes. """)
 @pass_context
 def list(ctx,
            # Optional main parameter
@@ -1389,7 +1390,8 @@ def list(ctx,
            startvirtualvolumeid = None,
            # Optional main parameter
            virtualvolumeids = None):
-    """ListVirtualVolumes enables you to list the virtual volumes currently in the system. You can use this method to list all virtual volumes, or only list a subset."""
+    """ListVirtualVolumes enables you to list the virtual volumes currently in the system. You can use this method to list all virtual volumes,"""
+    """or only list a subset."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -1496,16 +1498,16 @@ def snapshot(ctx,
 
 
 
-@cli.command('listbindings', short_help="""ListVirtualVolumeBindings returns a list of VVol bindings. """, cls=SolidFireCommand)
+@cli.command('listbindings', short_help="""ListVirtualVolumeBindings returns a list of all virtual volumes in the cluster that are bound to protocol endpoints. """, cls=SolidFireCommand)
 @click.option('--virtualvolumebindingids',
               type=str,
               required=False,
-              help=""" """)
+              help="""A list of virtual volume binding IDs for which to retrieve information. If unspecified, the method returns information about all virtual volume bindings. """)
 @pass_context
 def listbindings(ctx,
            # Optional main parameter
            virtualvolumebindingids = None):
-    """ListVirtualVolumeBindings returns a list of VVol bindings."""
+    """ListVirtualVolumeBindings returns a list of all virtual volumes in the cluster that are bound to protocol endpoints."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -1554,16 +1556,16 @@ def getcount(ctx):
 
 
 
-@cli.command('enablefeature', short_help="""EnableFeature allows you to enable cluster features that are disabled by default. """, cls=SolidFireCommand)
+@cli.command('enablefeature', short_help="""You can use EnableFeature to enable cluster features that are disabled by default. """, cls=SolidFireCommand)
 @click.option('--feature',
               type=str,
               required=True,
-              help="""Valid values: vvols: Enable the Virtual Volumes (VVOLs) cluster feature. """)
+              help="""Indicates which feature to enable. Valid value is: vvols: Enable the NetApp SolidFire VVols cluster feature. """)
 @pass_context
 def enablefeature(ctx,
            # Mandatory main parameter
            feature):
-    """EnableFeature allows you to enable cluster features that are disabled by default."""
+    """You can use EnableFeature to enable cluster features that are disabled by default."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()

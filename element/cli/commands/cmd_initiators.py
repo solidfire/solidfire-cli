@@ -26,14 +26,14 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 def cli(ctx):
     """modify create list delete """
 
-@cli.command('modify', short_help="""ModifyInitiators enables you to change the attributes of an existing initiator. You cannot change the name of an existing initiator. If you need to change the name of an initiator, delete the existing initiator with DeleteInitiators and create a new one with CreateInitiators. If ModifyInitiators fails to change one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible). """, cls=SolidFireCommand)
+@cli.command('modify', short_help="""ModifyInitiators enables you to change the attributes of one or more existing initiators. You cannot change the name of an existing initiator. If you need to change the name of an initiator, delete it first with DeleteInitiators and create a new one with CreateInitiators. If ModifyInitiators fails to change one of the initiators provided in the parameter, the method returns an error and does not modify any initiators (no partial completion is possible). """, cls=SolidFireCommand)
 @click.option('--initiators',
               cls=SolidFireOption,
               is_flag=True,
               multiple=True,
               subparameters=["initiatorid", "alias", "volumeaccessgroupid", "attributes", ],
               required=True,
-              help="""A list of Initiator objects containing characteristics of each initiator to modify.  Has the following subparameters: --initiatorid --alias --volumeaccessgroupid --attributes """)
+              help="""A list of objects containing characteristics of each initiator to modify. Values are: initiatorID: (Required) The ID of the initiator to modify. (Integer) alias: (Optional) A new friendly name to assign to the initiator. (String) attributes: (Optional) A new set of JSON attributes to assign to the initiator. (JSON Object) volumeAccessGroupID: (Optional) The ID of the volume access group into to which the initiator should be added. If the initiator was previously in a different volume access group, it is removed from the old volume access group. If this key is present but null, the initiator is removed from its current volume access group, but not placed in any new volume access group. (Integer)  Has the following subparameters: --initiatorid --alias --volumeaccessgroupid --attributes """)
 @click.option('--initiatorid',
               required=True,
               multiple=True,
@@ -78,8 +78,11 @@ def modify(ctx,
            volumeaccessgroupid = None,
            # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
            attributes = None):
-    """ModifyInitiators enables you to change the attributes of an existing initiator. You cannot change the name of an existing initiator. If you need to change the name of an initiator, delete the existing initiator with DeleteInitiators and create a new one with CreateInitiators."""
-    """If ModifyInitiators fails to change one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible)."""
+    """ModifyInitiators enables you to change the attributes of one or more existing initiators. You cannot change the name of an existing"""
+    """initiator. If you need to change the name of an initiator, delete it first with DeleteInitiators and create a new one with"""
+    """CreateInitiators."""
+    """If ModifyInitiators fails to change one of the initiators provided in the parameter, the method returns an error and does not modify"""
+    """any initiators (no partial completion is possible)."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -120,7 +123,7 @@ def modify(ctx,
               multiple=True,
               subparameters=["name", "alias", "volumeaccessgroupid", "attributes", ],
               required=True,
-              help="""A list of Initiator objects containing characteristics of each new initiator  Has the following subparameters: --name --alias --volumeaccessgroupid --attributes """)
+              help="""A list of objects containing characteristics of each new initiator. Values are: name: (Required) The name of the initiator (IQN or WWPN) to create. (String) alias: (Optional) The friendly name to assign to this initiator. (String) attributes: (Optional) A set of JSON attributes to assign to this initiator. (JSON Object) volumeAccessGroupID: (Optional) The ID of the volume access group into to which this newly created initiator will be added. (Integer)  Has the following subparameters: --name --alias --volumeaccessgroupid --attributes """)
 @click.option('--name',
               required=True,
               multiple=True,
@@ -165,8 +168,10 @@ def create(ctx,
            volumeaccessgroupid = None,
            # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
            attributes = None):
-    """CreateInitiators enables you to create multiple new initiator IQNs or World Wide Port Names (WWPNs) and optionally assign them aliases and attributes. When you use CreateInitiators to create new initiators, you can also add them to volume access groups."""
-    """If CreateInitiators fails to create one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible)."""
+    """CreateInitiators enables you to create multiple new initiator IQNs or World Wide Port Names (WWPNs) and optionally assign them"""
+    """aliases and attributes. When you use CreateInitiators to create new initiators, you can also add them to volume access groups."""
+    """If CreateInitiators fails to create one of the initiators provided in the parameter, the method returns an error and does not create"""
+    """any initiators (no partial completion is possible)."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
@@ -212,7 +217,7 @@ def create(ctx,
 @click.option('--initiators',
               type=str,
               required=False,
-              help="""A list of initiator IDs to retrieve. You can supply this parameter or the "startInitiatorID" parameter, but not both. """)
+              help="""A list of initiator IDs to retrieve. You can provide a value for this parameter or the "startInitiatorID" parameter, but not both. """)
 @pass_context
 def list(ctx,
            # Optional main parameter
@@ -254,8 +259,10 @@ def list(ctx,
 def delete(ctx,
            # Mandatory main parameter
            initiators):
-    """DeleteInitiators enables you to delete one or more initiators from the system (and from any associated volumes or volume access groups)."""
-    """If DeleteInitiators fails to delete one of the initiators provided in the parameter, the system returns an error and does not delete any initiators (no partial completion is possible)."""
+    """DeleteInitiators enables you to delete one or more initiators from the system (and from any associated volumes or volume access"""
+    """groups)."""
+    """If DeleteInitiators fails to delete one of the initiators provided in the parameter, the system returns an error and does not delete any"""
+    """initiators (no partial completion is possible)."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
