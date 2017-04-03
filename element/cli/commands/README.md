@@ -880,20 +880,40 @@ true: Delete initiator objects after they are removed from a volume access group
 List of name-value pairs in JSON object format. 
 
 ---------------------------------------------------------------
-#### getefficiency ####
+#### create ####
 Command:
 
-    sfcli VolumeAccessGroup getefficiency <options>
+    sfcli VolumeAccessGroup create <options>
 
 Description:
 
-GetVolumeAccessGroupEfficiency enables you to retrieve efficiency information about a volume access group. Only the volume access group you provide as the parameter in this API method is used to compute the capacity. 
+You can use CreateVolumeAccessGroup to create a new volume access group. When you create the volume access group, you need to give it a name, and you can optionally enter initiators and volumes. After you create the group, you can add volumes and initiator IQNs. Any initiator IQN that you add to the volume access group is able to access any volume in the group without CHAP authentication. 
 
 Options:
 
---volumeaccessgroupid
+--name
 
-The volume access group for which capacity is computed. 
+The name for this volume access group. Not required to be unique, but recommended. 
+
+--initiators
+
+List of initiators to include in the volume access group. If unspecified, the access group's configured initiators are not modified. 
+
+--volumes
+
+List of volumes to initially include in the volume access group. If unspecified, the access group's volumes are not modified. 
+
+--virtualnetworkid
+
+The ID of the SolidFire virtual network to associate the volume access group with. 
+
+--virtualnetworktags
+
+The ID of the SolidFire virtual network to associate the volume access group with. 
+
+--attributes
+
+List of name-value pairs in JSON object format. 
 
 ---------------------------------------------------------------
 #### modifylunassignments ####
@@ -1016,40 +1036,20 @@ The list of initiators to remove from the volume access group.
 true: Delete initiator objects after they are removed from a volume access group. false: Do not delete initiator objects after they are removed from a volume access group. 
 
 ---------------------------------------------------------------
-#### create ####
+#### getefficiency ####
 Command:
 
-    sfcli VolumeAccessGroup create <options>
+    sfcli VolumeAccessGroup getefficiency <options>
 
 Description:
 
-You can use CreateVolumeAccessGroup to create a new volume access group. When you create the volume access group, you need to give it a name, and you can optionally enter initiators and volumes. After you create the group, you can add volumes and initiator IQNs. Any initiator IQN that you add to the volume access group is able to access any volume in the group without CHAP authentication. 
+GetVolumeAccessGroupEfficiency enables you to retrieve efficiency information about a volume access group. Only the volume access group you provide as the parameter in this API method is used to compute the capacity. 
 
 Options:
 
---name
+--volumeaccessgroupid
 
-The name for this volume access group. Not required to be unique, but recommended. 
-
---initiators
-
-List of initiators to include in the volume access group. If unspecified, the access group's configured initiators are not modified. 
-
---volumes
-
-List of volumes to initially include in the volume access group. If unspecified, the access group's volumes are not modified. 
-
---virtualnetworkid
-
-The ID of the SolidFire virtual network to associate the volume access group with. 
-
---virtualnetworktags
-
-The ID of the SolidFire virtual network to associate the volume access group with. 
-
---attributes
-
-List of name-value pairs in JSON object format. 
+The volume access group for which capacity is computed. 
 
 ---------------------------------------------------------------
 #### delete ####
@@ -2608,20 +2608,28 @@ An array of unique volume IDs to query. If you do not specify this parameter, al
 Retrieves information for a specific group snapshot ID. 
 
 ---------------------------------------------------------------
-#### getschedule ####
+#### modifygroup ####
 Command:
 
-    sfcli Snapshot getschedule <options>
+    sfcli Snapshot modifygroup <options>
 
 Description:
 
-You can use the GetSchedule method to retrieve information about a scheduled snapshot. You can see information about a specific schedule if there are many snapshot schedules in the system. You also retrieve information about more than one schedule with this method by specifying additional scheduleIDs in the parameter. 
+ModifyGroupSnapshot enables you to change the attributes of a group of snapshots. You can also use this method to enable snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system. 
 
 Options:
 
---scheduleid
+--groupsnapshotid
 
-Specifies the unique ID of the schedule or multiple schedules to display. 
+Specifies the ID of the group of snapshots. 
+
+--expirationtime
+
+Sets the time when the snapshot should be removed. If unspecified, the current time is used. 
+
+--enableremotereplication
+
+Replicates the snapshot created to a remote cluster. Possible values are: true: The snapshot is replicated to remote storage. false: Default. The snapshot is not replicated. 
 
 ---------------------------------------------------------------
 #### modify ####
@@ -2740,28 +2748,20 @@ Specifies the unique ID of the group snapshot.
 Specifies whether to preserve snapshots or delete them. Valid values are: true: Snapshots are preserved, but group association is removed. false: The group and snapshots are deleted. 
 
 ---------------------------------------------------------------
-#### modifygroup ####
+#### getschedule ####
 Command:
 
-    sfcli Snapshot modifygroup <options>
+    sfcli Snapshot getschedule <options>
 
 Description:
 
-ModifyGroupSnapshot enables you to change the attributes of a group of snapshots. You can also use this method to enable snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system. 
+You can use the GetSchedule method to retrieve information about a scheduled snapshot. You can see information about a specific schedule if there are many snapshot schedules in the system. You also retrieve information about more than one schedule with this method by specifying additional scheduleIDs in the parameter. 
 
 Options:
 
---groupsnapshotid
+--scheduleid
 
-Specifies the ID of the group of snapshots. 
-
---expirationtime
-
-Sets the time when the snapshot should be removed. If unspecified, the current time is used. 
-
---enableremotereplication
-
-Replicates the snapshot created to a remote cluster. Possible values are: true: The snapshot is replicated to remote storage. false: Default. The snapshot is not replicated. 
+Specifies the unique ID of the schedule or multiple schedules to display. 
 
 ---------------------------------------------------------------
 #### rollbacktogroup ####
@@ -3094,36 +3094,28 @@ Signed SSL certificate for the Vasa Provider
 UUID identifying the vasa provider 
 
 ---------------------------------------------------------------
-#### getunsharedchunks ####
+#### copydiffsto ####
 Command:
 
-    sfcli VirtualVolume getunsharedchunks <options>
+    sfcli VirtualVolume copydiffsto <options>
 
 Description:
 
-GetVirtualVolumeAllocatedBitmap scans a VVol segment and returns the number of  chunks not shared between two volumes. This call will return results in less  than 30 seconds. If the specified VVol and the base VVil are not related, an  error is thrown. If the offset/length combination is invalid or out fo range  an error is thrown. 
+CopyDiffsToVirtualVolume is a three-way merge function. 
 
 Options:
 
 --virtualvolumeid
 
-The ID of the Virtual Volume. 
+The ID of the snapshot Virtual Volume. 
 
 --basevirtualvolumeid
 
-The ID of the Virtual Volume to compare against. 
+The ID of the base Virtual Volume. 
 
---segmentstart
+--dstvirtualvolumeid
 
-Start Byte offset. 
-
---segmentlength
-
-Length of the scan segment in bytes. 
-
---chunksize
-
-Number of bytes represented by one bit in the bitmap. 
+The ID of the Virtual Volume to be overwritten. 
 
 ---------------------------------------------------------------
 #### querymetadata ####
@@ -3326,28 +3318,36 @@ The ID of the Virtual Volume snapshot.
 The ID of the Virtual Volume to restore to. 
 
 ---------------------------------------------------------------
-#### copydiffsto ####
+#### getunsharedchunks ####
 Command:
 
-    sfcli VirtualVolume copydiffsto <options>
+    sfcli VirtualVolume getunsharedchunks <options>
 
 Description:
 
-CopyDiffsToVirtualVolume is a three-way merge function. 
+GetVirtualVolumeAllocatedBitmap scans a VVol segment and returns the number of  chunks not shared between two volumes. This call will return results in less  than 30 seconds. If the specified VVol and the base VVil are not related, an  error is thrown. If the offset/length combination is invalid or out fo range  an error is thrown. 
 
 Options:
 
 --virtualvolumeid
 
-The ID of the snapshot Virtual Volume. 
+The ID of the Virtual Volume. 
 
 --basevirtualvolumeid
 
-The ID of the base Virtual Volume. 
+The ID of the Virtual Volume to compare against. 
 
---dstvirtualvolumeid
+--segmentstart
 
-The ID of the Virtual Volume to be overwritten. 
+Start Byte offset. 
+
+--segmentlength
+
+Length of the scan segment in bytes. 
+
+--chunksize
+
+Number of bytes represented by one bit in the bitmap. 
 
 ---------------------------------------------------------------
 #### clone ####
@@ -4038,20 +4038,16 @@ Identifies the beginning of a range of events to return.
 Identifies the end of a range of events to return. 
 
 ---------------------------------------------------------------
-#### clearfaults ####
+#### snmpsendtesttraps ####
 Command:
 
-    sfcli Cluster clearfaults <options>
+    sfcli Cluster snmpsendtesttraps <options>
 
 Description:
 
-You can use the ClearClusterFaults method to clear information about both current and previously detected faults. Both resolved and unresolved faults can be cleared. 
+SnmpSendTestTraps enables you to test SNMP functionality for a cluster. This method instructs the cluster to send test SNMP traps to the currently configured SNMP manager. 
 
 Options:
-
---faulttypes
-
-Determines the types of faults cleared. Possible values are: current: Faults that are currently detected and have not been resolved. resolved: (Default) Faults that were previously detected and resolved. all: Both current and resolved faults are cleared. The fault status can be determined by the resolved field of the fault object. 
 
 ---------------------------------------------------------------
 #### removeadmin ####
@@ -4070,16 +4066,28 @@ Options:
 ClusterAdminID for the cluster admin to remove. 
 
 ---------------------------------------------------------------
-#### getstats ####
+#### modifyfullthreshold ####
 Command:
 
-    sfcli Cluster getstats <options>
+    sfcli Cluster modifyfullthreshold <options>
 
 Description:
 
-GetClusterStats enables you to retrieve high-level activity measurements for the cluster. Values returned are cumulative from the creation of the cluster. 
+You can use ModifyClusterFullThreshold to change the level at which the system generates an event when the storage cluster approaches a certain capacity utilization. You can use the threshold setting to indicate the acceptable amount of utilized block storage before the system generates a warning. For example, if you want to be alerted when the system reaches 3% below the "Error" level block storage utilization, enter a value of "3" for the stage3BlockThresholdPercent parameter. If this level is reached, the system sends an alert to the Event Log in the Cluster Management Console. 
 
 Options:
+
+--stage2awarethreshold
+
+The number of nodes of capacity remaining in the cluster before the system triggers a capacity notification. 
+
+--stage3blockthresholdpercent
+
+The percentage of block storage utilization below the "Error" threshold that causes the system to trigger a cluster "Warning" alert. 
+
+--maxmetadataoverprovisionfactor
+
+A value representative of the number of times metadata space can be overprovisioned relative to the amount of space available. For example, if there was enough metadata space to store 100 TiB of volumes and this number was set to 5, then 500 TiB worth of volumes can be created. 
 
 ---------------------------------------------------------------
 #### getlimits ####
@@ -4130,20 +4138,16 @@ Passed to the sf_make_support_bundle script. You should use this parameter only 
 The number of seconds to allow the support bundle script to run before stopping. The default value is 1500 seconds. 
 
 ---------------------------------------------------------------
-#### enablesnmp ####
+#### getcapacity ####
 Command:
 
-    sfcli Cluster enablesnmp <options>
+    sfcli Cluster getcapacity <options>
 
 Description:
 
-EnableSnmp enables you to enable SNMP on cluster nodes. When you enable SNMP, the action applies to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to EnableSnmp. 
+You can use the GetClusterCapacity method to return the high-level capacity measurements for an entire cluster. You can use the fields returned from this method to calculate the efficiency rates that are displayed in the Element OS Web UI. You can use the following calculations in scripts to return the efficiency rates for thin provisioning, deduplication, compression, and overall efficiency. 
 
 Options:
-
---snmpv3enabled
-
-If set to "true", then SNMP v3 is enabled on each node in the cluster. If set to "false", then SNMP v2 is enabled. 
 
 ---------------------------------------------------------------
 #### getntpinfo ####
@@ -4158,14 +4162,14 @@ GetNtpInfo enables you to return the current network time protocol (NTP) configu
 Options:
 
 ---------------------------------------------------------------
-#### listsyncjobs ####
+#### enableencryptionatrest ####
 Command:
 
-    sfcli Cluster listsyncjobs <options>
+    sfcli Cluster enableencryptionatrest <options>
 
 Description:
 
-ListSyncJobs enables you to return information about synchronization jobs that are running on a SolidFire cluster. The type of synchronization jobs that are returned with this method are slice, clone, and remote. 
+You can use the EnableEncryptionAtRest method to enable the Advanced Encryption Standard (AES) 256-bit encryption at rest on the cluster, so that the cluster can manage the encryption key used for the drives on each node. This feature is not enabled by default. When you enable Encryption at Rest, the cluster automatically manages encryption keys internally for the drives on each node in the cluster. Nodes do not store the keys to unlock drives and the keys are never passed over the network. Two nodes participating in a cluster are required to access the key to disable encryption on a drive. The encryption management does not affect performance or efficiency on the cluster. If an encryption-enabled drive or node is removed from the cluster with the API, Encryption at Rest is disabled and the data is not secure erased. Data can be secure erased using the SecureEraseDrives API method. Note: If you have a node type with a model number ending in "-NE", the EnableEncryptionAtRest method call fails with a response of "Encryption not allowed. Cluster detected non-encryptable node". You should only enable or disable encryption when the cluster is running and in a healthy state. You can enable or disable encryption at your discretion and as often as you need. Note: This process is asynchronous and returns a response before encryption is enabled. You can use the GetClusterInfo method to poll the system to see when the process has completed. 
 
 Options:
 
@@ -4202,16 +4206,20 @@ List of networks and what type of access they have to the SNMP servers running o
 List of users and the type of access they have to the SNMP servers running on the cluster nodes. 
 
 ---------------------------------------------------------------
-#### snmpsendtesttraps ####
+#### clearfaults ####
 Command:
 
-    sfcli Cluster snmpsendtesttraps <options>
+    sfcli Cluster clearfaults <options>
 
 Description:
 
-SnmpSendTestTraps enables you to test SNMP functionality for a cluster. This method instructs the cluster to send test SNMP traps to the currently configured SNMP manager. 
+You can use the ClearClusterFaults method to clear information about both current and previously detected faults. Both resolved and unresolved faults can be cleared. 
 
 Options:
+
+--faulttypes
+
+Determines the types of faults cleared. Possible values are: current: Faults that are currently detected and have not been resolved. resolved: (Default) Faults that were previously detected and resolved. all: Both current and resolved faults are cleared. The fault status can be determined by the resolved field of the fault object. 
 
 ---------------------------------------------------------------
 #### getsnmpacl ####
@@ -4242,40 +4250,32 @@ Options:
 To run this command, the force parameter must be set to true. 
 
 ---------------------------------------------------------------
-#### getcapacity ####
+#### enablesnmp ####
 Command:
 
-    sfcli Cluster getcapacity <options>
+    sfcli Cluster enablesnmp <options>
 
 Description:
 
-You can use the GetClusterCapacity method to return the high-level capacity measurements for an entire cluster. You can use the fields returned from this method to calculate the efficiency rates that are displayed in the Element OS Web UI. You can use the following calculations in scripts to return the efficiency rates for thin provisioning, deduplication, compression, and overall efficiency. 
+EnableSnmp enables you to enable SNMP on cluster nodes. When you enable SNMP, the action applies to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to EnableSnmp. 
 
 Options:
+
+--snmpv3enabled
+
+If set to "true", then SNMP v3 is enabled on each node in the cluster. If set to "false", then SNMP v2 is enabled. 
 
 ---------------------------------------------------------------
-#### modifyfullthreshold ####
+#### getstats ####
 Command:
 
-    sfcli Cluster modifyfullthreshold <options>
+    sfcli Cluster getstats <options>
 
 Description:
 
-You can use ModifyClusterFullThreshold to change the level at which the system generates an event when the storage cluster approaches a certain capacity utilization. You can use the threshold setting to indicate the acceptable amount of utilized block storage before the system generates a warning. For example, if you want to be alerted when the system reaches 3% below the "Error" level block storage utilization, enter a value of "3" for the stage3BlockThresholdPercent parameter. If this level is reached, the system sends an alert to the Event Log in the Cluster Management Console. 
+GetClusterStats enables you to retrieve high-level activity measurements for the cluster. Values returned are cumulative from the creation of the cluster. 
 
 Options:
-
---stage2awarethreshold
-
-The number of nodes of capacity remaining in the cluster before the system triggers a capacity notification. 
-
---stage3blockthresholdpercent
-
-The percentage of block storage utilization below the "Error" threshold that causes the system to trigger a cluster "Warning" alert. 
-
---maxmetadataoverprovisionfactor
-
-A value representative of the number of times metadata space can be overprovisioned relative to the amount of space available. For example, if there was enough metadata space to store 100 TiB of volumes and this number was set to 5, then 500 TiB worth of volumes can be created. 
 
 ---------------------------------------------------------------
 #### getmasternodeid ####
@@ -4330,14 +4330,14 @@ You can use GetClusterFullThreshold to view the stages set for cluster fullness 
 Options:
 
 ---------------------------------------------------------------
-#### enableencryptionatrest ####
+#### listsyncjobs ####
 Command:
 
-    sfcli Cluster enableencryptionatrest <options>
+    sfcli Cluster listsyncjobs <options>
 
 Description:
 
-You can use the EnableEncryptionAtRest method to enable the Advanced Encryption Standard (AES) 256-bit encryption at rest on the cluster, so that the cluster can manage the encryption key used for the drives on each node. This feature is not enabled by default. When you enable Encryption at Rest, the cluster automatically manages encryption keys internally for the drives on each node in the cluster. Nodes do not store the keys to unlock drives and the keys are never passed over the network. Two nodes participating in a cluster are required to access the key to disable encryption on a drive. The encryption management does not affect performance or efficiency on the cluster. If an encryption-enabled drive or node is removed from the cluster with the API, Encryption at Rest is disabled and the data is not secure erased. Data can be secure erased using the SecureEraseDrives API method. Note: If you have a node type with a model number ending in "-NE", the EnableEncryptionAtRest method call fails with a response of "Encryption not allowed. Cluster detected non-encryptable node". You should only enable or disable encryption when the cluster is running and in a healthy state. You can enable or disable encryption at your discretion and as often as you need. Note: This process is asynchronous and returns a response before encryption is enabled. You can use the GetClusterInfo method to poll the system to see when the process has completed. 
+ListSyncJobs enables you to return information about synchronization jobs that are running on a SolidFire cluster. The type of synchronization jobs that are returned with this method are slice, clone, and remote. 
 
 Options:
 
