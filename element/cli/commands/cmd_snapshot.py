@@ -24,7 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """listgroup modifygroup modify create list createschedule deletegroup getschedule rollbacktogroup rollbackto creategroup modifyschedule listschedules delete """
+    """listgroup getschedule modify create list createschedule deletegroup modifygroup rollbacktogroup rollbackto creategroup modifyschedule listschedules delete """
 
 @cli.command('listgroup', short_help="""ListGroupSnapshots enables you to get information about all group snapshots that have been created. """, cls=SolidFireCommand)
 @click.option('--volumeid',
@@ -63,38 +63,28 @@ def listgroup(ctx,
 
 
 
-@cli.command('modifygroup', short_help="""ModifyGroupSnapshot enables you to change the attributes of a group of snapshots. You can also use this method to enable snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system. """, cls=SolidFireCommand)
-@click.option('--groupsnapshotid',
+@cli.command('getschedule', short_help="""You can use the GetSchedule method to retrieve information about a scheduled snapshot. You can see information about a specific schedule if there are many snapshot schedules in the system. You also retrieve information about more than one schedule with this method by specifying additional scheduleIDs in the parameter. """, cls=SolidFireCommand)
+@click.option('--scheduleid',
               type=int,
               required=True,
-              help="""Specifies the ID of the group of snapshots. """)
-@click.option('--expirationtime',
-              type=str,
-              required=False,
-              help="""Sets the time when the snapshot should be removed. If unspecified, the current time is used. """)
-@click.option('--enableremotereplication',
-              type=bool,
-              required=False,
-              help="""Replicates the snapshot created to a remote cluster. Possible values are: true: The snapshot is replicated to remote storage. false: Default. The snapshot is not replicated. """)
+              help="""Specifies the unique ID of the schedule or multiple schedules to display. """)
 @pass_context
-def modifygroup(ctx,
+def getschedule(ctx,
            # Mandatory main parameter
-           groupsnapshotid,
-           # Optional main parameter
-           expirationtime = None,
-           # Optional main parameter
-           enableremotereplication = None):
-    """ModifyGroupSnapshot enables you to change the attributes of a group of snapshots. You can also use this method to enable snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system."""
+           scheduleid):
+    """You can use the GetSchedule method to retrieve information about a scheduled snapshot. You can see information about a specific"""
+    """schedule if there are many snapshot schedules in the system. You also retrieve information about more than one schedule with this"""
+    """method by specifying additional scheduleIDs in the parameter."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-            
+    
     
 
-    ctx.logger.info("""groupsnapshotid = """+str(groupsnapshotid)+""";"""+"""expirationtime = """+str(expirationtime)+""";"""+"""enableremotereplication = """+str(enableremotereplication)+""";"""+"")
+    ctx.logger.info("""scheduleid = """+str(scheduleid)+""";"""+"")
     try:
-        _ModifyGroupSnapshotResult = ctx.element.modify_group_snapshot(group_snapshot_id=groupsnapshotid, expiration_time=expirationtime, enable_remote_replication=enableremotereplication)
+        _GetScheduleResult = ctx.element.get_schedule(schedule_id=scheduleid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -102,7 +92,7 @@ def modifygroup(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_ModifyGroupSnapshotResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_GetScheduleResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -433,28 +423,38 @@ def deletegroup(ctx,
 
 
 
-@cli.command('getschedule', short_help="""You can use the GetSchedule method to retrieve information about a scheduled snapshot. You can see information about a specific schedule if there are many snapshot schedules in the system. You also retrieve information about more than one schedule with this method by specifying additional scheduleIDs in the parameter. """, cls=SolidFireCommand)
-@click.option('--scheduleid',
+@cli.command('modifygroup', short_help="""ModifyGroupSnapshot enables you to change the attributes of a group of snapshots. You can also use this method to enable snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system. """, cls=SolidFireCommand)
+@click.option('--groupsnapshotid',
               type=int,
               required=True,
-              help="""Specifies the unique ID of the schedule or multiple schedules to display. """)
+              help="""Specifies the ID of the group of snapshots. """)
+@click.option('--expirationtime',
+              type=str,
+              required=False,
+              help="""Sets the time when the snapshot should be removed. If unspecified, the current time is used. """)
+@click.option('--enableremotereplication',
+              type=bool,
+              required=False,
+              help="""Replicates the snapshot created to a remote cluster. Possible values are: true: The snapshot is replicated to remote storage. false: Default. The snapshot is not replicated. """)
 @pass_context
-def getschedule(ctx,
+def modifygroup(ctx,
            # Mandatory main parameter
-           scheduleid):
-    """You can use the GetSchedule method to retrieve information about a scheduled snapshot. You can see information about a specific"""
-    """schedule if there are many snapshot schedules in the system. You also retrieve information about more than one schedule with this"""
-    """method by specifying additional scheduleIDs in the parameter."""
+           groupsnapshotid,
+           # Optional main parameter
+           expirationtime = None,
+           # Optional main parameter
+           enableremotereplication = None):
+    """ModifyGroupSnapshot enables you to change the attributes of a group of snapshots. You can also use this method to enable snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-    
+            
     
 
-    ctx.logger.info("""scheduleid = """+str(scheduleid)+""";"""+"")
+    ctx.logger.info("""groupsnapshotid = """+str(groupsnapshotid)+""";"""+"""expirationtime = """+str(expirationtime)+""";"""+"""enableremotereplication = """+str(enableremotereplication)+""";"""+"")
     try:
-        _GetScheduleResult = ctx.element.get_schedule(schedule_id=scheduleid)
+        _ModifyGroupSnapshotResult = ctx.element.modify_group_snapshot(group_snapshot_id=groupsnapshotid, expiration_time=expirationtime, enable_remote_replication=enableremotereplication)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -462,7 +462,7 @@ def getschedule(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_GetScheduleResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_ModifyGroupSnapshotResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
