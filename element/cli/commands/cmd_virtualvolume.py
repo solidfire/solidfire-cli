@@ -24,7 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """modifyhost gettaskupdate unbindallfromhost modifymetadata modifyvasaproviderinfo getunsharedchunks querymetadata listtasks create fastclone canceltask getallocatedbitmap getunsharedbitmap listhosts rollback copydiffsto clone modify preparevirtualsnapshot getfeaturestatus unbind createhost bind list getvasaproviderinfo snapshot listbindings getcount enablefeature delete """
+    """modifyhost gettaskupdate unbindallfromhost modifymetadata modifyvasaproviderinfo copydiffsto querymetadata listtasks create fastclone canceltask getallocatedbitmap getunsharedbitmap listhosts rollback getunsharedchunks clone modify preparevirtualsnapshot getfeaturestatus unbind createhost bind list getvasaproviderinfo snapshot listbindings getcount enablefeature delete """
 
 @cli.command('modifyhost', short_help="""ModifyVirtualVolumeHost changes an existing ESX host. """, cls=SolidFireCommand)
 @click.option('--virtualvolumehostid',
@@ -209,54 +209,38 @@ def modifyvasaproviderinfo(ctx,
 
 
 
-@cli.command('getunsharedchunks', short_help="""GetVirtualVolumeAllocatedBitmap scans a VVol segment and returns the number of  chunks not shared between two volumes. This call will return results in less  than 30 seconds. If the specified VVol and the base VVil are not related, an  error is thrown. If the offset/length combination is invalid or out fo range  an error is thrown. """, cls=SolidFireCommand)
+@cli.command('copydiffsto', short_help="""CopyDiffsToVirtualVolume is a three-way merge function. """, cls=SolidFireCommand)
 @click.option('--virtualvolumeid',
               type=str,
               required=True,
-              help="""The ID of the Virtual Volume. """)
+              help="""The ID of the snapshot Virtual Volume. """)
 @click.option('--basevirtualvolumeid',
               type=str,
               required=True,
-              help="""The ID of the Virtual Volume to compare against. """)
-@click.option('--segmentstart',
-              type=int,
+              help="""The ID of the base Virtual Volume. """)
+@click.option('--dstvirtualvolumeid',
+              type=str,
               required=True,
-              help="""Start Byte offset. """)
-@click.option('--segmentlength',
-              type=int,
-              required=True,
-              help="""Length of the scan segment in bytes. """)
-@click.option('--chunksize',
-              type=int,
-              required=True,
-              help="""Number of bytes represented by one bit in the bitmap. """)
+              help="""The ID of the Virtual Volume to be overwritten. """)
 @pass_context
-def getunsharedchunks(ctx,
+def copydiffsto(ctx,
            # Mandatory main parameter
            virtualvolumeid,
            # Mandatory main parameter
            basevirtualvolumeid,
            # Mandatory main parameter
-           segmentstart,
-           # Mandatory main parameter
-           segmentlength,
-           # Mandatory main parameter
-           chunksize):
-    """GetVirtualVolumeAllocatedBitmap scans a VVol segment and returns the number of """
-    """chunks not shared between two volumes. This call will return results in less """
-    """than 30 seconds. If the specified VVol and the base VVil are not related, an """
-    """error is thrown. If the offset/length combination is invalid or out fo range """
-    """an error is thrown."""
+           dstvirtualvolumeid):
+    """CopyDiffsToVirtualVolume is a three-way merge function."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-                    
+            
     
 
-    ctx.logger.info("""virtualvolumeid = """+str(virtualvolumeid)+""";"""+"""basevirtualvolumeid = """+str(basevirtualvolumeid)+""";"""+"""segmentstart = """+str(segmentstart)+""";"""+"""segmentlength = """+str(segmentlength)+""";"""+"""chunksize = """+str(chunksize)+""";"""+"")
+    ctx.logger.info("""virtualvolumeid = """+str(virtualvolumeid)+""";"""+"""basevirtualvolumeid = """+str(basevirtualvolumeid)+""";"""+"""dstvirtualvolumeid = """+str(dstvirtualvolumeid)+""";"""+"")
     try:
-        _VirtualVolumeUnsharedChunkResult = ctx.element.get_virtual_volume_unshared_chunks(virtual_volume_id=virtualvolumeid, base_virtual_volume_id=basevirtualvolumeid, segment_start=segmentstart, segment_length=segmentlength, chunk_size=chunksize)
+        _VirtualVolumeAsyncResult = ctx.element.copy_diffs_to_virtual_volume(virtual_volume_id=virtualvolumeid, base_virtual_volume_id=basevirtualvolumeid, dst_virtual_volume_id=dstvirtualvolumeid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -264,7 +248,7 @@ def getunsharedchunks(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_VirtualVolumeUnsharedChunkResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_VirtualVolumeAsyncResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -728,38 +712,54 @@ def rollback(ctx,
 
 
 
-@cli.command('copydiffsto', short_help="""CopyDiffsToVirtualVolume is a three-way merge function. """, cls=SolidFireCommand)
+@cli.command('getunsharedchunks', short_help="""GetVirtualVolumeAllocatedBitmap scans a VVol segment and returns the number of  chunks not shared between two volumes. This call will return results in less  than 30 seconds. If the specified VVol and the base VVil are not related, an  error is thrown. If the offset/length combination is invalid or out fo range  an error is thrown. """, cls=SolidFireCommand)
 @click.option('--virtualvolumeid',
               type=str,
               required=True,
-              help="""The ID of the snapshot Virtual Volume. """)
+              help="""The ID of the Virtual Volume. """)
 @click.option('--basevirtualvolumeid',
               type=str,
               required=True,
-              help="""The ID of the base Virtual Volume. """)
-@click.option('--dstvirtualvolumeid',
-              type=str,
+              help="""The ID of the Virtual Volume to compare against. """)
+@click.option('--segmentstart',
+              type=int,
               required=True,
-              help="""The ID of the Virtual Volume to be overwritten. """)
+              help="""Start Byte offset. """)
+@click.option('--segmentlength',
+              type=int,
+              required=True,
+              help="""Length of the scan segment in bytes. """)
+@click.option('--chunksize',
+              type=int,
+              required=True,
+              help="""Number of bytes represented by one bit in the bitmap. """)
 @pass_context
-def copydiffsto(ctx,
+def getunsharedchunks(ctx,
            # Mandatory main parameter
            virtualvolumeid,
            # Mandatory main parameter
            basevirtualvolumeid,
            # Mandatory main parameter
-           dstvirtualvolumeid):
-    """CopyDiffsToVirtualVolume is a three-way merge function."""
+           segmentstart,
+           # Mandatory main parameter
+           segmentlength,
+           # Mandatory main parameter
+           chunksize):
+    """GetVirtualVolumeAllocatedBitmap scans a VVol segment and returns the number of """
+    """chunks not shared between two volumes. This call will return results in less """
+    """than 30 seconds. If the specified VVol and the base VVil are not related, an """
+    """error is thrown. If the offset/length combination is invalid or out fo range """
+    """an error is thrown."""
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-            
+                    
     
 
-    ctx.logger.info("""virtualvolumeid = """+str(virtualvolumeid)+""";"""+"""basevirtualvolumeid = """+str(basevirtualvolumeid)+""";"""+"""dstvirtualvolumeid = """+str(dstvirtualvolumeid)+""";"""+"")
+    ctx.logger.info("""virtualvolumeid = """+str(virtualvolumeid)+""";"""+"""basevirtualvolumeid = """+str(basevirtualvolumeid)+""";"""+"""segmentstart = """+str(segmentstart)+""";"""+"""segmentlength = """+str(segmentlength)+""";"""+"""chunksize = """+str(chunksize)+""";"""+"")
     try:
-        _VirtualVolumeAsyncResult = ctx.element.copy_diffs_to_virtual_volume(virtual_volume_id=virtualvolumeid, base_virtual_volume_id=basevirtualvolumeid, dst_virtual_volume_id=dstvirtualvolumeid)
+        _VirtualVolumeUnsharedChunkResult = ctx.element.get_virtual_volume_unshared_chunks(virtual_volume_id=virtualvolumeid, base_virtual_volume_id=basevirtualvolumeid, segment_start=segmentstart, segment_length=segmentlength, chunk_size=chunksize)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -767,7 +767,7 @@ def copydiffsto(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_VirtualVolumeAsyncResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_VirtualVolumeUnsharedChunkResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
