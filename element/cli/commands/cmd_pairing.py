@@ -24,38 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """completecluster completevolume listclusterpairs removevolumepair startvolume listactivepairedvolumes modifyvolumepair startcluster removeclusterpair """
-
-@cli.command('completecluster', short_help="""You can use the CompleteClusterPairing method with the encoded key received from the  StartClusterPairing method to complete the cluster pairing process. The CompleteClusterPairing method is the second step in the cluster pairing process.  """, cls=SolidFireCommand)
-@click.option('--clusterpairingkey',
-              type=str,
-              required=True,
-              help="""A string of characters that is returned from the "StartClusterPairing" API method. """)
-@pass_context
-def completecluster(ctx,
-           # Mandatory main parameter
-           clusterpairingkey):
-    """You can use the CompleteClusterPairing method with the encoded key received from the  StartClusterPairing method to complete the cluster pairing process. The CompleteClusterPairing method is the second step in the cluster pairing process. """
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-    
-    
-
-    ctx.logger.info("""clusterpairingkey = """+str(clusterpairingkey)+""";"""+"")
-    try:
-        _CompleteClusterPairingResult = ctx.element.complete_cluster_pairing(cluster_pairing_key=clusterpairingkey)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_CompleteClusterPairingResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
+    """completevolume completecluster listactivepairedvolumes startcluster listclusterpairs modifyvolumepair removeclusterpair startvolume removevolumepair """
 
 @cli.command('completevolume', short_help="""You can use the CompleteVolumePairing method to complete the pairing of two volumes. """, cls=SolidFireCommand)
 @click.option('--volumepairingkey',
@@ -94,89 +63,26 @@ def completevolume(ctx,
 
 
 
-@cli.command('listclusterpairs', short_help="""You can use the ListClusterPairs method to list all the clusters that a cluster is paired with. This method returns information about active and pending cluster pairings, such as statistics about the current pairing as well as the connectivity and latency (in milliseconds) of the cluster pairing. """, cls=SolidFireCommand)
-@pass_context
-def listclusterpairs(ctx):
-    """You can use the ListClusterPairs method to list all the clusters that a cluster is paired with. This method returns information about active and pending cluster pairings, such as statistics about the current pairing as well as the connectivity and latency (in milliseconds) of the cluster pairing."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-    
-
-    ctx.logger.info("")
-    try:
-        _ListClusterPairsResult = ctx.element.list_cluster_pairs()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_ListClusterPairsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('removevolumepair', short_help="""RemoveVolumePair enables you to remove the remote pairing between two volumes. Use this method on both the source and target volumes that are paired together. When you remove the volume pairing information, data is no longer replicated to or from the volume. """, cls=SolidFireCommand)
-@click.option('--volumeid',
-              type=int,
-              required=True,
-              help="""The ID of the volume on which to stop the replication process. """)
-@pass_context
-def removevolumepair(ctx,
-           # Mandatory main parameter
-           volumeid):
-    """RemoveVolumePair enables you to remove the remote pairing between two volumes. Use this method on both the source and target volumes that are paired together. When you remove the volume pairing information, data is no longer replicated to or from the volume."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-    
-    
-
-    ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"")
-    try:
-        _RemoveVolumePairResult = ctx.element.remove_volume_pair(volume_id=volumeid)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_RemoveVolumePairResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('startvolume', short_help="""StartVolumePairing enables you to create an encoded key from a volume that is used to pair with another volume. The key that this method creates is used in the CompleteVolumePairing API method to establish a volume pairing. """, cls=SolidFireCommand)
-@click.option('--volumeid',
-              type=int,
-              required=True,
-              help="""The ID of the volume on which to start the pairing process. """)
-@click.option('--mode',
+@cli.command('completecluster', short_help="""You can use the CompleteClusterPairing method with the encoded key received from the  StartClusterPairing method to complete the cluster pairing process. The CompleteClusterPairing method is the second step in the cluster pairing process.  """, cls=SolidFireCommand)
+@click.option('--clusterpairingkey',
               type=str,
-              required=False,
-              help="""The mode of the volume on which to start the pairing process. The mode can only be set if the volume is the source volume. Possible values are: Async: (default if no mode parameter specified) Writes are acknowledged when they complete locally. The cluster does not wait for writes to be replicated to the target cluster. Sync: Source acknowledges write when the data is stored locally and on the remote cluster. SnapshotsOnly: Only snapshots created on the source cluster will be replicated. Active writes from the source volume are not replicated. """)
+              required=True,
+              help="""A string of characters that is returned from the "StartClusterPairing" API method. """)
 @pass_context
-def startvolume(ctx,
+def completecluster(ctx,
            # Mandatory main parameter
-           volumeid,
-           # Optional main parameter
-           mode = None):
-    """StartVolumePairing enables you to create an encoded key from a volume that is used to pair with another volume. The key that this"""
-    """method creates is used in the CompleteVolumePairing API method to establish a volume pairing."""
+           clusterpairingkey):
+    """You can use the CompleteClusterPairing method with the encoded key received from the  StartClusterPairing method to complete the cluster pairing process. The CompleteClusterPairing method is the second step in the cluster pairing process. """
     if ctx.element is None:
          ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
          exit()
 
-        
+    
     
 
-    ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""mode = """+str(mode)+""";"""+"")
+    ctx.logger.info("""clusterpairingkey = """+str(clusterpairingkey)+""";"""+"")
     try:
-        _StartVolumePairingResult = ctx.element.start_volume_pairing(volume_id=volumeid, mode=mode)
+        _CompleteClusterPairingResult = ctx.element.complete_cluster_pairing(cluster_pairing_key=clusterpairingkey)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -184,7 +90,7 @@ def startvolume(ctx,
         ctx.logger.error(e.__str__())
         exit()
 
-    cli_utils.print_result(_StartVolumePairingResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    cli_utils.print_result(_CompleteClusterPairingResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -222,6 +128,56 @@ def listactivepairedvolumes(ctx,
         exit()
 
     cli_utils.print_result(_ListActivePairedVolumesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('startcluster', short_help="""You can use the StartClusterPairing method to create an encoded key from a cluster that is used to pair with another cluster. The key created from this API method is used in the CompleteClusterPairing API method to establish a cluster pairing. You can pair a cluster with a maximum of four other clusters.  """, cls=SolidFireCommand)
+@pass_context
+def startcluster(ctx):
+    """You can use the StartClusterPairing method to create an encoded key from a cluster that is used to pair with another cluster. The key created from this API method is used in the CompleteClusterPairing API method to establish a cluster pairing. You can pair a cluster with a maximum of four other clusters. """
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+    
+
+    ctx.logger.info("")
+    try:
+        _StartClusterPairingResult = ctx.element.start_cluster_pairing()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_StartClusterPairingResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('listclusterpairs', short_help="""You can use the ListClusterPairs method to list all the clusters that a cluster is paired with. This method returns information about active and pending cluster pairings, such as statistics about the current pairing as well as the connectivity and latency (in milliseconds) of the cluster pairing. """, cls=SolidFireCommand)
+@pass_context
+def listclusterpairs(ctx):
+    """You can use the ListClusterPairs method to list all the clusters that a cluster is paired with. This method returns information about active and pending cluster pairings, such as statistics about the current pairing as well as the connectivity and latency (in milliseconds) of the cluster pairing."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+    
+
+    ctx.logger.info("")
+    try:
+        _ListClusterPairsResult = ctx.element.list_cluster_pairs()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_ListClusterPairsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -274,31 +230,6 @@ def modifyvolumepair(ctx,
 
 
 
-@cli.command('startcluster', short_help="""You can use the StartClusterPairing method to create an encoded key from a cluster that is used to pair with another cluster. The key created from this API method is used in the CompleteClusterPairing API method to establish a cluster pairing. You can pair a cluster with a maximum of four other clusters.  """, cls=SolidFireCommand)
-@pass_context
-def startcluster(ctx):
-    """You can use the StartClusterPairing method to create an encoded key from a cluster that is used to pair with another cluster. The key created from this API method is used in the CompleteClusterPairing API method to establish a cluster pairing. You can pair a cluster with a maximum of four other clusters. """
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-    
-
-    ctx.logger.info("")
-    try:
-        _StartClusterPairingResult = ctx.element.start_cluster_pairing()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_StartClusterPairingResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
 @cli.command('removeclusterpair', short_help="""You can use the RemoveClusterPair method to close the open connections between two paired clusters. Note: Before you remove a cluster pair, you must first remove all volume pairing to the clusters with the "RemoveVolumePair" API method. """, cls=SolidFireCommand)
 @click.option('--clusterpairid',
               type=int,
@@ -328,4 +259,73 @@ def removeclusterpair(ctx,
         exit()
 
     cli_utils.print_result(_RemoveClusterPairResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('startvolume', short_help="""StartVolumePairing enables you to create an encoded key from a volume that is used to pair with another volume. The key that this method creates is used in the CompleteVolumePairing API method to establish a volume pairing. """, cls=SolidFireCommand)
+@click.option('--volumeid',
+              type=int,
+              required=True,
+              help="""The ID of the volume on which to start the pairing process. """)
+@click.option('--mode',
+              type=str,
+              required=False,
+              help="""The mode of the volume on which to start the pairing process. The mode can only be set if the volume is the source volume. Possible values are: Async: (default if no mode parameter specified) Writes are acknowledged when they complete locally. The cluster does not wait for writes to be replicated to the target cluster. Sync: Source acknowledges write when the data is stored locally and on the remote cluster. SnapshotsOnly: Only snapshots created on the source cluster will be replicated. Active writes from the source volume are not replicated. """)
+@pass_context
+def startvolume(ctx,
+           # Mandatory main parameter
+           volumeid,
+           # Optional main parameter
+           mode = None):
+    """StartVolumePairing enables you to create an encoded key from a volume that is used to pair with another volume. The key that this"""
+    """method creates is used in the CompleteVolumePairing API method to establish a volume pairing."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+        
+    
+
+    ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""mode = """+str(mode)+""";"""+"")
+    try:
+        _StartVolumePairingResult = ctx.element.start_volume_pairing(volume_id=volumeid, mode=mode)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_StartVolumePairingResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('removevolumepair', short_help="""RemoveVolumePair enables you to remove the remote pairing between two volumes. Use this method on both the source and target volumes that are paired together. When you remove the volume pairing information, data is no longer replicated to or from the volume. """, cls=SolidFireCommand)
+@click.option('--volumeid',
+              type=int,
+              required=True,
+              help="""The ID of the volume on which to stop the replication process. """)
+@pass_context
+def removevolumepair(ctx,
+           # Mandatory main parameter
+           volumeid):
+    """RemoveVolumePair enables you to remove the remote pairing between two volumes. Use this method on both the source and target volumes that are paired together. When you remove the volume pairing information, data is no longer replicated to or from the volume."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+    
+    
+
+    ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"")
+    try:
+        _RemoveVolumePairResult = ctx.element.remove_volume_pair(volume_id=volumeid)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_RemoveVolumePairResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

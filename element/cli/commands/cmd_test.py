@@ -24,96 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """list ping connectmvip listutilities connectensemble connectsvip """
-
-@cli.command('list', short_help="""You can use the ListTests API method to return the tests that are available to run on a node. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
-@pass_context
-def list(ctx):
-    """You can use the ListTests API method to return the tests that are available to run on a node."""
-    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-
-    
-
-    ctx.logger.info("")
-    try:
-        _ListTestsResult = ctx.element.list_tests()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_ListTestsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('ping', short_help="""You can use the TestPing API method to validate the connection to all the nodes in a cluster on both 1G and 10G interfaces by using ICMP packets. The test uses the appropriate MTU sizes for each packet based on the MTU settings in the network configuration. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
-@click.option('--attempts',
-              type=int,
-              required=False,
-              help="""Specifies the number of times the system should repeat the test ping. The default value is 5. """)
-@click.option('--hosts',
-              type=str,
-              required=False,
-              help="""Specifies a comma-separated list of addresses or hostnames of devices to ping. """)
-@click.option('--totaltimeoutsec',
-              type=int,
-              required=False,
-              help="""Specifies the length of time the ping should wait for a system response before issuing the next ping attempt or ending the process. """)
-@click.option('--packetsize',
-              type=int,
-              required=False,
-              help="""Specifies the number of bytes to send in the ICMP packet that is sent to each IP. The number must be less than the maximum MTU specified in the network configuration. """)
-@click.option('--pingtimeoutmsec',
-              type=int,
-              required=False,
-              help="""Specifies the number of milliseconds to wait for each individual ping response. The default value is 500 ms. """)
-@click.option('--prohibitfragmentation',
-              type=bool,
-              required=False,
-              help="""Specifies that the Do not Fragment (DF) flag is enabled for the ICMP packets. """)
-@pass_context
-def ping(ctx,
-           # Optional main parameter
-           attempts = None,
-           # Optional main parameter
-           hosts = None,
-           # Optional main parameter
-           totaltimeoutsec = None,
-           # Optional main parameter
-           packetsize = None,
-           # Optional main parameter
-           pingtimeoutmsec = None,
-           # Optional main parameter
-           prohibitfragmentation = None):
-    """You can use the TestPing API method to validate the"""
-    """connection to all the nodes in a cluster on both 1G and 10G interfaces by using ICMP packets. The test uses the appropriate MTU sizes for each packet based on the MTU settings in the network configuration."""
-    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
-
-                        
-    
-
-    ctx.logger.info("""attempts = """+str(attempts)+""";"""+"""hosts = """+str(hosts)+""";"""+"""totaltimeoutsec = """+str(totaltimeoutsec)+""";"""+"""packetsize = """+str(packetsize)+""";"""+"""pingtimeoutmsec = """+str(pingtimeoutmsec)+""";"""+"""prohibitfragmentation = """+str(prohibitfragmentation)+""";"""+"")
-    try:
-        _TestPingResult = ctx.element.test_ping(attempts=attempts, hosts=hosts, total_timeout_sec=totaltimeoutsec, packet_size=packetsize, ping_timeout_msec=pingtimeoutmsec, prohibit_fragmentation=prohibitfragmentation)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-
-    cli_utils.print_result(_TestPingResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
+    """connectmvip listutilities connectensemble list connectsvip ping """
 
 @cli.command('connectmvip', short_help="""The TestConnectMvip API method enables you to test the management connection to the cluster. The test pings the MVIP and executes a simple API method to verify connectivity. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
 @click.option('--mvip',
@@ -206,6 +117,32 @@ def connectensemble(ctx,
 
 
 
+@cli.command('list', short_help="""You can use the ListTests API method to return the tests that are available to run on a node. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
+@pass_context
+def list(ctx):
+    """You can use the ListTests API method to return the tests that are available to run on a node."""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+
+    
+
+    ctx.logger.info("")
+    try:
+        _ListTestsResult = ctx.element.list_tests()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_ListTestsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
 @cli.command('connectsvip', short_help="""The TestConnectSvip API method enables you to test the storage connection to the cluster. The test pings the SVIP using ICMP packets, and when successful, connects as an iSCSI initiator. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
 @click.option('--svip',
               type=str,
@@ -235,4 +172,67 @@ def connectsvip(ctx,
         exit()
 
     cli_utils.print_result(_TestConnectSvipResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('ping', short_help="""You can use the TestPing API method to validate the connection to all the nodes in a cluster on both 1G and 10G interfaces by using ICMP packets. The test uses the appropriate MTU sizes for each packet based on the MTU settings in the network configuration. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
+@click.option('--attempts',
+              type=int,
+              required=False,
+              help="""Specifies the number of times the system should repeat the test ping. The default value is 5. """)
+@click.option('--hosts',
+              type=str,
+              required=False,
+              help="""Specifies a comma-separated list of addresses or hostnames of devices to ping. """)
+@click.option('--totaltimeoutsec',
+              type=int,
+              required=False,
+              help="""Specifies the length of time the ping should wait for a system response before issuing the next ping attempt or ending the process. """)
+@click.option('--packetsize',
+              type=int,
+              required=False,
+              help="""Specifies the number of bytes to send in the ICMP packet that is sent to each IP. The number must be less than the maximum MTU specified in the network configuration. """)
+@click.option('--pingtimeoutmsec',
+              type=int,
+              required=False,
+              help="""Specifies the number of milliseconds to wait for each individual ping response. The default value is 500 ms. """)
+@click.option('--prohibitfragmentation',
+              type=bool,
+              required=False,
+              help="""Specifies that the Do not Fragment (DF) flag is enabled for the ICMP packets. """)
+@pass_context
+def ping(ctx,
+           # Optional main parameter
+           attempts = None,
+           # Optional main parameter
+           hosts = None,
+           # Optional main parameter
+           totaltimeoutsec = None,
+           # Optional main parameter
+           packetsize = None,
+           # Optional main parameter
+           pingtimeoutmsec = None,
+           # Optional main parameter
+           prohibitfragmentation = None):
+    """You can use the TestPing API method to validate the"""
+    """connection to all the nodes in a cluster on both 1G and 10G interfaces by using ICMP packets. The test uses the appropriate MTU sizes for each packet based on the MTU settings in the network configuration."""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
+    if ctx.element is None:
+         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+         exit()
+
+                        
+    
+
+    ctx.logger.info("""attempts = """+str(attempts)+""";"""+"""hosts = """+str(hosts)+""";"""+"""totaltimeoutsec = """+str(totaltimeoutsec)+""";"""+"""packetsize = """+str(packetsize)+""";"""+"""pingtimeoutmsec = """+str(pingtimeoutmsec)+""";"""+"""prohibitfragmentation = """+str(prohibitfragmentation)+""";"""+"")
+    try:
+        _TestPingResult = ctx.element.test_ping(attempts=attempts, hosts=hosts, total_timeout_sec=totaltimeoutsec, packet_size=packetsize, ping_timeout_msec=pingtimeoutmsec, prohibit_fragmentation=prohibitfragmentation)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+
+    cli_utils.print_result(_TestPingResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
