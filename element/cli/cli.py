@@ -273,7 +273,7 @@ def cli(ctx,
         debug=0,
         verbose=0,
         version='9.0'):
-    """SolidFire command line interface."""
+    """Welcome to the SolidFire command line interface! For more information about how to use this, see the readme here: https://github.com/solidfire/Python-CLI"""
     # NOTE(jdg): This method is actually our console entry point,
     # if/when we introduce a v2 of the shell and client, we may
     # need to define a new entry point one level up that parses
