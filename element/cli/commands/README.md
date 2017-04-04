@@ -82,7 +82,20 @@ Executing Commands
 ------------------
 Executing a command with standard parameters:
 
-    sfcli -c 0 Account GetByID --account_id 94
+    sfcli -c 0 Account GetByID --accountid 3065
+
+Example output:
+
+    account:
+        attributes:
+        target_secret:
+            secret:   q7788;0a:Cd0xCE4
+        initiator_secret:
+            secret:   r0Ju1}t:02"5p<L^
+        status:   active
+        account_id:   3065
+        username:   example
+        volumes:
 
 Executing Commands with Grouped Parameters
 ------------------------------------------
@@ -348,14 +361,40 @@ Example:
         ]
     }
 
+Logging
+-------
+The user can pick from 4 different levels of logging:
+Level 0: Critical logging - only shows errors.
+Level 1: Warning logging - shows errors and warnings
+Level 2: Info logging - shows errors, warnings, and info
+Level 3: Debug logging - shows errors, warning, info, and debug.
+
+To set the level of debug, use the debug flag at the sfcli level. The logger is a standard, pythonic logger. In bash, the standard way to store information from different streams is to specify the stream you wish to redirect to a folder. For instance, when I run:
+
+	sfcli --debug 2 account list
+
+I get the following info printed out:
+
+	INFO in cmd_account.py@50: startaccountid = None;limit = None;
+
+And I get the following data:
+
+	accounts:
+
+If I want to store the response from the server, I can run the command like this:
+
+	sfcli --debug 2 account list > data.txt
+
+If I want to store the info from the server, I can run the command like this:
+
+	sfcli --debug 2 accoun list 2 > info.txt
+
+In this case, the file info.txt would only contain the text labeled INFO and the file, data.txt would only contain the text, "accounts:".
+
 
 Command Details
 ---------------
-Usage: sfcli [OPTIONS] COMMAND [ARGS]...
-
-  SolidFire command line interface.
-
-Options:
+sfcli Options:
 
     -m, --mvip TEXT
         SolidFire MVIP
