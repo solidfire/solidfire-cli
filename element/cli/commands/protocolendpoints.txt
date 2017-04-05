@@ -29,9 +29,12 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        ListProtocolEndpoints enables you to retrieve information about all protocol endpoints in the cluster. Protocol endpoints govern access to their associated virtual volume storage containers. 
+                        <apiname>ListProtocolEndpoints</apiname> enables you to retrieve information about all protocol endpoints in the cluster. Protocol endpoints govern access to their associated virtual volume storage containers. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>protocolendpointids</parmname>
+                        : A list of protocol endpoint IDs for which to retrieve information. If you omit this parameter, the method returns information about all protocol endpoints. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>

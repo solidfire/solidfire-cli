@@ -29,9 +29,12 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        GetNvramInfo enables you to retrieve information from each node about the NVRAM card. 
+                        <apiname>GetNvramInfo</apiname> enables you to retrieve information from each node about the NVRAM card. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>force</parmname>
+                        : Required parameter to successfully run on all nodes in the cluster. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>
@@ -55,9 +58,12 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        GetNodeHardwareInfo enables you to return all the hardware information and status for the node specified. This generally includes details about manufacturers, vendors, versions, and other associated hardware identification information. 
+                        <apiname>GetNodeHardwareInfo</apiname> enables you to return all the hardware information and status for the node specified. This generally includes details about manufacturers, vendors, versions, and other associated hardware identification information. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>nodeid</parmname>
+                        : The ID of the node for which hardware information is being requested. Information about a Fibre Channel node is returned if a Fibre Channel node is specified. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>
@@ -81,9 +87,12 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        You can use the GetClusterHardwareInfo method to retrieve the hardware status and information for all Fibre Channel nodes, iSCSI nodes and drives in the cluster. This generally includes details about manufacturers, vendors, versions, and other associated hardware identification information. 
+                        You can use the <apiname>GetClusterHardwareInfo</apiname> method to retrieve the hardware status and information for all Fibre Channel nodes, iSCSI nodes and drives in the cluster. This generally includes details about manufacturers, vendors, versions, and other associated hardware identification information. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>type</parmname>
+                        : Includes only a certain <parmname>type</parmname of hardware information in the response. Possible values are: drives: List only drive information in the response. nodes: List only node information in the response. all: Include both drive and node information in the response. If this parameter is omitted, a <parmname>type</parmname of "all" is assumed. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>
@@ -107,7 +116,7 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        GetHardwareConfig enables you to display the hardware configuration information for a node. Note: This method is available only through the per-node API endpoint 5.0 or later. 
+                        <apiname>GetHardwareConfig</apiname> enables you to display the hardware configuration information for a node. <note>: This method is available only through the per-node API endpoint 5.0 or later. 
                      </entry>
                      <entry colname="col2" cid="sKwWv">None</entry>
                   </row>

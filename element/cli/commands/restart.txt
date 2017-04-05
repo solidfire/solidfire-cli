@@ -29,9 +29,16 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        The RestartServices API method enables you to restart the services on a node. Caution: This method causes temporary node services interruption. Exercise caution when using this method. Note: This method is available only through the per-node API endpoint 5.0 or later. 
+                        The <apiname>RestartServices</apiname> API method enables you to restart the <parmname>service</parmnames on a node. Caution: This method causes temporary node <parmname>service</parmnames interruption. Exercise caution when using this method. <note>: This method is available only through the per-node API endpoint 5.0 or later. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>force</parmname>
+                        : Required parameter to successfully restart <parmname>service</parmnames on a node. 
+                        <parmname>service</parmname>
+                        : Service name to be restarted. 
+                        <parmname>action</parmname>
+                        : Action to perform on the <parmname>service</parmname (start, stop, restart). 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>
@@ -55,9 +62,12 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        The RestartNetworking API method enables you to restart the networking services on a node. Warning: This method restarts all networking services on a node, causing temporary loss of networking connectivity. Exercise caution when using this method. Note: This method is available only through the per-node API endpoint 5.0 or later. 
+                        The <apiname>RestartNetworking</apiname> API method enables you to restart the networking services on a node. Warning: This method restarts all networking services on a node, causing temporary loss of networking connectivity. Exercise caution when using this method. <note>: This method is available only through the per-node API endpoint 5.0 or later. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>force</parmname>
+                        : Required parameter to successfully reset the node. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>
@@ -81,9 +91,18 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        The ResetNode API method enables you to reset a node to the factory settings. All data, packages (software upgrades, and so on), configurations, and log files are deleted from the node when you call this method. However, network settings for the node are preserved during this operation. Nodes that are participating in a cluster cannot be reset to the factory settings. The ResetNode API can only be used on nodes that are in an "Available" state. It cannot be used on nodes that are "Active" in a cluster, or in a "Pending" state. Caution: This method clears any data that is on the node. Exercise caution when using this method. Note: This method is available only through the per-node API endpoint 5.0 or later. 
+                        The <apiname>ResetNode</apiname> API method enables you to reset a node to the factory settings. All data, packages (software upgrades, and so on), configurations, and log files are deleted from the node when you call this method. However, network settings for the node are preserved during this operation. Nodes that are participating in a cluster cannot be reset to the factory settings. The <apiname>ResetNode</apiname> API can only be used on nodes that are in an "Available" state. It cannot be used on nodes that are "Active" in a cluster, or in a "Pending" state. Caution: This method clears any data that is on the node. Exercise caution when using this method. <note>: This method is available only through the per-node API endpoint 5.0 or later. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>build</parmname>
+                        : Specifies the URL to a remote Element software image to which the node will be reset. 
+                        <parmname>force</parmname>
+                        : Required parameter to successfully reset the node. 
+                        <parmname>options</parmname>
+                        : Specifications for running the reset operation. 
+                        <parmname>reboot</parmname>
+                        : Should it be <parmname>reboot</parmnameed? 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>
@@ -107,9 +126,14 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        The Shutdown API method enables you to restart or shutdown a node that has not yet been added to a cluster. To use this method, log in to the MIP for the pending node, and enter the "shutdown" method with either the "restart" or "halt" options. 
+                        The <apiname>Shutdown</apiname> API method enables you to restart or shutdown a node that has not yet been added to a cluster. To use this method, log in to the MIP for the pending node, and enter the "shutdown" method with either the "restart" or "halt" <parmname>option</parmnames. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>nodes</parmname>
+                        : List of NodeIDs for the <parmname>nodes</parmname to be shutdown. 
+                        <parmname>option</parmname>
+                        : Specifies the action to take for the node shutdown. Possible values are: restart: Restarts the node. halt: Shuts down the node. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>

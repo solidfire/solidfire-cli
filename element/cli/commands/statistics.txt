@@ -29,7 +29,7 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        NetApp engineering uses the GetCompleteStats API method to troubleshoot new features. The data returned from GetCompleteStats is not documented, changes frequently, and is not guaranteed to be accurate. NetApp does not recommend using GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster. 
+                        NetApp engineering uses the <apiname>GetCompleteStats</apiname> API method to troubleshoot new features. The data returned from <apiname>GetCompleteStats</apiname> is not documented, changes frequently, and is not guaranteed to be accurate. NetApp does not recommend using <apiname>GetCompleteStats</apiname> for collecting performance data or any other management integration with a SolidFire cluster. 
                      </entry>
                      <entry colname="col2" cid="sKwWv">None</entry>
                   </row>
@@ -55,7 +55,7 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        The GetHardwareInfo API method enables you to return hardware information and status for a single node. This generally includes details about manufacturers, vendors, versions, drives, and other associated hardware identification information. 
+                        The <apiname>GetHardwareInfo</apiname> API method enables you to return hardware information and status for a single node. This generally includes details about manufacturers, vendors, versions, drives, and other associated hardware identification information. 
                      </entry>
                      <entry colname="col2" cid="sKwWv">None</entry>
                   </row>
@@ -81,7 +81,7 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        NetApp engineering uses the GetRawStats API method to troubleshoot new features. The data returned from GetRawStats is not documented, changes frequently, and is not guaranteed to be accurate. NetApp does not recommend using GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster. 
+                        NetApp engineering uses the <apiname>GetRawStats</apiname> API method to troubleshoot new features. The data returned from <apiname>GetRawStats</apiname> is not documented, changes frequently, and is not guaranteed to be accurate. NetApp does not recommend using GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster. 
                      </entry>
                      <entry colname="col2" cid="sKwWv">None</entry>
                   </row>
@@ -107,9 +107,12 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        ListVolumeStatsByVirtualVolume enables you to list volume statistics for any volumes in the system that are associated with virtual volumes. Statistics are cumulative from the creation of the volume. 
+                        <apiname>ListVolumeStatsByVirtualVolume</apiname> enables you to list volume statistics for any volumes in the system that are associated with virtual volumes. Statistics are cumulative from the creation of the volume. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>virtualvolumeids</parmname>
+                        : A list of one or more virtual volume IDs for which to retrieve information. If you specify this parameter, the method returns information about only these virtual volumes. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>
@@ -133,9 +136,12 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        ListVolumeStats returns high-level activity measurements for a single volume, list of volumes, or all volumes (if you omit the volumeIDs parameter). Measurement values are cumulative from the creation of the volume. 
+                        <apiname>ListVolumeStats</apiname> returns high-level activity measurements for a single volume, list of volumes, or all volumes (if you omit the <parmname>volumeIDs</parmname parameter). Measurement values are cumulative from the creation of the volume. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>volumeids</parmname>
+                        : A list of volume IDs of volumes from which to retrieve activity information. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>
@@ -159,9 +165,12 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        ListDriveStats enables you to retrieve high-level activity measurements for multiple drives in the cluster. By default, this method returns statistics for all drives in the cluster, and these measurements are cumulative from the addition of the drive to the cluster. Some values this method returns are specific to block drives, and some are specific to metadata drives. 
+                        <apiname>ListDriveStats</apiname> enables you to retrieve high-level activity measurements for multiple <parmname>drives</parmname in the cluster. By default, this method returns statistics for all <parmname>drives</parmname in the cluster, and these measurements are cumulative from the addition of the drive to the cluster. Some values this method returns are specific to block <parmname>drives</parmname, and some are specific to metadata <parmname>drives</parmname. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>drives</parmname>
+                        : Optional list of DriveIDs for which to return drive statistics. If you omit this parameter, measurements for all <parmname>drives</parmname are returned. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>

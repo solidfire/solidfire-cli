@@ -29,9 +29,28 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        You can use ModifyVirtualNetwork to change the attributes of an existing virtual network. This method enables you to add or remove address blocks, change the netmask, or modify the name or description of the virtual network. You can also use it to enable or disable namespaces, as well as add or remove a gateway if namespaces are enabled on the virtual network. Note: This method requires either the VirtualNetworkID or the VirtualNetworkTag as a parameter, but not both. Caution: Enabling or disabling the Routable Storage VLANs functionality for an existing virtual network by changing the "namespace" parameter disrupts any traffic handled by the virtual network. NetApp strongly recommends changing the "namespace" parameter only during a scheduled maintenance window. 
+                        You can use <api<parmname>name</parmname>ModifyVirtualNetwork</api<parmname>name</parmname> to change the <parmname>attributes</parmname of an existing virtual network. This method enables you to add or remove address blocks, change the <parmname>netmask</parmname, or modify the <parmname>name</parmname or description of the virtual network. You can also use it to enable or disable <parmname>name</parm<parmname>namespace</parmnames, as well as add or remove a <parmname>gateway</parmname if <parmname>name</parm<parmname>namespace</parmnames are enabled on the virtual network. <note>: This method requires either the VirtualNetworkID or the VirtualNetworkTag as a parameter, but not both. Caution: Enabling or disabling the Routable Storage VLANs functionality for an existing virtual network by changing the "<parmname>name</parm<parmname>namespace</parmname" parameter disrupts any traffic handled by the virtual network. NetApp strongly recommends changing the "<parmname>name</parm<parmname>namespace</parmname" parameter only during a scheduled maintenance window. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>virtualnetworkid</parmname>
+                        : The unique identifier of the virtual network to modify. This is the virtual network ID assigned by the cluster.  Note: This parameter is optional but either <parm<parmname>name</parmname>virtualNetworkID</parm<parmname>name</parmname or <parm<parmname>name</parmname>virtualNetworkTag</parm<parmname>name</parmname must be specified with this API method. 
+                        <parmname>virtualnetworktag</parmname>
+                        : The network tag that identifies the virtual network to modify. Note: This parameter is optional but either <parm<parmname>name</parmname>virtualNetworkID</parm<parmname>name</parmname or <parm<parmname>name</parmname>virtualNetworkTag</parm<parmname>name</parmname must be specified with this API method. 
+                        <parmname>name</parmname>
+                        : The new <parmname>name</parmname for the virtual network. 
+                        <parmname>addressblocks</parmname>
+                        : The new addressBlock to set for this virtual network. This might contain new address blocks to add to the existing object or omit unused address blocks that need to be removed. Alternatively, you can extend or reduce the size of existing address blocks. You can only increase the size of the starting <parmname>addressBlocks</parmname for a virtual network object; you can never decrease it. Attributes for this parameter are: start: The start of the IP address range. (String) size: The number of IP addresses to include in the block. (Integer) 
+                        <parmname>netmask</parmname>
+                        : New network mask for this virtual network. 
+                        <parmname>svip</parmname>
+                        : The storage virtual IP address for this virtual network. The <parmname>svip</parmname for a virtual network cannot be changed. You must create a new virtual network to use a different <parmname>svip</parmname address. 
+                        <parmname>gateway</parmname>
+                        : The IP address of a <parmname>gateway</parmname of the virtual network. This parameter is only valid if the "<parmname>name</parm<parmname>namespace</parmname" parameter is set to true. 
+                        <parmname>namespace</parmname>
+                        : When set to true, enables Routable Storage VLANs functionality by recreating the virtual network and configuring a <parmname>name</parm<parmname>namespace</parmname to contain it. When set to false, disables the VRF functionality for the virtual network. Changing this value disrupts traffic running through this virtual network. 
+                        <parmname>attributes</parmname>
+                        : A new list of <parmname>name</parmname-value pairs in JSON object format. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>
@@ -55,9 +74,26 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        You can use the AddVirtualNetwork method to add a new virtual network to a cluster configuration. When you add a virtual network, an interface for each node is created and each interface will require a virtual network IP address. The number of IP addresses you specify as a parameter for this API method must be equal to or greater than the number of nodes in the cluster. The system bulk provisions virtual network addresses and assigns them to individual nodes automatically. You do not need to assign virtual network addresses to nodes manually. Note: You can use AddVirtualNetwork only to create a new virtual network. If you want to make changes to an existing virtual network, use ModifyVirtualNetwork. Note: Virtual network parameters must be unique to each virtual network when setting the namespace parameter to false. 
+                        You can use the <api<parmname>name</parmname>AddVirtualNetwork</api<parmname>name</parmname> method to add a new virtual network to a cluster configuration. When you add a virtual network, an interface for each node is created and each interface will require a virtual network IP address. The number of IP addresses you specify as a parameter for this API method must be equal to or greater than the number of nodes in the cluster. The system bulk provisions virtual network addresses and assigns them to individual nodes automatically. You do not need to assign virtual network addresses to nodes manually. <note>: You can use <api<parmname>name</parmname>AddVirtualNetwork</api<parmname>name</parmname> only to create a new virtual network. If you want to make changes to an existing virtual network, use ModifyVirtualNetwork. <note>: Virtual network parameters must be unique to each virtual network when setting the <parmname>name</parm<parmname>namespace</parmname parameter to false. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>virtualnetworktag</parmname>
+                        : A unique virtual network (VLAN) tag. Supported values are 1 through 4094.The number zero (0) is not supported. 
+                        <parmname>name</parmname>
+                        : A user-defined <parmname>name</parmname for the new virtual network. 
+                        <parmname>addressblocks</parmname>
+                        : Unique range of IP addresses to include in the virtual network. Attributes for this parameter are: start: The start of the IP address range. (String) size: The number of IP addresses to include in the block. (Integer) 
+                        <parmname>netmask</parmname>
+                        : Unique network mask for the virtual network being created. 
+                        <parmname>svip</parmname>
+                        : Unique storage IP address for the virtual network being created. 
+                        <parmname>gateway</parmname>
+                        : The IP address of a <parmname>gateway</parmname of the virtual network. This parameter is only valid if the "<parmname>name</parm<parmname>namespace</parmname" parameter is set to true. 
+                        <parmname>namespace</parmname>
+                        : When set to true, enables the Routable Storage VLANs functionality by creating and configuring a <parmname>name</parm<parmname>namespace</parmname and the virtual network contained by it. 
+                        <parmname>attributes</parmname>
+                        : List of <parmname>name</parmname-value pairs in JSON object format. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>
@@ -81,9 +117,18 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        ListVirtualNetworks enables you to list all configured virtual networks for the cluster. You can use this method to verify the virtual network settings in the cluster. There are no required parameters for this method. However, to filter the results, you can pass one or more VirtualNetworkID or VirtualNetworkTag values. 
+                        <apiname>ListVirtualNetworks</apiname> enables you to list all configured virtual networks for the cluster. You can use this method to verify the virtual network settings in the cluster. There are no required parameters for this method. However, to filter the results, you can pass one or more VirtualNetworkID or VirtualNetworkTag values. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>virtualnetworkid</parmname>
+                        : Network ID to filter the list for a single virtual network. 
+                        <parmname>virtualnetworktag</parmname>
+                        : Network tag to filter the list for a single virtual network. 
+                        <parmname>virtualnetworkids</parmname>
+                        : Network IDs to include in the list. 
+                        <parmname>virtualnetworktags</parmname>
+                        : Network tag to include in the list. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>
@@ -107,9 +152,14 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        RemoveVirtualNetwork enables you to remove a previously added virtual network. Note: This method requires either the virtualNetworkID or the virtualNetworkTag as a parameter, but not both. 
+                        <apiname>RemoveVirtualNetwork</apiname> enables you to remove a previously added virtual network. <note>: This method requires either the <parmname>virtualNetworkID</parmname or the <parmname>virtualNetworkTag</parmname as a parameter, but not both. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>virtualnetworkid</parmname>
+                        : Network ID that identifies the virtual network to remove. 
+                        <parmname>virtualnetworktag</parmname>
+                        : Network tag that identifies the virtual network to remove. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>

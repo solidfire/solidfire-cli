@@ -21,7 +21,13 @@ set up.
 
 To Install
 ----------
-pip install solidfire-cli
+There are two options for installing the tool:
+
+1. Execute the following command using pip
+
+    pip install solidfire-cli
+
+2.
 
 Operating Systems and Distributions
 -----------------------------------

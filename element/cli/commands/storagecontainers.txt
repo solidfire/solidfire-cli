@@ -29,9 +29,16 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        ModifyStorageContainer enables you to make changes to an existing virtual volume storage container. 
+                        <apiname>ModifyStorageContainer</apiname> enables you to make changes to an existing virtual volume storage container. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>storagecontainerid</parmname>
+                        : The unique ID of the virtual volume storage container to modify. 
+                        <parmname>initiatorsecret</parmname>
+                        : The new secret for CHAP authentication for the initiator. 
+                        <parmname>targetsecret</parmname>
+                        : The new secret for CHAP authentication for the target. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>
@@ -55,9 +62,12 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        ListStorageContainers enables you to retrieve information about all virtual volume storage containers known to the system. 
+                        <apiname>ListStorageContainers</apiname> enables you to retrieve information about all virtual volume storage containers known to the system. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>storagecontainerids</parmname>
+                        : A list of storage container IDs for which to retrieve information. If you omit this parameter, the method returns information about all storage containers in the system. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>
@@ -81,9 +91,12 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        GetStorageContainerEfficiency enables you to retrieve efficiency information about a virtual volume storage container. 
+                        <apiname>GetStorageContainerEfficiency</apiname> enables you to retrieve efficiency information about a virtual volume storage container. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>storagecontainerid</parmname>
+                        : The ID of the storage container for which to retrieve efficiency information. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>
@@ -107,9 +120,18 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        CreateStorageContainer enables you to create a Virtual Volume (VVol) storage container. Storage containers are associated with a SolidFire storage system account, and are used for reporting and resource allocation. Storage containers can only be associated with virtual volumes. You need at least one storage container to use the Virtual Volumes feature. 
+                        <api<parmname>name</parmname>CreateStorageContainer</api<parmname>name</parmname> enables you to create a Virtual Volume (VVol) storage container. Storage containers are associated with a SolidFire storage system account, and are used for reporting and resource allocation. Storage containers can only be associated with virtual volumes. You need at least one storage container to use the Virtual Volumes feature. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>name</parmname>
+                        : The <parmname>name</parmname of the storage container. Follows SolidFire account naming restrictions. 
+                        <parmname>initiatorsecret</parmname>
+                        : The secret for CHAP authentication for the initiator. 
+                        <parmname>targetsecret</parmname>
+                        : The secret for CHAP authentication for the target. 
+                        <parmname>accountid</parmname>
+                        : Non-storage container account that will become a storage container. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>
@@ -133,9 +155,12 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        DeleteStorageContainers enables you to remove up to 2000 Virtual Volume (VVol) storage containers from the system at one time. The storage containers you remove must not contain any VVols. 
+                        <apiname>DeleteStorageContainers</apiname> enables you to remove up to 2000 Virtual Volume (VVol) storage containers from the system at one time. The storage containers you remove must not contain any VVols. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>storagecontainerids</parmname>
+                        : A list of IDs of the storage containers to delete. You can specify up to 2000 IDs in the list. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>

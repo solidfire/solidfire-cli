@@ -29,9 +29,12 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        The SetNetworkConfig API method enables you to set the network configuration for a node. To display the current network settings for a node, run the GetNetworkConfig API method.  Note: This method is available only through the per-node API endpoint 5.0 or later. Changing the "bond-mode" on a node can cause a temporary loss of network connectivity. Exercise caution when using this method. 
+                        The <apiname>SetNetworkConfig</apiname> API method enables you to set the <parmname>network</parmname configuration for a node. To display the current <parmname>network</parmname settings for a node, run the GetNetworkConfig API method.  <note>: This method is available only through the per-node API endpoint 5.0 or later. Changing the "bond-mode" on a node can cause a temporary loss of <parmname>network</parmname connectivity. Exercise caution when using this method. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>network</parmname>
+                        : An object containing node <parmname>network</parmname settings to modify. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>
@@ -55,7 +58,7 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        ListPendingNodes returns a list of the currently pending nodes in the system. Pending nodes are nodes that are running and configured to join the cluster, but have not yet been added via the AddNodes API method. 
+                        <apiname>ListPendingNodes</apiname> returns a list of the currently pending nodes in the system. Pending nodes are nodes that are running and configured to join the cluster, but have not yet been added via the AddNodes API method. 
                      </entry>
                      <entry colname="col2" cid="sKwWv">None</entry>
                   </row>
@@ -81,7 +84,7 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        GetOrigin enables you to retrieve the origination certificate for where the node was built. This method might return null if there is no origination certification. 
+                        <apiname>GetOrigin</apiname> enables you to retrieve the origination certificate for where the node was built. This method might return null if there is no origination certification. 
                      </entry>
                      <entry colname="col2" cid="sKwWv">None</entry>
                   </row>
@@ -107,7 +110,7 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        ListPendingActiveNodes returns the list of nodes in the cluster that are currently in the PendingActive state, between the pending and active states. These are nodes that are currently being returned to the factory image. 
+                        <apiname>ListPendingActiveNodes</apiname> returns the list of nodes in the cluster that are currently in the PendingActive state, between the pending and active states. These are nodes that are currently being returned to the factory image. 
                      </entry>
                      <entry colname="col2" cid="sKwWv">None</entry>
                   </row>
@@ -133,7 +136,7 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        ListAllNodes enables you to retrieve a list of active and pending nodes in the cluster. 
+                        <apiname>ListAllNodes</apiname> enables you to retrieve a list of active and pending nodes in the cluster. 
                      </entry>
                      <entry colname="col2" cid="sKwWv">None</entry>
                   </row>
@@ -159,7 +162,7 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        You can use GetPendingOperation to detect an operation on a node that is currently in progress. You can also use this method to report back when an operation has completed.  Note: method is available only through the per-node API endpoint 5.0 or later. 
+                        You can use <apiname>GetPendingOperation</apiname> to detect an operation on a node that is currently in progress. You can also use this method to report back when an operation has completed.  <note>: method is available only through the per-node API endpoint 5.0 or later. 
                      </entry>
                      <entry colname="col2" cid="sKwWv">None</entry>
                   </row>
@@ -185,7 +188,7 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        ListNodeStats enables you to view the high-level activity measurements for all nodes in a cluster. 
+                        <apiname>ListNodeStats</apiname> enables you to view the high-level activity measurements for all nodes in a cluster. 
                      </entry>
                      <entry colname="col2" cid="sKwWv">None</entry>
                   </row>
@@ -211,9 +214,14 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        AddNodes enables you to add one or more new nodes to a cluster. When a node that is not configured starts up for the first time, you are prompted to configure the node. After you configure the node, it is registered as a "pending node" with the cluster.  Note: It might take several seconds after adding a new node for it to start up and register its drives as available. 
+                        <apiname>AddNodes</apiname> enables you to add one or more new nodes to a cluster. When a node that is not configured starts up for the first time, you are prompted to configure the node. After you configure the node, it is registered as a "pending node" with the cluster.  <note>: It might take several seconds after adding a new node for it to start up and register its drives as available. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>pendingnodes</parmname>
+                        :  List of pending NodeIDs for the nodes to be added. You can  obtain the list of pending nodes using the ListPendingNodes method. 
+                        <parmname>autoinstall</parmname>
+                        : Whether these nodes should be autoinstalled 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>
@@ -237,9 +245,12 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        The SetConfig API method enables you to set all the configuration information for the node. This includes the same information available via calls to SetClusterConfig and SetNetworkConfig in one API method.  Note: This method is available only through the per-node API endpoint 5.0 or later. Caution: Changing the "bond-mode" on a node can cause a temporary loss of network connectivity. Exercise caution when using this method. 
+                        The <apiname>SetConfig</apiname> API method enables you to set all the <parmname>config</parmnameuration information for the node. This includes the same information available via calls to SetClusterConfig and SetNetworkConfig in one API method.  <note>: This method is available only through the per-node API endpoint 5.0 or later. Caution: Changing the "bond-mode" on a node can cause a temporary loss of network connectivity. Exercise caution when using this method. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>config</parmname>
+                        : Objects that you want changed for the cluster interface settings. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>
@@ -263,7 +274,7 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        The GetNetworkConfig API method enables you to display the network configuration information for a node. Note: This method is available only through the per-node API endpoint 5.0 or later. 
+                        The <apiname>GetNetworkConfig</apiname> API method enables you to display the network configuration information for a node. <note>: This method is available only through the per-node API endpoint 5.0 or later. 
                      </entry>
                      <entry colname="col2" cid="sKwWv">None</entry>
                   </row>
@@ -289,9 +300,12 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        GetNodeStats enables you to retrieve the high-level activity measurements for a single node. 
+                        <apiname>GetNodeStats</apiname> enables you to retrieve the high-level activity measurements for a single node. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>nodeid</parmname>
+                        : Specifies the node for which statistics are gathered. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>
@@ -315,7 +329,7 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        The GetConfig API method enables you to retrieve all configuration information for a node. This method includes the same information available in both the GetClusterConfig and GetNetworkConfig API methods. Note: This method is available only through the per-node API endpoint 5.0 or later. 
+                        The <apiname>GetConfig</apiname> API method enables you to retrieve all configuration information for a node. This method includes the same information available in both the GetClusterConfig and GetNetworkConfig API methods. <note>: This method is available only through the per-node API endpoint 5.0 or later. 
                      </entry>
                      <entry colname="col2" cid="sKwWv">None</entry>
                   </row>
@@ -341,9 +355,12 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        You can use RemoveNodes to remove one or more nodes that should no longer participate in the cluster. Before removing a node, you must remove all drives the node contains using the RemoveDrives method. You cannot remove a node until the RemoveDrives process has completed and all data has been migrated away from the node. After you remove a node, it registers itself as a pending node. You can add the node again or shut it down (shutting the node down removes it from the Pending Node list). 
+                        You can use <apiname>RemoveNodes</apiname> to remove one or more <parmname>nodes</parmname that should no longer participate in the cluster. Before removing a node, you must remove all drives the node contains using the RemoveDrives method. You cannot remove a node until the RemoveDrives process has completed and all data has been migrated away from the node. After you remove a node, it registers itself as a pending node. You can add the node again or shut it down (shutting the node down removes it from the Pending Node list). 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>nodes</parmname>
+                        : List of NodeIDs for the <parmname>nodes</parmname to be removed. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>
@@ -367,7 +384,7 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        ListActiveNodes returns the list of currently active nodes that are in the cluster. 
+                        <apiname>ListActiveNodes</apiname> returns the list of currently active nodes that are in the cluster. 
                      </entry>
                      <entry colname="col2" cid="sKwWv">None</entry>
                   </row>
@@ -393,7 +410,7 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        GetBootstrapConfig returns cluster and node information from the bootstrap configuration file. Use this API method on an individual node before it has been joined with a cluster. You can use the information this method returns in the cluster configuration interface when you create a cluster. 
+                        <apiname>GetBootstrapConfig</apiname> returns cluster and node information from the bootstrap configuration file. Use this API method on an individual node before it has been joined with a cluster. You can use the information this method returns in the cluster configuration interface when you create a cluster. 
                      </entry>
                      <entry colname="col2" cid="sKwWv">None</entry>
                   </row>

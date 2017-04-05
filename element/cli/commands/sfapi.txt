@@ -29,9 +29,14 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        This will invoke any API method supported by the SolidFire API for the version and port the connection is using. Returns a nested hashtable of key/value pairs that contain the result of the invoked method. 
+                        This will invoke any API <parmname>method</parmname supported by the SolidFire API for the version and port the connection is using. Returns a nested hashtable of key/value pairs that contain the result of the invoked <parmname>method</parmname. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>method</parmname>
+                        : The name of the <parmname>method</parmname to invoke. This is case sensitive. 
+                        <parmname>parameters</parmname>
+                        : An object, normally a dictionary or hashtable of the key/value pairs, to be passed as the params for the <parmname>method</parmname being invoked. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>

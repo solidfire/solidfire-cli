@@ -29,7 +29,7 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        You can use ListServices to return the services information for nodes, drives, current software, and other services that are running on the cluster. 
+                        You can use <apiname>ListServices</apiname> to return the services information for nodes, drives, current software, and other services that are running on the cluster. 
                      </entry>
                      <entry colname="col2" cid="sKwWv">None</entry>
                   </row>

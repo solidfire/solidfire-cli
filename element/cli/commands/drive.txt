@@ -29,9 +29,14 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        ResetDrives enables you to proactively initialize drives and remove all data currently residing on a drive. The drive can then be reused in an existing node or used in an upgraded node. This method requires the force parameter to be included in the method call. 
+                        <apiname>ResetDrives</apiname> enables you to proactively initialize <parmname>drives</parmname and remove all data currently residing on a drive. The drive can then be reused in an existing node or used in an upgraded node. This method requires the <parmname>force</parmname parameter to be included in the method call. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>drives</parmname>
+                        : List of device names (not driveIDs) to reset. 
+                        <parmname>force</parmname>
+                        : Required parameter to successfully reset a drive. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>
@@ -55,9 +60,12 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        SecureEraseDrives enables you to remove any residual data from drives that have a status of "available." You might want to use this method when replacing a drive nearing the end of its service life that contained sensitive data. This method uses a Security Erase Unit command to write a predetermined pattern to the drive and resets the encryption key on the drive. This asynchronous method might take up to two minutes to complete. You can use GetAsyncResult to check on the status of the secure erase operation. You can use the ListDrives method to obtain the driveIDs for the drives you want to secure erase. 
+                        <apiname>SecureEraseDrives</apiname> enables you to remove any residual data from <parmname>drives</parmname that have a status of "available." You might want to use this method when replacing a drive nearing the end of its service life that contained sensitive data. This method uses a Security Erase Unit command to write a predetermined pattern to the drive and resets the encryption key on the drive. This asynchronous method might take up to two minutes to complete. You can use GetAsyncResult to check on the status of the secure erase operation. You can use the ListDrives method to obtain the driveIDs for the <parmname>drives</parmname you want to secure erase. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>drives</parmname>
+                        : List of driveIDs to be secure erased. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>
@@ -81,7 +89,7 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        ListDrives enables you to retrieve the list of the drives that exist in the cluster's active nodes. This method returns drives that have been added as volume metadata or block drives as well as drives that have not been added and are available. 
+                        <apiname>ListDrives</apiname> enables you to retrieve the list of the drives that exist in the cluster's active nodes. This method returns drives that have been added as volume metadata or block drives as well as drives that have not been added and are available. 
                      </entry>
                      <entry colname="col2" cid="sKwWv">None</entry>
                   </row>
@@ -107,9 +115,14 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        You can use RemoveDrives to proactively remove drives that are part of the cluster. You might want to use this method when reducing cluster capacity or preparing to replace drives nearing the end of their service life. Any data on the drives is removed and migrated to other drives in the cluster before the drive is removed from the cluster. This is an asynchronous method. Depending on the total capacity of the drives being removed, it might take several minutes to migrate all of the data. Use the GetAsyncResult method to check the status of the remove operation. When removing multiple drives, use a single RemoveDrives method call rather than multiple individual methods with a single drive each. This reduces the amount of data balancing that must occur to even stabilize the storage load on the cluster. You can also remove drives with a "failed" status using RemoveDrives. When you remove a drive with a "failed" status it is not returned to an "available" or active status. The drive is unavailable for use in the cluster. Use the ListDrives method to obtain the driveIDs for the drives you want to remove. 
+                        You can use <apiname>RemoveDrives</apiname> to proactively remove <parmname>drives</parmname that are part of the cluster. You might want to use this method when reducing cluster capacity or preparing to replace <parmname>drives</parmname nearing the end of their service life. Any data on the <parmname>drives</parmname is removed and migrated to other <parmname>drives</parmname in the cluster before the drive is removed from the cluster. This is an asynchronous method. Depending on the total capacity of the <parmname>drives</parmname being removed, it might take several minutes to migrate all of the data. Use the GetAsyncResult method to check the status of the remove operation. When removing multiple <parmname>drives</parmname, use a single <apiname>RemoveDrives</apiname> method call rather than multiple individual methods with a single drive each. This reduces the amount of data balancing that must occur to even stabilize the storage load on the cluster. You can also remove <parmname>drives</parmname with a "failed" status using <apiname>RemoveDrives</apiname>. When you remove a drive with a "failed" status it is not returned to an "available" or active status. The drive is unavailable for use in the cluster. Use the ListDrives method to obtain the driveIDs for the <parmname>drives</parmname you want to remove. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>drives</parmname>
+                        : List of driveIDs to remove from the cluster. 
+                        <parmname>forceduringupgrade</parmname>
+                        : If you want to remove a drive during upgrade, this must be set to true. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>
@@ -133,9 +146,12 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        GetDriveHardwareInfo returns all the hardware information for the given drive. This generally includes details about manufacturers, vendors, versions, and other associated hardware identification information. 
+                        <apiname>GetDriveHardwareInfo</apiname> returns all the hardware information for the given drive. This generally includes details about manufacturers, vendors, versions, and other associated hardware identification information. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>driveid</parmname>
+                        : DriveID for the drive information requested. You can get DriveIDs by using the ListDrives method. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>
@@ -159,9 +175,14 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        AddDrives enables you to add one or more available drives to the cluster, enabling the drives to host a portion of the cluster's data. When you add a node to the cluster or install new drives in an existing node, the new drives are marked as "available" and must be added via AddDrives before they can be utilized. Use the ListDrives method to display drives that are "available" to be added. When you add multiple drives, it is more efficient to add them in a single AddDrives method call rather than multiple individual methods with a single drive each. This reduces the amount of data balancing that must occur to stabilize the storage load on the cluster. When you add a drive, the system automatically determines the "type" of drive it should be. The method is asynchronous and returns immediately. However, it can take some time for the data in the cluster to be rebalanced using the newly added drives. As the new drives are syncing on the system, you can use the ListSyncJobs method to see how the drives are being rebalanced and the progress of adding the new drive. You can also use the GetAsyncResult method to query the method's returned asyncHandle. 
+                        <apiname>AddDrives</apiname> enables you to add one or more available <parmname>drives</parmname to the cluster, enabling the <parmname>drives</parmname to host a portion of the cluster's data. When you add a node to the cluster or install new <parmname>drives</parmname in an existing node, the new <parmname>drives</parmname are marked as "available" and must be added via <apiname>AddDrives</apiname> before they can be utilized. Use the ListDrives method to display <parmname>drives</parmname that are "available" to be added. When you add multiple <parmname>drives</parmname, it is more efficient to add them in a single <apiname>AddDrives</apiname> method call rather than multiple individual methods with a single drive each. This reduces the amount of data balancing that must occur to stabilize the storage load on the cluster. When you add a drive, the system automatically determines the "type" of drive it should be. The method is asynchronous and returns immediately. However, it can take some time for the data in the cluster to be rebalanced using the newly added <parmname>drives</parmname. As the new <parmname>drives</parmname are syncing on the system, you can use the ListSyncJobs method to see how the <parmname>drives</parmname are being rebalanced and the progress of adding the new drive. You can also use the GetAsyncResult method to query the method's returned asyncHandle. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>drives</parmname>
+                        : Returns information about each drive to be added to the cluster. Possible values are: driveID: The ID of the drive to add. (Integer) type: (Optional) The type of drive to add. Valid values are "slice" or "block". If omitted, the system assigns the correct type. (String) 
+                        <parmname>forceduringupgrade</parmname>
+                        : Allows the user to force the addition of <parmname>drives</parmname during an upgrade. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>
@@ -185,9 +206,12 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        GetDriveStats returns high-level activity measurements for a single drive. Values are cumulative from the addition of the drive to the cluster. Some values are specific to block drives. You might not obtain statistical data for both block and metadata drives when you run this method.  
+                        <apiname>GetDriveStats</apiname> returns high-level activity measurements for a single drive. Values are cumulative from the addition of the drive to the cluster. Some values are specific to block drives. You might not obtain statistical data for both block and metadata drives when you run this method.  
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>driveid</parmname>
+                        : Specifies the drive for which statistics are gathered. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>
@@ -211,7 +235,7 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        GetDriveConfig enables you to display drive information for expected slice and block drive counts as well as the number of slices and block drives that are currently connected to the node. Note: This method is available only through the per-node API endpoint 5.0 or later. 
+                        <apiname>GetDriveConfig</apiname> enables you to display drive information for expected slice and block drive counts as well as the number of slices and block drives that are currently connected to the node. <note>: This method is available only through the per-node API endpoint 5.0 or later. 
                      </entry>
                      <entry colname="col2" cid="sKwWv">None</entry>
                   </row>
@@ -237,9 +261,12 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        You can use the TestDrives API method to run a hardware validation on all drives on the node. This method detects hardware failures on the drives (if present) and reports them in the results of the validation tests. You can only use the TestDrives method on nodes that are not "active" in a cluster. Note: This test takes approximately 10 minutes. Note: This method is available only through the per-node API endpoint 5.0 or later. 
+                        You can use the <apiname>TestDrives</apiname> API method to run a hardware validation on all drives on the node. This method detects hardware failures on the drives (if present) and reports them in the results of the validation tests. You can only use the <apiname>TestDrives</apiname> method on nodes that are not "active" in a cluster. <note>: This test takes approximately 10 <parmname>minutes</parmname. <note>: This method is available only through the per-node API endpoint 5.0 or later. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>minutes</parmname>
+                        : Specifies the number of <parmname>minutes</parmname to run the test. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>
@@ -263,9 +290,12 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        ListDriveHardware returns all the drives connected to a node. Use this method on individual nodes to return drive hardware information or use this method on the cluster master node MVIP to see information for all the drives on all nodes. Note: The "securitySupported": true line of the method response does not imply that the drives are capable of encryption; only that the security status can be queried. If you have a node type with a model number ending in "-NE", commands to enable security features on these drives will fail. See the EnableEncryptionAtRest method for more information. 
+                        <apiname>ListDriveHardware</apiname> returns all the drives connected to a node. Use this method on individual nodes to return drive hardware information or use this method on the cluster master node MVIP to see information for all the drives on all nodes. <note>: The "securitySupported": true line of the method response does not imply that the drives are capable of encryption; only that the security status can be queried. If you have a node type with a model number ending in "-NE", commands to enable security features on these drives will fail. See the EnableEncryptionAtRest method for more information. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>force</parmname>
+                        : To run this command, the <parmname>force</parmname parameter must be set to true. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>

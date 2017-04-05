@@ -29,7 +29,7 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        GetIpmiInfo enables you to display a detailed reporting of sensors (objects) for node fans, intake and exhaust temperatures, and power supplies that are monitored by the system. 
+                        <apiname>GetIpmiInfo</apiname> enables you to display a detailed reporting of sensors (objects) for node fans, intake and exhaust temperatures, and power supplies that are monitored by the system. 
                      </entry>
                      <entry colname="col2" cid="sKwWv">None</entry>
                   </row>
@@ -55,9 +55,12 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        GetIpmiConfig enables you to retrieve hardware sensor information from sensors that are in your node. 
+                        <apiname>GetIpmiConfig</apiname> enables you to retrieve hardware sensor information from sensors that are in your node. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>chassistype</parmname>
+                        : Displays information for each node chassis type. Valid values are: all: Returns sensor information for each chassis type. {chassis type}: Returns sensor information for a specified chassis type. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>

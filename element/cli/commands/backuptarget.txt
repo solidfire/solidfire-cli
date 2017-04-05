@@ -29,9 +29,16 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        ModifyBackupTarget enables you to change attributes of a backup target. 
+                        <api<parmname>name</parmname>ModifyBackupTarget</api<parmname>name</parmname> enables you to change <parmname>attributes</parmname of a backup target. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>backuptargetid</parmname>
+                        : The unique target ID for the target to modify. 
+                        <parmname>name</parmname>
+                        : The new <parmname>name</parmname for the backup target. 
+                        <parmname>attributes</parmname>
+                        : List of <parmname>name</parmname-value pairs in JSON object format. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>
@@ -55,9 +62,14 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        CreateBackupTarget enables you to create and store backup target information so that you do not need to re-enter it each time a backup is created. 
+                        <api<parmname>name</parmname>CreateBackupTarget</api<parmname>name</parmname> enables you to create and store backup target information so that you do not need to re-enter it each time a backup is created. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>name</parmname>
+                        : The <parmname>name</parmname of the backup target. 
+                        <parmname>attributes</parmname>
+                        : List of <parmname>name</parmname-value pairs in JSON object format. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>
@@ -81,7 +93,7 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        You can use ListBackupTargets to retrieve information about all backup targets that have been created. 
+                        You can use <apiname>ListBackupTargets</apiname> to retrieve information about all backup targets that have been created. 
                      </entry>
                      <entry colname="col2" cid="sKwWv">None</entry>
                   </row>
@@ -107,9 +119,12 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        RemoveBackupTarget allows you to delete backup targets. 
+                        <apiname>RemoveBackupTarget</apiname> allows you to delete backup targets. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>backuptargetid</parmname>
+                        : The unique target ID of the target to remove. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>
@@ -133,9 +148,12 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        GetBackupTarget enables you to return information about a specific backup target that you have created. 
+                        <apiname>GetBackupTarget</apiname> enables you to return information about a specific backup target that you have created. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>backuptargetid</parmname>
+                        : The unique identifier assigned to the backup target. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>

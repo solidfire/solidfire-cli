@@ -29,7 +29,7 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        GetRemoteLoggingHosts enables you to retrieve the current list of log servers. 
+                        <apiname>GetRemoteLoggingHosts</apiname> enables you to retrieve the current list of log servers. 
                      </entry>
                      <entry colname="col2" cid="sKwWv">None</entry>
                   </row>
@@ -55,9 +55,12 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        SetRemoteLoggingHosts enables you to configure remote logging from the nodes in the storage cluster to a centralized log server or servers. Remote logging is performed over TCP using the default port 514. This API does not add to the existing logging hosts. Rather, it replaces what currently exists with new values specified by this API method. You can use GetRemoteLoggingHosts to determine what the current logging hosts are, and then use SetRemoteLoggingHosts to set the desired list of current and new logging hosts. 
+                        <apiname>SetRemoteLoggingHosts</apiname> enables you to configure remote logging from the nodes in the storage cluster to a centralized log server or servers. Remote logging is performed over TCP using the default port 514. This API does not add to the existing logging hosts. Rather, it replaces what currently exists with new values specified by this API method. You can use GetRemoteLoggingHosts to determine what the current logging hosts are, and then use <apiname>SetRemoteLoggingHosts</apiname> to set the desired list of current and new logging hosts. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>remotehosts</parmname>
+                        : A list of hosts to send log messages to. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>
@@ -81,9 +84,12 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        You can use SetLoginSessionInfo to set the period of time that a session's login authentication is valid. After the log in period elapses without activity on the system, the authentication expires. New login credentials are required for continued access to the cluster after the timeout period has elapsed. 
+                        You can use <apiname>SetLoginSessionInfo</apiname> to set the period of time that a session's login authentication is valid. After the log in period elapses without activity on the system, the authentication expires. New login credentials are required for continued access to the cluster after the <parmname>timeout</parmname period has elapsed. 
                      </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>timeout</parmname>
+                        : Cluster authentication expiration period. Formatted in HH:mm:ss. For example, 01:30:00, 00:90:00, and 00:00:5400 can be used to equal a 90 minute <parmname>timeout</parmname period. The default value is 30 minutes. 
+                     </entry>
                   </row>
                </tbody>
             </tgroup>
@@ -107,7 +113,7 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        GetLoginSessionInfo enables you to return the period of time a log in authentication session is valid for both log in shells and the TUI. 
+                        <apiname>GetLoginSessionInfo</apiname> enables you to return the period of time a log in authentication session is valid for both log in shells and the TUI. 
                      </entry>
                      <entry colname="col2" cid="sKwWv">None</entry>
                   </row>
