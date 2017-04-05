@@ -65,7 +65,7 @@
       </section>
       <section>
          <title>
-            sfcli VolumeAccessGroup create
+            sfcli VolumeAccessGroup getefficiency
             <varname cid="1IOAZZ">options</varname>
          </title>
          <table>
@@ -81,7 +81,7 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        You can use CreateVolumeAccessGroup to create a new volume access group. When you create the volume access group, you need to give it a name, and you can optionally enter initiators and volumes. After you create the group, you can add volumes and initiator IQNs. Any initiator IQN that you add to the volume access group is able to access any volume in the group without CHAP authentication. 
+                        GetVolumeAccessGroupEfficiency enables you to retrieve efficiency information about a volume access group. Only the volume access group you provide as the parameter in this API method is used to compute the capacity. 
                      </entry>
                      <entry colname="col2" cid="sKwWv">None</entry>
                   </row>
@@ -247,7 +247,7 @@
       </section>
       <section>
          <title>
-            sfcli VolumeAccessGroup getefficiency
+            sfcli VolumeAccessGroup create
             <varname cid="1IOAZZ">options</varname>
          </title>
          <table>
@@ -263,7 +263,7 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        GetVolumeAccessGroupEfficiency enables you to retrieve efficiency information about a volume access group. Only the volume access group you provide as the parameter in this API method is used to compute the capacity. 
+                        You can use CreateVolumeAccessGroup to create a new volume access group. When you create the volume access group, you need to give it a name, and you can optionally enter initiators and volumes. After you create the group, you can add volumes and initiator IQNs. Any initiator IQN that you add to the volume access group is able to access any volume in the group without CHAP authentication. 
                      </entry>
                      <entry colname="col2" cid="sKwWv">None</entry>
                   </row>
