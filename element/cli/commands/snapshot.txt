@@ -39,7 +39,7 @@
       </section>
       <section>
          <title>
-            sfcli Snapshot getschedule
+            sfcli Snapshot modifygroup
             <varname cid="1IOAZZ">options</varname>
          </title>
          <table>
@@ -55,7 +55,7 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        You can use the GetSchedule method to retrieve information about a scheduled snapshot. You can see information about a specific schedule if there are many snapshot schedules in the system. You also retrieve information about more than one schedule with this method by specifying additional scheduleIDs in the parameter. 
+                        ModifyGroupSnapshot enables you to change the attributes of a group of snapshots. You can also use this method to enable snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system. 
                      </entry>
                      <entry colname="col2" cid="sKwWv">None</entry>
                   </row>
@@ -195,7 +195,7 @@
       </section>
       <section>
          <title>
-            sfcli Snapshot modifygroup
+            sfcli Snapshot getschedule
             <varname cid="1IOAZZ">options</varname>
          </title>
          <table>
@@ -211,7 +211,7 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        ModifyGroupSnapshot enables you to change the attributes of a group of snapshots. You can also use this method to enable snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system. 
+                        You can use the GetSchedule method to retrieve information about a scheduled snapshot. You can see information about a specific schedule if there are many snapshot schedules in the system. You also retrieve information about more than one schedule with this method by specifying additional scheduleIDs in the parameter. 
                      </entry>
                      <entry colname="col2" cid="sKwWv">None</entry>
                   </row>

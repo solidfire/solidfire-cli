@@ -143,7 +143,7 @@
       </section>
       <section>
          <title>
-            sfcli VirtualVolume getunsharedchunks
+            sfcli VirtualVolume copydiffsto
             <varname cid="1IOAZZ">options</varname>
          </title>
          <table>
@@ -159,7 +159,7 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        GetVirtualVolumeAllocatedBitmap scans a VVol segment and returns the number of  chunks not shared between two volumes. This call will return results in less  than 30 seconds. If the specified VVol and the base VVil are not related, an  error is thrown. If the offset/length combination is invalid or out fo range  an error is thrown. 
+                        CopyDiffsToVirtualVolume is a three-way merge function. 
                      </entry>
                      <entry colname="col2" cid="sKwWv">None</entry>
                   </row>
@@ -403,7 +403,7 @@
       </section>
       <section>
          <title>
-            sfcli VirtualVolume copydiffsto
+            sfcli VirtualVolume getunsharedchunks
             <varname cid="1IOAZZ">options</varname>
          </title>
          <table>
@@ -419,7 +419,7 @@
                <tbody cid="7uqUX">
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
-                        CopyDiffsToVirtualVolume is a three-way merge function. 
+                        GetVirtualVolumeAllocatedBitmap scans a VVol segment and returns the number of  chunks not shared between two volumes. This call will return results in less  than 30 seconds. If the specified VVol and the base VVil are not related, an  error is thrown. If the offset/length combination is invalid or out fo range  an error is thrown. 
                      </entry>
                      <entry colname="col2" cid="sKwWv">None</entry>
                   </row>
