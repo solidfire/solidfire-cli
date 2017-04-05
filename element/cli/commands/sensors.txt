@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="GUID-FC4AF171-310F-4FD7-829D-A001202587B2" xml:lang="en">
+   <title id="GUID-622436CC-76F9-4BB4-A2B1-D05F6752F6CD">Login session commands</title>
+   <shortdesc cid="29MFm">This section describes the login session commands that you can use in the tool.</shortdesc>
+   <prolog cid="2HIyNN">
+      <metadata>
+         <keywords>
+            <?xm-replace_text Insert index entries here. How to do it: Use Alt + Shift + X or insert indexterm from the element list. Basics: Use first level entries for title nouns and second level entries to identify the purpose of the topic, as reflected by the title and shortdesc.  ?>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody cid="1zXwwo">
+      <section>
+         <title>
+            sfcli Sensors getipmiinfo
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        GetIpmiInfo enables you to display a detailed reporting of sensors (objects) for node fans, intake and exhaust temperatures, and power supplies that are monitored by the system. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">None</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Sensors getipmiconfig
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        GetIpmiConfig enables you to retrieve hardware sensor information from sensors that are in your node. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">None</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+   </refbody>
+</reference>

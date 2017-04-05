@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="GUID-FC4AF171-310F-4FD7-829D-A001202587B2" xml:lang="en">
+   <title id="GUID-622436CC-76F9-4BB4-A2B1-D05F6752F6CD">Login session commands</title>
+   <shortdesc cid="29MFm">This section describes the login session commands that you can use in the tool.</shortdesc>
+   <prolog cid="2HIyNN">
+      <metadata>
+         <keywords>
+            <?xm-replace_text Insert index entries here. How to do it: Use Alt + Shift + X or insert indexterm from the element list. Basics: Use first level entries for title nouns and second level entries to identify the purpose of the topic, as reflected by the title and shortdesc.  ?>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody cid="1zXwwo">
+      <section>
+         <title>
+            sfcli Statistics getcompletestats
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        NetApp engineering uses the GetCompleteStats API method to troubleshoot new features. The data returned from GetCompleteStats is not documented, changes frequently, and is not guaranteed to be accurate. NetApp does not recommend using GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">None</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Statistics gethardwareinfo
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        The GetHardwareInfo API method enables you to return hardware information and status for a single node. This generally includes details about manufacturers, vendors, versions, drives, and other associated hardware identification information. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">None</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Statistics getrawstats
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        NetApp engineering uses the GetRawStats API method to troubleshoot new features. The data returned from GetRawStats is not documented, changes frequently, and is not guaranteed to be accurate. NetApp does not recommend using GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">None</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Statistics listvolumestatsbyvirtualvolume
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        ListVolumeStatsByVirtualVolume enables you to list volume statistics for any volumes in the system that are associated with virtual volumes. Statistics are cumulative from the creation of the volume. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">None</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Statistics listvolumestats
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        ListVolumeStats returns high-level activity measurements for a single volume, list of volumes, or all volumes (if you omit the volumeIDs parameter). Measurement values are cumulative from the creation of the volume. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">None</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Statistics listdrivestats
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        ListDriveStats enables you to retrieve high-level activity measurements for multiple drives in the cluster. By default, this method returns statistics for all drives in the cluster, and these measurements are cumulative from the addition of the drive to the cluster. Some values this method returns are specific to block drives, and some are specific to metadata drives. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">None</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+   </refbody>
+</reference>
