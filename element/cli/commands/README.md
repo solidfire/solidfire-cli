@@ -875,6 +875,42 @@ The ID of the volume access group to remove volumes from.
 The ID of the volume access group to remove volumes from. 
 
 ---------------------------------------------------------------
+#### getefficiency ####
+Command:
+
+    sfcli VolumeAccessGroup getefficiency <options>
+
+Description:
+
+GetVolumeAccessGroupEfficiency enables you to retrieve efficiency information about a volume access group. Only the volume access group you provide as the parameter in this API method is used to compute the capacity. 
+
+Options:
+
+--volumeaccessgroupid
+
+The volume access group for which capacity is computed. 
+
+---------------------------------------------------------------
+#### modifylunassignments ####
+Command:
+
+    sfcli VolumeAccessGroup modifylunassignments <options>
+
+Description:
+
+The ModifyVolumeAccessGroupLunAssignments method enables you to define custom LUN assignments for specific volumes. This method changes only LUN values set on the lunAssignments parameter in the volume access group. All other LUN assignments remain unchanged. LUN assignment values must be unique for volumes in a volume access group. You cannot define duplicate LUN values within a volume access group. However, you can use the same LUN values again in different volume access groups.  Note: Correct LUN values are 0 through 16383. The system generates an exception if you pass a LUN value outside of this range. None of the specified LUN assignments are modified if there is an exception.  Caution: If you change a LUN assignment for a volume with active I/O, the I/O can be disrupted. You might need to change the server configuration before changing volume LUN assignments. 
+
+Options:
+
+--volumeaccessgroupid
+
+The ID of the volume access group for which the LUN assignments will be modified. 
+
+--lunassignments
+
+The volume IDs with new assigned LUN values. 
+
+---------------------------------------------------------------
 #### modify ####
 Command:
 
@@ -919,42 +955,6 @@ true: Delete initiator objects after they are removed from a volume access group
 List of name-value pairs in JSON object format. 
 
 ---------------------------------------------------------------
-#### getefficiency ####
-Command:
-
-    sfcli VolumeAccessGroup getefficiency <options>
-
-Description:
-
-GetVolumeAccessGroupEfficiency enables you to retrieve efficiency information about a volume access group. Only the volume access group you provide as the parameter in this API method is used to compute the capacity. 
-
-Options:
-
---volumeaccessgroupid
-
-The volume access group for which capacity is computed. 
-
----------------------------------------------------------------
-#### modifylunassignments ####
-Command:
-
-    sfcli VolumeAccessGroup modifylunassignments <options>
-
-Description:
-
-The ModifyVolumeAccessGroupLunAssignments method enables you to define custom LUN assignments for specific volumes. This method changes only LUN values set on the lunAssignments parameter in the volume access group. All other LUN assignments remain unchanged. LUN assignment values must be unique for volumes in a volume access group. You cannot define duplicate LUN values within a volume access group. However, you can use the same LUN values again in different volume access groups.  Note: Correct LUN values are 0 through 16383. The system generates an exception if you pass a LUN value outside of this range. None of the specified LUN assignments are modified if there is an exception.  Caution: If you change a LUN assignment for a volume with active I/O, the I/O can be disrupted. You might need to change the server configuration before changing volume LUN assignments. 
-
-Options:
-
---volumeaccessgroupid
-
-The ID of the volume access group for which the LUN assignments will be modified. 
-
---lunassignments
-
-The volume IDs with new assigned LUN values. 
-
----------------------------------------------------------------
 #### list ####
 Command:
 
@@ -973,6 +973,10 @@ The volume access group ID at which to begin the listing. If unspecified, there 
 --limit
 
 The maximum number of results to return. This can be useful for paging. 
+
+--volumeaccessgroups
+
+The list of ids of the volume access groups you wish to list 
 
 ---------------------------------------------------------------
 #### addinitiatorsto ####

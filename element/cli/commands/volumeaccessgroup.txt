@@ -39,32 +39,6 @@
       </section>
       <section>
          <title>
-            sfcli VolumeAccessGroup modify
-            <varname cid="1IOAZZ">options</varname>
-         </title>
-         <table>
-            <tgroup cols="2" cid="Nirny">
-               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
-               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
-               <thead cid="23Fc7a">
-                  <row cid="13uyDN">
-                     <entry colname="col1" cid="2x5tN">Description</entry>
-                     <entry colname="col2" cid="13UHCG">Options</entry>
-                  </row>
-               </thead>
-               <tbody cid="7uqUX">
-                  <row cid="2EBjiH">
-                     <entry colname="col1" cid="1Thqa5">
-                        You can use ModifyVolumeAccessGroup to update initiators and add or remove volumes from a volume access group. If a specified initiator or volume is a duplicate of what currently exists, the volume access group is left as-is. If you do not specify a value for volumes or initiators, the current list of initiators and volumes is not changed. 
-                     </entry>
-                     <entry colname="col2" cid="sKwWv">None</entry>
-                  </row>
-               </tbody>
-            </tgroup>
-         </table>
-      </section>
-      <section>
-         <title>
             sfcli VolumeAccessGroup getefficiency
             <varname cid="1IOAZZ">options</varname>
          </title>
@@ -108,6 +82,32 @@
                   <row cid="2EBjiH">
                      <entry colname="col1" cid="1Thqa5">
                         The ModifyVolumeAccessGroupLunAssignments method enables you to define custom LUN assignments for specific volumes. This method changes only LUN values set on the lunAssignments parameter in the volume access group. All other LUN assignments remain unchanged. LUN assignment values must be unique for volumes in a volume access group. You cannot define duplicate LUN values within a volume access group. However, you can use the same LUN values again in different volume access groups.  Note: Correct LUN values are 0 through 16383. The system generates an exception if you pass a LUN value outside of this range. None of the specified LUN assignments are modified if there is an exception.  Caution: If you change a LUN assignment for a volume with active I/O, the I/O can be disrupted. You might need to change the server configuration before changing volume LUN assignments. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">None</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli VolumeAccessGroup modify
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        You can use ModifyVolumeAccessGroup to update initiators and add or remove volumes from a volume access group. If a specified initiator or volume is a duplicate of what currently exists, the volume access group is left as-is. If you do not specify a value for volumes or initiators, the current list of initiators and volumes is not changed. 
                      </entry>
                      <entry colname="col2" cid="sKwWv">None</entry>
                   </row>
