@@ -1,94 +1,103 @@
-Python Lib and CLI for SolidFire Storage Clusters
+SolidFire CLI Tools for Storage Clusters
 =================================================
-The purpose of this tool is not as a hard core programming language, but rather as a quick and dirty command line interface. This feature gives the user the ability to
+This tool is intended to be an easy-to-use command-line interface that enables you to do the following:
 
-1. Quickly install a fully functional interface to the JSON-RPC using pip
-2. Learn how to use the commands by via inline help
-3. Execute any command supported by Fluorine
-4. Utilize autofill on MacOS and Linux distributions to make constructing commands easier
-5. Get the responses in 3 different output formats: Tree format, Json format, and Pickle format
-6. Execute any non-public command by using "sfcli sfapi invoke" with the necessary method name and parameters.
+1. Quickly install a fully functional interface to the JSON-RPC using pip.
+2. Get help on how to use the commands by accessing the inline help.
+3. Execute any command supported by NetApp SolidFire Element OS version 9.0.
+4. Utilize autofill on MacOS and Linux distributions to make constructing commands easier.
+5. Get responses in three different output formats: tree format, JSON format, and pickle format.
+6. Execute any non-public commands by using "sfcli sfapi invoke" with the necessary method name and parameters.
 7. Achieve the same functionality as the SDKs without ever opening an editor.
-8. Establish and store connection information locally
+8. Establish and store connection information locally.
 
-Intended Audience
+Audience
 -----------------
-The SolidFire CLI is intended for users who for one reason or another, cannot or will
-not use PowerShell. It integrates as you would expect with bash. The main advantages
-of using this framework are (firstly) that the objects are returned as strings which
-allows for expeditious grepping and (secondly) that it is very easy to install and get
-set up.
+The tool is for users who do not want to use PowerShell. It integrates as you would expect with bash. The main advantages
+of using this tool are the following:
+* Objects are returned as strings, which allows for expeditious grepping.
+* It is very easy to install and use.
 
-To Install
+Installing SolidFire CLI Tools
 ----------
-There are two options for installing the tool:
+There are two ways in which you can install the tool:
 
-1. Execute the following command using pip
+* Execute the following command using pip:
+
 
     pip install solidfire-cli
 
-2.
 
-Operating Systems and Distributions
+* Navigate to the easy_install solidfirecli*.tar.gz file (where the * stands for the version), and run
+
+
+	easy_install solidfirecli*.tar.gz
+
+
+Supported Operating Systems
 -----------------------------------
-Windows 7, 8, 10, Linux, Mac
+* Windows 7, 8, and 10
+* Linux
+* MacOS
 
 Accessing Inline Help
 ---------------------
-To see top level help, run:
+The tool includes inline help that provides details about how to use the commands.
+
+To see the top-level help, run:
 
     sfcli --help
 
-To see second level help, run:
+To see the help at the object level (for example, account), run:
 
     sfcli account --help
 
-To see commands specific help, run:
+To see command-specific help, run:
 
     sfcli account getbyid --help
 
 Enabling Autocomplete
 ---------------------
-Copy and paste the following into your .bashrc file or run it whenever you want autocomplete enabled:
+Enter the following into your .bashrc file or run it whenever you want autocomplete enabled:
 
     eval "$(_SFCLI_COMPLETE=source sfcli)"
 
-Connection Management
+Managing Connections
 ---------------------
-To run a command on a given connection without storing it away, use the mvip, login, and password options.
+To run a command on a given connection without storing it away, use the mvip, login, and password options at the top level.
 
-    sfcli --mvip 10.117.60.15 --login admin --password admin Account List
+    sfcli --mvip 10.117.60.15 --login username --password password account list
 
-To store a given connection, use the Connection Push and supply the name option.
+To store a given connection, use the connection push command and supply the name option.
 
-    sfcli --mvip 10.117.60.15 --login admin --password admin --name "Example" Connection Push
+    sfcli connection push --mvip 10.117.60.15 --login username --password password --name "Example"
 
-To use a connection you've stored, use -n or --name or -c or -connectionIndex or leave it to default to connection 0
+There are three ways to access a stored connection: by name, by index, or by default. To access a connection by name, use -n or --name. To access a connection by index, use -c or --connectionIndex. To access a connection by default, leave the above two parameters off and the command will default to using the connection at index 0. The three possibilities are exemplified below:
 
-    sfcli -n Example Account List # by name
-    sfcli -c 0 Account List # by index
-    sfcli Account List # use connection 0
+    sfcli -n Example account list # by name
+    sfcli -c 0 account list # by index
+    sfcli account list # use connection 0
 
-To remove a given connection, use the Connection Remove command.
+To remove a given connection, use the connection remove command.
 
-    sfcli Connection Remove -n Example
-    sfcli Connection Remove -i -1 # Removes the newly pushed connection.
-    sfcli Connection Remove -i 0 # Removes the oldest pushed connection.
-    sfcli Connection Remove -i 1 # Removes the second oldest connection.
+    sfcli connection remove -n Example
+    sfcli connection remove -i -1 # Removes the newly pushed connection.
+    sfcli connection remove -i 0 # Removes the oldest pushed connection.
+    sfcli connection remove -i 1 # Removes the second oldest connection.
 
 To list the stored connections, use the Connection List command.
 
-	sfcli Connection List
+	sfcli connection list
 
 To prune broken connections from the connection.csv file, use the Connection Prune command.
 
-	sfcli Connection Prune
+	sfcli connection prune
 
-Executing Commands
+Executing Commands with Standard Parameters
 ------------------
-Executing a command with standard parameters:
+Determine the needed parameters using the autocomplete functionality or the --help functionality and then append the required parameters at the end as shown below:
 
-    sfcli -c 0 Account GetByID --accountid 3065
+    sfcli -c 0 account getbyid --accountid 3065
 
 Example output:
 
@@ -105,22 +114,26 @@ Example output:
 
 Executing Commands with Grouped Parameters
 ------------------------------------------
-Occasionally, the docs will refer to something called a subparameter. A subparameter
-is used to specify an attribute of a super parameter. For instance,
+A parameter might have optional subparameters that you need to use to specify an attribute of the the parameter.
+In the following example, the --volumes parameter has subparameters, such as volumeid, accessvolumes, name, newaccountid, newsize,and attributes:
 
     sfcli volume clonemultiple --help
 
     Usage: sfcli volume clonemultiple [OPTIONS]
 
-      CloneMultipleVolumes is used to create a clone of a group of specified
-      volumes. A consistent set of characteristics can be assigned to a group of
-      multiple volume when they are cloned together.
+      CloneMultipleVolumes enables you to create a clone of a group of specified
+      volumes. You can assign a consistent set of characteristics to a group of
+      multiple volumes when they are cloned together. Before using groupSnapShotID
+      to clone the volumes in a group snapshot, you must create the group snapshot
+      by using the CreateGroupSnapShot API method or the Element OS Web UI. Using
+      groupSnapshotID is optional when cloning multiple volumes.
+      Note: Cloning multiple volumes is allowed if cluster fullness is at stage 2 or 3.
+      Clones are not created when cluster fullness is at stage 4 or 5.
 
     Options:
-      --volumes                      Array of Unique ID for each volume to include
-                                     in the clone with optional parameters. If
-                                     optional parameters are not specified, the
-                                     values will be inherited from the source
+      --volumes                      Unique ID for each volume to include
+                                     in the clone. If optional parameters are not specified,
+                                     the values are inherited from the source
                                      volumes.  Has the following subparameters:
                                      --volumeid --accessvolumes --name
                                      --newaccountidvolumes --newsize --attributes
@@ -142,11 +155,11 @@ is used to specify an attribute of a super parameter. For instance,
       --newsize INTEGER              [subparameter] New size Total size of the
                                      volume, in bytes. Size is rounded up to the
                                      nearest 1MB size.
-      --attributes TEXT              [subparameter] List of Name/Value pairs in
+      --attributes TEXT              [subparameter] List of name-value pairs in
                                      JSON object format.
       --access TEXT                  New default access method for the new volumes
                                      if not overridden by information passed in
-                                     the volumes array. readOnly: Only read
+                                     the volume's array. readOnly: Only read
                                      operations are allowed. readWrite: Reads and
                                      writes are allowed. locked: No reads or
                                      writes are allowed. replicationTarget:
@@ -162,18 +175,18 @@ is used to specify an attribute of a super parameter. For instance,
                                      volumes array.
       --help                         Show this message and exit.
 
-If I want to clone multipe volumes in the same group, I can run it as follows:
+To clone multipe volumes in the same group, run:
 
     sfcli volume clonemultiple --volumes --volumeid 1 --accessvolumes readWrite --volumes --volumeid 1
 
-This will clone the volumes and apply the readWrite access to volume 1 and use the default for volume 2.
+This clones the volumes and applies readWrite access to volume 1 and uses the default for volume 2.
 
-Executing Commands with Non-Standard Parameters
+Executing Commands with Nonstandard Parameters
 ------------------------------------------------
-Occasionally, the user will need to pass in an arbitrary dictionary of keys and values. In that case,
-the user will need to provide a json string directly to the command line.
+Occasionally, you will need to pass in an arbitrary dictionary of keys and values. In that case,
+you will need to provide a JSON string directly to the command line.
 
-In the example below, if you want to bypass the logic and send somethign directly to the api, you can
+In the example below, if you want to bypass the logic and make a call directly to the API, you can
 do so by using SFApi Invoke.
 
 #### SFApi Invoke ####
@@ -183,11 +196,11 @@ do so by using SFApi Invoke.
 Output Formats
 --------------
 #### Tree Format (Default) ####
-The tree format was constructed specifically to make it easier for users to grep the output and get
+The tree format enables you to  grep the output and get
 a result without extra formatting. It uses whitespace to distinguish between different objects. To
-view this format, one need only run a command without the -j or -k flags.
+view this format, run a command without the -j or -k options.
 
-Example:
+See the following example:
 
     accounts:
 
@@ -202,7 +215,7 @@ Example:
                 secret:   <to see more details, increase depth>
             volumes:
                 <to see more details, increase depth>
-            username:   ARIEL
+            username:   EXAMPLE
 
             attributes:
             storage_container_id:
@@ -228,12 +241,12 @@ Example:
             volumes:
             username:   haxeclij0yA7YVfCDiq9jZXdkdiKfkSytK2flKk9Gi9NFq0677Fcg44QIDc9inqF
 
-#### Json Format ####
-The json format is constructed to look like the output of the api. This can be useful if you are going
-to store the data away for later use with postman or if you want to import it via any json libraries.
-To get this output, add the flag, -j after "sfcli" in your command.
+#### JSON Format ####
+The output in JSON format resembles the output of the API. This can be useful if you are going
+to store the data for later use with Postman or if you want to import it via any JSON libraries.
+To get this output, use the -j option after "sfcli" in your command.
 
-Example:
+See the following example:
 
     {
         "accounts": [
@@ -250,7 +263,7 @@ Example:
                 },
                 "status": "active",
                 "account_id": 2404,
-                "username": "ARIEL",
+                "username": "EXAMPLE",
                 "storage_container_id": {
                     "hex": "00000000000000000000000000000000"
                 }
@@ -291,13 +304,12 @@ Example:
     }
 
 #### Pickle Format ####
-The pickle format is the same as the json format except with an extra field in every object.
-This field names the object type. This is useful if you want to store the data away and use
-it with a python sdk later. If you unpickle the string using the python sdk, you will get
-a full object model instead of a nested dictionary. To use this, add the flag -k to your
-command after "sfcli".
+The pickle format is the same as the JSON format except with an extra field for every object.
+This field names the object type. This is useful if you want to store the data and use
+it with a Python SDK later. If you unpickle the string using the Python SDK, you get
+a full object model instead of a nested dictionary. To get this output, use the -k option after "sfcli" in your command.
 
-Example:
+See the following example:
 
     {
         "py/object": "solidfire.models.ListAccountsResult",
@@ -315,7 +327,7 @@ Example:
                     "secret": "3,gG[sP02V'@911}",
                     "py/object": "solidfire.custom.models.CHAPSecret"
                 },
-                "username": "ARIEL",
+                "username": "EXAMPLE",
                 "volumes": [
                     4588
                 ],
@@ -367,40 +379,42 @@ Example:
         ]
     }
 
-Logging
+Error Logging
 -------
-The user can pick from 4 different levels of logging:
-Level 0: Critical logging - only shows errors.
-Level 1: Warning logging - shows errors and warnings
-Level 2: Info logging - shows errors, warnings, and info
-Level 3: Debug logging - shows errors, warning, info, and debug.
+You can choose from four different levels of logging:
+* 0: Critical logging. Only shows errors.
+* 1: Warning logging. Shows errors and warnings.
+* 2: Info logging. Shows errors, warnings, and information.
+* 3: Debug logging. Shows errors, warning, information, and debug information.
 
-To set the level of debug, use the debug flag at the sfcli level. The logger is a standard, pythonic logger. In bash, the standard way to store information from different streams is to specify the stream you wish to redirect to a folder. For instance, when I run:
+To set the debug level, use the --debug option after "sfcli" in your command. The logger is a standard, Pythonic logger. In bash, the standard way to store information from different streams is to specify the stream you wish to redirect to a folder.
+
+In the following example, when you run:
 
 	sfcli --debug 2 account list
 
-I get the following info printed out:
+You get the following information printed:
 
 	INFO in cmd_account.py@50: startaccountid = None;limit = None;
 
-And I get the following data:
+And you get the following data:
 
 	accounts:
 
-If I want to store the response from the server, I can run the command like this:
+If you want to store the response from the server, you can run the command as follows:
 
 	sfcli --debug 2 account list > data.txt
 
-If I want to store the info from the server, I can run the command like this:
+If you want to store the information from the server, you can run the command as follows:
 
-	sfcli --debug 2 accoun list 2 > info.txt
+	sfcli --debug 2 account list 2 > info.txt
 
-In this case, the file info.txt would only contain the text labeled INFO and the file, data.txt would only contain the text, "accounts:".
+In this case, the info.txt file only contains the text labeled "INFO" and the data.txt file only contains the text labeled "accounts:".
 
 
-Command Details
+Command Options
 ---------------
-sfcli Options:
+You can use the following options in the tool:
 
     -m, --mvip TEXT
         SolidFire MVIP
