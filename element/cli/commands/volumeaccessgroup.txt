@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="GUID-FC4AF171-310F-4FD7-829D-A001202587B2" xml:lang="en">
+   <title id="GUID-622436CC-76F9-4BB4-A2B1-D05F6752F6CD">Login session commands</title>
+   <shortdesc cid="29MFm">This section describes the login session commands that you can use in the tool.</shortdesc>
+   <prolog cid="2HIyNN">
+      <metadata>
+         <keywords>
+            <?xm-replace_text Insert index entries here. How to do it: Use Alt + Shift + X or insert indexterm from the element list. Basics: Use first level entries for title nouns and second level entries to identify the purpose of the topic, as reflected by the title and shortdesc.  ?>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody cid="1zXwwo">
+      <section>
+         <title>
+            sfcli VolumeAccessGroup removevolumesfrom
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        The RemoveVolumeFromVolumeAccessGroup method enables you to remove <parmname>volumes</parmname from a volume access group. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>volumeaccessgroupid</parmname>
+                        : The ID of the volume access group to remove <parmname>volumes</parmname from. 
+                        <parmname>volumes</parmname>
+                        : The ID of the volume access group to remove <parmname>volumes</parmname from. 
+                     </entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli VolumeAccessGroup getefficiency
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        <apiname>GetVolumeAccessGroupEfficiency</apiname> enables you to retrieve efficiency information about a volume access group. Only the volume access group you provide as the parameter in this API method is used to compute the capacity. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>volumeaccessgroupid</parmname>
+                        : The volume access group for which capacity is computed. 
+                     </entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli VolumeAccessGroup modifylunassignments
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        The <apiname>ModifyVolumeAccessGroupLunAssignments</apiname> method enables you to define custom LUN assignments for specific volumes. This method changes only LUN values set on the <parmname>lunAssignments</parmname parameter in the volume access group. All other LUN assignments remain unchanged. LUN assignment values must be unique for volumes in a volume access group. You cannot define duplicate LUN values within a volume access group. However, you can use the same LUN values again in different volume access groups.  <note>: Correct LUN values are 0 through 16383. The system generates an exception if you pass a LUN value outside of this range. None of the specified LUN assignments are modified if there is an exception.  Caution: If you change a LUN assignment for a volume with active I/O, the I/O can be disrupted. You might need to change the server configuration before changing volume LUN assignments. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>volumeaccessgroupid</parmname>
+                        : The ID of the volume access group for which the LUN assignments will be modified. 
+                        <parmname>lunassignments</parmname>
+                        : The volume IDs with new assigned LUN values. 
+                     </entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli VolumeAccessGroup modify
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        You can use <api<parmname>name</parmname>ModifyVolumeAccessGroup</api<parmname>name</parmname> to update <parmname>initiators</parmname and add or remove <parmname>volumes</parmname from a volume access group. If a specified initiator or volume is a duplicate of what currently exists, the volume access group is left as-is. If you do not specify a value for <parmname>volumes</parmname or <parmname>initiators</parmname, the current list of <parmname>initiators</parmname and <parmname>volumes</parmname is not changed. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>volumeaccessgroupid</parmname>
+                        : The ID of the volume access group to modify. 
+                        <parmname>virtualnetworkid</parmname>
+                        : The ID of the SolidFire virtual network to associate the volume access group with. 
+                        <parmname>virtualnetworktags</parmname>
+                        : The ID of the SolidFire virtual network to associate the volume access group with. 
+                        <parmname>name</parmname>
+                        : The new <parmname>name</parmname for this volume access group. Not required to be unique, but recommended. 
+                        <parmname>initiators</parmname>
+                        : List of <parmname>initiators</parmname to include in the volume access group. If unspecified, the access group's configured <parmname>initiators</parmname are not modified. 
+                        <parmname>volumes</parmname>
+                        : List of <parmname>volumes</parmname to initially include in the volume access group. If unspecified, the access group's <parmname>volumes</parmname are not modified. 
+                        <parmname>deleteorphaninitiators</parmname>
+                        : true: Delete initiator objects after they are removed from a volume access group. false: Do not delete initiator objects after they are removed from a volume access group. 
+                        <parmname>attributes</parmname>
+                        : List of <parmname>name</parmname-value pairs in JSON object format. 
+                     </entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli VolumeAccessGroup list
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        <apiname>ListVolumeAccessGroups</apiname> enables you to return information about the volume access groups that are currently in the system. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>startvolumeaccessgroupid</parmname>
+                        : The volume access group ID at which to begin the listing. If unspecified, there is no lower <parmname>limit</parmname (implicitly 0). 
+                        <parmname>limit</parmname>
+                        : The maximum number of results to return. This can be useful for paging. 
+                        <parmname>volumeaccessgroups</parmname>
+                        : The list of ids of the volume access groups you wish to list 
+                     </entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli VolumeAccessGroup addinitiatorsto
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        <apiname>AddInitiatorsToVolumeAccessGroup</apiname> enables you to add <parmname>initiators</parmname to a specified volume access group. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>volumeaccessgroupid</parmname>
+                        : The ID of the volume access group to modify. 
+                        <parmname>initiators</parmname>
+                        : The list of <parmname>initiators</parmname to add to the volume access group. 
+                     </entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli VolumeAccessGroup getlunassignments
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        The <apiname>GetVolumeAccessGroupLunAssignments</apiname> method enables you to retrieve details on LUN mappings of a specified volume access group. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>volumeaccessgroupid</parmname>
+                        : The unique volume access group ID used to return information. 
+                     </entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli VolumeAccessGroup addvolumesto
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        <apiname>AddVolumesToVolumeAccessGroup</apiname> enables you to add <parmname>volumes</parmname to a specified volume access group. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>volumeaccessgroupid</parmname>
+                        : The ID of the volume access group to which <parmname>volumes</parmname are added. 
+                        <parmname>volumes</parmname>
+                        : The list of <parmname>volumes</parmname to add to the volume access group. 
+                     </entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli VolumeAccessGroup removeinitiatorsfrom
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        <apiname>RemoveInitiatorsFromVolumeAccessGroup</apiname> enables you to remove <parmname>initiators</parmname from a specified volume access group. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>volumeaccessgroupid</parmname>
+                        : The ID of the volume access group from which the <parmname>initiators</parmname are removed. 
+                        <parmname>initiators</parmname>
+                        : The list of <parmname>initiators</parmname to remove from the volume access group. 
+                        <parmname>deleteorphaninitiators</parmname>
+                        : true: Delete initiator objects after they are removed from a volume access group. false: Do not delete initiator objects after they are removed from a volume access group. 
+                     </entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli VolumeAccessGroup create
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        You can use <api<parmname>name</parmname>CreateVolumeAccessGroup</api<parmname>name</parmname> to create a new volume access group. When you create the volume access group, you need to give it a <parmname>name</parmname, and you can optionally enter <parmname>initiators</parmname and <parmname>volumes</parmname. After you create the group, you can add <parmname>volumes</parmname and initiator IQNs. Any initiator IQN that you add to the volume access group is able to access any volume in the group without CHAP authentication. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>name</parmname>
+                        : The <parmname>name</parmname for this volume access group. Not required to be unique, but recommended. 
+                        <parmname>initiators</parmname>
+                        : List of <parmname>initiators</parmname to include in the volume access group. If unspecified, the access group's configured <parmname>initiators</parmname are not modified. 
+                        <parmname>volumes</parmname>
+                        : List of <parmname>volumes</parmname to initially include in the volume access group. If unspecified, the access group's <parmname>volumes</parmname are not modified. 
+                        <parmname>virtualnetworkid</parmname>
+                        : The ID of the SolidFire virtual network to associate the volume access group with. 
+                        <parmname>virtualnetworktags</parmname>
+                        : The ID of the SolidFire virtual network to associate the volume access group with. 
+                        <parmname>attributes</parmname>
+                        : List of <parmname>name</parmname-value pairs in JSON object format. 
+                     </entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli VolumeAccessGroup delete
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        <apiname>DeleteVolumeAccessGroup</apiname> enables you to delete a volume access group. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>volumeaccessgroupid</parmname>
+                        : The ID of the volume access group to be deleted. 
+                     </entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+   </refbody>
+</reference>

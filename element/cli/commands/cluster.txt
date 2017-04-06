@@ -1,0 +1,1135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="GUID-FC4AF171-310F-4FD7-829D-A001202587B2" xml:lang="en">
+   <title id="GUID-622436CC-76F9-4BB4-A2B1-D05F6752F6CD">Login session commands</title>
+   <shortdesc cid="29MFm">This section describes the login session commands that you can use in the tool.</shortdesc>
+   <prolog cid="2HIyNN">
+      <metadata>
+         <keywords>
+            <?xm-replace_text Insert index entries here. How to do it: Use Alt + Shift + X or insert indexterm from the element list. Basics: Use first level entries for title nouns and second level entries to identify the purpose of the topic, as reflected by the title and shortdesc.  ?>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody cid="1zXwwo">
+      <section>
+         <title>
+            sfcli Cluster getinfo
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        <apiname>GetClusterInfo</apiname> enables you to return configuration information about the cluster. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">None</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster getapi
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        You can use the <apiname>GetAPI</apiname> method to return a list of all the API methods and supported API endpoints that can be used in the system. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">None</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster disablesnmp
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        You can use <apiname>DisableSnmp</apiname> to disable SNMP on the cluster nodes. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">None</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster getsnmpstate
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        You can use <apiname>GetSnmpState</apiname> to return the current state of the SNMP feature. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">None</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster getsnmpinfo
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        <apiname>GetSnmpInfo</apiname> enables you to retrieve the current simple network management protocol (SNMP) configuration information. <note>: <apiname>GetSnmpInfo</apiname> is available for Element OS 8 and prior releases. It is deprecated for versions later than Element OS 8. NetApp recommends that you migrate to the GetSnmpState and SetSnmpACL methods. See details in the Element API Reference Guide for their descriptions and usage. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">None</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster getconfig
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        The <apiname>GetClusterConfig</apiname> API method enables you to return information about the cluster configuration this node uses to communicate with the cluster that it is a part of. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">None</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster deleteallsupportbundles
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        <apiname>DeleteAllSupportBundles</apiname> enables you to delete all support bundles generated with the CreateSupportBundle API method. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">None</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster getsystemstatus
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        <apiname>GetSystemStatus</apiname> enables you to return whether a reboot ir required or not. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">None</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster setsnmptrapinfo
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        You can use <apiname>SetSnmpTrapInfo</apiname> to enable and disable the generation of cluster SNMP notifications (traps) and to specify the set of network host computers that receive the notifications. The values you pass with each <apiname>SetSnmpTrapInfo</apiname> method call replace all values set in any previous call to <apiname>SetSnmpTrapInfo</apiname>. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>traprecipients</parmname>
+                        : List of hosts that are to receive the traps generated by the Cluster Master. At least one object is required if any one of the trap types is enabled. 
+                        <parmname>clusterfaulttrapsenabled</parmname>
+                        : If the value is set to true, a corresponding solidFireClusterFaultNotification is sent to the configured list of trap recipients when a cluster fault is logged. The default value is false. 
+                        <parmname>clusterfaultresolvedtrapsenabled</parmname>
+                        : If the value is set to true, a corresponding solidFireClusterFaultResolvedNotification is sent to the configured list of trap recipients when a cluster fault is resolved. The default value is false. 
+                        <parmname>clustereventtrapsenabled</parmname>
+                        : If the value is set to true, a corresponding solidFireClusterEventNotification is sent to the configured list of trap recipients when a cluster event is logged. The default value is false. 
+                     </entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster listfaults
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        <apiname>ListClusterFaults</apiname> enables you to retrieve information about any faults detected on the cluster. With this method, you can retrieve both current faults as well as faults that have been resolved. The system caches faults every 30 seconds. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>bestpractices</parmname>
+                        : Specifies whether to include faults triggered by suboptimal system configuration. Possible values are: true false 
+                        <parmname>faulttypes</parmname>
+                        : Determines the types of faults returned. Possible values are: current: List active, unresolved faults. resolved: List faults that were previously detected and resolved. all: (Default) List both current and resolved faults. You can see the fault status in the resolved field of the Cluster Fault object. 
+                     </entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster listadmins
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        <apiname>ListClusterAdmins</apiname> returns the list of all cluster administrators for the cluster. There can be several cluster administrator accounts with different levels of permissions. There can be only one primary cluster administrator in the system. The primary Cluster Admin is the administrator that was created when the cluster was created. You can also create LDAP administrators when setting up an LDAP system on the cluster. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">None</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster create
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        The <apiname>CreateCluster</apiname> method enables you to initialize the node in a cluster that has ownership of the "<parmname>mvip</parmname" and "<parmname>svip</parmname" addresses. Each new cluster is initialized using the management IP (MIP) of the first node in the cluster. This method also automatically adds all the <parmname>nodes</parmname being configured into the cluster. You only need to use this method once each time a new cluster is initialized. <note>: You need to log in to the node that is used as the master node for the cluster. After you log in, run the GetBootstrapConfig method on the node to get the IP addresses for the rest of the <parmname>nodes</parmname that you want to include in the cluster. Then, run the <apiname>CreateCluster</apiname> method. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>accepteula</parmname>
+                        : Required to indicate your acceptance of the End User License Agreement when creating this cluster. To accept the EULA, set this parameter to true. 
+                        <parmname>mvip</parmname>
+                        : Floating (virtual) IP address for the cluster on the management network. 
+                        <parmname>svip</parmname>
+                        : Floating (virtual) IP address for the cluster on the storage (iSCSI) network. 
+                        <parmname>repcount</parmname>
+                        : Number of replicas of each piece of data to store in the cluster. Valid value is "2". 
+                        <parmname>username</parmname>
+                        : Username for the cluster admin. 
+                        <parmname>password</parmname>
+                        : Initial <parmname>password</parmname for the cluster admin account. 
+                        <parmname>nodes</parmname>
+                        : CIP/SIP addresses of the initial set of <parmname>nodes</parmname making up the cluster. This node's IP must be in the list. 
+                        <parmname>attributes</parmname>
+                        : List of name-value pairs in JSON object format. 
+                     </entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster disableencryptionatrest
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        The <apiname>DisableEncryptionAtRest</apiname> method enables you to remove the encryption that was previously applied to the cluster using the EnableEncryptionAtRest method. This disable method is asynchronous and returns a response before encryption is disabled. You can use the GetClusterInfo method to poll the system to see when the process has completed. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">None</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster addadmin
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        You can use <apiname>AddClusterAdmin</apiname> to add a new cluster admin account. A cluster ddmin can manage the cluster using the API and management tools. Cluster admins are completely separate and unrelated to standard tenant accounts. Each cluster admin can be restricted to a subset of the API. NetApp recommends using multiple cluster admin accounts for different users and applications. You should give each cluster admin the minimal permissions necessary; this reduces the potential impact of credential compromise. You must accept the End User License Agreement (EULA) by setting the <parmname>acceptEula</parmname parameter to true to add a cluster administrator account to the system. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>username</parmname>
+                        : Unique <parmname>username</parmname for this cluster admin. Must be between 1 and 1024 characters in length. 
+                        <parmname>password</parmname>
+                        : Password used to authenticate this cluster admin. 
+                        <parmname>access</parmname>
+                        : Controls which methods this cluster admin can use. For more details on the levels of <parmname>access</parmname, see Access Control in the Element API Reference Guide. 
+                        <parmname>accepteula</parmname>
+                        : Required to indicate your acceptance of the End User License Agreement when creating this cluster. To accept the EULA, set this parameter to true. 
+                        <parmname>attributes</parmname>
+                        : List of name-value pairs in JSON object format. 
+                     </entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster setntpinfo
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        <apiname>SetNtpInfo</apiname> enables you to configure NTP on cluster nodes. The values you set with this interface apply to all nodes in the cluster. If an NTP broadcast server periodically broadcasts time information on your network, you can optionally configure nodes as broadcast clients. <note>: NetApp recommends using NTP <parmname>servers</parmname that are internal to your network, rather than the installation defaults. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>servers</parmname>
+                        : List of NTP <parmname>servers</parmname to add to each nodes NTP configuration. 
+                        <parmname>broadcastclient</parmname>
+                        : Enables every node in the cluster as a broadcast client. 
+                     </entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster setconfig
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        The <apiname>SetClusterConfig</apiname> API method enables you to set the configuration this node uses to communicate with the <parmname>cluster</parmname it is associated with. To see the states in which these objects can be modified, see Cluster Object Attributes. To display the current <parmname>cluster</parmname interface settings for a node, run the GetClusterConfig API method. <note>: This method is available only through the per-node API endpoint 5.0 or later. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>cluster</parmname>
+                        : Objects that are changed for the <parmname>cluster</parmname interface settings. 
+                     </entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster modifyadmin
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        You can use <apiname>ModifyClusterAdmin</apiname> to change the settings for a cluster admin or LDAP cluster admin. You cannot change <parmname>access</parmname for the administrator cluster admin account. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>clusteradminid</parmname>
+                        : ClusterAdminID for the cluster admin or LDAP cluster admin to modify. 
+                        <parmname>password</parmname>
+                        : Password used to authenticate this cluster admin. 
+                        <parmname>access</parmname>
+                        : Controls which methods this cluster admin can use. For more details, see Access Control in the Element API Reference Guide. 
+                        <parmname>attributes</parmname>
+                        : List of name-value pairs in JSON object format. 
+                     </entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster getsnmptrapinfo
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        You can use <apiname>GetSnmpTrapInfo</apiname> to return current SNMP trap configuration information. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">None</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster listevents
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        <apiname>ListEvents</apiname> returns events detected on the cluster, sorted from oldest to newest. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>maxevents</parmname>
+                        : Specifies the maximum number of events to return. 
+                        <parmname>starteventid</parmname>
+                        : Identifies the beginning of a range of events to return. 
+                        <parmname>endeventid</parmname>
+                        : Identifies the end of a range of events to return. 
+                     </entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster clearfaults
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        You can use the <apiname>ClearClusterFaults</apiname> method to clear information about both current and previously detected faults. Both resolved and unresolved faults can be cleared. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>faulttypes</parmname>
+                        : Determines the types of faults cleared. Possible values are: current: Faults that are currently detected and have not been resolved. resolved: (Default) Faults that were previously detected and resolved. all: Both current and resolved faults are cleared. The fault status can be determined by the resolved field of the fault object. 
+                     </entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster removeadmin
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        You can use <apiname>RemoveClusterAdmin</apiname> to remove a Cluster Admin. You cannot remove the administrator cluster admin account. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>clusteradminid</parmname>
+                        : ClusterAdminID for the cluster admin to remove. 
+                     </entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster getstats
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        <apiname>GetClusterStats</apiname> enables you to retrieve high-level activity measurements for the cluster. Values returned are cumulative from the creation of the cluster. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">None</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster getlimits
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        <apiname>GetLimits</apiname> enables you to retrieve the limit values set by the API. These values might change between releases of Element OS, but do not change without an update to the system. Knowing the limit values set by the API can be useful when writing API scripts for user-facing tools. <note>: The <apiname>GetLimits</apiname> method returns the limits for the current software version regardless of the API endpoint version used to pass the method. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">None</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster getcurrentadmin
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        <apiname>GetCurrentClusterAdmin</apiname> returns information for the current primary cluster administrator. The primary Cluster Admin was created when the cluster was created. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">None</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster createsupportbundle
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        <apiname>CreateSupportBundle</apiname> enables you to create a support bundle file under the node's directory. After creation, the bundle is stored on the node as a tar.gz file. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>bundlename</parmname>
+                        : The unique name for the support bundle. If no name is provided, "supportbundle" and the node name are used as the filename. 
+                        <parmname>extraargs</parmname>
+                        : Passed to the sf_make_support_bundle script. You should use this parameter only at the request of NetApp SolidFire Support. 
+                        <parmname>timeoutsec</parmname>
+                        : The number of seconds to allow the support bundle script to run before stopping. The default value is 1500 seconds. 
+                     </entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster enablesnmp
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        <apiname>EnableSnmp</apiname> enables you to enable SNMP on cluster nodes. When you enable SNMP, the action applies to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to <apiname>EnableSnmp</apiname>. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>snmpv3enabled</parmname>
+                        : If set to "true", then SNMP v3 is enabled on each node in the cluster. If set to "false", then SNMP v2 is enabled. 
+                     </entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster getntpinfo
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        <apiname>GetNtpInfo</apiname> enables you to return the current network time protocol (NTP) configuration information. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">None</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster listsyncjobs
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        <apiname>ListSyncJobs</apiname> enables you to return information about synchronization jobs that are running on a SolidFire cluster. The type of synchronization jobs that are returned with this method are slice, clone, and remote. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">None</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster getversioninfo
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        <apiname>GetClusterVersionInfo</apiname> enables you to retrieve information about the Element software version running on each node in the cluster. This method also returns information about nodes that are currently in the process of upgrading software. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">None</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster setsnmpacl
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        <apiname>SetSnmpACL</apiname> enables you to configure SNMP access permissions on the cluster nodes. The values you set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to <apiname>SetSnmpACL</apiname>. Also note that the values set with this interface replace all network or <parmname>usmUsers</parmname values set with the older SetSnmpInfo. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>networks</parmname>
+                        : List of <parmname>networks</parmname and what type of access they have to the SNMP servers running on the cluster nodes. See SNMP Network Object for possible "<parmname>networks</parmname" values. This parameter is required if SNMP v3 is disabled. 
+                        <parmname>usmusers</parmname>
+                        : List of users and the type of access they have to the SNMP servers running on the cluster nodes. 
+                     </entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster snmpsendtesttraps
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        <apiname>SnmpSendTestTraps</apiname> enables you to test SNMP functionality for a cluster. This method instructs the cluster to send test SNMP traps to the currently configured SNMP manager. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">None</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster getsnmpacl
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        <apiname>GetSnmpACL</apiname> enables you to return the current SNMP access permissions on the cluster nodes. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">None</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster getstate
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        The <apiname>GetClusterState</apiname> API method enables you to indicate if a node is part of a cluster or not. The three states are: Available: Node has not been configured with a cluster name. Pending: Node is pending for a specific named cluster and can be added. Active: Node is an active member of a cluster and may not be added to another cluster. <note>: This method is available only through the per-node API endpoint 5.0 or later. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>force</parmname>
+                        : To run this command, the <parmname>force</parmname parameter must be set to true. 
+                     </entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster getcapacity
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        You can use the <apiname>GetClusterCapacity</apiname> method to return the high-level capacity measurements for an entire cluster. You can use the fields returned from this method to calculate the efficiency rates that are displayed in the Element OS Web UI. You can use the following calculations in scripts to return the efficiency rates for thin provisioning, deduplication, compression, and overall efficiency. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">None</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster modifyfullthreshold
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        You can use <apiname>ModifyClusterFullThreshold</apiname> to change the level at which the system generates an event when the storage cluster approaches a certain capacity utilization. You can use the threshold setting to indicate the acceptable amount of utilized block storage before the system generates a warning. For example, if you want to be alerted when the system reaches 3% below the "Error" level block storage utilization, enter a value of "3" for the <parmname>stage3BlockThresholdPercent</parmname parameter. If this level is reached, the system sends an alert to the Event Log in the Cluster Management Console. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>stage2awarethreshold</parmname>
+                        : The number of nodes of capacity remaining in the cluster before the system triggers a capacity notification. 
+                        <parmname>stage3blockthresholdpercent</parmname>
+                        : The percentage of block storage utilization below the "Error" threshold that causes the system to trigger a cluster "Warning" alert. 
+                        <parmname>maxmetadataoverprovisionfactor</parmname>
+                        : A value representative of the number of times metadata space can be overprovisioned relative to the amount of space available. For example, if there was enough metadata space to store 100 TiB of volumes and this number was set to 5, then 500 TiB worth of volumes can be created. 
+                     </entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster getmasternodeid
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        <apiname>GetClusterMasterNodeID</apiname> enables you to retrieve the ID of the node that can perform cluster-wide administration tasks and holds the storage virtual IP address (SVIP) and management virtual IP address (MVIP). 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">None</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster setsnmpinfo
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        <apiname>SetSnmpInfo</apiname> enables you to configure SNMP version 2 and version 3 on cluster nodes. The values you set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to <apiname>SetSnmpInfo</apiname>. <note>: <apiname>SetSnmpInfo</apiname> is deprecated. Use the EnableSnmp and SetSnmpACL methods instead. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">
+                        <parmname>networks</parmname>
+                        : List of <parmname>networks</parmname and what type of access they have to the SNMP servers running on the cluster nodes. See the SNMP Network Object for possible "<parmname>networks</parmname" values. This parameter is required only for SNMP v2. 
+                        <parmname>enabled</parmname>
+                        : If set to true, SNMP is <parmname>enabled</parmname on each node in the cluster. 
+                        <parmname>snmpv3enabled</parmname>
+                        : If set to true, SNMP v3 is <parmname>enabled</parmname on each node in the cluster. 
+                        <parmname>usmusers</parmname>
+                        : If SNMP v3 is <parmname>enabled</parmname, this value must be passed in place of the <parmname>networks</parmname parameter. This parameter is required only for SNMP v3. 
+                     </entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster getfullthreshold
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        You can use <apiname>GetClusterFullThreshold</apiname> to view the stages set for cluster fullness levels. This method returns all fullness metrics for the cluster. <note>: When a cluster reaches the Error stage of block cluster fullness, the maximum IOPS on all volumes are reduced linearly to the volume's minimum IOPS as the cluster approaches the Critical stage. This helps prevent the cluster from reaching the Critical stage of block cluster fullness. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">None</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+      <section>
+         <title>
+            sfcli Cluster enableencryptionatrest
+            <varname cid="1IOAZZ">options</varname>
+         </title>
+         <table>
+            <tgroup cols="2" cid="Nirny">
+               <colspec colnum="1" colname="col1" colwidth="1.34*" cid="21O9D4" />
+               <colspec colnum="2" colname="col2" colwidth="1.00*" cid="EKRMv" />
+               <thead cid="23Fc7a">
+                  <row cid="13uyDN">
+                     <entry colname="col1" cid="2x5tN">Description</entry>
+                     <entry colname="col2" cid="13UHCG">Options</entry>
+                  </row>
+               </thead>
+               <tbody cid="7uqUX">
+                  <row cid="2EBjiH">
+                     <entry colname="col1" cid="1Thqa5">
+                        You can use the <apiname>EnableEncryptionAtRest</apiname> method to enable the Advanced Encryption Standard (AES) 256-bit encryption at rest on the cluster, so that the cluster can manage the encryption key used for the drives on each node. This feature is not enabled by default. When you enable Encryption at Rest, the cluster automatically manages encryption keys internally for the drives on each node in the cluster. Nodes do not store the keys to unlock drives and the keys are never passed over the network. Two nodes participating in a cluster are required to access the key to disable encryption on a drive. The encryption management does not affect performance or efficiency on the cluster. If an encryption-enabled drive or node is removed from the cluster with the API, Encryption at Rest is disabled and the data is not secure erased. Data can be secure erased using the SecureEraseDrives API method. <note>: If you have a node type with a model number ending in "-NE", the <apiname>EnableEncryptionAtRest</apiname> method call fails with a response of "Encryption not allowed. Cluster detected non-encryptable node". You should only enable or disable encryption when the cluster is running and in a healthy state. You can enable or disable encryption at your discretion and as often as you need. <note>: This process is asynchronous and returns a response before encryption is enabled. You can use the GetClusterInfo method to poll the system to see when the process has completed. 
+                     </entry>
+                     <entry colname="col2" cid="sKwWv">None</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+      </section>
+   </refbody>
+</reference>
