@@ -36,6 +36,8 @@
                         : An array of unique volume IDs to query. If you do not specify this parameter, all group snapshots on the cluster are included. 
                         <parmname>groupsnapshotid</parmname>
                         : Retrieves information for a specific group snapshot ID. 
+                        <parmname>volumes</parmname>
+                        :  
                      </entry>
                   </row>
                </tbody>
