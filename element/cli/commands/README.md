@@ -2654,17 +2654,13 @@ ListGroupSnapshots enables you to get information about all group snapshots that
 
 Options:
 
---volumeid
-
-An array of unique volume IDs to query. If you do not specify this parameter, all group snapshots on the cluster are included. 
-
 --groupsnapshotid
 
 Retrieves information for a specific group snapshot ID. 
 
 --volumes
 
- 
+An array of unique volume IDs to query. If you do not specify this parameter, all group snapshots on the cluster are included. 
 
 ---------------------------------------------------------------
 #### getschedule ####
