@@ -556,10 +556,6 @@
                         : New QoS settings for this volume. If not specified, the QoS settings are not changed. 
                         <parmname>totalsize</parmname>
                         : New size of the volume in bytes. 1000000000 is equal to 1GB. Size is rounded up to the nearest 1MB. This parameter can only be used to increase the size of a volume. 
-                        <parmname>setcreatetime</parmname>
-                        : If set to true, changes the recorded date of volume creation. 
-                        <parmname>createtime</parmname>
-                        : An ISO 8601 date string to set as the new volume creation date. Required if "<parmname>setCreateTime</parmname" is set to true. 
                         <parmname>attributes</parmname>
                         : List of name-value pairs in JSON object format. 
                      </entry>

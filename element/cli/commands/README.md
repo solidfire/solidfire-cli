@@ -1806,14 +1806,6 @@ New QoS settings for this volume. If not specified, the QoS settings are not cha
 
 New size of the volume in bytes. 1000000000 is equal to 1GB. Size is rounded up to the nearest 1MB. This parameter can only be used to increase the size of a volume. 
 
---setcreatetime
-
-If set to true, changes the recorded date of volume creation. 
-
---createtime
-
-An ISO 8601 date string to set as the new volume creation date. Required if "setCreateTime" is set to true. 
-
 --attributes
 
 List of name-value pairs in JSON object format. 
