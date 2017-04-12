@@ -28,7 +28,7 @@ There are two ways in which you can install the tool:
     pip install solidfire-cli
 
 
-* Navigate to the easy_install solidfirecli*.tar.gz file (where the * stands for the version), and run
+* Navigate to solidfirecli*.tar.gz file (where the * stands for the version), and run
 
 
 	easy_install solidfirecli*.tar.gz
