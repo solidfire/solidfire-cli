@@ -67,8 +67,8 @@ def push(ctx, mvip, username, password, version, port, name):
         username = cli_utils.encrypt(username)
         password = cli_utils.encrypt(password)
     connections = connections + [{'mvip': mvip,
-                                  'username': username,
-                                  'password': password,
+                                  'username': "b'"+str(username)+"'",
+                                  'password': "b'"+str(password)+"'",
                                   'port': port,
                                   'url': 'https://%s:%s' % (mvip, port),
                                   'version': version,
