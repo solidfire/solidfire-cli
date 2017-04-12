@@ -46,8 +46,11 @@ def getremotelogginghosts(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_GetRemoteLoggingHostsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetRemoteLoggingHostsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetRemoteLoggingHostsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -109,8 +112,11 @@ def setremotelogginghosts(ctx,
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_SetRemoteLoggingHostsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_SetRemoteLoggingHostsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_SetRemoteLoggingHostsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -140,8 +146,11 @@ def setinfo(ctx,
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_SetLoginSessionInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_SetLoginSessionInfoResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_SetLoginSessionInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -165,6 +174,9 @@ def getinfo(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_GetLoginSessionInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetLoginSessionInfoResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetLoginSessionInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

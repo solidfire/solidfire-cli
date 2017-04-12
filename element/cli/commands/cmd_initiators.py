@@ -56,7 +56,7 @@ def cli(ctx):
               type=int,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter] (Optional) The ID of the volume access group into to which the newly created initiator should be added. If the initiator was previously in a different volume access group, it is removed from the old volume access group. If this key is present but null, the initiator is removed from its current volume access group, but not placed in any new volume access group. (Integer) """,
+              help="""[subparameter] (Optional) The ID of the volume access group to which the newly created initiator should be added. If the initiator was previously in a different volume access group, it is removed from the old volume access group. If this key is present but null, the initiator is removed from its current volume access group, but not placed in any new volume access group. (Integer) """,
               cls=SolidFireOption)
 @click.option('--attributes',
               required=False,
@@ -111,8 +111,11 @@ def modify(ctx,
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_ModifyInitiatorsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ModifyInitiatorsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ModifyInitiatorsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -146,7 +149,7 @@ def modify(ctx,
               type=int,
               default=None,
               is_sub_parameter=True,
-              help="""[subparameter] (Optional) The ID of the volume access group into to which this newly created initiator will be added. (Integer) """,
+              help="""[subparameter] (Optional) The ID of the volume access group to which this newly created initiator will be added. (Integer) """,
               cls=SolidFireOption)
 @click.option('--attributes',
               required=False,
@@ -200,8 +203,11 @@ def create(ctx,
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_CreateInitiatorsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_CreateInitiatorsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_CreateInitiatorsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -245,8 +251,11 @@ def list(ctx,
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_ListInitiatorsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListInitiatorsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListInitiatorsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -281,6 +290,9 @@ def delete(ctx,
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_DeleteInitiatorsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_DeleteInitiatorsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_DeleteInitiatorsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

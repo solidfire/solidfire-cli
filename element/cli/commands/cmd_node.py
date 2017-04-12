@@ -49,8 +49,11 @@ def listpending(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_ListPendingNodesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListPendingNodesResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListPendingNodesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -74,8 +77,11 @@ def getorigin(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_GetOriginResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetOriginResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetOriginResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -99,8 +105,11 @@ def listpendingactive(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_ListPendingActiveNodesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListPendingActiveNodesResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListPendingActiveNodesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -124,8 +133,11 @@ def listall(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_ListAllNodesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListAllNodesResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListAllNodesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -150,8 +162,11 @@ def getpendingoperation(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_GetPendingOperationResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetPendingOperationResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetPendingOperationResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -175,8 +190,11 @@ def liststats(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_ListNodeStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListNodeStatsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListNodeStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -215,8 +233,11 @@ def add(ctx,
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_AddNodesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_AddNodesResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_AddNodesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 # SetConfig has been intentionally excluded from the python cli because
@@ -244,8 +265,11 @@ def getnetworkconfig(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_GetNetworkConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetNetworkConfigResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetNetworkConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -275,8 +299,11 @@ def getstats(ctx,
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_GetNodeStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetNodeStatsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetNodeStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -301,8 +328,11 @@ def getconfig(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_GetConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetConfigResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -335,8 +365,11 @@ def remove(ctx,
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_RemoveNodesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_RemoveNodesResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_RemoveNodesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -360,8 +393,11 @@ def listactive(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_ListActiveNodesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListActiveNodesResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListActiveNodesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -385,6 +421,9 @@ def getbootstrapconfig(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_GetBootstrapConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetBootstrapConfigResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetBootstrapConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

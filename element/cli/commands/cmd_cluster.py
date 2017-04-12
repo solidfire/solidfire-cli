@@ -46,8 +46,11 @@ def getinfo(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_GetClusterInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetClusterInfoResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetClusterInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -71,8 +74,11 @@ def getapi(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_GetAPIResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetAPIResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetAPIResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -96,8 +102,11 @@ def disablesnmp(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_DisableSnmpResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_DisableSnmpResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_DisableSnmpResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -121,8 +130,11 @@ def getsnmpstate(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_GetSnmpStateResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetSnmpStateResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetSnmpStateResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -149,8 +161,11 @@ def getsnmpinfo(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_GetSnmpInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetSnmpInfoResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetSnmpInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -174,8 +189,11 @@ def getconfig(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_GetClusterConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetClusterConfigResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetClusterConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -199,8 +217,11 @@ def deleteallsupportbundles(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_DeleteAllSupportBundlesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_DeleteAllSupportBundlesResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_DeleteAllSupportBundlesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -224,8 +245,11 @@ def getsystemstatus(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_GetSystemStatusResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetSystemStatusResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetSystemStatusResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -315,8 +339,11 @@ def setsnmptrapinfo(ctx,
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_SetSnmpTrapInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_SetSnmpTrapInfoResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_SetSnmpTrapInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -352,8 +379,11 @@ def listfaults(ctx,
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_ListClusterFaultsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListClusterFaultsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListClusterFaultsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -377,8 +407,11 @@ def listadmins(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_ListClusterAdminsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListClusterAdminsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListClusterAdminsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -463,8 +496,11 @@ def create(ctx,
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_CreateClusterResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_CreateClusterResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_CreateClusterResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -488,8 +524,11 @@ def disableencryptionatrest(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_DisableEncryptionAtRestResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_DisableEncryptionAtRestResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_DisableEncryptionAtRestResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -556,8 +595,11 @@ def addadmin(ctx,
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_AddClusterAdminResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_AddClusterAdminResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_AddClusterAdminResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -596,8 +638,11 @@ def setntpinfo(ctx,
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_SetNtpInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_SetNtpInfoResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_SetNtpInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -749,8 +794,11 @@ def setconfig(ctx,
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_SetClusterConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_SetClusterConfigResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_SetClusterConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -809,8 +857,11 @@ def modifyadmin(ctx,
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_ModifyClusterAdminResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ModifyClusterAdminResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ModifyClusterAdminResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -834,8 +885,11 @@ def getsnmptrapinfo(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_GetSnmpTrapInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetSnmpTrapInfoResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetSnmpTrapInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -877,8 +931,11 @@ def listevents(ctx,
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_ListEventsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListEventsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListEventsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -902,8 +959,11 @@ def snmpsendtesttraps(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_SnmpSendTestTrapsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_SnmpSendTestTrapsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_SnmpSendTestTrapsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -933,8 +993,11 @@ def removeadmin(ctx,
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_RemoveClusterAdminResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_RemoveClusterAdminResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_RemoveClusterAdminResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -976,8 +1039,11 @@ def modifyfullthreshold(ctx,
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_ModifyClusterFullThresholdResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ModifyClusterFullThresholdResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ModifyClusterFullThresholdResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1002,8 +1068,11 @@ def getlimits(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_GetLimitsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetLimitsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetLimitsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1027,8 +1096,11 @@ def getcurrentadmin(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_GetCurrentClusterAdminResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetCurrentClusterAdminResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetCurrentClusterAdminResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1070,8 +1142,11 @@ def createsupportbundle(ctx,
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_CreateSupportBundleResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_CreateSupportBundleResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_CreateSupportBundleResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1095,8 +1170,11 @@ def getcapacity(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_GetClusterCapacityResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetClusterCapacityResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetClusterCapacityResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1120,8 +1198,11 @@ def getntpinfo(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_GetNtpInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetNtpInfoResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetNtpInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1150,8 +1231,11 @@ def enableencryptionatrest(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_EnableEncryptionAtRestResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_EnableEncryptionAtRestResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_EnableEncryptionAtRestResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1176,8 +1260,11 @@ def getversioninfo(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_GetClusterVersionInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetClusterVersionInfoResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetClusterVersionInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1329,8 +1416,11 @@ def setsnmpacl(ctx,
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_SetSnmpACLResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_SetSnmpACLResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_SetSnmpACLResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1361,8 +1451,11 @@ def clearfaults(ctx,
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_ClearClusterFaultsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ClearClusterFaultsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ClearClusterFaultsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1386,8 +1479,11 @@ def getsnmpacl(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_GetSnmpACLResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetSnmpACLResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetSnmpACLResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1422,8 +1518,11 @@ def getstate(ctx,
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_GetClusterStateResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetClusterStateResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetClusterStateResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1454,8 +1553,11 @@ def enablesnmp(ctx,
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_EnableSnmpResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_EnableSnmpResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_EnableSnmpResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1480,8 +1582,11 @@ def getstats(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_GetClusterStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetClusterStatsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetClusterStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1506,8 +1611,11 @@ def getmasternodeid(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_GetClusterMasterNodeIDResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetClusterMasterNodeIDResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetClusterMasterNodeIDResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1671,8 +1779,11 @@ def setsnmpinfo(ctx,
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_SetSnmpInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_SetSnmpInfoResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_SetSnmpInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1699,8 +1810,11 @@ def getfullthreshold(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_GetClusterFullThresholdResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetClusterFullThresholdResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetClusterFullThresholdResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1725,6 +1839,9 @@ def listsyncjobs(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_ListSyncJobsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListSyncJobsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListSyncJobsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

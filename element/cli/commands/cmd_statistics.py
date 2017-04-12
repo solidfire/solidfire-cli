@@ -47,8 +47,11 @@ def getcompletestats(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_dict, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_dict), indent=4))
+        return
+    else:
+        cli_utils.print_result(_dict, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -72,8 +75,11 @@ def gethardwareinfo(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_GetHardwareInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetHardwareInfoResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetHardwareInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -98,8 +104,11 @@ def getrawstats(ctx):
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_dict, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_dict), indent=4))
+        return
+    else:
+        cli_utils.print_result(_dict, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -131,8 +140,11 @@ def listvolumestatsbyvirtualvolume(ctx,
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_ListVolumeStatsByVirtualVolumeResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListVolumeStatsByVirtualVolumeResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListVolumeStatsByVirtualVolumeResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -164,8 +176,11 @@ def listvolumestats(ctx,
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_ListVolumeStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListVolumeStatsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListVolumeStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -197,6 +212,9 @@ def listdrivestats(ctx,
     except BaseException as e:
         ctx.logger.error(e.__str__())
         exit()
-
-    cli_utils.print_result(_ListDriveStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListDriveStatsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListDriveStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
