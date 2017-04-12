@@ -64,13 +64,13 @@ Enter the following into your .bashrc file or run it whenever you want autocompl
 
 Managing Connections
 ---------------------
-To run a command on a given connection without storing it away, use the mvip, login, and password options at the top level.
+To run a command on a given connection without storing it away, use the mvip, username, and password options at the top level.
 
-    sfcli --mvip 10.117.60.15 --login username --password password account list
+    sfcli --mvip 10.117.60.15 --username username --password password account list
 
 To store a given connection, use the connection push command and supply the name option.
 
-    sfcli connection push --mvip 10.117.60.15 --login username --password password --name "Example"
+    sfcli connection push --mvip 10.117.60.15 --username username --password password --name "Example"
 
 There are three ways to access a stored connection: by name, by index, or by default. To access a connection by name, use -n or --name. To access a connection by index, use -c or --connectionIndex. To access a connection by default, leave the above two parameters off and the command will default to using the connection at index 0. The three possibilities are exemplified below:
 
