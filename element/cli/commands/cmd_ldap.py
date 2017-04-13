@@ -57,13 +57,14 @@ def addclusteradmin(ctx,
     """cluster via the API and management tools. LDAP cluster admin accounts are completely separate and unrelated to standard tenant"""
     """accounts."""
     """You can also use this method to add an LDAP group that has been defined in Active Directory. The access level that is given to the group is passed to the individual users in the LDAP group."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-        
+    cli_utils.establish_connection(ctx)
+    
+    
 
-    access = parser.parse_array(access)        
+    access = parser.parse_array(access)
+    
+    
 
     kwargsDict = None
 
@@ -96,11 +97,8 @@ def addclusteradmin(ctx,
 @pass_context
 def getconfiguration(ctx):
     """The GetLdapConfiguration method enables you to get the currently active LDAP configuration on the cluster."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -207,11 +205,11 @@ def testauthentication(ctx,
            ldapconfigurationusersearchfilter = None):
     """The TestLdapAuthentication method enables you to validate the currently enabled LDAP authentication settings. If the configuration is"""
     """correct, the API call returns the group membership of the tested user."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-            
+    cli_utils.establish_connection(ctx)
+    
+    
+    
 
     ldapconfiguration = None
     if(ldapconfigurationauthtype is not None or
@@ -274,11 +272,8 @@ ldapconfigurationusersearchfilter
 @pass_context
 def disableauthentication(ctx):
     """The DisableLdapAuthentication method enables you to disable LDAP authentication and remove all LDAP configuration settings. This method does not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no longer be able to log in."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -362,13 +357,20 @@ def enableauthentication(ctx,
            # Optional main parameter
            usersearchfilter = None):
     """The EnableLdapAuthentication method enables you to configure an LDAP directory connection to use for LDAP authentication to a cluster. Users that are members of the LDAP directory can then log in to the storage system using their LDAP credentials."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-                            
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+    
+    
+    
+    
 
-    serveruris = parser.parse_array(serveruris)            
+    serveruris = parser.parse_array(serveruris)
+    
+    
+    
     
 
     ctx.logger.info("""authtype = """+str(authtype)+""";"""+"""groupsearchbasedn = """+str(groupsearchbasedn)+""";"""+"""groupsearchcustomfilter = """+str(groupsearchcustomfilter)+""";"""+"""groupsearchtype = """+str(groupsearchtype)+""";"""+"""searchbinddn = """+str(searchbinddn)+""";"""+"""searchbindpassword = """+str(searchbindpassword)+""";"""+"""serveruris = """+str(serveruris)+""";"""+"""userdntemplate = """+str(userdntemplate)+""";"""+"""usersearchbasedn = """+str(usersearchbasedn)+""";"""+"""usersearchfilter = """+str(usersearchfilter)+""";"""+"")

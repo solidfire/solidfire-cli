@@ -30,11 +30,8 @@ def cli(ctx):
 @pass_context
 def getinfo(ctx):
     """GetClusterInfo enables you to return configuration information about the cluster."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -58,11 +55,8 @@ def getinfo(ctx):
 @pass_context
 def getapi(ctx):
     """You can use the GetAPI method to return a list of all the API methods and supported API endpoints that can be used in the system."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -86,11 +80,8 @@ def getapi(ctx):
 @pass_context
 def disablesnmp(ctx):
     """You can use DisableSnmp to disable SNMP on the cluster nodes."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -114,11 +105,8 @@ def disablesnmp(ctx):
 @pass_context
 def getsnmpstate(ctx):
     """You can use GetSnmpState to return the current state of the SNMP feature."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -145,11 +133,8 @@ def getsnmpinfo(ctx):
     """Note: GetSnmpInfo is available for Element OS 8 and prior releases. It is deprecated for versions later than Element OS 8."""
     """NetApp recommends that you migrate to the GetSnmpState and SetSnmpACL methods. See details in the Element API Reference Guide"""
     """for their descriptions and usage."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -173,11 +158,8 @@ def getsnmpinfo(ctx):
 @pass_context
 def getconfig(ctx):
     """The GetClusterConfig API method enables you to return information about the cluster configuration this node uses to communicate with the cluster that it is a part of."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -201,11 +183,8 @@ def getconfig(ctx):
 @pass_context
 def deleteallsupportbundles(ctx):
     """DeleteAllSupportBundles enables you to delete all support bundles generated with the CreateSupportBundle API method."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -229,11 +208,8 @@ def deleteallsupportbundles(ctx):
 @pass_context
 def getsystemstatus(ctx):
     """GetSystemStatus enables you to return whether a reboot ir required or not."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -314,10 +290,8 @@ def setsnmptrapinfo(ctx,
            # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
            port):
     """You can use SetSnmpTrapInfo to enable and disable the generation of cluster SNMP notifications (traps) and to specify the set of network host computers that receive the notifications. The values you pass with each SetSnmpTrapInfo method call replace all values set in any previous call to SetSnmpTrapInfo."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
 
     traprecipientsArray = []
@@ -327,7 +301,10 @@ def setsnmptrapinfo(ctx,
                 traprecipientsArray.append(SnmpTrapRecipient(host=host[i], community=community[i], port=port[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1)            
+            exit(1)
+    
+    
+    
     
 
     ctx.logger.info("""traprecipients = """+str(traprecipients)+""";"""+"""clusterfaulttrapsenabled = """+str(clusterfaulttrapsenabled)+""";"""+"""clusterfaultresolvedtrapsenabled = """+str(clusterfaultresolvedtrapsenabled)+""";"""+"""clustereventtrapsenabled = """+str(clustereventtrapsenabled)+""";"""+"")
@@ -363,11 +340,10 @@ def listfaults(ctx,
            # Optional main parameter
            faulttypes = None):
     """ListClusterFaults enables you to retrieve information about any faults detected on the cluster. With this method, you can retrieve both current faults as well as faults that have been resolved. The system caches faults every 30 seconds."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-        
+    cli_utils.establish_connection(ctx)
+    
+    
     
 
     ctx.logger.info("""bestpractices = """+str(bestpractices)+""";"""+"""faulttypes = """+str(faulttypes)+""";"""+"")
@@ -391,11 +367,8 @@ def listfaults(ctx,
 @pass_context
 def listadmins(ctx):
     """ListClusterAdmins returns the list of all cluster administrators for the cluster. There can be several cluster administrator accounts with different levels of permissions. There can be only one primary cluster administrator in the system. The primary Cluster Admin is the administrator that was created when the cluster was created. You can also create LDAP administrators when setting up an LDAP system on the cluster."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -469,13 +442,18 @@ def create(ctx,
     """The CreateCluster method enables you to initialize the node in a cluster that has ownership of the &quot;mvip&quot; and &quot;svip&quot; addresses. Each new cluster is initialized using the management IP (MIP) of the first node in the cluster. This method also automatically adds all the nodes being configured into the cluster. You only need to use this method once each time a new cluster is initialized."""
     """Note: You need to log in to the node that is used as the master node for the cluster. After you log in, run the GetBootstrapConfig method on the node to get the IP addresses for the rest of the nodes that you want to include in the"""
     """cluster. Then, run the CreateCluster method."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-                            
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+    
+    
+    
+    
 
-    nodes = parser.parse_array(nodes)    
+    nodes = parser.parse_array(nodes)
+    
 
     kwargsDict = None
 
@@ -508,11 +486,8 @@ def create(ctx,
 @pass_context
 def disableencryptionatrest(ctx):
     """The DisableEncryptionAtRest method enables you to remove the encryption that was previously applied to the cluster using the EnableEncryptionAtRest method. This disable method is asynchronous and returns a response before encryption is disabled. You can use the GetClusterInfo method to poll the system to see when the process has completed."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -568,13 +543,15 @@ def addadmin(ctx,
     """You can use AddClusterAdmin to add a new cluster admin account. A cluster ddmin can manage the cluster using the API and management tools. Cluster admins are completely separate and unrelated to standard tenant accounts."""
     """Each cluster admin can be restricted to a subset of the API. NetApp recommends using multiple cluster admin accounts for different users and applications. You should give each cluster admin the minimal permissions necessary; this reduces the potential impact of credential compromise."""
     """You must accept the End User License Agreement (EULA) by setting the acceptEula parameter to true to add a cluster administrator account to the system."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-            
+    cli_utils.establish_connection(ctx)
+    
+    
+    
 
-    access = parser.parse_array(access)        
+    access = parser.parse_array(access)
+    
+    
 
     kwargsDict = None
 
@@ -620,13 +597,12 @@ def setntpinfo(ctx,
            broadcastclient = None):
     """SetNtpInfo enables you to configure NTP on cluster nodes. The values you set with this interface apply to all nodes in the cluster. If an NTP broadcast server periodically broadcasts time information on your network, you can optionally configure nodes as broadcast clients."""
     """Note: NetApp recommends using NTP servers that are internal to your network, rather than the installation defaults."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
 
-    servers = parser.parse_array(servers)    
+    servers = parser.parse_array(servers)
+    
     
 
     ctx.logger.info("""servers = """+str(servers)+""";"""+"""broadcastclient = """+str(broadcastclient)+""";"""+"")
@@ -743,10 +719,8 @@ def setconfig(ctx,
     """The SetClusterConfig API method enables you to set the configuration this node uses to communicate with the cluster it is associated with. To see the states in which these objects can be modified, see Cluster Object Attributes. To display the current cluster"""
     """interface settings for a node, run the GetClusterConfig API method."""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
 
     cluster = None
@@ -830,13 +804,14 @@ def modifyadmin(ctx,
            # Optional main parameter
            attributes = None):
     """You can use ModifyClusterAdmin to change the settings for a cluster admin or LDAP cluster admin. You cannot change access for the administrator cluster admin account."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-            
+    cli_utils.establish_connection(ctx)
+    
+    
+    
 
-    access = parser.parse_array(access)    
+    access = parser.parse_array(access)
+    
 
     kwargsDict = None
 
@@ -869,11 +844,8 @@ def modifyadmin(ctx,
 @pass_context
 def getsnmptrapinfo(ctx):
     """You can use GetSnmpTrapInfo to return current SNMP trap configuration information."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -915,11 +887,11 @@ def listevents(ctx,
            # Optional main parameter
            endeventid = None):
     """ListEvents returns events detected on the cluster, sorted from oldest to newest."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-            
+    cli_utils.establish_connection(ctx)
+    
+    
+    
     
 
     ctx.logger.info("""maxevents = """+str(maxevents)+""";"""+"""starteventid = """+str(starteventid)+""";"""+"""endeventid = """+str(endeventid)+""";"""+"")
@@ -943,11 +915,8 @@ def listevents(ctx,
 @pass_context
 def snmpsendtesttraps(ctx):
     """SnmpSendTestTraps enables you to test SNMP functionality for a cluster. This method instructs the cluster to send test SNMP traps to the currently configured SNMP manager."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -977,10 +946,8 @@ def removeadmin(ctx,
            # Mandatory main parameter
            clusteradminid):
     """You can use RemoveClusterAdmin to remove a Cluster Admin. You cannot remove the administrator cluster admin account."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 
@@ -1023,11 +990,11 @@ def modifyfullthreshold(ctx,
            # Optional main parameter
            maxmetadataoverprovisionfactor = None):
     """You can use ModifyClusterFullThreshold to change the level at which the system generates an event when the storage cluster approaches a certain capacity utilization. You can use the threshold setting to indicate the acceptable amount of utilized block storage before the system generates a warning. For example, if you want to be alerted when the system reaches 3% below the &quot;Error&quot; level block storage utilization, enter a value of &quot;3&quot; for the stage3BlockThresholdPercent parameter. If this level is reached, the system sends an alert to the Event Log in the Cluster Management Console."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-            
+    cli_utils.establish_connection(ctx)
+    
+    
+    
     
 
     ctx.logger.info("""stage2awarethreshold = """+str(stage2awarethreshold)+""";"""+"""stage3blockthresholdpercent = """+str(stage3blockthresholdpercent)+""";"""+"""maxmetadataoverprovisionfactor = """+str(maxmetadataoverprovisionfactor)+""";"""+"")
@@ -1052,11 +1019,8 @@ def modifyfullthreshold(ctx,
 def getlimits(ctx):
     """GetLimits enables you to retrieve the limit values set by the API. These values might change between releases of Element OS, but do not change without an update to the system. Knowing the limit values set by the API can be useful when writing API scripts for user-facing tools."""
     """Note: The GetLimits method returns the limits for the current software version regardless of the API endpoint version used to pass the method."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -1080,11 +1044,8 @@ def getlimits(ctx):
 @pass_context
 def getcurrentadmin(ctx):
     """GetCurrentClusterAdmin returns information for the current primary cluster administrator. The primary Cluster Admin was created when the cluster was created."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -1126,11 +1087,11 @@ def createsupportbundle(ctx,
            # Optional main parameter
            timeoutsec = None):
     """CreateSupportBundle enables you to create a support bundle file under the node&#x27;s directory. After creation, the bundle is stored on the node as a tar.gz file."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-            
+    cli_utils.establish_connection(ctx)
+    
+    
+    
     
 
     ctx.logger.info("""bundlename = """+str(bundlename)+""";"""+"""extraargs = """+str(extraargs)+""";"""+"""timeoutsec = """+str(timeoutsec)+""";"""+"")
@@ -1154,11 +1115,8 @@ def createsupportbundle(ctx,
 @pass_context
 def getcapacity(ctx):
     """You can use the GetClusterCapacity method to return the high-level capacity measurements for an entire cluster. You can use the fields returned from this method to calculate the efficiency rates that are displayed in the Element OS Web UI. You can use the following calculations in scripts to return the efficiency rates for thin provisioning, deduplication, compression, and overall efficiency."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -1182,11 +1140,8 @@ def getcapacity(ctx):
 @pass_context
 def getntpinfo(ctx):
     """GetNtpInfo enables you to return the current network time protocol (NTP) configuration information."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -1215,11 +1170,8 @@ def enableencryptionatrest(ctx):
     """You should only enable or disable encryption when the cluster is running and in a healthy state. You can enable or disable encryption at your discretion and as often as you need."""
     """Note: This process is asynchronous and returns a response before encryption is enabled. You can use the GetClusterInfo"""
     """method to poll the system to see when the process has completed."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -1244,11 +1196,8 @@ def enableencryptionatrest(ctx):
 def getversioninfo(ctx):
     """GetClusterVersionInfo enables you to retrieve information about the Element software version running on each node in the cluster."""
     """This method also returns information about nodes that are currently in the process of upgrading software."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -1382,10 +1331,8 @@ def setsnmpacl(ctx,
     """SetSnmpACL enables you to configure SNMP access permissions on the cluster nodes. The values you set with this interface apply to all"""
     """nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to SetSnmpACL. Also note"""
     """that the values set with this interface replace all network or usmUsers values set with the older SetSnmpInfo."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
 
     networksArray = []
@@ -1395,7 +1342,8 @@ def setsnmpacl(ctx,
                 networksArray.append(SnmpNetwork(access=accessnetworks[i], cidr=cidr[i], community=community[i], network=network[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1)    
+            exit(1)
+    
 
     usmusersArray = []
     if(usmusers is not None):
@@ -1435,10 +1383,8 @@ def clearfaults(ctx,
            faulttypes = None):
     """You can use the ClearClusterFaults method to clear information about both current and previously detected faults. Both resolved"""
     """and unresolved faults can be cleared."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 
@@ -1463,11 +1409,8 @@ def clearfaults(ctx,
 @pass_context
 def getsnmpacl(ctx):
     """GetSnmpACL enables you to return the current SNMP access permissions on the cluster nodes."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -1502,10 +1445,8 @@ def getstate(ctx,
     """Active: Node is an active member of a cluster and may not be added to another"""
     """cluster."""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 
@@ -1537,10 +1478,8 @@ def enablesnmp(ctx,
            snmpv3enabled):
     """EnableSnmp enables you to enable SNMP on cluster nodes. When you enable SNMP, the action applies to all nodes in the cluster, and"""
     """the values that are passed replace, in whole, all values set in any previous call to EnableSnmp."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 
@@ -1566,11 +1505,8 @@ def enablesnmp(ctx,
 def getstats(ctx):
     """GetClusterStats enables you to retrieve high-level activity measurements for the cluster. Values returned are cumulative from the"""
     """creation of the cluster."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -1595,11 +1531,8 @@ def getstats(ctx):
 def getmasternodeid(ctx):
     """GetClusterMasterNodeID enables you to retrieve the ID of the node that can perform cluster-wide administration tasks and holds the"""
     """storage virtual IP address (SVIP) and management virtual IP address (MVIP)."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -1745,10 +1678,8 @@ def setsnmpinfo(ctx,
     """SetSnmpInfo enables you to configure SNMP version 2 and version 3 on cluster nodes. The values you set with this interface apply to"""
     """all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to SetSnmpInfo."""
     """Note: SetSnmpInfo is deprecated. Use the EnableSnmp and SetSnmpACL methods instead."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
 
     networksArray = []
@@ -1758,7 +1689,10 @@ def setsnmpinfo(ctx,
                 networksArray.append(SnmpNetwork(access=accessnetworks[i], cidr=cidr[i], community=community[i], network=network[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1)            
+            exit(1)
+    
+    
+    
 
     usmusersArray = []
     if(usmusers is not None):
@@ -1794,11 +1728,8 @@ def getfullthreshold(ctx):
     """cluster."""
     """Note: When a cluster reaches the Error stage of block cluster fullness, the maximum IOPS on all volumes are reduced linearly to the volume&#x27;s minimum IOPS as the cluster approaches the Critical stage. This helps prevent the cluster from"""
     """reaching the Critical stage of block cluster fullness."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -1823,11 +1754,8 @@ def getfullthreshold(ctx):
 def listsyncjobs(ctx):
     """ListSyncJobs enables you to return information about synchronization jobs that are running on a SolidFire cluster. The type of"""
     """synchronization jobs that are returned with this method are slice, clone, and remote."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")

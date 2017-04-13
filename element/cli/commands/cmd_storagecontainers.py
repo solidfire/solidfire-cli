@@ -48,11 +48,11 @@ def modifystoragecontainer(ctx,
            # Optional main parameter
            targetsecret = None):
     """ModifyStorageContainer enables you to make changes to an existing virtual volume storage container."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-            
+    cli_utils.establish_connection(ctx)
+    
+    
+    
     
 
     ctx.logger.info("""storagecontainerid = """+str(storagecontainerid)+""";"""+"""initiatorsecret = """+str(initiatorsecret)+""";"""+"""targetsecret = """+str(targetsecret)+""";"""+"")
@@ -82,10 +82,8 @@ def list(ctx,
            # Optional main parameter
            storagecontainerids = None):
     """ListStorageContainers enables you to retrieve information about all virtual volume storage containers known to the system."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
 
     storagecontainerids = parser.parse_array(storagecontainerids)
@@ -118,10 +116,8 @@ def getstoragecontainerefficiency(ctx,
            # Mandatory main parameter
            storagecontainerid):
     """GetStorageContainerEfficiency enables you to retrieve efficiency information about a virtual volume storage container."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 
@@ -170,11 +166,12 @@ def createstoragecontainer(ctx,
            # Optional main parameter
            accountid = None):
     """CreateStorageContainer enables you to create a Virtual Volume (VVol) storage container. Storage containers are associated with a SolidFire storage system account, and are used for reporting and resource allocation. Storage containers can only be associated with virtual volumes. You need at least one storage container to use the Virtual Volumes feature."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-                
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+    
     
 
     ctx.logger.info("""name = """+str(name)+""";"""+"""initiatorsecret = """+str(initiatorsecret)+""";"""+"""targetsecret = """+str(targetsecret)+""";"""+"""accountid = """+str(accountid)+""";"""+"")
@@ -205,10 +202,8 @@ def delete(ctx,
            storagecontainerids):
     """DeleteStorageContainers enables you to remove up to 2000 Virtual Volume (VVol) storage containers from the system at one time."""
     """The storage containers you remove must not contain any VVols."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
 
     storagecontainerids = parser.parse_array(storagecontainerids)

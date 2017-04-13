@@ -123,11 +123,12 @@ def modify(ctx,
     """Caution: Enabling or disabling the Routable Storage VLANs functionality for an existing virtual network by changing the"""
     """&quot;namespace&quot; parameter disrupts any traffic handled by the virtual network. NetApp strongly recommends changing the"""
     """&quot;namespace&quot; parameter only during a scheduled maintenance window."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-                
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+    
 
     addressblocksArray = []
     if(addressblocks is not None):
@@ -136,7 +137,12 @@ def modify(ctx,
                 addressblocksArray.append(AddressBlock(start=start[i], size=size[i], available=available[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1)                    
+            exit(1)
+    
+    
+    
+    
+    
 
     kwargsDict = None
 
@@ -257,11 +263,11 @@ def add(ctx,
     """Note: You can use AddVirtualNetwork only to create a new virtual network. If you want to make changes to an"""
     """existing virtual network, use ModifyVirtualNetwork."""
     """Note: Virtual network parameters must be unique to each virtual network when setting the namespace parameter to false."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-            
+    cli_utils.establish_connection(ctx)
+    
+    
+    
 
     addressblocksArray = []
     if(addressblocks is not None):
@@ -270,7 +276,12 @@ def add(ctx,
                 addressblocksArray.append(AddressBlock(start=start[i], size=size[i], available=available[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1)                    
+            exit(1)
+    
+    
+    
+    
+    
 
     kwargsDict = None
 
@@ -330,13 +341,14 @@ def list(ctx,
     """network settings in the cluster."""
     """There are no required parameters for this method. However, to filter the results, you can pass one or more VirtualNetworkID or"""
     """VirtualNetworkTag values."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-            
+    cli_utils.establish_connection(ctx)
+    
+    
+    
 
-    virtualnetworkids = parser.parse_array(virtualnetworkids)    
+    virtualnetworkids = parser.parse_array(virtualnetworkids)
+    
 
     virtualnetworktags = parser.parse_array(virtualnetworktags)
     
@@ -375,11 +387,10 @@ def remove(ctx,
            virtualnetworktag = None):
     """RemoveVirtualNetwork enables you to remove a previously added virtual network."""
     """Note: This method requires either the virtualNetworkID or the virtualNetworkTag as a parameter, but not both."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-        
+    cli_utils.establish_connection(ctx)
+    
+    
     
 
     ctx.logger.info("""virtualnetworkid = """+str(virtualnetworkid)+""";"""+"""virtualnetworktag = """+str(virtualnetworktag)+""";"""+"")

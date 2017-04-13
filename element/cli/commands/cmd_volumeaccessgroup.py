@@ -42,11 +42,10 @@ def removevolumesfrom(ctx,
            # Mandatory main parameter
            volumes):
     """The RemoveVolumeFromVolumeAccessGroup method enables you to remove volumes from a volume access group."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-        
+    cli_utils.establish_connection(ctx)
+    
+    
 
     volumes = parser.parse_array(volumes)
     
@@ -120,19 +119,24 @@ def modify(ctx,
            # Optional main parameter
            attributes = None):
     """You can use ModifyVolumeAccessGroup to update initiators and add or remove volumes from a volume access group. If a specified initiator or volume is a duplicate of what currently exists, the volume access group is left as-is. If you do not specify a value for volumes or initiators, the current list of initiators and volumes is not changed."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-        
+    cli_utils.establish_connection(ctx)
+    
+    
 
-    virtualnetworkid = parser.parse_array(virtualnetworkid)    
+    virtualnetworkid = parser.parse_array(virtualnetworkid)
+    
 
-    virtualnetworktags = parser.parse_array(virtualnetworktags)        
+    virtualnetworktags = parser.parse_array(virtualnetworktags)
+    
+    
 
-    initiators = parser.parse_array(initiators)    
+    initiators = parser.parse_array(initiators)
+    
 
-    volumes = parser.parse_array(volumes)        
+    volumes = parser.parse_array(volumes)
+    
+    
 
     kwargsDict = None
 
@@ -201,19 +205,22 @@ def create(ctx,
            # Optional main parameter
            attributes = None):
     """You can use CreateVolumeAccessGroup to create a new volume access group. When you create the volume access group, you need to give it a name, and you can optionally enter initiators and volumes. After you create the group, you can add volumes and initiator IQNs. Any initiator IQN that you add to the volume access group is able to access any volume in the group without CHAP authentication."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-        
+    cli_utils.establish_connection(ctx)
+    
+    
 
-    initiators = parser.parse_array(initiators)    
+    initiators = parser.parse_array(initiators)
+    
 
-    volumes = parser.parse_array(volumes)    
+    volumes = parser.parse_array(volumes)
+    
 
-    virtualnetworkid = parser.parse_array(virtualnetworkid)    
+    virtualnetworkid = parser.parse_array(virtualnetworkid)
+    
 
-    virtualnetworktags = parser.parse_array(virtualnetworktags)    
+    virtualnetworktags = parser.parse_array(virtualnetworktags)
+    
 
     kwargsDict = None
 
@@ -288,11 +295,10 @@ def modifylunassignments(ctx,
     """unchanged. LUN assignment values must be unique for volumes in a volume access group. You cannot define duplicate LUN values within a volume access group. However, you can use the same LUN values again in different volume access groups. """
     """Note: Correct LUN values are 0 through 16383. The system generates an exception if you pass a LUN value outside of this range. None of the specified LUN assignments are modified if there is an exception. """
     """Caution: If you change a LUN assignment for a volume with active I/O, the I/O can be disrupted. You might need to change the server configuration before changing volume LUN assignments."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-        
+    cli_utils.establish_connection(ctx)
+    
+    
 
     lunassignmentsArray = []
     if(lunassignments is not None):
@@ -345,11 +351,11 @@ def list(ctx,
     """ListVolumeAccessGroups enables you to return"""
     """information about the volume access groups that are"""
     """currently in the system."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-            
+    cli_utils.establish_connection(ctx)
+    
+    
+    
 
     volumeaccessgroups = parser.parse_array(volumeaccessgroups)
     
@@ -388,11 +394,10 @@ def addinitiatorsto(ctx,
            initiators):
     """AddInitiatorsToVolumeAccessGroup enables you"""
     """to add initiators to a specified volume access group."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-        
+    cli_utils.establish_connection(ctx)
+    
+    
 
     initiators = parser.parse_array(initiators)
     
@@ -426,10 +431,8 @@ def getlunassignments(ctx,
     """The GetVolumeAccessGroupLunAssignments"""
     """method enables you to retrieve details on LUN mappings"""
     """of a specified volume access group."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 
@@ -467,11 +470,10 @@ def addvolumesto(ctx,
            volumes):
     """AddVolumesToVolumeAccessGroup enables you to add"""
     """volumes to a specified volume access group."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-        
+    cli_utils.establish_connection(ctx)
+    
+    
 
     volumes = parser.parse_array(volumes)
     
@@ -517,13 +519,13 @@ def removeinitiatorsfrom(ctx,
     """RemoveInitiatorsFromVolumeAccessGroup enables"""
     """you to remove initiators from a specified volume access"""
     """group."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-        
+    cli_utils.establish_connection(ctx)
+    
+    
 
-    initiators = parser.parse_array(initiators)    
+    initiators = parser.parse_array(initiators)
+    
     
 
     ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"""initiators = """+str(initiators)+""";"""+"""deleteorphaninitiators = """+str(deleteorphaninitiators)+""";"""+"")
@@ -557,10 +559,8 @@ def getefficiency(ctx,
     """group. Only the volume access group you provide as the"""
     """parameter in this API method is used to compute the"""
     """capacity."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 
@@ -592,10 +592,8 @@ def delete(ctx,
            volumeaccessgroupid):
     """DeleteVolumeAccessGroup enables you to delete a"""
     """volume access group."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 

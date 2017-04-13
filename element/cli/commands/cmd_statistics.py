@@ -31,11 +31,8 @@ def cli(ctx):
 def getcompletestats(ctx):
     """NetApp engineering uses the GetCompleteStats API method to troubleshoot new features. The data returned from GetCompleteStats is not documented, changes frequently, and is not guaranteed to be accurate. NetApp does not recommend using GetCompleteStats for collecting performance data or any other"""
     """management integration with a SolidFire cluster."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -59,11 +56,8 @@ def getcompletestats(ctx):
 @pass_context
 def gethardwareinfo(ctx):
     """The GetHardwareInfo API method enables you to return hardware information and status for a single node. This generally includes details about manufacturers, vendors, versions, drives, and other associated hardware identification information."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -88,11 +82,8 @@ def gethardwareinfo(ctx):
 def getrawstats(ctx):
     """NetApp engineering uses the GetRawStats API method to troubleshoot new features. The data returned from GetRawStats is not documented, changes frequently, and is not guaranteed to be accurate. NetApp does not recommend using GetCompleteStats for collecting performance data or any other"""
     """management integration with a SolidFire cluster."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -122,10 +113,8 @@ def listvolumestatsbyvirtualvolume(ctx,
            # Optional main parameter
            virtualvolumeids = None):
     """ListVolumeStatsByVirtualVolume enables you to list volume statistics for any volumes in the system that are associated with virtual volumes. Statistics are cumulative from the creation of the volume."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
 
     virtualvolumeids = parser.parse_array(virtualvolumeids)
@@ -158,10 +147,8 @@ def listvolumestats(ctx,
            # Optional main parameter
            volumeids = None):
     """ListVolumeStats returns high-level activity measurements for a single volume, list of volumes, or all volumes (if you omit the volumeIDs parameter). Measurement values are cumulative from the creation of the volume."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
 
     volumeids = parser.parse_array(volumeids)
@@ -194,10 +181,8 @@ def listdrivestats(ctx,
            # Optional main parameter
            drives = None):
     """ListDriveStats enables you to retrieve high-level activity measurements for multiple drives in the cluster. By default, this method returns statistics for all drives in the cluster, and these measurements are cumulative from the addition of the drive to the cluster. Some values this method returns are specific to block drives, and some are specific to metadata drives."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
 
     drives = parser.parse_array(drives)

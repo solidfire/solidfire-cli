@@ -36,10 +36,8 @@ def getefficiency(ctx,
            # Mandatory main parameter
            volumeid):
     """GetVolumeEfficiency enables you to retrieve information about a volume. Only the volume you give as a parameter in this API method is used to compute the capacity."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 
@@ -76,13 +74,12 @@ def liststatsbyaccount(ctx,
            # Optional main parameter
            includevirtualvolumes = None):
     """ListVolumeStatsByAccount returns high-level activity measurements for every account. Values are summed from all the volumes owned by the account."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
 
-    accounts = parser.parse_array(accounts)    
+    accounts = parser.parse_array(accounts)
+    
     
 
     ctx.logger.info("""accounts = """+str(accounts)+""";"""+"""includevirtualvolumes = """+str(includevirtualvolumes)+""";"""+"")
@@ -137,11 +134,12 @@ def startbulkwrite(ctx,
            attributes = None):
     """StartBulkVolumeWrite enables you to initialize a bulk volume write session on a specified volume. Only two bulk volume processes can run simultaneously on a volume. When you initialize the write session, data is written to a SolidFire storage volume from an external backup source. The external data is accessed by a web server running on an SF-series node. Communications and server"""
     """interaction information for external data access is passed by a script running on the storage system."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-                
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+    
 
     kwargsDict = None
 
@@ -150,7 +148,8 @@ def startbulkwrite(ctx,
             kwargsDict = simplejson.loads(scriptparameters)
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1)    
+            exit(1)
+    
 
     kwargsDict = None
 
@@ -214,11 +213,13 @@ def updatebulkstatus(ctx,
            attributes = None):
     """You can use UpdateBulkVolumeStatus in a script to update the status of a bulk volume job that you started with the"""
     """StartBulkVolumeRead or StartBulkVolumeWrite methods."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-                    
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+    
+    
 
     kwargsDict = None
 
@@ -294,11 +295,13 @@ def startbulkread(ctx,
     """previous snapshot, the system does not create a new snapshot of the volume or delete the previous snapshot when the"""
     """read completes."""
     """Note: This process creates a new snapshot if the ID of an existing snapshot is not provided. Snapshots can be created if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-                    
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+    
+    
 
     kwargsDict = None
 
@@ -307,7 +310,8 @@ def startbulkread(ctx,
             kwargsDict = simplejson.loads(scriptparameters)
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1)    
+            exit(1)
+    
 
     kwargsDict = None
 
@@ -346,10 +350,8 @@ def listdeleted(ctx,
            # Optional main parameter
            includevirtualvolumes = None):
     """ListDeletedVolumes enables you to retrieve the list of volumes that have been marked for deletion and purged from the system."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 
@@ -382,10 +384,8 @@ def purgedeleted(ctx,
     """PurgeDeletedVolume immediately and permanently purges a volume that has been deleted. You must delete a volume using"""
     """DeleteVolume before it can be purged. Volumes are purged automatically after a period of time, so usage of this method is not"""
     """typically required."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 
@@ -417,10 +417,8 @@ def liststatsby(ctx,
            includevirtualvolumes = None):
     """ListVolumeStatsByVolume returns high-level activity measurements for every volume, by volume. Values are cumulative from the"""
     """creation of the volume."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 
@@ -504,11 +502,13 @@ def create(ctx,
            attributes = None):
     """CreateVolume enables you to create a new (empty) volume on the cluster. As soon as the volume creation is complete, the volume is"""
     """available for connection via iSCSI."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-                    
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+    
+    
 
     qos = None
     if(qosminiops is not None or
@@ -525,7 +525,8 @@ def create(ctx,
         kwargsDict["burst_iops"] = qosburstiops
         kwargsDict["burst_time"] = qosbursttime
 
-        qos = QoS(**kwargsDict)    
+        qos = QoS(**kwargsDict)
+    
 
     kwargsDict = None
 
@@ -565,10 +566,8 @@ def cancelclone(ctx,
            cloneid):
     """CancelClone enables you to stop an ongoing CloneVolume or CopyVolume process. When you cancel a group clone operation, the"""
     """system completes and removes the operation&#x27;s associated asyncHandle."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 
@@ -593,11 +592,8 @@ def cancelclone(ctx,
 @pass_context
 def getdefaultqos(ctx):
     """GetDefaultQoS enables you to retrieve the default QoS values for a newly created volume."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -637,11 +633,10 @@ def getasyncresult(ctx,
     """GetAsyncResult to poll the asyncHandle value returned by the method."""
     """GetAsyncResult returns the overall status of the operation (in progress, completed, or error) in a standard fashion, but the actual"""
     """data returned for the operation depends on the original method call and the return data is documented with each method."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-        
+    cli_utils.establish_connection(ctx)
+    
+    
     
 
     ctx.logger.info("""asynchandle = """+str(asynchandle)+""";"""+"""keepresult = """+str(keepresult)+""";"""+"")
@@ -673,10 +668,8 @@ def listasyncresults(ctx,
     """You can use ListAsyncResults to list the results of all currently running and completed asynchronous methods on the system."""
     """Querying asynchronous results with ListAsyncResults does not cause completed asyncHandles to expire; you can use GetAsyncResult"""
     """to query any of the asyncHandles returned by ListAsyncResults."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
 
     asyncresulttypes = parser.parse_array(asyncresulttypes)
@@ -716,13 +709,12 @@ def liststatsbyaccessgroup(ctx,
            includevirtualvolumes = None):
     """ListVolumeStatsByVolumeAccessGroup enables you to get total activity measurements for all of the volumes that are a member of the"""
     """specified volume access group(s)."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
 
-    volumeaccessgroups = parser.parse_array(volumeaccessgroups)    
+    volumeaccessgroups = parser.parse_array(volumeaccessgroups)
+    
     
 
     ctx.logger.info("""volumeaccessgroups = """+str(volumeaccessgroups)+""";"""+"""includevirtualvolumes = """+str(includevirtualvolumes)+""";"""+"")
@@ -747,11 +739,8 @@ def liststatsbyaccessgroup(ctx,
 def listbulkjobs(ctx):
     """ListBulkVolumeJobs enables you to retrieve information about each bulk volume read or write operation that is occurring in the"""
     """system."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -825,11 +814,15 @@ def clone(ctx,
     """CloneVolume enables you to create a copy of a volume. This method is asynchronous and might take a variable amount of time to complete. The cloning process begins immediately when you make the CloneVolume request and is representative of the state of the volume when the API method is issued. You can use the GetAsyncResult method to determine when the cloning process is complete and the new volume is available for connections. You can use ListSyncJobs to see the progress of creating the clone."""
     """Note: The initial attributes and QoS settings for the volume are inherited from the volume being cloned. You can change these settings with ModifyVolume."""
     """Note: Cloned volumes do not inherit volume access group memberships from the source volume."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-                            
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+    
+    
+    
+    
 
     kwargsDict = None
 
@@ -838,7 +831,8 @@ def clone(ctx,
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1)    
+            exit(1)
+    
     
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""name = """+str(name)+""";"""+"""newaccountid = """+str(newaccountid)+""";"""+"""newsize = """+str(newsize)+""";"""+"""access = """+str(access)+""";"""+"""snapshotid = """+str(snapshotid)+""";"""+"""attributes = """+str(attributes)+""";"""+"""enable512e = """+str(enable512e)+""";"""+"")
@@ -927,11 +921,12 @@ def modify(ctx,
     """2. Increase the size of the source or &quot;Read / Write&quot; volume."""
     """NetApp recommends that both the target and source volumes are the same size."""
     """Note: If you change the &quot;access&quot; status to locked or target, all existing iSCSI connections are terminated."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-                
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+    
 
     qos = None
     if(qosminiops is not None or
@@ -948,7 +943,9 @@ def modify(ctx,
         kwargsDict["burst_iops"] = qosburstiops
         kwargsDict["burst_time"] = qosbursttime
 
-        qos = QoS(**kwargsDict)        
+        qos = QoS(**kwargsDict)
+    
+    
 
     kwargsDict = None
 
@@ -987,10 +984,8 @@ def restoredeleted(ctx,
            # Mandatory main parameter
            volumeid):
     """RestoreDeletedVolume marks a deleted volume as active again. This action makes the volume immediately available for iSCSI connection."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 
@@ -1039,11 +1034,11 @@ def copy(ctx,
     """destination volume is modified during the copy operation, the changes will be lost."""
     """This method is asynchronous and may take a variable amount of time to complete. You can use the GetAsyncResult method to"""
     """determine when the process has finished, and ListSyncJobs to see the progress of the copy."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-            
+    cli_utils.establish_connection(ctx)
+    
+    
+    
     
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""dstvolumeid = """+str(dstvolumeid)+""";"""+"""snapshotid = """+str(snapshotid)+""";"""+"")
@@ -1086,11 +1081,11 @@ def listactive(ctx,
            includevirtualvolumes = None):
     """ListActiveVolumes enables you to return the list of active volumes currently in the system. The list of volumes is returned sorted in"""
     """VolumeID order and can be returned in multiple parts (pages)."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-            
+    cli_utils.establish_connection(ctx)
+    
+    
+    
     
 
     ctx.logger.info("""startvolumeid = """+str(startvolumeid)+""";"""+"""limit = """+str(limit)+""";"""+"""includevirtualvolumes = """+str(includevirtualvolumes)+""";"""+"")
@@ -1163,15 +1158,20 @@ def list(ctx,
            includevirtualvolumes = None):
     """The ListVolumes method enables you to retrieve a list of volumes that are in a cluster. You can specify the volumes you want to"""
     """return in the list by using the available parameters."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-                
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+    
 
-    accounts = parser.parse_array(accounts)        
+    accounts = parser.parse_array(accounts)
+    
+    
 
-    volumeids = parser.parse_array(volumeids)        
+    volumeids = parser.parse_array(volumeids)
+    
+    
     
 
     ctx.logger.info("""startvolumeid = """+str(startvolumeid)+""";"""+"""limit = """+str(limit)+""";"""+"""volumestatus = """+str(volumestatus)+""";"""+"""accounts = """+str(accounts)+""";"""+"""ispaired = """+str(ispaired)+""";"""+"""volumeids = """+str(volumeids)+""";"""+"""volumename = """+str(volumename)+""";"""+"""includevirtualvolumes = """+str(includevirtualvolumes)+""";"""+"")
@@ -1287,10 +1287,8 @@ def clonemultiple(ctx,
     """CreateGroupSnapshot API method or the Element OS Web UI. Using groupSnapshotID is optional when cloning multiple volumes."""
     """Note: Cloning multiple volumes is allowed if cluster fullness is at stage 2 or 3. Clones are not created when cluster fullness is"""
     """at stage 4 or 5."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
 
     volumesArray = []
@@ -1303,7 +1301,10 @@ def clonemultiple(ctx,
                 volumesArray.append(CloneMultipleVolumeParams(volume_id=volumeid[i], access=accessvolumes[i], name=name[i], new_account_id=newaccountidvolumes[i], new_size=newsize[i], attributes=attributes_json, ))
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1)            
+            exit(1)
+    
+    
+    
     
 
     ctx.logger.info("""volumes = """+str(volumes)+""";"""+"""access = """+str(access)+""";"""+"""groupsnapshotid = """+str(groupsnapshotid)+""";"""+"""newaccountid = """+str(newaccountid)+""";"""+"")
@@ -1346,11 +1347,11 @@ def setdefaultqos(ctx,
            burstiops = None):
     """SetDefaultQoS enables you to configure the default Quality of Service (QoS) values (measured in inputs and outputs per second, or"""
     """IOPS) for a volume. For more information about QoS in a SolidFire cluster, see the User Guide."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-            
+    cli_utils.establish_connection(ctx)
+    
+    
+    
     
 
     ctx.logger.info("""miniops = """+str(miniops)+""";"""+"""maxiops = """+str(maxiops)+""";"""+"""burstiops = """+str(burstiops)+""";"""+"")
@@ -1380,10 +1381,8 @@ def getstats(ctx,
            # Mandatory main parameter
            volumeid):
     """GetVolumeStats enables  you to retrieve high-level activity measurements for a single volume. Values are cumulative from the creation of the volume."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 
@@ -1432,11 +1431,12 @@ def listforaccount(ctx,
            # Optional main parameter
            includevirtualvolumes = None):
     """ListVolumesForAccount returns the list of active and (pending) deleted volumes for an account."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-                
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+    
     
 
     ctx.logger.info("""accountid = """+str(accountid)+""";"""+"""startvolumeid = """+str(startvolumeid)+""";"""+"""limit = """+str(limit)+""";"""+"""includevirtualvolumes = """+str(includevirtualvolumes)+""";"""+"")
@@ -1460,11 +1460,8 @@ def listforaccount(ctx,
 @pass_context
 def getcount(ctx):
     """GetVolumeCount enables you to retrieve the number of volumes currently in the system."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -1495,10 +1492,8 @@ def cancelgroupclone(ctx,
            groupcloneid):
     """CancelGroupClone enables you to stop an ongoing CloneMultipleVolumes process occurring on a group of volumes. When you cancel"""
     """a group clone operation, the system completes and removes the operation&#x27;s associated asyncHandle."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 
@@ -1538,10 +1533,8 @@ def delete(ctx,
     """write operation is stopped."""
     """If the volume you delete is paired with a volume, replication between the paired volumes is suspended and no data is transferred"""
     """to it or from it while in a deleted state. The remote volume that the deleted volume was paired with enters into a PausedMisconfigured state and data is no longer sent to it or from the deleted volume. Until the deleted volume is purged, it can be restored and data transfers resume. If the deleted volume gets purged from the system, the volume it was paired with enters into a StoppedMisconfigured state and the volume pairing status is removed. The purged volume becomes permanently unavailable."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 

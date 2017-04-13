@@ -42,11 +42,10 @@ def listgroup(ctx,
            # Optional main parameter
            volumes = None):
     """ListGroupSnapshots enables you to get information about all group snapshots that have been created."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-        
+    cli_utils.establish_connection(ctx)
+    
+    
 
     volumes = parser.parse_array(volumes)
     
@@ -90,11 +89,11 @@ def modifygroup(ctx,
            # Optional main parameter
            enableremotereplication = None):
     """ModifyGroupSnapshot enables you to change the attributes of a group of snapshots. You can also use this method to enable snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-            
+    cli_utils.establish_connection(ctx)
+    
+    
+    
     
 
     ctx.logger.info("""groupsnapshotid = """+str(groupsnapshotid)+""";"""+"""expirationtime = """+str(expirationtime)+""";"""+"""enableremotereplication = """+str(enableremotereplication)+""";"""+"")
@@ -137,11 +136,11 @@ def modify(ctx,
            enableremotereplication = None):
     """ModifySnapshot enables you to change the attributes currently assigned to a snapshot. You can use this method to enable snapshots created on"""
     """the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-            
+    cli_utils.establish_connection(ctx)
+    
+    
+    
     
 
     ctx.logger.info("""snapshotid = """+str(snapshotid)+""";"""+"""expirationtime = """+str(expirationtime)+""";"""+"""enableremotereplication = """+str(enableremotereplication)+""";"""+"")
@@ -203,11 +202,14 @@ def create(ctx,
     """CreateSnapshot enables you to create a point-in-time copy of a volume. You can create a snapshot from any volume or from an existing snapshot. If you do not provide a SnapshotID with this API method, a snapshot is created from the volume&#x27;s active branch."""
     """If the volume from which the snapshot is created is being replicated to a remote cluster, the snapshot can also be replicated to the same target. Use the enableRemoteReplication parameter to enable snapshot replication."""
     """Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-                        
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+    
+    
+    
 
     kwargsDict = None
 
@@ -252,11 +254,10 @@ def list(ctx,
            # Optional main parameter
            snapshotid = None):
     """ListSnapshots enables you to return the attributes of each snapshot taken on the volume. Information about snapshots that reside on the target cluster is displayed on the source cluster when this method is called from the source cluster."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-        
+    cli_utils.establish_connection(ctx)
+    
+    
     
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""snapshotid = """+str(snapshotid)+""";"""+"")
@@ -429,11 +430,10 @@ def deletegroup(ctx,
            # Mandatory main parameter
            savemembers):
     """DeleteGroupSnapshot enables you to delete a group snapshot. You can use the saveMembers parameter to preserve all the snapshots that were made for the volumes in the group, but the group association is removed."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-        
+    cli_utils.establish_connection(ctx)
+    
+    
     
 
     ctx.logger.info("""groupsnapshotid = """+str(groupsnapshotid)+""";"""+"""savemembers = """+str(savemembers)+""";"""+"")
@@ -465,10 +465,8 @@ def getschedule(ctx,
     """You can use the GetSchedule method to retrieve information about a scheduled snapshot. You can see information about a specific"""
     """schedule if there are many snapshot schedules in the system. You also retrieve information about more than one schedule with this"""
     """method by specifying additional scheduleIDs in the parameter."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 
@@ -519,11 +517,12 @@ def rollbacktogroup(ctx,
     """RollbackToGroupSnapshot enables you to roll back all individual volumes in a snapshot group to each volume&#x27;s individual snapshot."""
     """Note: Rolling back to a group snapshot creates a temporary snapshot of each volume within the group snapshot."""
     """Snapshots are allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-                
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+    
 
     kwargsDict = None
 
@@ -590,11 +589,13 @@ def rollbackto(ctx,
     """The previously &quot;active&quot; snapshot is deleted unless you set the parameter saveCurrentState to true."""
     """Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is"""
     """at stage 4 or 5."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-                    
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+    
+    
 
     kwargsDict = None
 
@@ -658,13 +659,15 @@ def creategroup(ctx,
            attributes = None):
     """CreateGroupSnapshot enables you to create a point-in-time copy of a group of volumes. You can use this snapshot later as a backup or rollback to ensure the data on the group of volumes is consistent for the point in time that you created the snapshot."""
     """Note: Creating a group snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
 
-    volumes = parser.parse_array(volumes)                
+    volumes = parser.parse_array(volumes)
+    
+    
+    
+    
 
     kwargsDict = None
 
@@ -872,11 +875,8 @@ def ModifySchedule(ctx,
 @pass_context
 def listschedules(ctx):
     """ListSchedule enables you to retrieve information about all scheduled snapshots that have been created."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -907,10 +907,8 @@ def delete(ctx,
            snapshotid):
     """DeleteSnapshot enables you to delete a snapshot. A snapshot that is currently the &quot;active&quot; snapshot cannot be deleted. You must"""
     """rollback and make another snapshot &quot;active&quot; before the current snapshot can be deleted. For more details on rolling back snapshots, see RollbackToSnapshot."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 

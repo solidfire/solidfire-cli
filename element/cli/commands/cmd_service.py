@@ -30,11 +30,8 @@ def cli(ctx):
 @pass_context
 def list(ctx):
     """You can use ListServices to return the services information for nodes, drives, current software, and other services that are running on the cluster."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")

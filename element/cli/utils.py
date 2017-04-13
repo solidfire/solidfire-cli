@@ -8,6 +8,9 @@ from Crypto.Cipher import ARC4
 import base64
 import base64
 import socket
+import getpass
+from solidfire.factory import ElementFactory
+from solidfire import Element
 
 def kv_string_to_dict(kv_string):
     new_dict = {}
@@ -162,6 +165,80 @@ def print_result_as_table(objs, keyPaths):
 
 def print_result_as_tree(objs, depth=1):
     print(get_result_as_tree(objs, depth))
+
+def establish_connection(ctx):
+    # Verify that the mvip does not contain the port number:
+    if ctx.mvip and ":" in ctx.mvip:
+        ctx.logger.error('Please provide the port using the port parameter.')
+        exit(1)
+
+    cfg = None
+    # Arguments take precedence regardless of env settings
+    if ctx.mvip:
+        if ctx.username is None:
+            ctx.username = getpass.getpass("Username:")
+        if ctx.password is None:
+            ctx.password = getpass.getpass("Password:")
+        cfg = {'mvip': ctx.mvip,
+               'username': ctx.username,
+               'password': ctx.password,
+               'port': ctx.port,
+               'url': 'https://%s:%s' % (ctx.mvip, ctx.port),
+               'version': ctx.version}
+        try:
+            ctx.element = ElementFactory.create(cfg["mvip"],cfg["username"],cfg["password"],port=cfg["port"],version=ctx.version,verify_ssl=ctx.verifyssl)
+        except Exception as e:
+            ctx.logger.error(e.__str__())
+            exit(1)
+
+    # If someone accidentally passed in an argument, but didn't specify everything, throw an error.
+    elif ctx.username or ctx.password:
+        ctx.logger.error("In order to manually connect, please provide an mvip, a username, AND a password")
+
+    # If someone asked for a given connection or we need to default to using the connection at index 0 if it exists:
+    else:
+        connections = get_connections()
+        if(ctx.connectionindex is not None):
+            cfg = connections[ctx.connectionindex]
+        elif(ctx.name is not None):
+            filteredCfg = [connection for connection in connections if connection["name"] == ctx.name]
+            if(len(filteredCfg) > 1):
+                ctx.logger.error("Your connections.csv file has become corrupted. There are two connections of the same name.")
+                exit()
+            if(len(filteredCfg) < 1):
+                ctx.logger.error("Could not find a connection named "+ctx.name)
+                exit()
+            cfg = filteredCfg[0]
+        else:
+            if len(connections) > 0:
+                cfg = connections[0]
+
+        # If we managed to find the connection we were looking for, we must try to establish the connection.
+        if cfg is not None:
+            # Finally, we need to establish our connection via elementfactory:
+
+            try:
+                ctx.element = Element(cfg["mvip"]+":"+str(cfg["port"]), decrypt(cfg["username"]), decrypt(cfg["password"]), cfg["version"], verify_ssl=ctx.verifyssl)
+            except Exception as e:
+                ctx.logger.error(e.__str__())
+                ctx.logger.error("The connection is corrupt. Run 'sfcli connection prune' to try and remove all broken connections or use 'sfcli connection remove -n name'")
+                ctx.logger.error(cfg)
+
+    # If we want the json output directly from the source, we'll have to override the send request method in the sdk:
+    if ctx.json and ctx.element:
+        def new_send_request(*args, **kwargs):
+            return ctx.element.__class__.__bases__[0].send_request(ctx.element, *args, **kwargs, return_response_raw=True)
+        ctx.element.send_request = new_send_request
+
+    # The only time it is none is when we're asking for help or we're trying to store a connection.
+    # If that's not what we're doing, we catch it later.
+    if cfg is not None:
+        cfg["port"] = int(cfg["port"])
+        ctx.cfg = cfg
+
+    if ctx.element is None:
+        ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
+        exit()
 
 def get_connections():
     connectionsCsvLocation = resource_filename(Requirement.parse("solidfire-cli"), "connections.csv")

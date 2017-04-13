@@ -33,11 +33,8 @@ def cli(ctx):
 @pass_context
 def listpending(ctx):
     """ListPendingNodes returns a list of the currently pending nodes in the system. Pending nodes are nodes that are running and configured to join the cluster, but have not yet been added via the AddNodes API method."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -61,11 +58,8 @@ def listpending(ctx):
 @pass_context
 def getorigin(ctx):
     """GetOrigin enables you to retrieve the origination certificate for where the node was built. This method might return null if there is no origination certification."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -89,11 +83,8 @@ def getorigin(ctx):
 @pass_context
 def listpendingactive(ctx):
     """ListPendingActiveNodes returns the list of nodes in the cluster that are currently in the PendingActive state, between the pending and active states. These are nodes that are currently being returned to the factory image."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -117,11 +108,8 @@ def listpendingactive(ctx):
 @pass_context
 def listall(ctx):
     """ListAllNodes enables you to retrieve a list of active and pending nodes in the cluster."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -146,11 +134,8 @@ def listall(ctx):
 def getpendingoperation(ctx):
     """You can use GetPendingOperation to detect an operation on a node that is currently in progress. You can also use this method to report back when an operation has completed. """
     """Note: method is available only through the per-node API endpoint 5.0 or later."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -174,11 +159,8 @@ def getpendingoperation(ctx):
 @pass_context
 def liststats(ctx):
     """ListNodeStats enables you to view the high-level activity measurements for all nodes in a cluster."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -215,13 +197,12 @@ def add(ctx,
            autoinstall = None):
     """AddNodes enables you to add one or more new nodes to a cluster. When a node that is not configured starts up for the first time, you are prompted to configure the node. After you configure the node, it is registered as a &quot;pending node&quot; with the cluster. """
     """Note: It might take several seconds after adding a new node for it to start up and register its drives as available."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
 
-    pendingnodes = parser.parse_array(pendingnodes)    
+    pendingnodes = parser.parse_array(pendingnodes)
+    
     
 
     ctx.logger.info("""pendingnodes = """+str(pendingnodes)+""";"""+"""autoinstall = """+str(autoinstall)+""";"""+"")
@@ -249,11 +230,8 @@ def add(ctx,
 def getnetworkconfig(ctx):
     """The GetNetworkConfig API method enables you to display the network configuration information for a node."""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -283,10 +261,8 @@ def getstats(ctx,
            # Mandatory main parameter
            nodeid):
     """GetNodeStats enables you to retrieve the high-level activity measurements for a single node."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 
@@ -312,11 +288,8 @@ def getstats(ctx,
 def getconfig(ctx):
     """The GetConfig API method enables you to retrieve all configuration information for a node. This method includes the same information available in both the GetClusterConfig and GetNetworkConfig API methods."""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -347,10 +320,8 @@ def remove(ctx,
            nodes):
     """You can use RemoveNodes to remove one or more nodes that should no longer participate in the cluster. Before removing a node, you must remove all drives the node contains using the RemoveDrives method. You cannot remove a node until the RemoveDrives process has completed and all data has been migrated away from the node."""
     """After you remove a node, it registers itself as a pending node. You can add the node again or shut it down (shutting the node down removes it from the Pending Node list)."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
 
     nodes = parser.parse_array(nodes)
@@ -377,11 +348,8 @@ def remove(ctx,
 @pass_context
 def listactive(ctx):
     """ListActiveNodes returns the list of currently active nodes that are in the cluster."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -405,11 +373,8 @@ def listactive(ctx):
 @pass_context
 def getbootstrapconfig(ctx):
     """GetBootstrapConfig returns cluster and node information from the bootstrap configuration file. Use this API method on an individual node before it has been joined with a cluster. You can use the information this method returns in the cluster configuration interface when you create a cluster."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")

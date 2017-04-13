@@ -83,10 +83,8 @@ def modify(ctx,
     """CreateInitiators."""
     """If ModifyInitiators fails to change one of the initiators provided in the parameter, the method returns an error and does not modify"""
     """any initiators (no partial completion is possible)."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
 
     initiatorsArray = []
@@ -175,10 +173,8 @@ def create(ctx,
     """aliases and attributes. When you use CreateInitiators to create new initiators, you can also add them to volume access groups."""
     """If CreateInitiators fails to create one of the initiators provided in the parameter, the method returns an error and does not create"""
     """any initiators (no partial completion is possible)."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
 
     initiatorsArray = []
@@ -233,11 +229,11 @@ def list(ctx,
            # Optional main parameter
            initiators = None):
     """ListInitiators enables you to list initiator IQNs or World Wide Port Names (WWPNs)."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-            
+    cli_utils.establish_connection(ctx)
+    
+    
+    
 
     initiators = parser.parse_array(initiators)
     
@@ -272,10 +268,8 @@ def delete(ctx,
     """groups)."""
     """If DeleteInitiators fails to delete one of the initiators provided in the parameter, the system returns an error and does not delete any"""
     """initiators (no partial completion is possible)."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
 
     initiators = parser.parse_array(initiators)

@@ -30,11 +30,8 @@ def cli(ctx):
 @pass_context
 def getipmiinfo(ctx):
     """GetIpmiInfo enables you to display a detailed reporting of sensors (objects) for node fans, intake and exhaust temperatures, and power supplies that are monitored by the system."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -64,10 +61,8 @@ def getipmiconfig(ctx,
            # Optional main parameter
            chassistype = None):
     """GetIpmiConfig enables you to retrieve hardware sensor information from sensors that are in your node."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 

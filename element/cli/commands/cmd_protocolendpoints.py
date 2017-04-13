@@ -37,10 +37,8 @@ def list(ctx,
            protocolendpointids = None):
     """ListProtocolEndpoints enables you to retrieve information about all protocol endpoints in the cluster. Protocol endpoints govern"""
     """access to their associated virtual volume storage containers."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
 
     protocolendpointids = parser.parse_array(protocolendpointids)

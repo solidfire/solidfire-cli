@@ -43,11 +43,10 @@ def reset(ctx,
            force):
     """ResetDrives enables you to proactively initialize drives and remove all data currently residing on a drive. The drive can then be reused"""
     """in an existing node or used in an upgraded node. This method requires the force parameter to be included in the method call."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-        
+    cli_utils.establish_connection(ctx)
+    
+    
     
 
     ctx.logger.info("""drives = """+str(drives)+""";"""+"""force = """+str(force)+""";"""+"")
@@ -78,10 +77,8 @@ def secureerase(ctx,
            drives):
     """SecureEraseDrives enables you to remove any residual data from drives that have a status of &quot;available.&quot; You might want to use this method when replacing a drive nearing the end of its service life that contained sensitive data. This method uses a Security Erase Unit command to write a predetermined pattern to the drive and resets the encryption key on the drive. This asynchronous method might take up to two minutes to complete. You can use GetAsyncResult to check on the status of the secure erase operation."""
     """You can use the ListDrives method to obtain the driveIDs for the drives you want to secure erase."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
 
     drives = parser.parse_array(drives)
@@ -109,11 +106,8 @@ def secureerase(ctx,
 def list(ctx):
     """ListDrives enables you to retrieve the list of the drives that exist in the cluster&#x27;s active nodes. This method returns drives that have"""
     """been added as volume metadata or block drives as well as drives that have not been added and are available."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -158,13 +152,12 @@ def remove(ctx,
     """You can also remove drives with a &quot;failed&quot; status using RemoveDrives. When you remove a drive with a &quot;failed&quot; status it is not"""
     """returned to an &quot;available&quot; or active status. The drive is unavailable for use in the cluster."""
     """Use the ListDrives method to obtain the driveIDs for the drives you want to remove."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
 
-    drives = parser.parse_array(drives)    
+    drives = parser.parse_array(drives)
+    
     
 
     ctx.logger.info("""drives = """+str(drives)+""";"""+"""forceduringupgrade = """+str(forceduringupgrade)+""";"""+"")
@@ -195,10 +188,8 @@ def gethardwareinfo(ctx,
            driveid):
     """GetDriveHardwareInfo returns all the hardware information for the given drive. This generally includes details about manufacturers, vendors, versions, and"""
     """other associated hardware identification information."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 
@@ -267,10 +258,8 @@ def add(ctx,
     """using the newly added drives. As the new drives are syncing on the system, you can use the ListSyncJobs method to see how the"""
     """drives are being rebalanced and the progress of adding the new drive. You can also use the GetAsyncResult method to query the"""
     """method&#x27;s returned asyncHandle."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
 
     drivesArray = []
@@ -280,7 +269,8 @@ def add(ctx,
                 drivesArray.append(NewDrive(drive_id=driveid[i], type=type[i], ))
         except Exception as e:
             ctx.logger.error(e.__str__())
-            exit(1)    
+            exit(1)
+    
     
 
     ctx.logger.info("""drives = """+str(drives)+""";"""+"""forceduringupgrade = """+str(forceduringupgrade)+""";"""+"")
@@ -312,10 +302,8 @@ def getstats(ctx,
     """GetDriveStats returns high-level activity measurements for a single drive. Values are cumulative from the addition of the drive to the"""
     """cluster. Some values are specific to block drives. You might not obtain statistical data for both block and metadata drives when you"""
     """run this method. """
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 
@@ -342,11 +330,8 @@ def getconfig(ctx):
     """GetDriveConfig enables you to display drive information for expected slice and block drive counts as well as the number of slices"""
     """and block drives that are currently connected to the node."""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -380,10 +365,8 @@ def test(ctx,
     """You can only use the TestDrives method on nodes that are not &quot;active&quot; in a cluster."""
     """Note: This test takes approximately 10 minutes."""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 
@@ -418,10 +401,8 @@ def listhardware(ctx,
     """Note: The &quot;securitySupported&quot;: true line of the method response does not imply that the drives are capable of"""
     """encryption; only that the security status can be queried. If you have a node type with a model number ending in &quot;-NE&quot;,"""
     """commands to enable security features on these drives will fail. See the EnableEncryptionAtRest method for more information."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 

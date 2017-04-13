@@ -48,11 +48,11 @@ def list(ctx,
            # Optional main parameter
            includestoragecontainers = None):
     """ListAccounts returns the entire list of accounts, with optional paging support."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-            
+    cli_utils.establish_connection(ctx)
+    
+    
+    
     
 
     ctx.logger.info("""startaccountid = """+str(startaccountid)+""";"""+"""limit = """+str(limit)+""";"""+"""includestoragecontainers = """+str(includestoragecontainers)+""";"""+"")
@@ -83,10 +83,8 @@ def getefficiency(ctx,
            accountid):
     """GetAccountEfficiency enables you to retrieve efficiency statistics about a volume account. This method returns efficiency information"""
     """only for the account you specify as a parameter."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 
@@ -151,11 +149,14 @@ def modify(ctx,
     """CHAP settings, any existing connections remain active, and the new CHAP settings are used on subsequent connections or"""
     """reconnections."""
     """To clear an account&#x27;s attributes, specify {} for the attributes parameter."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-                        
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+    
+    
+    
 
     kwargsDict = None
 
@@ -200,10 +201,8 @@ def remove(ctx,
     """RemoveAccount enables you to remove an existing account. You must delete and purge all volumes associated with the account"""
     """using DeleteVolume before you can remove the account. If volumes on the account are still pending deletion, you cannot use"""
     """RemoveAccount to remove the account."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 
@@ -234,10 +233,8 @@ def getbyname(ctx,
            # Mandatory main parameter
            username):
     """GetAccountByName enables you to retrieve details about a specific account, given its username."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 
@@ -286,11 +283,12 @@ def add(ctx,
            # Optional main parameter
            attributes = None):
     """You can use AddAccount to add a new account to the system. You can create new volumes under the new account. The CHAP settings you specify for the account apply to all volumes owned by the account."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-                
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+    
 
     kwargsDict = None
 
@@ -333,10 +331,8 @@ def getbyid(ctx,
            # Mandatory main parameter
            accountid):
     """GetAccountByID enables you to return details about a specific account, given its accountID."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 

@@ -60,15 +60,17 @@ def modifyhost(ctx,
            # Optional main parameter
            hostaddress = None):
     """ModifyVirtualVolumeHost changes an existing ESX host."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-            
+    cli_utils.establish_connection(ctx)
+    
+    
+    
 
-    visibleprotocolendpointids = parser.parse_array(visibleprotocolendpointids)    
+    visibleprotocolendpointids = parser.parse_array(visibleprotocolendpointids)
+    
 
-    initiatornames = parser.parse_array(initiatornames)    
+    initiatornames = parser.parse_array(initiatornames)
+    
     
 
     ctx.logger.info("""virtualvolumehostid = """+str(virtualvolumehostid)+""";"""+"""clusterid = """+str(clusterid)+""";"""+"""visibleprotocolendpointids = """+str(visibleprotocolendpointids)+""";"""+"""initiatornames = """+str(initiatornames)+""";"""+"""hostaddress = """+str(hostaddress)+""";"""+"")
@@ -98,10 +100,8 @@ def gettaskupdate(ctx,
            # Mandatory main parameter
            virtualvolumetaskid):
     """GetVirtualVolumeTaskUpdate checks the status of a VVol Async Task."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 
@@ -126,11 +126,8 @@ def gettaskupdate(ctx,
 @pass_context
 def unbindallfromhost(ctx):
     """UnbindAllVirtualVolumesFromHost removes all VVol  Host binding."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -160,10 +157,8 @@ def modifymetadata(ctx,
            # Mandatory main parameter
            virtualvolumeid):
     """ModifyVirtualVolumeMetadata is used to selectively modify the VVol metadata."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 
@@ -200,11 +195,10 @@ def modifyvasaproviderinfo(ctx,
            # Optional main parameter
            vasaproviderid = None):
     """Update the Vasa Provider info"""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-        
+    cli_utils.establish_connection(ctx)
+    
+    
     
 
     ctx.logger.info("""keystore = """+str(keystore)+""";"""+"""vasaproviderid = """+str(vasaproviderid)+""";"""+"")
@@ -246,11 +240,11 @@ def copydiffsto(ctx,
            # Mandatory main parameter
            dstvirtualvolumeid):
     """CopyDiffsToVirtualVolume is a three-way merge function."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-            
+    cli_utils.establish_connection(ctx)
+    
+    
+    
     
 
     ctx.logger.info("""virtualvolumeid = """+str(virtualvolumeid)+""";"""+"""basevirtualvolumeid = """+str(basevirtualvolumeid)+""";"""+"""dstvirtualvolumeid = """+str(dstvirtualvolumeid)+""";"""+"")
@@ -274,11 +268,8 @@ def copydiffsto(ctx,
 @pass_context
 def querymetadata(ctx):
     """QueryVirtualVolumeMetadata returns a list of VVols matching a metadata query."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -308,10 +299,8 @@ def listtasks(ctx,
            # Optional main parameter
            virtualvolumetaskids = None):
     """ListVirtualVolumeTasks returns a list of virtual volume tasks in the system."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
 
     virtualvolumetaskids = parser.parse_array(virtualvolumetaskids)
@@ -397,11 +386,13 @@ def create(ctx,
            metadata = None):
     """CreateVirtualVolume is used to create a new (empty) Virtual Volume on the cluster."""
     """When the volume is created successfully it is available for connection via PE."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-                    
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+    
+    
 
     qos = None
     if(qosminiops is not None or
@@ -418,7 +409,8 @@ def create(ctx,
         kwargsDict["burst_iops"] = qosburstiops
         kwargsDict["burst_time"] = qosbursttime
 
-        qos = QoS(**kwargsDict)    
+        qos = QoS(**kwargsDict)
+    
 
     kwargsDict = None
 
@@ -491,11 +483,11 @@ def fastclone(ctx,
            # Optional subparameter of optional main parameter.
            qosbursttime = None):
     """FastCloneVirtualVolume is used to execute a VMware Virtual Volume fast clone."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-            
+    cli_utils.establish_connection(ctx)
+    
+    
+    
 
     qos = None
     if(qosminiops is not None or
@@ -542,10 +534,8 @@ def canceltask(ctx,
            # Mandatory main parameter
            virtualvolumetaskid):
     """CancelVirtualVolumeTask attempts to cancel the VVol Async Task."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 
@@ -596,11 +586,12 @@ def getallocatedbitmap(ctx,
     """GetVirtualVolumeAllocatedBitmap returns a b64-encoded block of data """
     """representing a bitmap where non-zero bits indicate the allocation of a """
     """segment (LBA range) of the volume."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-                
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+    
     
 
     ctx.logger.info("""virtualvolumeid = """+str(virtualvolumeid)+""";"""+"""segmentstart = """+str(segmentstart)+""";"""+"""segmentlength = """+str(segmentlength)+""";"""+"""chunksize = """+str(chunksize)+""";"""+"")
@@ -656,11 +647,13 @@ def getunsharedbitmap(ctx,
     """GetVirtualVolumeAllocatedBitmap returns a b64-encoded block of data """
     """representing a bitmap where non-zero bits indicate that data is not the same """
     """between two volumes for a common segment (LBA range) of the volumes."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-                    
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+    
+    
     
 
     ctx.logger.info("""virtualvolumeid = """+str(virtualvolumeid)+""";"""+"""basevirtualvolumeid = """+str(basevirtualvolumeid)+""";"""+"""segmentstart = """+str(segmentstart)+""";"""+"""segmentlength = """+str(segmentlength)+""";"""+"""chunksize = """+str(chunksize)+""";"""+"")
@@ -691,10 +684,8 @@ def listhosts(ctx,
            virtualvolumehostids = None):
     """ListVirtualVolumeHosts returns a list of all virtual volume hosts known to the cluster. A virtual volume host is a VMware ESX host"""
     """that has initiated a session with the VASA API provider."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
 
     virtualvolumehostids = parser.parse_array(virtualvolumehostids)
@@ -733,11 +724,10 @@ def rollback(ctx,
            # Mandatory main parameter
            dstvirtualvolumeid):
     """RollbackVirtualVolume is used to restore a VMware Virtual Volume snapshot."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-        
+    cli_utils.establish_connection(ctx)
+    
+    
     
 
     ctx.logger.info("""srcvirtualvolumeid = """+str(srcvirtualvolumeid)+""";"""+"""dstvirtualvolumeid = """+str(dstvirtualvolumeid)+""";"""+"")
@@ -795,11 +785,13 @@ def getunsharedchunks(ctx,
     """than 30 seconds. If the specified VVol and the base VVil are not related, an """
     """error is thrown. If the offset/length combination is invalid or out fo range """
     """an error is thrown."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-                    
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+    
+    
     
 
     ctx.logger.info("""virtualvolumeid = """+str(virtualvolumeid)+""";"""+"""basevirtualvolumeid = """+str(basevirtualvolumeid)+""";"""+"""segmentstart = """+str(segmentstart)+""";"""+"""segmentlength = """+str(segmentlength)+""";"""+"""chunksize = """+str(chunksize)+""";"""+"")
@@ -863,11 +855,11 @@ def clone(ctx,
            # Optional subparameter of optional main parameter.
            qosbursttime = None):
     """CloneVirtualVolume is used to execute a VMware Virtual Volume clone."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-            
+    cli_utils.establish_connection(ctx)
+    
+    
+    
 
     qos = None
     if(qosminiops is not None or
@@ -948,11 +940,10 @@ def modify(ctx,
            # Optional main parameter
            totalsize = None):
     """ModifyVirtualVolume is used to modify settings on an existing virtual volume."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-        
+    cli_utils.establish_connection(ctx)
+    
+    
 
     qos = None
     if(qosminiops is not None or
@@ -969,7 +960,8 @@ def modify(ctx,
         kwargsDict["burst_iops"] = qosburstiops
         kwargsDict["burst_time"] = qosbursttime
 
-        qos = QoS(**kwargsDict)    
+        qos = QoS(**kwargsDict)
+    
     
 
     ctx.logger.info("""virtualvolumeid = """+str(virtualvolumeid)+""";"""+"""qos = """+str(qos)+""";"""+"""totalsize = """+str(totalsize)+""";"""+"")
@@ -1011,11 +1003,11 @@ def preparevirtualsnapshot(ctx,
            # Optional main parameter
            writablesnapshot = None):
     """PrepareVirtualSnapshot is used to set up VMware Virtual Volume snapshot."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-            
+    cli_utils.establish_connection(ctx)
+    
+    
+    
     
 
     ctx.logger.info("""virtualvolumeid = """+str(virtualvolumeid)+""";"""+"""name = """+str(name)+""";"""+"""writablesnapshot = """+str(writablesnapshot)+""";"""+"")
@@ -1045,10 +1037,8 @@ def getfeaturestatus(ctx,
            # Optional main parameter
            feature = None):
     """GetFeatureStatus enables you to retrieve the status of a cluster feature."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 
@@ -1079,10 +1069,8 @@ def unbind(ctx,
            # Mandatory main parameter
            unbindcontext):
     """UnbindGetVirtualVolume removes the VVol  Host binding."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 
@@ -1131,13 +1119,14 @@ def createhost(ctx,
            # Optional main parameter
            hostaddress = None):
     """CreateVirtualVolumeHost creates a new ESX host."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-            
+    cli_utils.establish_connection(ctx)
+    
+    
+    
 
-    visibleprotocolendpointids = parser.parse_array(visibleprotocolendpointids)    
+    visibleprotocolendpointids = parser.parse_array(visibleprotocolendpointids)
+    
     
 
     ctx.logger.info("""virtualvolumehostid = """+str(virtualvolumehostid)+""";"""+"""clusterid = """+str(clusterid)+""";"""+"""visibleprotocolendpointids = """+str(visibleprotocolendpointids)+""";"""+"""hostaddress = """+str(hostaddress)+""";"""+"")
@@ -1179,13 +1168,13 @@ def bind(ctx,
            # Mandatory main parameter
            bindcontext):
     """BindVirtualVolume binds a VVol with a Host."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
 
-    virtualvolumeids = parser.parse_array(virtualvolumeids)        
+    virtualvolumeids = parser.parse_array(virtualvolumeids)
+    
+    
     
 
     ctx.logger.info("""virtualvolumeids = """+str(virtualvolumeids)+""";"""+"""virtualvolumehostid = """+str(virtualvolumehostid)+""";"""+"""bindcontext = """+str(bindcontext)+""";"""+"")
@@ -1240,11 +1229,13 @@ def list(ctx,
            virtualvolumeids = None):
     """ListVirtualVolumes enables you to list the virtual volumes currently in the system. You can use this method to list all virtual volumes,"""
     """or only list a subset."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-                    
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+    
+    
 
     virtualvolumeids = parser.parse_array(virtualvolumeids)
     
@@ -1270,11 +1261,8 @@ def list(ctx,
 @pass_context
 def getvasaproviderinfo(ctx):
     """Gets the Vasa Provider info"""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -1310,11 +1298,10 @@ def snapshot(ctx,
            # Mandatory main parameter
            timeout):
     """SnapshotVirtualVolume is used to take a VMware Virtual Volume snapshot."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-        
+    cli_utils.establish_connection(ctx)
+    
+    
     
 
     ctx.logger.info("""virtualvolumeid = """+str(virtualvolumeid)+""";"""+"""timeout = """+str(timeout)+""";"""+"")
@@ -1344,10 +1331,8 @@ def listbindings(ctx,
            # Optional main parameter
            virtualvolumebindingids = None):
     """ListVirtualVolumeBindings returns a list of all virtual volumes in the cluster that are bound to protocol endpoints."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
 
     virtualvolumebindingids = parser.parse_array(virtualvolumebindingids)
@@ -1374,11 +1359,8 @@ def listbindings(ctx,
 @pass_context
 def getcount(ctx):
     """Enables retrieval of the number of virtual volumes currently in the system."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -1408,10 +1390,8 @@ def enablefeature(ctx,
            # Mandatory main parameter
            feature):
     """You can use EnableFeature to enable cluster features that are disabled by default."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 
@@ -1456,10 +1436,8 @@ def delete(ctx,
     """Until the deleted volume is purged, it can be restored and data transfers resumes."""
     """If the deleted volume gets purged from the system, the volume it was paired with enters into a StoppedMisconfigured state and the volume pairing status is removed."""
     """The purged volume becomes permanently unavailable."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
 
     virtualvolumes = parser.parse_array(virtualvolumes)

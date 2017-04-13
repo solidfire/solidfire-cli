@@ -48,11 +48,11 @@ def modify(ctx,
            # Optional main parameter
            attributes = None):
     """ModifyBackupTarget enables you to change attributes of a backup target."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-            
+    cli_utils.establish_connection(ctx)
+    
+    
+    
 
     kwargsDict = None
 
@@ -97,11 +97,10 @@ def create(ctx,
            # Optional main parameter
            attributes = None):
     """CreateBackupTarget enables you to create and store backup target information so that you do not need to re-enter it each time a backup is created."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-        
+    cli_utils.establish_connection(ctx)
+    
+    
 
     kwargsDict = None
 
@@ -134,11 +133,8 @@ def create(ctx,
 @pass_context
 def list(ctx):
     """You can use ListBackupTargets to retrieve information about all backup targets that have been created."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -168,10 +164,8 @@ def remove(ctx,
            # Mandatory main parameter
            backuptargetid):
     """RemoveBackupTarget allows you to delete backup targets."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 
@@ -202,10 +196,8 @@ def get(ctx,
            # Mandatory main parameter
            backuptargetid):
     """GetBackupTarget enables you to return information about a specific backup target that you have created."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 

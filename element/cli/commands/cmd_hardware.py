@@ -36,10 +36,8 @@ def getnvraminfo(ctx,
            # Optional main parameter
            force = None):
     """GetNvramInfo enables you to retrieve information from each node about the NVRAM card."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 
@@ -71,10 +69,8 @@ def getnodeinfo(ctx,
            nodeid):
     """GetNodeHardwareInfo enables you to return all the hardware information and status for the node specified. This generally includes details about"""
     """manufacturers, vendors, versions, and other associated hardware identification information."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 
@@ -107,10 +103,8 @@ def getclusterinfo(ctx,
     """You can use the GetClusterHardwareInfo method to retrieve the hardware status and information for all Fibre Channel nodes, iSCSI"""
     """nodes and drives in the cluster. This generally includes details about manufacturers, vendors, versions, and other associated hardware"""
     """identification information."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 
@@ -136,11 +130,8 @@ def getclusterinfo(ctx,
 def getconfig(ctx):
     """GetHardwareConfig enables you to display the hardware configuration information for a node."""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")

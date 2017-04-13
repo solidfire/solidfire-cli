@@ -36,10 +36,8 @@ def completecluster(ctx,
            # Mandatory main parameter
            clusterpairingkey):
     """You can use the CompleteClusterPairing method with the encoded key received from the  StartClusterPairing method to complete the cluster pairing process. The CompleteClusterPairing method is the second step in the cluster pairing process. """
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 
@@ -76,11 +74,10 @@ def completevolume(ctx,
            # Mandatory main parameter
            volumeid):
     """You can use the CompleteVolumePairing method to complete the pairing of two volumes."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-        
+    cli_utils.establish_connection(ctx)
+    
+    
     
 
     ctx.logger.info("""volumepairingkey = """+str(volumepairingkey)+""";"""+"""volumeid = """+str(volumeid)+""";"""+"")
@@ -104,11 +101,8 @@ def completevolume(ctx,
 @pass_context
 def listclusterpairs(ctx):
     """You can use the ListClusterPairs method to list all the clusters that a cluster is paired with. This method returns information about active and pending cluster pairings, such as statistics about the current pairing as well as the connectivity and latency (in milliseconds) of the cluster pairing."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -138,10 +132,8 @@ def removevolumepair(ctx,
            # Mandatory main parameter
            volumeid):
     """RemoveVolumePair enables you to remove the remote pairing between two volumes. Use this method on both the source and target volumes that are paired together. When you remove the volume pairing information, data is no longer replicated to or from the volume."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 
@@ -179,11 +171,10 @@ def startvolume(ctx,
            mode = None):
     """StartVolumePairing enables you to create an encoded key from a volume that is used to pair with another volume. The key that this"""
     """method creates is used in the CompleteVolumePairing API method to establish a volume pairing."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-        
+    cli_utils.establish_connection(ctx)
+    
+    
     
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""mode = """+str(mode)+""";"""+"")
@@ -219,11 +210,10 @@ def listactivepairedvolumes(ctx,
            # Optional main parameter
            limit = None):
     """ListActivePairedVolumes enables you to list all the active volumes paired with a volume. This method returns information about volumes with active and pending pairings."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-        
+    cli_utils.establish_connection(ctx)
+    
+    
     
 
     ctx.logger.info("""startvolumeid = """+str(startvolumeid)+""";"""+"""limit = """+str(limit)+""";"""+"")
@@ -271,11 +261,12 @@ def modifyvolumepair(ctx,
            # Optional main parameter
            pauselimit = None):
     """ModifyVolumePair enables you to pause or restart replication between a pair of volumes."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-                
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+    
     
 
     ctx.logger.info("""volumeid = """+str(volumeid)+""";"""+"""pausedmanual = """+str(pausedmanual)+""";"""+"""mode = """+str(mode)+""";"""+"""pauselimit = """+str(pauselimit)+""";"""+"")
@@ -299,11 +290,8 @@ def modifyvolumepair(ctx,
 @pass_context
 def startcluster(ctx):
     """You can use the StartClusterPairing method to create an encoded key from a cluster that is used to pair with another cluster. The key created from this API method is used in the CompleteClusterPairing API method to establish a cluster pairing. You can pair a cluster with a maximum of four other clusters. """
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -334,10 +322,8 @@ def removeclusterpair(ctx,
            clusterpairid):
     """You can use the RemoveClusterPair method to close the open connections between two paired clusters."""
     """Note: Before you remove a cluster pair, you must first remove all volume pairing to the clusters with the &quot;RemoveVolumePair&quot; API method."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 

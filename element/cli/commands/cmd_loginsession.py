@@ -30,11 +30,8 @@ def cli(ctx):
 @pass_context
 def getremotelogginghosts(ctx):
     """GetRemoteLoggingHosts enables you to retrieve the current list of log servers."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
@@ -87,10 +84,8 @@ def setremotelogginghosts(ctx,
            # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
            port):
     """SetRemoteLoggingHosts enables you to configure remote logging from the nodes in the storage cluster to a centralized log server or servers. Remote logging is performed over TCP using the default port 514. This API does not add to the existing logging hosts. Rather, it replaces what currently exists with new values specified by this API method. You can use GetRemoteLoggingHosts to determine what the current logging hosts are, and then use SetRemoteLoggingHosts to set the desired list of current and new logging hosts."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
 
     remotehostsArray = []
@@ -130,10 +125,8 @@ def setinfo(ctx,
            # Mandatory main parameter
            timeout):
     """You can use SetLoginSessionInfo to set the period of time that a session&#x27;s login authentication is valid. After the log in period elapses without activity on the system, the authentication expires. New login credentials are required for continued access to the cluster after the timeout period has elapsed."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 
@@ -158,11 +151,8 @@ def setinfo(ctx,
 @pass_context
 def getinfo(ctx):
     """GetLoginSessionInfo enables you to return the period of time a log in authentication session is valid for both log in shells and the TUI."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-
+    cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")

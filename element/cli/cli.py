@@ -10,8 +10,6 @@ from pkg_resources import Requirement, resource_filename
 import struct
 import base64
 
-from solidfire.factory import ElementFactory
-from solidfire import Element
 from element.cli import utils as cli_utils
 
 logging.basicConfig()
@@ -287,76 +285,18 @@ def cli(ctx,
     logging.getLogger('solidfire.Element').setLevel(logging.CRITICAL)
     ctx.logger = LOG
     ctx.verbose = verbose
-
-    # Verify that the mvip does not contain the port number:
-    if mvip and ":" in mvip:
-        ctx.logger.error('Please provide the port using the port parameter.')
-        exit(1)
-
-    cfg = None
-    # Arguments take precedence regardless of env settings
-    if mvip and username and password:
-        cfg = {'mvip': mvip,
-               'username': username,
-               'password': password,
-               'port': port,
-               'url': 'https://%s:%s' % (mvip, port),
-               'version': version}
-        try:
-            ctx.element = ElementFactory.create(cfg["mvip"],cfg["username"],cfg["password"],port=cfg["port"],version=version,verify_ssl=verifyssl)
-        except Exception as e:
-            ctx.logger.error(e.__str__())
-            exit(1)
-
-    # If someone accidentally passed in an argument, but didn't specify everything, throw an error.
-    elif mvip or username or password:
-        LOG.error("In order to manually connect, please provide mvip, username, AND password")
-
-    # If someone asked for a given connection or we need to default to using the connection at index 0 if it exists:
-    else:
-        connections = cli_utils.get_connections()
-        if(connectionindex is not None):
-            cfg = connections[connectionindex]
-        elif(name is not None):
-            filteredCfg = [connection for connection in connections if connection["name"] == name]
-            if(len(filteredCfg) > 1):
-                LOG.error("Your connections.csv file has become corrupted. There are two connections of the same name.")
-                exit()
-            if(len(filteredCfg) < 1):
-                LOG.error("Could not find a connection named "+name)
-                exit()
-            cfg = filteredCfg[0]
-        else:
-            if len(connections) > 0:
-                cfg = connections[0]
-
-        # If we managed to find the connection we were looking for, we must try to establish the connection.
-        if cfg is not None:
-            # Finally, we need to establish our connection via elementfactory:
-
-            try:
-                ctx.element = Element(cfg["mvip"]+":"+str(cfg["port"]), cli_utils.decrypt(cfg["username"]), cli_utils.decrypt(cfg["password"]), cfg["version"], verify_ssl=verifyssl)
-            except Exception as e:
-                ctx.logger.error(e.__str__())
-                ctx.logger.error("The connection is corrupt. Run 'sfcli connection prune' to try and remove all broken connections or use 'sfcli connection remove -n name'")
-                ctx.logger.error(cfg)
-
-    # If we want the json output directly from the source, we'll have to override the send request method in the sdk:
-    if json and ctx.element:
-        def new_send_request(*args, **kwargs):
-            return ctx.element.__class__.__bases__[0].send_request(ctx.element, *args, **kwargs, return_response_raw=True)
-        ctx.element.send_request = new_send_request
-
-    # The only time it is none is when we're asking for help or we're trying to store a connection.
-    # If that's not what we're doing, we catch it later.
-    if cfg is not None:
-        cfg["port"] = int(cfg["port"])
-        ctx.cfg = cfg
+    ctx.username = username
+    ctx.password = password
+    ctx.name = name
+    ctx.port = port
+    ctx.connectionindex = connectionindex
+    ctx.mvip = mvip
     ctx.json = json
     ctx.pickle = pickle
     ctx.depth = depth
     ctx.filter_tree = filter_tree
     ctx.verifyssl = verifyssl
+    ctx.version = version
 
 if __name__ == '__main__':
     cli.main()

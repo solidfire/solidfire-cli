@@ -50,11 +50,11 @@ def services(ctx,
     """The RestartServices API method enables you to restart the services on a node."""
     """Caution: This method causes temporary node services interruption. Exercise caution when using this method."""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-            
+    cli_utils.establish_connection(ctx)
+    
+    
+    
     
 
     ctx.logger.info("""force = """+str(force)+""";"""+"""service = """+str(service)+""";"""+"""action = """+str(action)+""";"""+"")
@@ -87,10 +87,8 @@ def networking(ctx,
     """Warning: This method restarts all networking services on a node, causing temporary loss of networking connectivity."""
     """Exercise caution when using this method."""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
     
 
@@ -145,11 +143,12 @@ def resetnode(ctx,
     """cluster, or in a &quot;Pending&quot; state."""
     """Caution: This method clears any data that is on the node. Exercise caution when using this method."""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-                
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+    
     
 
     ctx.logger.info("""build = """+str(build)+""";"""+"""force = """+str(force)+""";"""+"""options = """+str(options)+""";"""+"""reboot = """+str(reboot)+""";"""+"")
@@ -186,13 +185,12 @@ def shutdown(ctx,
            option = None):
     """The Shutdown API method enables you to restart or shutdown a node that has not yet been added to a cluster. To use this method,"""
     """log in to the MIP for the pending node, and enter the &quot;shutdown&quot; method with either the &quot;restart&quot; or &quot;halt&quot; options."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
+    cli_utils.establish_connection(ctx)
     
 
-    nodes = parser.parse_array(nodes)    
+    nodes = parser.parse_array(nodes)
+    
     
 
     ctx.logger.info("""nodes = """+str(nodes)+""";"""+"""option = """+str(option)+""";"""+"")

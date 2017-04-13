@@ -43,11 +43,10 @@ def invoke(ctx,
            parameters = None):
     """This will invoke any API method supported by the SolidFire API for the version and port the connection is using."""
     """Returns a nested hashtable of key/value pairs that contain the result of the invoked method."""
-    if ctx.element is None:
-         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
-         exit()
 
-        
+    cli_utils.establish_connection(ctx)
+    
+    
     
 
     ctx.logger.info("""method = """+str(method)+""";"""+"""parameters = """+str(parameters)+""";"""+"")
