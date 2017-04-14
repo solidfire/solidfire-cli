@@ -3,6 +3,8 @@
 #
 # Copyright &copy; 2014-2016 NetApp, Inc. All Rights Reserved.
 
+from __future__ import unicode_literals
+
 import click
 
 import os
@@ -66,9 +68,10 @@ def push(ctx, mvip, username, password, version, port, name):
     if(username is not None and password is not None):
         username = cli_utils.encrypt(username)
         password = cli_utils.encrypt(password)
+
     connections = connections + [{'mvip': mvip,
-                                  'username': "b'"+str(username)+"'",
-                                  'password': "b'"+str(password)+"'",
+                                  'username': "b'"+username.decode('utf-8')+"'",
+                                  'password': "b'"+password.decode('utf-8')+"'",
                                   'port': port,
                                   'url': 'https://%s:%s' % (mvip, port),
                                   'version': version,
