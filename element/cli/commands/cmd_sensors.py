@@ -24,7 +24,32 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """getipmiconfig getipmiinfo """
+    """getipmiinfo getipmiconfig """
+
+@cli.command('getipmiinfo', short_help="""GetIpmiInfo enables you to display a detailed reporting of sensors (objects) for node fans, intake and exhaust temperatures, and power supplies that are monitored by the system. """, cls=SolidFireCommand)
+@pass_context
+def getipmiinfo(ctx):
+    """GetIpmiInfo enables you to display a detailed reporting of sensors (objects) for node fans, intake and exhaust temperatures, and power supplies that are monitored by the system."""
+
+    cli_utils.establish_connection(ctx)
+    
+
+    ctx.logger.info("")
+    try:
+        _GetIpmiInfoResult = ctx.element.get_ipmi_info()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetIpmiInfoResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetIpmiInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
 
 @cli.command('getipmiconfig', short_help="""GetIpmiConfig enables you to retrieve hardware sensor information from sensors that are in your node. """, cls=SolidFireCommand)
 @click.option('--chassistype',
@@ -55,29 +80,4 @@ def getipmiconfig(ctx,
         return
     else:
         cli_utils.print_result(_GetIpmiConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getipmiinfo', short_help="""GetIpmiInfo enables you to display a detailed reporting of sensors (objects) for node fans, intake and exhaust temperatures, and power supplies that are monitored by the system. """, cls=SolidFireCommand)
-@pass_context
-def getipmiinfo(ctx):
-    """GetIpmiInfo enables you to display a detailed reporting of sensors (objects) for node fans, intake and exhaust temperatures, and power supplies that are monitored by the system."""
-
-    cli_utils.establish_connection(ctx)
-    
-
-    ctx.logger.info("")
-    try:
-        _GetIpmiInfoResult = ctx.element.get_ipmi_info()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetIpmiInfoResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_GetIpmiInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

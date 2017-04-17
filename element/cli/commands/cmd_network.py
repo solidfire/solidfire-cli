@@ -24,32 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """listiscsisessions listnodefibrechannelportinfo listfibrechannelportinfo listinterfaces listfibrechannelsessions """
-
-@cli.command('listiscsisessions', short_help="""You can use ListISCSISessions to return iSCSI information for volumes in the cluster. """, cls=SolidFireCommand)
-@pass_context
-def listiscsisessions(ctx):
-    """You can use ListISCSISessions to return iSCSI information for volumes in the cluster."""
-
-    cli_utils.establish_connection(ctx)
-    
-
-    ctx.logger.info("")
-    try:
-        _ListISCSISessionsResult = ctx.element.list_iscsisessions()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ListISCSISessionsResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_ListISCSISessionsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
+    """listnodefibrechannelportinfo listiscsisessions listinterfaces listfibrechannelportinfo listfibrechannelsessions """
 
 @cli.command('listnodefibrechannelportinfo', short_help="""The ListNodeFibreChannelPortInfo API method enables you to retrieve information about the Fibre Channel ports on a node. The API method is intended for use on individual nodes; userid and password authentication is required for access to individual Fibre Channel nodes. """, cls=SolidFireCommand)
 @pass_context
@@ -76,17 +51,17 @@ def listnodefibrechannelportinfo(ctx):
 
 
 
-@cli.command('listfibrechannelportinfo', short_help="""ListFibreChannelPortInfo enables you to retrieve information about the Fibre Channel ports on a node.  The API method is intended for use on individual nodes; userid and password authentication is required for access to individual Fibre Channel nodes. """, cls=SolidFireCommand)
+@cli.command('listiscsisessions', short_help="""You can use ListISCSISessions to return iSCSI information for volumes in the cluster. """, cls=SolidFireCommand)
 @pass_context
-def listfibrechannelportinfo(ctx):
-    """ListFibreChannelPortInfo enables you to retrieve information about the Fibre Channel ports on a node.  The API method is intended for use on individual nodes; userid and password authentication is required for access to individual Fibre Channel nodes."""
+def listiscsisessions(ctx):
+    """You can use ListISCSISessions to return iSCSI information for volumes in the cluster."""
 
     cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
     try:
-        _ListFibreChannelPortInfoResult = ctx.element.list_fibre_channel_port_info()
+        _ListISCSISessionsResult = ctx.element.list_iscsisessions()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -94,10 +69,10 @@ def listfibrechannelportinfo(ctx):
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ListFibreChannelPortInfoResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_ListISCSISessionsResult), indent=4))
         return
     else:
-        cli_utils.print_result(_ListFibreChannelPortInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_ListISCSISessionsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -123,6 +98,31 @@ def listinterfaces(ctx):
         return
     else:
         cli_utils.print_result(_ListNetworkInterfacesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('listfibrechannelportinfo', short_help="""ListFibreChannelPortInfo enables you to retrieve information about the Fibre Channel ports on a node.  The API method is intended for use on individual nodes; userid and password authentication is required for access to individual Fibre Channel nodes. """, cls=SolidFireCommand)
+@pass_context
+def listfibrechannelportinfo(ctx):
+    """ListFibreChannelPortInfo enables you to retrieve information about the Fibre Channel ports on a node.  The API method is intended for use on individual nodes; userid and password authentication is required for access to individual Fibre Channel nodes."""
+
+    cli_utils.establish_connection(ctx)
+    
+
+    ctx.logger.info("")
+    try:
+        _ListFibreChannelPortInfoResult = ctx.element.list_fibre_channel_port_info()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListFibreChannelPortInfoResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListFibreChannelPortInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
