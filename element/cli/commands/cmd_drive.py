@@ -24,141 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """listhardware test list getstats secureerase gethardwareinfo getconfig remove reset add """
-
-@cli.command('listhardware', short_help="""ListDriveHardware returns all the drives connected to a node. Use this method on individual nodes to return drive hardware information or use this method on the cluster master node MVIP to see information for all the drives on all nodes. Note: The "securitySupported": true line of the method response does not imply that the drives are capable of encryption; only that the security status can be queried. If you have a node type with a model number ending in "-NE", commands to enable security features on these drives will fail. See the EnableEncryptionAtRest method for more information. """, cls=SolidFireCommand)
-@click.option('--force',
-              type=bool,
-              required=True,
-              prompt=True,
-              help="""To run this command, the force parameter must be set to true. """)
-@pass_context
-def listhardware(ctx,
-           # Mandatory main parameter
-           force):
-    """ListDriveHardware returns all the drives connected to a node. Use this method on individual nodes to return drive hardware"""
-    """information or use this method on the cluster master node MVIP to see information for all the drives on all nodes."""
-    """Note: The &quot;securitySupported&quot;: true line of the method response does not imply that the drives are capable of"""
-    """encryption; only that the security status can be queried. If you have a node type with a model number ending in &quot;-NE&quot;,"""
-    """commands to enable security features on these drives will fail. See the EnableEncryptionAtRest method for more information."""
-
-    cli_utils.establish_connection(ctx)
-    
-    
-
-    ctx.logger.info("""force = """+str(force)+""";"""+"")
-    try:
-        _ListDriveHardwareResult = ctx.element.list_drive_hardware(force=force)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ListDriveHardwareResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_ListDriveHardwareResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('test', short_help="""You can use the TestDrives API method to run a hardware validation on all drives on the node. This method detects hardware failures on the drives (if present) and reports them in the results of the validation tests. You can only use the TestDrives method on nodes that are not "active" in a cluster. Note: This test takes approximately 10 minutes. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
-@click.option('--minutes',
-              type=int,
-              required=False,
-              help="""Specifies the number of minutes to run the test. """)
-@pass_context
-def test(ctx,
-           # Optional main parameter
-           minutes = None):
-    """You can use the TestDrives API method to run a hardware validation on all drives on the node. This method detects hardware"""
-    """failures on the drives (if present) and reports them in the results of the validation tests."""
-    """You can only use the TestDrives method on nodes that are not &quot;active&quot; in a cluster."""
-    """Note: This test takes approximately 10 minutes."""
-    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
-
-    cli_utils.establish_connection(ctx)
-    
-    
-
-    ctx.logger.info("""minutes = """+str(minutes)+""";"""+"")
-    try:
-        _TestDrivesResult = ctx.element.test_drives(minutes=minutes)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_TestDrivesResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_TestDrivesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('list', short_help="""ListDrives enables you to retrieve the list of the drives that exist in the cluster's active nodes. This method returns drives that have been added as volume metadata or block drives as well as drives that have not been added and are available. """, cls=SolidFireCommand)
-@pass_context
-def list(ctx):
-    """ListDrives enables you to retrieve the list of the drives that exist in the cluster&#x27;s active nodes. This method returns drives that have"""
-    """been added as volume metadata or block drives as well as drives that have not been added and are available."""
-
-    cli_utils.establish_connection(ctx)
-    
-
-    ctx.logger.info("")
-    try:
-        _ListDrivesResult = ctx.element.list_drives()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ListDrivesResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_ListDrivesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getstats', short_help="""GetDriveStats returns high-level activity measurements for a single drive. Values are cumulative from the addition of the drive to the cluster. Some values are specific to block drives. You might not obtain statistical data for both block and metadata drives when you run this method.  """, cls=SolidFireCommand)
-@click.option('--driveid',
-              type=int,
-              required=True,
-              prompt=True,
-              help="""Specifies the drive for which statistics are gathered. """)
-@pass_context
-def getstats(ctx,
-           # Mandatory main parameter
-           driveid):
-    """GetDriveStats returns high-level activity measurements for a single drive. Values are cumulative from the addition of the drive to the"""
-    """cluster. Some values are specific to block drives. You might not obtain statistical data for both block and metadata drives when you"""
-    """run this method. """
-
-    cli_utils.establish_connection(ctx)
-    
-    
-
-    ctx.logger.info("""driveid = """+str(driveid)+""";"""+"")
-    try:
-        _GetDriveStatsResult = ctx.element.get_drive_stats(drive_id=driveid)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetDriveStatsResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_GetDriveStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
+    """secureerase gethardwareinfo remove reset add test getstats listhardware getconfig list """
 
 @cli.command('secureerase', short_help="""SecureEraseDrives enables you to remove any residual data from drives that have a status of "available." You might want to use this method when replacing a drive nearing the end of its service life that contained sensitive data. This method uses a Security Erase Unit command to write a predetermined pattern to the drive and resets the encryption key on the drive. This asynchronous method might take up to two minutes to complete. You can use GetAsyncResult to check on the status of the secure erase operation. You can use the ListDrives method to obtain the driveIDs for the drives you want to secure erase. """, cls=SolidFireCommand)
 @click.option('--drives',
@@ -227,33 +93,6 @@ def gethardwareinfo(ctx,
         return
     else:
         cli_utils.print_result(_GetDriveHardwareInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getconfig', short_help="""GetDriveConfig enables you to display drive information for expected slice and block drive counts as well as the number of slices and block drives that are currently connected to the node. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
-@pass_context
-def getconfig(ctx):
-    """GetDriveConfig enables you to display drive information for expected slice and block drive counts as well as the number of slices"""
-    """and block drives that are currently connected to the node."""
-    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
-
-    cli_utils.establish_connection(ctx)
-    
-
-    ctx.logger.info("")
-    try:
-        _GetDriveConfigResult = ctx.element.get_drive_config()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetDriveConfigResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_GetDriveConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -429,4 +268,165 @@ def add(ctx,
         return
     else:
         cli_utils.print_result(_AddDrivesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('test', short_help="""You can use the TestDrives API method to run a hardware validation on all drives on the node. This method detects hardware failures on the drives (if present) and reports them in the results of the validation tests. You can only use the TestDrives method on nodes that are not "active" in a cluster. Note: This test takes approximately 10 minutes. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
+@click.option('--minutes',
+              type=int,
+              required=False,
+              help="""Specifies the number of minutes to run the test. """)
+@pass_context
+def test(ctx,
+           # Optional main parameter
+           minutes = None):
+    """You can use the TestDrives API method to run a hardware validation on all drives on the node. This method detects hardware"""
+    """failures on the drives (if present) and reports them in the results of the validation tests."""
+    """You can only use the TestDrives method on nodes that are not &quot;active&quot; in a cluster."""
+    """Note: This test takes approximately 10 minutes."""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
+
+    cli_utils.establish_connection(ctx)
+    
+    
+
+    ctx.logger.info("""minutes = """+str(minutes)+""";"""+"")
+    try:
+        _TestDrivesResult = ctx.element.test_drives(minutes=minutes)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_TestDrivesResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_TestDrivesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getstats', short_help="""GetDriveStats returns high-level activity measurements for a single drive. Values are cumulative from the addition of the drive to the cluster. Some values are specific to block drives. You might not obtain statistical data for both block and metadata drives when you run this method.  """, cls=SolidFireCommand)
+@click.option('--driveid',
+              type=int,
+              required=True,
+              prompt=True,
+              help="""Specifies the drive for which statistics are gathered. """)
+@pass_context
+def getstats(ctx,
+           # Mandatory main parameter
+           driveid):
+    """GetDriveStats returns high-level activity measurements for a single drive. Values are cumulative from the addition of the drive to the"""
+    """cluster. Some values are specific to block drives. You might not obtain statistical data for both block and metadata drives when you"""
+    """run this method. """
+
+    cli_utils.establish_connection(ctx)
+    
+    
+
+    ctx.logger.info("""driveid = """+str(driveid)+""";"""+"")
+    try:
+        _GetDriveStatsResult = ctx.element.get_drive_stats(drive_id=driveid)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetDriveStatsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetDriveStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('listhardware', short_help="""ListDriveHardware returns all the drives connected to a node. Use this method on individual nodes to return drive hardware information or use this method on the cluster master node MVIP to see information for all the drives on all nodes. Note: The "securitySupported": true line of the method response does not imply that the drives are capable of encryption; only that the security status can be queried. If you have a node type with a model number ending in "-NE", commands to enable security features on these drives will fail. See the EnableEncryptionAtRest method for more information. """, cls=SolidFireCommand)
+@click.option('--force',
+              type=bool,
+              required=True,
+              prompt=True,
+              help="""To run this command, the force parameter must be set to true. """)
+@pass_context
+def listhardware(ctx,
+           # Mandatory main parameter
+           force):
+    """ListDriveHardware returns all the drives connected to a node. Use this method on individual nodes to return drive hardware"""
+    """information or use this method on the cluster master node MVIP to see information for all the drives on all nodes."""
+    """Note: The &quot;securitySupported&quot;: true line of the method response does not imply that the drives are capable of"""
+    """encryption; only that the security status can be queried. If you have a node type with a model number ending in &quot;-NE&quot;,"""
+    """commands to enable security features on these drives will fail. See the EnableEncryptionAtRest method for more information."""
+
+    cli_utils.establish_connection(ctx)
+    
+    
+
+    ctx.logger.info("""force = """+str(force)+""";"""+"")
+    try:
+        _ListDriveHardwareResult = ctx.element.list_drive_hardware(force=force)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListDriveHardwareResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListDriveHardwareResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getconfig', short_help="""GetDriveConfig enables you to display drive information for expected slice and block drive counts as well as the number of slices and block drives that are currently connected to the node. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
+@pass_context
+def getconfig(ctx):
+    """GetDriveConfig enables you to display drive information for expected slice and block drive counts as well as the number of slices"""
+    """and block drives that are currently connected to the node."""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
+
+    cli_utils.establish_connection(ctx)
+    
+
+    ctx.logger.info("")
+    try:
+        _GetDriveConfigResult = ctx.element.get_drive_config()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetDriveConfigResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetDriveConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('list', short_help="""ListDrives enables you to retrieve the list of the drives that exist in the cluster's active nodes. This method returns drives that have been added as volume metadata or block drives as well as drives that have not been added and are available. """, cls=SolidFireCommand)
+@pass_context
+def list(ctx):
+    """ListDrives enables you to retrieve the list of the drives that exist in the cluster&#x27;s active nodes. This method returns drives that have"""
+    """been added as volume metadata or block drives as well as drives that have not been added and are available."""
+
+    cli_utils.establish_connection(ctx)
+    
+
+    ctx.logger.info("")
+    try:
+        _ListDrivesResult = ctx.element.list_drives()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListDrivesResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListDrivesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

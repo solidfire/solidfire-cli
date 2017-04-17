@@ -24,7 +24,32 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """setinfo setremotelogginghosts getinfo getremotelogginghosts """
+    """getinfo setinfo setremotelogginghosts getremotelogginghosts """
+
+@cli.command('getinfo', short_help="""GetLoginSessionInfo enables you to return the period of time a log in authentication session is valid for both log in shells and the TUI. """, cls=SolidFireCommand)
+@pass_context
+def getinfo(ctx):
+    """GetLoginSessionInfo enables you to return the period of time a log in authentication session is valid for both log in shells and the TUI."""
+
+    cli_utils.establish_connection(ctx)
+    
+
+    ctx.logger.info("")
+    try:
+        _GetLoginSessionInfoResult = ctx.element.get_login_session_info()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetLoginSessionInfoResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetLoginSessionInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
 
 @cli.command('setinfo', short_help="""You can use SetLoginSessionInfo to set the period of time that a session's login authentication is valid. After the log in period elapses without activity on the system, the authentication expires. New login credentials are required for continued access to the cluster after the timeout period has elapsed. """, cls=SolidFireCommand)
 @click.option('--timeout',
@@ -123,31 +148,6 @@ def setremotelogginghosts(ctx,
         return
     else:
         cli_utils.print_result(_SetRemoteLoggingHostsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getinfo', short_help="""GetLoginSessionInfo enables you to return the period of time a log in authentication session is valid for both log in shells and the TUI. """, cls=SolidFireCommand)
-@pass_context
-def getinfo(ctx):
-    """GetLoginSessionInfo enables you to return the period of time a log in authentication session is valid for both log in shells and the TUI."""
-
-    cli_utils.establish_connection(ctx)
-    
-
-    ctx.logger.info("")
-    try:
-        _GetLoginSessionInfoResult = ctx.element.get_login_session_info()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetLoginSessionInfoResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_GetLoginSessionInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
