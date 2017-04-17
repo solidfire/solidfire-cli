@@ -24,62 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """modify create list remove get """
-
-@cli.command('modify', short_help="""ModifyBackupTarget enables you to change attributes of a backup target. """, cls=SolidFireCommand)
-@click.option('--backuptargetid',
-              type=int,
-              required=True,
-              help="""The unique target ID for the target to modify. """)
-@click.option('--name',
-              type=str,
-              required=False,
-              help="""The new name for the backup target. """)
-@click.option('--attributes',
-              type=str,
-              required=False,
-              help="""List of name-value pairs in JSON object format.  Has the following subparameters: """)
-@pass_context
-def modify(ctx,
-           # Mandatory main parameter
-           backuptargetid,
-           # Optional main parameter
-           name = None,
-           # Optional main parameter
-           attributes = None):
-    """ModifyBackupTarget enables you to change attributes of a backup target."""
-
-    cli_utils.establish_connection(ctx)
-    
-    
-    
-
-    kwargsDict = None
-
-    if(attributes is not None):
-        try:
-            kwargsDict = simplejson.loads(attributes)
-        except Exception as e:
-            ctx.logger.error(e.__str__())
-            exit(1)
-    
-
-    ctx.logger.info("""backuptargetid = """+str(backuptargetid)+""";"""+"""name = """+str(name)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
-    try:
-        _ModifyBackupTargetResult = ctx.element.modify_backup_target(backup_target_id=backuptargetid, name=name, attributes=kwargsDict)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ModifyBackupTargetResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_ModifyBackupTargetResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
+    """create list get remove modify """
 
 @cli.command('create', short_help="""CreateBackupTarget enables you to create and store backup target information so that you do not need to re-enter it each time a backup is created. """, cls=SolidFireCommand)
 @click.option('--name',
@@ -154,6 +99,38 @@ def list(ctx):
 
 
 
+@cli.command('get', short_help="""GetBackupTarget enables you to return information about a specific backup target that you have created. """, cls=SolidFireCommand)
+@click.option('--backuptargetid',
+              type=int,
+              required=True,
+              help="""The unique identifier assigned to the backup target. """)
+@pass_context
+def get(ctx,
+           # Mandatory main parameter
+           backuptargetid):
+    """GetBackupTarget enables you to return information about a specific backup target that you have created."""
+
+    cli_utils.establish_connection(ctx)
+    
+    
+
+    ctx.logger.info("""backuptargetid = """+str(backuptargetid)+""";"""+"")
+    try:
+        _GetBackupTargetResult = ctx.element.get_backup_target(backup_target_id=backuptargetid)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetBackupTargetResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetBackupTargetResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
 @cli.command('remove', short_help="""RemoveBackupTarget allows you to delete backup targets. """, cls=SolidFireCommand)
 @click.option('--backuptargetid',
               type=int,
@@ -186,24 +163,47 @@ def remove(ctx,
 
 
 
-@cli.command('get', short_help="""GetBackupTarget enables you to return information about a specific backup target that you have created. """, cls=SolidFireCommand)
+@cli.command('modify', short_help="""ModifyBackupTarget enables you to change attributes of a backup target. """, cls=SolidFireCommand)
 @click.option('--backuptargetid',
               type=int,
               required=True,
-              help="""The unique identifier assigned to the backup target. """)
+              help="""The unique target ID for the target to modify. """)
+@click.option('--name',
+              type=str,
+              required=False,
+              help="""The new name for the backup target. """)
+@click.option('--attributes',
+              type=str,
+              required=False,
+              help="""List of name-value pairs in JSON object format.  Has the following subparameters: """)
 @pass_context
-def get(ctx,
+def modify(ctx,
            # Mandatory main parameter
-           backuptargetid):
-    """GetBackupTarget enables you to return information about a specific backup target that you have created."""
+           backuptargetid,
+           # Optional main parameter
+           name = None,
+           # Optional main parameter
+           attributes = None):
+    """ModifyBackupTarget enables you to change attributes of a backup target."""
 
     cli_utils.establish_connection(ctx)
     
     
+    
 
-    ctx.logger.info("""backuptargetid = """+str(backuptargetid)+""";"""+"")
+    kwargsDict = None
+
+    if(attributes is not None):
+        try:
+            kwargsDict = simplejson.loads(attributes)
+        except Exception as e:
+            ctx.logger.error(e.__str__())
+            exit(1)
+    
+
+    ctx.logger.info("""backuptargetid = """+str(backuptargetid)+""";"""+"""name = """+str(name)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
     try:
-        _GetBackupTargetResult = ctx.element.get_backup_target(backup_target_id=backuptargetid)
+        _ModifyBackupTargetResult = ctx.element.modify_backup_target(backup_target_id=backuptargetid, name=name, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -211,8 +211,8 @@ def get(ctx,
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetBackupTargetResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_ModifyBackupTargetResult), indent=4))
         return
     else:
-        cli_utils.print_result(_GetBackupTargetResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_ModifyBackupTargetResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

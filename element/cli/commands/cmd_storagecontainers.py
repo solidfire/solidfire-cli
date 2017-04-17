@@ -24,53 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """modifystoragecontainer list getstoragecontainerefficiency createstoragecontainer delete """
-
-@cli.command('modifystoragecontainer', short_help="""ModifyStorageContainer enables you to make changes to an existing virtual volume storage container. """, cls=SolidFireCommand)
-@click.option('--storagecontainerid',
-              type=str,
-              required=True,
-              help="""The unique ID of the virtual volume storage container to modify. """)
-@click.option('--initiatorsecret',
-              type=str,
-              required=False,
-              help="""The new secret for CHAP authentication for the initiator. """)
-@click.option('--targetsecret',
-              type=str,
-              required=False,
-              help="""The new secret for CHAP authentication for the target. """)
-@pass_context
-def modifystoragecontainer(ctx,
-           # Mandatory main parameter
-           storagecontainerid,
-           # Optional main parameter
-           initiatorsecret = None,
-           # Optional main parameter
-           targetsecret = None):
-    """ModifyStorageContainer enables you to make changes to an existing virtual volume storage container."""
-
-    cli_utils.establish_connection(ctx)
-    
-    
-    
-    
-
-    ctx.logger.info("""storagecontainerid = """+str(storagecontainerid)+""";"""+"""initiatorsecret = """+str(initiatorsecret)+""";"""+"""targetsecret = """+str(targetsecret)+""";"""+"")
-    try:
-        _ModifyStorageContainerResult = ctx.element.modify_storage_container(storage_container_id=storagecontainerid, initiator_secret=initiatorsecret, target_secret=targetsecret)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ModifyStorageContainerResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_ModifyStorageContainerResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
+    """list getstoragecontainerefficiency createstoragecontainer delete modifystoragecontainer """
 
 @cli.command('list', short_help="""ListStorageContainers enables you to retrieve information about all virtual volume storage containers known to the system. """, cls=SolidFireCommand)
 @click.option('--storagecontainerids',
@@ -223,4 +177,50 @@ def delete(ctx,
         return
     else:
         cli_utils.print_result(_DeleteStorageContainerResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('modifystoragecontainer', short_help="""ModifyStorageContainer enables you to make changes to an existing virtual volume storage container. """, cls=SolidFireCommand)
+@click.option('--storagecontainerid',
+              type=str,
+              required=True,
+              help="""The unique ID of the virtual volume storage container to modify. """)
+@click.option('--initiatorsecret',
+              type=str,
+              required=False,
+              help="""The new secret for CHAP authentication for the initiator. """)
+@click.option('--targetsecret',
+              type=str,
+              required=False,
+              help="""The new secret for CHAP authentication for the target. """)
+@pass_context
+def modifystoragecontainer(ctx,
+           # Mandatory main parameter
+           storagecontainerid,
+           # Optional main parameter
+           initiatorsecret = None,
+           # Optional main parameter
+           targetsecret = None):
+    """ModifyStorageContainer enables you to make changes to an existing virtual volume storage container."""
+
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+    
+
+    ctx.logger.info("""storagecontainerid = """+str(storagecontainerid)+""";"""+"""initiatorsecret = """+str(initiatorsecret)+""";"""+"""targetsecret = """+str(targetsecret)+""";"""+"")
+    try:
+        _ModifyStorageContainerResult = ctx.element.modify_storage_container(storage_container_id=storagecontainerid, initiator_secret=initiatorsecret, target_secret=targetsecret)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ModifyStorageContainerResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ModifyStorageContainerResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

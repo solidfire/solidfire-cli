@@ -24,58 +24,29 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """modifyhost gettaskupdate unbindallfromhost modifymetadata modifyvasaproviderinfo copydiffsto querymetadata listtasks create fastclone canceltask getallocatedbitmap getunsharedbitmap listhosts rollback getunsharedchunks clone modify preparevirtualsnapshot getfeaturestatus unbind createhost bind list getvasaproviderinfo snapshot listbindings getcount enablefeature delete """
+    """listhosts gettaskupdate canceltask modifyvasaproviderinfo getunsharedchunks getcount listbindings copydiffsto create modifymetadata unbind modify getfeaturestatus fastclone unbindallfromhost querymetadata createhost list snapshot enablefeature listtasks bind getallocatedbitmap clone rollback getunsharedbitmap delete modifyhost getvasaproviderinfo preparevirtualsnapshot """
 
-@cli.command('modifyhost', short_help="""ModifyVirtualVolumeHost changes an existing ESX host. """, cls=SolidFireCommand)
-@click.option('--virtualvolumehostid',
-              type=str,
-              required=True,
-              help="""The GUID of the ESX host. """)
-@click.option('--clusterid',
+@cli.command('listhosts', short_help="""ListVirtualVolumeHosts returns a list of all virtual volume hosts known to the cluster. A virtual volume host is a VMware ESX host that has initiated a session with the VASA API provider. """, cls=SolidFireCommand)
+@click.option('--virtualvolumehostids',
               type=str,
               required=False,
-              help="""The GUID of the ESX Cluster. """)
-@click.option('--visibleprotocolendpointids',
-              type=str,
-              required=False,
-              help="""A list of PEs the host is aware of. """)
-@click.option('--initiatornames',
-              type=str,
-              required=False,
-              help="""List of iSCSI initiator IQNs for the host. """)
-@click.option('--hostaddress',
-              type=str,
-              required=False,
-              help="""IP or DNS name for the host. """)
+              help="""A list of virtual volume host IDs for which to retrieve information. If you omit this parameter, the method returns information about all virtual volume hosts. """)
 @pass_context
-def modifyhost(ctx,
-           # Mandatory main parameter
-           virtualvolumehostid,
+def listhosts(ctx,
            # Optional main parameter
-           clusterid = None,
-           # Optional main parameter
-           visibleprotocolendpointids = None,
-           # Optional main parameter
-           initiatornames = None,
-           # Optional main parameter
-           hostaddress = None):
-    """ModifyVirtualVolumeHost changes an existing ESX host."""
+           virtualvolumehostids = None):
+    """ListVirtualVolumeHosts returns a list of all virtual volume hosts known to the cluster. A virtual volume host is a VMware ESX host"""
+    """that has initiated a session with the VASA API provider."""
 
     cli_utils.establish_connection(ctx)
     
-    
+
+    virtualvolumehostids = parser.parse_array(virtualvolumehostids)
     
 
-    visibleprotocolendpointids = parser.parse_array(visibleprotocolendpointids)
-    
-
-    initiatornames = parser.parse_array(initiatornames)
-    
-    
-
-    ctx.logger.info("""virtualvolumehostid = """+str(virtualvolumehostid)+""";"""+"""clusterid = """+str(clusterid)+""";"""+"""visibleprotocolendpointids = """+str(visibleprotocolendpointids)+""";"""+"""initiatornames = """+str(initiatornames)+""";"""+"""hostaddress = """+str(hostaddress)+""";"""+"")
+    ctx.logger.info("""virtualvolumehostids = """+str(virtualvolumehostids)+""";"""+"")
     try:
-        _VirtualVolumeNullResult = ctx.element.modify_virtual_volume_host(virtual_volume_host_id=virtualvolumehostid, cluster_id=clusterid, visible_protocol_endpoint_ids=visibleprotocolendpointids, initiator_names=initiatornames, host_address=hostaddress)
+        _ListVirtualVolumeHostsResult = ctx.element.list_virtual_volume_hosts(virtual_volume_host_ids=virtualvolumehostids)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -83,10 +54,10 @@ def modifyhost(ctx,
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_VirtualVolumeNullResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_ListVirtualVolumeHostsResult), indent=4))
         return
     else:
-        cli_utils.print_result(_VirtualVolumeNullResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_ListVirtualVolumeHostsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -122,49 +93,24 @@ def gettaskupdate(ctx,
 
 
 
-@cli.command('unbindallfromhost', short_help="""UnbindAllVirtualVolumesFromHost removes all VVol  Host binding. """, cls=SolidFireCommand)
-@pass_context
-def unbindallfromhost(ctx):
-    """UnbindAllVirtualVolumesFromHost removes all VVol  Host binding."""
-
-    cli_utils.establish_connection(ctx)
-    
-
-    ctx.logger.info("")
-    try:
-        _UnbindAllVirtualVolumesFromHostResult = ctx.element.unbind_all_virtual_volumes_from_host()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_UnbindAllVirtualVolumesFromHostResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_UnbindAllVirtualVolumesFromHostResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('modifymetadata', short_help="""ModifyVirtualVolumeMetadata is used to selectively modify the VVol metadata. """, cls=SolidFireCommand)
-@click.option('--virtualvolumeid',
+@cli.command('canceltask', short_help="""CancelVirtualVolumeTask attempts to cancel the VVol Async Task. """, cls=SolidFireCommand)
+@click.option('--virtualvolumetaskid',
               type=str,
               required=True,
-              help="""VvolVolumeID for the volume to be modified. """)
+              help="""The UUID of the VVol Task to cancel. """)
 @pass_context
-def modifymetadata(ctx,
+def canceltask(ctx,
            # Mandatory main parameter
-           virtualvolumeid):
-    """ModifyVirtualVolumeMetadata is used to selectively modify the VVol metadata."""
+           virtualvolumetaskid):
+    """CancelVirtualVolumeTask attempts to cancel the VVol Async Task."""
 
     cli_utils.establish_connection(ctx)
     
     
 
-    ctx.logger.info("""virtualvolumeid = """+str(virtualvolumeid)+""";"""+"")
+    ctx.logger.info("""virtualvolumetaskid = """+str(virtualvolumetaskid)+""";"""+"")
     try:
-        _VirtualVolumeNullResult = ctx.element.modify_virtual_volume_metadata(virtual_volume_id=virtualvolumeid)
+        _VirtualVolumeNullResult = ctx.element.cancel_virtual_volume_task(virtual_volume_task_id=virtualvolumetaskid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -218,6 +164,129 @@ def modifyvasaproviderinfo(ctx,
 
 
 
+@cli.command('getunsharedchunks', short_help="""GetVirtualVolumeAllocatedBitmap scans a VVol segment and returns the number of  chunks not shared between two volumes. This call will return results in less  than 30 seconds. If the specified VVol and the base VVil are not related, an  error is thrown. If the offset/length combination is invalid or out fo range  an error is thrown. """, cls=SolidFireCommand)
+@click.option('--virtualvolumeid',
+              type=str,
+              required=True,
+              help="""The ID of the Virtual Volume. """)
+@click.option('--basevirtualvolumeid',
+              type=str,
+              required=True,
+              help="""The ID of the Virtual Volume to compare against. """)
+@click.option('--segmentstart',
+              type=int,
+              required=True,
+              help="""Start Byte offset. """)
+@click.option('--segmentlength',
+              type=int,
+              required=True,
+              help="""Length of the scan segment in bytes. """)
+@click.option('--chunksize',
+              type=int,
+              required=True,
+              help="""Number of bytes represented by one bit in the bitmap. """)
+@pass_context
+def getunsharedchunks(ctx,
+           # Mandatory main parameter
+           virtualvolumeid,
+           # Mandatory main parameter
+           basevirtualvolumeid,
+           # Mandatory main parameter
+           segmentstart,
+           # Mandatory main parameter
+           segmentlength,
+           # Mandatory main parameter
+           chunksize):
+    """GetVirtualVolumeAllocatedBitmap scans a VVol segment and returns the number of """
+    """chunks not shared between two volumes. This call will return results in less """
+    """than 30 seconds. If the specified VVol and the base VVil are not related, an """
+    """error is thrown. If the offset/length combination is invalid or out fo range """
+    """an error is thrown."""
+
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+    
+    
+    
+
+    ctx.logger.info("""virtualvolumeid = """+str(virtualvolumeid)+""";"""+"""basevirtualvolumeid = """+str(basevirtualvolumeid)+""";"""+"""segmentstart = """+str(segmentstart)+""";"""+"""segmentlength = """+str(segmentlength)+""";"""+"""chunksize = """+str(chunksize)+""";"""+"")
+    try:
+        _VirtualVolumeUnsharedChunkResult = ctx.element.get_virtual_volume_unshared_chunks(virtual_volume_id=virtualvolumeid, base_virtual_volume_id=basevirtualvolumeid, segment_start=segmentstart, segment_length=segmentlength, chunk_size=chunksize)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_VirtualVolumeUnsharedChunkResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_VirtualVolumeUnsharedChunkResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getcount', short_help="""Enables retrieval of the number of virtual volumes currently in the system. """, cls=SolidFireCommand)
+@pass_context
+def getcount(ctx):
+    """Enables retrieval of the number of virtual volumes currently in the system."""
+
+    cli_utils.establish_connection(ctx)
+    
+
+    ctx.logger.info("")
+    try:
+        _GetVirtualVolumeCountResult = ctx.element.get_virtual_volume_count()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetVirtualVolumeCountResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetVirtualVolumeCountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('listbindings', short_help="""ListVirtualVolumeBindings returns a list of all virtual volumes in the cluster that are bound to protocol endpoints. """, cls=SolidFireCommand)
+@click.option('--virtualvolumebindingids',
+              type=str,
+              required=False,
+              help="""A list of virtual volume binding IDs for which to retrieve information. If you omit this parameter, the method returns information about all virtual volume bindings. """)
+@pass_context
+def listbindings(ctx,
+           # Optional main parameter
+           virtualvolumebindingids = None):
+    """ListVirtualVolumeBindings returns a list of all virtual volumes in the cluster that are bound to protocol endpoints."""
+
+    cli_utils.establish_connection(ctx)
+    
+
+    virtualvolumebindingids = parser.parse_array(virtualvolumebindingids)
+    
+
+    ctx.logger.info("""virtualvolumebindingids = """+str(virtualvolumebindingids)+""";"""+"")
+    try:
+        _ListVirtualVolumeBindingsResult = ctx.element.list_virtual_volume_bindings(virtual_volume_binding_ids=virtualvolumebindingids)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListVirtualVolumeBindingsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListVirtualVolumeBindingsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
 @cli.command('copydiffsto', short_help="""CopyDiffsToVirtualVolume is a three-way merge function. """, cls=SolidFireCommand)
 @click.option('--virtualvolumeid',
               type=str,
@@ -261,65 +330,6 @@ def copydiffsto(ctx,
         return
     else:
         cli_utils.print_result(_VirtualVolumeAsyncResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('querymetadata', short_help="""QueryVirtualVolumeMetadata returns a list of VVols matching a metadata query. """, cls=SolidFireCommand)
-@pass_context
-def querymetadata(ctx):
-    """QueryVirtualVolumeMetadata returns a list of VVols matching a metadata query."""
-
-    cli_utils.establish_connection(ctx)
-    
-
-    ctx.logger.info("")
-    try:
-        _QueryVirtualVolumeMetadataResult = ctx.element.query_virtual_volume_metadata()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_QueryVirtualVolumeMetadataResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_QueryVirtualVolumeMetadataResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('listtasks', short_help="""ListVirtualVolumeTasks returns a list of virtual volume tasks in the system. """, cls=SolidFireCommand)
-@click.option('--virtualvolumetaskids',
-              type=str,
-              required=False,
-              help="""A list of virtual volume task IDs for which to retrieve information. If you omit this parameter, the method returns information about all virtual volume tasks. """)
-@pass_context
-def listtasks(ctx,
-           # Optional main parameter
-           virtualvolumetaskids = None):
-    """ListVirtualVolumeTasks returns a list of virtual volume tasks in the system."""
-
-    cli_utils.establish_connection(ctx)
-    
-
-    virtualvolumetaskids = parser.parse_array(virtualvolumetaskids)
-    
-
-    ctx.logger.info("""virtualvolumetaskids = """+str(virtualvolumetaskids)+""";"""+"")
-    try:
-        _ListVirtualVolumeTasksResult = ctx.element.list_virtual_volume_tasks(virtual_volume_task_ids=virtualvolumetaskids)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ListVirtualVolumeTasksResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_ListVirtualVolumeTasksResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -439,109 +449,24 @@ def create(ctx,
 
 
 
-@cli.command('fastclone', short_help="""FastCloneVirtualVolume is used to execute a VMware Virtual Volume fast clone. """, cls=SolidFireCommand)
+@cli.command('modifymetadata', short_help="""ModifyVirtualVolumeMetadata is used to selectively modify the VVol metadata. """, cls=SolidFireCommand)
 @click.option('--virtualvolumeid',
               type=str,
               required=True,
-              help="""The ID of the Virtual Volume to clone. """)
-@click.option('--name',
-              type=str,
-              required=False,
-              help="""The name for the newly-created volume. """)
-
-@click.option('--qosminiops',
-              type=int,
-              required=False,
-              help="""Desired minimum 4KB IOPS to guarantee. The allowed IOPS will only drop below this level if all volumes have been capped at their minimum IOPS value and there is still insufficient performance capacity. """)
-
-@click.option('--qosmaxiops',
-              type=int,
-              required=False,
-              help="""Desired maximum 4KB IOPS allowed over an extended period of time. """)
-
-@click.option('--qosburstiops',
-              type=int,
-              required=False,
-              help="""Maximum "peak" 4KB IOPS allowed for short periods of time. Allows for bursts of I/O activity over the normal max IOPS value. """)
-
-@click.option('--qosbursttime',
-              type=int,
-              required=False,
-              help="""The length of time burst IOPS is allowed. The value returned is represented in time units of seconds. Note: this value is calculated by the system based on IOPS set for QoS. """)
+              help="""VvolVolumeID for the volume to be modified. """)
 @pass_context
-def fastclone(ctx,
+def modifymetadata(ctx,
            # Mandatory main parameter
-           virtualvolumeid,
-           # Optional main parameter
-           name = None,
-           # Optional subparameter of optional main parameter.
-           qosminiops = None,
-           # Optional subparameter of optional main parameter.
-           qosmaxiops = None,
-           # Optional subparameter of optional main parameter.
-           qosburstiops = None,
-           # Optional subparameter of optional main parameter.
-           qosbursttime = None):
-    """FastCloneVirtualVolume is used to execute a VMware Virtual Volume fast clone."""
-
-    cli_utils.establish_connection(ctx)
-    
-    
-    
-
-    qos = None
-    if(qosminiops is not None or
-       qosmaxiops is not None or
-       qosburstiops is not None or
-       qosbursttime is not None or
-       False):
-        if not ( True):
-            ctx.logger.error("""If you choose to provide qos, you must include all of the following parameters:
-""")
-        kwargsDict = dict()
-        kwargsDict["min_iops"] = qosminiops
-        kwargsDict["max_iops"] = qosmaxiops
-        kwargsDict["burst_iops"] = qosburstiops
-        kwargsDict["burst_time"] = qosbursttime
-
-        qos = QoS(**kwargsDict)
-    
-
-    ctx.logger.info("""virtualvolumeid = """+str(virtualvolumeid)+""";"""+"""name = """+str(name)+""";"""+"""qos = """+str(qos)+""";"""+"")
-    try:
-        _VirtualVolumeAsyncResult = ctx.element.fast_clone_virtual_volume(virtual_volume_id=virtualvolumeid, name=name, qos=qos)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_VirtualVolumeAsyncResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_VirtualVolumeAsyncResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('canceltask', short_help="""CancelVirtualVolumeTask attempts to cancel the VVol Async Task. """, cls=SolidFireCommand)
-@click.option('--virtualvolumetaskid',
-              type=str,
-              required=True,
-              help="""The UUID of the VVol Task to cancel. """)
-@pass_context
-def canceltask(ctx,
-           # Mandatory main parameter
-           virtualvolumetaskid):
-    """CancelVirtualVolumeTask attempts to cancel the VVol Async Task."""
+           virtualvolumeid):
+    """ModifyVirtualVolumeMetadata is used to selectively modify the VVol metadata."""
 
     cli_utils.establish_connection(ctx)
     
     
 
-    ctx.logger.info("""virtualvolumetaskid = """+str(virtualvolumetaskid)+""";"""+"")
+    ctx.logger.info("""virtualvolumeid = """+str(virtualvolumeid)+""";"""+"")
     try:
-        _VirtualVolumeNullResult = ctx.element.cancel_virtual_volume_task(virtual_volume_task_id=virtualvolumetaskid)
+        _VirtualVolumeNullResult = ctx.element.modify_virtual_volume_metadata(virtual_volume_id=virtualvolumeid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -556,47 +481,24 @@ def canceltask(ctx,
 
 
 
-@cli.command('getallocatedbitmap', short_help="""GetVirtualVolumeAllocatedBitmap returns a b64-encoded block of data  representing a bitmap where non-zero bits indicate the allocation of a  segment (LBA range) of the volume. """, cls=SolidFireCommand)
-@click.option('--virtualvolumeid',
+@cli.command('unbind', short_help="""UnbindGetVirtualVolume removes the VVol  Host binding. """, cls=SolidFireCommand)
+@click.option('--unbindcontext',
               type=str,
               required=True,
-              help="""The ID of the Virtual Volume. """)
-@click.option('--segmentstart',
-              type=int,
-              required=True,
-              help="""Byte offset. """)
-@click.option('--segmentlength',
-              type=int,
-              required=True,
-              help="""Byte length adjusted to end on a chunk boundary. """)
-@click.option('--chunksize',
-              type=int,
-              required=True,
-              help="""Number of bytes represented by one bit in the bitmap. """)
+              help="""Normal, Start, or End? """)
 @pass_context
-def getallocatedbitmap(ctx,
+def unbind(ctx,
            # Mandatory main parameter
-           virtualvolumeid,
-           # Mandatory main parameter
-           segmentstart,
-           # Mandatory main parameter
-           segmentlength,
-           # Mandatory main parameter
-           chunksize):
-    """GetVirtualVolumeAllocatedBitmap returns a b64-encoded block of data """
-    """representing a bitmap where non-zero bits indicate the allocation of a """
-    """segment (LBA range) of the volume."""
+           unbindcontext):
+    """UnbindGetVirtualVolume removes the VVol  Host binding."""
 
     cli_utils.establish_connection(ctx)
     
     
-    
-    
-    
 
-    ctx.logger.info("""virtualvolumeid = """+str(virtualvolumeid)+""";"""+"""segmentstart = """+str(segmentstart)+""";"""+"""segmentlength = """+str(segmentlength)+""";"""+"""chunksize = """+str(chunksize)+""";"""+"")
+    ctx.logger.info("""unbindcontext = """+str(unbindcontext)+""";"""+"")
     try:
-        _VirtualVolumeBitmapResult = ctx.element.get_virtual_volume_allocated_bitmap(virtual_volume_id=virtualvolumeid, segment_start=segmentstart, segment_length=segmentlength, chunk_size=chunksize)
+        _VirtualVolumeUnbindResult = ctx.element.unbind_virtual_volumes(unbind_context=unbindcontext)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -604,295 +506,10 @@ def getallocatedbitmap(ctx,
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_VirtualVolumeBitmapResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_VirtualVolumeUnbindResult), indent=4))
         return
     else:
-        cli_utils.print_result(_VirtualVolumeBitmapResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getunsharedbitmap', short_help="""GetVirtualVolumeAllocatedBitmap returns a b64-encoded block of data  representing a bitmap where non-zero bits indicate that data is not the same  between two volumes for a common segment (LBA range) of the volumes. """, cls=SolidFireCommand)
-@click.option('--virtualvolumeid',
-              type=str,
-              required=True,
-              help="""The ID of the Virtual Volume. """)
-@click.option('--basevirtualvolumeid',
-              type=str,
-              required=True,
-              help="""The ID of the Virtual Volume to compare against. """)
-@click.option('--segmentstart',
-              type=int,
-              required=True,
-              help="""Byte offset. """)
-@click.option('--segmentlength',
-              type=int,
-              required=True,
-              help="""Byte length adjusted to end on a chunk boundary. """)
-@click.option('--chunksize',
-              type=int,
-              required=True,
-              help="""Number of bytes represented by one bit in the bitmap. """)
-@pass_context
-def getunsharedbitmap(ctx,
-           # Mandatory main parameter
-           virtualvolumeid,
-           # Mandatory main parameter
-           basevirtualvolumeid,
-           # Mandatory main parameter
-           segmentstart,
-           # Mandatory main parameter
-           segmentlength,
-           # Mandatory main parameter
-           chunksize):
-    """GetVirtualVolumeAllocatedBitmap returns a b64-encoded block of data """
-    """representing a bitmap where non-zero bits indicate that data is not the same """
-    """between two volumes for a common segment (LBA range) of the volumes."""
-
-    cli_utils.establish_connection(ctx)
-    
-    
-    
-    
-    
-    
-
-    ctx.logger.info("""virtualvolumeid = """+str(virtualvolumeid)+""";"""+"""basevirtualvolumeid = """+str(basevirtualvolumeid)+""";"""+"""segmentstart = """+str(segmentstart)+""";"""+"""segmentlength = """+str(segmentlength)+""";"""+"""chunksize = """+str(chunksize)+""";"""+"")
-    try:
-        _VirtualVolumeBitmapResult = ctx.element.get_virtual_volume_unshared_bitmap(virtual_volume_id=virtualvolumeid, base_virtual_volume_id=basevirtualvolumeid, segment_start=segmentstart, segment_length=segmentlength, chunk_size=chunksize)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_VirtualVolumeBitmapResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_VirtualVolumeBitmapResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('listhosts', short_help="""ListVirtualVolumeHosts returns a list of all virtual volume hosts known to the cluster. A virtual volume host is a VMware ESX host that has initiated a session with the VASA API provider. """, cls=SolidFireCommand)
-@click.option('--virtualvolumehostids',
-              type=str,
-              required=False,
-              help="""A list of virtual volume host IDs for which to retrieve information. If you omit this parameter, the method returns information about all virtual volume hosts. """)
-@pass_context
-def listhosts(ctx,
-           # Optional main parameter
-           virtualvolumehostids = None):
-    """ListVirtualVolumeHosts returns a list of all virtual volume hosts known to the cluster. A virtual volume host is a VMware ESX host"""
-    """that has initiated a session with the VASA API provider."""
-
-    cli_utils.establish_connection(ctx)
-    
-
-    virtualvolumehostids = parser.parse_array(virtualvolumehostids)
-    
-
-    ctx.logger.info("""virtualvolumehostids = """+str(virtualvolumehostids)+""";"""+"")
-    try:
-        _ListVirtualVolumeHostsResult = ctx.element.list_virtual_volume_hosts(virtual_volume_host_ids=virtualvolumehostids)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ListVirtualVolumeHostsResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_ListVirtualVolumeHostsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('rollback', short_help="""RollbackVirtualVolume is used to restore a VMware Virtual Volume snapshot. """, cls=SolidFireCommand)
-@click.option('--srcvirtualvolumeid',
-              type=str,
-              required=True,
-              help="""The ID of the Virtual Volume snapshot. """)
-@click.option('--dstvirtualvolumeid',
-              type=str,
-              required=True,
-              help="""The ID of the Virtual Volume to restore to. """)
-@pass_context
-def rollback(ctx,
-           # Mandatory main parameter
-           srcvirtualvolumeid,
-           # Mandatory main parameter
-           dstvirtualvolumeid):
-    """RollbackVirtualVolume is used to restore a VMware Virtual Volume snapshot."""
-
-    cli_utils.establish_connection(ctx)
-    
-    
-    
-
-    ctx.logger.info("""srcvirtualvolumeid = """+str(srcvirtualvolumeid)+""";"""+"""dstvirtualvolumeid = """+str(dstvirtualvolumeid)+""";"""+"")
-    try:
-        _VirtualVolumeAsyncResult = ctx.element.rollback_virtual_volume(src_virtual_volume_id=srcvirtualvolumeid, dst_virtual_volume_id=dstvirtualvolumeid)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_VirtualVolumeAsyncResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_VirtualVolumeAsyncResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getunsharedchunks', short_help="""GetVirtualVolumeAllocatedBitmap scans a VVol segment and returns the number of  chunks not shared between two volumes. This call will return results in less  than 30 seconds. If the specified VVol and the base VVil are not related, an  error is thrown. If the offset/length combination is invalid or out fo range  an error is thrown. """, cls=SolidFireCommand)
-@click.option('--virtualvolumeid',
-              type=str,
-              required=True,
-              help="""The ID of the Virtual Volume. """)
-@click.option('--basevirtualvolumeid',
-              type=str,
-              required=True,
-              help="""The ID of the Virtual Volume to compare against. """)
-@click.option('--segmentstart',
-              type=int,
-              required=True,
-              help="""Start Byte offset. """)
-@click.option('--segmentlength',
-              type=int,
-              required=True,
-              help="""Length of the scan segment in bytes. """)
-@click.option('--chunksize',
-              type=int,
-              required=True,
-              help="""Number of bytes represented by one bit in the bitmap. """)
-@pass_context
-def getunsharedchunks(ctx,
-           # Mandatory main parameter
-           virtualvolumeid,
-           # Mandatory main parameter
-           basevirtualvolumeid,
-           # Mandatory main parameter
-           segmentstart,
-           # Mandatory main parameter
-           segmentlength,
-           # Mandatory main parameter
-           chunksize):
-    """GetVirtualVolumeAllocatedBitmap scans a VVol segment and returns the number of """
-    """chunks not shared between two volumes. This call will return results in less """
-    """than 30 seconds. If the specified VVol and the base VVil are not related, an """
-    """error is thrown. If the offset/length combination is invalid or out fo range """
-    """an error is thrown."""
-
-    cli_utils.establish_connection(ctx)
-    
-    
-    
-    
-    
-    
-
-    ctx.logger.info("""virtualvolumeid = """+str(virtualvolumeid)+""";"""+"""basevirtualvolumeid = """+str(basevirtualvolumeid)+""";"""+"""segmentstart = """+str(segmentstart)+""";"""+"""segmentlength = """+str(segmentlength)+""";"""+"""chunksize = """+str(chunksize)+""";"""+"")
-    try:
-        _VirtualVolumeUnsharedChunkResult = ctx.element.get_virtual_volume_unshared_chunks(virtual_volume_id=virtualvolumeid, base_virtual_volume_id=basevirtualvolumeid, segment_start=segmentstart, segment_length=segmentlength, chunk_size=chunksize)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_VirtualVolumeUnsharedChunkResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_VirtualVolumeUnsharedChunkResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('clone', short_help="""CloneVirtualVolume is used to execute a VMware Virtual Volume clone. """, cls=SolidFireCommand)
-@click.option('--virtualvolumeid',
-              type=str,
-              required=True,
-              help="""The ID of the Virtual Volume to clone. """)
-@click.option('--name',
-              type=str,
-              required=False,
-              help="""The name for the newly-created volume. """)
-
-@click.option('--qosminiops',
-              type=int,
-              required=False,
-              help="""Desired minimum 4KB IOPS to guarantee. The allowed IOPS will only drop below this level if all volumes have been capped at their minimum IOPS value and there is still insufficient performance capacity. """)
-
-@click.option('--qosmaxiops',
-              type=int,
-              required=False,
-              help="""Desired maximum 4KB IOPS allowed over an extended period of time. """)
-
-@click.option('--qosburstiops',
-              type=int,
-              required=False,
-              help="""Maximum "peak" 4KB IOPS allowed for short periods of time. Allows for bursts of I/O activity over the normal max IOPS value. """)
-
-@click.option('--qosbursttime',
-              type=int,
-              required=False,
-              help="""The length of time burst IOPS is allowed. The value returned is represented in time units of seconds. Note: this value is calculated by the system based on IOPS set for QoS. """)
-@pass_context
-def clone(ctx,
-           # Mandatory main parameter
-           virtualvolumeid,
-           # Optional main parameter
-           name = None,
-           # Optional subparameter of optional main parameter.
-           qosminiops = None,
-           # Optional subparameter of optional main parameter.
-           qosmaxiops = None,
-           # Optional subparameter of optional main parameter.
-           qosburstiops = None,
-           # Optional subparameter of optional main parameter.
-           qosbursttime = None):
-    """CloneVirtualVolume is used to execute a VMware Virtual Volume clone."""
-
-    cli_utils.establish_connection(ctx)
-    
-    
-    
-
-    qos = None
-    if(qosminiops is not None or
-       qosmaxiops is not None or
-       qosburstiops is not None or
-       qosbursttime is not None or
-       False):
-        if not ( True):
-            ctx.logger.error("""If you choose to provide qos, you must include all of the following parameters:
-""")
-        kwargsDict = dict()
-        kwargsDict["min_iops"] = qosminiops
-        kwargsDict["max_iops"] = qosmaxiops
-        kwargsDict["burst_iops"] = qosburstiops
-        kwargsDict["burst_time"] = qosbursttime
-
-        qos = QoS(**kwargsDict)
-    
-
-    ctx.logger.info("""virtualvolumeid = """+str(virtualvolumeid)+""";"""+"""name = """+str(name)+""";"""+"""qos = """+str(qos)+""";"""+"")
-    try:
-        _VirtualVolumeAsyncResult = ctx.element.clone_virtual_volume(virtual_volume_id=virtualvolumeid, name=name, qos=qos)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_VirtualVolumeAsyncResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_VirtualVolumeAsyncResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_VirtualVolumeUnbindResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -981,52 +598,6 @@ def modify(ctx,
 
 
 
-@cli.command('preparevirtualsnapshot', short_help="""PrepareVirtualSnapshot is used to set up VMware Virtual Volume snapshot. """, cls=SolidFireCommand)
-@click.option('--virtualvolumeid',
-              type=str,
-              required=True,
-              help="""The ID of the Virtual Volume to clone. """)
-@click.option('--name',
-              type=str,
-              required=False,
-              help="""The name for the newly-created volume. """)
-@click.option('--writablesnapshot',
-              type=bool,
-              required=False,
-              help="""Will the snapshot be writable? """)
-@pass_context
-def preparevirtualsnapshot(ctx,
-           # Mandatory main parameter
-           virtualvolumeid,
-           # Optional main parameter
-           name = None,
-           # Optional main parameter
-           writablesnapshot = None):
-    """PrepareVirtualSnapshot is used to set up VMware Virtual Volume snapshot."""
-
-    cli_utils.establish_connection(ctx)
-    
-    
-    
-    
-
-    ctx.logger.info("""virtualvolumeid = """+str(virtualvolumeid)+""";"""+"""name = """+str(name)+""";"""+"""writablesnapshot = """+str(writablesnapshot)+""";"""+"")
-    try:
-        _PrepareVirtualSnapshotResult = ctx.element.prepare_virtual_snapshot(virtual_volume_id=virtualvolumeid, name=name, writable_snapshot=writablesnapshot)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_PrepareVirtualSnapshotResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_PrepareVirtualSnapshotResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
 @cli.command('getfeaturestatus', short_help="""GetFeatureStatus enables you to retrieve the status of a cluster feature. """, cls=SolidFireCommand)
 @click.option('--feature',
               type=str,
@@ -1059,24 +630,77 @@ def getfeaturestatus(ctx,
 
 
 
-@cli.command('unbind', short_help="""UnbindGetVirtualVolume removes the VVol  Host binding. """, cls=SolidFireCommand)
-@click.option('--unbindcontext',
+@cli.command('fastclone', short_help="""FastCloneVirtualVolume is used to execute a VMware Virtual Volume fast clone. """, cls=SolidFireCommand)
+@click.option('--virtualvolumeid',
               type=str,
               required=True,
-              help="""Normal, Start, or End? """)
+              help="""The ID of the Virtual Volume to clone. """)
+@click.option('--name',
+              type=str,
+              required=False,
+              help="""The name for the newly-created volume. """)
+
+@click.option('--qosminiops',
+              type=int,
+              required=False,
+              help="""Desired minimum 4KB IOPS to guarantee. The allowed IOPS will only drop below this level if all volumes have been capped at their minimum IOPS value and there is still insufficient performance capacity. """)
+
+@click.option('--qosmaxiops',
+              type=int,
+              required=False,
+              help="""Desired maximum 4KB IOPS allowed over an extended period of time. """)
+
+@click.option('--qosburstiops',
+              type=int,
+              required=False,
+              help="""Maximum "peak" 4KB IOPS allowed for short periods of time. Allows for bursts of I/O activity over the normal max IOPS value. """)
+
+@click.option('--qosbursttime',
+              type=int,
+              required=False,
+              help="""The length of time burst IOPS is allowed. The value returned is represented in time units of seconds. Note: this value is calculated by the system based on IOPS set for QoS. """)
 @pass_context
-def unbind(ctx,
+def fastclone(ctx,
            # Mandatory main parameter
-           unbindcontext):
-    """UnbindGetVirtualVolume removes the VVol  Host binding."""
+           virtualvolumeid,
+           # Optional main parameter
+           name = None,
+           # Optional subparameter of optional main parameter.
+           qosminiops = None,
+           # Optional subparameter of optional main parameter.
+           qosmaxiops = None,
+           # Optional subparameter of optional main parameter.
+           qosburstiops = None,
+           # Optional subparameter of optional main parameter.
+           qosbursttime = None):
+    """FastCloneVirtualVolume is used to execute a VMware Virtual Volume fast clone."""
 
     cli_utils.establish_connection(ctx)
     
     
+    
 
-    ctx.logger.info("""unbindcontext = """+str(unbindcontext)+""";"""+"")
+    qos = None
+    if(qosminiops is not None or
+       qosmaxiops is not None or
+       qosburstiops is not None or
+       qosbursttime is not None or
+       False):
+        if not ( True):
+            ctx.logger.error("""If you choose to provide qos, you must include all of the following parameters:
+""")
+        kwargsDict = dict()
+        kwargsDict["min_iops"] = qosminiops
+        kwargsDict["max_iops"] = qosmaxiops
+        kwargsDict["burst_iops"] = qosburstiops
+        kwargsDict["burst_time"] = qosbursttime
+
+        qos = QoS(**kwargsDict)
+    
+
+    ctx.logger.info("""virtualvolumeid = """+str(virtualvolumeid)+""";"""+"""name = """+str(name)+""";"""+"""qos = """+str(qos)+""";"""+"")
     try:
-        _VirtualVolumeUnbindResult = ctx.element.unbind_virtual_volumes(unbind_context=unbindcontext)
+        _VirtualVolumeAsyncResult = ctx.element.fast_clone_virtual_volume(virtual_volume_id=virtualvolumeid, name=name, qos=qos)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1084,10 +708,60 @@ def unbind(ctx,
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_VirtualVolumeUnbindResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_VirtualVolumeAsyncResult), indent=4))
         return
     else:
-        cli_utils.print_result(_VirtualVolumeUnbindResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_VirtualVolumeAsyncResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('unbindallfromhost', short_help="""UnbindAllVirtualVolumesFromHost removes all VVol  Host binding. """, cls=SolidFireCommand)
+@pass_context
+def unbindallfromhost(ctx):
+    """UnbindAllVirtualVolumesFromHost removes all VVol  Host binding."""
+
+    cli_utils.establish_connection(ctx)
+    
+
+    ctx.logger.info("")
+    try:
+        _UnbindAllVirtualVolumesFromHostResult = ctx.element.unbind_all_virtual_volumes_from_host()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_UnbindAllVirtualVolumesFromHostResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_UnbindAllVirtualVolumesFromHostResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('querymetadata', short_help="""QueryVirtualVolumeMetadata returns a list of VVols matching a metadata query. """, cls=SolidFireCommand)
+@pass_context
+def querymetadata(ctx):
+    """QueryVirtualVolumeMetadata returns a list of VVols matching a metadata query."""
+
+    cli_utils.establish_connection(ctx)
+    
+
+    ctx.logger.info("")
+    try:
+        _QueryVirtualVolumeMetadataResult = ctx.element.query_virtual_volume_metadata()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_QueryVirtualVolumeMetadataResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_QueryVirtualVolumeMetadataResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1143,54 +817,6 @@ def createhost(ctx,
         return
     else:
         cli_utils.print_result(_VirtualVolumeNullResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('bind', short_help="""BindVirtualVolume binds a VVol with a Host. """, cls=SolidFireCommand)
-@click.option('--virtualvolumeids',
-              type=str,
-              required=True,
-              help="""The UUID of the VVol to bind. """)
-@click.option('--virtualvolumehostid',
-              type=str,
-              required=True,
-              help="""The UUID of the ESX host. """)
-@click.option('--bindcontext',
-              type=str,
-              required=True,
-              help="""Normal or Start? """)
-@pass_context
-def bind(ctx,
-           # Mandatory main parameter
-           virtualvolumeids,
-           # Mandatory main parameter
-           virtualvolumehostid,
-           # Mandatory main parameter
-           bindcontext):
-    """BindVirtualVolume binds a VVol with a Host."""
-
-    cli_utils.establish_connection(ctx)
-    
-
-    virtualvolumeids = parser.parse_array(virtualvolumeids)
-    
-    
-    
-
-    ctx.logger.info("""virtualvolumeids = """+str(virtualvolumeids)+""";"""+"""virtualvolumehostid = """+str(virtualvolumehostid)+""";"""+"""bindcontext = """+str(bindcontext)+""";"""+"")
-    try:
-        _VirtualVolumeBindingListResult = ctx.element.bind_virtual_volumes(virtual_volume_ids=virtualvolumeids, virtual_volume_host_id=virtualvolumehostid, bind_context=bindcontext)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_VirtualVolumeBindingListResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_VirtualVolumeBindingListResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1257,31 +883,6 @@ def list(ctx,
 
 
 
-@cli.command('getvasaproviderinfo', short_help="""Gets the Vasa Provider info """, cls=SolidFireCommand)
-@pass_context
-def getvasaproviderinfo(ctx):
-    """Gets the Vasa Provider info"""
-
-    cli_utils.establish_connection(ctx)
-    
-
-    ctx.logger.info("")
-    try:
-        _VasaProviderInfoResult = ctx.element.get_vasa_provider_info()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_VasaProviderInfoResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_VasaProviderInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
 @cli.command('snapshot', short_help="""SnapshotVirtualVolume is used to take a VMware Virtual Volume snapshot. """, cls=SolidFireCommand)
 @click.option('--virtualvolumeid',
               type=str,
@@ -1321,65 +922,6 @@ def snapshot(ctx,
 
 
 
-@cli.command('listbindings', short_help="""ListVirtualVolumeBindings returns a list of all virtual volumes in the cluster that are bound to protocol endpoints. """, cls=SolidFireCommand)
-@click.option('--virtualvolumebindingids',
-              type=str,
-              required=False,
-              help="""A list of virtual volume binding IDs for which to retrieve information. If you omit this parameter, the method returns information about all virtual volume bindings. """)
-@pass_context
-def listbindings(ctx,
-           # Optional main parameter
-           virtualvolumebindingids = None):
-    """ListVirtualVolumeBindings returns a list of all virtual volumes in the cluster that are bound to protocol endpoints."""
-
-    cli_utils.establish_connection(ctx)
-    
-
-    virtualvolumebindingids = parser.parse_array(virtualvolumebindingids)
-    
-
-    ctx.logger.info("""virtualvolumebindingids = """+str(virtualvolumebindingids)+""";"""+"")
-    try:
-        _ListVirtualVolumeBindingsResult = ctx.element.list_virtual_volume_bindings(virtual_volume_binding_ids=virtualvolumebindingids)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ListVirtualVolumeBindingsResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_ListVirtualVolumeBindingsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getcount', short_help="""Enables retrieval of the number of virtual volumes currently in the system. """, cls=SolidFireCommand)
-@pass_context
-def getcount(ctx):
-    """Enables retrieval of the number of virtual volumes currently in the system."""
-
-    cli_utils.establish_connection(ctx)
-    
-
-    ctx.logger.info("")
-    try:
-        _GetVirtualVolumeCountResult = ctx.element.get_virtual_volume_count()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetVirtualVolumeCountResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_GetVirtualVolumeCountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
 @cli.command('enablefeature', short_help="""You can use EnableFeature to enable cluster features that are disabled by default. """, cls=SolidFireCommand)
 @click.option('--feature',
               type=str,
@@ -1409,6 +951,329 @@ def enablefeature(ctx,
         return
     else:
         cli_utils.print_result(_EnableFeatureResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('listtasks', short_help="""ListVirtualVolumeTasks returns a list of virtual volume tasks in the system. """, cls=SolidFireCommand)
+@click.option('--virtualvolumetaskids',
+              type=str,
+              required=False,
+              help="""A list of virtual volume task IDs for which to retrieve information. If you omit this parameter, the method returns information about all virtual volume tasks. """)
+@pass_context
+def listtasks(ctx,
+           # Optional main parameter
+           virtualvolumetaskids = None):
+    """ListVirtualVolumeTasks returns a list of virtual volume tasks in the system."""
+
+    cli_utils.establish_connection(ctx)
+    
+
+    virtualvolumetaskids = parser.parse_array(virtualvolumetaskids)
+    
+
+    ctx.logger.info("""virtualvolumetaskids = """+str(virtualvolumetaskids)+""";"""+"")
+    try:
+        _ListVirtualVolumeTasksResult = ctx.element.list_virtual_volume_tasks(virtual_volume_task_ids=virtualvolumetaskids)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListVirtualVolumeTasksResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListVirtualVolumeTasksResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('bind', short_help="""BindVirtualVolume binds a VVol with a Host. """, cls=SolidFireCommand)
+@click.option('--virtualvolumeids',
+              type=str,
+              required=True,
+              help="""The UUID of the VVol to bind. """)
+@click.option('--virtualvolumehostid',
+              type=str,
+              required=True,
+              help="""The UUID of the ESX host. """)
+@click.option('--bindcontext',
+              type=str,
+              required=True,
+              help="""Normal or Start? """)
+@pass_context
+def bind(ctx,
+           # Mandatory main parameter
+           virtualvolumeids,
+           # Mandatory main parameter
+           virtualvolumehostid,
+           # Mandatory main parameter
+           bindcontext):
+    """BindVirtualVolume binds a VVol with a Host."""
+
+    cli_utils.establish_connection(ctx)
+    
+
+    virtualvolumeids = parser.parse_array(virtualvolumeids)
+    
+    
+    
+
+    ctx.logger.info("""virtualvolumeids = """+str(virtualvolumeids)+""";"""+"""virtualvolumehostid = """+str(virtualvolumehostid)+""";"""+"""bindcontext = """+str(bindcontext)+""";"""+"")
+    try:
+        _VirtualVolumeBindingListResult = ctx.element.bind_virtual_volumes(virtual_volume_ids=virtualvolumeids, virtual_volume_host_id=virtualvolumehostid, bind_context=bindcontext)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_VirtualVolumeBindingListResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_VirtualVolumeBindingListResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getallocatedbitmap', short_help="""GetVirtualVolumeAllocatedBitmap returns a b64-encoded block of data  representing a bitmap where non-zero bits indicate the allocation of a  segment (LBA range) of the volume. """, cls=SolidFireCommand)
+@click.option('--virtualvolumeid',
+              type=str,
+              required=True,
+              help="""The ID of the Virtual Volume. """)
+@click.option('--segmentstart',
+              type=int,
+              required=True,
+              help="""Byte offset. """)
+@click.option('--segmentlength',
+              type=int,
+              required=True,
+              help="""Byte length adjusted to end on a chunk boundary. """)
+@click.option('--chunksize',
+              type=int,
+              required=True,
+              help="""Number of bytes represented by one bit in the bitmap. """)
+@pass_context
+def getallocatedbitmap(ctx,
+           # Mandatory main parameter
+           virtualvolumeid,
+           # Mandatory main parameter
+           segmentstart,
+           # Mandatory main parameter
+           segmentlength,
+           # Mandatory main parameter
+           chunksize):
+    """GetVirtualVolumeAllocatedBitmap returns a b64-encoded block of data """
+    """representing a bitmap where non-zero bits indicate the allocation of a """
+    """segment (LBA range) of the volume."""
+
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+    
+    
+
+    ctx.logger.info("""virtualvolumeid = """+str(virtualvolumeid)+""";"""+"""segmentstart = """+str(segmentstart)+""";"""+"""segmentlength = """+str(segmentlength)+""";"""+"""chunksize = """+str(chunksize)+""";"""+"")
+    try:
+        _VirtualVolumeBitmapResult = ctx.element.get_virtual_volume_allocated_bitmap(virtual_volume_id=virtualvolumeid, segment_start=segmentstart, segment_length=segmentlength, chunk_size=chunksize)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_VirtualVolumeBitmapResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_VirtualVolumeBitmapResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('clone', short_help="""CloneVirtualVolume is used to execute a VMware Virtual Volume clone. """, cls=SolidFireCommand)
+@click.option('--virtualvolumeid',
+              type=str,
+              required=True,
+              help="""The ID of the Virtual Volume to clone. """)
+@click.option('--name',
+              type=str,
+              required=False,
+              help="""The name for the newly-created volume. """)
+
+@click.option('--qosminiops',
+              type=int,
+              required=False,
+              help="""Desired minimum 4KB IOPS to guarantee. The allowed IOPS will only drop below this level if all volumes have been capped at their minimum IOPS value and there is still insufficient performance capacity. """)
+
+@click.option('--qosmaxiops',
+              type=int,
+              required=False,
+              help="""Desired maximum 4KB IOPS allowed over an extended period of time. """)
+
+@click.option('--qosburstiops',
+              type=int,
+              required=False,
+              help="""Maximum "peak" 4KB IOPS allowed for short periods of time. Allows for bursts of I/O activity over the normal max IOPS value. """)
+
+@click.option('--qosbursttime',
+              type=int,
+              required=False,
+              help="""The length of time burst IOPS is allowed. The value returned is represented in time units of seconds. Note: this value is calculated by the system based on IOPS set for QoS. """)
+@pass_context
+def clone(ctx,
+           # Mandatory main parameter
+           virtualvolumeid,
+           # Optional main parameter
+           name = None,
+           # Optional subparameter of optional main parameter.
+           qosminiops = None,
+           # Optional subparameter of optional main parameter.
+           qosmaxiops = None,
+           # Optional subparameter of optional main parameter.
+           qosburstiops = None,
+           # Optional subparameter of optional main parameter.
+           qosbursttime = None):
+    """CloneVirtualVolume is used to execute a VMware Virtual Volume clone."""
+
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+
+    qos = None
+    if(qosminiops is not None or
+       qosmaxiops is not None or
+       qosburstiops is not None or
+       qosbursttime is not None or
+       False):
+        if not ( True):
+            ctx.logger.error("""If you choose to provide qos, you must include all of the following parameters:
+""")
+        kwargsDict = dict()
+        kwargsDict["min_iops"] = qosminiops
+        kwargsDict["max_iops"] = qosmaxiops
+        kwargsDict["burst_iops"] = qosburstiops
+        kwargsDict["burst_time"] = qosbursttime
+
+        qos = QoS(**kwargsDict)
+    
+
+    ctx.logger.info("""virtualvolumeid = """+str(virtualvolumeid)+""";"""+"""name = """+str(name)+""";"""+"""qos = """+str(qos)+""";"""+"")
+    try:
+        _VirtualVolumeAsyncResult = ctx.element.clone_virtual_volume(virtual_volume_id=virtualvolumeid, name=name, qos=qos)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_VirtualVolumeAsyncResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_VirtualVolumeAsyncResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('rollback', short_help="""RollbackVirtualVolume is used to restore a VMware Virtual Volume snapshot. """, cls=SolidFireCommand)
+@click.option('--srcvirtualvolumeid',
+              type=str,
+              required=True,
+              help="""The ID of the Virtual Volume snapshot. """)
+@click.option('--dstvirtualvolumeid',
+              type=str,
+              required=True,
+              help="""The ID of the Virtual Volume to restore to. """)
+@pass_context
+def rollback(ctx,
+           # Mandatory main parameter
+           srcvirtualvolumeid,
+           # Mandatory main parameter
+           dstvirtualvolumeid):
+    """RollbackVirtualVolume is used to restore a VMware Virtual Volume snapshot."""
+
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+
+    ctx.logger.info("""srcvirtualvolumeid = """+str(srcvirtualvolumeid)+""";"""+"""dstvirtualvolumeid = """+str(dstvirtualvolumeid)+""";"""+"")
+    try:
+        _VirtualVolumeAsyncResult = ctx.element.rollback_virtual_volume(src_virtual_volume_id=srcvirtualvolumeid, dst_virtual_volume_id=dstvirtualvolumeid)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_VirtualVolumeAsyncResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_VirtualVolumeAsyncResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getunsharedbitmap', short_help="""GetVirtualVolumeAllocatedBitmap returns a b64-encoded block of data  representing a bitmap where non-zero bits indicate that data is not the same  between two volumes for a common segment (LBA range) of the volumes. """, cls=SolidFireCommand)
+@click.option('--virtualvolumeid',
+              type=str,
+              required=True,
+              help="""The ID of the Virtual Volume. """)
+@click.option('--basevirtualvolumeid',
+              type=str,
+              required=True,
+              help="""The ID of the Virtual Volume to compare against. """)
+@click.option('--segmentstart',
+              type=int,
+              required=True,
+              help="""Byte offset. """)
+@click.option('--segmentlength',
+              type=int,
+              required=True,
+              help="""Byte length adjusted to end on a chunk boundary. """)
+@click.option('--chunksize',
+              type=int,
+              required=True,
+              help="""Number of bytes represented by one bit in the bitmap. """)
+@pass_context
+def getunsharedbitmap(ctx,
+           # Mandatory main parameter
+           virtualvolumeid,
+           # Mandatory main parameter
+           basevirtualvolumeid,
+           # Mandatory main parameter
+           segmentstart,
+           # Mandatory main parameter
+           segmentlength,
+           # Mandatory main parameter
+           chunksize):
+    """GetVirtualVolumeAllocatedBitmap returns a b64-encoded block of data """
+    """representing a bitmap where non-zero bits indicate that data is not the same """
+    """between two volumes for a common segment (LBA range) of the volumes."""
+
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+    
+    
+    
+
+    ctx.logger.info("""virtualvolumeid = """+str(virtualvolumeid)+""";"""+"""basevirtualvolumeid = """+str(basevirtualvolumeid)+""";"""+"""segmentstart = """+str(segmentstart)+""";"""+"""segmentlength = """+str(segmentlength)+""";"""+"""chunksize = """+str(chunksize)+""";"""+"")
+    try:
+        _VirtualVolumeBitmapResult = ctx.element.get_virtual_volume_unshared_bitmap(virtual_volume_id=virtualvolumeid, base_virtual_volume_id=basevirtualvolumeid, segment_start=segmentstart, segment_length=segmentlength, chunk_size=chunksize)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_VirtualVolumeBitmapResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_VirtualVolumeBitmapResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1457,4 +1322,139 @@ def delete(ctx,
         return
     else:
         cli_utils.print_result(_VirtualVolumeNullResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('modifyhost', short_help="""ModifyVirtualVolumeHost changes an existing ESX host. """, cls=SolidFireCommand)
+@click.option('--virtualvolumehostid',
+              type=str,
+              required=True,
+              help="""The GUID of the ESX host. """)
+@click.option('--clusterid',
+              type=str,
+              required=False,
+              help="""The GUID of the ESX Cluster. """)
+@click.option('--visibleprotocolendpointids',
+              type=str,
+              required=False,
+              help="""A list of PEs the host is aware of. """)
+@click.option('--initiatornames',
+              type=str,
+              required=False,
+              help="""List of iSCSI initiator IQNs for the host. """)
+@click.option('--hostaddress',
+              type=str,
+              required=False,
+              help="""IP or DNS name for the host. """)
+@pass_context
+def modifyhost(ctx,
+           # Mandatory main parameter
+           virtualvolumehostid,
+           # Optional main parameter
+           clusterid = None,
+           # Optional main parameter
+           visibleprotocolendpointids = None,
+           # Optional main parameter
+           initiatornames = None,
+           # Optional main parameter
+           hostaddress = None):
+    """ModifyVirtualVolumeHost changes an existing ESX host."""
+
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+
+    visibleprotocolendpointids = parser.parse_array(visibleprotocolendpointids)
+    
+
+    initiatornames = parser.parse_array(initiatornames)
+    
+    
+
+    ctx.logger.info("""virtualvolumehostid = """+str(virtualvolumehostid)+""";"""+"""clusterid = """+str(clusterid)+""";"""+"""visibleprotocolendpointids = """+str(visibleprotocolendpointids)+""";"""+"""initiatornames = """+str(initiatornames)+""";"""+"""hostaddress = """+str(hostaddress)+""";"""+"")
+    try:
+        _VirtualVolumeNullResult = ctx.element.modify_virtual_volume_host(virtual_volume_host_id=virtualvolumehostid, cluster_id=clusterid, visible_protocol_endpoint_ids=visibleprotocolendpointids, initiator_names=initiatornames, host_address=hostaddress)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_VirtualVolumeNullResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_VirtualVolumeNullResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getvasaproviderinfo', short_help="""Gets the Vasa Provider info """, cls=SolidFireCommand)
+@pass_context
+def getvasaproviderinfo(ctx):
+    """Gets the Vasa Provider info"""
+
+    cli_utils.establish_connection(ctx)
+    
+
+    ctx.logger.info("")
+    try:
+        _VasaProviderInfoResult = ctx.element.get_vasa_provider_info()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_VasaProviderInfoResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_VasaProviderInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('preparevirtualsnapshot', short_help="""PrepareVirtualSnapshot is used to set up VMware Virtual Volume snapshot. """, cls=SolidFireCommand)
+@click.option('--virtualvolumeid',
+              type=str,
+              required=True,
+              help="""The ID of the Virtual Volume to clone. """)
+@click.option('--name',
+              type=str,
+              required=False,
+              help="""The name for the newly-created volume. """)
+@click.option('--writablesnapshot',
+              type=bool,
+              required=False,
+              help="""Will the snapshot be writable? """)
+@pass_context
+def preparevirtualsnapshot(ctx,
+           # Mandatory main parameter
+           virtualvolumeid,
+           # Optional main parameter
+           name = None,
+           # Optional main parameter
+           writablesnapshot = None):
+    """PrepareVirtualSnapshot is used to set up VMware Virtual Volume snapshot."""
+
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+    
+
+    ctx.logger.info("""virtualvolumeid = """+str(virtualvolumeid)+""";"""+"""name = """+str(name)+""";"""+"""writablesnapshot = """+str(writablesnapshot)+""";"""+"")
+    try:
+        _PrepareVirtualSnapshotResult = ctx.element.prepare_virtual_snapshot(virtual_volume_id=virtualvolumeid, name=name, writable_snapshot=writablesnapshot)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_PrepareVirtualSnapshotResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_PrepareVirtualSnapshotResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

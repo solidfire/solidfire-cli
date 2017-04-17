@@ -24,10 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """setnetworkconfig listpending getorigin listpendingactive listall getpendingoperation liststats add setconfig getnetworkconfig getstats getconfig remove listactive getbootstrapconfig """
-# SetNewtorkConfig has been intentionally excluded from the python cli because
-# the input values would be too complex to reasonably support in a CLI.
-
+    """listpending listall setconfig liststats getbootstrapconfig remove listpendingactive getorigin getstats add getnetworkconfig getpendingoperation setnetworkconfig listactive getconfig """
 
 @cli.command('listpending', short_help="""ListPendingNodes returns a list of the currently pending nodes in the system. Pending nodes are nodes that are running and configured to join the cluster, but have not yet been added via the AddNodes API method. """, cls=SolidFireCommand)
 @pass_context
@@ -54,17 +51,17 @@ def listpending(ctx):
 
 
 
-@cli.command('getorigin', short_help="""GetOrigin enables you to retrieve the origination certificate for where the node was built. This method might return null if there is no origination certification. """, cls=SolidFireCommand)
+@cli.command('listall', short_help="""ListAllNodes enables you to retrieve a list of active and pending nodes in the cluster. """, cls=SolidFireCommand)
 @pass_context
-def getorigin(ctx):
-    """GetOrigin enables you to retrieve the origination certificate for where the node was built. This method might return null if there is no origination certification."""
+def listall(ctx):
+    """ListAllNodes enables you to retrieve a list of active and pending nodes in the cluster."""
 
     cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
     try:
-        _GetOriginResult = ctx.element.get_origin()
+        _ListAllNodesResult = ctx.element.list_all_nodes()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -72,10 +69,98 @@ def getorigin(ctx):
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetOriginResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_ListAllNodesResult), indent=4))
         return
     else:
-        cli_utils.print_result(_GetOriginResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_ListAllNodesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+# SetConfig has been intentionally excluded from the python cli because
+# the input values would be too complex to reasonably support in a CLI.
+
+
+@cli.command('liststats', short_help="""ListNodeStats enables you to view the high-level activity measurements for all nodes in a cluster. """, cls=SolidFireCommand)
+@pass_context
+def liststats(ctx):
+    """ListNodeStats enables you to view the high-level activity measurements for all nodes in a cluster."""
+
+    cli_utils.establish_connection(ctx)
+    
+
+    ctx.logger.info("")
+    try:
+        _ListNodeStatsResult = ctx.element.list_node_stats()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListNodeStatsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListNodeStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getbootstrapconfig', short_help="""GetBootstrapConfig returns cluster and node information from the bootstrap configuration file. Use this API method on an individual node before it has been joined with a cluster. You can use the information this method returns in the cluster configuration interface when you create a cluster. """, cls=SolidFireCommand)
+@pass_context
+def getbootstrapconfig(ctx):
+    """GetBootstrapConfig returns cluster and node information from the bootstrap configuration file. Use this API method on an individual node before it has been joined with a cluster. You can use the information this method returns in the cluster configuration interface when you create a cluster."""
+
+    cli_utils.establish_connection(ctx)
+    
+
+    ctx.logger.info("")
+    try:
+        _GetBootstrapConfigResult = ctx.element.get_bootstrap_config()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetBootstrapConfigResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetBootstrapConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('remove', short_help="""You can use RemoveNodes to remove one or more nodes that should no longer participate in the cluster. Before removing a node, you must remove all drives the node contains using the RemoveDrives method. You cannot remove a node until the RemoveDrives process has completed and all data has been migrated away from the node. After you remove a node, it registers itself as a pending node. You can add the node again or shut it down (shutting the node down removes it from the Pending Node list). """, cls=SolidFireCommand)
+@click.option('--nodes',
+              type=str,
+              required=True,
+              help="""List of NodeIDs for the nodes to be removed. """)
+@pass_context
+def remove(ctx,
+           # Mandatory main parameter
+           nodes):
+    """You can use RemoveNodes to remove one or more nodes that should no longer participate in the cluster. Before removing a node, you must remove all drives the node contains using the RemoveDrives method. You cannot remove a node until the RemoveDrives process has completed and all data has been migrated away from the node."""
+    """After you remove a node, it registers itself as a pending node. You can add the node again or shut it down (shutting the node down removes it from the Pending Node list)."""
+
+    cli_utils.establish_connection(ctx)
+    
+
+    nodes = parser.parse_array(nodes)
+    
+
+    ctx.logger.info("""nodes = """+str(nodes)+""";"""+"")
+    try:
+        _RemoveNodesResult = ctx.element.remove_nodes(nodes=nodes)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_RemoveNodesResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_RemoveNodesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -104,17 +189,17 @@ def listpendingactive(ctx):
 
 
 
-@cli.command('listall', short_help="""ListAllNodes enables you to retrieve a list of active and pending nodes in the cluster. """, cls=SolidFireCommand)
+@cli.command('getorigin', short_help="""GetOrigin enables you to retrieve the origination certificate for where the node was built. This method might return null if there is no origination certification. """, cls=SolidFireCommand)
 @pass_context
-def listall(ctx):
-    """ListAllNodes enables you to retrieve a list of active and pending nodes in the cluster."""
+def getorigin(ctx):
+    """GetOrigin enables you to retrieve the origination certificate for where the node was built. This method might return null if there is no origination certification."""
 
     cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
     try:
-        _ListAllNodesResult = ctx.element.list_all_nodes()
+        _GetOriginResult = ctx.element.get_origin()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -122,25 +207,31 @@ def listall(ctx):
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ListAllNodesResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_GetOriginResult), indent=4))
         return
     else:
-        cli_utils.print_result(_ListAllNodesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_GetOriginResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
-@cli.command('getpendingoperation', short_help="""You can use GetPendingOperation to detect an operation on a node that is currently in progress. You can also use this method to report back when an operation has completed.  Note: method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
+@cli.command('getstats', short_help="""GetNodeStats enables you to retrieve the high-level activity measurements for a single node. """, cls=SolidFireCommand)
+@click.option('--nodeid',
+              type=int,
+              required=True,
+              help="""Specifies the node for which statistics are gathered. """)
 @pass_context
-def getpendingoperation(ctx):
-    """You can use GetPendingOperation to detect an operation on a node that is currently in progress. You can also use this method to report back when an operation has completed. """
-    """Note: method is available only through the per-node API endpoint 5.0 or later."""
+def getstats(ctx,
+           # Mandatory main parameter
+           nodeid):
+    """GetNodeStats enables you to retrieve the high-level activity measurements for a single node."""
 
     cli_utils.establish_connection(ctx)
     
+    
 
-    ctx.logger.info("")
+    ctx.logger.info("""nodeid = """+str(nodeid)+""";"""+"")
     try:
-        _GetPendingOperationResult = ctx.element.get_pending_operation()
+        _GetNodeStatsResult = ctx.element.get_node_stats(node_id=nodeid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -148,35 +239,10 @@ def getpendingoperation(ctx):
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetPendingOperationResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_GetNodeStatsResult), indent=4))
         return
     else:
-        cli_utils.print_result(_GetPendingOperationResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('liststats', short_help="""ListNodeStats enables you to view the high-level activity measurements for all nodes in a cluster. """, cls=SolidFireCommand)
-@pass_context
-def liststats(ctx):
-    """ListNodeStats enables you to view the high-level activity measurements for all nodes in a cluster."""
-
-    cli_utils.establish_connection(ctx)
-    
-
-    ctx.logger.info("")
-    try:
-        _ListNodeStatsResult = ctx.element.list_node_stats()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ListNodeStatsResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_ListNodeStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_GetNodeStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -221,9 +287,6 @@ def add(ctx,
         cli_utils.print_result(_AddNodesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
-# SetConfig has been intentionally excluded from the python cli because
-# the input values would be too complex to reasonably support in a CLI.
-
 
 @cli.command('getnetworkconfig', short_help="""The GetNetworkConfig API method enables you to display the network configuration information for a node. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
 @pass_context
@@ -251,50 +314,18 @@ def getnetworkconfig(ctx):
 
 
 
-@cli.command('getstats', short_help="""GetNodeStats enables you to retrieve the high-level activity measurements for a single node. """, cls=SolidFireCommand)
-@click.option('--nodeid',
-              type=int,
-              required=True,
-              help="""Specifies the node for which statistics are gathered. """)
+@cli.command('getpendingoperation', short_help="""You can use GetPendingOperation to detect an operation on a node that is currently in progress. You can also use this method to report back when an operation has completed.  Note: method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
 @pass_context
-def getstats(ctx,
-           # Mandatory main parameter
-           nodeid):
-    """GetNodeStats enables you to retrieve the high-level activity measurements for a single node."""
-
-    cli_utils.establish_connection(ctx)
-    
-    
-
-    ctx.logger.info("""nodeid = """+str(nodeid)+""";"""+"")
-    try:
-        _GetNodeStatsResult = ctx.element.get_node_stats(node_id=nodeid)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetNodeStatsResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_GetNodeStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getconfig', short_help="""The GetConfig API method enables you to retrieve all configuration information for a node. This method includes the same information available in both the GetClusterConfig and GetNetworkConfig API methods. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
-@pass_context
-def getconfig(ctx):
-    """The GetConfig API method enables you to retrieve all configuration information for a node. This method includes the same information available in both the GetClusterConfig and GetNetworkConfig API methods."""
-    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
+def getpendingoperation(ctx):
+    """You can use GetPendingOperation to detect an operation on a node that is currently in progress. You can also use this method to report back when an operation has completed. """
+    """Note: method is available only through the per-node API endpoint 5.0 or later."""
 
     cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
     try:
-        _GetConfigResult = ctx.element.get_config()
+        _GetPendingOperationResult = ctx.element.get_pending_operation()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -302,46 +333,14 @@ def getconfig(ctx):
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetConfigResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_GetPendingOperationResult), indent=4))
         return
     else:
-        cli_utils.print_result(_GetConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_GetPendingOperationResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
-
-@cli.command('remove', short_help="""You can use RemoveNodes to remove one or more nodes that should no longer participate in the cluster. Before removing a node, you must remove all drives the node contains using the RemoveDrives method. You cannot remove a node until the RemoveDrives process has completed and all data has been migrated away from the node. After you remove a node, it registers itself as a pending node. You can add the node again or shut it down (shutting the node down removes it from the Pending Node list). """, cls=SolidFireCommand)
-@click.option('--nodes',
-              type=str,
-              required=True,
-              help="""List of NodeIDs for the nodes to be removed. """)
-@pass_context
-def remove(ctx,
-           # Mandatory main parameter
-           nodes):
-    """You can use RemoveNodes to remove one or more nodes that should no longer participate in the cluster. Before removing a node, you must remove all drives the node contains using the RemoveDrives method. You cannot remove a node until the RemoveDrives process has completed and all data has been migrated away from the node."""
-    """After you remove a node, it registers itself as a pending node. You can add the node again or shut it down (shutting the node down removes it from the Pending Node list)."""
-
-    cli_utils.establish_connection(ctx)
-    
-
-    nodes = parser.parse_array(nodes)
-    
-
-    ctx.logger.info("""nodes = """+str(nodes)+""";"""+"")
-    try:
-        _RemoveNodesResult = ctx.element.remove_nodes(nodes=nodes)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_RemoveNodesResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_RemoveNodesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
+# SetNewtorkConfig has been intentionally excluded from the python cli because
+# the input values would be too complex to reasonably support in a CLI.
 
 
 @cli.command('listactive', short_help="""ListActiveNodes returns the list of currently active nodes that are in the cluster. """, cls=SolidFireCommand)
@@ -369,17 +368,18 @@ def listactive(ctx):
 
 
 
-@cli.command('getbootstrapconfig', short_help="""GetBootstrapConfig returns cluster and node information from the bootstrap configuration file. Use this API method on an individual node before it has been joined with a cluster. You can use the information this method returns in the cluster configuration interface when you create a cluster. """, cls=SolidFireCommand)
+@cli.command('getconfig', short_help="""The GetConfig API method enables you to retrieve all configuration information for a node. This method includes the same information available in both the GetClusterConfig and GetNetworkConfig API methods. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
 @pass_context
-def getbootstrapconfig(ctx):
-    """GetBootstrapConfig returns cluster and node information from the bootstrap configuration file. Use this API method on an individual node before it has been joined with a cluster. You can use the information this method returns in the cluster configuration interface when you create a cluster."""
+def getconfig(ctx):
+    """The GetConfig API method enables you to retrieve all configuration information for a node. This method includes the same information available in both the GetClusterConfig and GetNetworkConfig API methods."""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
 
     cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info("")
     try:
-        _GetBootstrapConfigResult = ctx.element.get_bootstrap_config()
+        _GetConfigResult = ctx.element.get_config()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -387,8 +387,8 @@ def getbootstrapconfig(ctx):
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetBootstrapConfigResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_GetConfigResult), indent=4))
         return
     else:
-        cli_utils.print_result(_GetBootstrapConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_GetConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
