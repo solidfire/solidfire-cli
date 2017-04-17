@@ -439,190 +439,81 @@ You can use the following options in the tool:
     --help
         Show this help and exit.
 
-StorageContainers Commands 
+Hardware Commands 
 ---------------------------------------------------------------
-#### list ####
+#### getconfig ####
 Command:
 
-    sfcli StorageContainers list <options>
+    sfcli Hardware getconfig <options>
 
 Description:
 
-ListStorageContainers enables you to retrieve information about all virtual volume storage containers known to the system. 
+GetHardwareConfig enables you to display the hardware configuration information for a node. Note: This method is available only through the per-node API endpoint 5.0 or later. 
 
 Options:
---storagecontainerids
-A list of storage container IDs for which to retrieve information. If you omit this parameter, the method returns information about all storage containers in the system. 
-
 ---------------------------------------------------------------
-#### getstoragecontainerefficiency ####
+#### getclusterinfo ####
 Command:
 
-    sfcli StorageContainers getstoragecontainerefficiency <options>
+    sfcli Hardware getclusterinfo <options>
 
 Description:
 
-GetStorageContainerEfficiency enables you to retrieve efficiency information about a virtual volume storage container. 
+You can use the GetClusterHardwareInfo method to retrieve the hardware status and information for all Fibre Channel nodes, iSCSI nodes and drives in the cluster. This generally includes details about manufacturers, vendors, versions, and other associated hardware identification information. 
 
 Options:
---storagecontainerid
-The ID of the storage container for which to retrieve efficiency information. 
+--type
+Includes only a certain type of hardware information in the response. Possible values are: drives: List only drive information in the response. nodes: List only node information in the response. all: Include both drive and node information in the response. If this parameter is omitted, a type of "all" is assumed. 
 
 ---------------------------------------------------------------
-#### createstoragecontainer ####
+#### getnvraminfo ####
 Command:
 
-    sfcli StorageContainers createstoragecontainer <options>
+    sfcli Hardware getnvraminfo <options>
 
 Description:
 
-CreateStorageContainer enables you to create a Virtual Volume (VVol) storage container. Storage containers are associated with a SolidFire storage system account, and are used for reporting and resource allocation. Storage containers can only be associated with virtual volumes. You need at least one storage container to use the Virtual Volumes feature. 
+GetNvramInfo enables you to retrieve information from each node about the NVRAM card. 
 
 Options:
---name
-The name of the storage container. Follows SolidFire account naming restrictions. 
-
---initiatorsecret
-The secret for CHAP authentication for the initiator. 
-
---targetsecret
-The secret for CHAP authentication for the target. 
-
---accountid
-Non-storage container account that will become a storage container. 
+--force
+Required parameter to successfully run on all nodes in the cluster. 
 
 ---------------------------------------------------------------
-#### delete ####
+#### getnodeinfo ####
 Command:
 
-    sfcli StorageContainers delete <options>
+    sfcli Hardware getnodeinfo <options>
 
 Description:
 
-DeleteStorageContainers enables you to remove up to 2000 Virtual Volume (VVol) storage containers from the system at one time. The storage containers you remove must not contain any VVols. 
+GetNodeHardwareInfo enables you to return all the hardware information and status for the node specified. This generally includes details about manufacturers, vendors, versions, and other associated hardware identification information. 
 
 Options:
---storagecontainerids
-A list of IDs of the storage containers to delete. You can specify up to 2000 IDs in the list. 
+--nodeid
+The ID of the node for which hardware information is being requested. Information about a Fibre Channel node is returned if a Fibre Channel node is specified. 
 
+
+SFApi Commands 
 ---------------------------------------------------------------
-#### modifystoragecontainer ####
+#### invoke ####
 Command:
 
-    sfcli StorageContainers modifystoragecontainer <options>
+    sfcli SFApi invoke <options>
 
 Description:
 
-ModifyStorageContainer enables you to make changes to an existing virtual volume storage container. 
+This will invoke any API method supported by the SolidFire API for the version and port the connection is using. Returns a nested hashtable of key/value pairs that contain the result of the invoked method. 
 
 Options:
---storagecontainerid
-The unique ID of the virtual volume storage container to modify. 
+--method
+The name of the method to invoke. This is case sensitive. 
 
---initiatorsecret
-The new secret for CHAP authentication for the initiator. 
-
---targetsecret
-The new secret for CHAP authentication for the target. 
+--parameters
+An object, normally a dictionary or hashtable of the key/value pairs, to be passed as the params for the method being invoked. 
 
 
 VirtualVolume Commands 
----------------------------------------------------------------
-#### listhosts ####
-Command:
-
-    sfcli VirtualVolume listhosts <options>
-
-Description:
-
-ListVirtualVolumeHosts returns a list of all virtual volume hosts known to the cluster. A virtual volume host is a VMware ESX host that has initiated a session with the VASA API provider. 
-
-Options:
---virtualvolumehostids
-A list of virtual volume host IDs for which to retrieve information. If you omit this parameter, the method returns information about all virtual volume hosts. 
-
----------------------------------------------------------------
-#### gettaskupdate ####
-Command:
-
-    sfcli VirtualVolume gettaskupdate <options>
-
-Description:
-
-GetVirtualVolumeTaskUpdate checks the status of a VVol Async Task. 
-
-Options:
---virtualvolumetaskid
-The UUID of the VVol Task. 
-
----------------------------------------------------------------
-#### canceltask ####
-Command:
-
-    sfcli VirtualVolume canceltask <options>
-
-Description:
-
-CancelVirtualVolumeTask attempts to cancel the VVol Async Task. 
-
-Options:
---virtualvolumetaskid
-The UUID of the VVol Task to cancel. 
-
----------------------------------------------------------------
-#### modifyvasaproviderinfo ####
-Command:
-
-    sfcli VirtualVolume modifyvasaproviderinfo <options>
-
-Description:
-
-Update the Vasa Provider info 
-
-Options:
---keystore
-Signed SSL certificate for the Vasa Provider 
-
---vasaproviderid
-UUID identifying the vasa provider 
-
----------------------------------------------------------------
-#### getunsharedchunks ####
-Command:
-
-    sfcli VirtualVolume getunsharedchunks <options>
-
-Description:
-
-GetVirtualVolumeAllocatedBitmap scans a VVol segment and returns the number of  chunks not shared between two volumes. This call will return results in less  than 30 seconds. If the specified VVol and the base VVil are not related, an  error is thrown. If the offset/length combination is invalid or out fo range  an error is thrown. 
-
-Options:
---virtualvolumeid
-The ID of the Virtual Volume. 
-
---basevirtualvolumeid
-The ID of the Virtual Volume to compare against. 
-
---segmentstart
-Start Byte offset. 
-
---segmentlength
-Length of the scan segment in bytes. 
-
---chunksize
-Number of bytes represented by one bit in the bitmap. 
-
----------------------------------------------------------------
-#### getcount ####
-Command:
-
-    sfcli VirtualVolume getcount <options>
-
-Description:
-
-Enables retrieval of the number of virtual volumes currently in the system. 
-
-Options:
 ---------------------------------------------------------------
 #### listbindings ####
 Command:
@@ -638,24 +529,44 @@ Options:
 A list of virtual volume binding IDs for which to retrieve information. If you omit this parameter, the method returns information about all virtual volume bindings. 
 
 ---------------------------------------------------------------
-#### copydiffsto ####
+#### list ####
 Command:
 
-    sfcli VirtualVolume copydiffsto <options>
+    sfcli VirtualVolume list <options>
 
 Description:
 
-CopyDiffsToVirtualVolume is a three-way merge function. 
+ListVirtualVolumes enables you to list the virtual volumes currently in the system. You can use this method to list all virtual volumes, or only list a subset. 
 
 Options:
---virtualvolumeid
-The ID of the snapshot Virtual Volume. 
+--details
+Specifies the level of detail about each virtual volume that is returned. Possible values are: true: Include more details about each virtual volume in the response. false: Include the standard level of detail about each virtual volume in the response. 
 
---basevirtualvolumeid
-The ID of the base Virtual Volume. 
+--limit
+The maximum number of virtual volumes to list. 
 
---dstvirtualvolumeid
-The ID of the Virtual Volume to be overwritten. 
+--recursive
+Specifies whether to include information about the children of each virtual volume in the response. Possible values are: true: Include information about the children of each virtual volume in the response. false: Do not include information about the children of each virtual volume in the response. 
+
+--startvirtualvolumeid
+The ID of the virtual volume at which to begin the list. 
+
+--virtualvolumeids
+A list of virtual volume IDs for which to retrieve information. If you specify this parameter, the method returns information about only these virtual volumes. 
+
+---------------------------------------------------------------
+#### enablefeature ####
+Command:
+
+    sfcli VirtualVolume enablefeature <options>
+
+Description:
+
+You can use EnableFeature to enable cluster features that are disabled by default. 
+
+Options:
+--feature
+Indicates which feature to enable. Valid value is: vvols: Enable the NetApp SolidFire VVols cluster feature. 
 
 ---------------------------------------------------------------
 #### create ####
@@ -710,61 +621,47 @@ Options:
 VvolVolumeID for the volume to be modified. 
 
 ---------------------------------------------------------------
-#### unbind ####
+#### copydiffsto ####
 Command:
 
-    sfcli VirtualVolume unbind <options>
+    sfcli VirtualVolume copydiffsto <options>
 
 Description:
 
-UnbindGetVirtualVolume removes the VVol  Host binding. 
-
-Options:
---unbindcontext
-Normal, Start, or End? 
-
----------------------------------------------------------------
-#### modify ####
-Command:
-
-    sfcli VirtualVolume modify <options>
-
-Description:
-
-ModifyVirtualVolume is used to modify settings on an existing virtual volume. 
+CopyDiffsToVirtualVolume is a three-way merge function. 
 
 Options:
 --virtualvolumeid
-VvolVolumeID for the volume to be modified. 
+The ID of the snapshot Virtual Volume. 
 
---qosminiops
-Desired minimum 4KB IOPS to guarantee. The allowed IOPS will only drop below this level if all volumes have been capped at their minimum IOPS value and there is still insufficient performance capacity. 
+--basevirtualvolumeid
+The ID of the base Virtual Volume. 
 
---qosmaxiops
-Desired maximum 4KB IOPS allowed over an extended period of time. 
-
---qosburstiops
-Maximum "peak" 4KB IOPS allowed for short periods of time. Allows for bursts of I/O activity over the normal max IOPS value. 
-
---qosbursttime
-The length of time burst IOPS is allowed. The value returned is represented in time units of seconds. Note: this value is calculated by the system based on IOPS set for QoS. 
-
---totalsize
-New size of the volume in bytes. Size is rounded up to the nearest 1MiB size. This parameter can only be used to *increase* the size of a volume. 
+--dstvirtualvolumeid
+The ID of the Virtual Volume to be overwritten. 
 
 ---------------------------------------------------------------
-#### getfeaturestatus ####
+#### createhost ####
 Command:
 
-    sfcli VirtualVolume getfeaturestatus <options>
+    sfcli VirtualVolume createhost <options>
 
 Description:
 
-GetFeatureStatus enables you to retrieve the status of a cluster feature. 
+CreateVirtualVolumeHost creates a new ESX host. 
 
 Options:
---feature
-Specifies the feature for which the status is returned. Valid value is: vvols: Retrieve status for the NetApp SolidFire VVols cluster feature. 
+--virtualvolumehostid
+The GUID of the ESX host. 
+
+--clusterid
+The GUID of the ESX Cluster. 
+
+--visibleprotocolendpointids
+A list of PEs the host is aware of. 
+
+--hostaddress
+IP or DNS name for the host. 
 
 ---------------------------------------------------------------
 #### fastclone ####
@@ -796,77 +693,6 @@ Maximum "peak" 4KB IOPS allowed for short periods of time. Allows for bursts of 
 The length of time burst IOPS is allowed. The value returned is represented in time units of seconds. Note: this value is calculated by the system based on IOPS set for QoS. 
 
 ---------------------------------------------------------------
-#### unbindallfromhost ####
-Command:
-
-    sfcli VirtualVolume unbindallfromhost <options>
-
-Description:
-
-UnbindAllVirtualVolumesFromHost removes all VVol  Host binding. 
-
-Options:
----------------------------------------------------------------
-#### querymetadata ####
-Command:
-
-    sfcli VirtualVolume querymetadata <options>
-
-Description:
-
-QueryVirtualVolumeMetadata returns a list of VVols matching a metadata query. 
-
-Options:
----------------------------------------------------------------
-#### createhost ####
-Command:
-
-    sfcli VirtualVolume createhost <options>
-
-Description:
-
-CreateVirtualVolumeHost creates a new ESX host. 
-
-Options:
---virtualvolumehostid
-The GUID of the ESX host. 
-
---clusterid
-The GUID of the ESX Cluster. 
-
---visibleprotocolendpointids
-A list of PEs the host is aware of. 
-
---hostaddress
-IP or DNS name for the host. 
-
----------------------------------------------------------------
-#### list ####
-Command:
-
-    sfcli VirtualVolume list <options>
-
-Description:
-
-ListVirtualVolumes enables you to list the virtual volumes currently in the system. You can use this method to list all virtual volumes, or only list a subset. 
-
-Options:
---details
-Specifies the level of detail about each virtual volume that is returned. Possible values are: true: Include more details about each virtual volume in the response. false: Include the standard level of detail about each virtual volume in the response. 
-
---limit
-The maximum number of virtual volumes to list. 
-
---recursive
-Specifies whether to include information about the children of each virtual volume in the response. Possible values are: true: Include information about the children of each virtual volume in the response. false: Do not include information about the children of each virtual volume in the response. 
-
---startvirtualvolumeid
-The ID of the virtual volume at which to begin the list. 
-
---virtualvolumeids
-A list of virtual volume IDs for which to retrieve information. If you specify this parameter, the method returns information about only these virtual volumes. 
-
----------------------------------------------------------------
 #### snapshot ####
 Command:
 
@@ -884,53 +710,67 @@ The ID of the Virtual Volume to clone.
 Number of seconds to complete or fail. 
 
 ---------------------------------------------------------------
-#### enablefeature ####
+#### modifyhost ####
 Command:
 
-    sfcli VirtualVolume enablefeature <options>
+    sfcli VirtualVolume modifyhost <options>
 
 Description:
 
-You can use EnableFeature to enable cluster features that are disabled by default. 
+ModifyVirtualVolumeHost changes an existing ESX host. 
 
 Options:
---feature
-Indicates which feature to enable. Valid value is: vvols: Enable the NetApp SolidFire VVols cluster feature. 
-
----------------------------------------------------------------
-#### listtasks ####
-Command:
-
-    sfcli VirtualVolume listtasks <options>
-
-Description:
-
-ListVirtualVolumeTasks returns a list of virtual volume tasks in the system. 
-
-Options:
---virtualvolumetaskids
-A list of virtual volume task IDs for which to retrieve information. If you omit this parameter, the method returns information about all virtual volume tasks. 
-
----------------------------------------------------------------
-#### bind ####
-Command:
-
-    sfcli VirtualVolume bind <options>
-
-Description:
-
-BindVirtualVolume binds a VVol with a Host. 
-
-Options:
---virtualvolumeids
-The UUID of the VVol to bind. 
-
 --virtualvolumehostid
-The UUID of the ESX host. 
+The GUID of the ESX host. 
 
---bindcontext
-Normal or Start? 
+--clusterid
+The GUID of the ESX Cluster. 
 
+--visibleprotocolendpointids
+A list of PEs the host is aware of. 
+
+--initiatornames
+List of iSCSI initiator IQNs for the host. 
+
+--hostaddress
+IP or DNS name for the host. 
+
+---------------------------------------------------------------
+#### unbindallfromhost ####
+Command:
+
+    sfcli VirtualVolume unbindallfromhost <options>
+
+Description:
+
+UnbindAllVirtualVolumesFromHost removes all VVol  Host binding. 
+
+Options:
+---------------------------------------------------------------
+#### canceltask ####
+Command:
+
+    sfcli VirtualVolume canceltask <options>
+
+Description:
+
+CancelVirtualVolumeTask attempts to cancel the VVol Async Task. 
+
+Options:
+--virtualvolumetaskid
+The UUID of the VVol Task to cancel. 
+
+---------------------------------------------------------------
+#### getcount ####
+Command:
+
+    sfcli VirtualVolume getcount <options>
+
+Description:
+
+Enables retrieval of the number of virtual volumes currently in the system. 
+
+Options:
 ---------------------------------------------------------------
 #### getallocatedbitmap ####
 Command:
@@ -950,6 +790,148 @@ Byte offset.
 
 --segmentlength
 Byte length adjusted to end on a chunk boundary. 
+
+--chunksize
+Number of bytes represented by one bit in the bitmap. 
+
+---------------------------------------------------------------
+#### gettaskupdate ####
+Command:
+
+    sfcli VirtualVolume gettaskupdate <options>
+
+Description:
+
+GetVirtualVolumeTaskUpdate checks the status of a VVol Async Task. 
+
+Options:
+--virtualvolumetaskid
+The UUID of the VVol Task. 
+
+---------------------------------------------------------------
+#### rollback ####
+Command:
+
+    sfcli VirtualVolume rollback <options>
+
+Description:
+
+RollbackVirtualVolume is used to restore a VMware Virtual Volume snapshot. 
+
+Options:
+--srcvirtualvolumeid
+The ID of the Virtual Volume snapshot. 
+
+--dstvirtualvolumeid
+The ID of the Virtual Volume to restore to. 
+
+---------------------------------------------------------------
+#### listhosts ####
+Command:
+
+    sfcli VirtualVolume listhosts <options>
+
+Description:
+
+ListVirtualVolumeHosts returns a list of all virtual volume hosts known to the cluster. A virtual volume host is a VMware ESX host that has initiated a session with the VASA API provider. 
+
+Options:
+--virtualvolumehostids
+A list of virtual volume host IDs for which to retrieve information. If you omit this parameter, the method returns information about all virtual volume hosts. 
+
+---------------------------------------------------------------
+#### getunsharedbitmap ####
+Command:
+
+    sfcli VirtualVolume getunsharedbitmap <options>
+
+Description:
+
+GetVirtualVolumeAllocatedBitmap returns a b64-encoded block of data  representing a bitmap where non-zero bits indicate that data is not the same  between two volumes for a common segment (LBA range) of the volumes. 
+
+Options:
+--virtualvolumeid
+The ID of the Virtual Volume. 
+
+--basevirtualvolumeid
+The ID of the Virtual Volume to compare against. 
+
+--segmentstart
+Byte offset. 
+
+--segmentlength
+Byte length adjusted to end on a chunk boundary. 
+
+--chunksize
+Number of bytes represented by one bit in the bitmap. 
+
+---------------------------------------------------------------
+#### getfeaturestatus ####
+Command:
+
+    sfcli VirtualVolume getfeaturestatus <options>
+
+Description:
+
+GetFeatureStatus enables you to retrieve the status of a cluster feature. 
+
+Options:
+--feature
+Specifies the feature for which the status is returned. Valid value is: vvols: Retrieve status for the NetApp SolidFire VVols cluster feature. 
+
+---------------------------------------------------------------
+#### preparevirtualsnapshot ####
+Command:
+
+    sfcli VirtualVolume preparevirtualsnapshot <options>
+
+Description:
+
+PrepareVirtualSnapshot is used to set up VMware Virtual Volume snapshot. 
+
+Options:
+--virtualvolumeid
+The ID of the Virtual Volume to clone. 
+
+--name
+The name for the newly-created volume. 
+
+--writablesnapshot
+Will the snapshot be writable? 
+
+---------------------------------------------------------------
+#### getvasaproviderinfo ####
+Command:
+
+    sfcli VirtualVolume getvasaproviderinfo <options>
+
+Description:
+
+Gets the Vasa Provider info 
+
+Options:
+---------------------------------------------------------------
+#### getunsharedchunks ####
+Command:
+
+    sfcli VirtualVolume getunsharedchunks <options>
+
+Description:
+
+GetVirtualVolumeAllocatedBitmap scans a VVol segment and returns the number of  chunks not shared between two volumes. This call will return results in less  than 30 seconds. If the specified VVol and the base VVil are not related, an  error is thrown. If the offset/length combination is invalid or out fo range  an error is thrown. 
+
+Options:
+--virtualvolumeid
+The ID of the Virtual Volume. 
+
+--basevirtualvolumeid
+The ID of the Virtual Volume to compare against. 
+
+--segmentstart
+Start Byte offset. 
+
+--segmentlength
+Length of the scan segment in bytes. 
 
 --chunksize
 Number of bytes represented by one bit in the bitmap. 
@@ -984,47 +966,24 @@ Maximum "peak" 4KB IOPS allowed for short periods of time. Allows for bursts of 
 The length of time burst IOPS is allowed. The value returned is represented in time units of seconds. Note: this value is calculated by the system based on IOPS set for QoS. 
 
 ---------------------------------------------------------------
-#### rollback ####
+#### bind ####
 Command:
 
-    sfcli VirtualVolume rollback <options>
+    sfcli VirtualVolume bind <options>
 
 Description:
 
-RollbackVirtualVolume is used to restore a VMware Virtual Volume snapshot. 
+BindVirtualVolume binds a VVol with a Host. 
 
 Options:
---srcvirtualvolumeid
-The ID of the Virtual Volume snapshot. 
+--virtualvolumeids
+The UUID of the VVol to bind. 
 
---dstvirtualvolumeid
-The ID of the Virtual Volume to restore to. 
+--virtualvolumehostid
+The UUID of the ESX host. 
 
----------------------------------------------------------------
-#### getunsharedbitmap ####
-Command:
-
-    sfcli VirtualVolume getunsharedbitmap <options>
-
-Description:
-
-GetVirtualVolumeAllocatedBitmap returns a b64-encoded block of data  representing a bitmap where non-zero bits indicate that data is not the same  between two volumes for a common segment (LBA range) of the volumes. 
-
-Options:
---virtualvolumeid
-The ID of the Virtual Volume. 
-
---basevirtualvolumeid
-The ID of the Virtual Volume to compare against. 
-
---segmentstart
-Byte offset. 
-
---segmentlength
-Byte length adjusted to end on a chunk boundary. 
-
---chunksize
-Number of bytes represented by one bit in the bitmap. 
+--bindcontext
+Normal or Start? 
 
 ---------------------------------------------------------------
 #### delete ####
@@ -1041,213 +1000,139 @@ Options:
 The UUID of the volume to delete. 
 
 ---------------------------------------------------------------
-#### modifyhost ####
+#### modifyvasaproviderinfo ####
 Command:
 
-    sfcli VirtualVolume modifyhost <options>
+    sfcli VirtualVolume modifyvasaproviderinfo <options>
 
 Description:
 
-ModifyVirtualVolumeHost changes an existing ESX host. 
+Update the Vasa Provider info 
 
 Options:
---virtualvolumehostid
-The GUID of the ESX host. 
+--keystore
+Signed SSL certificate for the Vasa Provider 
 
---clusterid
-The GUID of the ESX Cluster. 
-
---visibleprotocolendpointids
-A list of PEs the host is aware of. 
-
---initiatornames
-List of iSCSI initiator IQNs for the host. 
-
---hostaddress
-IP or DNS name for the host. 
+--vasaproviderid
+UUID identifying the vasa provider 
 
 ---------------------------------------------------------------
-#### getvasaproviderinfo ####
+#### modify ####
 Command:
 
-    sfcli VirtualVolume getvasaproviderinfo <options>
+    sfcli VirtualVolume modify <options>
 
 Description:
 
-Gets the Vasa Provider info 
-
-Options:
----------------------------------------------------------------
-#### preparevirtualsnapshot ####
-Command:
-
-    sfcli VirtualVolume preparevirtualsnapshot <options>
-
-Description:
-
-PrepareVirtualSnapshot is used to set up VMware Virtual Volume snapshot. 
+ModifyVirtualVolume is used to modify settings on an existing virtual volume. 
 
 Options:
 --virtualvolumeid
-The ID of the Virtual Volume to clone. 
+VvolVolumeID for the volume to be modified. 
 
---name
-The name for the newly-created volume. 
+--qosminiops
+Desired minimum 4KB IOPS to guarantee. The allowed IOPS will only drop below this level if all volumes have been capped at their minimum IOPS value and there is still insufficient performance capacity. 
 
---writablesnapshot
-Will the snapshot be writable? 
+--qosmaxiops
+Desired maximum 4KB IOPS allowed over an extended period of time. 
 
+--qosburstiops
+Maximum "peak" 4KB IOPS allowed for short periods of time. Allows for bursts of I/O activity over the normal max IOPS value. 
 
-BackupTarget Commands 
+--qosbursttime
+The length of time burst IOPS is allowed. The value returned is represented in time units of seconds. Note: this value is calculated by the system based on IOPS set for QoS. 
+
+--totalsize
+New size of the volume in bytes. Size is rounded up to the nearest 1MiB size. This parameter can only be used to *increase* the size of a volume. 
+
 ---------------------------------------------------------------
-#### create ####
+#### listtasks ####
 Command:
 
-    sfcli BackupTarget create <options>
+    sfcli VirtualVolume listtasks <options>
 
 Description:
 
-CreateBackupTarget enables you to create and store backup target information so that you do not need to re-enter it each time a backup is created. 
+ListVirtualVolumeTasks returns a list of virtual volume tasks in the system. 
 
 Options:
---name
-The name of the backup target. 
-
---attributes
-List of name-value pairs in JSON object format. 
+--virtualvolumetaskids
+A list of virtual volume task IDs for which to retrieve information. If you omit this parameter, the method returns information about all virtual volume tasks. 
 
 ---------------------------------------------------------------
-#### list ####
+#### unbind ####
 Command:
 
-    sfcli BackupTarget list <options>
+    sfcli VirtualVolume unbind <options>
 
 Description:
 
-You can use ListBackupTargets to retrieve information about all backup targets that have been created. 
+UnbindGetVirtualVolume removes the VVol  Host binding. 
 
 Options:
+--unbindcontext
+Normal, Start, or End? 
+
 ---------------------------------------------------------------
-#### get ####
+#### querymetadata ####
 Command:
 
-    sfcli BackupTarget get <options>
+    sfcli VirtualVolume querymetadata <options>
 
 Description:
 
-GetBackupTarget enables you to return information about a specific backup target that you have created. 
+QueryVirtualVolumeMetadata returns a list of VVols matching a metadata query. 
 
 Options:
---backuptargetid
-The unique identifier assigned to the backup target. 
-
----------------------------------------------------------------
-#### remove ####
-Command:
-
-    sfcli BackupTarget remove <options>
-
-Description:
-
-RemoveBackupTarget allows you to delete backup targets. 
-
-Options:
---backuptargetid
-The unique target ID of the target to remove. 
-
----------------------------------------------------------------
-#### modify ####
-Command:
-
-    sfcli BackupTarget modify <options>
-
-Description:
-
-ModifyBackupTarget enables you to change attributes of a backup target. 
-
-Options:
---backuptargetid
-The unique target ID for the target to modify. 
-
---name
-The new name for the backup target. 
-
---attributes
-List of name-value pairs in JSON object format. 
-
 
 VolumeAccessGroup Commands 
 ---------------------------------------------------------------
-#### modify ####
+#### removevolumesfrom ####
 Command:
 
-    sfcli VolumeAccessGroup modify <options>
+    sfcli VolumeAccessGroup removevolumesfrom <options>
 
 Description:
 
-You can use ModifyVolumeAccessGroup to update initiators and add or remove volumes from a volume access group. If a specified initiator or volume is a duplicate of what currently exists, the volume access group is left as-is. If you do not specify a value for volumes or initiators, the current list of initiators and volumes is not changed. 
+The RemoveVolumeFromVolumeAccessGroup method enables you to remove volumes from a volume access group. 
 
 Options:
 --volumeaccessgroupid
-The ID of the volume access group to modify. 
-
---virtualnetworkid
-The ID of the SolidFire virtual network to associate the volume access group with. 
-
---virtualnetworktags
-The ID of the SolidFire virtual network to associate the volume access group with. 
-
---name
-The new name for this volume access group. Not required to be unique, but recommended. 
-
---initiators
-List of initiators to include in the volume access group. If unspecified, the access group's configured initiators are not modified. 
+The ID of the volume access group to remove volumes from. 
 
 --volumes
-List of volumes to initially include in the volume access group. If unspecified, the access group's volumes are not modified. 
-
---deleteorphaninitiators
-true: Delete initiator objects after they are removed from a volume access group. false: Do not delete initiator objects after they are removed from a volume access group. 
-
---attributes
-List of name-value pairs in JSON object format. 
+The ID of the volume access group to remove volumes from. 
 
 ---------------------------------------------------------------
-#### addinitiatorsto ####
+#### getefficiency ####
 Command:
 
-    sfcli VolumeAccessGroup addinitiatorsto <options>
+    sfcli VolumeAccessGroup getefficiency <options>
 
 Description:
 
-AddInitiatorsToVolumeAccessGroup enables you to add initiators to a specified volume access group. 
+GetVolumeAccessGroupEfficiency enables you to retrieve efficiency information about a volume access group. Only the volume access group you provide as the parameter in this API method is used to compute the capacity. 
 
 Options:
 --volumeaccessgroupid
-The ID of the volume access group to modify. 
-
---initiators
-The list of initiators to add to the volume access group. 
+The volume access group for which capacity is computed. 
 
 ---------------------------------------------------------------
-#### removeinitiatorsfrom ####
+#### addvolumesto ####
 Command:
 
-    sfcli VolumeAccessGroup removeinitiatorsfrom <options>
+    sfcli VolumeAccessGroup addvolumesto <options>
 
 Description:
 
-RemoveInitiatorsFromVolumeAccessGroup enables you to remove initiators from a specified volume access group. 
+AddVolumesToVolumeAccessGroup enables you to add volumes to a specified volume access group. 
 
 Options:
 --volumeaccessgroupid
-The ID of the volume access group from which the initiators are removed. 
+The ID of the volume access group to which volumes are added. 
 
---initiators
-The list of initiators to remove from the volume access group. 
-
---deleteorphaninitiators
-true: Delete initiator objects after they are removed from a volume access group. false: Do not delete initiator objects after they are removed from a volume access group. 
+--volumes
+The list of volumes to add to the volume access group. 
 
 ---------------------------------------------------------------
 #### modifylunassignments ####
@@ -1287,26 +1172,6 @@ Options:
 The ID of the volume access group to be deleted. 
 
 ---------------------------------------------------------------
-#### list ####
-Command:
-
-    sfcli VolumeAccessGroup list <options>
-
-Description:
-
-ListVolumeAccessGroups enables you to return information about the volume access groups that are currently in the system. 
-
-Options:
---startvolumeaccessgroupid
-The volume access group ID at which to begin the listing. If unspecified, there is no lower limit (implicitly 0). 
-
---limit
-The maximum number of results to return. This can be useful for paging. 
-
---volumeaccessgroups
-The list of ids of the volume access groups you wish to list 
-
----------------------------------------------------------------
 #### create ####
 Command:
 
@@ -1336,21 +1201,96 @@ The ID of the SolidFire virtual network to associate the volume access group wit
 List of name-value pairs in JSON object format. 
 
 ---------------------------------------------------------------
-#### addvolumesto ####
+#### modify ####
 Command:
 
-    sfcli VolumeAccessGroup addvolumesto <options>
+    sfcli VolumeAccessGroup modify <options>
 
 Description:
 
-AddVolumesToVolumeAccessGroup enables you to add volumes to a specified volume access group. 
+You can use ModifyVolumeAccessGroup to update initiators and add or remove volumes from a volume access group. If a specified initiator or volume is a duplicate of what currently exists, the volume access group is left as-is. If you do not specify a value for volumes or initiators, the current list of initiators and volumes is not changed. 
 
 Options:
 --volumeaccessgroupid
-The ID of the volume access group to which volumes are added. 
+The ID of the volume access group to modify. 
+
+--virtualnetworkid
+The ID of the SolidFire virtual network to associate the volume access group with. 
+
+--virtualnetworktags
+The ID of the SolidFire virtual network to associate the volume access group with. 
+
+--name
+The new name for this volume access group. Not required to be unique, but recommended. 
+
+--initiators
+List of initiators to include in the volume access group. If unspecified, the access group's configured initiators are not modified. 
 
 --volumes
-The list of volumes to add to the volume access group. 
+List of volumes to initially include in the volume access group. If unspecified, the access group's volumes are not modified. 
+
+--deleteorphaninitiators
+true: Delete initiator objects after they are removed from a volume access group. false: Do not delete initiator objects after they are removed from a volume access group. 
+
+--attributes
+List of name-value pairs in JSON object format. 
+
+---------------------------------------------------------------
+#### removeinitiatorsfrom ####
+Command:
+
+    sfcli VolumeAccessGroup removeinitiatorsfrom <options>
+
+Description:
+
+RemoveInitiatorsFromVolumeAccessGroup enables you to remove initiators from a specified volume access group. 
+
+Options:
+--volumeaccessgroupid
+The ID of the volume access group from which the initiators are removed. 
+
+--initiators
+The list of initiators to remove from the volume access group. 
+
+--deleteorphaninitiators
+true: Delete initiator objects after they are removed from a volume access group. false: Do not delete initiator objects after they are removed from a volume access group. 
+
+---------------------------------------------------------------
+#### addinitiatorsto ####
+Command:
+
+    sfcli VolumeAccessGroup addinitiatorsto <options>
+
+Description:
+
+AddInitiatorsToVolumeAccessGroup enables you to add initiators to a specified volume access group. 
+
+Options:
+--volumeaccessgroupid
+The ID of the volume access group to modify. 
+
+--initiators
+The list of initiators to add to the volume access group. 
+
+---------------------------------------------------------------
+#### list ####
+Command:
+
+    sfcli VolumeAccessGroup list <options>
+
+Description:
+
+ListVolumeAccessGroups enables you to return information about the volume access groups that are currently in the system. 
+
+Options:
+--startvolumeaccessgroupid
+The volume access group ID at which to begin the listing. If unspecified, there is no lower limit (implicitly 0). 
+
+--limit
+The maximum number of results to return. This can be useful for paging. 
+
+--volumeaccessgroups
+The list of ids of the volume access groups you wish to list 
 
 ---------------------------------------------------------------
 #### getlunassignments ####
@@ -1366,66 +1306,8 @@ Options:
 --volumeaccessgroupid
 The unique volume access group ID used to return information. 
 
----------------------------------------------------------------
-#### getefficiency ####
-Command:
-
-    sfcli VolumeAccessGroup getefficiency <options>
-
-Description:
-
-GetVolumeAccessGroupEfficiency enables you to retrieve efficiency information about a volume access group. Only the volume access group you provide as the parameter in this API method is used to compute the capacity. 
-
-Options:
---volumeaccessgroupid
-The volume access group for which capacity is computed. 
-
----------------------------------------------------------------
-#### removevolumesfrom ####
-Command:
-
-    sfcli VolumeAccessGroup removevolumesfrom <options>
-
-Description:
-
-The RemoveVolumeFromVolumeAccessGroup method enables you to remove volumes from a volume access group. 
-
-Options:
---volumeaccessgroupid
-The ID of the volume access group to remove volumes from. 
-
---volumes
-The ID of the volume access group to remove volumes from. 
-
-
-Service Commands 
----------------------------------------------------------------
-#### list ####
-Command:
-
-    sfcli Service list <options>
-
-Description:
-
-You can use ListServices to return the services information for nodes, drives, current software, and other services that are running on the cluster. 
-
-Options:
 
 Pairing Commands 
----------------------------------------------------------------
-#### removevolumepair ####
-Command:
-
-    sfcli Pairing removevolumepair <options>
-
-Description:
-
-RemoveVolumePair enables you to remove the remote pairing between two volumes. Use this method on both the source and target volumes that are paired together. When you remove the volume pairing information, data is no longer replicated to or from the volume. 
-
-Options:
---volumeid
-The ID of the volume on which to stop the replication process. 
-
 ---------------------------------------------------------------
 #### startvolume ####
 Command:
@@ -1443,65 +1325,6 @@ The ID of the volume on which to start the pairing process.
 --mode
 The mode of the volume on which to start the pairing process. The mode can only be set if the volume is the source volume. Possible values are: Async: (default if no mode parameter specified) Writes are acknowledged when they complete locally. The cluster does not wait for writes to be replicated to the target cluster. Sync: Source acknowledges write when the data is stored locally and on the remote cluster. SnapshotsOnly: Only snapshots created on the source cluster will be replicated. Active writes from the source volume are not replicated. 
 
----------------------------------------------------------------
-#### removeclusterpair ####
-Command:
-
-    sfcli Pairing removeclusterpair <options>
-
-Description:
-
-You can use the RemoveClusterPair method to close the open connections between two paired clusters. Note: Before you remove a cluster pair, you must first remove all volume pairing to the clusters with the "RemoveVolumePair" API method. 
-
-Options:
---clusterpairid
-Unique identifier used to pair two clusters. 
-
----------------------------------------------------------------
-#### listclusterpairs ####
-Command:
-
-    sfcli Pairing listclusterpairs <options>
-
-Description:
-
-You can use the ListClusterPairs method to list all the clusters that a cluster is paired with. This method returns information about active and pending cluster pairings, such as statistics about the current pairing as well as the connectivity and latency (in milliseconds) of the cluster pairing. 
-
-Options:
----------------------------------------------------------------
-#### modifyvolumepair ####
-Command:
-
-    sfcli Pairing modifyvolumepair <options>
-
-Description:
-
-ModifyVolumePair enables you to pause or restart replication between a pair of volumes. 
-
-Options:
---volumeid
-The ID of the volume to be modified. 
-
---pausedmanual
-Specifies whether to pause or restart volume replication process. Valid values are:  true: Pauses volume replication false: Restarts volume replication 
-
---mode
-Specifies the volume replication mode. Possible values are: Async: Writes are acknowledged when they complete locally. The cluster does not wait for writes to be replicated to the target cluster. Sync: The source acknowledges the write when the data is stored locally and on the remote cluster. SnapshotsOnly: Only snapshots created on the source cluster are replicated. Active writes from the source volume are not replicated. 
-
---pauselimit
-Internal use only. 
-
----------------------------------------------------------------
-#### startcluster ####
-Command:
-
-    sfcli Pairing startcluster <options>
-
-Description:
-
-You can use the StartClusterPairing method to create an encoded key from a cluster that is used to pair with another cluster. The key created from this API method is used in the CompleteClusterPairing API method to establish a cluster pairing. You can pair a cluster with a maximum of four other clusters.  
-
-Options:
 ---------------------------------------------------------------
 #### completevolume ####
 Command:
@@ -1534,6 +1357,43 @@ Options:
 A string of characters that is returned from the "StartClusterPairing" API method. 
 
 ---------------------------------------------------------------
+#### modifyvolumepair ####
+Command:
+
+    sfcli Pairing modifyvolumepair <options>
+
+Description:
+
+ModifyVolumePair enables you to pause or restart replication between a pair of volumes. 
+
+Options:
+--volumeid
+The ID of the volume to be modified. 
+
+--pausedmanual
+Specifies whether to pause or restart volume replication process. Valid values are:  true: Pauses volume replication false: Restarts volume replication 
+
+--mode
+Specifies the volume replication mode. Possible values are: Async: Writes are acknowledged when they complete locally. The cluster does not wait for writes to be replicated to the target cluster. Sync: The source acknowledges the write when the data is stored locally and on the remote cluster. SnapshotsOnly: Only snapshots created on the source cluster are replicated. Active writes from the source volume are not replicated. 
+
+--pauselimit
+Internal use only. 
+
+---------------------------------------------------------------
+#### removeclusterpair ####
+Command:
+
+    sfcli Pairing removeclusterpair <options>
+
+Description:
+
+You can use the RemoveClusterPair method to close the open connections between two paired clusters. Note: Before you remove a cluster pair, you must first remove all volume pairing to the clusters with the "RemoveVolumePair" API method. 
+
+Options:
+--clusterpairid
+Unique identifier used to pair two clusters. 
+
+---------------------------------------------------------------
 #### listactivepairedvolumes ####
 Command:
 
@@ -1550,433 +1410,380 @@ The beginning of the range of active paired volumes to return.
 --limit
 Maximum number of active paired volumes to return. 
 
-
-Sensors Commands 
 ---------------------------------------------------------------
-#### getipmiinfo ####
+#### removevolumepair ####
 Command:
 
-    sfcli Sensors getipmiinfo <options>
+    sfcli Pairing removevolumepair <options>
 
 Description:
 
-GetIpmiInfo enables you to display a detailed reporting of sensors (objects) for node fans, intake and exhaust temperatures, and power supplies that are monitored by the system. 
+RemoveVolumePair enables you to remove the remote pairing between two volumes. Use this method on both the source and target volumes that are paired together. When you remove the volume pairing information, data is no longer replicated to or from the volume. 
 
 Options:
+--volumeid
+The ID of the volume on which to stop the replication process. 
+
 ---------------------------------------------------------------
-#### getipmiconfig ####
+#### startcluster ####
 Command:
 
-    sfcli Sensors getipmiconfig <options>
+    sfcli Pairing startcluster <options>
 
 Description:
 
-GetIpmiConfig enables you to retrieve hardware sensor information from sensors that are in your node. 
+You can use the StartClusterPairing method to create an encoded key from a cluster that is used to pair with another cluster. The key created from this API method is used in the CompleteClusterPairing API method to establish a cluster pairing. You can pair a cluster with a maximum of four other clusters.  
 
 Options:
---chassistype
-Displays information for each node chassis type. Valid values are: all: Returns sensor information for each chassis type. {chassis type}: Returns sensor information for a specified chassis type. 
-
-
-VirtualNetwork Commands 
 ---------------------------------------------------------------
-#### add ####
+#### listclusterpairs ####
 Command:
 
-    sfcli VirtualNetwork add <options>
+    sfcli Pairing listclusterpairs <options>
 
 Description:
 
-You can use the AddVirtualNetwork method to add a new virtual network to a cluster configuration. When you add a virtual network, an interface for each node is created and each interface will require a virtual network IP address. The number of IP addresses you specify as a parameter for this API method must be equal to or greater than the number of nodes in the cluster. The system bulk provisions virtual network addresses and assigns them to individual nodes automatically. You do not need to assign virtual network addresses to nodes manually. Note: You can use AddVirtualNetwork only to create a new virtual network. If you want to make changes to an existing virtual network, use ModifyVirtualNetwork. Note: Virtual network parameters must be unique to each virtual network when setting the namespace parameter to false. 
+You can use the ListClusterPairs method to list all the clusters that a cluster is paired with. This method returns information about active and pending cluster pairings, such as statistics about the current pairing as well as the connectivity and latency (in milliseconds) of the cluster pairing. 
 
 Options:
---virtualnetworktag
-A unique virtual network (VLAN) tag. Supported values are 1 through 4094.The number zero (0) is not supported. 
 
---name
-A user-defined name for the new virtual network. 
+Restart Commands 
+---------------------------------------------------------------
+#### networking ####
+Command:
 
---addressblocks
-Unique range of IP addresses to include in the virtual network. Attributes for this parameter are: start: The start of the IP address range. (String) size: The number of IP addresses to include in the block. (Integer) 
+    sfcli Restart networking <options>
 
---netmask
-Unique network mask for the virtual network being created. 
+Description:
 
+The RestartNetworking API method enables you to restart the networking services on a node. Warning: This method restarts all networking services on a node, causing temporary loss of networking connectivity. Exercise caution when using this method. Note: This method is available only through the per-node API endpoint 5.0 or later. 
+
+Options:
+--force
+Required parameter to successfully reset the node. 
+
+---------------------------------------------------------------
+#### resetnode ####
+Command:
+
+    sfcli Restart resetnode <options>
+
+Description:
+
+The ResetNode API method enables you to reset a node to the factory settings. All data, packages (software upgrades, and so on), configurations, and log files are deleted from the node when you call this method. However, network settings for the node are preserved during this operation. Nodes that are participating in a cluster cannot be reset to the factory settings. The ResetNode API can only be used on nodes that are in an "Available" state. It cannot be used on nodes that are "Active" in a cluster, or in a "Pending" state. Caution: This method clears any data that is on the node. Exercise caution when using this method. Note: This method is available only through the per-node API endpoint 5.0 or later. 
+
+Options:
+--build
+Specifies the URL to a remote Element software image to which the node will be reset. 
+
+--force
+Required parameter to successfully reset the node. 
+
+--options
+Specifications for running the reset operation. 
+
+--reboot
+Should it be rebooted? 
+
+---------------------------------------------------------------
+#### services ####
+Command:
+
+    sfcli Restart services <options>
+
+Description:
+
+The RestartServices API method enables you to restart the services on a node. Caution: This method causes temporary node services interruption. Exercise caution when using this method. Note: This method is available only through the per-node API endpoint 5.0 or later. 
+
+Options:
+--force
+Required parameter to successfully restart services on a node. 
+
+--service
+Service name to be restarted. 
+
+--action
+Action to perform on the service (start, stop, restart). 
+
+---------------------------------------------------------------
+#### shutdown ####
+Command:
+
+    sfcli Restart shutdown <options>
+
+Description:
+
+The Shutdown API method enables you to restart or shutdown a node that has not yet been added to a cluster. To use this method, log in to the MIP for the pending node, and enter the "shutdown" method with either the "restart" or "halt" options. 
+
+Options:
+--nodes
+List of NodeIDs for the nodes to be shutdown. 
+
+--option
+Specifies the action to take for the node shutdown. Possible values are: restart: Restarts the node. halt: Shuts down the node. 
+
+
+Test Commands 
+---------------------------------------------------------------
+#### connectsvip ####
+Command:
+
+    sfcli Test connectsvip <options>
+
+Description:
+
+The TestConnectSvip API method enables you to test the storage connection to the cluster. The test pings the SVIP using ICMP packets, and when successful, connects as an iSCSI initiator. Note: This method is available only through the per-node API endpoint 5.0 or later. 
+
+Options:
 --svip
-Unique storage IP address for the virtual network being created. 
+If specified, tests the storage connection of a different SVIP. You do not need to use this value when testing the connection to the target cluster. This parameter is optional. 
 
---start
-Start of the IP address range. 
+---------------------------------------------------------------
+#### connectmvip ####
+Command:
 
---size
-Number of IP addresses to include in the block. 
+    sfcli Test connectmvip <options>
 
---available
-Nuber of available blocks 
+Description:
 
---gateway
-The IP address of a gateway of the virtual network. This parameter is only valid if the "namespace" parameter is set to true. 
+The TestConnectMvip API method enables you to test the management connection to the cluster. The test pings the MVIP and executes a simple API method to verify connectivity. Note: This method is available only through the per-node API endpoint 5.0 or later. 
 
---namespace
-When set to true, enables the Routable Storage VLANs functionality by creating and configuring a namespace and the virtual network contained by it. 
+Options:
+--mvip
+If specified, tests the management connection of a different MVIP. You do not need to use this value when testing the connection to the target cluster. This parameter is optional. 
 
---attributes
-List of name-value pairs in JSON object format. 
+---------------------------------------------------------------
+#### listutilities ####
+Command:
 
+    sfcli Test listutilities <options>
+
+Description:
+
+You can use the ListUtilities API method to return the operations that are available to run on a node.  Note: This method is available only through the per-node API endpoint 5.0 or later. 
+
+Options:
 ---------------------------------------------------------------
 #### list ####
 Command:
 
-    sfcli VirtualNetwork list <options>
+    sfcli Test list <options>
 
 Description:
 
-ListVirtualNetworks enables you to list all configured virtual networks for the cluster. You can use this method to verify the virtual network settings in the cluster. There are no required parameters for this method. However, to filter the results, you can pass one or more VirtualNetworkID or VirtualNetworkTag values. 
+You can use the ListTests API method to return the tests that are available to run on a node. Note: This method is available only through the per-node API endpoint 5.0 or later. 
 
 Options:
---virtualnetworkid
-Network ID to filter the list for a single virtual network. 
-
---virtualnetworktag
-Network tag to filter the list for a single virtual network. 
-
---virtualnetworkids
-Network IDs to include in the list. 
-
---virtualnetworktags
-Network tag to include in the list. 
-
 ---------------------------------------------------------------
-#### remove ####
+#### ping ####
 Command:
 
-    sfcli VirtualNetwork remove <options>
+    sfcli Test ping <options>
 
 Description:
 
-RemoveVirtualNetwork enables you to remove a previously added virtual network. Note: This method requires either the virtualNetworkID or the virtualNetworkTag as a parameter, but not both. 
+You can use the TestPing API method to validate the connection to all the nodes in a cluster on both 1G and 10G interfaces by using ICMP packets. The test uses the appropriate MTU sizes for each packet based on the MTU settings in the network configuration. Note: This method is available only through the per-node API endpoint 5.0 or later. 
 
 Options:
---virtualnetworkid
-Network ID that identifies the virtual network to remove. 
+--attempts
+Specifies the number of times the system should repeat the test ping. The default value is 5. 
 
---virtualnetworktag
-Network tag that identifies the virtual network to remove. 
+--hosts
+Specifies a comma-separated list of addresses or hostnames of devices to ping. 
+
+--totaltimeoutsec
+Specifies the length of time the ping should wait for a system response before issuing the next ping attempt or ending the process. 
+
+--packetsize
+Specifies the number of bytes to send in the ICMP packet that is sent to each IP. The number must be less than the maximum MTU specified in the network configuration. 
+
+--pingtimeoutmsec
+Specifies the number of milliseconds to wait for each individual ping response. The default value is 500 ms. 
+
+--prohibitfragmentation
+Specifies that the Do not Fragment (DF) flag is enabled for the ICMP packets. 
 
 ---------------------------------------------------------------
-#### modify ####
+#### connectensemble ####
 Command:
 
-    sfcli VirtualNetwork modify <options>
+    sfcli Test connectensemble <options>
 
 Description:
 
-You can use ModifyVirtualNetwork to change the attributes of an existing virtual network. This method enables you to add or remove address blocks, change the netmask, or modify the name or description of the virtual network. You can also use it to enable or disable namespaces, as well as add or remove a gateway if namespaces are enabled on the virtual network. Note: This method requires either the VirtualNetworkID or the VirtualNetworkTag as a parameter, but not both. Caution: Enabling or disabling the Routable Storage VLANs functionality for an existing virtual network by changing the "namespace" parameter disrupts any traffic handled by the virtual network. NetApp strongly recommends changing the "namespace" parameter only during a scheduled maintenance window. 
+The TestConnectEnsemble API method enables you to verify connectivity with a specified database ensemble. By default, it uses the ensemble for the cluster that the node is associated with. Alternatively, you can provide a different ensemble to test connectivity with. Note: This method is available only through the per-node API endpoint 5.0 or later. 
 
 Options:
---virtualnetworkid
-The unique identifier of the virtual network to modify. This is the virtual network ID assigned by the cluster.  Note: This parameter is optional but either virtualNetworkID or virtualNetworkTag must be specified with this API method. 
-
---virtualnetworktag
-The network tag that identifies the virtual network to modify. Note: This parameter is optional but either virtualNetworkID or virtualNetworkTag must be specified with this API method. 
-
---name
-The new name for the virtual network. 
-
---addressblocks
-The new addressBlock to set for this virtual network. This might contain new address blocks to add to the existing object or omit unused address blocks that need to be removed. Alternatively, you can extend or reduce the size of existing address blocks. You can only increase the size of the starting addressBlocks for a virtual network object; you can never decrease it. Attributes for this parameter are: start: The start of the IP address range. (String) size: The number of IP addresses to include in the block. (Integer) 
-
---netmask
-New network mask for this virtual network. 
-
---svip
-The storage virtual IP address for this virtual network. The svip for a virtual network cannot be changed. You must create a new virtual network to use a different svip address. 
-
---gateway
-The IP address of a gateway of the virtual network. This parameter is only valid if the "namespace" parameter is set to true. 
-
---namespace
-When set to true, enables Routable Storage VLANs functionality by recreating the virtual network and configuring a namespace to contain it. When set to false, disables the VRF functionality for the virtual network. Changing this value disrupts traffic running through this virtual network. 
-
---attributes
-A new list of name-value pairs in JSON object format. 
+--ensemble
+Uses a comma-separated list of ensemble node cluster IP addresses to test connectivity. This parameter is optional. 
 
 
-Drive Commands 
+Node Commands 
+---------------------------------------------------------------
+#### listall ####
+Command:
+
+    sfcli Node listall <options>
+
+Description:
+
+ListAllNodes enables you to retrieve a list of active and pending nodes in the cluster. 
+
+Options:
 ---------------------------------------------------------------
 #### add ####
 Command:
 
-    sfcli Drive add <options>
+    sfcli Node add <options>
 
 Description:
 
-AddDrives enables you to add one or more available drives to the cluster, enabling the drives to host a portion of the cluster's data. When you add a node to the cluster or install new drives in an existing node, the new drives are marked as "available" and must be added via AddDrives before they can be utilized. Use the ListDrives method to display drives that are "available" to be added. When you add multiple drives, it is more efficient to add them in a single AddDrives method call rather than multiple individual methods with a single drive each. This reduces the amount of data balancing that must occur to stabilize the storage load on the cluster. When you add a drive, the system automatically determines the "type" of drive it should be. The method is asynchronous and returns immediately. However, it can take some time for the data in the cluster to be rebalanced using the newly added drives. As the new drives are syncing on the system, you can use the ListSyncJobs method to see how the drives are being rebalanced and the progress of adding the new drive. You can also use the GetAsyncResult method to query the method's returned asyncHandle. 
+AddNodes enables you to add one or more new nodes to a cluster. When a node that is not configured starts up for the first time, you are prompted to configure the node. After you configure the node, it is registered as a "pending node" with the cluster.  Note: It might take several seconds after adding a new node for it to start up and register its drives as available. 
 
 Options:
---drives
-Returns information about each drive to be added to the cluster. Possible values are: driveID: The ID of the drive to add. (Integer) type: (Optional) The type of drive to add. Valid values are "slice" or "block". If omitted, the system assigns the correct type. (String) 
+--pendingnodes
+ List of pending NodeIDs for the nodes to be added. You can  obtain the list of pending nodes using the ListPendingNodes method. 
 
---driveid
-A unique identifier for this drive. 
-
---type
-block or slice 
-
---forceduringupgrade
-Allows the user to force the addition of drives during an upgrade. 
+--autoinstall
+Whether these nodes should be autoinstalled 
 
 ---------------------------------------------------------------
-#### reset ####
+#### getnetworkconfig ####
 Command:
 
-    sfcli Drive reset <options>
+    sfcli Node getnetworkconfig <options>
 
 Description:
 
-ResetDrives enables you to proactively initialize drives and remove all data currently residing on a drive. The drive can then be reused in an existing node or used in an upgraded node. This method requires the force parameter to be included in the method call. 
-
-Options:
---drives
-List of device names (not driveIDs) to reset. 
-
---force
-Required parameter to successfully reset a drive. 
-
----------------------------------------------------------------
-#### listhardware ####
-Command:
-
-    sfcli Drive listhardware <options>
-
-Description:
-
-ListDriveHardware returns all the drives connected to a node. Use this method on individual nodes to return drive hardware information or use this method on the cluster master node MVIP to see information for all the drives on all nodes. Note: The "securitySupported": true line of the method response does not imply that the drives are capable of encryption; only that the security status can be queried. If you have a node type with a model number ending in "-NE", commands to enable security features on these drives will fail. See the EnableEncryptionAtRest method for more information. 
-
-Options:
---force
-To run this command, the force parameter must be set to true. 
-
----------------------------------------------------------------
-#### list ####
-Command:
-
-    sfcli Drive list <options>
-
-Description:
-
-ListDrives enables you to retrieve the list of the drives that exist in the cluster's active nodes. This method returns drives that have been added as volume metadata or block drives as well as drives that have not been added and are available. 
+The GetNetworkConfig API method enables you to display the network configuration information for a node. Note: This method is available only through the per-node API endpoint 5.0 or later. 
 
 Options:
 ---------------------------------------------------------------
-#### remove ####
+#### getbootstrapconfig ####
 Command:
 
-    sfcli Drive remove <options>
+    sfcli Node getbootstrapconfig <options>
 
 Description:
 
-You can use RemoveDrives to proactively remove drives that are part of the cluster. You might want to use this method when reducing cluster capacity or preparing to replace drives nearing the end of their service life. Any data on the drives is removed and migrated to other drives in the cluster before the drive is removed from the cluster. This is an asynchronous method. Depending on the total capacity of the drives being removed, it might take several minutes to migrate all of the data. Use the GetAsyncResult method to check the status of the remove operation. When removing multiple drives, use a single RemoveDrives method call rather than multiple individual methods with a single drive each. This reduces the amount of data balancing that must occur to even stabilize the storage load on the cluster. You can also remove drives with a "failed" status using RemoveDrives. When you remove a drive with a "failed" status it is not returned to an "available" or active status. The drive is unavailable for use in the cluster. Use the ListDrives method to obtain the driveIDs for the drives you want to remove. 
+GetBootstrapConfig returns cluster and node information from the bootstrap configuration file. Use this API method on an individual node before it has been joined with a cluster. You can use the information this method returns in the cluster configuration interface when you create a cluster. 
 
 Options:
---drives
-List of driveIDs to remove from the cluster. 
-
---forceduringupgrade
-If you want to remove a drive during upgrade, this must be set to true. 
-
 ---------------------------------------------------------------
-#### gethardwareinfo ####
-Command:
 
-    sfcli Drive gethardwareinfo <options>
-
-Description:
-
-GetDriveHardwareInfo returns all the hardware information for the given drive. This generally includes details about manufacturers, vendors, versions, and other associated hardware identification information. 
-
-Options:
---driveid
-DriveID for the drive information requested. You can get DriveIDs by using the ListDrives method. 
+# Set network config has been omitted from this cli
 
 ---------------------------------------------------------------
 #### getconfig ####
 Command:
 
-    sfcli Drive getconfig <options>
+    sfcli Node getconfig <options>
 
 Description:
 
-GetDriveConfig enables you to display drive information for expected slice and block drive counts as well as the number of slices and block drives that are currently connected to the node. Note: This method is available only through the per-node API endpoint 5.0 or later. 
+The GetConfig API method enables you to retrieve all configuration information for a node. This method includes the same information available in both the GetClusterConfig and GetNetworkConfig API methods. Note: This method is available only through the per-node API endpoint 5.0 or later. 
 
 Options:
 ---------------------------------------------------------------
-#### secureerase ####
+#### listpendingactive ####
 Command:
 
-    sfcli Drive secureerase <options>
+    sfcli Node listpendingactive <options>
 
 Description:
 
-SecureEraseDrives enables you to remove any residual data from drives that have a status of "available." You might want to use this method when replacing a drive nearing the end of its service life that contained sensitive data. This method uses a Security Erase Unit command to write a predetermined pattern to the drive and resets the encryption key on the drive. This asynchronous method might take up to two minutes to complete. You can use GetAsyncResult to check on the status of the secure erase operation. You can use the ListDrives method to obtain the driveIDs for the drives you want to secure erase. 
+ListPendingActiveNodes returns the list of nodes in the cluster that are currently in the PendingActive state, between the pending and active states. These are nodes that are currently being returned to the factory image. 
 
 Options:
---drives
-List of driveIDs to be secure erased. 
+---------------------------------------------------------------
+#### getorigin ####
+Command:
+
+    sfcli Node getorigin <options>
+
+Description:
+
+GetOrigin enables you to retrieve the origination certificate for where the node was built. This method might return null if there is no origination certification. 
+
+Options:
+---------------------------------------------------------------
+#### liststats ####
+Command:
+
+    sfcli Node liststats <options>
+
+Description:
+
+ListNodeStats enables you to view the high-level activity measurements for all nodes in a cluster. 
+
+Options:
+---------------------------------------------------------------
+#### remove ####
+Command:
+
+    sfcli Node remove <options>
+
+Description:
+
+You can use RemoveNodes to remove one or more nodes that should no longer participate in the cluster. Before removing a node, you must remove all drives the node contains using the RemoveDrives method. You cannot remove a node until the RemoveDrives process has completed and all data has been migrated away from the node. After you remove a node, it registers itself as a pending node. You can add the node again or shut it down (shutting the node down removes it from the Pending Node list). 
+
+Options:
+--nodes
+List of NodeIDs for the nodes to be removed. 
 
 ---------------------------------------------------------------
-#### test ####
+#### getpendingoperation ####
 Command:
 
-    sfcli Drive test <options>
+    sfcli Node getpendingoperation <options>
 
 Description:
 
-You can use the TestDrives API method to run a hardware validation on all drives on the node. This method detects hardware failures on the drives (if present) and reports them in the results of the validation tests. You can only use the TestDrives method on nodes that are not "active" in a cluster. Note: This test takes approximately 10 minutes. Note: This method is available only through the per-node API endpoint 5.0 or later. 
+You can use GetPendingOperation to detect an operation on a node that is currently in progress. You can also use this method to report back when an operation has completed.  Note: method is available only through the per-node API endpoint 5.0 or later. 
 
 Options:
---minutes
-Specifies the number of minutes to run the test. 
+---------------------------------------------------------------
+
+# Set config has been omitted from this cli
 
 ---------------------------------------------------------------
 #### getstats ####
 Command:
 
-    sfcli Drive getstats <options>
+    sfcli Node getstats <options>
 
 Description:
 
-GetDriveStats returns high-level activity measurements for a single drive. Values are cumulative from the addition of the drive to the cluster. Some values are specific to block drives. You might not obtain statistical data for both block and metadata drives when you run this method.  
+GetNodeStats enables you to retrieve the high-level activity measurements for a single node. 
 
 Options:
---driveid
-Specifies the drive for which statistics are gathered. 
+--nodeid
+Specifies the node for which statistics are gathered. 
 
+---------------------------------------------------------------
+#### listpending ####
+Command:
+
+    sfcli Node listpending <options>
+
+Description:
+
+ListPendingNodes returns a list of the currently pending nodes in the system. Pending nodes are nodes that are running and configured to join the cluster, but have not yet been added via the AddNodes API method. 
+
+Options:
+---------------------------------------------------------------
+#### listactive ####
+Command:
+
+    sfcli Node listactive <options>
+
+Description:
+
+ListActiveNodes returns the list of currently active nodes that are in the cluster. 
+
+Options:
 
 Snapshot Commands 
----------------------------------------------------------------
-#### deletegroup ####
-Command:
-
-    sfcli Snapshot deletegroup <options>
-
-Description:
-
-DeleteGroupSnapshot enables you to delete a group snapshot. You can use the saveMembers parameter to preserve all the snapshots that were made for the volumes in the group, but the group association is removed. 
-
-Options:
---groupsnapshotid
-Specifies the unique ID of the group snapshot. 
-
---savemembers
-Specifies whether to preserve snapshots or delete them. Valid values are: true: Snapshots are preserved, but group association is removed. false: The group and snapshots are deleted. 
-
----------------------------------------------------------------
-#### modify ####
-Command:
-
-    sfcli Snapshot modify <options>
-
-Description:
-
-ModifySnapshot enables you to change the attributes currently assigned to a snapshot. You can use this method to enable snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system. 
-
-Options:
---snapshotid
-Specifies the ID of the snapshot. 
-
---expirationtime
-Sets the time when the snapshot should be removed. 
-
---enableremotereplication
-Replicates the snapshot created to a remote cluster. Possible values are: true: The snapshot is replicated to remote storage. false: Default. The snapshot is not replicated. 
-
----------------------------------------------------------------
-#### creategroup ####
-Command:
-
-    sfcli Snapshot creategroup <options>
-
-Description:
-
-CreateGroupSnapshot enables you to create a point-in-time copy of a group of volumes. You can use this snapshot later as a backup or rollback to ensure the data on the group of volumes is consistent for the point in time that you created the snapshot. Note: Creating a group snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. 
-
-Options:
---volumes
-Unique ID of the volume image from which to copy. 
-
---name
-Name for the group snapshot. If unspecified, the date and time the group snapshot was taken is used. 
-
---enableremotereplication
-Replicates the snapshot created to remote storage. Possible values are: true: The snapshot is replicated to remote storage. false: Default. The snapshot is not replicated. 
-
---retention
-Specifies the amount of time for which the snapshots are retained. The format is HH:mm:ss. 
-
---attributes
-List of name-value pairs in JSON object format. 
-
----------------------------------------------------------------
-#### listschedules ####
-Command:
-
-    sfcli Snapshot listschedules <options>
-
-Description:
-
-ListSchedule enables you to retrieve information about all scheduled snapshots that have been created. 
-
-Options:
----------------------------------------------------------------
-#### rollbackto ####
-Command:
-
-    sfcli Snapshot rollbackto <options>
-
-Description:
-
-RollbackToSnapshot enables you to make an existing snapshot of the "active" volume image. This method creates a new snapshot from an existing snapshot. The new snapshot becomes "active" and the existing snapshot is preserved until you delete it. The previously "active" snapshot is deleted unless you set the parameter saveCurrentState to true. Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. 
-
-Options:
---volumeid
-VolumeID for the volume. 
-
---snapshotid
-The ID of a previously created snapshot on the given volume. 
-
---savecurrentstate
-Specifies whether to save an active volume image or delete it. Values are: true: The previous active volume image is kept. false: (default) The previous active volume image is deleted. 
-
---name
-Name for the snapshot. If unspecified, the name of the snapshot being rolled back to is used with "- copy" appended to the end of the name. 
-
---attributes
-List of name-value pairs in JSON object format. 
-
----------------------------------------------------------------
-#### rollbacktogroup ####
-Command:
-
-    sfcli Snapshot rollbacktogroup <options>
-
-Description:
-
-RollbackToGroupSnapshot enables you to roll back all individual volumes in a snapshot group to each volume's individual snapshot. Note: Rolling back to a group snapshot creates a temporary snapshot of each volume within the group snapshot. Snapshots are allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. 
-
-Options:
---groupsnapshotid
-Specifies the unique ID of the group snapshot. 
-
---savecurrentstate
-Specifies whether to save an active volume image or delete it. Values are: true: The previous active volume image is kept. false: (default) The previous active volume image is deleted. 
-
---name
-Name for the group snapshot of the volume's current state that is created if "saveCurrentState" is set to true. If you do not give a name, the name of the snapshots (group and individual volume) are set to a timestamp of the time that the rollback occurred. 
-
---attributes
-List of name-value pairs in JSON object format. 
-
 ---------------------------------------------------------------
 #### modifyschedule ####
 Command:
@@ -2035,18 +1842,81 @@ Indicates the status of the last scheduled snapshot. Valid values are: Success F
 
 
 ---------------------------------------------------------------
-#### getschedule ####
+#### delete ####
 Command:
 
-    sfcli Snapshot getschedule <options>
+    sfcli Snapshot delete <options>
 
 Description:
 
-You can use the GetSchedule method to retrieve information about a scheduled snapshot. You can see information about a specific schedule if there are many snapshot schedules in the system. You also retrieve information about more than one schedule with this method by specifying additional scheduleIDs in the parameter. 
+DeleteSnapshot enables you to delete a snapshot. A snapshot that is currently the "active" snapshot cannot be deleted. You must rollback and make another snapshot "active" before the current snapshot can be deleted. For more details on rolling back snapshots, see RollbackToSnapshot. 
 
 Options:
---scheduleid
-Specifies the unique ID of the schedule or multiple schedules to display. 
+--snapshotid
+The ID of the snapshot to be deleted. 
+
+---------------------------------------------------------------
+#### listgroup ####
+Command:
+
+    sfcli Snapshot listgroup <options>
+
+Description:
+
+ListGroupSnapshots enables you to get information about all group snapshots that have been created. 
+
+Options:
+--groupsnapshotid
+Retrieves information for a specific group snapshot ID. 
+
+--volumes
+An array of unique volume IDs to query. If you do not specify this parameter, all group snapshots on the cluster are included. 
+
+---------------------------------------------------------------
+#### modifygroup ####
+Command:
+
+    sfcli Snapshot modifygroup <options>
+
+Description:
+
+ModifyGroupSnapshot enables you to change the attributes of a group of snapshots. You can also use this method to enable snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system. 
+
+Options:
+--groupsnapshotid
+Specifies the ID of the group of snapshots. 
+
+--expirationtime
+Sets the time when the snapshot should be removed. If unspecified, the current time is used. 
+
+--enableremotereplication
+Replicates the snapshot created to a remote cluster. Possible values are: true: The snapshot is replicated to remote storage. false: Default. The snapshot is not replicated. 
+
+---------------------------------------------------------------
+#### rollbackto ####
+Command:
+
+    sfcli Snapshot rollbackto <options>
+
+Description:
+
+RollbackToSnapshot enables you to make an existing snapshot of the "active" volume image. This method creates a new snapshot from an existing snapshot. The new snapshot becomes "active" and the existing snapshot is preserved until you delete it. The previously "active" snapshot is deleted unless you set the parameter saveCurrentState to true. Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. 
+
+Options:
+--volumeid
+VolumeID for the volume. 
+
+--snapshotid
+The ID of a previously created snapshot on the given volume. 
+
+--savecurrentstate
+Specifies whether to save an active volume image or delete it. Values are: true: The previous active volume image is kept. false: (default) The previous active volume image is deleted. 
+
+--name
+Name for the snapshot. If unspecified, the name of the snapshot being rolled back to is used with "- copy" appended to the end of the name. 
+
+--attributes
+List of name-value pairs in JSON object format. 
 
 ---------------------------------------------------------------
 #### createschedule ####
@@ -2106,35 +1976,61 @@ Indicates the status of the last scheduled snapshot. Valid values are: Success F
 
 
 ---------------------------------------------------------------
-#### listgroup ####
+#### creategroup ####
 Command:
 
-    sfcli Snapshot listgroup <options>
+    sfcli Snapshot creategroup <options>
 
 Description:
 
-ListGroupSnapshots enables you to get information about all group snapshots that have been created. 
+CreateGroupSnapshot enables you to create a point-in-time copy of a group of volumes. You can use this snapshot later as a backup or rollback to ensure the data on the group of volumes is consistent for the point in time that you created the snapshot. Note: Creating a group snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. 
+
+Options:
+--volumes
+Unique ID of the volume image from which to copy. 
+
+--name
+Name for the group snapshot. If unspecified, the date and time the group snapshot was taken is used. 
+
+--enableremotereplication
+Replicates the snapshot created to remote storage. Possible values are: true: The snapshot is replicated to remote storage. false: Default. The snapshot is not replicated. 
+
+--retention
+Specifies the amount of time for which the snapshots are retained. The format is HH:mm:ss. 
+
+--attributes
+List of name-value pairs in JSON object format. 
+
+---------------------------------------------------------------
+#### deletegroup ####
+Command:
+
+    sfcli Snapshot deletegroup <options>
+
+Description:
+
+DeleteGroupSnapshot enables you to delete a group snapshot. You can use the saveMembers parameter to preserve all the snapshots that were made for the volumes in the group, but the group association is removed. 
 
 Options:
 --groupsnapshotid
-Retrieves information for a specific group snapshot ID. 
+Specifies the unique ID of the group snapshot. 
 
---volumes
-An array of unique volume IDs to query. If you do not specify this parameter, all group snapshots on the cluster are included. 
+--savemembers
+Specifies whether to preserve snapshots or delete them. Valid values are: true: Snapshots are preserved, but group association is removed. false: The group and snapshots are deleted. 
 
 ---------------------------------------------------------------
-#### delete ####
+#### getschedule ####
 Command:
 
-    sfcli Snapshot delete <options>
+    sfcli Snapshot getschedule <options>
 
 Description:
 
-DeleteSnapshot enables you to delete a snapshot. A snapshot that is currently the "active" snapshot cannot be deleted. You must rollback and make another snapshot "active" before the current snapshot can be deleted. For more details on rolling back snapshots, see RollbackToSnapshot. 
+You can use the GetSchedule method to retrieve information about a scheduled snapshot. You can see information about a specific schedule if there are many snapshot schedules in the system. You also retrieve information about more than one schedule with this method by specifying additional scheduleIDs in the parameter. 
 
 Options:
---snapshotid
-The ID of the snapshot to be deleted. 
+--scheduleid
+Specifies the unique ID of the schedule or multiple schedules to display. 
 
 ---------------------------------------------------------------
 #### list ####
@@ -2153,6 +2049,40 @@ Retrieves snapshots for a volume. If volumeID is not provided, all snapshots for
 --snapshotid
 Retrieves information for a specific snapshot ID. 
 
+---------------------------------------------------------------
+#### rollbacktogroup ####
+Command:
+
+    sfcli Snapshot rollbacktogroup <options>
+
+Description:
+
+RollbackToGroupSnapshot enables you to roll back all individual volumes in a snapshot group to each volume's individual snapshot. Note: Rolling back to a group snapshot creates a temporary snapshot of each volume within the group snapshot. Snapshots are allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. 
+
+Options:
+--groupsnapshotid
+Specifies the unique ID of the group snapshot. 
+
+--savecurrentstate
+Specifies whether to save an active volume image or delete it. Values are: true: The previous active volume image is kept. false: (default) The previous active volume image is deleted. 
+
+--name
+Name for the group snapshot of the volume's current state that is created if "saveCurrentState" is set to true. If you do not give a name, the name of the snapshots (group and individual volume) are set to a timestamp of the time that the rollback occurred. 
+
+--attributes
+List of name-value pairs in JSON object format. 
+
+---------------------------------------------------------------
+#### listschedules ####
+Command:
+
+    sfcli Snapshot listschedules <options>
+
+Description:
+
+ListSchedule enables you to retrieve information about all scheduled snapshots that have been created. 
+
+Options:
 ---------------------------------------------------------------
 #### create ####
 Command:
@@ -2183,80 +2113,602 @@ Specifies the amount of time for which the snapshot is retained. The format is H
 List of name-value pairs in JSON object format. 
 
 ---------------------------------------------------------------
-#### modifygroup ####
+#### modify ####
 Command:
 
-    sfcli Snapshot modifygroup <options>
+    sfcli Snapshot modify <options>
 
 Description:
 
-ModifyGroupSnapshot enables you to change the attributes of a group of snapshots. You can also use this method to enable snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system. 
+ModifySnapshot enables you to change the attributes currently assigned to a snapshot. You can use this method to enable snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system. 
 
 Options:
---groupsnapshotid
-Specifies the ID of the group of snapshots. 
+--snapshotid
+Specifies the ID of the snapshot. 
 
 --expirationtime
-Sets the time when the snapshot should be removed. If unspecified, the current time is used. 
+Sets the time when the snapshot should be removed. 
 
 --enableremotereplication
 Replicates the snapshot created to a remote cluster. Possible values are: true: The snapshot is replicated to remote storage. false: Default. The snapshot is not replicated. 
 
 
-Hardware Commands 
+Volume Commands 
 ---------------------------------------------------------------
-#### getnvraminfo ####
+#### listasyncresults ####
 Command:
 
-    sfcli Hardware getnvraminfo <options>
+    sfcli Volume listasyncresults <options>
 
 Description:
 
-GetNvramInfo enables you to retrieve information from each node about the NVRAM card. 
+You can use ListAsyncResults to list the results of all currently running and completed asynchronous methods on the system. Querying asynchronous results with ListAsyncResults does not cause completed asyncHandles to expire; you can use GetAsyncResult to query any of the asyncHandles returned by ListAsyncResults. 
 
 Options:
---force
-Required parameter to successfully run on all nodes in the cluster. 
+--asyncresulttypes
+An optional list of types of results. You can use this list to restrict the results to only these types of operations. Possible values are: BulkVolume: Copy operations between volumes, such as backups or restores. Clone: Volume cloning operations. DriveRemoval: Operations involving the system copying data from a drive in preparation to remove it from the cluster. RtfiPendingNode: Operations involving the system installing compatible software on a node before adding it to the cluster 
 
 ---------------------------------------------------------------
-#### getnodeinfo ####
+#### listforaccount ####
 Command:
 
-    sfcli Hardware getnodeinfo <options>
+    sfcli Volume listforaccount <options>
 
 Description:
 
-GetNodeHardwareInfo enables you to return all the hardware information and status for the node specified. This generally includes details about manufacturers, vendors, versions, and other associated hardware identification information. 
+ListVolumesForAccount returns the list of active and (pending) deleted volumes for an account. 
 
 Options:
---nodeid
-The ID of the node for which hardware information is being requested. Information about a Fibre Channel node is returned if a Fibre Channel node is specified. 
+--accountid
+Returns all volumes owned by this AccountID. 
+
+--startvolumeid
+The ID of the first volume to list. This can be useful for paging results. By default, this starts at the lowest VolumeID. 
+
+--limit
+The maximum number of volumes to return from the API. 
+
+--includevirtualvolumes
+Specifies that virtual volumes are included in the response by default. To exclude virtual volumes, set to false. 
 
 ---------------------------------------------------------------
-#### getconfig ####
+#### purgedeleted ####
 Command:
 
-    sfcli Hardware getconfig <options>
+    sfcli Volume purgedeleted <options>
 
 Description:
 
-GetHardwareConfig enables you to display the hardware configuration information for a node. Note: This method is available only through the per-node API endpoint 5.0 or later. 
+PurgeDeletedVolume immediately and permanently purges a volume that has been deleted. You must delete a volume using DeleteVolume before it can be purged. Volumes are purged automatically after a period of time, so usage of this method is not typically required. 
 
 Options:
+--volumeid
+The ID of the volume to be purged. 
+
 ---------------------------------------------------------------
-#### getclusterinfo ####
+#### restoredeleted ####
 Command:
 
-    sfcli Hardware getclusterinfo <options>
+    sfcli Volume restoredeleted <options>
 
 Description:
 
-You can use the GetClusterHardwareInfo method to retrieve the hardware status and information for all Fibre Channel nodes, iSCSI nodes and drives in the cluster. This generally includes details about manufacturers, vendors, versions, and other associated hardware identification information. 
+RestoreDeletedVolume marks a deleted volume as active again. This action makes the volume immediately available for iSCSI connection. 
 
 Options:
---type
-Includes only a certain type of hardware information in the response. Possible values are: drives: List only drive information in the response. nodes: List only node information in the response. all: Include both drive and node information in the response. If this parameter is omitted, a type of "all" is assumed. 
+--volumeid
+VolumeID of the deleted volume to be restored. 
 
+---------------------------------------------------------------
+#### liststatsbyaccount ####
+Command:
+
+    sfcli Volume liststatsbyaccount <options>
+
+Description:
+
+ListVolumeStatsByAccount returns high-level activity measurements for every account. Values are summed from all the volumes owned by the account. 
+
+Options:
+--accounts
+One or more account ids by which to filter the result. 
+
+--includevirtualvolumes
+Includes virtual volumes in the response by default. To exclude virtual volumes, set to false. 
+
+---------------------------------------------------------------
+#### list ####
+Command:
+
+    sfcli Volume list <options>
+
+Description:
+
+The ListVolumes method enables you to retrieve a list of volumes that are in a cluster. You can specify the volumes you want to return in the list by using the available parameters. 
+
+Options:
+--startvolumeid
+Only volumes with an ID greater than or equal to this value are returned. Mutually exclusive with the volumeIDs parameter. 
+
+--limit
+Specifies the maximum number of volume results that are returned. Mutually exclusive with the volumeIDs parameter. 
+
+--volumestatus
+Only volumes with a status equal to the status value are returned. Possible values are: creating snapshotting active deleted 
+
+--accounts
+Returns only the volumes owned by the accounts you specify here. Mutually exclusive with the volumeIDs parameter. 
+
+--ispaired
+Returns volumes that are paired or not paired. Possible values are: true: Returns all paired volumes. false: Returns all volumes that are not paired. 
+
+--volumeids
+A list of volume IDs. If you supply this parameter, other parameters operate only on this set of volumes. Mutually exclusive with the accounts, startVolumeID, and limit parameters. 
+
+--volumename
+Only volume object information matching the volume name is returned. 
+
+--includevirtualvolumes
+Specifies that virtual volumes are included in the response by default. To exclude virtual volumes, set to false. 
+
+---------------------------------------------------------------
+#### updatebulkstatus ####
+Command:
+
+    sfcli Volume updatebulkstatus <options>
+
+Description:
+
+You can use UpdateBulkVolumeStatus in a script to update the status of a bulk volume job that you started with the StartBulkVolumeRead or StartBulkVolumeWrite methods. 
+
+Options:
+--key
+The key assigned during initialization of a StartBulkVolumeRead or StartBulkVolumeWrite session. 
+
+--status
+The status of the given bulk volume job. The system sets the status. Possible values are:  running: Jobs that are still active. complete: Jobs that are done. failed: Jobs that failed. 
+
+--percentcomplete
+The completed progress of the bulk volume job as a percentage value. 
+
+--message
+The message returned indicating the status of the bulk volume job after the job is complete. 
+
+--attributes
+JSON attributes; updates what is on the bulk volume job. 
+
+---------------------------------------------------------------
+#### copy ####
+Command:
+
+    sfcli Volume copy <options>
+
+Description:
+
+CopyVolume enables you to overwrite the data contents of an existing volume with the data contents of another volume (or snapshot). Attributes of the destination volume such as IQN, QoS settings, size, account, and volume access group membership are not changed. The destination volume must already exist and must be the same size as the source volume. NetApp strongly recommends that clients unmount the destination volume before the CopyVolume operation begins. If the destination volume is modified during the copy operation, the changes will be lost. This method is asynchronous and may take a variable amount of time to complete. You can use the GetAsyncResult method to determine when the process has finished, and ListSyncJobs to see the progress of the copy. 
+
+Options:
+--volumeid
+VolumeID of the volume to be read from. 
+
+--dstvolumeid
+VolumeID of the volume to be overwritten. 
+
+--snapshotid
+ID of the snapshot that is used as the source of the clone. If no ID is provided, the current active volume is used. 
+
+---------------------------------------------------------------
+#### getstats ####
+Command:
+
+    sfcli Volume getstats <options>
+
+Description:
+
+GetVolumeStats enables  you to retrieve high-level activity measurements for a single volume. Values are cumulative from the creation of the volume. 
+
+Options:
+--volumeid
+Specifies the volume for which statistics are gathered. 
+
+---------------------------------------------------------------
+#### liststatsby ####
+Command:
+
+    sfcli Volume liststatsby <options>
+
+Description:
+
+ListVolumeStatsByVolume returns high-level activity measurements for every volume, by volume. Values are cumulative from the creation of the volume. 
+
+Options:
+--includevirtualvolumes
+Specifies that virtual volumes are included in the response by default. To exclude virtual volumes, set to false. 
+
+---------------------------------------------------------------
+#### getcount ####
+Command:
+
+    sfcli Volume getcount <options>
+
+Description:
+
+GetVolumeCount enables you to retrieve the number of volumes currently in the system. 
+
+Options:
+---------------------------------------------------------------
+#### setdefaultqos ####
+Command:
+
+    sfcli Volume setdefaultqos <options>
+
+Description:
+
+SetDefaultQoS enables you to configure the default Quality of Service (QoS) values (measured in inputs and outputs per second, or IOPS) for a volume. For more information about QoS in a SolidFire cluster, see the User Guide. 
+
+Options:
+--miniops
+The minimum number of sustained IOPS provided by the cluster to a volume. 
+
+--maxiops
+The maximum number of sustained IOPS provided by the cluster to a volume. 
+
+--burstiops
+The maximum number of IOPS allowed in a short burst scenario. 
+
+---------------------------------------------------------------
+#### listactive ####
+Command:
+
+    sfcli Volume listactive <options>
+
+Description:
+
+ListActiveVolumes enables you to return the list of active volumes currently in the system. The list of volumes is returned sorted in VolumeID order and can be returned in multiple parts (pages). 
+
+Options:
+--startvolumeid
+Starting VolumeID to return. If no volume exists with this VolumeID, the next volume by VolumeID order is used as the start of the list. To page through the list, pass the VolumeID of the last volume in the previous response + 1. 
+
+--limit
+Maximum number of Volume Info objects to return. A value of 0 (zero) returns all volumes (unlimited). 
+
+--includevirtualvolumes
+Specifies that virtual volumes are included in the response by default. To exclude virtual volumes, set to false. 
+
+---------------------------------------------------------------
+#### startbulkread ####
+Command:
+
+    sfcli Volume startbulkread <options>
+
+Description:
+
+StartBulkVolumeRead enables you to initialize a bulk volume read session on a specified volume. Only two bulk volume processes can run simultaneously on a volume. When you initialize the session, data is read from a SolidFire storage volume for the purposes of storing the data on an external backup source. The external data is accessed by a web server running on an SF-series node. Communications and server interaction information for external data access is passed by a script running on the storage system. At the start of a bulk volume read operation, a snapshot of the volume is made and the snapshot is deleted when the read is complete. You can also read a snapshot of the volume by entering the ID of the snapshot as a parameter. When you read a previous snapshot, the system does not create a new snapshot of the volume or delete the previous snapshot when the read completes. Note: This process creates a new snapshot if the ID of an existing snapshot is not provided. Snapshots can be created if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. 
+
+Options:
+--volumeid
+The ID of the volume to be read. 
+
+--format
+The format of the volume data. It can be either of the following formats: uncompressed: Every byte of the volume is returned without any compression. native: Opaque data is returned that is smaller and more efficiently stored and written on a subsequent bulk volume write. 
+
+--snapshotid
+The ID of a previously created snapshot used for bulk volume reads. If no ID is entered, a snapshot of the current active volume image is made. 
+
+--script
+The executable name of a script. If unspecified, the key and URL is necessary to access SF-series nodes. The script is run on the primary node and the key and URL is returned to the script so the local web server can be contacted. 
+
+--scriptparameters
+JSON parameters to pass to the script. 
+
+--attributes
+JSON attributes for the bulk volume job. 
+
+---------------------------------------------------------------
+#### getefficiency ####
+Command:
+
+    sfcli Volume getefficiency <options>
+
+Description:
+
+GetVolumeEfficiency enables you to retrieve information about a volume. Only the volume you give as a parameter in this API method is used to compute the capacity. 
+
+Options:
+--volumeid
+Specifies the volume for which capacity is computed. 
+
+---------------------------------------------------------------
+#### getasyncresult ####
+Command:
+
+    sfcli Volume getasyncresult <options>
+
+Description:
+
+You can use GetAsyncResult to retrieve the result of asynchronous method calls. Some method calls require some time to run, and might not be finished when the system sends the initial response. To obtain the status or result of the method call, use GetAsyncResult to poll the asyncHandle value returned by the method. GetAsyncResult returns the overall status of the operation (in progress, completed, or error) in a standard fashion, but the actual data returned for the operation depends on the original method call and the return data is documented with each method. 
+
+Options:
+--asynchandle
+A value that was returned from the original asynchronous method call. 
+
+--keepresult
+If true, GetAsyncResult does not remove the asynchronous result upon returning it, enabling future queries to that asyncHandle. 
+
+---------------------------------------------------------------
+#### startbulkwrite ####
+Command:
+
+    sfcli Volume startbulkwrite <options>
+
+Description:
+
+StartBulkVolumeWrite enables you to initialize a bulk volume write session on a specified volume. Only two bulk volume processes can run simultaneously on a volume. When you initialize the write session, data is written to a SolidFire storage volume from an external backup source. The external data is accessed by a web server running on an SF-series node. Communications and server interaction information for external data access is passed by a script running on the storage system. 
+
+Options:
+--volumeid
+The ID of the volume to be written to. 
+
+--format
+The format of the volume data. It can be either of the following formats: uncompressed: Every byte of the volume is returned without any compression. native: Opaque data is returned that is smaller and more efficiently stored and written on a subsequent bulk volume write. 
+
+--script
+The executable name of a script. If unspecified, the key and URL are necessary to access SF-series nodes. The script runs on the primary node and the key and URL is returned to the script, so the local web server can be contacted. 
+
+--scriptparameters
+JSON parameters to pass to the script. 
+
+--attributes
+JSON attributes for the bulk volume job. 
+
+---------------------------------------------------------------
+#### cancelclone ####
+Command:
+
+    sfcli Volume cancelclone <options>
+
+Description:
+
+CancelClone enables you to stop an ongoing CloneVolume or CopyVolume process. When you cancel a group clone operation, the system completes and removes the operation's associated asyncHandle. 
+
+Options:
+--cloneid
+The cloneID for the ongoing clone process. 
+
+---------------------------------------------------------------
+#### listbulkjobs ####
+Command:
+
+    sfcli Volume listbulkjobs <options>
+
+Description:
+
+ListBulkVolumeJobs enables you to retrieve information about each bulk volume read or write operation that is occurring in the system. 
+
+Options:
+---------------------------------------------------------------
+#### clone ####
+Command:
+
+    sfcli Volume clone <options>
+
+Description:
+
+CloneVolume enables you to create a copy of a volume. This method is asynchronous and might take a variable amount of time to complete. The cloning process begins immediately when you make the CloneVolume request and is representative of the state of the volume when the API method is issued. You can use the GetAsyncResult method to determine when the cloning process is complete and the new volume is available for connections. You can use ListSyncJobs to see the progress of creating the clone. Note: The initial attributes and QoS settings for the volume are inherited from the volume being cloned. You can change these settings with ModifyVolume. Note: Cloned volumes do not inherit volume access group memberships from the source volume. 
+
+Options:
+--volumeid
+VolumeID for the volume to be cloned. 
+
+--name
+The name of the new cloned volume. Might be 1 to 64 characters in length. 
+
+--newaccountid
+AccountID for the owner of the new volume. If unspecified, the accountID of the owner of the volume being cloned is used. 
+
+--newsize
+New size of the volume, in bytes. Might be greater or less than the size of the volume being cloned. If unspecified, the volume size is not changed. Size is rounded to the nearest 1MB. 
+
+--access
+Specifies the level of access allowed for the new volume. Possible values are: readOnly: Only read operations are allowed. readWrite: Reads and writes are allowed. locked: No reads or writes are allowed. If unspecified, the level of access of the volume being cloned is used. replicationTarget: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked. If a value is not specified, the access value does not change. 
+
+--snapshotid
+ID of the snapshot that is used as the source of the clone. If no ID is provided, the current active volume is used. 
+
+--attributes
+List of name-value pairs in JSON object format. 
+
+--enable512e
+Should the volume provide 512-byte sector emulation? 
+
+---------------------------------------------------------------
+#### listdeleted ####
+Command:
+
+    sfcli Volume listdeleted <options>
+
+Description:
+
+ListDeletedVolumes enables you to retrieve the list of volumes that have been marked for deletion and purged from the system. 
+
+Options:
+--includevirtualvolumes
+Specifies that virtual volumes are included in the response by default. To exclude virtual volumes, set to false. 
+
+---------------------------------------------------------------
+#### delete ####
+Command:
+
+    sfcli Volume delete <options>
+
+Description:
+
+DeleteVolume marks an active volume for deletion. When marked, the volume is purged (permanently deleted) after the cleanup interval elapses. After making a request to delete a volume, any active iSCSI connections to the volume are immediately terminated and no further connections are allowed while the volume is in this state. A marked volume is not returned in target discovery requests. Any snapshots of a volume that has been marked for deletion are not affected. Snapshots are kept until the volume is purged from the system. If a volume is marked for deletion and has a bulk volume read or bulk volume write operation in progress, the bulk volume read or write operation is stopped. If the volume you delete is paired with a volume, replication between the paired volumes is suspended and no data is transferred to it or from it while in a deleted state. The remote volume that the deleted volume was paired with enters into a PausedMisconfigured state and data is no longer sent to it or from the deleted volume. Until the deleted volume is purged, it can be restored and data transfers resume. If the deleted volume gets purged from the system, the volume it was paired with enters into a StoppedMisconfigured state and the volume pairing status is removed. The purged volume becomes permanently unavailable. 
+
+Options:
+--volumeid
+The ID of the volume to be deleted. 
+
+---------------------------------------------------------------
+#### create ####
+Command:
+
+    sfcli Volume create <options>
+
+Description:
+
+CreateVolume enables you to create a new (empty) volume on the cluster. As soon as the volume creation is complete, the volume is available for connection via iSCSI. 
+
+Options:
+--name
+The name of the volume access group (might be user specified). Not required to be unique, but recommended. Might be 1 to 64 characters in length. 
+
+--accountid
+AccountID for the owner of this volume. 
+
+--totalsize
+Total size of the volume, in bytes. Size is rounded up to the nearest 1MB size. 
+
+--enable512e
+Specifies whether 512e emulation is enabled or not. Possible values are: true: The volume provides 512-byte sector emulation. false: 512e emulation is not enabled. 
+
+--qosminiops
+Desired minimum 4KB IOPS to guarantee. The allowed IOPS will only drop below this level if all volumes have been capped at their minimum IOPS value and there is still insufficient performance capacity. 
+
+--qosmaxiops
+Desired maximum 4KB IOPS allowed over an extended period of time. 
+
+--qosburstiops
+Maximum "peak" 4KB IOPS allowed for short periods of time. Allows for bursts of I/O activity over the normal max IOPS value. 
+
+--qosbursttime
+The length of time burst IOPS is allowed. The value returned is represented in time units of seconds. Note: this value is calculated by the system based on IOPS set for QoS. 
+
+--attributes
+The list of name-value pairs in JSON object format. Total attribute size must be less than 1000B, or 1KB, including JSON formatting characters. 
+
+---------------------------------------------------------------
+#### clonemultiple ####
+Command:
+
+    sfcli Volume clonemultiple <options>
+
+Description:
+
+CloneMultipleVolumes enables you to create a clone of a group of specified volumes. You can assign a consistent set of characteristics to a group of multiple volumes when they are cloned together. Before using groupSnapshotID to clone the volumes in a group snapshot, you must create the group snapshot by using the CreateGroupSnapshot API method or the Element OS Web UI. Using groupSnapshotID is optional when cloning multiple volumes. Note: Cloning multiple volumes is allowed if cluster fullness is at stage 2 or 3. Clones are not created when cluster fullness is at stage 4 or 5. 
+
+Options:
+--volumes
+Unique ID for each volume to include in the clone. If optional parameters are not specified, the values are inherited from the source volumes. Required parameter for "volumes" array: volumeID Optional parameters for "volumes" array: access: Can be one of readOnly, readWrite, locked, or replicationTarget attributes: List of name-value pairs in JSON object format. name: New name for the clone. newAccountID: Account ID for the new volumes. newSize: New size Total size of the volume, in bytes. Size is rounded up to the nearest 1MB. 
+
+--volumeid
+Required parameter for "volumes" array: volumeID. 
+
+--accessvolumes
+Access settings for the new volume. readOnly: Only read operations are allowed. readWrite: Reads and writes are allowed. locked: No reads or writes are allowed. replicationTarget: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked.  If unspecified, the access settings of the clone will be the same as the source. 
+
+--name
+New name for the clone. 
+
+--newaccountidvolumes
+Account ID for the new volume. 
+
+--newsize
+New size Total size of the volume, in bytes. Size is rounded up to the nearest 1MB size. 
+
+--attributes
+List of Name/Value pairs in JSON object format. 
+
+--access
+New default access method for the new volumes if not overridden by information passed in the volume's array. 
+
+--groupsnapshotid
+ID of the group snapshot to use as a basis for the clone. 
+
+--newaccountid
+New account ID for the volumes if not overridden by information passed in the volumes array. 
+
+---------------------------------------------------------------
+#### modify ####
+Command:
+
+    sfcli Volume modify <options>
+
+Description:
+
+ModifyVolume enables you to modify settings on an existing volume. You can make modifications to one volume at a time and changes take place immediately. If you do not specify QoS values when you modify a volume, they remain the same as before the modification. You can retrieve default QoS values for a newly created volume by running the GetDefaultQoS method. When you need to increase the size of a volume that is being replicated, do so in the following order to prevent replication errors: 1. Increase the size of the "Replication Target" volume. 2. Increase the size of the source or "Read / Write" volume. NetApp recommends that both the target and source volumes are the same size. Note: If you change the "access" status to locked or target, all existing iSCSI connections are terminated. 
+
+Options:
+--volumeid
+VolumeID for the volume to be modified. 
+
+--accountid
+AccountID to which the volume is reassigned. If unspecified, the previous account name is used. 
+
+--access
+Specifies the access allowed for the volume. Possible values are: readOnly: Only read operations are allowed. readWrite: Reads and writes are allowed. locked: No reads or writes are allowed. If not specified, the access value does not change. replicationTarget: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked. If a value is not specified, the access value does not change. 
+
+--qosminiops
+Desired minimum 4KB IOPS to guarantee. The allowed IOPS will only drop below this level if all volumes have been capped at their minimum IOPS value and there is still insufficient performance capacity. 
+
+--qosmaxiops
+Desired maximum 4KB IOPS allowed over an extended period of time. 
+
+--qosburstiops
+Maximum "peak" 4KB IOPS allowed for short periods of time. Allows for bursts of I/O activity over the normal max IOPS value. 
+
+--qosbursttime
+The length of time burst IOPS is allowed. The value returned is represented in time units of seconds. Note: this value is calculated by the system based on IOPS set for QoS. 
+
+--totalsize
+New size of the volume in bytes. 1000000000 is equal to 1GB. Size is rounded up to the nearest 1MB. This parameter can only be used to increase the size of a volume. 
+
+--attributes
+List of name-value pairs in JSON object format. 
+
+---------------------------------------------------------------
+#### cancelgroupclone ####
+Command:
+
+    sfcli Volume cancelgroupclone <options>
+
+Description:
+
+CancelGroupClone enables you to stop an ongoing CloneMultipleVolumes process occurring on a group of volumes. When you cancel a group clone operation, the system completes and removes the operation's associated asyncHandle. 
+
+Options:
+--groupcloneid
+The cloneID for the ongoing clone process. 
+
+---------------------------------------------------------------
+#### liststatsbyaccessgroup ####
+Command:
+
+    sfcli Volume liststatsbyaccessgroup <options>
+
+Description:
+
+ListVolumeStatsByVolumeAccessGroup enables you to get total activity measurements for all of the volumes that are a member of the specified volume access group(s). 
+
+Options:
+--volumeaccessgroups
+An array of VolumeAccessGroupIDs for which volume activity is returned. If omitted, statistics for all volume access groups are returned. 
+
+--includevirtualvolumes
+Specifies that virtual volumes are included in the response by default. To exclude virtual volumes, set to false. 
+
+---------------------------------------------------------------
+#### getdefaultqos ####
+Command:
+
+    sfcli Volume getdefaultqos <options>
+
+Description:
+
+GetDefaultQoS enables you to retrieve the default QoS values for a newly created volume. 
+
+Options:
 
 ProtocolEndpoints Commands 
 ---------------------------------------------------------------
@@ -2274,7 +2726,775 @@ Options:
 A list of protocol endpoint IDs for which to retrieve information. If you omit this parameter, the method returns information about all protocol endpoints. 
 
 
+Statistics Commands 
+---------------------------------------------------------------
+#### listdrivestats ####
+Command:
+
+    sfcli Statistics listdrivestats <options>
+
+Description:
+
+ListDriveStats enables you to retrieve high-level activity measurements for multiple drives in the cluster. By default, this method returns statistics for all drives in the cluster, and these measurements are cumulative from the addition of the drive to the cluster. Some values this method returns are specific to block drives, and some are specific to metadata drives. 
+
+Options:
+--drives
+Optional list of DriveIDs for which to return drive statistics. If you omit this parameter, measurements for all drives are returned. 
+
+---------------------------------------------------------------
+#### listvolumestats ####
+Command:
+
+    sfcli Statistics listvolumestats <options>
+
+Description:
+
+ListVolumeStats returns high-level activity measurements for a single volume, list of volumes, or all volumes (if you omit the volumeIDs parameter). Measurement values are cumulative from the creation of the volume. 
+
+Options:
+--volumeids
+A list of volume IDs of volumes from which to retrieve activity information. 
+
+---------------------------------------------------------------
+#### getcompletestats ####
+Command:
+
+    sfcli Statistics getcompletestats <options>
+
+Description:
+
+NetApp engineering uses the GetCompleteStats API method to troubleshoot new features. The data returned from GetCompleteStats is not documented, changes frequently, and is not guaranteed to be accurate. NetApp does not recommend using GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster. 
+
+Options:
+---------------------------------------------------------------
+#### gethardwareinfo ####
+Command:
+
+    sfcli Statistics gethardwareinfo <options>
+
+Description:
+
+The GetHardwareInfo API method enables you to return hardware information and status for a single node. This generally includes details about manufacturers, vendors, versions, drives, and other associated hardware identification information. 
+
+Options:
+---------------------------------------------------------------
+#### getrawstats ####
+Command:
+
+    sfcli Statistics getrawstats <options>
+
+Description:
+
+NetApp engineering uses the GetRawStats API method to troubleshoot new features. The data returned from GetRawStats is not documented, changes frequently, and is not guaranteed to be accurate. NetApp does not recommend using GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster. 
+
+Options:
+---------------------------------------------------------------
+#### listvolumestatsbyvirtualvolume ####
+Command:
+
+    sfcli Statistics listvolumestatsbyvirtualvolume <options>
+
+Description:
+
+ListVolumeStatsByVirtualVolume enables you to list volume statistics for any volumes in the system that are associated with virtual volumes. Statistics are cumulative from the creation of the volume. 
+
+Options:
+--virtualvolumeids
+A list of one or more virtual volume IDs for which to retrieve information. If you specify this parameter, the method returns information about only these virtual volumes. 
+
+
+Network Commands 
+---------------------------------------------------------------
+#### listiscsisessions ####
+Command:
+
+    sfcli Network listiscsisessions <options>
+
+Description:
+
+You can use ListISCSISessions to return iSCSI information for volumes in the cluster. 
+
+Options:
+---------------------------------------------------------------
+#### listnodefibrechannelportinfo ####
+Command:
+
+    sfcli Network listnodefibrechannelportinfo <options>
+
+Description:
+
+The ListNodeFibreChannelPortInfo API method enables you to retrieve information about the Fibre Channel ports on a node. The API method is intended for use on individual nodes; userid and password authentication is required for access to individual Fibre Channel nodes. 
+
+Options:
+---------------------------------------------------------------
+#### listfibrechannelportinfo ####
+Command:
+
+    sfcli Network listfibrechannelportinfo <options>
+
+Description:
+
+ListFibreChannelPortInfo enables you to retrieve information about the Fibre Channel ports on a node.  The API method is intended for use on individual nodes; userid and password authentication is required for access to individual Fibre Channel nodes. 
+
+Options:
+---------------------------------------------------------------
+#### listinterfaces ####
+Command:
+
+    sfcli Network listinterfaces <options>
+
+Description:
+
+ListNetworkInterfaces enables you to retrieve information about each network interface on a node. The API method is intended for use on individual nodes; userid and password authentication is required for access to individual nodes. 
+
+Options:
+---------------------------------------------------------------
+#### listfibrechannelsessions ####
+Command:
+
+    sfcli Network listfibrechannelsessions <options>
+
+Description:
+
+ListFibreChannelSessions enables you to retrieve information about the active Fibre Channel sessions on a cluster.  
+
+Options:
+
+StorageContainers Commands 
+---------------------------------------------------------------
+#### list ####
+Command:
+
+    sfcli StorageContainers list <options>
+
+Description:
+
+ListStorageContainers enables you to retrieve information about all virtual volume storage containers known to the system. 
+
+Options:
+--storagecontainerids
+A list of storage container IDs for which to retrieve information. If you omit this parameter, the method returns information about all storage containers in the system. 
+
+---------------------------------------------------------------
+#### createstoragecontainer ####
+Command:
+
+    sfcli StorageContainers createstoragecontainer <options>
+
+Description:
+
+CreateStorageContainer enables you to create a Virtual Volume (VVol) storage container. Storage containers are associated with a SolidFire storage system account, and are used for reporting and resource allocation. Storage containers can only be associated with virtual volumes. You need at least one storage container to use the Virtual Volumes feature. 
+
+Options:
+--name
+The name of the storage container. Follows SolidFire account naming restrictions. 
+
+--initiatorsecret
+The secret for CHAP authentication for the initiator. 
+
+--targetsecret
+The secret for CHAP authentication for the target. 
+
+--accountid
+Non-storage container account that will become a storage container. 
+
+---------------------------------------------------------------
+#### getstoragecontainerefficiency ####
+Command:
+
+    sfcli StorageContainers getstoragecontainerefficiency <options>
+
+Description:
+
+GetStorageContainerEfficiency enables you to retrieve efficiency information about a virtual volume storage container. 
+
+Options:
+--storagecontainerid
+The ID of the storage container for which to retrieve efficiency information. 
+
+---------------------------------------------------------------
+#### delete ####
+Command:
+
+    sfcli StorageContainers delete <options>
+
+Description:
+
+DeleteStorageContainers enables you to remove up to 2000 Virtual Volume (VVol) storage containers from the system at one time. The storage containers you remove must not contain any VVols. 
+
+Options:
+--storagecontainerids
+A list of IDs of the storage containers to delete. You can specify up to 2000 IDs in the list. 
+
+---------------------------------------------------------------
+#### modifystoragecontainer ####
+Command:
+
+    sfcli StorageContainers modifystoragecontainer <options>
+
+Description:
+
+ModifyStorageContainer enables you to make changes to an existing virtual volume storage container. 
+
+Options:
+--storagecontainerid
+The unique ID of the virtual volume storage container to modify. 
+
+--initiatorsecret
+The new secret for CHAP authentication for the initiator. 
+
+--targetsecret
+The new secret for CHAP authentication for the target. 
+
+
+Sensors Commands 
+---------------------------------------------------------------
+#### getipmiconfig ####
+Command:
+
+    sfcli Sensors getipmiconfig <options>
+
+Description:
+
+GetIpmiConfig enables you to retrieve hardware sensor information from sensors that are in your node. 
+
+Options:
+--chassistype
+Displays information for each node chassis type. Valid values are: all: Returns sensor information for each chassis type. {chassis type}: Returns sensor information for a specified chassis type. 
+
+---------------------------------------------------------------
+#### getipmiinfo ####
+Command:
+
+    sfcli Sensors getipmiinfo <options>
+
+Description:
+
+GetIpmiInfo enables you to display a detailed reporting of sensors (objects) for node fans, intake and exhaust temperatures, and power supplies that are monitored by the system. 
+
+Options:
+
+LoginSession Commands 
+---------------------------------------------------------------
+#### getinfo ####
+Command:
+
+    sfcli LoginSession getinfo <options>
+
+Description:
+
+GetLoginSessionInfo enables you to return the period of time a log in authentication session is valid for both log in shells and the TUI. 
+
+Options:
+---------------------------------------------------------------
+#### setremotelogginghosts ####
+Command:
+
+    sfcli LoginSession setremotelogginghosts <options>
+
+Description:
+
+SetRemoteLoggingHosts enables you to configure remote logging from the nodes in the storage cluster to a centralized log server or servers. Remote logging is performed over TCP using the default port 514. This API does not add to the existing logging hosts. Rather, it replaces what currently exists with new values specified by this API method. You can use GetRemoteLoggingHosts to determine what the current logging hosts are, and then use SetRemoteLoggingHosts to set the desired list of current and new logging hosts. 
+
+Options:
+--remotehosts
+A list of hosts to send log messages to. 
+
+--host
+Hostname or IP address of the log server. 
+
+--port
+Port number that the log server is listening on. 
+
+---------------------------------------------------------------
+#### getremotelogginghosts ####
+Command:
+
+    sfcli LoginSession getremotelogginghosts <options>
+
+Description:
+
+GetRemoteLoggingHosts enables you to retrieve the current list of log servers. 
+
+Options:
+---------------------------------------------------------------
+#### setinfo ####
+Command:
+
+    sfcli LoginSession setinfo <options>
+
+Description:
+
+You can use SetLoginSessionInfo to set the period of time that a session's login authentication is valid. After the log in period elapses without activity on the system, the authentication expires. New login credentials are required for continued access to the cluster after the timeout period has elapsed. 
+
+Options:
+--timeout
+Cluster authentication expiration period. Formatted in HH:mm:ss. For example, 01:30:00, 00:90:00, and 00:00:5400 can be used to equal a 90 minute timeout period. The default value is 30 minutes. 
+
+
+Service Commands 
+---------------------------------------------------------------
+#### list ####
+Command:
+
+    sfcli Service list <options>
+
+Description:
+
+You can use ListServices to return the services information for nodes, drives, current software, and other services that are running on the cluster. 
+
+Options:
+
+Account Commands 
+---------------------------------------------------------------
+#### remove ####
+Command:
+
+    sfcli Account remove <options>
+
+Description:
+
+RemoveAccount enables you to remove an existing account. You must delete and purge all volumes associated with the account using DeleteVolume before you can remove the account. If volumes on the account are still pending deletion, you cannot use RemoveAccount to remove the account. 
+
+Options:
+--accountid
+Specifies the AccountID for the account to be removed. 
+
+---------------------------------------------------------------
+#### getefficiency ####
+Command:
+
+    sfcli Account getefficiency <options>
+
+Description:
+
+GetAccountEfficiency enables you to retrieve efficiency statistics about a volume account. This method returns efficiency information only for the account you specify as a parameter. 
+
+Options:
+--accountid
+Specifies the volume account for which efficiency statistics are returned. 
+
+---------------------------------------------------------------
+#### add ####
+Command:
+
+    sfcli Account add <options>
+
+Description:
+
+You can use AddAccount to add a new account to the system. You can create new volumes under the new account. The CHAP settings you specify for the account apply to all volumes owned by the account. 
+
+Options:
+--username
+Specifies the username for this account. (Might be 1 to 64 characters in length). 
+
+--initiatorsecret
+The CHAP secret to use for the initiator. This secret must be 12-16 characters in length and should be impenetrable. The initiator CHAP secret must be unique and cannot be the same as the target CHAP secret. If unspecified, a random secret is created. 
+
+--targetsecret
+The CHAP secret to use for the target (mutual CHAP authentication). This secret must be 12-16 characters in length and should be impenetrable. The target CHAP secret must be unique and cannot be the same as the initiator CHAP secret. If unspecified, a random secret is created. 
+
+--attributes
+List of name-value pairs in JSON object format. 
+
+---------------------------------------------------------------
+#### list ####
+Command:
+
+    sfcli Account list <options>
+
+Description:
+
+ListAccounts returns the entire list of accounts, with optional paging support. 
+
+Options:
+--startaccountid
+Starting AccountID to return. If no account exists with this AccountID, the next account by AccountID order is used as the start of the list. To page through the list, pass the AccountID of the last account in the previous response + 1. 
+
+--limit
+Maximum number of AccountInfo objects to return. 
+
+--includestoragecontainers
+Includes storage containers in the response by default. To exclude storage containers, set to false. 
+
+---------------------------------------------------------------
+#### getbyname ####
+Command:
+
+    sfcli Account getbyname <options>
+
+Description:
+
+GetAccountByName enables you to retrieve details about a specific account, given its username. 
+
+Options:
+--username
+Username for the account. 
+
+---------------------------------------------------------------
+#### modify ####
+Command:
+
+    sfcli Account modify <options>
+
+Description:
+
+ModifyAccount enables you to modify an existing account. When you lock an account, any existing connections from that account are immediately terminated. When you change an account's CHAP settings, any existing connections remain active, and the new CHAP settings are used on subsequent connections or reconnections. To clear an account's attributes, specify {} for the attributes parameter. 
+
+Options:
+--accountid
+Specifies the AccountID for the account to be modified. 
+
+--username
+Specifies the username associated with the account. (Might be 1 to 64 characters in length). 
+
+--status
+Sets the status for the account. Possible values are: active: The account is active and connections are allowed. locked: The account is locked and connections are refused. 
+
+--initiatorsecret
+Specifies the CHAP secret to use for the initiator. This secret must be 12-16 characters in length and should be impenetrable. The initiator CHAP secret must be unique and cannot be the same as the target CHAP secret. 
+
+--targetsecret
+Specifies the CHAP secret to use for the target (mutual CHAP authentication). This secret must be 12-16 characters in length and should be impenetrable. The target CHAP secret must be unique and cannot be the same as the initiator CHAP secret. 
+
+--attributes
+List of name-value pairs in JSON object format. 
+
+---------------------------------------------------------------
+#### getbyid ####
+Command:
+
+    sfcli Account getbyid <options>
+
+Description:
+
+GetAccountByID enables you to return details about a specific account, given its accountID. 
+
+Options:
+--accountid
+Specifies the account for which details are gathered. 
+
+
+LDAP Commands 
+---------------------------------------------------------------
+#### enableauthentication ####
+Command:
+
+    sfcli LDAP enableauthentication <options>
+
+Description:
+
+The EnableLdapAuthentication method enables you to configure an LDAP directory connection to use for LDAP authentication to a cluster. Users that are members of the LDAP directory can then log in to the storage system using their LDAP credentials. 
+
+Options:
+--serveruris
+A comma-separated list of LDAP server URIs (examples: "ldap://1.2.3.4" and ldaps://1.2.3.4:123") 
+
+--authtype
+Identifies which user authentication method to use. Must be one of the following: DirectBind SearchAndBind 
+
+--groupsearchbasedn
+The base DN of the tree to start the group search (will do a subtree search from here). 
+
+--groupsearchcustomfilter
+For use with the CustomFilter search type, an LDAP filter to use to return the DNs of a users groups. The string can have placeholder text of %USERNAME% and %USERDN% to be replaced with their username and full userDN as needed. 
+
+--groupsearchtype
+Controls the default group search filter used, and must be one of the following: NoGroups: No group support. ActiveDirectory: Nested membership of all of a users AD groups. MemberDN: MemberDN style groups (single level). 
+
+--searchbinddn
+A fully qualified DN to log in with to perform an LDAP search for the user (needs read access to the LDAP directory). 
+
+--searchbindpassword
+The password for the searchBindDN account used for searching. 
+
+--userdntemplate
+A string that is used to form a fully qualified user DN. The string should have the placeholder text %USERNAME%, which is replaced with the username of the authenticating user. 
+
+--usersearchbasedn
+The base DN of the tree to start the search (will do a subtree search from here). 
+
+--usersearchfilter
+The LDAP filter to use. The string should have the placeholder text %USERNAME% which is replaced with the username of the authenticating user. Example: (&(objectClass=person)(sAMAccountName=%USERNAME%)) will use the sAMAccountName field in Active Directory to match the username entered at cluster login. 
+
+---------------------------------------------------------------
+#### disableauthentication ####
+Command:
+
+    sfcli LDAP disableauthentication <options>
+
+Description:
+
+The DisableLdapAuthentication method enables you to disable LDAP authentication and remove all LDAP configuration settings. This method does not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no longer be able to log in. 
+
+Options:
+---------------------------------------------------------------
+#### getconfiguration ####
+Command:
+
+    sfcli LDAP getconfiguration <options>
+
+Description:
+
+The GetLdapConfiguration method enables you to get the currently active LDAP configuration on the cluster. 
+
+Options:
+---------------------------------------------------------------
+#### addclusteradmin ####
+Command:
+
+    sfcli LDAP addclusteradmin <options>
+
+Description:
+
+AddLdapClusterAdmin enables you to add a new LDAP cluster administrator user. An LDAP cluster administrator can manage the cluster via the API and management tools. LDAP cluster admin accounts are completely separate and unrelated to standard tenant accounts. You can also use this method to add an LDAP group that has been defined in Active Directory. The access level that is given to the group is passed to the individual users in the LDAP group. 
+
+Options:
+--username
+The distinguished user name for the new LDAP cluster admin. 
+
+--access
+Controls which methods this Cluster Admin can use. For more details on the levels of access, see the Access Control appendix in the SolidFire API Reference. 
+
+--accepteula
+Accept the End User License Agreement. Set to true to add a cluster administrator account to the system. If omitted or set to false, the method call fails. 
+
+--attributes
+List of name-value pairs in JSON object format. 
+
+---------------------------------------------------------------
+#### testauthentication ####
+Command:
+
+    sfcli LDAP testauthentication <options>
+
+Description:
+
+The TestLdapAuthentication method enables you to validate the currently enabled LDAP authentication settings. If the configuration is correct, the API call returns the group membership of the tested user. 
+
+Options:
+--username
+The username to be tested. 
+
+--password
+The password for the username to be tested. 
+
+--ldapconfigurationauthtype
+Identifies which user authentcation method will be used.  Valid values: DirectBind SearchAndBind 
+
+--ldapconfigurationenabled
+Identifies whether or not the system is enabled for LDAP.  Valid values: true false 
+
+--ldapconfigurationgroupsearchbasedn
+The base DN of the tree to start the group search (will do a subtree search from here). 
+
+--ldapconfigurationgroupsearchcustomfilter
+The custom search filter used. 
+
+--ldapconfigurationgroupsearchtype
+Controls the default group search filter used, can be one of the following: NoGroups: No group support. ActiveDirectory: Nested membership of all of a user's AD groups. MemberDN: MemberDN style groups (single-level). 
+
+--ldapconfigurationsearchbinddn
+A fully qualified DN to log in with to perform an LDAP search for the user (needs read access to the LDAP directory). 
+
+--ldapconfigurationserveruris
+A comma-separated list of LDAP server URIs (examples: "ldap://1.2.3.4" and ldaps://1.2.3.4:123") 
+
+--ldapconfigurationuserdntemplate
+A string that is used to form a fully qualified user DN. 
+
+--ldapconfigurationusersearchbasedn
+The base DN of the tree used to start the search (will do a subtree search from here). 
+
+--ldapconfigurationusersearchfilter
+The LDAP filter used. 
+
+
+Drive Commands 
+---------------------------------------------------------------
+#### listhardware ####
+Command:
+
+    sfcli Drive listhardware <options>
+
+Description:
+
+ListDriveHardware returns all the drives connected to a node. Use this method on individual nodes to return drive hardware information or use this method on the cluster master node MVIP to see information for all the drives on all nodes. Note: The "securitySupported": true line of the method response does not imply that the drives are capable of encryption; only that the security status can be queried. If you have a node type with a model number ending in "-NE", commands to enable security features on these drives will fail. See the EnableEncryptionAtRest method for more information. 
+
+Options:
+--force
+To run this command, the force parameter must be set to true. 
+
+---------------------------------------------------------------
+#### list ####
+Command:
+
+    sfcli Drive list <options>
+
+Description:
+
+ListDrives enables you to retrieve the list of the drives that exist in the cluster's active nodes. This method returns drives that have been added as volume metadata or block drives as well as drives that have not been added and are available. 
+
+Options:
+---------------------------------------------------------------
+#### reset ####
+Command:
+
+    sfcli Drive reset <options>
+
+Description:
+
+ResetDrives enables you to proactively initialize drives and remove all data currently residing on a drive. The drive can then be reused in an existing node or used in an upgraded node. This method requires the force parameter to be included in the method call. 
+
+Options:
+--drives
+List of device names (not driveIDs) to reset. 
+
+--force
+Required parameter to successfully reset a drive. 
+
+---------------------------------------------------------------
+#### add ####
+Command:
+
+    sfcli Drive add <options>
+
+Description:
+
+AddDrives enables you to add one or more available drives to the cluster, enabling the drives to host a portion of the cluster's data. When you add a node to the cluster or install new drives in an existing node, the new drives are marked as "available" and must be added via AddDrives before they can be utilized. Use the ListDrives method to display drives that are "available" to be added. When you add multiple drives, it is more efficient to add them in a single AddDrives method call rather than multiple individual methods with a single drive each. This reduces the amount of data balancing that must occur to stabilize the storage load on the cluster. When you add a drive, the system automatically determines the "type" of drive it should be. The method is asynchronous and returns immediately. However, it can take some time for the data in the cluster to be rebalanced using the newly added drives. As the new drives are syncing on the system, you can use the ListSyncJobs method to see how the drives are being rebalanced and the progress of adding the new drive. You can also use the GetAsyncResult method to query the method's returned asyncHandle. 
+
+Options:
+--drives
+Returns information about each drive to be added to the cluster. Possible values are: driveID: The ID of the drive to add. (Integer) type: (Optional) The type of drive to add. Valid values are "slice" or "block". If omitted, the system assigns the correct type. (String) 
+
+--driveid
+A unique identifier for this drive. 
+
+--type
+block or slice 
+
+--forceduringupgrade
+Allows the user to force the addition of drives during an upgrade. 
+
+---------------------------------------------------------------
+#### secureerase ####
+Command:
+
+    sfcli Drive secureerase <options>
+
+Description:
+
+SecureEraseDrives enables you to remove any residual data from drives that have a status of "available." You might want to use this method when replacing a drive nearing the end of its service life that contained sensitive data. This method uses a Security Erase Unit command to write a predetermined pattern to the drive and resets the encryption key on the drive. This asynchronous method might take up to two minutes to complete. You can use GetAsyncResult to check on the status of the secure erase operation. You can use the ListDrives method to obtain the driveIDs for the drives you want to secure erase. 
+
+Options:
+--drives
+List of driveIDs to be secure erased. 
+
+---------------------------------------------------------------
+#### remove ####
+Command:
+
+    sfcli Drive remove <options>
+
+Description:
+
+You can use RemoveDrives to proactively remove drives that are part of the cluster. You might want to use this method when reducing cluster capacity or preparing to replace drives nearing the end of their service life. Any data on the drives is removed and migrated to other drives in the cluster before the drive is removed from the cluster. This is an asynchronous method. Depending on the total capacity of the drives being removed, it might take several minutes to migrate all of the data. Use the GetAsyncResult method to check the status of the remove operation. When removing multiple drives, use a single RemoveDrives method call rather than multiple individual methods with a single drive each. This reduces the amount of data balancing that must occur to even stabilize the storage load on the cluster. You can also remove drives with a "failed" status using RemoveDrives. When you remove a drive with a "failed" status it is not returned to an "available" or active status. The drive is unavailable for use in the cluster. Use the ListDrives method to obtain the driveIDs for the drives you want to remove. 
+
+Options:
+--drives
+List of driveIDs to remove from the cluster. 
+
+--forceduringupgrade
+If you want to remove a drive during upgrade, this must be set to true. 
+
+---------------------------------------------------------------
+#### getstats ####
+Command:
+
+    sfcli Drive getstats <options>
+
+Description:
+
+GetDriveStats returns high-level activity measurements for a single drive. Values are cumulative from the addition of the drive to the cluster. Some values are specific to block drives. You might not obtain statistical data for both block and metadata drives when you run this method.  
+
+Options:
+--driveid
+Specifies the drive for which statistics are gathered. 
+
+---------------------------------------------------------------
+#### gethardwareinfo ####
+Command:
+
+    sfcli Drive gethardwareinfo <options>
+
+Description:
+
+GetDriveHardwareInfo returns all the hardware information for the given drive. This generally includes details about manufacturers, vendors, versions, and other associated hardware identification information. 
+
+Options:
+--driveid
+DriveID for the drive information requested. You can get DriveIDs by using the ListDrives method. 
+
+---------------------------------------------------------------
+#### getconfig ####
+Command:
+
+    sfcli Drive getconfig <options>
+
+Description:
+
+GetDriveConfig enables you to display drive information for expected slice and block drive counts as well as the number of slices and block drives that are currently connected to the node. Note: This method is available only through the per-node API endpoint 5.0 or later. 
+
+Options:
+---------------------------------------------------------------
+#### test ####
+Command:
+
+    sfcli Drive test <options>
+
+Description:
+
+You can use the TestDrives API method to run a hardware validation on all drives on the node. This method detects hardware failures on the drives (if present) and reports them in the results of the validation tests. You can only use the TestDrives method on nodes that are not "active" in a cluster. Note: This test takes approximately 10 minutes. Note: This method is available only through the per-node API endpoint 5.0 or later. 
+
+Options:
+--minutes
+Specifies the number of minutes to run the test. 
+
+
 Cluster Commands 
+---------------------------------------------------------------
+#### getmasternodeid ####
+Command:
+
+    sfcli Cluster getmasternodeid <options>
+
+Description:
+
+GetClusterMasterNodeID enables you to retrieve the ID of the node that can perform cluster-wide administration tasks and holds the storage virtual IP address (SVIP) and management virtual IP address (MVIP). 
+
+Options:
+---------------------------------------------------------------
+#### getsystemstatus ####
+Command:
+
+    sfcli Cluster getsystemstatus <options>
+
+Description:
+
+GetSystemStatus enables you to return whether a reboot ir required or not. 
+
+Options:
+---------------------------------------------------------------
+#### getstats ####
+Command:
+
+    sfcli Cluster getstats <options>
+
+Description:
+
+GetClusterStats enables you to retrieve high-level activity measurements for the cluster. Values returned are cumulative from the creation of the cluster. 
+
+Options:
 ---------------------------------------------------------------
 #### setsnmpinfo ####
 Command:
@@ -2299,14 +3519,141 @@ If set to true, SNMP v3 is enabled on each node in the cluster.
 If SNMP v3 is enabled, this value must be passed in place of the networks parameter. This parameter is required only for SNMP v3. 
 
 ---------------------------------------------------------------
-#### disablesnmp ####
+#### getsnmpinfo ####
 Command:
 
-    sfcli Cluster disablesnmp <options>
+    sfcli Cluster getsnmpinfo <options>
 
 Description:
 
-You can use DisableSnmp to disable SNMP on the cluster nodes. 
+GetSnmpInfo enables you to retrieve the current simple network management protocol (SNMP) configuration information. Note: GetSnmpInfo is available for Element OS 8 and prior releases. It is deprecated for versions later than Element OS 8. NetApp recommends that you migrate to the GetSnmpState and SetSnmpACL methods. See details in the Element API Reference Guide for their descriptions and usage. 
+
+Options:
+---------------------------------------------------------------
+#### getconfig ####
+Command:
+
+    sfcli Cluster getconfig <options>
+
+Description:
+
+The GetClusterConfig API method enables you to return information about the cluster configuration this node uses to communicate with the cluster that it is a part of. 
+
+Options:
+---------------------------------------------------------------
+#### getinfo ####
+Command:
+
+    sfcli Cluster getinfo <options>
+
+Description:
+
+GetClusterInfo enables you to return configuration information about the cluster. 
+
+Options:
+---------------------------------------------------------------
+#### getlimits ####
+Command:
+
+    sfcli Cluster getlimits <options>
+
+Description:
+
+GetLimits enables you to retrieve the limit values set by the API. These values might change between releases of Element OS, but do not change without an update to the system. Knowing the limit values set by the API can be useful when writing API scripts for user-facing tools. Note: The GetLimits method returns the limits for the current software version regardless of the API endpoint version used to pass the method. 
+
+Options:
+---------------------------------------------------------------
+#### clearfaults ####
+Command:
+
+    sfcli Cluster clearfaults <options>
+
+Description:
+
+You can use the ClearClusterFaults method to clear information about both current and previously detected faults. Both resolved and unresolved faults can be cleared. 
+
+Options:
+--faulttypes
+Determines the types of faults cleared. Possible values are: current: Faults that are currently detected and have not been resolved. resolved: (Default) Faults that were previously detected and resolved. all: Both current and resolved faults are cleared. The fault status can be determined by the resolved field of the fault object. 
+
+---------------------------------------------------------------
+#### getsnmpacl ####
+Command:
+
+    sfcli Cluster getsnmpacl <options>
+
+Description:
+
+GetSnmpACL enables you to return the current SNMP access permissions on the cluster nodes. 
+
+Options:
+---------------------------------------------------------------
+#### enablesnmp ####
+Command:
+
+    sfcli Cluster enablesnmp <options>
+
+Description:
+
+EnableSnmp enables you to enable SNMP on cluster nodes. When you enable SNMP, the action applies to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to EnableSnmp. 
+
+Options:
+--snmpv3enabled
+If set to "true", then SNMP v3 is enabled on each node in the cluster. If set to "false", then SNMP v2 is enabled. 
+
+---------------------------------------------------------------
+#### setsnmpacl ####
+Command:
+
+    sfcli Cluster setsnmpacl <options>
+
+Description:
+
+SetSnmpACL enables you to configure SNMP access permissions on the cluster nodes. The values you set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to SetSnmpACL. Also note that the values set with this interface replace all network or usmUsers values set with the older SetSnmpInfo. 
+
+Options:
+--networks
+List of networks and what type of access they have to the SNMP servers running on the cluster nodes. See SNMP Network Object for possible "networks" values. This parameter is required if SNMP v3 is disabled. 
+
+--usmusers
+List of users and the type of access they have to the SNMP servers running on the cluster nodes. 
+
+--accessnetworks
+ro: read-only access.* rw: for read-write access. rosys: for read-only access to a restricted set of system information *SolidFire recommends that all networks other than the default "localhost" be set to "ro" access, because all SolidFire MIB objects are read-only. 
+
+--cidr
+A CIDR network mask. This network mask must be an integer greater than or equal to 0, and less than or equal to 32. It must also not be equal to 31. 
+
+--community
+SNMP community string. 
+
+--network
+This parameter ainteger with the cidr variable is used to control which network the access and community string apply to. The special value of "default" is used to specify an entry that applies to all networks. The cidr mask is ignored when network value is either a host name or default. 
+
+--accessusmusers
+rouser: read-only access.* rwuser: for read-write access. rosys: for read-only access to a restricted set of system information *SolidFire recommends that all USM users be set to "rouser" access, because all SolidFire MIB objects are read-only. 
+
+--name
+The name of the user. Must contain at least one character, but no more than 32 characters. Blank spaces are not allowed. 
+
+--password
+The password of the user. Must be between 8 and 255 characters integer (inclusive). Blank spaces are not allowed. Required if "secLevel" is "auth" or "priv." 
+
+--passphrase
+The passphrase of the user. Must be between 8 and 255 characters integer (inclusive). Blank spaces are not allowed. Required if "secLevel" is "priv." 
+
+--seclevel
+noauth: No password or passphrase is required. auth: A password is required for user access. priv: A password and passphrase is required for user access. 
+
+---------------------------------------------------------------
+#### listadmins ####
+Command:
+
+    sfcli Cluster listadmins <options>
+
+Description:
+
+ListClusterAdmins returns the list of all cluster administrators for the cluster. There can be several cluster administrator accounts with different levels of permissions. There can be only one primary cluster administrator in the system. The primary Cluster Admin is the administrator that was created when the cluster was created. You can also create LDAP administrators when setting up an LDAP system on the cluster. 
 
 Options:
 ---------------------------------------------------------------
@@ -2335,6 +3682,94 @@ Required to indicate your acceptance of the End User License Agreement when crea
 --attributes
 List of name-value pairs in JSON object format. 
 
+---------------------------------------------------------------
+#### disablesnmp ####
+Command:
+
+    sfcli Cluster disablesnmp <options>
+
+Description:
+
+You can use DisableSnmp to disable SNMP on the cluster nodes. 
+
+Options:
+---------------------------------------------------------------
+#### setsnmptrapinfo ####
+Command:
+
+    sfcli Cluster setsnmptrapinfo <options>
+
+Description:
+
+You can use SetSnmpTrapInfo to enable and disable the generation of cluster SNMP notifications (traps) and to specify the set of network host computers that receive the notifications. The values you pass with each SetSnmpTrapInfo method call replace all values set in any previous call to SetSnmpTrapInfo. 
+
+Options:
+--traprecipients
+List of hosts that are to receive the traps generated by the Cluster Master. At least one object is required if any one of the trap types is enabled. 
+
+--clusterfaulttrapsenabled
+If the value is set to true, a corresponding solidFireClusterFaultNotification is sent to the configured list of trap recipients when a cluster fault is logged. The default value is false. 
+
+--clusterfaultresolvedtrapsenabled
+If the value is set to true, a corresponding solidFireClusterFaultResolvedNotification is sent to the configured list of trap recipients when a cluster fault is resolved. The default value is false. 
+
+--clustereventtrapsenabled
+If the value is set to true, a corresponding solidFireClusterEventNotification is sent to the configured list of trap recipients when a cluster event is logged. The default value is false. 
+
+--host
+The IP address or host name of the target network management station. 
+
+--community
+SNMP community string. 
+
+--port
+The UDP port number on the host where the trap is to be sent. Valid range is 1 - 65535. 0 (zero) is not a valid port number. Default is 162. 
+
+---------------------------------------------------------------
+#### modifyadmin ####
+Command:
+
+    sfcli Cluster modifyadmin <options>
+
+Description:
+
+You can use ModifyClusterAdmin to change the settings for a cluster admin or LDAP cluster admin. You cannot change access for the administrator cluster admin account. 
+
+Options:
+--clusteradminid
+ClusterAdminID for the cluster admin or LDAP cluster admin to modify. 
+
+--password
+Password used to authenticate this cluster admin. 
+
+--access
+Controls which methods this cluster admin can use. For more details, see Access Control in the Element API Reference Guide. 
+
+--attributes
+List of name-value pairs in JSON object format. 
+
+---------------------------------------------------------------
+#### disableencryptionatrest ####
+Command:
+
+    sfcli Cluster disableencryptionatrest <options>
+
+Description:
+
+The DisableEncryptionAtRest method enables you to remove the encryption that was previously applied to the cluster using the EnableEncryptionAtRest method. This disable method is asynchronous and returns a response before encryption is disabled. You can use the GetClusterInfo method to poll the system to see when the process has completed. 
+
+Options:
+---------------------------------------------------------------
+#### enableencryptionatrest ####
+Command:
+
+    sfcli Cluster enableencryptionatrest <options>
+
+Description:
+
+You can use the EnableEncryptionAtRest method to enable the Advanced Encryption Standard (AES) 256-bit encryption at rest on the cluster, so that the cluster can manage the encryption key used for the drives on each node. This feature is not enabled by default. When you enable Encryption at Rest, the cluster automatically manages encryption keys internally for the drives on each node in the cluster. Nodes do not store the keys to unlock drives and the keys are never passed over the network. Two nodes participating in a cluster are required to access the key to disable encryption on a drive. The encryption management does not affect performance or efficiency on the cluster. If an encryption-enabled drive or node is removed from the cluster with the API, Encryption at Rest is disabled and the data is not secure erased. Data can be secure erased using the SecureEraseDrives API method. Note: If you have a node type with a model number ending in "-NE", the EnableEncryptionAtRest method call fails with a response of "Encryption not allowed. Cluster detected non-encryptable node". You should only enable or disable encryption when the cluster is running and in a healthy state. You can enable or disable encryption at your discretion and as often as you need. Note: This process is asynchronous and returns a response before encryption is enabled. You can use the GetClusterInfo method to poll the system to see when the process has completed. 
+
+Options:
 ---------------------------------------------------------------
 #### setconfig ####
 Command:
@@ -2425,41 +3860,117 @@ Network interface used for storage.
  
 
 ---------------------------------------------------------------
-#### getsnmpacl ####
+#### modifyfullthreshold ####
 Command:
 
-    sfcli Cluster getsnmpacl <options>
+    sfcli Cluster modifyfullthreshold <options>
 
 Description:
 
-GetSnmpACL enables you to return the current SNMP access permissions on the cluster nodes. 
+You can use ModifyClusterFullThreshold to change the level at which the system generates an event when the storage cluster approaches a certain capacity utilization. You can use the threshold setting to indicate the acceptable amount of utilized block storage before the system generates a warning. For example, if you want to be alerted when the system reaches 3% below the "Error" level block storage utilization, enter a value of "3" for the stage3BlockThresholdPercent parameter. If this level is reached, the system sends an alert to the Event Log in the Cluster Management Console. 
+
+Options:
+--stage2awarethreshold
+The number of nodes of capacity remaining in the cluster before the system triggers a capacity notification. 
+
+--stage3blockthresholdpercent
+The percentage of block storage utilization below the "Error" threshold that causes the system to trigger a cluster "Warning" alert. 
+
+--maxmetadataoverprovisionfactor
+A value representative of the number of times metadata space can be overprovisioned relative to the amount of space available. For example, if there was enough metadata space to store 100 TiB of volumes and this number was set to 5, then 500 TiB worth of volumes can be created. 
+
+---------------------------------------------------------------
+#### removeadmin ####
+Command:
+
+    sfcli Cluster removeadmin <options>
+
+Description:
+
+You can use RemoveClusterAdmin to remove a Cluster Admin. You cannot remove the administrator cluster admin account. 
+
+Options:
+--clusteradminid
+ClusterAdminID for the cluster admin to remove. 
+
+---------------------------------------------------------------
+#### listevents ####
+Command:
+
+    sfcli Cluster listevents <options>
+
+Description:
+
+ListEvents returns events detected on the cluster, sorted from oldest to newest. 
+
+Options:
+--maxevents
+Specifies the maximum number of events to return. 
+
+--starteventid
+Identifies the beginning of a range of events to return. 
+
+--endeventid
+Identifies the end of a range of events to return. 
+
+---------------------------------------------------------------
+#### getapi ####
+Command:
+
+    sfcli Cluster getapi <options>
+
+Description:
+
+You can use the GetAPI method to return a list of all the API methods and supported API endpoints that can be used in the system. 
 
 Options:
 ---------------------------------------------------------------
-#### enablesnmp ####
+#### deleteallsupportbundles ####
 Command:
 
-    sfcli Cluster enablesnmp <options>
+    sfcli Cluster deleteallsupportbundles <options>
 
 Description:
 
-EnableSnmp enables you to enable SNMP on cluster nodes. When you enable SNMP, the action applies to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to EnableSnmp. 
+DeleteAllSupportBundles enables you to delete all support bundles generated with the CreateSupportBundle API method. 
 
 Options:
---snmpv3enabled
-If set to "true", then SNMP v3 is enabled on each node in the cluster. If set to "false", then SNMP v2 is enabled. 
-
 ---------------------------------------------------------------
-#### getcapacity ####
+#### snmpsendtesttraps ####
 Command:
 
-    sfcli Cluster getcapacity <options>
+    sfcli Cluster snmpsendtesttraps <options>
 
 Description:
 
-You can use the GetClusterCapacity method to return the high-level capacity measurements for an entire cluster. You can use the fields returned from this method to calculate the efficiency rates that are displayed in the Element OS Web UI. You can use the following calculations in scripts to return the efficiency rates for thin provisioning, deduplication, compression, and overall efficiency. 
+SnmpSendTestTraps enables you to test SNMP functionality for a cluster. This method instructs the cluster to send test SNMP traps to the currently configured SNMP manager. 
 
 Options:
+---------------------------------------------------------------
+#### getcurrentadmin ####
+Command:
+
+    sfcli Cluster getcurrentadmin <options>
+
+Description:
+
+GetCurrentClusterAdmin returns information for the current primary cluster administrator. The primary Cluster Admin was created when the cluster was created. 
+
+Options:
+---------------------------------------------------------------
+#### getstate ####
+Command:
+
+    sfcli Cluster getstate <options>
+
+Description:
+
+The GetClusterState API method enables you to indicate if a node is part of a cluster or not. The three states are: Available: Node has not been configured with a cluster name. Pending: Node is pending for a specific named cluster and can be added. Active: Node is an active member of a cluster and may not be added to another cluster. Note: This method is available only through the per-node API endpoint 5.0 or later. 
+
+Options:
+--force
+To run this command, the force parameter must be set to true. 
+
 ---------------------------------------------------------------
 #### createsupportbundle ####
 Command:
@@ -2481,128 +3992,44 @@ Passed to the sf_make_support_bundle script. You should use this parameter only 
 The number of seconds to allow the support bundle script to run before stopping. The default value is 1500 seconds. 
 
 ---------------------------------------------------------------
-#### disableencryptionatrest ####
+#### getsnmptrapinfo ####
 Command:
 
-    sfcli Cluster disableencryptionatrest <options>
+    sfcli Cluster getsnmptrapinfo <options>
 
 Description:
 
-The DisableEncryptionAtRest method enables you to remove the encryption that was previously applied to the cluster using the EnableEncryptionAtRest method. This disable method is asynchronous and returns a response before encryption is disabled. You can use the GetClusterInfo method to poll the system to see when the process has completed. 
+You can use GetSnmpTrapInfo to return current SNMP trap configuration information. 
 
 Options:
 ---------------------------------------------------------------
-#### getversioninfo ####
+#### listfaults ####
 Command:
 
-    sfcli Cluster getversioninfo <options>
+    sfcli Cluster listfaults <options>
 
 Description:
 
-GetClusterVersionInfo enables you to retrieve information about the Element software version running on each node in the cluster. This method also returns information about nodes that are currently in the process of upgrading software. 
+ListClusterFaults enables you to retrieve information about any faults detected on the cluster. With this method, you can retrieve both current faults as well as faults that have been resolved. The system caches faults every 30 seconds. 
 
 Options:
----------------------------------------------------------------
-#### setsnmpacl ####
-Command:
+--bestpractices
+Specifies whether to include faults triggered by suboptimal system configuration. Possible values are: true false 
 
-    sfcli Cluster setsnmpacl <options>
-
-Description:
-
-SetSnmpACL enables you to configure SNMP access permissions on the cluster nodes. The values you set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to SetSnmpACL. Also note that the values set with this interface replace all network or usmUsers values set with the older SetSnmpInfo. 
-
-Options:
---networks
-List of networks and what type of access they have to the SNMP servers running on the cluster nodes. See SNMP Network Object for possible "networks" values. This parameter is required if SNMP v3 is disabled. 
-
---usmusers
-List of users and the type of access they have to the SNMP servers running on the cluster nodes. 
-
---accessnetworks
-ro: read-only access.* rw: for read-write access. rosys: for read-only access to a restricted set of system information *SolidFire recommends that all networks other than the default "localhost" be set to "ro" access, because all SolidFire MIB objects are read-only. 
-
---cidr
-A CIDR network mask. This network mask must be an integer greater than or equal to 0, and less than or equal to 32. It must also not be equal to 31. 
-
---community
-SNMP community string. 
-
---network
-This parameter ainteger with the cidr variable is used to control which network the access and community string apply to. The special value of "default" is used to specify an entry that applies to all networks. The cidr mask is ignored when network value is either a host name or default. 
-
---accessusmusers
-rouser: read-only access.* rwuser: for read-write access. rosys: for read-only access to a restricted set of system information *SolidFire recommends that all USM users be set to "rouser" access, because all SolidFire MIB objects are read-only. 
-
---name
-The name of the user. Must contain at least one character, but no more than 32 characters. Blank spaces are not allowed. 
-
---password
-The password of the user. Must be between 8 and 255 characters integer (inclusive). Blank spaces are not allowed. Required if "secLevel" is "auth" or "priv." 
-
---passphrase
-The passphrase of the user. Must be between 8 and 255 characters integer (inclusive). Blank spaces are not allowed. Required if "secLevel" is "priv." 
-
---seclevel
-noauth: No password or passphrase is required. auth: A password is required for user access. priv: A password and passphrase is required for user access. 
-
----------------------------------------------------------------
-#### clearfaults ####
-Command:
-
-    sfcli Cluster clearfaults <options>
-
-Description:
-
-You can use the ClearClusterFaults method to clear information about both current and previously detected faults. Both resolved and unresolved faults can be cleared. 
-
-Options:
 --faulttypes
-Determines the types of faults cleared. Possible values are: current: Faults that are currently detected and have not been resolved. resolved: (Default) Faults that were previously detected and resolved. all: Both current and resolved faults are cleared. The fault status can be determined by the resolved field of the fault object. 
+Determines the types of faults returned. Possible values are: current: List active, unresolved faults. resolved: List faults that were previously detected and resolved. all: (Default) List both current and resolved faults. You can see the fault status in the resolved field of the Cluster Fault object. 
 
 ---------------------------------------------------------------
-#### getsystemstatus ####
+#### getfullthreshold ####
 Command:
 
-    sfcli Cluster getsystemstatus <options>
+    sfcli Cluster getfullthreshold <options>
 
 Description:
 
-GetSystemStatus enables you to return whether a reboot ir required or not. 
+You can use GetClusterFullThreshold to view the stages set for cluster fullness levels. This method returns all fullness metrics for the cluster. Note: When a cluster reaches the Error stage of block cluster fullness, the maximum IOPS on all volumes are reduced linearly to the volume's minimum IOPS as the cluster approaches the Critical stage. This helps prevent the cluster from reaching the Critical stage of block cluster fullness. 
 
 Options:
----------------------------------------------------------------
-#### setsnmptrapinfo ####
-Command:
-
-    sfcli Cluster setsnmptrapinfo <options>
-
-Description:
-
-You can use SetSnmpTrapInfo to enable and disable the generation of cluster SNMP notifications (traps) and to specify the set of network host computers that receive the notifications. The values you pass with each SetSnmpTrapInfo method call replace all values set in any previous call to SetSnmpTrapInfo. 
-
-Options:
---traprecipients
-List of hosts that are to receive the traps generated by the Cluster Master. At least one object is required if any one of the trap types is enabled. 
-
---clusterfaulttrapsenabled
-If the value is set to true, a corresponding solidFireClusterFaultNotification is sent to the configured list of trap recipients when a cluster fault is logged. The default value is false. 
-
---clusterfaultresolvedtrapsenabled
-If the value is set to true, a corresponding solidFireClusterFaultResolvedNotification is sent to the configured list of trap recipients when a cluster fault is resolved. The default value is false. 
-
---clustereventtrapsenabled
-If the value is set to true, a corresponding solidFireClusterEventNotification is sent to the configured list of trap recipients when a cluster event is logged. The default value is false. 
-
---host
-The IP address or host name of the target network management station. 
-
---community
-SNMP community string. 
-
---port
-The UDP port number on the host where the trap is to be sent. Valid range is 1 - 65535. 0 (zero) is not a valid port number. Default is 162. 
-
 ---------------------------------------------------------------
 #### create ####
 Command:
@@ -2639,290 +4066,6 @@ Required to indicate your acceptance of the End User License Agreement when crea
 List of name-value pairs in JSON object format. 
 
 ---------------------------------------------------------------
-#### enableencryptionatrest ####
-Command:
-
-    sfcli Cluster enableencryptionatrest <options>
-
-Description:
-
-You can use the EnableEncryptionAtRest method to enable the Advanced Encryption Standard (AES) 256-bit encryption at rest on the cluster, so that the cluster can manage the encryption key used for the drives on each node. This feature is not enabled by default. When you enable Encryption at Rest, the cluster automatically manages encryption keys internally for the drives on each node in the cluster. Nodes do not store the keys to unlock drives and the keys are never passed over the network. Two nodes participating in a cluster are required to access the key to disable encryption on a drive. The encryption management does not affect performance or efficiency on the cluster. If an encryption-enabled drive or node is removed from the cluster with the API, Encryption at Rest is disabled and the data is not secure erased. Data can be secure erased using the SecureEraseDrives API method. Note: If you have a node type with a model number ending in "-NE", the EnableEncryptionAtRest method call fails with a response of "Encryption not allowed. Cluster detected non-encryptable node". You should only enable or disable encryption when the cluster is running and in a healthy state. You can enable or disable encryption at your discretion and as often as you need. Note: This process is asynchronous and returns a response before encryption is enabled. You can use the GetClusterInfo method to poll the system to see when the process has completed. 
-
-Options:
----------------------------------------------------------------
-#### getinfo ####
-Command:
-
-    sfcli Cluster getinfo <options>
-
-Description:
-
-GetClusterInfo enables you to return configuration information about the cluster. 
-
-Options:
----------------------------------------------------------------
-#### getntpinfo ####
-Command:
-
-    sfcli Cluster getntpinfo <options>
-
-Description:
-
-GetNtpInfo enables you to return the current network time protocol (NTP) configuration information. 
-
-Options:
----------------------------------------------------------------
-#### listsyncjobs ####
-Command:
-
-    sfcli Cluster listsyncjobs <options>
-
-Description:
-
-ListSyncJobs enables you to return information about synchronization jobs that are running on a SolidFire cluster. The type of synchronization jobs that are returned with this method are slice, clone, and remote. 
-
-Options:
----------------------------------------------------------------
-#### modifyfullthreshold ####
-Command:
-
-    sfcli Cluster modifyfullthreshold <options>
-
-Description:
-
-You can use ModifyClusterFullThreshold to change the level at which the system generates an event when the storage cluster approaches a certain capacity utilization. You can use the threshold setting to indicate the acceptable amount of utilized block storage before the system generates a warning. For example, if you want to be alerted when the system reaches 3% below the "Error" level block storage utilization, enter a value of "3" for the stage3BlockThresholdPercent parameter. If this level is reached, the system sends an alert to the Event Log in the Cluster Management Console. 
-
-Options:
---stage2awarethreshold
-The number of nodes of capacity remaining in the cluster before the system triggers a capacity notification. 
-
---stage3blockthresholdpercent
-The percentage of block storage utilization below the "Error" threshold that causes the system to trigger a cluster "Warning" alert. 
-
---maxmetadataoverprovisionfactor
-A value representative of the number of times metadata space can be overprovisioned relative to the amount of space available. For example, if there was enough metadata space to store 100 TiB of volumes and this number was set to 5, then 500 TiB worth of volumes can be created. 
-
----------------------------------------------------------------
-#### listevents ####
-Command:
-
-    sfcli Cluster listevents <options>
-
-Description:
-
-ListEvents returns events detected on the cluster, sorted from oldest to newest. 
-
-Options:
---maxevents
-Specifies the maximum number of events to return. 
-
---starteventid
-Identifies the beginning of a range of events to return. 
-
---endeventid
-Identifies the end of a range of events to return. 
-
----------------------------------------------------------------
-#### getcurrentadmin ####
-Command:
-
-    sfcli Cluster getcurrentadmin <options>
-
-Description:
-
-GetCurrentClusterAdmin returns information for the current primary cluster administrator. The primary Cluster Admin was created when the cluster was created. 
-
-Options:
----------------------------------------------------------------
-#### getsnmptrapinfo ####
-Command:
-
-    sfcli Cluster getsnmptrapinfo <options>
-
-Description:
-
-You can use GetSnmpTrapInfo to return current SNMP trap configuration information. 
-
-Options:
----------------------------------------------------------------
-#### getstate ####
-Command:
-
-    sfcli Cluster getstate <options>
-
-Description:
-
-The GetClusterState API method enables you to indicate if a node is part of a cluster or not. The three states are: Available: Node has not been configured with a cluster name. Pending: Node is pending for a specific named cluster and can be added. Active: Node is an active member of a cluster and may not be added to another cluster. Note: This method is available only through the per-node API endpoint 5.0 or later. 
-
-Options:
---force
-To run this command, the force parameter must be set to true. 
-
----------------------------------------------------------------
-#### deleteallsupportbundles ####
-Command:
-
-    sfcli Cluster deleteallsupportbundles <options>
-
-Description:
-
-DeleteAllSupportBundles enables you to delete all support bundles generated with the CreateSupportBundle API method. 
-
-Options:
----------------------------------------------------------------
-#### getmasternodeid ####
-Command:
-
-    sfcli Cluster getmasternodeid <options>
-
-Description:
-
-GetClusterMasterNodeID enables you to retrieve the ID of the node that can perform cluster-wide administration tasks and holds the storage virtual IP address (SVIP) and management virtual IP address (MVIP). 
-
-Options:
----------------------------------------------------------------
-#### listfaults ####
-Command:
-
-    sfcli Cluster listfaults <options>
-
-Description:
-
-ListClusterFaults enables you to retrieve information about any faults detected on the cluster. With this method, you can retrieve both current faults as well as faults that have been resolved. The system caches faults every 30 seconds. 
-
-Options:
---bestpractices
-Specifies whether to include faults triggered by suboptimal system configuration. Possible values are: true false 
-
---faulttypes
-Determines the types of faults returned. Possible values are: current: List active, unresolved faults. resolved: List faults that were previously detected and resolved. all: (Default) List both current and resolved faults. You can see the fault status in the resolved field of the Cluster Fault object. 
-
----------------------------------------------------------------
-#### getsnmpinfo ####
-Command:
-
-    sfcli Cluster getsnmpinfo <options>
-
-Description:
-
-GetSnmpInfo enables you to retrieve the current simple network management protocol (SNMP) configuration information. Note: GetSnmpInfo is available for Element OS 8 and prior releases. It is deprecated for versions later than Element OS 8. NetApp recommends that you migrate to the GetSnmpState and SetSnmpACL methods. See details in the Element API Reference Guide for their descriptions and usage. 
-
-Options:
----------------------------------------------------------------
-#### getstats ####
-Command:
-
-    sfcli Cluster getstats <options>
-
-Description:
-
-GetClusterStats enables you to retrieve high-level activity measurements for the cluster. Values returned are cumulative from the creation of the cluster. 
-
-Options:
----------------------------------------------------------------
-#### removeadmin ####
-Command:
-
-    sfcli Cluster removeadmin <options>
-
-Description:
-
-You can use RemoveClusterAdmin to remove a Cluster Admin. You cannot remove the administrator cluster admin account. 
-
-Options:
---clusteradminid
-ClusterAdminID for the cluster admin to remove. 
-
----------------------------------------------------------------
-#### getapi ####
-Command:
-
-    sfcli Cluster getapi <options>
-
-Description:
-
-You can use the GetAPI method to return a list of all the API methods and supported API endpoints that can be used in the system. 
-
-Options:
----------------------------------------------------------------
-#### getfullthreshold ####
-Command:
-
-    sfcli Cluster getfullthreshold <options>
-
-Description:
-
-You can use GetClusterFullThreshold to view the stages set for cluster fullness levels. This method returns all fullness metrics for the cluster. Note: When a cluster reaches the Error stage of block cluster fullness, the maximum IOPS on all volumes are reduced linearly to the volume's minimum IOPS as the cluster approaches the Critical stage. This helps prevent the cluster from reaching the Critical stage of block cluster fullness. 
-
-Options:
----------------------------------------------------------------
-#### getlimits ####
-Command:
-
-    sfcli Cluster getlimits <options>
-
-Description:
-
-GetLimits enables you to retrieve the limit values set by the API. These values might change between releases of Element OS, but do not change without an update to the system. Knowing the limit values set by the API can be useful when writing API scripts for user-facing tools. Note: The GetLimits method returns the limits for the current software version regardless of the API endpoint version used to pass the method. 
-
-Options:
----------------------------------------------------------------
-#### modifyadmin ####
-Command:
-
-    sfcli Cluster modifyadmin <options>
-
-Description:
-
-You can use ModifyClusterAdmin to change the settings for a cluster admin or LDAP cluster admin. You cannot change access for the administrator cluster admin account. 
-
-Options:
---clusteradminid
-ClusterAdminID for the cluster admin or LDAP cluster admin to modify. 
-
---password
-Password used to authenticate this cluster admin. 
-
---access
-Controls which methods this cluster admin can use. For more details, see Access Control in the Element API Reference Guide. 
-
---attributes
-List of name-value pairs in JSON object format. 
-
----------------------------------------------------------------
-#### listadmins ####
-Command:
-
-    sfcli Cluster listadmins <options>
-
-Description:
-
-ListClusterAdmins returns the list of all cluster administrators for the cluster. There can be several cluster administrator accounts with different levels of permissions. There can be only one primary cluster administrator in the system. The primary Cluster Admin is the administrator that was created when the cluster was created. You can also create LDAP administrators when setting up an LDAP system on the cluster. 
-
-Options:
----------------------------------------------------------------
-#### snmpsendtesttraps ####
-Command:
-
-    sfcli Cluster snmpsendtesttraps <options>
-
-Description:
-
-SnmpSendTestTraps enables you to test SNMP functionality for a cluster. This method instructs the cluster to send test SNMP traps to the currently configured SNMP manager. 
-
-Options:
----------------------------------------------------------------
-#### getsnmpstate ####
-Command:
-
-    sfcli Cluster getsnmpstate <options>
-
-Description:
-
-You can use GetSnmpState to return the current state of the SNMP feature. 
-
-Options:
----------------------------------------------------------------
 #### setntpinfo ####
 Command:
 
@@ -2940,1185 +4083,289 @@ List of NTP servers to add to each nodes NTP configuration.
 Enables every node in the cluster as a broadcast client. 
 
 ---------------------------------------------------------------
-#### getconfig ####
+#### listsyncjobs ####
 Command:
 
-    sfcli Cluster getconfig <options>
+    sfcli Cluster listsyncjobs <options>
 
 Description:
 
-The GetClusterConfig API method enables you to return information about the cluster configuration this node uses to communicate with the cluster that it is a part of. 
-
-Options:
-
-Statistics Commands 
----------------------------------------------------------------
-#### getcompletestats ####
-Command:
-
-    sfcli Statistics getcompletestats <options>
-
-Description:
-
-NetApp engineering uses the GetCompleteStats API method to troubleshoot new features. The data returned from GetCompleteStats is not documented, changes frequently, and is not guaranteed to be accurate. NetApp does not recommend using GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster. 
+ListSyncJobs enables you to return information about synchronization jobs that are running on a SolidFire cluster. The type of synchronization jobs that are returned with this method are slice, clone, and remote. 
 
 Options:
 ---------------------------------------------------------------
-#### listvolumestatsbyvirtualvolume ####
+#### getntpinfo ####
 Command:
 
-    sfcli Statistics listvolumestatsbyvirtualvolume <options>
+    sfcli Cluster getntpinfo <options>
 
 Description:
 
-ListVolumeStatsByVirtualVolume enables you to list volume statistics for any volumes in the system that are associated with virtual volumes. Statistics are cumulative from the creation of the volume. 
-
-Options:
---virtualvolumeids
-A list of one or more virtual volume IDs for which to retrieve information. If you specify this parameter, the method returns information about only these virtual volumes. 
-
----------------------------------------------------------------
-#### listdrivestats ####
-Command:
-
-    sfcli Statistics listdrivestats <options>
-
-Description:
-
-ListDriveStats enables you to retrieve high-level activity measurements for multiple drives in the cluster. By default, this method returns statistics for all drives in the cluster, and these measurements are cumulative from the addition of the drive to the cluster. Some values this method returns are specific to block drives, and some are specific to metadata drives. 
-
-Options:
---drives
-Optional list of DriveIDs for which to return drive statistics. If you omit this parameter, measurements for all drives are returned. 
-
----------------------------------------------------------------
-#### getrawstats ####
-Command:
-
-    sfcli Statistics getrawstats <options>
-
-Description:
-
-NetApp engineering uses the GetRawStats API method to troubleshoot new features. The data returned from GetRawStats is not documented, changes frequently, and is not guaranteed to be accurate. NetApp does not recommend using GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster. 
+GetNtpInfo enables you to return the current network time protocol (NTP) configuration information. 
 
 Options:
 ---------------------------------------------------------------
-#### gethardwareinfo ####
+#### getsnmpstate ####
 Command:
 
-    sfcli Statistics gethardwareinfo <options>
+    sfcli Cluster getsnmpstate <options>
 
 Description:
 
-The GetHardwareInfo API method enables you to return hardware information and status for a single node. This generally includes details about manufacturers, vendors, versions, drives, and other associated hardware identification information. 
+You can use GetSnmpState to return the current state of the SNMP feature. 
 
 Options:
 ---------------------------------------------------------------
-#### listvolumestats ####
+#### getcapacity ####
 Command:
 
-    sfcli Statistics listvolumestats <options>
+    sfcli Cluster getcapacity <options>
 
 Description:
 
-ListVolumeStats returns high-level activity measurements for a single volume, list of volumes, or all volumes (if you omit the volumeIDs parameter). Measurement values are cumulative from the creation of the volume. 
+You can use the GetClusterCapacity method to return the high-level capacity measurements for an entire cluster. You can use the fields returned from this method to calculate the efficiency rates that are displayed in the Element OS Web UI. You can use the following calculations in scripts to return the efficiency rates for thin provisioning, deduplication, compression, and overall efficiency. 
 
 Options:
---volumeids
-A list of volume IDs of volumes from which to retrieve activity information. 
+---------------------------------------------------------------
+#### getversioninfo ####
+Command:
 
+    sfcli Cluster getversioninfo <options>
 
-Volume Commands 
+Description:
+
+GetClusterVersionInfo enables you to retrieve information about the Element software version running on each node in the cluster. This method also returns information about nodes that are currently in the process of upgrading software. 
+
+Options:
+
+BackupTarget Commands 
+---------------------------------------------------------------
+#### remove ####
+Command:
+
+    sfcli BackupTarget remove <options>
+
+Description:
+
+RemoveBackupTarget allows you to delete backup targets. 
+
+Options:
+--backuptargetid
+The unique target ID of the target to remove. 
+
 ---------------------------------------------------------------
 #### modify ####
 Command:
 
-    sfcli Volume modify <options>
+    sfcli BackupTarget modify <options>
 
 Description:
 
-ModifyVolume enables you to modify settings on an existing volume. You can make modifications to one volume at a time and changes take place immediately. If you do not specify QoS values when you modify a volume, they remain the same as before the modification. You can retrieve default QoS values for a newly created volume by running the GetDefaultQoS method. When you need to increase the size of a volume that is being replicated, do so in the following order to prevent replication errors: 1. Increase the size of the "Replication Target" volume. 2. Increase the size of the source or "Read / Write" volume. NetApp recommends that both the target and source volumes are the same size. Note: If you change the "access" status to locked or target, all existing iSCSI connections are terminated. 
+ModifyBackupTarget enables you to change attributes of a backup target. 
 
 Options:
---volumeid
-VolumeID for the volume to be modified. 
+--backuptargetid
+The unique target ID for the target to modify. 
 
---accountid
-AccountID to which the volume is reassigned. If unspecified, the previous account name is used. 
-
---access
-Specifies the access allowed for the volume. Possible values are: readOnly: Only read operations are allowed. readWrite: Reads and writes are allowed. locked: No reads or writes are allowed. If not specified, the access value does not change. replicationTarget: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked. If a value is not specified, the access value does not change. 
-
---qosminiops
-Desired minimum 4KB IOPS to guarantee. The allowed IOPS will only drop below this level if all volumes have been capped at their minimum IOPS value and there is still insufficient performance capacity. 
-
---qosmaxiops
-Desired maximum 4KB IOPS allowed over an extended period of time. 
-
---qosburstiops
-Maximum "peak" 4KB IOPS allowed for short periods of time. Allows for bursts of I/O activity over the normal max IOPS value. 
-
---qosbursttime
-The length of time burst IOPS is allowed. The value returned is represented in time units of seconds. Note: this value is calculated by the system based on IOPS set for QoS. 
-
---totalsize
-New size of the volume in bytes. 1000000000 is equal to 1GB. Size is rounded up to the nearest 1MB. This parameter can only be used to increase the size of a volume. 
+--name
+The new name for the backup target. 
 
 --attributes
 List of name-value pairs in JSON object format. 
 
 ---------------------------------------------------------------
-#### getasyncresult ####
+#### list ####
 Command:
 
-    sfcli Volume getasyncresult <options>
+    sfcli BackupTarget list <options>
 
 Description:
 
-You can use GetAsyncResult to retrieve the result of asynchronous method calls. Some method calls require some time to run, and might not be finished when the system sends the initial response. To obtain the status or result of the method call, use GetAsyncResult to poll the asyncHandle value returned by the method. GetAsyncResult returns the overall status of the operation (in progress, completed, or error) in a standard fashion, but the actual data returned for the operation depends on the original method call and the return data is documented with each method. 
-
-Options:
---asynchandle
-A value that was returned from the original asynchronous method call. 
-
---keepresult
-If true, GetAsyncResult does not remove the asynchronous result upon returning it, enabling future queries to that asyncHandle. 
-
----------------------------------------------------------------
-#### cancelclone ####
-Command:
-
-    sfcli Volume cancelclone <options>
-
-Description:
-
-CancelClone enables you to stop an ongoing CloneVolume or CopyVolume process. When you cancel a group clone operation, the system completes and removes the operation's associated asyncHandle. 
-
-Options:
---cloneid
-The cloneID for the ongoing clone process. 
-
----------------------------------------------------------------
-#### getcount ####
-Command:
-
-    sfcli Volume getcount <options>
-
-Description:
-
-GetVolumeCount enables you to retrieve the number of volumes currently in the system. 
+You can use ListBackupTargets to retrieve information about all backup targets that have been created. 
 
 Options:
 ---------------------------------------------------------------
-#### getefficiency ####
+#### get ####
 Command:
 
-    sfcli Volume getefficiency <options>
+    sfcli BackupTarget get <options>
 
 Description:
 
-GetVolumeEfficiency enables you to retrieve information about a volume. Only the volume you give as a parameter in this API method is used to compute the capacity. 
+GetBackupTarget enables you to return information about a specific backup target that you have created. 
 
 Options:
---volumeid
-Specifies the volume for which capacity is computed. 
-
----------------------------------------------------------------
-#### cancelgroupclone ####
-Command:
-
-    sfcli Volume cancelgroupclone <options>
-
-Description:
-
-CancelGroupClone enables you to stop an ongoing CloneMultipleVolumes process occurring on a group of volumes. When you cancel a group clone operation, the system completes and removes the operation's associated asyncHandle. 
-
-Options:
---groupcloneid
-The cloneID for the ongoing clone process. 
-
----------------------------------------------------------------
-#### setdefaultqos ####
-Command:
-
-    sfcli Volume setdefaultqos <options>
-
-Description:
-
-SetDefaultQoS enables you to configure the default Quality of Service (QoS) values (measured in inputs and outputs per second, or IOPS) for a volume. For more information about QoS in a SolidFire cluster, see the User Guide. 
-
-Options:
---miniops
-The minimum number of sustained IOPS provided by the cluster to a volume. 
-
---maxiops
-The maximum number of sustained IOPS provided by the cluster to a volume. 
-
---burstiops
-The maximum number of IOPS allowed in a short burst scenario. 
-
----------------------------------------------------------------
-#### listdeleted ####
-Command:
-
-    sfcli Volume listdeleted <options>
-
-Description:
-
-ListDeletedVolumes enables you to retrieve the list of volumes that have been marked for deletion and purged from the system. 
-
-Options:
---includevirtualvolumes
-Specifies that virtual volumes are included in the response by default. To exclude virtual volumes, set to false. 
+--backuptargetid
+The unique identifier assigned to the backup target. 
 
 ---------------------------------------------------------------
 #### create ####
 Command:
 
-    sfcli Volume create <options>
+    sfcli BackupTarget create <options>
 
 Description:
 
-CreateVolume enables you to create a new (empty) volume on the cluster. As soon as the volume creation is complete, the volume is available for connection via iSCSI. 
+CreateBackupTarget enables you to create and store backup target information so that you do not need to re-enter it each time a backup is created. 
 
 Options:
 --name
-The name of the volume access group (might be user specified). Not required to be unique, but recommended. Might be 1 to 64 characters in length. 
-
---accountid
-AccountID for the owner of this volume. 
-
---totalsize
-Total size of the volume, in bytes. Size is rounded up to the nearest 1MB size. 
-
---enable512e
-Specifies whether 512e emulation is enabled or not. Possible values are: true: The volume provides 512-byte sector emulation. false: 512e emulation is not enabled. 
-
---qosminiops
-Desired minimum 4KB IOPS to guarantee. The allowed IOPS will only drop below this level if all volumes have been capped at their minimum IOPS value and there is still insufficient performance capacity. 
-
---qosmaxiops
-Desired maximum 4KB IOPS allowed over an extended period of time. 
-
---qosburstiops
-Maximum "peak" 4KB IOPS allowed for short periods of time. Allows for bursts of I/O activity over the normal max IOPS value. 
-
---qosbursttime
-The length of time burst IOPS is allowed. The value returned is represented in time units of seconds. Note: this value is calculated by the system based on IOPS set for QoS. 
-
---attributes
-The list of name-value pairs in JSON object format. Total attribute size must be less than 1000B, or 1KB, including JSON formatting characters. 
-
----------------------------------------------------------------
-#### restoredeleted ####
-Command:
-
-    sfcli Volume restoredeleted <options>
-
-Description:
-
-RestoreDeletedVolume marks a deleted volume as active again. This action makes the volume immediately available for iSCSI connection. 
-
-Options:
---volumeid
-VolumeID of the deleted volume to be restored. 
-
----------------------------------------------------------------
-#### getstats ####
-Command:
-
-    sfcli Volume getstats <options>
-
-Description:
-
-GetVolumeStats enables  you to retrieve high-level activity measurements for a single volume. Values are cumulative from the creation of the volume. 
-
-Options:
---volumeid
-Specifies the volume for which statistics are gathered. 
-
----------------------------------------------------------------
-#### listasyncresults ####
-Command:
-
-    sfcli Volume listasyncresults <options>
-
-Description:
-
-You can use ListAsyncResults to list the results of all currently running and completed asynchronous methods on the system. Querying asynchronous results with ListAsyncResults does not cause completed asyncHandles to expire; you can use GetAsyncResult to query any of the asyncHandles returned by ListAsyncResults. 
-
-Options:
---asyncresulttypes
-An optional list of types of results. You can use this list to restrict the results to only these types of operations. Possible values are: BulkVolume: Copy operations between volumes, such as backups or restores. Clone: Volume cloning operations. DriveRemoval: Operations involving the system copying data from a drive in preparation to remove it from the cluster. RtfiPendingNode: Operations involving the system installing compatible software on a node before adding it to the cluster 
-
----------------------------------------------------------------
-#### updatebulkstatus ####
-Command:
-
-    sfcli Volume updatebulkstatus <options>
-
-Description:
-
-You can use UpdateBulkVolumeStatus in a script to update the status of a bulk volume job that you started with the StartBulkVolumeRead or StartBulkVolumeWrite methods. 
-
-Options:
---key
-The key assigned during initialization of a StartBulkVolumeRead or StartBulkVolumeWrite session. 
-
---status
-The status of the given bulk volume job. The system sets the status. Possible values are:  running: Jobs that are still active. complete: Jobs that are done. failed: Jobs that failed. 
-
---percentcomplete
-The completed progress of the bulk volume job as a percentage value. 
-
---message
-The message returned indicating the status of the bulk volume job after the job is complete. 
-
---attributes
-JSON attributes; updates what is on the bulk volume job. 
-
----------------------------------------------------------------
-#### startbulkread ####
-Command:
-
-    sfcli Volume startbulkread <options>
-
-Description:
-
-StartBulkVolumeRead enables you to initialize a bulk volume read session on a specified volume. Only two bulk volume processes can run simultaneously on a volume. When you initialize the session, data is read from a SolidFire storage volume for the purposes of storing the data on an external backup source. The external data is accessed by a web server running on an SF-series node. Communications and server interaction information for external data access is passed by a script running on the storage system. At the start of a bulk volume read operation, a snapshot of the volume is made and the snapshot is deleted when the read is complete. You can also read a snapshot of the volume by entering the ID of the snapshot as a parameter. When you read a previous snapshot, the system does not create a new snapshot of the volume or delete the previous snapshot when the read completes. Note: This process creates a new snapshot if the ID of an existing snapshot is not provided. Snapshots can be created if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. 
-
-Options:
---volumeid
-The ID of the volume to be read. 
-
---format
-The format of the volume data. It can be either of the following formats: uncompressed: Every byte of the volume is returned without any compression. native: Opaque data is returned that is smaller and more efficiently stored and written on a subsequent bulk volume write. 
-
---snapshotid
-The ID of a previously created snapshot used for bulk volume reads. If no ID is entered, a snapshot of the current active volume image is made. 
-
---script
-The executable name of a script. If unspecified, the key and URL is necessary to access SF-series nodes. The script is run on the primary node and the key and URL is returned to the script so the local web server can be contacted. 
-
---scriptparameters
-JSON parameters to pass to the script. 
-
---attributes
-JSON attributes for the bulk volume job. 
-
----------------------------------------------------------------
-#### liststatsbyaccount ####
-Command:
-
-    sfcli Volume liststatsbyaccount <options>
-
-Description:
-
-ListVolumeStatsByAccount returns high-level activity measurements for every account. Values are summed from all the volumes owned by the account. 
-
-Options:
---accounts
-One or more account ids by which to filter the result. 
-
---includevirtualvolumes
-Includes virtual volumes in the response by default. To exclude virtual volumes, set to false. 
-
----------------------------------------------------------------
-#### list ####
-Command:
-
-    sfcli Volume list <options>
-
-Description:
-
-The ListVolumes method enables you to retrieve a list of volumes that are in a cluster. You can specify the volumes you want to return in the list by using the available parameters. 
-
-Options:
---startvolumeid
-Only volumes with an ID greater than or equal to this value are returned. Mutually exclusive with the volumeIDs parameter. 
-
---limit
-Specifies the maximum number of volume results that are returned. Mutually exclusive with the volumeIDs parameter. 
-
---volumestatus
-Only volumes with a status equal to the status value are returned. Possible values are: creating snapshotting active deleted 
-
---accounts
-Returns only the volumes owned by the accounts you specify here. Mutually exclusive with the volumeIDs parameter. 
-
---ispaired
-Returns volumes that are paired or not paired. Possible values are: true: Returns all paired volumes. false: Returns all volumes that are not paired. 
-
---volumeids
-A list of volume IDs. If you supply this parameter, other parameters operate only on this set of volumes. Mutually exclusive with the accounts, startVolumeID, and limit parameters. 
-
---volumename
-Only volume object information matching the volume name is returned. 
-
---includevirtualvolumes
-Specifies that virtual volumes are included in the response by default. To exclude virtual volumes, set to false. 
-
----------------------------------------------------------------
-#### liststatsby ####
-Command:
-
-    sfcli Volume liststatsby <options>
-
-Description:
-
-ListVolumeStatsByVolume returns high-level activity measurements for every volume, by volume. Values are cumulative from the creation of the volume. 
-
-Options:
---includevirtualvolumes
-Specifies that virtual volumes are included in the response by default. To exclude virtual volumes, set to false. 
-
----------------------------------------------------------------
-#### listbulkjobs ####
-Command:
-
-    sfcli Volume listbulkjobs <options>
-
-Description:
-
-ListBulkVolumeJobs enables you to retrieve information about each bulk volume read or write operation that is occurring in the system. 
-
-Options:
----------------------------------------------------------------
-#### clonemultiple ####
-Command:
-
-    sfcli Volume clonemultiple <options>
-
-Description:
-
-CloneMultipleVolumes enables you to create a clone of a group of specified volumes. You can assign a consistent set of characteristics to a group of multiple volumes when they are cloned together. Before using groupSnapshotID to clone the volumes in a group snapshot, you must create the group snapshot by using the CreateGroupSnapshot API method or the Element OS Web UI. Using groupSnapshotID is optional when cloning multiple volumes. Note: Cloning multiple volumes is allowed if cluster fullness is at stage 2 or 3. Clones are not created when cluster fullness is at stage 4 or 5. 
-
-Options:
---volumes
-Unique ID for each volume to include in the clone. If optional parameters are not specified, the values are inherited from the source volumes. Required parameter for "volumes" array: volumeID Optional parameters for "volumes" array: access: Can be one of readOnly, readWrite, locked, or replicationTarget attributes: List of name-value pairs in JSON object format. name: New name for the clone. newAccountID: Account ID for the new volumes. newSize: New size Total size of the volume, in bytes. Size is rounded up to the nearest 1MB. 
-
---volumeid
-Required parameter for "volumes" array: volumeID. 
-
---accessvolumes
-Access settings for the new volume. readOnly: Only read operations are allowed. readWrite: Reads and writes are allowed. locked: No reads or writes are allowed. replicationTarget: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked.  If unspecified, the access settings of the clone will be the same as the source. 
-
---name
-New name for the clone. 
-
---newaccountidvolumes
-Account ID for the new volume. 
-
---newsize
-New size Total size of the volume, in bytes. Size is rounded up to the nearest 1MB size. 
-
---attributes
-List of Name/Value pairs in JSON object format. 
-
---access
-New default access method for the new volumes if not overridden by information passed in the volume's array. 
-
---groupsnapshotid
-ID of the group snapshot to use as a basis for the clone. 
-
---newaccountid
-New account ID for the volumes if not overridden by information passed in the volumes array. 
-
----------------------------------------------------------------
-#### listforaccount ####
-Command:
-
-    sfcli Volume listforaccount <options>
-
-Description:
-
-ListVolumesForAccount returns the list of active and (pending) deleted volumes for an account. 
-
-Options:
---accountid
-Returns all volumes owned by this AccountID. 
-
---startvolumeid
-The ID of the first volume to list. This can be useful for paging results. By default, this starts at the lowest VolumeID. 
-
---limit
-The maximum number of volumes to return from the API. 
-
---includevirtualvolumes
-Specifies that virtual volumes are included in the response by default. To exclude virtual volumes, set to false. 
-
----------------------------------------------------------------
-#### clone ####
-Command:
-
-    sfcli Volume clone <options>
-
-Description:
-
-CloneVolume enables you to create a copy of a volume. This method is asynchronous and might take a variable amount of time to complete. The cloning process begins immediately when you make the CloneVolume request and is representative of the state of the volume when the API method is issued. You can use the GetAsyncResult method to determine when the cloning process is complete and the new volume is available for connections. You can use ListSyncJobs to see the progress of creating the clone. Note: The initial attributes and QoS settings for the volume are inherited from the volume being cloned. You can change these settings with ModifyVolume. Note: Cloned volumes do not inherit volume access group memberships from the source volume. 
-
-Options:
---volumeid
-VolumeID for the volume to be cloned. 
-
---name
-The name of the new cloned volume. Might be 1 to 64 characters in length. 
-
---newaccountid
-AccountID for the owner of the new volume. If unspecified, the accountID of the owner of the volume being cloned is used. 
-
---newsize
-New size of the volume, in bytes. Might be greater or less than the size of the volume being cloned. If unspecified, the volume size is not changed. Size is rounded to the nearest 1MB. 
-
---access
-Specifies the level of access allowed for the new volume. Possible values are: readOnly: Only read operations are allowed. readWrite: Reads and writes are allowed. locked: No reads or writes are allowed. If unspecified, the level of access of the volume being cloned is used. replicationTarget: Identify a volume as the target volume for a paired set of volumes. If the volume is not paired, the access status is locked. If a value is not specified, the access value does not change. 
-
---snapshotid
-ID of the snapshot that is used as the source of the clone. If no ID is provided, the current active volume is used. 
+The name of the backup target. 
 
 --attributes
 List of name-value pairs in JSON object format. 
 
---enable512e
-Should the volume provide 512-byte sector emulation? 
 
----------------------------------------------------------------
-#### startbulkwrite ####
-Command:
-
-    sfcli Volume startbulkwrite <options>
-
-Description:
-
-StartBulkVolumeWrite enables you to initialize a bulk volume write session on a specified volume. Only two bulk volume processes can run simultaneously on a volume. When you initialize the write session, data is written to a SolidFire storage volume from an external backup source. The external data is accessed by a web server running on an SF-series node. Communications and server interaction information for external data access is passed by a script running on the storage system. 
-
-Options:
---volumeid
-The ID of the volume to be written to. 
-
---format
-The format of the volume data. It can be either of the following formats: uncompressed: Every byte of the volume is returned without any compression. native: Opaque data is returned that is smaller and more efficiently stored and written on a subsequent bulk volume write. 
-
---script
-The executable name of a script. If unspecified, the key and URL are necessary to access SF-series nodes. The script runs on the primary node and the key and URL is returned to the script, so the local web server can be contacted. 
-
---scriptparameters
-JSON parameters to pass to the script. 
-
---attributes
-JSON attributes for the bulk volume job. 
-
----------------------------------------------------------------
-#### delete ####
-Command:
-
-    sfcli Volume delete <options>
-
-Description:
-
-DeleteVolume marks an active volume for deletion. When marked, the volume is purged (permanently deleted) after the cleanup interval elapses. After making a request to delete a volume, any active iSCSI connections to the volume are immediately terminated and no further connections are allowed while the volume is in this state. A marked volume is not returned in target discovery requests. Any snapshots of a volume that has been marked for deletion are not affected. Snapshots are kept until the volume is purged from the system. If a volume is marked for deletion and has a bulk volume read or bulk volume write operation in progress, the bulk volume read or write operation is stopped. If the volume you delete is paired with a volume, replication between the paired volumes is suspended and no data is transferred to it or from it while in a deleted state. The remote volume that the deleted volume was paired with enters into a PausedMisconfigured state and data is no longer sent to it or from the deleted volume. Until the deleted volume is purged, it can be restored and data transfers resume. If the deleted volume gets purged from the system, the volume it was paired with enters into a StoppedMisconfigured state and the volume pairing status is removed. The purged volume becomes permanently unavailable. 
-
-Options:
---volumeid
-The ID of the volume to be deleted. 
-
----------------------------------------------------------------
-#### liststatsbyaccessgroup ####
-Command:
-
-    sfcli Volume liststatsbyaccessgroup <options>
-
-Description:
-
-ListVolumeStatsByVolumeAccessGroup enables you to get total activity measurements for all of the volumes that are a member of the specified volume access group(s). 
-
-Options:
---volumeaccessgroups
-An array of VolumeAccessGroupIDs for which volume activity is returned. If omitted, statistics for all volume access groups are returned. 
-
---includevirtualvolumes
-Specifies that virtual volumes are included in the response by default. To exclude virtual volumes, set to false. 
-
----------------------------------------------------------------
-#### getdefaultqos ####
-Command:
-
-    sfcli Volume getdefaultqos <options>
-
-Description:
-
-GetDefaultQoS enables you to retrieve the default QoS values for a newly created volume. 
-
-Options:
----------------------------------------------------------------
-#### listactive ####
-Command:
-
-    sfcli Volume listactive <options>
-
-Description:
-
-ListActiveVolumes enables you to return the list of active volumes currently in the system. The list of volumes is returned sorted in VolumeID order and can be returned in multiple parts (pages). 
-
-Options:
---startvolumeid
-Starting VolumeID to return. If no volume exists with this VolumeID, the next volume by VolumeID order is used as the start of the list. To page through the list, pass the VolumeID of the last volume in the previous response + 1. 
-
---limit
-Maximum number of Volume Info objects to return. A value of 0 (zero) returns all volumes (unlimited). 
-
---includevirtualvolumes
-Specifies that virtual volumes are included in the response by default. To exclude virtual volumes, set to false. 
-
----------------------------------------------------------------
-#### purgedeleted ####
-Command:
-
-    sfcli Volume purgedeleted <options>
-
-Description:
-
-PurgeDeletedVolume immediately and permanently purges a volume that has been deleted. You must delete a volume using DeleteVolume before it can be purged. Volumes are purged automatically after a period of time, so usage of this method is not typically required. 
-
-Options:
---volumeid
-The ID of the volume to be purged. 
-
----------------------------------------------------------------
-#### copy ####
-Command:
-
-    sfcli Volume copy <options>
-
-Description:
-
-CopyVolume enables you to overwrite the data contents of an existing volume with the data contents of another volume (or snapshot). Attributes of the destination volume such as IQN, QoS settings, size, account, and volume access group membership are not changed. The destination volume must already exist and must be the same size as the source volume. NetApp strongly recommends that clients unmount the destination volume before the CopyVolume operation begins. If the destination volume is modified during the copy operation, the changes will be lost. This method is asynchronous and may take a variable amount of time to complete. You can use the GetAsyncResult method to determine when the process has finished, and ListSyncJobs to see the progress of the copy. 
-
-Options:
---volumeid
-VolumeID of the volume to be read from. 
-
---dstvolumeid
-VolumeID of the volume to be overwritten. 
-
---snapshotid
-ID of the snapshot that is used as the source of the clone. If no ID is provided, the current active volume is used. 
-
-
-Node Commands 
----------------------------------------------------------------
-#### listpending ####
-Command:
-
-    sfcli Node listpending <options>
-
-Description:
-
-ListPendingNodes returns a list of the currently pending nodes in the system. Pending nodes are nodes that are running and configured to join the cluster, but have not yet been added via the AddNodes API method. 
-
-Options:
----------------------------------------------------------------
-#### listall ####
-Command:
-
-    sfcli Node listall <options>
-
-Description:
-
-ListAllNodes enables you to retrieve a list of active and pending nodes in the cluster. 
-
-Options:
----------------------------------------------------------------
-
-# Set config has been omitted from this cli
-
----------------------------------------------------------------
-#### liststats ####
-Command:
-
-    sfcli Node liststats <options>
-
-Description:
-
-ListNodeStats enables you to view the high-level activity measurements for all nodes in a cluster. 
-
-Options:
----------------------------------------------------------------
-#### getbootstrapconfig ####
-Command:
-
-    sfcli Node getbootstrapconfig <options>
-
-Description:
-
-GetBootstrapConfig returns cluster and node information from the bootstrap configuration file. Use this API method on an individual node before it has been joined with a cluster. You can use the information this method returns in the cluster configuration interface when you create a cluster. 
-
-Options:
+VirtualNetwork Commands 
 ---------------------------------------------------------------
 #### remove ####
 Command:
 
-    sfcli Node remove <options>
+    sfcli VirtualNetwork remove <options>
 
 Description:
 
-You can use RemoveNodes to remove one or more nodes that should no longer participate in the cluster. Before removing a node, you must remove all drives the node contains using the RemoveDrives method. You cannot remove a node until the RemoveDrives process has completed and all data has been migrated away from the node. After you remove a node, it registers itself as a pending node. You can add the node again or shut it down (shutting the node down removes it from the Pending Node list). 
+RemoveVirtualNetwork enables you to remove a previously added virtual network. Note: This method requires either the virtualNetworkID or the virtualNetworkTag as a parameter, but not both. 
 
 Options:
---nodes
-List of NodeIDs for the nodes to be removed. 
+--virtualnetworkid
+Network ID that identifies the virtual network to remove. 
 
----------------------------------------------------------------
-#### listpendingactive ####
-Command:
-
-    sfcli Node listpendingactive <options>
-
-Description:
-
-ListPendingActiveNodes returns the list of nodes in the cluster that are currently in the PendingActive state, between the pending and active states. These are nodes that are currently being returned to the factory image. 
-
-Options:
----------------------------------------------------------------
-#### getorigin ####
-Command:
-
-    sfcli Node getorigin <options>
-
-Description:
-
-GetOrigin enables you to retrieve the origination certificate for where the node was built. This method might return null if there is no origination certification. 
-
-Options:
----------------------------------------------------------------
-#### getstats ####
-Command:
-
-    sfcli Node getstats <options>
-
-Description:
-
-GetNodeStats enables you to retrieve the high-level activity measurements for a single node. 
-
-Options:
---nodeid
-Specifies the node for which statistics are gathered. 
-
----------------------------------------------------------------
-#### add ####
-Command:
-
-    sfcli Node add <options>
-
-Description:
-
-AddNodes enables you to add one or more new nodes to a cluster. When a node that is not configured starts up for the first time, you are prompted to configure the node. After you configure the node, it is registered as a "pending node" with the cluster.  Note: It might take several seconds after adding a new node for it to start up and register its drives as available. 
-
-Options:
---pendingnodes
- List of pending NodeIDs for the nodes to be added. You can  obtain the list of pending nodes using the ListPendingNodes method. 
-
---autoinstall
-Whether these nodes should be autoinstalled 
-
----------------------------------------------------------------
-#### getnetworkconfig ####
-Command:
-
-    sfcli Node getnetworkconfig <options>
-
-Description:
-
-The GetNetworkConfig API method enables you to display the network configuration information for a node. Note: This method is available only through the per-node API endpoint 5.0 or later. 
-
-Options:
----------------------------------------------------------------
-#### getpendingoperation ####
-Command:
-
-    sfcli Node getpendingoperation <options>
-
-Description:
-
-You can use GetPendingOperation to detect an operation on a node that is currently in progress. You can also use this method to report back when an operation has completed.  Note: method is available only through the per-node API endpoint 5.0 or later. 
-
-Options:
----------------------------------------------------------------
-
-# Set network config has been omitted from this cli
-
----------------------------------------------------------------
-#### listactive ####
-Command:
-
-    sfcli Node listactive <options>
-
-Description:
-
-ListActiveNodes returns the list of currently active nodes that are in the cluster. 
-
-Options:
----------------------------------------------------------------
-#### getconfig ####
-Command:
-
-    sfcli Node getconfig <options>
-
-Description:
-
-The GetConfig API method enables you to retrieve all configuration information for a node. This method includes the same information available in both the GetClusterConfig and GetNetworkConfig API methods. Note: This method is available only through the per-node API endpoint 5.0 or later. 
-
-Options:
-
-Account Commands 
----------------------------------------------------------------
-#### add ####
-Command:
-
-    sfcli Account add <options>
-
-Description:
-
-You can use AddAccount to add a new account to the system. You can create new volumes under the new account. The CHAP settings you specify for the account apply to all volumes owned by the account. 
-
-Options:
---username
-Specifies the username for this account. (Might be 1 to 64 characters in length). 
-
---initiatorsecret
-The CHAP secret to use for the initiator. This secret must be 12-16 characters in length and should be impenetrable. The initiator CHAP secret must be unique and cannot be the same as the target CHAP secret. If unspecified, a random secret is created. 
-
---targetsecret
-The CHAP secret to use for the target (mutual CHAP authentication). This secret must be 12-16 characters in length and should be impenetrable. The target CHAP secret must be unique and cannot be the same as the initiator CHAP secret. If unspecified, a random secret is created. 
-
---attributes
-List of name-value pairs in JSON object format. 
+--virtualnetworktag
+Network tag that identifies the virtual network to remove. 
 
 ---------------------------------------------------------------
 #### modify ####
 Command:
 
-    sfcli Account modify <options>
+    sfcli VirtualNetwork modify <options>
 
 Description:
 
-ModifyAccount enables you to modify an existing account. When you lock an account, any existing connections from that account are immediately terminated. When you change an account's CHAP settings, any existing connections remain active, and the new CHAP settings are used on subsequent connections or reconnections. To clear an account's attributes, specify {} for the attributes parameter. 
+You can use ModifyVirtualNetwork to change the attributes of an existing virtual network. This method enables you to add or remove address blocks, change the netmask, or modify the name or description of the virtual network. You can also use it to enable or disable namespaces, as well as add or remove a gateway if namespaces are enabled on the virtual network. Note: This method requires either the VirtualNetworkID or the VirtualNetworkTag as a parameter, but not both. Caution: Enabling or disabling the Routable Storage VLANs functionality for an existing virtual network by changing the "namespace" parameter disrupts any traffic handled by the virtual network. NetApp strongly recommends changing the "namespace" parameter only during a scheduled maintenance window. 
 
 Options:
---accountid
-Specifies the AccountID for the account to be modified. 
+--virtualnetworkid
+The unique identifier of the virtual network to modify. This is the virtual network ID assigned by the cluster.  Note: This parameter is optional but either virtualNetworkID or virtualNetworkTag must be specified with this API method. 
 
---username
-Specifies the username associated with the account. (Might be 1 to 64 characters in length). 
+--virtualnetworktag
+The network tag that identifies the virtual network to modify. Note: This parameter is optional but either virtualNetworkID or virtualNetworkTag must be specified with this API method. 
 
---status
-Sets the status for the account. Possible values are: active: The account is active and connections are allowed. locked: The account is locked and connections are refused. 
+--name
+The new name for the virtual network. 
 
---initiatorsecret
-Specifies the CHAP secret to use for the initiator. This secret must be 12-16 characters in length and should be impenetrable. The initiator CHAP secret must be unique and cannot be the same as the target CHAP secret. 
+--addressblocks
+The new addressBlock to set for this virtual network. This might contain new address blocks to add to the existing object or omit unused address blocks that need to be removed. Alternatively, you can extend or reduce the size of existing address blocks. You can only increase the size of the starting addressBlocks for a virtual network object; you can never decrease it. Attributes for this parameter are: start: The start of the IP address range. (String) size: The number of IP addresses to include in the block. (Integer) 
 
---targetsecret
-Specifies the CHAP secret to use for the target (mutual CHAP authentication). This secret must be 12-16 characters in length and should be impenetrable. The target CHAP secret must be unique and cannot be the same as the initiator CHAP secret. 
+--netmask
+New network mask for this virtual network. 
+
+--svip
+The storage virtual IP address for this virtual network. The svip for a virtual network cannot be changed. You must create a new virtual network to use a different svip address. 
+
+--gateway
+The IP address of a gateway of the virtual network. This parameter is only valid if the "namespace" parameter is set to true. 
+
+--namespace
+When set to true, enables Routable Storage VLANs functionality by recreating the virtual network and configuring a namespace to contain it. When set to false, disables the VRF functionality for the virtual network. Changing this value disrupts traffic running through this virtual network. 
+
+--attributes
+A new list of name-value pairs in JSON object format. 
+
+---------------------------------------------------------------
+#### add ####
+Command:
+
+    sfcli VirtualNetwork add <options>
+
+Description:
+
+You can use the AddVirtualNetwork method to add a new virtual network to a cluster configuration. When you add a virtual network, an interface for each node is created and each interface will require a virtual network IP address. The number of IP addresses you specify as a parameter for this API method must be equal to or greater than the number of nodes in the cluster. The system bulk provisions virtual network addresses and assigns them to individual nodes automatically. You do not need to assign virtual network addresses to nodes manually. Note: You can use AddVirtualNetwork only to create a new virtual network. If you want to make changes to an existing virtual network, use ModifyVirtualNetwork. Note: Virtual network parameters must be unique to each virtual network when setting the namespace parameter to false. 
+
+Options:
+--virtualnetworktag
+A unique virtual network (VLAN) tag. Supported values are 1 through 4094.The number zero (0) is not supported. 
+
+--name
+A user-defined name for the new virtual network. 
+
+--addressblocks
+Unique range of IP addresses to include in the virtual network. Attributes for this parameter are: start: The start of the IP address range. (String) size: The number of IP addresses to include in the block. (Integer) 
+
+--netmask
+Unique network mask for the virtual network being created. 
+
+--svip
+Unique storage IP address for the virtual network being created. 
+
+--start
+Start of the IP address range. 
+
+--size
+Number of IP addresses to include in the block. 
+
+--available
+Nuber of available blocks 
+
+--gateway
+The IP address of a gateway of the virtual network. This parameter is only valid if the "namespace" parameter is set to true. 
+
+--namespace
+When set to true, enables the Routable Storage VLANs functionality by creating and configuring a namespace and the virtual network contained by it. 
 
 --attributes
 List of name-value pairs in JSON object format. 
-
----------------------------------------------------------------
-#### getbyid ####
-Command:
-
-    sfcli Account getbyid <options>
-
-Description:
-
-GetAccountByID enables you to return details about a specific account, given its accountID. 
-
-Options:
---accountid
-Specifies the account for which details are gathered. 
-
----------------------------------------------------------------
-#### remove ####
-Command:
-
-    sfcli Account remove <options>
-
-Description:
-
-RemoveAccount enables you to remove an existing account. You must delete and purge all volumes associated with the account using DeleteVolume before you can remove the account. If volumes on the account are still pending deletion, you cannot use RemoveAccount to remove the account. 
-
-Options:
---accountid
-Specifies the AccountID for the account to be removed. 
 
 ---------------------------------------------------------------
 #### list ####
 Command:
 
-    sfcli Account list <options>
+    sfcli VirtualNetwork list <options>
 
 Description:
 
-ListAccounts returns the entire list of accounts, with optional paging support. 
+ListVirtualNetworks enables you to list all configured virtual networks for the cluster. You can use this method to verify the virtual network settings in the cluster. There are no required parameters for this method. However, to filter the results, you can pass one or more VirtualNetworkID or VirtualNetworkTag values. 
 
 Options:
---startaccountid
-Starting AccountID to return. If no account exists with this AccountID, the next account by AccountID order is used as the start of the list. To page through the list, pass the AccountID of the last account in the previous response + 1. 
+--virtualnetworkid
+Network ID to filter the list for a single virtual network. 
 
---limit
-Maximum number of AccountInfo objects to return. 
+--virtualnetworktag
+Network tag to filter the list for a single virtual network. 
 
---includestoragecontainers
-Includes storage containers in the response by default. To exclude storage containers, set to false. 
+--virtualnetworkids
+Network IDs to include in the list. 
 
----------------------------------------------------------------
-#### getefficiency ####
-Command:
+--virtualnetworktags
+Network tag to include in the list. 
 
-    sfcli Account getefficiency <options>
-
-Description:
-
-GetAccountEfficiency enables you to retrieve efficiency statistics about a volume account. This method returns efficiency information only for the account you specify as a parameter. 
-
-Options:
---accountid
-Specifies the volume account for which efficiency statistics are returned. 
-
----------------------------------------------------------------
-#### getbyname ####
-Command:
-
-    sfcli Account getbyname <options>
-
-Description:
-
-GetAccountByName enables you to retrieve details about a specific account, given its username. 
-
-Options:
---username
-Username for the account. 
-
-
-LoginSession Commands 
----------------------------------------------------------------
-#### getinfo ####
-Command:
-
-    sfcli LoginSession getinfo <options>
-
-Description:
-
-GetLoginSessionInfo enables you to return the period of time a log in authentication session is valid for both log in shells and the TUI. 
-
-Options:
----------------------------------------------------------------
-#### getremotelogginghosts ####
-Command:
-
-    sfcli LoginSession getremotelogginghosts <options>
-
-Description:
-
-GetRemoteLoggingHosts enables you to retrieve the current list of log servers. 
-
-Options:
----------------------------------------------------------------
-#### setremotelogginghosts ####
-Command:
-
-    sfcli LoginSession setremotelogginghosts <options>
-
-Description:
-
-SetRemoteLoggingHosts enables you to configure remote logging from the nodes in the storage cluster to a centralized log server or servers. Remote logging is performed over TCP using the default port 514. This API does not add to the existing logging hosts. Rather, it replaces what currently exists with new values specified by this API method. You can use GetRemoteLoggingHosts to determine what the current logging hosts are, and then use SetRemoteLoggingHosts to set the desired list of current and new logging hosts. 
-
-Options:
---remotehosts
-A list of hosts to send log messages to. 
-
---host
-Hostname or IP address of the log server. 
-
---port
-Port number that the log server is listening on. 
-
----------------------------------------------------------------
-#### setinfo ####
-Command:
-
-    sfcli LoginSession setinfo <options>
-
-Description:
-
-You can use SetLoginSessionInfo to set the period of time that a session's login authentication is valid. After the log in period elapses without activity on the system, the authentication expires. New login credentials are required for continued access to the cluster after the timeout period has elapsed. 
-
-Options:
---timeout
-Cluster authentication expiration period. Formatted in HH:mm:ss. For example, 01:30:00, 00:90:00, and 00:00:5400 can be used to equal a 90 minute timeout period. The default value is 30 minutes. 
-
-
-LDAP Commands 
----------------------------------------------------------------
-#### disableauthentication ####
-Command:
-
-    sfcli LDAP disableauthentication <options>
-
-Description:
-
-The DisableLdapAuthentication method enables you to disable LDAP authentication and remove all LDAP configuration settings. This method does not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no longer be able to log in. 
-
-Options:
----------------------------------------------------------------
-#### addclusteradmin ####
-Command:
-
-    sfcli LDAP addclusteradmin <options>
-
-Description:
-
-AddLdapClusterAdmin enables you to add a new LDAP cluster administrator user. An LDAP cluster administrator can manage the cluster via the API and management tools. LDAP cluster admin accounts are completely separate and unrelated to standard tenant accounts. You can also use this method to add an LDAP group that has been defined in Active Directory. The access level that is given to the group is passed to the individual users in the LDAP group. 
-
-Options:
---username
-The distinguished user name for the new LDAP cluster admin. 
-
---access
-Controls which methods this Cluster Admin can use. For more details on the levels of access, see the Access Control appendix in the SolidFire API Reference. 
-
---accepteula
-Accept the End User License Agreement. Set to true to add a cluster administrator account to the system. If omitted or set to false, the method call fails. 
-
---attributes
-List of name-value pairs in JSON object format. 
-
----------------------------------------------------------------
-#### testauthentication ####
-Command:
-
-    sfcli LDAP testauthentication <options>
-
-Description:
-
-The TestLdapAuthentication method enables you to validate the currently enabled LDAP authentication settings. If the configuration is correct, the API call returns the group membership of the tested user. 
-
-Options:
---username
-The username to be tested. 
-
---password
-The password for the username to be tested. 
-
---ldapconfigurationauthtype
-Identifies which user authentcation method will be used.  Valid values: DirectBind SearchAndBind 
-
---ldapconfigurationenabled
-Identifies whether or not the system is enabled for LDAP.  Valid values: true false 
-
---ldapconfigurationgroupsearchbasedn
-The base DN of the tree to start the group search (will do a subtree search from here). 
-
---ldapconfigurationgroupsearchcustomfilter
-The custom search filter used. 
-
---ldapconfigurationgroupsearchtype
-Controls the default group search filter used, can be one of the following: NoGroups: No group support. ActiveDirectory: Nested membership of all of a user's AD groups. MemberDN: MemberDN style groups (single-level). 
-
---ldapconfigurationsearchbinddn
-A fully qualified DN to log in with to perform an LDAP search for the user (needs read access to the LDAP directory). 
-
---ldapconfigurationserveruris
-A comma-separated list of LDAP server URIs (examples: "ldap://1.2.3.4" and ldaps://1.2.3.4:123") 
-
---ldapconfigurationuserdntemplate
-A string that is used to form a fully qualified user DN. 
-
---ldapconfigurationusersearchbasedn
-The base DN of the tree used to start the search (will do a subtree search from here). 
-
---ldapconfigurationusersearchfilter
-The LDAP filter used. 
-
----------------------------------------------------------------
-#### enableauthentication ####
-Command:
-
-    sfcli LDAP enableauthentication <options>
-
-Description:
-
-The EnableLdapAuthentication method enables you to configure an LDAP directory connection to use for LDAP authentication to a cluster. Users that are members of the LDAP directory can then log in to the storage system using their LDAP credentials. 
-
-Options:
---serveruris
-A comma-separated list of LDAP server URIs (examples: "ldap://1.2.3.4" and ldaps://1.2.3.4:123") 
-
---authtype
-Identifies which user authentication method to use. Must be one of the following: DirectBind SearchAndBind 
-
---groupsearchbasedn
-The base DN of the tree to start the group search (will do a subtree search from here). 
-
---groupsearchcustomfilter
-For use with the CustomFilter search type, an LDAP filter to use to return the DNs of a users groups. The string can have placeholder text of %USERNAME% and %USERDN% to be replaced with their username and full userDN as needed. 
-
---groupsearchtype
-Controls the default group search filter used, and must be one of the following: NoGroups: No group support. ActiveDirectory: Nested membership of all of a users AD groups. MemberDN: MemberDN style groups (single level). 
-
---searchbinddn
-A fully qualified DN to log in with to perform an LDAP search for the user (needs read access to the LDAP directory). 
-
---searchbindpassword
-The password for the searchBindDN account used for searching. 
-
---userdntemplate
-A string that is used to form a fully qualified user DN. The string should have the placeholder text %USERNAME%, which is replaced with the username of the authenticating user. 
-
---usersearchbasedn
-The base DN of the tree to start the search (will do a subtree search from here). 
-
---usersearchfilter
-The LDAP filter to use. The string should have the placeholder text %USERNAME% which is replaced with the username of the authenticating user. Example: (&(objectClass=person)(sAMAccountName=%USERNAME%)) will use the sAMAccountName field in Active Directory to match the username entered at cluster login. 
-
----------------------------------------------------------------
-#### getconfiguration ####
-Command:
-
-    sfcli LDAP getconfiguration <options>
-
-Description:
-
-The GetLdapConfiguration method enables you to get the currently active LDAP configuration on the cluster. 
-
-Options:
 
 Initiators Commands 
 ---------------------------------------------------------------
-#### create ####
+#### modify ####
 Command:
 
-    sfcli Initiators create <options>
+    sfcli Initiators modify <options>
 
 Description:
 
-CreateInitiators enables you to create multiple new initiator IQNs or World Wide Port Names (WWPNs) and optionally assign them aliases and attributes. When you use CreateInitiators to create new initiators, you can also add them to volume access groups. If CreateInitiators fails to create one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible). 
+ModifyInitiators enables you to change the attributes of one or more existing initiators. You cannot change the name of an existing initiator. If you need to change the name of an initiator, delete it first with DeleteInitiators and create a new one with CreateInitiators. If ModifyInitiators fails to change one of the initiators provided in the parameter, the method returns an error and does not modify any initiators (no partial completion is possible). 
 
 Options:
 --initiators
-A list of objects containing characteristics of each new initiator. Values are: name: (Required) The name of the initiator (IQN or WWPN) to create. (String) alias: (Optional) The friendly name to assign to this initiator. (String) attributes: (Optional) A set of JSON attributes to assign to this initiator. (JSON Object) volumeAccessGroupID: (Optional) The ID of the volume access group into to which this newly created initiator will be added. (Integer) 
+A list of objects containing characteristics of each initiator to modify. Values are: initiatorID: (Required) The ID of the initiator to modify. (Integer) alias: (Optional) A new friendly name to assign to the initiator. (String) attributes: (Optional) A new set of JSON attributes to assign to the initiator. (JSON Object) volumeAccessGroupID: (Optional) The ID of the volume access group into to which the initiator should be added. If the initiator was previously in a different volume access group, it is removed from the old volume access group. If this key is present but null, the initiator is removed from its current volume access group, but not placed in any new volume access group. (Integer) 
 
---name
-(Required) The name of the initiator (IQN or WWPN) to create. (String) 
+--initiatorid
+(Required) The numeric ID of the initiator to modify. (Integer) 
 
 --alias
-(Optional) The friendly name to assign to this initiator. (String) 
+(Optional) A new friendly name to assign to the initiator. (String) 
 
 --volumeaccessgroupid
-(Optional) The ID of the volume access group to which this newly created initiator will be added. (Integer) 
+(Optional) The ID of the volume access group to which the newly created initiator should be added. If the initiator was previously in a different volume access group, it is removed from the old volume access group. If this key is present but null, the initiator is removed from its current volume access group, but not placed in any new volume access group. (Integer) 
 
 --attributes
-(Optional) A set of JSON attributes assigned to this initiator. (JSON Object) 
+(Optional) A new set of JSON attributes assigned to this initiator. (JSON Object) 
 
 ---------------------------------------------------------------
 #### list ####
@@ -4155,275 +4402,27 @@ Options:
 An array of IDs of initiators to delete. 
 
 ---------------------------------------------------------------
-#### modify ####
+#### create ####
 Command:
 
-    sfcli Initiators modify <options>
+    sfcli Initiators create <options>
 
 Description:
 
-ModifyInitiators enables you to change the attributes of one or more existing initiators. You cannot change the name of an existing initiator. If you need to change the name of an initiator, delete it first with DeleteInitiators and create a new one with CreateInitiators. If ModifyInitiators fails to change one of the initiators provided in the parameter, the method returns an error and does not modify any initiators (no partial completion is possible). 
+CreateInitiators enables you to create multiple new initiator IQNs or World Wide Port Names (WWPNs) and optionally assign them aliases and attributes. When you use CreateInitiators to create new initiators, you can also add them to volume access groups. If CreateInitiators fails to create one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible). 
 
 Options:
 --initiators
-A list of objects containing characteristics of each initiator to modify. Values are: initiatorID: (Required) The ID of the initiator to modify. (Integer) alias: (Optional) A new friendly name to assign to the initiator. (String) attributes: (Optional) A new set of JSON attributes to assign to the initiator. (JSON Object) volumeAccessGroupID: (Optional) The ID of the volume access group into to which the initiator should be added. If the initiator was previously in a different volume access group, it is removed from the old volume access group. If this key is present but null, the initiator is removed from its current volume access group, but not placed in any new volume access group. (Integer) 
+A list of objects containing characteristics of each new initiator. Values are: name: (Required) The name of the initiator (IQN or WWPN) to create. (String) alias: (Optional) The friendly name to assign to this initiator. (String) attributes: (Optional) A set of JSON attributes to assign to this initiator. (JSON Object) volumeAccessGroupID: (Optional) The ID of the volume access group into to which this newly created initiator will be added. (Integer) 
 
---initiatorid
-(Required) The numeric ID of the initiator to modify. (Integer) 
+--name
+(Required) The name of the initiator (IQN or WWPN) to create. (String) 
 
 --alias
-(Optional) A new friendly name to assign to the initiator. (String) 
+(Optional) The friendly name to assign to this initiator. (String) 
 
 --volumeaccessgroupid
-(Optional) The ID of the volume access group to which the newly created initiator should be added. If the initiator was previously in a different volume access group, it is removed from the old volume access group. If this key is present but null, the initiator is removed from its current volume access group, but not placed in any new volume access group. (Integer) 
+(Optional) The ID of the volume access group to which this newly created initiator will be added. (Integer) 
 
 --attributes
-(Optional) A new set of JSON attributes assigned to this initiator. (JSON Object) 
-
-
-Restart Commands 
----------------------------------------------------------------
-#### services ####
-Command:
-
-    sfcli Restart services <options>
-
-Description:
-
-The RestartServices API method enables you to restart the services on a node. Caution: This method causes temporary node services interruption. Exercise caution when using this method. Note: This method is available only through the per-node API endpoint 5.0 or later. 
-
-Options:
---force
-Required parameter to successfully restart services on a node. 
-
---service
-Service name to be restarted. 
-
---action
-Action to perform on the service (start, stop, restart). 
-
----------------------------------------------------------------
-#### resetnode ####
-Command:
-
-    sfcli Restart resetnode <options>
-
-Description:
-
-The ResetNode API method enables you to reset a node to the factory settings. All data, packages (software upgrades, and so on), configurations, and log files are deleted from the node when you call this method. However, network settings for the node are preserved during this operation. Nodes that are participating in a cluster cannot be reset to the factory settings. The ResetNode API can only be used on nodes that are in an "Available" state. It cannot be used on nodes that are "Active" in a cluster, or in a "Pending" state. Caution: This method clears any data that is on the node. Exercise caution when using this method. Note: This method is available only through the per-node API endpoint 5.0 or later. 
-
-Options:
---build
-Specifies the URL to a remote Element software image to which the node will be reset. 
-
---force
-Required parameter to successfully reset the node. 
-
---options
-Specifications for running the reset operation. 
-
---reboot
-Should it be rebooted? 
-
----------------------------------------------------------------
-#### networking ####
-Command:
-
-    sfcli Restart networking <options>
-
-Description:
-
-The RestartNetworking API method enables you to restart the networking services on a node. Warning: This method restarts all networking services on a node, causing temporary loss of networking connectivity. Exercise caution when using this method. Note: This method is available only through the per-node API endpoint 5.0 or later. 
-
-Options:
---force
-Required parameter to successfully reset the node. 
-
----------------------------------------------------------------
-#### shutdown ####
-Command:
-
-    sfcli Restart shutdown <options>
-
-Description:
-
-The Shutdown API method enables you to restart or shutdown a node that has not yet been added to a cluster. To use this method, log in to the MIP for the pending node, and enter the "shutdown" method with either the "restart" or "halt" options. 
-
-Options:
---nodes
-List of NodeIDs for the nodes to be shutdown. 
-
---option
-Specifies the action to take for the node shutdown. Possible values are: restart: Restarts the node. halt: Shuts down the node. 
-
-
-Test Commands 
----------------------------------------------------------------
-#### listutilities ####
-Command:
-
-    sfcli Test listutilities <options>
-
-Description:
-
-You can use the ListUtilities API method to return the operations that are available to run on a node.  Note: This method is available only through the per-node API endpoint 5.0 or later. 
-
-Options:
----------------------------------------------------------------
-#### connectensemble ####
-Command:
-
-    sfcli Test connectensemble <options>
-
-Description:
-
-The TestConnectEnsemble API method enables you to verify connectivity with a specified database ensemble. By default, it uses the ensemble for the cluster that the node is associated with. Alternatively, you can provide a different ensemble to test connectivity with. Note: This method is available only through the per-node API endpoint 5.0 or later. 
-
-Options:
---ensemble
-Uses a comma-separated list of ensemble node cluster IP addresses to test connectivity. This parameter is optional. 
-
----------------------------------------------------------------
-#### list ####
-Command:
-
-    sfcli Test list <options>
-
-Description:
-
-You can use the ListTests API method to return the tests that are available to run on a node. Note: This method is available only through the per-node API endpoint 5.0 or later. 
-
-Options:
----------------------------------------------------------------
-#### connectmvip ####
-Command:
-
-    sfcli Test connectmvip <options>
-
-Description:
-
-The TestConnectMvip API method enables you to test the management connection to the cluster. The test pings the MVIP and executes a simple API method to verify connectivity. Note: This method is available only through the per-node API endpoint 5.0 or later. 
-
-Options:
---mvip
-If specified, tests the management connection of a different MVIP. You do not need to use this value when testing the connection to the target cluster. This parameter is optional. 
-
----------------------------------------------------------------
-#### ping ####
-Command:
-
-    sfcli Test ping <options>
-
-Description:
-
-You can use the TestPing API method to validate the connection to all the nodes in a cluster on both 1G and 10G interfaces by using ICMP packets. The test uses the appropriate MTU sizes for each packet based on the MTU settings in the network configuration. Note: This method is available only through the per-node API endpoint 5.0 or later. 
-
-Options:
---attempts
-Specifies the number of times the system should repeat the test ping. The default value is 5. 
-
---hosts
-Specifies a comma-separated list of addresses or hostnames of devices to ping. 
-
---totaltimeoutsec
-Specifies the length of time the ping should wait for a system response before issuing the next ping attempt or ending the process. 
-
---packetsize
-Specifies the number of bytes to send in the ICMP packet that is sent to each IP. The number must be less than the maximum MTU specified in the network configuration. 
-
---pingtimeoutmsec
-Specifies the number of milliseconds to wait for each individual ping response. The default value is 500 ms. 
-
---prohibitfragmentation
-Specifies that the Do not Fragment (DF) flag is enabled for the ICMP packets. 
-
----------------------------------------------------------------
-#### connectsvip ####
-Command:
-
-    sfcli Test connectsvip <options>
-
-Description:
-
-The TestConnectSvip API method enables you to test the storage connection to the cluster. The test pings the SVIP using ICMP packets, and when successful, connects as an iSCSI initiator. Note: This method is available only through the per-node API endpoint 5.0 or later. 
-
-Options:
---svip
-If specified, tests the storage connection of a different SVIP. You do not need to use this value when testing the connection to the target cluster. This parameter is optional. 
-
-
-SFApi Commands 
----------------------------------------------------------------
-#### invoke ####
-Command:
-
-    sfcli SFApi invoke <options>
-
-Description:
-
-This will invoke any API method supported by the SolidFire API for the version and port the connection is using. Returns a nested hashtable of key/value pairs that contain the result of the invoked method. 
-
-Options:
---method
-The name of the method to invoke. This is case sensitive. 
-
---parameters
-An object, normally a dictionary or hashtable of the key/value pairs, to be passed as the params for the method being invoked. 
-
-
-Network Commands 
----------------------------------------------------------------
-#### listfibrechannelsessions ####
-Command:
-
-    sfcli Network listfibrechannelsessions <options>
-
-Description:
-
-ListFibreChannelSessions enables you to retrieve information about the active Fibre Channel sessions on a cluster.  
-
-Options:
----------------------------------------------------------------
-#### listiscsisessions ####
-Command:
-
-    sfcli Network listiscsisessions <options>
-
-Description:
-
-You can use ListISCSISessions to return iSCSI information for volumes in the cluster. 
-
-Options:
----------------------------------------------------------------
-#### listnodefibrechannelportinfo ####
-Command:
-
-    sfcli Network listnodefibrechannelportinfo <options>
-
-Description:
-
-The ListNodeFibreChannelPortInfo API method enables you to retrieve information about the Fibre Channel ports on a node. The API method is intended for use on individual nodes; userid and password authentication is required for access to individual Fibre Channel nodes. 
-
-Options:
----------------------------------------------------------------
-#### listfibrechannelportinfo ####
-Command:
-
-    sfcli Network listfibrechannelportinfo <options>
-
-Description:
-
-ListFibreChannelPortInfo enables you to retrieve information about the Fibre Channel ports on a node.  The API method is intended for use on individual nodes; userid and password authentication is required for access to individual Fibre Channel nodes. 
-
-Options:
----------------------------------------------------------------
-#### listinterfaces ####
-Command:
-
-    sfcli Network listinterfaces <options>
-
-Description:
-
-ListNetworkInterfaces enables you to retrieve information about each network interface on a node. The API method is intended for use on individual nodes; userid and password authentication is required for access to individual nodes. 
-
-Options:
+(Optional) A set of JSON attributes assigned to this initiator. (JSON Object) 

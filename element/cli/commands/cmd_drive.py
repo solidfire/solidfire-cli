@@ -24,7 +24,109 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """add reset listhardware list remove gethardwareinfo getconfig secureerase test getstats """
+    """listhardware list reset add secureerase remove getstats gethardwareinfo getconfig test """
+
+@cli.command('listhardware', short_help="""ListDriveHardware returns all the drives connected to a node. Use this method on individual nodes to return drive hardware information or use this method on the cluster master node MVIP to see information for all the drives on all nodes. Note: The "securitySupported": true line of the method response does not imply that the drives are capable of encryption; only that the security status can be queried. If you have a node type with a model number ending in "-NE", commands to enable security features on these drives will fail. See the EnableEncryptionAtRest method for more information. """, cls=SolidFireCommand)
+@click.option('--force',
+              type=bool,
+              required=True,
+              help="""To run this command, the force parameter must be set to true. """)
+@pass_context
+def listhardware(ctx,
+           # Mandatory main parameter
+           force):
+    """ListDriveHardware returns all the drives connected to a node. Use this method on individual nodes to return drive hardware"""
+    """information or use this method on the cluster master node MVIP to see information for all the drives on all nodes."""
+    """Note: The &quot;securitySupported&quot;: true line of the method response does not imply that the drives are capable of"""
+    """encryption; only that the security status can be queried. If you have a node type with a model number ending in &quot;-NE&quot;,"""
+    """commands to enable security features on these drives will fail. See the EnableEncryptionAtRest method for more information."""
+
+    cli_utils.establish_connection(ctx)
+    
+    
+
+    ctx.logger.info("""force = """+str(force)+""";"""+"")
+    try:
+        _ListDriveHardwareResult = ctx.element.list_drive_hardware(force=force)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListDriveHardwareResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListDriveHardwareResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('list', short_help="""ListDrives enables you to retrieve the list of the drives that exist in the cluster's active nodes. This method returns drives that have been added as volume metadata or block drives as well as drives that have not been added and are available. """, cls=SolidFireCommand)
+@pass_context
+def list(ctx):
+    """ListDrives enables you to retrieve the list of the drives that exist in the cluster&#x27;s active nodes. This method returns drives that have"""
+    """been added as volume metadata or block drives as well as drives that have not been added and are available."""
+
+    cli_utils.establish_connection(ctx)
+    
+
+    ctx.logger.info("")
+    try:
+        _ListDrivesResult = ctx.element.list_drives()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListDrivesResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListDrivesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('reset', short_help="""ResetDrives enables you to proactively initialize drives and remove all data currently residing on a drive. The drive can then be reused in an existing node or used in an upgraded node. This method requires the force parameter to be included in the method call. """, cls=SolidFireCommand)
+@click.option('--drives',
+              type=str,
+              required=True,
+              help="""List of device names (not driveIDs) to reset. """)
+@click.option('--force',
+              type=bool,
+              required=True,
+              help="""Required parameter to successfully reset a drive. """)
+@pass_context
+def reset(ctx,
+           # Mandatory main parameter
+           drives,
+           # Mandatory main parameter
+           force):
+    """ResetDrives enables you to proactively initialize drives and remove all data currently residing on a drive. The drive can then be reused"""
+    """in an existing node or used in an upgraded node. This method requires the force parameter to be included in the method call."""
+
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+
+    ctx.logger.info("""drives = """+str(drives)+""";"""+"""force = """+str(force)+""";"""+"")
+    try:
+        _ResetDrivesResult = ctx.element.reset_drives(drives=drives, force=force)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ResetDrivesResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ResetDrivesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
 
 @cli.command('add', short_help="""AddDrives enables you to add one or more available drives to the cluster, enabling the drives to host a portion of the cluster's data. When you add a node to the cluster or install new drives in an existing node, the new drives are marked as "available" and must be added via AddDrives before they can be utilized. Use the ListDrives method to display drives that are "available" to be added. When you add multiple drives, it is more efficient to add them in a single AddDrives method call rather than multiple individual methods with a single drive each. This reduces the amount of data balancing that must occur to stabilize the storage load on the cluster. When you add a drive, the system automatically determines the "type" of drive it should be. The method is asynchronous and returns immediately. However, it can take some time for the data in the cluster to be rebalanced using the newly added drives. As the new drives are syncing on the system, you can use the ListSyncJobs method to see how the drives are being rebalanced and the progress of adding the new drive. You can also use the GetAsyncResult method to query the method's returned asyncHandle. """, cls=SolidFireCommand)
 @click.option('--drives',
@@ -106,32 +208,27 @@ def add(ctx,
 
 
 
-@cli.command('reset', short_help="""ResetDrives enables you to proactively initialize drives and remove all data currently residing on a drive. The drive can then be reused in an existing node or used in an upgraded node. This method requires the force parameter to be included in the method call. """, cls=SolidFireCommand)
+@cli.command('secureerase', short_help="""SecureEraseDrives enables you to remove any residual data from drives that have a status of "available." You might want to use this method when replacing a drive nearing the end of its service life that contained sensitive data. This method uses a Security Erase Unit command to write a predetermined pattern to the drive and resets the encryption key on the drive. This asynchronous method might take up to two minutes to complete. You can use GetAsyncResult to check on the status of the secure erase operation. You can use the ListDrives method to obtain the driveIDs for the drives you want to secure erase. """, cls=SolidFireCommand)
 @click.option('--drives',
               type=str,
               required=True,
-              help="""List of device names (not driveIDs) to reset. """)
-@click.option('--force',
-              type=bool,
-              required=True,
-              help="""Required parameter to successfully reset a drive. """)
+              help="""List of driveIDs to be secure erased. """)
 @pass_context
-def reset(ctx,
+def secureerase(ctx,
            # Mandatory main parameter
-           drives,
-           # Mandatory main parameter
-           force):
-    """ResetDrives enables you to proactively initialize drives and remove all data currently residing on a drive. The drive can then be reused"""
-    """in an existing node or used in an upgraded node. This method requires the force parameter to be included in the method call."""
+           drives):
+    """SecureEraseDrives enables you to remove any residual data from drives that have a status of &quot;available.&quot; You might want to use this method when replacing a drive nearing the end of its service life that contained sensitive data. This method uses a Security Erase Unit command to write a predetermined pattern to the drive and resets the encryption key on the drive. This asynchronous method might take up to two minutes to complete. You can use GetAsyncResult to check on the status of the secure erase operation."""
+    """You can use the ListDrives method to obtain the driveIDs for the drives you want to secure erase."""
 
     cli_utils.establish_connection(ctx)
     
-    
+
+    drives = parser.parse_array(drives)
     
 
-    ctx.logger.info("""drives = """+str(drives)+""";"""+"""force = """+str(force)+""";"""+"")
+    ctx.logger.info("""drives = """+str(drives)+""";"""+"")
     try:
-        _ResetDrivesResult = ctx.element.reset_drives(drives=drives, force=force)
+        _AsyncHandleResult = ctx.element.secure_erase_drives(drives=drives)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -139,72 +236,10 @@ def reset(ctx,
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ResetDrivesResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_AsyncHandleResult), indent=4))
         return
     else:
-        cli_utils.print_result(_ResetDrivesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('listhardware', short_help="""ListDriveHardware returns all the drives connected to a node. Use this method on individual nodes to return drive hardware information or use this method on the cluster master node MVIP to see information for all the drives on all nodes. Note: The "securitySupported": true line of the method response does not imply that the drives are capable of encryption; only that the security status can be queried. If you have a node type with a model number ending in "-NE", commands to enable security features on these drives will fail. See the EnableEncryptionAtRest method for more information. """, cls=SolidFireCommand)
-@click.option('--force',
-              type=bool,
-              required=True,
-              help="""To run this command, the force parameter must be set to true. """)
-@pass_context
-def listhardware(ctx,
-           # Mandatory main parameter
-           force):
-    """ListDriveHardware returns all the drives connected to a node. Use this method on individual nodes to return drive hardware"""
-    """information or use this method on the cluster master node MVIP to see information for all the drives on all nodes."""
-    """Note: The &quot;securitySupported&quot;: true line of the method response does not imply that the drives are capable of"""
-    """encryption; only that the security status can be queried. If you have a node type with a model number ending in &quot;-NE&quot;,"""
-    """commands to enable security features on these drives will fail. See the EnableEncryptionAtRest method for more information."""
-
-    cli_utils.establish_connection(ctx)
-    
-    
-
-    ctx.logger.info("""force = """+str(force)+""";"""+"")
-    try:
-        _ListDriveHardwareResult = ctx.element.list_drive_hardware(force=force)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ListDriveHardwareResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_ListDriveHardwareResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('list', short_help="""ListDrives enables you to retrieve the list of the drives that exist in the cluster's active nodes. This method returns drives that have been added as volume metadata or block drives as well as drives that have not been added and are available. """, cls=SolidFireCommand)
-@pass_context
-def list(ctx):
-    """ListDrives enables you to retrieve the list of the drives that exist in the cluster&#x27;s active nodes. This method returns drives that have"""
-    """been added as volume metadata or block drives as well as drives that have not been added and are available."""
-
-    cli_utils.establish_connection(ctx)
-    
-
-    ctx.logger.info("")
-    try:
-        _ListDrivesResult = ctx.element.list_drives()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ListDrivesResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_ListDrivesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_AsyncHandleResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -255,6 +290,40 @@ def remove(ctx,
         return
     else:
         cli_utils.print_result(_AsyncHandleResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getstats', short_help="""GetDriveStats returns high-level activity measurements for a single drive. Values are cumulative from the addition of the drive to the cluster. Some values are specific to block drives. You might not obtain statistical data for both block and metadata drives when you run this method.  """, cls=SolidFireCommand)
+@click.option('--driveid',
+              type=int,
+              required=True,
+              help="""Specifies the drive for which statistics are gathered. """)
+@pass_context
+def getstats(ctx,
+           # Mandatory main parameter
+           driveid):
+    """GetDriveStats returns high-level activity measurements for a single drive. Values are cumulative from the addition of the drive to the"""
+    """cluster. Some values are specific to block drives. You might not obtain statistical data for both block and metadata drives when you"""
+    """run this method. """
+
+    cli_utils.establish_connection(ctx)
+    
+    
+
+    ctx.logger.info("""driveid = """+str(driveid)+""";"""+"")
+    try:
+        _GetDriveStatsResult = ctx.element.get_drive_stats(drive_id=driveid)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetDriveStatsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetDriveStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -318,41 +387,6 @@ def getconfig(ctx):
 
 
 
-@cli.command('secureerase', short_help="""SecureEraseDrives enables you to remove any residual data from drives that have a status of "available." You might want to use this method when replacing a drive nearing the end of its service life that contained sensitive data. This method uses a Security Erase Unit command to write a predetermined pattern to the drive and resets the encryption key on the drive. This asynchronous method might take up to two minutes to complete. You can use GetAsyncResult to check on the status of the secure erase operation. You can use the ListDrives method to obtain the driveIDs for the drives you want to secure erase. """, cls=SolidFireCommand)
-@click.option('--drives',
-              type=str,
-              required=True,
-              help="""List of driveIDs to be secure erased. """)
-@pass_context
-def secureerase(ctx,
-           # Mandatory main parameter
-           drives):
-    """SecureEraseDrives enables you to remove any residual data from drives that have a status of &quot;available.&quot; You might want to use this method when replacing a drive nearing the end of its service life that contained sensitive data. This method uses a Security Erase Unit command to write a predetermined pattern to the drive and resets the encryption key on the drive. This asynchronous method might take up to two minutes to complete. You can use GetAsyncResult to check on the status of the secure erase operation."""
-    """You can use the ListDrives method to obtain the driveIDs for the drives you want to secure erase."""
-
-    cli_utils.establish_connection(ctx)
-    
-
-    drives = parser.parse_array(drives)
-    
-
-    ctx.logger.info("""drives = """+str(drives)+""";"""+"")
-    try:
-        _AsyncHandleResult = ctx.element.secure_erase_drives(drives=drives)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_AsyncHandleResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_AsyncHandleResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
 @cli.command('test', short_help="""You can use the TestDrives API method to run a hardware validation on all drives on the node. This method detects hardware failures on the drives (if present) and reports them in the results of the validation tests. You can only use the TestDrives method on nodes that are not "active" in a cluster. Note: This test takes approximately 10 minutes. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
 @click.option('--minutes',
               type=int,
@@ -386,38 +420,4 @@ def test(ctx,
         return
     else:
         cli_utils.print_result(_TestDrivesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getstats', short_help="""GetDriveStats returns high-level activity measurements for a single drive. Values are cumulative from the addition of the drive to the cluster. Some values are specific to block drives. You might not obtain statistical data for both block and metadata drives when you run this method.  """, cls=SolidFireCommand)
-@click.option('--driveid',
-              type=int,
-              required=True,
-              help="""Specifies the drive for which statistics are gathered. """)
-@pass_context
-def getstats(ctx,
-           # Mandatory main parameter
-           driveid):
-    """GetDriveStats returns high-level activity measurements for a single drive. Values are cumulative from the addition of the drive to the"""
-    """cluster. Some values are specific to block drives. You might not obtain statistical data for both block and metadata drives when you"""
-    """run this method. """
-
-    cli_utils.establish_connection(ctx)
-    
-    
-
-    ctx.logger.info("""driveid = """+str(driveid)+""";"""+"")
-    try:
-        _GetDriveStatsResult = ctx.element.get_drive_stats(drive_id=driveid)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetDriveStatsResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_GetDriveStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
