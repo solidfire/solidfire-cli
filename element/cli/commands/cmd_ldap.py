@@ -24,16 +24,18 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """testauthentication getconfiguration disableauthentication enableauthentication addclusteradmin """
+    """testauthentication getconfiguration enableauthentication disableauthentication addclusteradmin """
 
 @cli.command('testauthentication', short_help="""The TestLdapAuthentication method enables you to validate the currently enabled LDAP authentication settings. If the configuration is correct, the API call returns the group membership of the tested user. """, cls=SolidFireCommand)
 @click.option('--username',
               type=str,
               required=True,
+              prompt=True,
               help="""The username to be tested. """)
 @click.option('--password',
               type=str,
               required=True,
+              prompt=True,
               help="""The password for the username to be tested. """)
 
 @click.option('--authtype',
@@ -201,31 +203,6 @@ def getconfiguration(ctx):
 
 
 
-@cli.command('disableauthentication', short_help="""The DisableLdapAuthentication method enables you to disable LDAP authentication and remove all LDAP configuration settings. This method does not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no longer be able to log in. """, cls=SolidFireCommand)
-@pass_context
-def disableauthentication(ctx):
-    """The DisableLdapAuthentication method enables you to disable LDAP authentication and remove all LDAP configuration settings. This method does not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no longer be able to log in."""
-
-    cli_utils.establish_connection(ctx)
-    
-
-    ctx.logger.info("")
-    try:
-        _DisableLdapAuthenticationResult = ctx.element.disable_ldap_authentication()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_DisableLdapAuthenticationResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_DisableLdapAuthenticationResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
 @cli.command('enableauthentication', short_help="""The EnableLdapAuthentication method enables you to configure an LDAP directory connection to use for LDAP authentication to a cluster. Users that are members of the LDAP directory can then log in to the storage system using their LDAP credentials. """, cls=SolidFireCommand)
 @click.option('--authtype',
               type=str,
@@ -254,6 +231,7 @@ def disableauthentication(ctx):
 @click.option('--serveruris',
               type=str,
               required=True,
+              prompt=True,
               help="""A comma-separated list of LDAP server URIs (examples: "ldap://1.2.3.4" and ldaps://1.2.3.4:123") """)
 @click.option('--userdntemplate',
               type=str,
@@ -323,14 +301,41 @@ def enableauthentication(ctx,
 
 
 
+@cli.command('disableauthentication', short_help="""The DisableLdapAuthentication method enables you to disable LDAP authentication and remove all LDAP configuration settings. This method does not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no longer be able to log in. """, cls=SolidFireCommand)
+@pass_context
+def disableauthentication(ctx):
+    """The DisableLdapAuthentication method enables you to disable LDAP authentication and remove all LDAP configuration settings. This method does not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no longer be able to log in."""
+
+    cli_utils.establish_connection(ctx)
+    
+
+    ctx.logger.info("")
+    try:
+        _DisableLdapAuthenticationResult = ctx.element.disable_ldap_authentication()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_DisableLdapAuthenticationResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_DisableLdapAuthenticationResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
 @cli.command('addclusteradmin', short_help="""AddLdapClusterAdmin enables you to add a new LDAP cluster administrator user. An LDAP cluster administrator can manage the cluster via the API and management tools. LDAP cluster admin accounts are completely separate and unrelated to standard tenant accounts. You can also use this method to add an LDAP group that has been defined in Active Directory. The access level that is given to the group is passed to the individual users in the LDAP group. """, cls=SolidFireCommand)
 @click.option('--username',
               type=str,
               required=True,
+              prompt=True,
               help="""The distinguished user name for the new LDAP cluster admin. """)
 @click.option('--access',
               type=str,
               required=True,
+              prompt=True,
               help="""Controls which methods this Cluster Admin can use. For more details on the levels of access, see the Access Control appendix in the SolidFire API Reference. """)
 @click.option('--accepteula',
               type=bool,

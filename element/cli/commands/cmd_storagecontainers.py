@@ -24,159 +24,13 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """modifystoragecontainer delete list getstoragecontainerefficiency createstoragecontainer """
-
-@cli.command('modifystoragecontainer', short_help="""ModifyStorageContainer enables you to make changes to an existing virtual volume storage container. """, cls=SolidFireCommand)
-@click.option('--storagecontainerid',
-              type=str,
-              required=True,
-              help="""The unique ID of the virtual volume storage container to modify. """)
-@click.option('--initiatorsecret',
-              type=str,
-              required=False,
-              help="""The new secret for CHAP authentication for the initiator. """)
-@click.option('--targetsecret',
-              type=str,
-              required=False,
-              help="""The new secret for CHAP authentication for the target. """)
-@pass_context
-def modifystoragecontainer(ctx,
-           # Mandatory main parameter
-           storagecontainerid,
-           # Optional main parameter
-           initiatorsecret = None,
-           # Optional main parameter
-           targetsecret = None):
-    """ModifyStorageContainer enables you to make changes to an existing virtual volume storage container."""
-
-    cli_utils.establish_connection(ctx)
-    
-    
-    
-    
-
-    ctx.logger.info("""storagecontainerid = """+str(storagecontainerid)+""";"""+"""initiatorsecret = """+str(initiatorsecret)+""";"""+"""targetsecret = """+str(targetsecret)+""";"""+"")
-    try:
-        _ModifyStorageContainerResult = ctx.element.modify_storage_container(storage_container_id=storagecontainerid, initiator_secret=initiatorsecret, target_secret=targetsecret)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ModifyStorageContainerResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_ModifyStorageContainerResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('delete', short_help="""DeleteStorageContainers enables you to remove up to 2000 Virtual Volume (VVol) storage containers from the system at one time. The storage containers you remove must not contain any VVols. """, cls=SolidFireCommand)
-@click.option('--storagecontainerids',
-              type=str,
-              required=True,
-              help="""A list of IDs of the storage containers to delete. You can specify up to 2000 IDs in the list. """)
-@pass_context
-def delete(ctx,
-           # Mandatory main parameter
-           storagecontainerids):
-    """DeleteStorageContainers enables you to remove up to 2000 Virtual Volume (VVol) storage containers from the system at one time."""
-    """The storage containers you remove must not contain any VVols."""
-
-    cli_utils.establish_connection(ctx)
-    
-
-    storagecontainerids = parser.parse_array(storagecontainerids)
-    
-
-    ctx.logger.info("""storagecontainerids = """+str(storagecontainerids)+""";"""+"")
-    try:
-        _DeleteStorageContainerResult = ctx.element.delete_storage_containers(storage_container_ids=storagecontainerids)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_DeleteStorageContainerResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_DeleteStorageContainerResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('list', short_help="""ListStorageContainers enables you to retrieve information about all virtual volume storage containers known to the system. """, cls=SolidFireCommand)
-@click.option('--storagecontainerids',
-              type=str,
-              required=False,
-              help="""A list of storage container IDs for which to retrieve information. If you omit this parameter, the method returns information about all storage containers in the system. """)
-@pass_context
-def list(ctx,
-           # Optional main parameter
-           storagecontainerids = None):
-    """ListStorageContainers enables you to retrieve information about all virtual volume storage containers known to the system."""
-
-    cli_utils.establish_connection(ctx)
-    
-
-    storagecontainerids = parser.parse_array(storagecontainerids)
-    
-
-    ctx.logger.info("""storagecontainerids = """+str(storagecontainerids)+""";"""+"")
-    try:
-        _ListStorageContainersResult = ctx.element.list_storage_containers(storage_container_ids=storagecontainerids)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ListStorageContainersResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_ListStorageContainersResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getstoragecontainerefficiency', short_help="""GetStorageContainerEfficiency enables you to retrieve efficiency information about a virtual volume storage container. """, cls=SolidFireCommand)
-@click.option('--storagecontainerid',
-              type=str,
-              required=True,
-              help="""The ID of the storage container for which to retrieve efficiency information. """)
-@pass_context
-def getstoragecontainerefficiency(ctx,
-           # Mandatory main parameter
-           storagecontainerid):
-    """GetStorageContainerEfficiency enables you to retrieve efficiency information about a virtual volume storage container."""
-
-    cli_utils.establish_connection(ctx)
-    
-    
-
-    ctx.logger.info("""storagecontainerid = """+str(storagecontainerid)+""";"""+"")
-    try:
-        _GetStorageContainerEfficiencyResult = ctx.element.get_storage_container_efficiency(storage_container_id=storagecontainerid)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetStorageContainerEfficiencyResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_GetStorageContainerEfficiencyResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
+    """createstoragecontainer delete getstoragecontainerefficiency list modifystoragecontainer """
 
 @cli.command('createstoragecontainer', short_help="""CreateStorageContainer enables you to create a Virtual Volume (VVol) storage container. Storage containers are associated with a SolidFire storage system account, and are used for reporting and resource allocation. Storage containers can only be associated with virtual volumes. You need at least one storage container to use the Virtual Volumes feature. """, cls=SolidFireCommand)
 @click.option('--name',
               type=str,
               required=True,
+              prompt=True,
               help="""The name of the storage container. Follows SolidFire account naming restrictions. """)
 @click.option('--initiatorsecret',
               type=str,
@@ -223,4 +77,154 @@ def createstoragecontainer(ctx,
         return
     else:
         cli_utils.print_result(_CreateStorageContainerResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('delete', short_help="""DeleteStorageContainers enables you to remove up to 2000 Virtual Volume (VVol) storage containers from the system at one time. The storage containers you remove must not contain any VVols. """, cls=SolidFireCommand)
+@click.option('--storagecontainerids',
+              type=str,
+              required=True,
+              prompt=True,
+              help="""A list of IDs of the storage containers to delete. You can specify up to 2000 IDs in the list. """)
+@pass_context
+def delete(ctx,
+           # Mandatory main parameter
+           storagecontainerids):
+    """DeleteStorageContainers enables you to remove up to 2000 Virtual Volume (VVol) storage containers from the system at one time."""
+    """The storage containers you remove must not contain any VVols."""
+
+    cli_utils.establish_connection(ctx)
+    
+
+    storagecontainerids = parser.parse_array(storagecontainerids)
+    
+
+    ctx.logger.info("""storagecontainerids = """+str(storagecontainerids)+""";"""+"")
+    try:
+        _DeleteStorageContainerResult = ctx.element.delete_storage_containers(storage_container_ids=storagecontainerids)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_DeleteStorageContainerResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_DeleteStorageContainerResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getstoragecontainerefficiency', short_help="""GetStorageContainerEfficiency enables you to retrieve efficiency information about a virtual volume storage container. """, cls=SolidFireCommand)
+@click.option('--storagecontainerid',
+              type=str,
+              required=True,
+              prompt=True,
+              help="""The ID of the storage container for which to retrieve efficiency information. """)
+@pass_context
+def getstoragecontainerefficiency(ctx,
+           # Mandatory main parameter
+           storagecontainerid):
+    """GetStorageContainerEfficiency enables you to retrieve efficiency information about a virtual volume storage container."""
+
+    cli_utils.establish_connection(ctx)
+    
+    
+
+    ctx.logger.info("""storagecontainerid = """+str(storagecontainerid)+""";"""+"")
+    try:
+        _GetStorageContainerEfficiencyResult = ctx.element.get_storage_container_efficiency(storage_container_id=storagecontainerid)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetStorageContainerEfficiencyResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetStorageContainerEfficiencyResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('list', short_help="""ListStorageContainers enables you to retrieve information about all virtual volume storage containers known to the system. """, cls=SolidFireCommand)
+@click.option('--storagecontainerids',
+              type=str,
+              required=False,
+              help="""A list of storage container IDs for which to retrieve information. If you omit this parameter, the method returns information about all storage containers in the system. """)
+@pass_context
+def list(ctx,
+           # Optional main parameter
+           storagecontainerids = None):
+    """ListStorageContainers enables you to retrieve information about all virtual volume storage containers known to the system."""
+
+    cli_utils.establish_connection(ctx)
+    
+
+    storagecontainerids = parser.parse_array(storagecontainerids)
+    
+
+    ctx.logger.info("""storagecontainerids = """+str(storagecontainerids)+""";"""+"")
+    try:
+        _ListStorageContainersResult = ctx.element.list_storage_containers(storage_container_ids=storagecontainerids)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListStorageContainersResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListStorageContainersResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('modifystoragecontainer', short_help="""ModifyStorageContainer enables you to make changes to an existing virtual volume storage container. """, cls=SolidFireCommand)
+@click.option('--storagecontainerid',
+              type=str,
+              required=True,
+              prompt=True,
+              help="""The unique ID of the virtual volume storage container to modify. """)
+@click.option('--initiatorsecret',
+              type=str,
+              required=False,
+              help="""The new secret for CHAP authentication for the initiator. """)
+@click.option('--targetsecret',
+              type=str,
+              required=False,
+              help="""The new secret for CHAP authentication for the target. """)
+@pass_context
+def modifystoragecontainer(ctx,
+           # Mandatory main parameter
+           storagecontainerid,
+           # Optional main parameter
+           initiatorsecret = None,
+           # Optional main parameter
+           targetsecret = None):
+    """ModifyStorageContainer enables you to make changes to an existing virtual volume storage container."""
+
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+    
+
+    ctx.logger.info("""storagecontainerid = """+str(storagecontainerid)+""";"""+"""initiatorsecret = """+str(initiatorsecret)+""";"""+"""targetsecret = """+str(targetsecret)+""";"""+"")
+    try:
+        _ModifyStorageContainerResult = ctx.element.modify_storage_container(storage_container_id=storagecontainerid, initiator_secret=initiatorsecret, target_secret=targetsecret)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ModifyStorageContainerResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ModifyStorageContainerResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

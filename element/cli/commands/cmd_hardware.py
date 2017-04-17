@@ -24,12 +24,39 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """getnodeinfo getnvraminfo getconfig getclusterinfo """
+    """getconfig getnodeinfo getclusterinfo getnvraminfo """
+
+@cli.command('getconfig', short_help="""GetHardwareConfig enables you to display the hardware configuration information for a node. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
+@pass_context
+def getconfig(ctx):
+    """GetHardwareConfig enables you to display the hardware configuration information for a node."""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
+
+    cli_utils.establish_connection(ctx)
+    
+
+    ctx.logger.info("")
+    try:
+        _GetHardwareConfigResult = ctx.element.get_hardware_config()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetHardwareConfigResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetHardwareConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
 
 @cli.command('getnodeinfo', short_help="""GetNodeHardwareInfo enables you to return all the hardware information and status for the node specified. This generally includes details about manufacturers, vendors, versions, and other associated hardware identification information. """, cls=SolidFireCommand)
 @click.option('--nodeid',
               type=int,
               required=True,
+              prompt=True,
               help="""The ID of the node for which hardware information is being requested. Information about a Fibre Channel node is returned if a Fibre Channel node is specified. """)
 @pass_context
 def getnodeinfo(ctx,
@@ -56,64 +83,6 @@ def getnodeinfo(ctx,
         return
     else:
         cli_utils.print_result(_GetNodeHardwareInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getnvraminfo', short_help="""GetNvramInfo enables you to retrieve information from each node about the NVRAM card. """, cls=SolidFireCommand)
-@click.option('--force',
-              type=bool,
-              required=False,
-              help="""Required parameter to successfully run on all nodes in the cluster. """)
-@pass_context
-def getnvraminfo(ctx,
-           # Optional main parameter
-           force = None):
-    """GetNvramInfo enables you to retrieve information from each node about the NVRAM card."""
-
-    cli_utils.establish_connection(ctx)
-    
-    
-
-    ctx.logger.info("""force = """+str(force)+""";"""+"")
-    try:
-        _GetNvramInfoResult = ctx.element.get_nvram_info(force=force)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetNvramInfoResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_GetNvramInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getconfig', short_help="""GetHardwareConfig enables you to display the hardware configuration information for a node. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
-@pass_context
-def getconfig(ctx):
-    """GetHardwareConfig enables you to display the hardware configuration information for a node."""
-    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
-
-    cli_utils.establish_connection(ctx)
-    
-
-    ctx.logger.info("")
-    try:
-        _GetHardwareConfigResult = ctx.element.get_hardware_config()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetHardwareConfigResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_GetHardwareConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -148,4 +117,36 @@ def getclusterinfo(ctx,
         return
     else:
         cli_utils.print_result(_GetClusterHardwareInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getnvraminfo', short_help="""GetNvramInfo enables you to retrieve information from each node about the NVRAM card. """, cls=SolidFireCommand)
+@click.option('--force',
+              type=bool,
+              required=False,
+              help="""Required parameter to successfully run on all nodes in the cluster. """)
+@pass_context
+def getnvraminfo(ctx,
+           # Optional main parameter
+           force = None):
+    """GetNvramInfo enables you to retrieve information from each node about the NVRAM card."""
+
+    cli_utils.establish_connection(ctx)
+    
+    
+
+    ctx.logger.info("""force = """+str(force)+""";"""+"")
+    try:
+        _GetNvramInfoResult = ctx.element.get_nvram_info(force=force)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetNvramInfoResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetNvramInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

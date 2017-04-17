@@ -28,11 +28,15 @@ def cli(ctx):
 @click.option('--username', '-u',
               default=None,
               help="SolidFire cluster username",
-              required=True)
+              required=True,
+              prompt=True,
+              hide_input=True)
 @click.option('--password', '-p',
               default=None,
               help="SolidFire cluster password",
-              required=True)
+              required=True,
+              prompt=True,
+              hide_input=True)
 @click.option('--version', '-v',
               default="9.0",
               help='The version you would like to connect on',
@@ -40,7 +44,8 @@ def cli(ctx):
 @click.option('--name', '-n',
               default = None,
               help="The name you want to associate with the connection'.",
-              required=True)
+              required=True,
+              prompt=True)
 @click.option('--port',
               default = 443,
               help="The port you wish to connect on",

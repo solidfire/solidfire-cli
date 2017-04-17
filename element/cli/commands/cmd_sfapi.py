@@ -30,6 +30,7 @@ def cli(ctx):
 @click.option('--method',
               type=str,
               required=True,
+              prompt=True,
               help="""The name of the method to invoke. This is case sensitive. """)
 @click.option('--parameters',
               type=str,

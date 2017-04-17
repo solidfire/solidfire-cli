@@ -24,12 +24,13 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """setinfo setremotelogginghosts getremotelogginghosts getinfo """
+    """setinfo setremotelogginghosts getinfo getremotelogginghosts """
 
 @cli.command('setinfo', short_help="""You can use SetLoginSessionInfo to set the period of time that a session's login authentication is valid. After the log in period elapses without activity on the system, the authentication expires. New login credentials are required for continued access to the cluster after the timeout period has elapsed. """, cls=SolidFireCommand)
 @click.option('--timeout',
               type=str,
               required=True,
+              prompt=True,
               help="""Cluster authentication expiration period. Formatted in HH:mm:ss. For example, 01:30:00, 00:90:00, and 00:00:5400 can be used to equal a 90 minute timeout period. The default value is 30 minutes. """)
 @pass_context
 def setinfo(ctx,
@@ -65,9 +66,11 @@ def setinfo(ctx,
               multiple=True,
               subparameters=["host", "port", ],
               required=True,
+              prompt=True,
               help="""A list of hosts to send log messages to.  Has the following subparameters: --host --port """)
 @click.option('--host',
               required=True,
+              prompt=True,
               multiple=True,
               type=str,
               default=None,
@@ -76,6 +79,7 @@ def setinfo(ctx,
               cls=SolidFireOption)
 @click.option('--port',
               required=True,
+              prompt=True,
               multiple=True,
               type=int,
               default=None,
@@ -122,31 +126,6 @@ def setremotelogginghosts(ctx,
 
 
 
-@cli.command('getremotelogginghosts', short_help="""GetRemoteLoggingHosts enables you to retrieve the current list of log servers. """, cls=SolidFireCommand)
-@pass_context
-def getremotelogginghosts(ctx):
-    """GetRemoteLoggingHosts enables you to retrieve the current list of log servers."""
-
-    cli_utils.establish_connection(ctx)
-    
-
-    ctx.logger.info("")
-    try:
-        _GetRemoteLoggingHostsResult = ctx.element.get_remote_logging_hosts()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetRemoteLoggingHostsResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_GetRemoteLoggingHostsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
 @cli.command('getinfo', short_help="""GetLoginSessionInfo enables you to return the period of time a log in authentication session is valid for both log in shells and the TUI. """, cls=SolidFireCommand)
 @pass_context
 def getinfo(ctx):
@@ -169,4 +148,29 @@ def getinfo(ctx):
         return
     else:
         cli_utils.print_result(_GetLoginSessionInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getremotelogginghosts', short_help="""GetRemoteLoggingHosts enables you to retrieve the current list of log servers. """, cls=SolidFireCommand)
+@pass_context
+def getremotelogginghosts(ctx):
+    """GetRemoteLoggingHosts enables you to retrieve the current list of log servers."""
+
+    cli_utils.establish_connection(ctx)
+    
+
+    ctx.logger.info("")
+    try:
+        _GetRemoteLoggingHostsResult = ctx.element.get_remote_logging_hosts()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetRemoteLoggingHostsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetRemoteLoggingHostsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
