@@ -4,13 +4,14 @@ import os
 import sys
 import click
 import click.core
+import click.testing
 import copy
 import csv
 from pkg_resources import Requirement, resource_filename
 import struct
 import base64
 
-from element.cli import utils as cli_utils
+from element.cli import cli as element_cli, utils as cli_utils
 
 logging.basicConfig()
 LOG = logging.getLogger(__name__)
@@ -181,6 +182,8 @@ class SolidFireOption(click.core.Option):
         def _convert(value, level):
             if level == 0:
                 if value == "":
+                    if self.required and self.is_sub_parameter:
+                        raise click.BadParameter(self.name+" is a required member of its parameter group. Please provide it inline after the associated superparameter.")
                     return None
                 return self.type(value, self, ctx)
             return tuple(_convert(x, level - 1) for x in value or ())
@@ -299,4 +302,13 @@ def cli(ctx,
     ctx.version = version
 
 if __name__ == '__main__':
+    """
+    #pass_context()
+    #ctx = click.globals.get_current_context()
+    runner = click.testing.CliRunner()
+    runner.invoke(element_cli.cli,
+                  ["account", "list"])
+    runner.invoke(element_cli.cli,
+                  ['--mvip', "10.117.61.44", "--login", "admin", "--password", "admin", "--name", "b", "Connection",
+                   "PushConnection"])"""
     cli.main()

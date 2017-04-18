@@ -24,50 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """shutdown networking services resetnode """
-
-@cli.command('shutdown', short_help="""The Shutdown API method enables you to restart or shutdown a node that has not yet been added to a cluster. To use this method, log in to the MIP for the pending node, and enter the "shutdown" method with either the "restart" or "halt" options. """, cls=SolidFireCommand)
-@click.option('--nodes',
-              type=str,
-              required=True,
-              prompt=True,
-              help="""List of NodeIDs for the nodes to be shutdown. """)
-@click.option('--option',
-              type=str,
-              required=False,
-              help="""Specifies the action to take for the node shutdown. Possible values are: restart: Restarts the node. halt: Shuts down the node. """)
-@pass_context
-def shutdown(ctx,
-           # Mandatory main parameter
-           nodes,
-           # Optional main parameter
-           option = None):
-    """The Shutdown API method enables you to restart or shutdown a node that has not yet been added to a cluster. To use this method,"""
-    """log in to the MIP for the pending node, and enter the &quot;shutdown&quot; method with either the &quot;restart&quot; or &quot;halt&quot; options."""
-
-    cli_utils.establish_connection(ctx)
-    
-
-    nodes = parser.parse_array(nodes)
-    
-    
-
-    ctx.logger.info("""nodes = """ + str(nodes)+";" + """option = """+str(option)+""";"""+"")
-    try:
-        _ShutdownResult = ctx.element.shutdown(nodes=nodes, option=option)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ShutdownResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_ShutdownResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
+    """networking services shutdown resetnode """
 
 @cli.command('networking', short_help="""The RestartNetworking API method enables you to restart the networking services on a node. Warning: This method restarts all networking services on a node, causing temporary loss of networking connectivity. Exercise caution when using this method. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
 @click.option('--force',
@@ -151,6 +108,49 @@ def services(ctx,
         return
     else:
         cli_utils.print_result(_dict, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('shutdown', short_help="""The Shutdown API method enables you to restart or shutdown a node that has not yet been added to a cluster. To use this method, log in to the MIP for the pending node, and enter the "shutdown" method with either the "restart" or "halt" options. """, cls=SolidFireCommand)
+@click.option('--nodes',
+              type=str,
+              required=True,
+              prompt=True,
+              help="""List of NodeIDs for the nodes to be shutdown. """)
+@click.option('--option',
+              type=str,
+              required=False,
+              help="""Specifies the action to take for the node shutdown. Possible values are: restart: Restarts the node. halt: Shuts down the node. """)
+@pass_context
+def shutdown(ctx,
+           # Mandatory main parameter
+           nodes,
+           # Optional main parameter
+           option = None):
+    """The Shutdown API method enables you to restart or shutdown a node that has not yet been added to a cluster. To use this method,"""
+    """log in to the MIP for the pending node, and enter the &quot;shutdown&quot; method with either the &quot;restart&quot; or &quot;halt&quot; options."""
+
+    cli_utils.establish_connection(ctx)
+    
+
+    nodes = parser.parse_array(nodes)
+    
+    
+
+    ctx.logger.info("""nodes = """ + str(nodes)+";" + """option = """+str(option)+""";"""+"")
+    try:
+        _ShutdownResult = ctx.element.shutdown(nodes=nodes, option=option)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ShutdownResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ShutdownResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 

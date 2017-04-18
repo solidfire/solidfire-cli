@@ -24,41 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """connectmvip listutilities ping list connectensemble connectsvip """
-
-@cli.command('connectmvip', short_help="""The TestConnectMvip API method enables you to test the management connection to the cluster. The test pings the MVIP and executes a simple API method to verify connectivity. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
-@click.option('--mvip',
-              type=str,
-              required=False,
-              help="""If specified, tests the management connection of a different MVIP. You do not need to use this value when testing the connection to the target cluster. This parameter is optional. """)
-@pass_context
-def connectmvip(ctx,
-           # Optional main parameter
-           mvip = None):
-    """The TestConnectMvip API method enables you to test the"""
-    """management connection to the cluster. The test pings the MVIP and executes a simple API method to verify connectivity."""
-    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
-
-    cli_utils.establish_connection(ctx)
-    
-    
-
-    ctx.logger.info("""mvip = """+str(mvip)+""";"""+"")
-    try:
-        _TestConnectMvipResult = ctx.element.test_connect_mvip(mvip=mvip)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_TestConnectMvipResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_TestConnectMvipResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
+    """listutilities ping list connectmvip connectensemble connectsvip """
 
 @cli.command('listutilities', short_help="""You can use the ListUtilities API method to return the operations that are available to run on a node.  Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
 @pass_context
@@ -178,6 +144,40 @@ def list(ctx):
         return
     else:
         cli_utils.print_result(_ListTestsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('connectmvip', short_help="""The TestConnectMvip API method enables you to test the management connection to the cluster. The test pings the MVIP and executes a simple API method to verify connectivity. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
+@click.option('--mvip',
+              type=str,
+              required=False,
+              help="""If specified, tests the management connection of a different MVIP. You do not need to use this value when testing the connection to the target cluster. This parameter is optional. """)
+@pass_context
+def connectmvip(ctx,
+           # Optional main parameter
+           mvip = None):
+    """The TestConnectMvip API method enables you to test the"""
+    """management connection to the cluster. The test pings the MVIP and executes a simple API method to verify connectivity."""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
+
+    cli_utils.establish_connection(ctx)
+    
+    
+
+    ctx.logger.info("""mvip = """+str(mvip)+""";"""+"")
+    try:
+        _TestConnectMvipResult = ctx.element.test_connect_mvip(mvip=mvip)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_TestConnectMvipResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_TestConnectMvipResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 

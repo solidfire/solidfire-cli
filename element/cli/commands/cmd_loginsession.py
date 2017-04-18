@@ -24,32 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """getremotelogginghosts setremotelogginghosts getinfo setinfo """
-
-@cli.command('getremotelogginghosts', short_help="""GetRemoteLoggingHosts enables you to retrieve the current list of log servers. """, cls=SolidFireCommand)
-@pass_context
-def getremotelogginghosts(ctx):
-    """GetRemoteLoggingHosts enables you to retrieve the current list of log servers."""
-
-    cli_utils.establish_connection(ctx)
-    
-
-    ctx.logger.info(+""";"""+"")
-    try:
-        _GetRemoteLoggingHostsResult = ctx.element.get_remote_logging_hosts()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetRemoteLoggingHostsResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_GetRemoteLoggingHostsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
+    """setremotelogginghosts getremotelogginghosts setinfo getinfo """
 
 @cli.command('setremotelogginghosts', short_help="""SetRemoteLoggingHosts enables you to configure remote logging from the nodes in the storage cluster to a centralized log server or servers. Remote logging is performed over TCP using the default port 514. This API does not add to the existing logging hosts. Rather, it replaces what currently exists with new values specified by this API method. You can use GetRemoteLoggingHosts to determine what the current logging hosts are, and then use SetRemoteLoggingHosts to set the desired list of current and new logging hosts. """, cls=SolidFireCommand)
 @click.option('--remotehosts',
@@ -119,17 +94,17 @@ def setremotelogginghosts(ctx,
 
 
 
-@cli.command('getinfo', short_help="""GetLoginSessionInfo enables you to return the period of time a log in authentication session is valid for both log in shells and the TUI. """, cls=SolidFireCommand)
+@cli.command('getremotelogginghosts', short_help="""GetRemoteLoggingHosts enables you to retrieve the current list of log servers. """, cls=SolidFireCommand)
 @pass_context
-def getinfo(ctx):
-    """GetLoginSessionInfo enables you to return the period of time a log in authentication session is valid for both log in shells and the TUI."""
+def getremotelogginghosts(ctx):
+    """GetRemoteLoggingHosts enables you to retrieve the current list of log servers."""
 
     cli_utils.establish_connection(ctx)
     
 
     ctx.logger.info(+""";"""+"")
     try:
-        _GetLoginSessionInfoResult = ctx.element.get_login_session_info()
+        _GetRemoteLoggingHostsResult = ctx.element.get_remote_logging_hosts()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -137,10 +112,10 @@ def getinfo(ctx):
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetLoginSessionInfoResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_GetRemoteLoggingHostsResult), indent=4))
         return
     else:
-        cli_utils.print_result(_GetLoginSessionInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_GetRemoteLoggingHostsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -174,4 +149,29 @@ def setinfo(ctx,
         return
     else:
         cli_utils.print_result(_SetLoginSessionInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getinfo', short_help="""GetLoginSessionInfo enables you to return the period of time a log in authentication session is valid for both log in shells and the TUI. """, cls=SolidFireCommand)
+@pass_context
+def getinfo(ctx):
+    """GetLoginSessionInfo enables you to return the period of time a log in authentication session is valid for both log in shells and the TUI."""
+
+    cli_utils.establish_connection(ctx)
+    
+
+    ctx.logger.info(+""";"""+"")
+    try:
+        _GetLoginSessionInfoResult = ctx.element.get_login_session_info()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetLoginSessionInfoResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetLoginSessionInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

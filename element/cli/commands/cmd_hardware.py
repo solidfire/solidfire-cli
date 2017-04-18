@@ -24,7 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """getconfig getclusterinfo getnodeinfo getnvraminfo """
+    """getconfig getnvraminfo getclusterinfo getnodeinfo """
 
 @cli.command('getconfig', short_help="""GetHardwareConfig enables you to display the hardware configuration information for a node. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
 @pass_context
@@ -49,6 +49,38 @@ def getconfig(ctx):
         return
     else:
         cli_utils.print_result(_GetHardwareConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getnvraminfo', short_help="""GetNvramInfo enables you to retrieve information from each node about the NVRAM card. """, cls=SolidFireCommand)
+@click.option('--force',
+              type=bool,
+              required=False,
+              help="""Required parameter to successfully run on all nodes in the cluster. """)
+@pass_context
+def getnvraminfo(ctx,
+           # Optional main parameter
+           force = None):
+    """GetNvramInfo enables you to retrieve information from each node about the NVRAM card."""
+
+    cli_utils.establish_connection(ctx)
+    
+    
+
+    ctx.logger.info("""force = """+str(force)+""";"""+"")
+    try:
+        _GetNvramInfoResult = ctx.element.get_nvram_info(force=force)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetNvramInfoResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetNvramInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -117,36 +149,4 @@ def getnodeinfo(ctx,
         return
     else:
         cli_utils.print_result(_GetNodeHardwareInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getnvraminfo', short_help="""GetNvramInfo enables you to retrieve information from each node about the NVRAM card. """, cls=SolidFireCommand)
-@click.option('--force',
-              type=bool,
-              required=False,
-              help="""Required parameter to successfully run on all nodes in the cluster. """)
-@pass_context
-def getnvraminfo(ctx,
-           # Optional main parameter
-           force = None):
-    """GetNvramInfo enables you to retrieve information from each node about the NVRAM card."""
-
-    cli_utils.establish_connection(ctx)
-    
-    
-
-    ctx.logger.info("""force = """+str(force)+""";"""+"")
-    try:
-        _GetNvramInfoResult = ctx.element.get_nvram_info(force=force)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetNvramInfoResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_GetNvramInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

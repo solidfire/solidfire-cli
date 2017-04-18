@@ -24,53 +24,28 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """gethardwareinfo listvolumestats listvolumestatsbyvirtualvolume getrawstats getcompletestats listdrivestats """
+    """listdrivestats listvolumestatsbyvirtualvolume listvolumestats getrawstats getcompletestats gethardwareinfo """
 
-@cli.command('gethardwareinfo', short_help="""The GetHardwareInfo API method enables you to return hardware information and status for a single node. This generally includes details about manufacturers, vendors, versions, drives, and other associated hardware identification information. """, cls=SolidFireCommand)
-@pass_context
-def gethardwareinfo(ctx):
-    """The GetHardwareInfo API method enables you to return hardware information and status for a single node. This generally includes details about manufacturers, vendors, versions, drives, and other associated hardware identification information."""
-
-    cli_utils.establish_connection(ctx)
-    
-
-    ctx.logger.info(+""";"""+"")
-    try:
-        _GetHardwareInfoResult = ctx.element.get_hardware_info()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetHardwareInfoResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_GetHardwareInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('listvolumestats', short_help="""ListVolumeStats returns high-level activity measurements for a single volume, list of volumes, or all volumes (if you omit the volumeIDs parameter). Measurement values are cumulative from the creation of the volume. """, cls=SolidFireCommand)
-@click.option('--volumeids',
+@cli.command('listdrivestats', short_help="""ListDriveStats enables you to retrieve high-level activity measurements for multiple drives in the cluster. By default, this method returns statistics for all drives in the cluster, and these measurements are cumulative from the addition of the drive to the cluster. Some values this method returns are specific to block drives, and some are specific to metadata drives. """, cls=SolidFireCommand)
+@click.option('--drives',
               type=str,
               required=False,
-              help="""A list of volume IDs of volumes from which to retrieve activity information. """)
+              help="""Optional list of DriveIDs for which to return drive statistics. If you omit this parameter, measurements for all drives are returned. """)
 @pass_context
-def listvolumestats(ctx,
+def listdrivestats(ctx,
            # Optional main parameter
-           volumeids = None):
-    """ListVolumeStats returns high-level activity measurements for a single volume, list of volumes, or all volumes (if you omit the volumeIDs parameter). Measurement values are cumulative from the creation of the volume."""
+           drives = None):
+    """ListDriveStats enables you to retrieve high-level activity measurements for multiple drives in the cluster. By default, this method returns statistics for all drives in the cluster, and these measurements are cumulative from the addition of the drive to the cluster. Some values this method returns are specific to block drives, and some are specific to metadata drives."""
 
     cli_utils.establish_connection(ctx)
     
 
-    volumeids = parser.parse_array(volumeids)
+    drives = parser.parse_array(drives)
     
 
-    ctx.logger.info("""volumeids = """+str(volumeids)+""";"""+"")
+    ctx.logger.info("""drives = """+str(drives)+""";"""+"")
     try:
-        _ListVolumeStatsResult = ctx.element.list_volume_stats(volume_ids=volumeids)
+        _ListDriveStatsResult = ctx.element.list_drive_stats(drives=drives)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -78,10 +53,10 @@ def listvolumestats(ctx,
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ListVolumeStatsResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_ListDriveStatsResult), indent=4))
         return
     else:
-        cli_utils.print_result(_ListVolumeStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_ListDriveStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -116,6 +91,40 @@ def listvolumestatsbyvirtualvolume(ctx,
         return
     else:
         cli_utils.print_result(_ListVolumeStatsByVirtualVolumeResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('listvolumestats', short_help="""ListVolumeStats returns high-level activity measurements for a single volume, list of volumes, or all volumes (if you omit the volumeIDs parameter). Measurement values are cumulative from the creation of the volume. """, cls=SolidFireCommand)
+@click.option('--volumeids',
+              type=str,
+              required=False,
+              help="""A list of volume IDs of volumes from which to retrieve activity information. """)
+@pass_context
+def listvolumestats(ctx,
+           # Optional main parameter
+           volumeids = None):
+    """ListVolumeStats returns high-level activity measurements for a single volume, list of volumes, or all volumes (if you omit the volumeIDs parameter). Measurement values are cumulative from the creation of the volume."""
+
+    cli_utils.establish_connection(ctx)
+    
+
+    volumeids = parser.parse_array(volumeids)
+    
+
+    ctx.logger.info("""volumeids = """+str(volumeids)+""";"""+"")
+    try:
+        _ListVolumeStatsResult = ctx.element.list_volume_stats(volume_ids=volumeids)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListVolumeStatsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListVolumeStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -171,26 +180,17 @@ def getcompletestats(ctx):
 
 
 
-@cli.command('listdrivestats', short_help="""ListDriveStats enables you to retrieve high-level activity measurements for multiple drives in the cluster. By default, this method returns statistics for all drives in the cluster, and these measurements are cumulative from the addition of the drive to the cluster. Some values this method returns are specific to block drives, and some are specific to metadata drives. """, cls=SolidFireCommand)
-@click.option('--drives',
-              type=str,
-              required=False,
-              help="""Optional list of DriveIDs for which to return drive statistics. If you omit this parameter, measurements for all drives are returned. """)
+@cli.command('gethardwareinfo', short_help="""The GetHardwareInfo API method enables you to return hardware information and status for a single node. This generally includes details about manufacturers, vendors, versions, drives, and other associated hardware identification information. """, cls=SolidFireCommand)
 @pass_context
-def listdrivestats(ctx,
-           # Optional main parameter
-           drives = None):
-    """ListDriveStats enables you to retrieve high-level activity measurements for multiple drives in the cluster. By default, this method returns statistics for all drives in the cluster, and these measurements are cumulative from the addition of the drive to the cluster. Some values this method returns are specific to block drives, and some are specific to metadata drives."""
+def gethardwareinfo(ctx):
+    """The GetHardwareInfo API method enables you to return hardware information and status for a single node. This generally includes details about manufacturers, vendors, versions, drives, and other associated hardware identification information."""
 
     cli_utils.establish_connection(ctx)
     
 
-    drives = parser.parse_array(drives)
-    
-
-    ctx.logger.info("""drives = """+str(drives)+""";"""+"")
+    ctx.logger.info(+""";"""+"")
     try:
-        _ListDriveStatsResult = ctx.element.list_drive_stats(drives=drives)
+        _GetHardwareInfoResult = ctx.element.get_hardware_info()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -198,8 +198,8 @@ def listdrivestats(ctx,
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ListDriveStatsResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_GetHardwareInfoResult), indent=4))
         return
     else:
-        cli_utils.print_result(_ListDriveStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_GetHardwareInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

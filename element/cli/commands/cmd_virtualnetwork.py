@@ -24,140 +24,34 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """modify list add remove """
+    """remove list add modify """
 
-@cli.command('modify', short_help="""You can use ModifyVirtualNetwork to change the attributes of an existing virtual network. This method enables you to add or remove address blocks, change the netmask, or modify the name or description of the virtual network. You can also use it to enable or disable namespaces, as well as add or remove a gateway if namespaces are enabled on the virtual network. Note: This method requires either the VirtualNetworkID or the VirtualNetworkTag as a parameter, but not both. Caution: Enabling or disabling the Routable Storage VLANs functionality for an existing virtual network by changing the "namespace" parameter disrupts any traffic handled by the virtual network. NetApp strongly recommends changing the "namespace" parameter only during a scheduled maintenance window. """, cls=SolidFireCommand)
+@cli.command('remove', short_help="""RemoveVirtualNetwork enables you to remove a previously added virtual network. Note: This method requires either the virtualNetworkID or the virtualNetworkTag as a parameter, but not both. """, cls=SolidFireCommand)
 @click.option('--virtualnetworkid',
               type=int,
               required=False,
-              help="""The unique identifier of the virtual network to modify. This is the virtual network ID assigned by the cluster.  Note: This parameter is optional but either virtualNetworkID or virtualNetworkTag must be specified with this API method. """)
+              help="""Network ID that identifies the virtual network to remove. """)
 @click.option('--virtualnetworktag',
               type=int,
               required=False,
-              help="""The network tag that identifies the virtual network to modify. Note: This parameter is optional but either virtualNetworkID or virtualNetworkTag must be specified with this API method. """)
-@click.option('--name',
-              type=str,
-              required=False,
-              help="""The new name for the virtual network. """)
-@click.option('--addressblocks',
-              cls=SolidFireOption,
-              is_flag=True,
-              multiple=True,
-              subparameters=["start", "size", "available", ],
-              required=False,
-              help="""The new addressBlock to set for this virtual network. This might contain new address blocks to add to the existing object or omit unused address blocks that need to be removed. Alternatively, you can extend or reduce the size of existing address blocks. You can only increase the size of the starting addressBlocks for a virtual network object; you can never decrease it. Attributes for this parameter are: start: The start of the IP address range. (String) size: The number of IP addresses to include in the block. (Integer)  Has the following subparameters: --start --size --available """)
-@click.option('--start',
-              required=False,
-              multiple=True,
-              type=str,
-              default=None,
-              is_sub_parameter=True,
-              help="""[subparameter] Start of the IP address range. """,
-              cls=SolidFireOption)
-@click.option('--size',
-              required=False,
-              multiple=True,
-              type=int,
-              default=None,
-              is_sub_parameter=True,
-              help="""[subparameter] Number of IP addresses to include in the block. """,
-              cls=SolidFireOption)
-@click.option('--available',
-              required=False,
-              multiple=True,
-              type=str,
-              default=None,
-              is_sub_parameter=True,
-              help="""[subparameter] Nuber of available blocks """,
-              cls=SolidFireOption)
-@click.option('--netmask',
-              type=str,
-              required=False,
-              help="""New network mask for this virtual network. """)
-@click.option('--svip',
-              type=str,
-              required=False,
-              help="""The storage virtual IP address for this virtual network. The svip for a virtual network cannot be changed. You must create a new virtual network to use a different svip address. """)
-@click.option('--gateway',
-              type=str,
-              required=False,
-              help="""The IP address of a gateway of the virtual network. This parameter is only valid if the "namespace" parameter is set to true. """)
-@click.option('--namespace',
-              type=bool,
-              required=False,
-              help="""When set to true, enables Routable Storage VLANs functionality by recreating the virtual network and configuring a namespace to contain it. When set to false, disables the VRF functionality for the virtual network. Changing this value disrupts traffic running through this virtual network. """)
-@click.option('--attributes',
-              type=str,
-              required=False,
-              help="""A new list of name-value pairs in JSON object format.  Has the following subparameters: """)
+              help="""Network tag that identifies the virtual network to remove. """)
 @pass_context
-def modify(ctx,
+def remove(ctx,
            # Optional main parameter
            virtualnetworkid = None,
            # Optional main parameter
-           virtualnetworktag = None,
-           # Optional main parameter
-           name = None,
-           # Optional main parameter
-           addressblocks = None,
-           # Optional subparameter of optional main parameter.
-           start = None,
-           # Optional subparameter of optional main parameter.
-           size = None,
-           # Optional subparameter of optional main parameter.
-           available = None,
-           # Optional main parameter
-           netmask = None,
-           # Optional main parameter
-           svip = None,
-           # Optional main parameter
-           gateway = None,
-           # Optional main parameter
-           namespace = None,
-           # Optional main parameter
-           attributes = None):
-    """You can use ModifyVirtualNetwork to change the attributes of an existing virtual network. This method enables you to add or remove"""
-    """address blocks, change the netmask, or modify the name or description of the virtual network. You can also use it to enable or"""
-    """disable namespaces, as well as add or remove a gateway if namespaces are enabled on the virtual network."""
-    """Note: This method requires either the VirtualNetworkID or the VirtualNetworkTag as a parameter, but not both."""
-    """Caution: Enabling or disabling the Routable Storage VLANs functionality for an existing virtual network by changing the"""
-    """&quot;namespace&quot; parameter disrupts any traffic handled by the virtual network. NetApp strongly recommends changing the"""
-    """&quot;namespace&quot; parameter only during a scheduled maintenance window."""
+           virtualnetworktag = None):
+    """RemoveVirtualNetwork enables you to remove a previously added virtual network."""
+    """Note: This method requires either the virtualNetworkID or the virtualNetworkTag as a parameter, but not both."""
 
     cli_utils.establish_connection(ctx)
     
     
     
-    
 
-    addressblocksArray = None
-    if(addressblocks is not None and addressblocks != ()):
-        addressblocksArray = []
-        try:
-            for i, _addressblocks in enumerate(addressblocks):
-                addressblocksArray.append(AddressBlock(start=start[i], size=size[i], available=available[i], ))
-        except Exception as e:
-            ctx.logger.error(e.__str__())
-            exit(1)
-    
-    
-    
-    
-    
-
-    kwargsDict = None
-
-    if(attributes is not None and attributes != ()):
-        try:
-            kwargsDict = simplejson.loads(attributes)
-        except Exception as e:
-            ctx.logger.error(e.__str__())
-            exit(1)
-    
-
-    ctx.logger.info("""virtualnetworkid = """+str(virtualnetworkid)+";" + """virtualnetworktag = """+str(virtualnetworktag)+";" + """name = """+str(name)+";" + """addressblocks = """+str(addressblocksArray)+";" + """netmask = """+str(netmask)+";" + """svip = """+str(svip)+";" + """gateway = """+str(gateway)+";" + """namespace = """+str(namespace)+";" + """attributes = """+str(kwargsDict)+""";"""+"")
+    ctx.logger.info("""virtualnetworkid = """+str(virtualnetworkid)+";" + """virtualnetworktag = """+str(virtualnetworktag)+""";"""+"")
     try:
-        _AddVirtualNetworkResult = ctx.element.modify_virtual_network(virtual_network_id=virtualnetworkid, virtual_network_tag=virtualnetworktag, name=name, address_blocks=addressblocksArray, netmask=netmask, svip=svip, gateway=gateway, namespace=namespace, attributes=kwargsDict)
+        _RemoveVirtualNetworkResult = ctx.element.remove_virtual_network(virtual_network_id=virtualnetworkid, virtual_network_tag=virtualnetworktag)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -165,10 +59,10 @@ def modify(ctx,
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_AddVirtualNetworkResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_RemoveVirtualNetworkResult), indent=4))
         return
     else:
-        cli_utils.print_result(_AddVirtualNetworkResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_RemoveVirtualNetworkResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -380,32 +274,138 @@ def add(ctx,
 
 
 
-@cli.command('remove', short_help="""RemoveVirtualNetwork enables you to remove a previously added virtual network. Note: This method requires either the virtualNetworkID or the virtualNetworkTag as a parameter, but not both. """, cls=SolidFireCommand)
+@cli.command('modify', short_help="""You can use ModifyVirtualNetwork to change the attributes of an existing virtual network. This method enables you to add or remove address blocks, change the netmask, or modify the name or description of the virtual network. You can also use it to enable or disable namespaces, as well as add or remove a gateway if namespaces are enabled on the virtual network. Note: This method requires either the VirtualNetworkID or the VirtualNetworkTag as a parameter, but not both. Caution: Enabling or disabling the Routable Storage VLANs functionality for an existing virtual network by changing the "namespace" parameter disrupts any traffic handled by the virtual network. NetApp strongly recommends changing the "namespace" parameter only during a scheduled maintenance window. """, cls=SolidFireCommand)
 @click.option('--virtualnetworkid',
               type=int,
               required=False,
-              help="""Network ID that identifies the virtual network to remove. """)
+              help="""The unique identifier of the virtual network to modify. This is the virtual network ID assigned by the cluster.  Note: This parameter is optional but either virtualNetworkID or virtualNetworkTag must be specified with this API method. """)
 @click.option('--virtualnetworktag',
               type=int,
               required=False,
-              help="""Network tag that identifies the virtual network to remove. """)
+              help="""The network tag that identifies the virtual network to modify. Note: This parameter is optional but either virtualNetworkID or virtualNetworkTag must be specified with this API method. """)
+@click.option('--name',
+              type=str,
+              required=False,
+              help="""The new name for the virtual network. """)
+@click.option('--addressblocks',
+              cls=SolidFireOption,
+              is_flag=True,
+              multiple=True,
+              subparameters=["start", "size", "available", ],
+              required=False,
+              help="""The new addressBlock to set for this virtual network. This might contain new address blocks to add to the existing object or omit unused address blocks that need to be removed. Alternatively, you can extend or reduce the size of existing address blocks. You can only increase the size of the starting addressBlocks for a virtual network object; you can never decrease it. Attributes for this parameter are: start: The start of the IP address range. (String) size: The number of IP addresses to include in the block. (Integer)  Has the following subparameters: --start --size --available """)
+@click.option('--start',
+              required=False,
+              multiple=True,
+              type=str,
+              default=None,
+              is_sub_parameter=True,
+              help="""[subparameter] Start of the IP address range. """,
+              cls=SolidFireOption)
+@click.option('--size',
+              required=False,
+              multiple=True,
+              type=int,
+              default=None,
+              is_sub_parameter=True,
+              help="""[subparameter] Number of IP addresses to include in the block. """,
+              cls=SolidFireOption)
+@click.option('--available',
+              required=False,
+              multiple=True,
+              type=str,
+              default=None,
+              is_sub_parameter=True,
+              help="""[subparameter] Nuber of available blocks """,
+              cls=SolidFireOption)
+@click.option('--netmask',
+              type=str,
+              required=False,
+              help="""New network mask for this virtual network. """)
+@click.option('--svip',
+              type=str,
+              required=False,
+              help="""The storage virtual IP address for this virtual network. The svip for a virtual network cannot be changed. You must create a new virtual network to use a different svip address. """)
+@click.option('--gateway',
+              type=str,
+              required=False,
+              help="""The IP address of a gateway of the virtual network. This parameter is only valid if the "namespace" parameter is set to true. """)
+@click.option('--namespace',
+              type=bool,
+              required=False,
+              help="""When set to true, enables Routable Storage VLANs functionality by recreating the virtual network and configuring a namespace to contain it. When set to false, disables the VRF functionality for the virtual network. Changing this value disrupts traffic running through this virtual network. """)
+@click.option('--attributes',
+              type=str,
+              required=False,
+              help="""A new list of name-value pairs in JSON object format.  Has the following subparameters: """)
 @pass_context
-def remove(ctx,
+def modify(ctx,
            # Optional main parameter
            virtualnetworkid = None,
            # Optional main parameter
-           virtualnetworktag = None):
-    """RemoveVirtualNetwork enables you to remove a previously added virtual network."""
-    """Note: This method requires either the virtualNetworkID or the virtualNetworkTag as a parameter, but not both."""
+           virtualnetworktag = None,
+           # Optional main parameter
+           name = None,
+           # Optional main parameter
+           addressblocks = None,
+           # Optional subparameter of optional main parameter.
+           start = None,
+           # Optional subparameter of optional main parameter.
+           size = None,
+           # Optional subparameter of optional main parameter.
+           available = None,
+           # Optional main parameter
+           netmask = None,
+           # Optional main parameter
+           svip = None,
+           # Optional main parameter
+           gateway = None,
+           # Optional main parameter
+           namespace = None,
+           # Optional main parameter
+           attributes = None):
+    """You can use ModifyVirtualNetwork to change the attributes of an existing virtual network. This method enables you to add or remove"""
+    """address blocks, change the netmask, or modify the name or description of the virtual network. You can also use it to enable or"""
+    """disable namespaces, as well as add or remove a gateway if namespaces are enabled on the virtual network."""
+    """Note: This method requires either the VirtualNetworkID or the VirtualNetworkTag as a parameter, but not both."""
+    """Caution: Enabling or disabling the Routable Storage VLANs functionality for an existing virtual network by changing the"""
+    """&quot;namespace&quot; parameter disrupts any traffic handled by the virtual network. NetApp strongly recommends changing the"""
+    """&quot;namespace&quot; parameter only during a scheduled maintenance window."""
 
     cli_utils.establish_connection(ctx)
     
     
     
+    
 
-    ctx.logger.info("""virtualnetworkid = """+str(virtualnetworkid)+";" + """virtualnetworktag = """+str(virtualnetworktag)+""";"""+"")
+    addressblocksArray = None
+    if(addressblocks is not None and addressblocks != ()):
+        addressblocksArray = []
+        try:
+            for i, _addressblocks in enumerate(addressblocks):
+                addressblocksArray.append(AddressBlock(start=start[i], size=size[i], available=available[i], ))
+        except Exception as e:
+            ctx.logger.error(e.__str__())
+            exit(1)
+    
+    
+    
+    
+    
+
+    kwargsDict = None
+
+    if(attributes is not None and attributes != ()):
+        try:
+            kwargsDict = simplejson.loads(attributes)
+        except Exception as e:
+            ctx.logger.error(e.__str__())
+            exit(1)
+    
+
+    ctx.logger.info("""virtualnetworkid = """+str(virtualnetworkid)+";" + """virtualnetworktag = """+str(virtualnetworktag)+";" + """name = """+str(name)+";" + """addressblocks = """+str(addressblocksArray)+";" + """netmask = """+str(netmask)+";" + """svip = """+str(svip)+";" + """gateway = """+str(gateway)+";" + """namespace = """+str(namespace)+";" + """attributes = """+str(kwargsDict)+""";"""+"")
     try:
-        _RemoveVirtualNetworkResult = ctx.element.remove_virtual_network(virtual_network_id=virtualnetworkid, virtual_network_tag=virtualnetworktag)
+        _AddVirtualNetworkResult = ctx.element.modify_virtual_network(virtual_network_id=virtualnetworkid, virtual_network_tag=virtualnetworktag, name=name, address_blocks=addressblocksArray, netmask=netmask, svip=svip, gateway=gateway, namespace=namespace, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -413,8 +413,8 @@ def remove(ctx,
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_RemoveVirtualNetworkResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_AddVirtualNetworkResult), indent=4))
         return
     else:
-        cli_utils.print_result(_RemoveVirtualNetworkResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_AddVirtualNetworkResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
