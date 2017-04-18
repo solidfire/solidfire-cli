@@ -34,7 +34,7 @@ def list(ctx):
     cli_utils.establish_connection(ctx)
     
 
-    ctx.logger.info("")
+    ctx.logger.info(+""";"""+"")
     try:
         _ListServicesResult = ctx.element.list_services()
     except common.ApiServerError as e:

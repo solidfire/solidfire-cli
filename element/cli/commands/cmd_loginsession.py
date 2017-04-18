@@ -24,7 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """getremotelogginghosts setremotelogginghosts setinfo getinfo """
+    """getremotelogginghosts setremotelogginghosts getinfo setinfo """
 
 @cli.command('getremotelogginghosts', short_help="""GetRemoteLoggingHosts enables you to retrieve the current list of log servers. """, cls=SolidFireCommand)
 @pass_context
@@ -34,7 +34,7 @@ def getremotelogginghosts(ctx):
     cli_utils.establish_connection(ctx)
     
 
-    ctx.logger.info("")
+    ctx.logger.info(+""";"""+"")
     try:
         _GetRemoteLoggingHostsResult = ctx.element.get_remote_logging_hosts()
     except common.ApiServerError as e:
@@ -91,8 +91,9 @@ def setremotelogginghosts(ctx,
     cli_utils.establish_connection(ctx)
     
 
-    remotehostsArray = []
-    if(remotehosts is not None):
+    remotehostsArray = None
+    if(remotehosts is not None and remotehosts != ()):
+        remotehostsArray = []
         try:
             for i, _remotehosts in enumerate(remotehosts):
                 remotehostsArray.append(LoggingServer(host=host[i], port=port[i], ))
@@ -101,7 +102,7 @@ def setremotelogginghosts(ctx,
             exit(1)
     
 
-    ctx.logger.info("""remotehosts = """+str(remotehosts)+""";"""+"")
+    ctx.logger.info("""remotehosts = """ + str(remotehostsArray)+""";"""+"")
     try:
         _SetRemoteLoggingHostsResult = ctx.element.set_remote_logging_hosts(remote_hosts=remotehostsArray)
     except common.ApiServerError as e:
@@ -115,6 +116,31 @@ def setremotelogginghosts(ctx,
         return
     else:
         cli_utils.print_result(_SetRemoteLoggingHostsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getinfo', short_help="""GetLoginSessionInfo enables you to return the period of time a log in authentication session is valid for both log in shells and the TUI. """, cls=SolidFireCommand)
+@pass_context
+def getinfo(ctx):
+    """GetLoginSessionInfo enables you to return the period of time a log in authentication session is valid for both log in shells and the TUI."""
+
+    cli_utils.establish_connection(ctx)
+    
+
+    ctx.logger.info(+""";"""+"")
+    try:
+        _GetLoginSessionInfoResult = ctx.element.get_login_session_info()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetLoginSessionInfoResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetLoginSessionInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -134,7 +160,7 @@ def setinfo(ctx,
     
     
 
-    ctx.logger.info("""timeout = """+str(timeout)+""";"""+"")
+    ctx.logger.info("""timeout = """ + str(timeout)+""";"""+"")
     try:
         _SetLoginSessionInfoResult = ctx.element.set_login_session_info(timeout=timeout)
     except common.ApiServerError as e:
@@ -148,29 +174,4 @@ def setinfo(ctx,
         return
     else:
         cli_utils.print_result(_SetLoginSessionInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getinfo', short_help="""GetLoginSessionInfo enables you to return the period of time a log in authentication session is valid for both log in shells and the TUI. """, cls=SolidFireCommand)
-@pass_context
-def getinfo(ctx):
-    """GetLoginSessionInfo enables you to return the period of time a log in authentication session is valid for both log in shells and the TUI."""
-
-    cli_utils.establish_connection(ctx)
-    
-
-    ctx.logger.info("")
-    try:
-        _GetLoginSessionInfoResult = ctx.element.get_login_session_info()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetLoginSessionInfoResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_GetLoginSessionInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

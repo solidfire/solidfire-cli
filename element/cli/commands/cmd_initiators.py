@@ -88,8 +88,9 @@ def create(ctx,
     cli_utils.establish_connection(ctx)
     
 
-    initiatorsArray = []
-    if(initiators is not None):
+    initiatorsArray = None
+    if(initiators is not None and initiators != ()):
+        initiatorsArray = []
         try:
             for i, _initiators in enumerate(initiators):
                 attributes_json = None
@@ -101,7 +102,7 @@ def create(ctx,
             exit(1)
     
 
-    ctx.logger.info("""initiators = """+str(initiators)+""";"""+"")
+    ctx.logger.info("""initiators = """ + str(initiatorsArray)+""";"""+"")
     try:
         _CreateInitiatorsResult = ctx.element.create_initiators(initiators=initiatorsArray)
     except common.ApiServerError as e:
@@ -181,8 +182,9 @@ def modify(ctx,
     cli_utils.establish_connection(ctx)
     
 
-    initiatorsArray = []
-    if(initiators is not None):
+    initiatorsArray = None
+    if(initiators is not None and initiators != ()):
+        initiatorsArray = []
         try:
             for i, _initiators in enumerate(initiators):
                 attributes_json = None
@@ -194,7 +196,7 @@ def modify(ctx,
             exit(1)
     
 
-    ctx.logger.info("""initiators = """+str(initiators)+""";"""+"")
+    ctx.logger.info("""initiators = """ + str(initiatorsArray)+""";"""+"")
     try:
         _ModifyInitiatorsResult = ctx.element.modify_initiators(initiators=initiatorsArray)
     except common.ApiServerError as e:
@@ -242,7 +244,7 @@ def list(ctx,
     initiators = parser.parse_array(initiators)
     
 
-    ctx.logger.info("""startinitiatorid = """+str(startinitiatorid)+""";"""+"""limit = """+str(limit)+""";"""+"""initiators = """+str(initiators)+""";"""+"")
+    ctx.logger.info("""startinitiatorid = """+str(startinitiatorid)+";" + """limit = """+str(limit)+";" + """initiators = """+str(initiators)+""";"""+"")
     try:
         _ListInitiatorsResult = ctx.element.list_initiators(start_initiator_id=startinitiatorid, limit=limit, initiators=initiators)
     except common.ApiServerError as e:
@@ -280,7 +282,7 @@ def delete(ctx,
     initiators = parser.parse_array(initiators)
     
 
-    ctx.logger.info("""initiators = """+str(initiators)+""";"""+"")
+    ctx.logger.info("""initiators = """ + str(initiators)+""";"""+"")
     try:
         _DeleteInitiatorsResult = ctx.element.delete_initiators(initiators=initiators)
     except common.ApiServerError as e:

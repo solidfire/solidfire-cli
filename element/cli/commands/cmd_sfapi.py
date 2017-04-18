@@ -51,7 +51,7 @@ def invoke(ctx,
 
     kwargsDict = None
 
-    if(parameters is not None):
+    if(parameters is not None and parameters != ()):
         try:
             kwargsDict = simplejson.loads(parameters)
         except Exception as e:
@@ -59,7 +59,7 @@ def invoke(ctx,
             exit(1)
     
 
-    ctx.logger.info("""method = """+str(method)+""";"""+"""parameters = """+str(parameters)+""";"""+"")
+    ctx.logger.info("""method = """ + str(method)+";" + """parameters = """+str(kwargsDict)+""";"""+"")
     try:
         _dict = ctx.element.invoke_sfapi(method=method, parameters=kwargsDict)
     except common.ApiServerError as e:

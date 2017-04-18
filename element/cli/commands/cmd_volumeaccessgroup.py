@@ -24,46 +24,93 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """removeinitiatorsfrom modifylunassignments addvolumesto create getlunassignments delete removevolumesfrom modify addinitiatorsto list getefficiency """
+    """modify modifylunassignments list getefficiency getlunassignments addvolumesto create removeinitiatorsfrom addinitiatorsto removevolumesfrom delete """
 
-@cli.command('removeinitiatorsfrom', short_help="""RemoveInitiatorsFromVolumeAccessGroup enables you to remove initiators from a specified volume access group. """, cls=SolidFireCommand)
+@cli.command('modify', short_help="""You can use ModifyVolumeAccessGroup to update initiators and add or remove volumes from a volume access group. If a specified initiator or volume is a duplicate of what currently exists, the volume access group is left as-is. If you do not specify a value for volumes or initiators, the current list of initiators and volumes is not changed. """, cls=SolidFireCommand)
 @click.option('--volumeaccessgroupid',
               type=int,
               required=True,
               prompt=True,
-              help="""The ID of the volume access group from which the initiators are removed. """)
+              help="""The ID of the volume access group to modify. """)
+@click.option('--virtualnetworkid',
+              type=str,
+              required=False,
+              help="""The ID of the SolidFire virtual network to associate the volume access group with. """)
+@click.option('--virtualnetworktags',
+              type=str,
+              required=False,
+              help="""The ID of the SolidFire virtual network to associate the volume access group with. """)
+@click.option('--name',
+              type=str,
+              required=False,
+              help="""The new name for this volume access group. Not required to be unique, but recommended. """)
 @click.option('--initiators',
               type=str,
-              required=True,
-              prompt=True,
-              help="""The list of initiators to remove from the volume access group. """)
+              required=False,
+              help="""List of initiators to include in the volume access group. If unspecified, the access group's configured initiators are not modified. """)
+@click.option('--volumes',
+              type=str,
+              required=False,
+              help="""List of volumes to initially include in the volume access group. If unspecified, the access group's volumes are not modified. """)
 @click.option('--deleteorphaninitiators',
               type=bool,
               required=False,
               help="""true: Delete initiator objects after they are removed from a volume access group. false: Do not delete initiator objects after they are removed from a volume access group. """)
+@click.option('--attributes',
+              type=str,
+              required=False,
+              help="""List of name-value pairs in JSON object format.  Has the following subparameters: """)
 @pass_context
-def removeinitiatorsfrom(ctx,
+def modify(ctx,
            # Mandatory main parameter
            volumeaccessgroupid,
-           # Mandatory main parameter
-           initiators,
            # Optional main parameter
-           deleteorphaninitiators = None):
-    """RemoveInitiatorsFromVolumeAccessGroup enables"""
-    """you to remove initiators from a specified volume access"""
-    """group."""
+           virtualnetworkid = None,
+           # Optional main parameter
+           virtualnetworktags = None,
+           # Optional main parameter
+           name = None,
+           # Optional main parameter
+           initiators = None,
+           # Optional main parameter
+           volumes = None,
+           # Optional main parameter
+           deleteorphaninitiators = None,
+           # Optional main parameter
+           attributes = None):
+    """You can use ModifyVolumeAccessGroup to update initiators and add or remove volumes from a volume access group. If a specified initiator or volume is a duplicate of what currently exists, the volume access group is left as-is. If you do not specify a value for volumes or initiators, the current list of initiators and volumes is not changed."""
 
     cli_utils.establish_connection(ctx)
     
     
 
-    initiators = parser.parse_array(initiators)
+    virtualnetworkid = parser.parse_array(virtualnetworkid)
+    
+
+    virtualnetworktags = parser.parse_array(virtualnetworktags)
     
     
 
-    ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"""initiators = """+str(initiators)+""";"""+"""deleteorphaninitiators = """+str(deleteorphaninitiators)+""";"""+"")
+    initiators = parser.parse_array(initiators)
+    
+
+    volumes = parser.parse_array(volumes)
+    
+    
+
+    kwargsDict = None
+
+    if(attributes is not None and attributes != ()):
+        try:
+            kwargsDict = simplejson.loads(attributes)
+        except Exception as e:
+            ctx.logger.error(e.__str__())
+            exit(1)
+    
+
+    ctx.logger.info("""volumeaccessgroupid = """ + str(volumeaccessgroupid)+";" + """virtualnetworkid = """+str(virtualnetworkid)+";" + """virtualnetworktags = """+str(virtualnetworktags)+";" + """name = """+str(name)+";" + """initiators = """+str(initiators)+";" + """volumes = """+str(volumes)+";" + """deleteorphaninitiators = """+str(deleteorphaninitiators)+";" + """attributes = """+str(kwargsDict)+""";"""+"")
     try:
-        _ModifyVolumeAccessGroupResult = ctx.element.remove_initiators_from_volume_access_group(volume_access_group_id=volumeaccessgroupid, initiators=initiators, delete_orphan_initiators=deleteorphaninitiators)
+        _ModifyVolumeAccessGroupResult = ctx.element.modify_volume_access_group(volume_access_group_id=volumeaccessgroupid, virtual_network_id=virtualnetworkid, virtual_network_tags=virtualnetworktags, name=name, initiators=initiators, volumes=volumes, delete_orphan_initiators=deleteorphaninitiators, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -133,8 +180,9 @@ def modifylunassignments(ctx,
     
     
 
-    lunassignmentsArray = []
-    if(lunassignments is not None):
+    lunassignmentsArray = None
+    if(lunassignments is not None and lunassignments != ()):
+        lunassignmentsArray = []
         try:
             for i, _lunassignments in enumerate(lunassignments):
                 lunassignmentsArray.append(LunAssignment(volume_id=volumeid[i], lun=lun[i], ))
@@ -143,7 +191,7 @@ def modifylunassignments(ctx,
             exit(1)
     
 
-    ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"""lunassignments = """+str(lunassignments)+""";"""+"")
+    ctx.logger.info("""volumeaccessgroupid = """ + str(volumeaccessgroupid)+";"+"""lunassignments = """ + str(lunassignmentsArray)+""";"""+"")
     try:
         _ModifyVolumeAccessGroupLunAssignmentsResult = ctx.element.modify_volume_access_group_lun_assignments(volume_access_group_id=volumeaccessgroupid, lun_assignments=lunassignmentsArray)
     except common.ApiServerError as e:
@@ -157,6 +205,128 @@ def modifylunassignments(ctx,
         return
     else:
         cli_utils.print_result(_ModifyVolumeAccessGroupLunAssignmentsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('list', short_help="""ListVolumeAccessGroups enables you to return information about the volume access groups that are currently in the system. """, cls=SolidFireCommand)
+@click.option('--startvolumeaccessgroupid',
+              type=int,
+              required=False,
+              help="""The volume access group ID at which to begin the listing. If unspecified, there is no lower limit (implicitly 0). """)
+@click.option('--limit',
+              type=int,
+              required=False,
+              help="""The maximum number of results to return. This can be useful for paging. """)
+@click.option('--volumeaccessgroups',
+              type=str,
+              required=False,
+              help="""The list of ids of the volume access groups you wish to list """)
+@pass_context
+def list(ctx,
+           # Optional main parameter
+           startvolumeaccessgroupid = None,
+           # Optional main parameter
+           limit = None,
+           # Optional main parameter
+           volumeaccessgroups = None):
+    """ListVolumeAccessGroups enables you to return"""
+    """information about the volume access groups that are"""
+    """currently in the system."""
+
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+
+    volumeaccessgroups = parser.parse_array(volumeaccessgroups)
+    
+
+    ctx.logger.info("""startvolumeaccessgroupid = """+str(startvolumeaccessgroupid)+";" + """limit = """+str(limit)+";" + """volumeaccessgroups = """+str(volumeaccessgroups)+""";"""+"")
+    try:
+        _ListVolumeAccessGroupsResult = ctx.element.list_volume_access_groups(start_volume_access_group_id=startvolumeaccessgroupid, limit=limit, volume_access_groups=volumeaccessgroups)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListVolumeAccessGroupsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListVolumeAccessGroupsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getefficiency', short_help="""GetVolumeAccessGroupEfficiency enables you to retrieve efficiency information about a volume access group. Only the volume access group you provide as the parameter in this API method is used to compute the capacity. """, cls=SolidFireCommand)
+@click.option('--volumeaccessgroupid',
+              type=int,
+              required=True,
+              prompt=True,
+              help="""The volume access group for which capacity is computed. """)
+@pass_context
+def getefficiency(ctx,
+           # Mandatory main parameter
+           volumeaccessgroupid):
+    """GetVolumeAccessGroupEfficiency enables you to"""
+    """retrieve efficiency information about a volume access"""
+    """group. Only the volume access group you provide as the"""
+    """parameter in this API method is used to compute the"""
+    """capacity."""
+
+    cli_utils.establish_connection(ctx)
+    
+    
+
+    ctx.logger.info("""volumeaccessgroupid = """ + str(volumeaccessgroupid)+""";"""+"")
+    try:
+        _GetEfficiencyResult = ctx.element.get_volume_access_group_efficiency(volume_access_group_id=volumeaccessgroupid)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetEfficiencyResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetEfficiencyResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getlunassignments', short_help="""The GetVolumeAccessGroupLunAssignments method enables you to retrieve details on LUN mappings of a specified volume access group. """, cls=SolidFireCommand)
+@click.option('--volumeaccessgroupid',
+              type=int,
+              required=True,
+              prompt=True,
+              help="""The unique volume access group ID used to return information. """)
+@pass_context
+def getlunassignments(ctx,
+           # Mandatory main parameter
+           volumeaccessgroupid):
+    """The GetVolumeAccessGroupLunAssignments"""
+    """method enables you to retrieve details on LUN mappings"""
+    """of a specified volume access group."""
+
+    cli_utils.establish_connection(ctx)
+    
+    
+
+    ctx.logger.info("""volumeaccessgroupid = """ + str(volumeaccessgroupid)+""";"""+"")
+    try:
+        _GetVolumeAccessGroupLunAssignmentsResult = ctx.element.get_volume_access_group_lun_assignments(volume_access_group_id=volumeaccessgroupid)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetVolumeAccessGroupLunAssignmentsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetVolumeAccessGroupLunAssignmentsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -187,7 +357,7 @@ def addvolumesto(ctx,
     volumes = parser.parse_array(volumes)
     
 
-    ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"""volumes = """+str(volumes)+""";"""+"")
+    ctx.logger.info("""volumeaccessgroupid = """ + str(volumeaccessgroupid)+";"+"""volumes = """ + str(volumes)+""";"""+"")
     try:
         _ModifyVolumeAccessGroupResult = ctx.element.add_volumes_to_volume_access_group(volume_access_group_id=volumeaccessgroupid, volumes=volumes)
     except common.ApiServerError as e:
@@ -264,7 +434,7 @@ def create(ctx,
 
     kwargsDict = None
 
-    if(attributes is not None):
+    if(attributes is not None and attributes != ()):
         try:
             kwargsDict = simplejson.loads(attributes)
         except Exception as e:
@@ -272,7 +442,7 @@ def create(ctx,
             exit(1)
     
 
-    ctx.logger.info("""name = """+str(name)+""";"""+"""initiators = """+str(initiators)+""";"""+"""volumes = """+str(volumes)+""";"""+"""virtualnetworkid = """+str(virtualnetworkid)+""";"""+"""virtualnetworktags = """+str(virtualnetworktags)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
+    ctx.logger.info("""name = """ + str(name)+";" + """initiators = """+str(initiators)+";" + """volumes = """+str(volumes)+";" + """virtualnetworkid = """+str(virtualnetworkid)+";" + """virtualnetworktags = """+str(virtualnetworktags)+";" + """attributes = """+str(kwargsDict)+""";"""+"")
     try:
         _CreateVolumeAccessGroupResult = ctx.element.create_volume_access_group(name=name, initiators=initiators, volumes=volumes, virtual_network_id=virtualnetworkid, virtual_network_tags=virtualnetworktags, attributes=kwargsDict)
     except common.ApiServerError as e:
@@ -289,203 +459,44 @@ def create(ctx,
 
 
 
-@cli.command('getlunassignments', short_help="""The GetVolumeAccessGroupLunAssignments method enables you to retrieve details on LUN mappings of a specified volume access group. """, cls=SolidFireCommand)
+@cli.command('removeinitiatorsfrom', short_help="""RemoveInitiatorsFromVolumeAccessGroup enables you to remove initiators from a specified volume access group. """, cls=SolidFireCommand)
 @click.option('--volumeaccessgroupid',
               type=int,
               required=True,
               prompt=True,
-              help="""The unique volume access group ID used to return information. """)
-@pass_context
-def getlunassignments(ctx,
-           # Mandatory main parameter
-           volumeaccessgroupid):
-    """The GetVolumeAccessGroupLunAssignments"""
-    """method enables you to retrieve details on LUN mappings"""
-    """of a specified volume access group."""
-
-    cli_utils.establish_connection(ctx)
-    
-    
-
-    ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"")
-    try:
-        _GetVolumeAccessGroupLunAssignmentsResult = ctx.element.get_volume_access_group_lun_assignments(volume_access_group_id=volumeaccessgroupid)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetVolumeAccessGroupLunAssignmentsResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_GetVolumeAccessGroupLunAssignmentsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('delete', short_help="""DeleteVolumeAccessGroup enables you to delete a volume access group. """, cls=SolidFireCommand)
-@click.option('--volumeaccessgroupid',
-              type=int,
-              required=True,
-              prompt=True,
-              help="""The ID of the volume access group to be deleted. """)
-@pass_context
-def delete(ctx,
-           # Mandatory main parameter
-           volumeaccessgroupid):
-    """DeleteVolumeAccessGroup enables you to delete a"""
-    """volume access group."""
-
-    cli_utils.establish_connection(ctx)
-    
-    
-
-    ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"")
-    try:
-        _DeleteVolumeAccessGroupResult = ctx.element.delete_volume_access_group(volume_access_group_id=volumeaccessgroupid)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_DeleteVolumeAccessGroupResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_DeleteVolumeAccessGroupResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('removevolumesfrom', short_help="""The RemoveVolumeFromVolumeAccessGroup method enables you to remove volumes from a volume access group. """, cls=SolidFireCommand)
-@click.option('--volumeaccessgroupid',
-              type=int,
-              required=True,
-              prompt=True,
-              help="""The ID of the volume access group to remove volumes from. """)
-@click.option('--volumes',
-              type=str,
-              required=True,
-              prompt=True,
-              help="""The ID of the volume access group to remove volumes from. """)
-@pass_context
-def removevolumesfrom(ctx,
-           # Mandatory main parameter
-           volumeaccessgroupid,
-           # Mandatory main parameter
-           volumes):
-    """The RemoveVolumeFromVolumeAccessGroup method enables you to remove volumes from a volume access group."""
-
-    cli_utils.establish_connection(ctx)
-    
-    
-
-    volumes = parser.parse_array(volumes)
-    
-
-    ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"""volumes = """+str(volumes)+""";"""+"")
-    try:
-        _ModifyVolumeAccessGroupResult = ctx.element.remove_volumes_from_volume_access_group(volume_access_group_id=volumeaccessgroupid, volumes=volumes)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ModifyVolumeAccessGroupResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_ModifyVolumeAccessGroupResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('modify', short_help="""You can use ModifyVolumeAccessGroup to update initiators and add or remove volumes from a volume access group. If a specified initiator or volume is a duplicate of what currently exists, the volume access group is left as-is. If you do not specify a value for volumes or initiators, the current list of initiators and volumes is not changed. """, cls=SolidFireCommand)
-@click.option('--volumeaccessgroupid',
-              type=int,
-              required=True,
-              prompt=True,
-              help="""The ID of the volume access group to modify. """)
-@click.option('--virtualnetworkid',
-              type=str,
-              required=False,
-              help="""The ID of the SolidFire virtual network to associate the volume access group with. """)
-@click.option('--virtualnetworktags',
-              type=str,
-              required=False,
-              help="""The ID of the SolidFire virtual network to associate the volume access group with. """)
-@click.option('--name',
-              type=str,
-              required=False,
-              help="""The new name for this volume access group. Not required to be unique, but recommended. """)
+              help="""The ID of the volume access group from which the initiators are removed. """)
 @click.option('--initiators',
               type=str,
-              required=False,
-              help="""List of initiators to include in the volume access group. If unspecified, the access group's configured initiators are not modified. """)
-@click.option('--volumes',
-              type=str,
-              required=False,
-              help="""List of volumes to initially include in the volume access group. If unspecified, the access group's volumes are not modified. """)
+              required=True,
+              prompt=True,
+              help="""The list of initiators to remove from the volume access group. """)
 @click.option('--deleteorphaninitiators',
               type=bool,
               required=False,
               help="""true: Delete initiator objects after they are removed from a volume access group. false: Do not delete initiator objects after they are removed from a volume access group. """)
-@click.option('--attributes',
-              type=str,
-              required=False,
-              help="""List of name-value pairs in JSON object format.  Has the following subparameters: """)
 @pass_context
-def modify(ctx,
+def removeinitiatorsfrom(ctx,
            # Mandatory main parameter
            volumeaccessgroupid,
+           # Mandatory main parameter
+           initiators,
            # Optional main parameter
-           virtualnetworkid = None,
-           # Optional main parameter
-           virtualnetworktags = None,
-           # Optional main parameter
-           name = None,
-           # Optional main parameter
-           initiators = None,
-           # Optional main parameter
-           volumes = None,
-           # Optional main parameter
-           deleteorphaninitiators = None,
-           # Optional main parameter
-           attributes = None):
-    """You can use ModifyVolumeAccessGroup to update initiators and add or remove volumes from a volume access group. If a specified initiator or volume is a duplicate of what currently exists, the volume access group is left as-is. If you do not specify a value for volumes or initiators, the current list of initiators and volumes is not changed."""
+           deleteorphaninitiators = None):
+    """RemoveInitiatorsFromVolumeAccessGroup enables"""
+    """you to remove initiators from a specified volume access"""
+    """group."""
 
     cli_utils.establish_connection(ctx)
-    
-    
-
-    virtualnetworkid = parser.parse_array(virtualnetworkid)
-    
-
-    virtualnetworktags = parser.parse_array(virtualnetworktags)
     
     
 
     initiators = parser.parse_array(initiators)
     
-
-    volumes = parser.parse_array(volumes)
-    
     
 
-    kwargsDict = None
-
-    if(attributes is not None):
-        try:
-            kwargsDict = simplejson.loads(attributes)
-        except Exception as e:
-            ctx.logger.error(e.__str__())
-            exit(1)
-    
-
-    ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"""virtualnetworkid = """+str(virtualnetworkid)+""";"""+"""virtualnetworktags = """+str(virtualnetworktags)+""";"""+"""name = """+str(name)+""";"""+"""initiators = """+str(initiators)+""";"""+"""volumes = """+str(volumes)+""";"""+"""deleteorphaninitiators = """+str(deleteorphaninitiators)+""";"""+"""attributes = """+str(attributes)+""";"""+"")
+    ctx.logger.info("""volumeaccessgroupid = """ + str(volumeaccessgroupid)+";"+"""initiators = """ + str(initiators)+";" + """deleteorphaninitiators = """+str(deleteorphaninitiators)+""";"""+"")
     try:
-        _ModifyVolumeAccessGroupResult = ctx.element.modify_volume_access_group(volume_access_group_id=volumeaccessgroupid, virtual_network_id=virtualnetworkid, virtual_network_tags=virtualnetworktags, name=name, initiators=initiators, volumes=volumes, delete_orphan_initiators=deleteorphaninitiators, attributes=kwargsDict)
+        _ModifyVolumeAccessGroupResult = ctx.element.remove_initiators_from_volume_access_group(volume_access_group_id=volumeaccessgroupid, initiators=initiators, delete_orphan_initiators=deleteorphaninitiators)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -527,7 +538,7 @@ def addinitiatorsto(ctx,
     initiators = parser.parse_array(initiators)
     
 
-    ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"""initiators = """+str(initiators)+""";"""+"")
+    ctx.logger.info("""volumeaccessgroupid = """ + str(volumeaccessgroupid)+";"+"""initiators = """ + str(initiators)+""";"""+"")
     try:
         _ModifyVolumeAccessGroupResult = ctx.element.add_initiators_to_volume_access_group(volume_access_group_id=volumeaccessgroupid, initiators=initiators)
     except common.ApiServerError as e:
@@ -544,79 +555,35 @@ def addinitiatorsto(ctx,
 
 
 
-@cli.command('list', short_help="""ListVolumeAccessGroups enables you to return information about the volume access groups that are currently in the system. """, cls=SolidFireCommand)
-@click.option('--startvolumeaccessgroupid',
-              type=int,
-              required=False,
-              help="""The volume access group ID at which to begin the listing. If unspecified, there is no lower limit (implicitly 0). """)
-@click.option('--limit',
-              type=int,
-              required=False,
-              help="""The maximum number of results to return. This can be useful for paging. """)
-@click.option('--volumeaccessgroups',
-              type=str,
-              required=False,
-              help="""The list of ids of the volume access groups you wish to list """)
-@pass_context
-def list(ctx,
-           # Optional main parameter
-           startvolumeaccessgroupid = None,
-           # Optional main parameter
-           limit = None,
-           # Optional main parameter
-           volumeaccessgroups = None):
-    """ListVolumeAccessGroups enables you to return"""
-    """information about the volume access groups that are"""
-    """currently in the system."""
-
-    cli_utils.establish_connection(ctx)
-    
-    
-    
-
-    volumeaccessgroups = parser.parse_array(volumeaccessgroups)
-    
-
-    ctx.logger.info("""startvolumeaccessgroupid = """+str(startvolumeaccessgroupid)+""";"""+"""limit = """+str(limit)+""";"""+"""volumeaccessgroups = """+str(volumeaccessgroups)+""";"""+"")
-    try:
-        _ListVolumeAccessGroupsResult = ctx.element.list_volume_access_groups(start_volume_access_group_id=startvolumeaccessgroupid, limit=limit, volume_access_groups=volumeaccessgroups)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ListVolumeAccessGroupsResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_ListVolumeAccessGroupsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getefficiency', short_help="""GetVolumeAccessGroupEfficiency enables you to retrieve efficiency information about a volume access group. Only the volume access group you provide as the parameter in this API method is used to compute the capacity. """, cls=SolidFireCommand)
+@cli.command('removevolumesfrom', short_help="""The RemoveVolumeFromVolumeAccessGroup method enables you to remove volumes from a volume access group. """, cls=SolidFireCommand)
 @click.option('--volumeaccessgroupid',
               type=int,
               required=True,
               prompt=True,
-              help="""The volume access group for which capacity is computed. """)
+              help="""The ID of the volume access group to remove volumes from. """)
+@click.option('--volumes',
+              type=str,
+              required=True,
+              prompt=True,
+              help="""The ID of the volume access group to remove volumes from. """)
 @pass_context
-def getefficiency(ctx,
+def removevolumesfrom(ctx,
            # Mandatory main parameter
-           volumeaccessgroupid):
-    """GetVolumeAccessGroupEfficiency enables you to"""
-    """retrieve efficiency information about a volume access"""
-    """group. Only the volume access group you provide as the"""
-    """parameter in this API method is used to compute the"""
-    """capacity."""
+           volumeaccessgroupid,
+           # Mandatory main parameter
+           volumes):
+    """The RemoveVolumeFromVolumeAccessGroup method enables you to remove volumes from a volume access group."""
 
     cli_utils.establish_connection(ctx)
     
     
 
-    ctx.logger.info("""volumeaccessgroupid = """+str(volumeaccessgroupid)+""";"""+"")
+    volumes = parser.parse_array(volumes)
+    
+
+    ctx.logger.info("""volumeaccessgroupid = """ + str(volumeaccessgroupid)+";"+"""volumes = """ + str(volumes)+""";"""+"")
     try:
-        _GetEfficiencyResult = ctx.element.get_volume_access_group_efficiency(volume_access_group_id=volumeaccessgroupid)
+        _ModifyVolumeAccessGroupResult = ctx.element.remove_volumes_from_volume_access_group(volume_access_group_id=volumeaccessgroupid, volumes=volumes)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -624,8 +591,42 @@ def getefficiency(ctx,
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetEfficiencyResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_ModifyVolumeAccessGroupResult), indent=4))
         return
     else:
-        cli_utils.print_result(_GetEfficiencyResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_ModifyVolumeAccessGroupResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('delete', short_help="""DeleteVolumeAccessGroup enables you to delete a volume access group. """, cls=SolidFireCommand)
+@click.option('--volumeaccessgroupid',
+              type=int,
+              required=True,
+              prompt=True,
+              help="""The ID of the volume access group to be deleted. """)
+@pass_context
+def delete(ctx,
+           # Mandatory main parameter
+           volumeaccessgroupid):
+    """DeleteVolumeAccessGroup enables you to delete a"""
+    """volume access group."""
+
+    cli_utils.establish_connection(ctx)
+    
+    
+
+    ctx.logger.info("""volumeaccessgroupid = """ + str(volumeaccessgroupid)+""";"""+"")
+    try:
+        _DeleteVolumeAccessGroupResult = ctx.element.delete_volume_access_group(volume_access_group_id=volumeaccessgroupid)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_DeleteVolumeAccessGroupResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_DeleteVolumeAccessGroupResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

@@ -24,33 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """getcompletestats gethardwareinfo listvolumestats listvolumestatsbyvirtualvolume listdrivestats getrawstats """
-
-@cli.command('getcompletestats', short_help="""NetApp engineering uses the GetCompleteStats API method to troubleshoot new features. The data returned from GetCompleteStats is not documented, changes frequently, and is not guaranteed to be accurate. NetApp does not recommend using GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster. """, cls=SolidFireCommand)
-@pass_context
-def getcompletestats(ctx):
-    """NetApp engineering uses the GetCompleteStats API method to troubleshoot new features. The data returned from GetCompleteStats is not documented, changes frequently, and is not guaranteed to be accurate. NetApp does not recommend using GetCompleteStats for collecting performance data or any other"""
-    """management integration with a SolidFire cluster."""
-
-    cli_utils.establish_connection(ctx)
-    
-
-    ctx.logger.info("")
-    try:
-        _dict = ctx.element.get_complete_stats()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_dict), indent=4))
-        return
-    else:
-        cli_utils.print_result(_dict, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
+    """gethardwareinfo listvolumestats listvolumestatsbyvirtualvolume getrawstats getcompletestats listdrivestats """
 
 @cli.command('gethardwareinfo', short_help="""The GetHardwareInfo API method enables you to return hardware information and status for a single node. This generally includes details about manufacturers, vendors, versions, drives, and other associated hardware identification information. """, cls=SolidFireCommand)
 @pass_context
@@ -60,7 +34,7 @@ def gethardwareinfo(ctx):
     cli_utils.establish_connection(ctx)
     
 
-    ctx.logger.info("")
+    ctx.logger.info(+""";"""+"")
     try:
         _GetHardwareInfoResult = ctx.element.get_hardware_info()
     except common.ApiServerError as e:
@@ -145,6 +119,58 @@ def listvolumestatsbyvirtualvolume(ctx,
 
 
 
+@cli.command('getrawstats', short_help="""NetApp engineering uses the GetRawStats API method to troubleshoot new features. The data returned from GetRawStats is not documented, changes frequently, and is not guaranteed to be accurate. NetApp does not recommend using GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster. """, cls=SolidFireCommand)
+@pass_context
+def getrawstats(ctx):
+    """NetApp engineering uses the GetRawStats API method to troubleshoot new features. The data returned from GetRawStats is not documented, changes frequently, and is not guaranteed to be accurate. NetApp does not recommend using GetCompleteStats for collecting performance data or any other"""
+    """management integration with a SolidFire cluster."""
+
+    cli_utils.establish_connection(ctx)
+    
+
+    ctx.logger.info(+""";"""+"")
+    try:
+        _dict = ctx.element.get_raw_stats()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_dict), indent=4))
+        return
+    else:
+        cli_utils.print_result(_dict, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getcompletestats', short_help="""NetApp engineering uses the GetCompleteStats API method to troubleshoot new features. The data returned from GetCompleteStats is not documented, changes frequently, and is not guaranteed to be accurate. NetApp does not recommend using GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster. """, cls=SolidFireCommand)
+@pass_context
+def getcompletestats(ctx):
+    """NetApp engineering uses the GetCompleteStats API method to troubleshoot new features. The data returned from GetCompleteStats is not documented, changes frequently, and is not guaranteed to be accurate. NetApp does not recommend using GetCompleteStats for collecting performance data or any other"""
+    """management integration with a SolidFire cluster."""
+
+    cli_utils.establish_connection(ctx)
+    
+
+    ctx.logger.info(+""";"""+"")
+    try:
+        _dict = ctx.element.get_complete_stats()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_dict), indent=4))
+        return
+    else:
+        cli_utils.print_result(_dict, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
 @cli.command('listdrivestats', short_help="""ListDriveStats enables you to retrieve high-level activity measurements for multiple drives in the cluster. By default, this method returns statistics for all drives in the cluster, and these measurements are cumulative from the addition of the drive to the cluster. Some values this method returns are specific to block drives, and some are specific to metadata drives. """, cls=SolidFireCommand)
 @click.option('--drives',
               type=str,
@@ -176,30 +202,4 @@ def listdrivestats(ctx,
         return
     else:
         cli_utils.print_result(_ListDriveStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getrawstats', short_help="""NetApp engineering uses the GetRawStats API method to troubleshoot new features. The data returned from GetRawStats is not documented, changes frequently, and is not guaranteed to be accurate. NetApp does not recommend using GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster. """, cls=SolidFireCommand)
-@pass_context
-def getrawstats(ctx):
-    """NetApp engineering uses the GetRawStats API method to troubleshoot new features. The data returned from GetRawStats is not documented, changes frequently, and is not guaranteed to be accurate. NetApp does not recommend using GetCompleteStats for collecting performance data or any other"""
-    """management integration with a SolidFire cluster."""
-
-    cli_utils.establish_connection(ctx)
-    
-
-    ctx.logger.info("")
-    try:
-        _dict = ctx.element.get_raw_stats()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_dict), indent=4))
-        return
-    else:
-        cli_utils.print_result(_dict, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
