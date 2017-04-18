@@ -24,7 +24,41 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """getconfig getnvraminfo getclusterinfo getnodeinfo """
+    """getclusterinfo getconfig getnvraminfo getnodeinfo """
+
+@cli.command('getclusterinfo', short_help="""You can use the GetClusterHardwareInfo method to retrieve the hardware status and information for all Fibre Channel nodes, iSCSI nodes and drives in the cluster. This generally includes details about manufacturers, vendors, versions, and other associated hardware identification information. """, cls=SolidFireCommand)
+@click.option('--type',
+              type=str,
+              required=False,
+              help="""Includes only a certain type of hardware information in the response. Possible values are: drives: List only drive information in the response. nodes: List only node information in the response. all: Include both drive and node information in the response. If this parameter is omitted, a type of "all" is assumed. """)
+@pass_context
+def getclusterinfo(ctx,
+           # Optional main parameter
+           type = None):
+    """You can use the GetClusterHardwareInfo method to retrieve the hardware status and information for all Fibre Channel nodes, iSCSI"""
+    """nodes and drives in the cluster. This generally includes details about manufacturers, vendors, versions, and other associated hardware"""
+    """identification information."""
+
+    cli_utils.establish_connection(ctx)
+    
+    
+
+    ctx.logger.info("""type = """+str(type)+""";"""+"")
+    try:
+        _GetClusterHardwareInfoResult = ctx.element.get_cluster_hardware_info(type=type)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetClusterHardwareInfoResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetClusterHardwareInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
 
 @cli.command('getconfig', short_help="""GetHardwareConfig enables you to display the hardware configuration information for a node. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
 @pass_context
@@ -81,40 +115,6 @@ def getnvraminfo(ctx,
         return
     else:
         cli_utils.print_result(_GetNvramInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getclusterinfo', short_help="""You can use the GetClusterHardwareInfo method to retrieve the hardware status and information for all Fibre Channel nodes, iSCSI nodes and drives in the cluster. This generally includes details about manufacturers, vendors, versions, and other associated hardware identification information. """, cls=SolidFireCommand)
-@click.option('--type',
-              type=str,
-              required=False,
-              help="""Includes only a certain type of hardware information in the response. Possible values are: drives: List only drive information in the response. nodes: List only node information in the response. all: Include both drive and node information in the response. If this parameter is omitted, a type of "all" is assumed. """)
-@pass_context
-def getclusterinfo(ctx,
-           # Optional main parameter
-           type = None):
-    """You can use the GetClusterHardwareInfo method to retrieve the hardware status and information for all Fibre Channel nodes, iSCSI"""
-    """nodes and drives in the cluster. This generally includes details about manufacturers, vendors, versions, and other associated hardware"""
-    """identification information."""
-
-    cli_utils.establish_connection(ctx)
-    
-    
-
-    ctx.logger.info("""type = """+str(type)+""";"""+"")
-    try:
-        _GetClusterHardwareInfoResult = ctx.element.get_cluster_hardware_info(type=type)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetClusterHardwareInfoResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_GetClusterHardwareInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 

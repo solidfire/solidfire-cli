@@ -24,7 +24,40 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """createstoragecontainer modifystoragecontainer getstoragecontainerefficiency list delete """
+    """getstoragecontainerefficiency createstoragecontainer list delete modifystoragecontainer """
+
+@cli.command('getstoragecontainerefficiency', short_help="""GetStorageContainerEfficiency enables you to retrieve efficiency information about a virtual volume storage container. """, cls=SolidFireCommand)
+@click.option('--storagecontainerid',
+              type=str,
+              required=True,
+              prompt=True,
+              help="""The ID of the storage container for which to retrieve efficiency information. """)
+@pass_context
+def getstoragecontainerefficiency(ctx,
+           # Mandatory main parameter
+           storagecontainerid):
+    """GetStorageContainerEfficiency enables you to retrieve efficiency information about a virtual volume storage container."""
+
+    cli_utils.establish_connection(ctx)
+    
+    
+
+    ctx.logger.info("""storagecontainerid = """ + str(storagecontainerid)+""";"""+"")
+    try:
+        _GetStorageContainerEfficiencyResult = ctx.element.get_storage_container_efficiency(storage_container_id=storagecontainerid)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetStorageContainerEfficiencyResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetStorageContainerEfficiencyResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
 
 @cli.command('createstoragecontainer', short_help="""CreateStorageContainer enables you to create a Virtual Volume (VVol) storage container. Storage containers are associated with a SolidFire storage system account, and are used for reporting and resource allocation. Storage containers can only be associated with virtual volumes. You need at least one storage container to use the Virtual Volumes feature. """, cls=SolidFireCommand)
 @click.option('--name',
@@ -77,86 +110,6 @@ def createstoragecontainer(ctx,
         return
     else:
         cli_utils.print_result(_CreateStorageContainerResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('modifystoragecontainer', short_help="""ModifyStorageContainer enables you to make changes to an existing virtual volume storage container. """, cls=SolidFireCommand)
-@click.option('--storagecontainerid',
-              type=str,
-              required=True,
-              prompt=True,
-              help="""The unique ID of the virtual volume storage container to modify. """)
-@click.option('--initiatorsecret',
-              type=str,
-              required=False,
-              help="""The new secret for CHAP authentication for the initiator. """)
-@click.option('--targetsecret',
-              type=str,
-              required=False,
-              help="""The new secret for CHAP authentication for the target. """)
-@pass_context
-def modifystoragecontainer(ctx,
-           # Mandatory main parameter
-           storagecontainerid,
-           # Optional main parameter
-           initiatorsecret = None,
-           # Optional main parameter
-           targetsecret = None):
-    """ModifyStorageContainer enables you to make changes to an existing virtual volume storage container."""
-
-    cli_utils.establish_connection(ctx)
-    
-    
-    
-    
-
-    ctx.logger.info("""storagecontainerid = """ + str(storagecontainerid)+";" + """initiatorsecret = """+str(initiatorsecret)+";" + """targetsecret = """+str(targetsecret)+""";"""+"")
-    try:
-        _ModifyStorageContainerResult = ctx.element.modify_storage_container(storage_container_id=storagecontainerid, initiator_secret=initiatorsecret, target_secret=targetsecret)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ModifyStorageContainerResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_ModifyStorageContainerResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getstoragecontainerefficiency', short_help="""GetStorageContainerEfficiency enables you to retrieve efficiency information about a virtual volume storage container. """, cls=SolidFireCommand)
-@click.option('--storagecontainerid',
-              type=str,
-              required=True,
-              prompt=True,
-              help="""The ID of the storage container for which to retrieve efficiency information. """)
-@pass_context
-def getstoragecontainerefficiency(ctx,
-           # Mandatory main parameter
-           storagecontainerid):
-    """GetStorageContainerEfficiency enables you to retrieve efficiency information about a virtual volume storage container."""
-
-    cli_utils.establish_connection(ctx)
-    
-    
-
-    ctx.logger.info("""storagecontainerid = """ + str(storagecontainerid)+""";"""+"")
-    try:
-        _GetStorageContainerEfficiencyResult = ctx.element.get_storage_container_efficiency(storage_container_id=storagecontainerid)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetStorageContainerEfficiencyResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_GetStorageContainerEfficiencyResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -227,4 +180,51 @@ def delete(ctx,
         return
     else:
         cli_utils.print_result(_DeleteStorageContainerResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('modifystoragecontainer', short_help="""ModifyStorageContainer enables you to make changes to an existing virtual volume storage container. """, cls=SolidFireCommand)
+@click.option('--storagecontainerid',
+              type=str,
+              required=True,
+              prompt=True,
+              help="""The unique ID of the virtual volume storage container to modify. """)
+@click.option('--initiatorsecret',
+              type=str,
+              required=False,
+              help="""The new secret for CHAP authentication for the initiator. """)
+@click.option('--targetsecret',
+              type=str,
+              required=False,
+              help="""The new secret for CHAP authentication for the target. """)
+@pass_context
+def modifystoragecontainer(ctx,
+           # Mandatory main parameter
+           storagecontainerid,
+           # Optional main parameter
+           initiatorsecret = None,
+           # Optional main parameter
+           targetsecret = None):
+    """ModifyStorageContainer enables you to make changes to an existing virtual volume storage container."""
+
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+    
+
+    ctx.logger.info("""storagecontainerid = """ + str(storagecontainerid)+";" + """initiatorsecret = """+str(initiatorsecret)+";" + """targetsecret = """+str(targetsecret)+""";"""+"")
+    try:
+        _ModifyStorageContainerResult = ctx.element.modify_storage_container(storage_container_id=storagecontainerid, initiator_secret=initiatorsecret, target_secret=targetsecret)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ModifyStorageContainerResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ModifyStorageContainerResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

@@ -24,7 +24,206 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """remove test add list listhardware getconfig gethardwareinfo reset getstats secureerase """
+    """listhardware test add reset remove getconfig gethardwareinfo list getstats secureerase """
+
+@cli.command('listhardware', short_help="""ListDriveHardware returns all the drives connected to a node. Use this method on individual nodes to return drive hardware information or use this method on the cluster master node MVIP to see information for all the drives on all nodes. Note: The "securitySupported": true line of the method response does not imply that the drives are capable of encryption; only that the security status can be queried. If you have a node type with a model number ending in "-NE", commands to enable security features on these drives will fail. See the EnableEncryptionAtRest method for more information. """, cls=SolidFireCommand)
+@click.option('--force',
+              type=bool,
+              required=True,
+              prompt=True,
+              help="""To run this command, the force parameter must be set to true. """)
+@pass_context
+def listhardware(ctx,
+           # Mandatory main parameter
+           force):
+    """ListDriveHardware returns all the drives connected to a node. Use this method on individual nodes to return drive hardware"""
+    """information or use this method on the cluster master node MVIP to see information for all the drives on all nodes."""
+    """Note: The &quot;securitySupported&quot;: true line of the method response does not imply that the drives are capable of"""
+    """encryption; only that the security status can be queried. If you have a node type with a model number ending in &quot;-NE&quot;,"""
+    """commands to enable security features on these drives will fail. See the EnableEncryptionAtRest method for more information."""
+
+    cli_utils.establish_connection(ctx)
+    
+    
+
+    ctx.logger.info("""force = """ + str(force)+""";"""+"")
+    try:
+        _ListDriveHardwareResult = ctx.element.list_drive_hardware(force=force)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListDriveHardwareResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListDriveHardwareResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('test', short_help="""You can use the TestDrives API method to run a hardware validation on all drives on the node. This method detects hardware failures on the drives (if present) and reports them in the results of the validation tests. You can only use the TestDrives method on nodes that are not "active" in a cluster. Note: This test takes approximately 10 minutes. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
+@click.option('--minutes',
+              type=int,
+              required=False,
+              help="""Specifies the number of minutes to run the test. """)
+@pass_context
+def test(ctx,
+           # Optional main parameter
+           minutes = None):
+    """You can use the TestDrives API method to run a hardware validation on all drives on the node. This method detects hardware"""
+    """failures on the drives (if present) and reports them in the results of the validation tests."""
+    """You can only use the TestDrives method on nodes that are not &quot;active&quot; in a cluster."""
+    """Note: This test takes approximately 10 minutes."""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
+
+    cli_utils.establish_connection(ctx)
+    
+    
+
+    ctx.logger.info("""minutes = """+str(minutes)+""";"""+"")
+    try:
+        _TestDrivesResult = ctx.element.test_drives(minutes=minutes)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_TestDrivesResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_TestDrivesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('add', short_help="""AddDrives enables you to add one or more available drives to the cluster, enabling the drives to host a portion of the cluster's data. When you add a node to the cluster or install new drives in an existing node, the new drives are marked as "available" and must be added via AddDrives before they can be utilized. Use the ListDrives method to display drives that are "available" to be added. When you add multiple drives, it is more efficient to add them in a single AddDrives method call rather than multiple individual methods with a single drive each. This reduces the amount of data balancing that must occur to stabilize the storage load on the cluster. When you add a drive, the system automatically determines the "type" of drive it should be. The method is asynchronous and returns immediately. However, it can take some time for the data in the cluster to be rebalanced using the newly added drives. As the new drives are syncing on the system, you can use the ListSyncJobs method to see how the drives are being rebalanced and the progress of adding the new drive. You can also use the GetAsyncResult method to query the method's returned asyncHandle. """, cls=SolidFireCommand)
+@click.option('--drives',
+              cls=SolidFireOption,
+              is_flag=True,
+              multiple=True,
+              subparameters=["driveid", "type", ],
+              required=True,
+              help="""Returns information about each drive to be added to the cluster. Possible values are: driveID: The ID of the drive to add. (Integer) type: (Optional) The type of drive to add. Valid values are "slice" or "block". If omitted, the system assigns the correct type. (String)  Has the following subparameters: --driveid --type """)
+@click.option('--driveid',
+              required=True,
+              prompt=True,
+              multiple=True,
+              type=int,
+              default=None,
+              is_sub_parameter=True,
+              help="""[subparameter] A unique identifier for this drive. """,
+              cls=SolidFireOption)
+@click.option('--type',
+              required=False,
+              multiple=True,
+              type=str,
+              default=None,
+              is_sub_parameter=True,
+              help="""[subparameter] block or slice """,
+              cls=SolidFireOption)
+@click.option('--forceduringupgrade',
+              type=bool,
+              required=False,
+              help="""Allows the user to force the addition of drives during an upgrade. """)
+@pass_context
+def add(ctx,
+           # Mandatory main parameter
+           drives,
+           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
+           driveid,
+           # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
+           type = None,
+           # Optional main parameter
+           forceduringupgrade = None):
+    """AddDrives enables you to add one or more available drives to the cluster, enabling the drives to host a portion of the cluster&#x27;s data."""
+    """When you add a node to the cluster or install new drives in an existing node, the new drives are marked as &quot;available&quot; and must be"""
+    """added via AddDrives before they can be utilized. Use the ListDrives method to display drives that are &quot;available&quot; to be added. When"""
+    """you add multiple drives, it is more efficient to add them in a single AddDrives method call rather than multiple individual methods"""
+    """with a single drive each. This reduces the amount of data balancing that must occur to stabilize the storage load on the cluster."""
+    """When you add a drive, the system automatically determines the &quot;type&quot; of drive it should be."""
+    """The method is asynchronous and returns immediately. However, it can take some time for the data in the cluster to be rebalanced"""
+    """using the newly added drives. As the new drives are syncing on the system, you can use the ListSyncJobs method to see how the"""
+    """drives are being rebalanced and the progress of adding the new drive. You can also use the GetAsyncResult method to query the"""
+    """method&#x27;s returned asyncHandle."""
+
+    cli_utils.establish_connection(ctx)
+    
+
+    drivesArray = None
+    if len(drives) == 1 and driveid[0] is None and type[0] is None:
+        remotehostsArray = []
+    elif(drives is not None and drives != ()):
+        drivesArray = []
+        try:
+            for i, _drives in enumerate(drives):
+                drivesArray.append(NewDrive(drive_id=driveid[i], type=type[i], ))
+        except Exception as e:
+            ctx.logger.error(e.__str__())
+            exit(1)
+    
+    
+
+    ctx.logger.info("""drives = """ + str(drivesArray)+";" + """forceduringupgrade = """+str(forceduringupgrade)+""";"""+"")
+    try:
+        _AddDrivesResult = ctx.element.add_drives(drives=drivesArray, force_during_upgrade=forceduringupgrade)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_AddDrivesResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_AddDrivesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('reset', short_help="""ResetDrives enables you to proactively initialize drives and remove all data currently residing on a drive. The drive can then be reused in an existing node or used in an upgraded node. This method requires the force parameter to be included in the method call. """, cls=SolidFireCommand)
+@click.option('--drives',
+              type=str,
+              required=True,
+              prompt=True,
+              help="""List of device names (not driveIDs) to reset. """)
+@click.option('--force',
+              type=bool,
+              required=True,
+              prompt=True,
+              help="""Required parameter to successfully reset a drive. """)
+@pass_context
+def reset(ctx,
+           # Mandatory main parameter
+           drives,
+           # Mandatory main parameter
+           force):
+    """ResetDrives enables you to proactively initialize drives and remove all data currently residing on a drive. The drive can then be reused"""
+    """in an existing node or used in an upgraded node. This method requires the force parameter to be included in the method call."""
+
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+
+    ctx.logger.info("""drives = """ + str(drives)+";"+"""force = """ + str(force)+""";"""+"")
+    try:
+        _ResetDrivesResult = ctx.element.reset_drives(drives=drives, force=force)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ResetDrivesResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ResetDrivesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
 
 @cli.command('remove', short_help="""You can use RemoveDrives to proactively remove drives that are part of the cluster. You might want to use this method when reducing cluster capacity or preparing to replace drives nearing the end of their service life. Any data on the drives is removed and migrated to other drives in the cluster before the drive is removed from the cluster. This is an asynchronous method. Depending on the total capacity of the drives being removed, it might take several minutes to migrate all of the data. Use the GetAsyncResult method to check the status of the remove operation. When removing multiple drives, use a single RemoveDrives method call rather than multiple individual methods with a single drive each. This reduces the amount of data balancing that must occur to even stabilize the storage load on the cluster. You can also remove drives with a "failed" status using RemoveDrives. When you remove a drive with a "failed" status it is not returned to an "available" or active status. The drive is unavailable for use in the cluster. Use the ListDrives method to obtain the driveIDs for the drives you want to remove. """, cls=SolidFireCommand)
 @click.option('--drives',
@@ -74,188 +273,6 @@ def remove(ctx,
         return
     else:
         cli_utils.print_result(_AsyncHandleResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('test', short_help="""You can use the TestDrives API method to run a hardware validation on all drives on the node. This method detects hardware failures on the drives (if present) and reports them in the results of the validation tests. You can only use the TestDrives method on nodes that are not "active" in a cluster. Note: This test takes approximately 10 minutes. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
-@click.option('--minutes',
-              type=int,
-              required=False,
-              help="""Specifies the number of minutes to run the test. """)
-@pass_context
-def test(ctx,
-           # Optional main parameter
-           minutes = None):
-    """You can use the TestDrives API method to run a hardware validation on all drives on the node. This method detects hardware"""
-    """failures on the drives (if present) and reports them in the results of the validation tests."""
-    """You can only use the TestDrives method on nodes that are not &quot;active&quot; in a cluster."""
-    """Note: This test takes approximately 10 minutes."""
-    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
-
-    cli_utils.establish_connection(ctx)
-    
-    
-
-    ctx.logger.info("""minutes = """+str(minutes)+""";"""+"")
-    try:
-        _TestDrivesResult = ctx.element.test_drives(minutes=minutes)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_TestDrivesResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_TestDrivesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('add', short_help="""AddDrives enables you to add one or more available drives to the cluster, enabling the drives to host a portion of the cluster's data. When you add a node to the cluster or install new drives in an existing node, the new drives are marked as "available" and must be added via AddDrives before they can be utilized. Use the ListDrives method to display drives that are "available" to be added. When you add multiple drives, it is more efficient to add them in a single AddDrives method call rather than multiple individual methods with a single drive each. This reduces the amount of data balancing that must occur to stabilize the storage load on the cluster. When you add a drive, the system automatically determines the "type" of drive it should be. The method is asynchronous and returns immediately. However, it can take some time for the data in the cluster to be rebalanced using the newly added drives. As the new drives are syncing on the system, you can use the ListSyncJobs method to see how the drives are being rebalanced and the progress of adding the new drive. You can also use the GetAsyncResult method to query the method's returned asyncHandle. """, cls=SolidFireCommand)
-@click.option('--drives',
-              cls=SolidFireOption,
-              is_flag=True,
-              multiple=True,
-              subparameters=["driveid", "type", ],
-              required=True,
-              prompt=True,
-              help="""Returns information about each drive to be added to the cluster. Possible values are: driveID: The ID of the drive to add. (Integer) type: (Optional) The type of drive to add. Valid values are "slice" or "block". If omitted, the system assigns the correct type. (String)  Has the following subparameters: --driveid --type """)
-@click.option('--driveid',
-              required=True,
-              prompt=True,
-              multiple=True,
-              type=int,
-              default=None,
-              is_sub_parameter=True,
-              help="""[subparameter] A unique identifier for this drive. """,
-              cls=SolidFireOption)
-@click.option('--type',
-              required=False,
-              multiple=True,
-              type=str,
-              default=None,
-              is_sub_parameter=True,
-              help="""[subparameter] block or slice """,
-              cls=SolidFireOption)
-@click.option('--forceduringupgrade',
-              type=bool,
-              required=False,
-              help="""Allows the user to force the addition of drives during an upgrade. """)
-@pass_context
-def add(ctx,
-           # Mandatory main parameter
-           drives,
-           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
-           driveid,
-           # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
-           type = None,
-           # Optional main parameter
-           forceduringupgrade = None):
-    """AddDrives enables you to add one or more available drives to the cluster, enabling the drives to host a portion of the cluster&#x27;s data."""
-    """When you add a node to the cluster or install new drives in an existing node, the new drives are marked as &quot;available&quot; and must be"""
-    """added via AddDrives before they can be utilized. Use the ListDrives method to display drives that are &quot;available&quot; to be added. When"""
-    """you add multiple drives, it is more efficient to add them in a single AddDrives method call rather than multiple individual methods"""
-    """with a single drive each. This reduces the amount of data balancing that must occur to stabilize the storage load on the cluster."""
-    """When you add a drive, the system automatically determines the &quot;type&quot; of drive it should be."""
-    """The method is asynchronous and returns immediately. However, it can take some time for the data in the cluster to be rebalanced"""
-    """using the newly added drives. As the new drives are syncing on the system, you can use the ListSyncJobs method to see how the"""
-    """drives are being rebalanced and the progress of adding the new drive. You can also use the GetAsyncResult method to query the"""
-    """method&#x27;s returned asyncHandle."""
-
-    cli_utils.establish_connection(ctx)
-    
-
-    drivesArray = None
-    if(drives is not None and drives != ()):
-        drivesArray = []
-        try:
-            for i, _drives in enumerate(drives):
-                drivesArray.append(NewDrive(drive_id=driveid[i], type=type[i], ))
-        except Exception as e:
-            ctx.logger.error(e.__str__())
-            exit(1)
-    
-    
-
-    ctx.logger.info("""drives = """ + str(drivesArray)+";" + """forceduringupgrade = """+str(forceduringupgrade)+""";"""+"")
-    try:
-        _AddDrivesResult = ctx.element.add_drives(drives=drivesArray, force_during_upgrade=forceduringupgrade)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_AddDrivesResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_AddDrivesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('list', short_help="""ListDrives enables you to retrieve the list of the drives that exist in the cluster's active nodes. This method returns drives that have been added as volume metadata or block drives as well as drives that have not been added and are available. """, cls=SolidFireCommand)
-@pass_context
-def list(ctx):
-    """ListDrives enables you to retrieve the list of the drives that exist in the cluster&#x27;s active nodes. This method returns drives that have"""
-    """been added as volume metadata or block drives as well as drives that have not been added and are available."""
-
-    cli_utils.establish_connection(ctx)
-    
-
-    ctx.logger.info(+""";"""+"")
-    try:
-        _ListDrivesResult = ctx.element.list_drives()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ListDrivesResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_ListDrivesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('listhardware', short_help="""ListDriveHardware returns all the drives connected to a node. Use this method on individual nodes to return drive hardware information or use this method on the cluster master node MVIP to see information for all the drives on all nodes. Note: The "securitySupported": true line of the method response does not imply that the drives are capable of encryption; only that the security status can be queried. If you have a node type with a model number ending in "-NE", commands to enable security features on these drives will fail. See the EnableEncryptionAtRest method for more information. """, cls=SolidFireCommand)
-@click.option('--force',
-              type=bool,
-              required=True,
-              prompt=True,
-              help="""To run this command, the force parameter must be set to true. """)
-@pass_context
-def listhardware(ctx,
-           # Mandatory main parameter
-           force):
-    """ListDriveHardware returns all the drives connected to a node. Use this method on individual nodes to return drive hardware"""
-    """information or use this method on the cluster master node MVIP to see information for all the drives on all nodes."""
-    """Note: The &quot;securitySupported&quot;: true line of the method response does not imply that the drives are capable of"""
-    """encryption; only that the security status can be queried. If you have a node type with a model number ending in &quot;-NE&quot;,"""
-    """commands to enable security features on these drives will fail. See the EnableEncryptionAtRest method for more information."""
-
-    cli_utils.establish_connection(ctx)
-    
-    
-
-    ctx.logger.info("""force = """ + str(force)+""";"""+"")
-    try:
-        _ListDriveHardwareResult = ctx.element.list_drive_hardware(force=force)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ListDriveHardwareResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_ListDriveHardwareResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -320,34 +337,18 @@ def gethardwareinfo(ctx,
 
 
 
-@cli.command('reset', short_help="""ResetDrives enables you to proactively initialize drives and remove all data currently residing on a drive. The drive can then be reused in an existing node or used in an upgraded node. This method requires the force parameter to be included in the method call. """, cls=SolidFireCommand)
-@click.option('--drives',
-              type=str,
-              required=True,
-              prompt=True,
-              help="""List of device names (not driveIDs) to reset. """)
-@click.option('--force',
-              type=bool,
-              required=True,
-              prompt=True,
-              help="""Required parameter to successfully reset a drive. """)
+@cli.command('list', short_help="""ListDrives enables you to retrieve the list of the drives that exist in the cluster's active nodes. This method returns drives that have been added as volume metadata or block drives as well as drives that have not been added and are available. """, cls=SolidFireCommand)
 @pass_context
-def reset(ctx,
-           # Mandatory main parameter
-           drives,
-           # Mandatory main parameter
-           force):
-    """ResetDrives enables you to proactively initialize drives and remove all data currently residing on a drive. The drive can then be reused"""
-    """in an existing node or used in an upgraded node. This method requires the force parameter to be included in the method call."""
+def list(ctx):
+    """ListDrives enables you to retrieve the list of the drives that exist in the cluster&#x27;s active nodes. This method returns drives that have"""
+    """been added as volume metadata or block drives as well as drives that have not been added and are available."""
 
     cli_utils.establish_connection(ctx)
     
-    
-    
 
-    ctx.logger.info("""drives = """ + str(drives)+";"+"""force = """ + str(force)+""";"""+"")
+    ctx.logger.info(+""";"""+"")
     try:
-        _ResetDrivesResult = ctx.element.reset_drives(drives=drives, force=force)
+        _ListDrivesResult = ctx.element.list_drives()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -355,10 +356,10 @@ def reset(ctx,
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ResetDrivesResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_ListDrivesResult), indent=4))
         return
     else:
-        cli_utils.print_result(_ResetDrivesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_ListDrivesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 

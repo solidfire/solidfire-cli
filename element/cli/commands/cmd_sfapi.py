@@ -50,7 +50,6 @@ def invoke(ctx,
     
 
     kwargsDict = None
-
     if(parameters is not None and parameters != ()):
         try:
             kwargsDict = simplejson.loads(parameters)

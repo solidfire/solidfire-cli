@@ -144,7 +144,8 @@ class SolidFireParser(click.parser.OptionParser):
 
         # Finally, if this is a regular parameter, there is a chance it has
         # subparameters we need to expect. We add them to the state machine
-        # here. These will be expected in the next iteration.
+        # here. These will be expected in the next iteration. Note well, by
+        # the time we're handling regular parameters, state.subparameters=[].
         if state.subparameters == [] and type(option.obj) == SolidFireOption:
             state.subparameters = copy.deepcopy(option.obj.subparameters)
 
@@ -182,8 +183,8 @@ class SolidFireOption(click.core.Option):
         def _convert(value, level):
             if level == 0:
                 if value == "":
-                    if self.required and self.is_sub_parameter:
-                        raise click.BadParameter(self.name+" is a required member of its parameter group. Please provide it inline after the associated superparameter.")
+                    #if self.required and self.is_sub_parameter:
+                    #    raise click.BadParameter(self.name+" is a required member of its parameter group. Please provide it inline after the associated superparameter.")
                     return None
                 return self.type(value, self, ctx)
             return tuple(_convert(x, level - 1) for x in value or ())
