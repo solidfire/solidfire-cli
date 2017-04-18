@@ -14,3 +14,5 @@ venv
 python3
 python32
 connections.csv
+element/cli/commands/*.md
+element/cli/commands/*.txt
