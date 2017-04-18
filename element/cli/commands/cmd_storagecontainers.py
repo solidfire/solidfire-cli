@@ -24,41 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """list modifystoragecontainer getstoragecontainerefficiency delete createstoragecontainer """
-
-@cli.command('list', short_help="""ListStorageContainers enables you to retrieve information about all virtual volume storage containers known to the system. """, cls=SolidFireCommand)
-@click.option('--storagecontainerids',
-              type=str,
-              required=False,
-              help="""A list of storage container IDs for which to retrieve information. If you omit this parameter, the method returns information about all storage containers in the system. """)
-@pass_context
-def list(ctx,
-           # Optional main parameter
-           storagecontainerids = None):
-    """ListStorageContainers enables you to retrieve information about all virtual volume storage containers known to the system."""
-
-    cli_utils.establish_connection(ctx)
-    
-
-    storagecontainerids = parser.parse_array(storagecontainerids)
-    
-
-    ctx.logger.info("""storagecontainerids = """+str(storagecontainerids)+""";"""+"")
-    try:
-        _ListStorageContainersResult = ctx.element.list_storage_containers(storage_container_ids=storagecontainerids)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ListStorageContainersResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_ListStorageContainersResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
+    """modifystoragecontainer createstoragecontainer list getstoragecontainerefficiency delete """
 
 @cli.command('modifystoragecontainer', short_help="""ModifyStorageContainer enables you to make changes to an existing virtual volume storage container. """, cls=SolidFireCommand)
 @click.option('--storagecontainerid',
@@ -104,6 +70,94 @@ def modifystoragecontainer(ctx,
         return
     else:
         cli_utils.print_result(_ModifyStorageContainerResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('createstoragecontainer', short_help="""CreateStorageContainer enables you to create a Virtual Volume (VVol) storage container. Storage containers are associated with a SolidFire storage system account, and are used for reporting and resource allocation. Storage containers can only be associated with virtual volumes. You need at least one storage container to use the Virtual Volumes feature. """, cls=SolidFireCommand)
+@click.option('--name',
+              type=str,
+              required=True,
+              prompt=True,
+              help="""The name of the storage container. Follows SolidFire account naming restrictions. """)
+@click.option('--initiatorsecret',
+              type=str,
+              required=False,
+              help="""The secret for CHAP authentication for the initiator. """)
+@click.option('--targetsecret',
+              type=str,
+              required=False,
+              help="""The secret for CHAP authentication for the target. """)
+@click.option('--accountid',
+              type=int,
+              required=False,
+              help="""Non-storage container account that will become a storage container. """)
+@pass_context
+def createstoragecontainer(ctx,
+           # Mandatory main parameter
+           name,
+           # Optional main parameter
+           initiatorsecret = None,
+           # Optional main parameter
+           targetsecret = None,
+           # Optional main parameter
+           accountid = None):
+    """CreateStorageContainer enables you to create a Virtual Volume (VVol) storage container. Storage containers are associated with a SolidFire storage system account, and are used for reporting and resource allocation. Storage containers can only be associated with virtual volumes. You need at least one storage container to use the Virtual Volumes feature."""
+
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+    
+    
+
+    ctx.logger.info("""name = """+str(name)+""";"""+"""initiatorsecret = """+str(initiatorsecret)+""";"""+"""targetsecret = """+str(targetsecret)+""";"""+"""accountid = """+str(accountid)+""";"""+"")
+    try:
+        _CreateStorageContainerResult = ctx.element.create_storage_container(name=name, initiator_secret=initiatorsecret, target_secret=targetsecret, account_id=accountid)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_CreateStorageContainerResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_CreateStorageContainerResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('list', short_help="""ListStorageContainers enables you to retrieve information about all virtual volume storage containers known to the system. """, cls=SolidFireCommand)
+@click.option('--storagecontainerids',
+              type=str,
+              required=False,
+              help="""A list of storage container IDs for which to retrieve information. If you omit this parameter, the method returns information about all storage containers in the system. """)
+@pass_context
+def list(ctx,
+           # Optional main parameter
+           storagecontainerids = None):
+    """ListStorageContainers enables you to retrieve information about all virtual volume storage containers known to the system."""
+
+    cli_utils.establish_connection(ctx)
+    
+
+    storagecontainerids = parser.parse_array(storagecontainerids)
+    
+
+    ctx.logger.info("""storagecontainerids = """+str(storagecontainerids)+""";"""+"")
+    try:
+        _ListStorageContainersResult = ctx.element.list_storage_containers(storage_container_ids=storagecontainerids)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListStorageContainersResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListStorageContainersResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -173,58 +227,4 @@ def delete(ctx,
         return
     else:
         cli_utils.print_result(_DeleteStorageContainerResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('createstoragecontainer', short_help="""CreateStorageContainer enables you to create a Virtual Volume (VVol) storage container. Storage containers are associated with a SolidFire storage system account, and are used for reporting and resource allocation. Storage containers can only be associated with virtual volumes. You need at least one storage container to use the Virtual Volumes feature. """, cls=SolidFireCommand)
-@click.option('--name',
-              type=str,
-              required=True,
-              prompt=True,
-              help="""The name of the storage container. Follows SolidFire account naming restrictions. """)
-@click.option('--initiatorsecret',
-              type=str,
-              required=False,
-              help="""The secret for CHAP authentication for the initiator. """)
-@click.option('--targetsecret',
-              type=str,
-              required=False,
-              help="""The secret for CHAP authentication for the target. """)
-@click.option('--accountid',
-              type=int,
-              required=False,
-              help="""Non-storage container account that will become a storage container. """)
-@pass_context
-def createstoragecontainer(ctx,
-           # Mandatory main parameter
-           name,
-           # Optional main parameter
-           initiatorsecret = None,
-           # Optional main parameter
-           targetsecret = None,
-           # Optional main parameter
-           accountid = None):
-    """CreateStorageContainer enables you to create a Virtual Volume (VVol) storage container. Storage containers are associated with a SolidFire storage system account, and are used for reporting and resource allocation. Storage containers can only be associated with virtual volumes. You need at least one storage container to use the Virtual Volumes feature."""
-
-    cli_utils.establish_connection(ctx)
-    
-    
-    
-    
-    
-
-    ctx.logger.info("""name = """+str(name)+""";"""+"""initiatorsecret = """+str(initiatorsecret)+""";"""+"""targetsecret = """+str(targetsecret)+""";"""+"""accountid = """+str(accountid)+""";"""+"")
-    try:
-        _CreateStorageContainerResult = ctx.element.create_storage_container(name=name, initiator_secret=initiatorsecret, target_secret=targetsecret, account_id=accountid)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_CreateStorageContainerResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_CreateStorageContainerResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

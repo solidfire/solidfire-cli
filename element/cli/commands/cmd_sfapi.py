@@ -35,7 +35,7 @@ def cli(ctx):
 @click.option('--parameters',
               type=str,
               required=False,
-              help="""An object, normally a dictionary or hashtable of the key/value pairs, to be passed as the params for the method being invoked. """)
+              help="""An object, normally a dictionary or hashtable of the key/value pairs, to be passed as the params for the method being invoked.  Has the following subparameters: """)
 @pass_context
 def invoke(ctx,
            # Mandatory main parameter
@@ -48,11 +48,20 @@ def invoke(ctx,
     cli_utils.establish_connection(ctx)
     
     
+
+    kwargsDict = None
+
+    if(parameters is not None):
+        try:
+            kwargsDict = simplejson.loads(parameters)
+        except Exception as e:
+            ctx.logger.error(e.__str__())
+            exit(1)
     
 
     ctx.logger.info("""method = """+str(method)+""";"""+"""parameters = """+str(parameters)+""";"""+"")
     try:
-        _dict = ctx.element.invoke_sfapi(method=method, parameters=parameters)
+        _dict = ctx.element.invoke_sfapi(method=method, parameters=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
