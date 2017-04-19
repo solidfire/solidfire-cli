@@ -24,55 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """list create modify delete """
-
-@cli.command('list', short_help="""ListInitiators enables you to list initiator IQNs or World Wide Port Names (WWPNs). """, cls=SolidFireCommand)
-@click.option('--startinitiatorid',
-              type=int,
-              required=False,
-              help="""The initiator ID at which to begin the listing. You can supply this parameter or the "initiators" parameter, but not both. """)
-@click.option('--limit',
-              type=int,
-              required=False,
-              help="""The maximum number of initiator objects to return. """)
-@click.option('--initiators',
-              type=str,
-              required=False,
-              help="""A list of initiator IDs to retrieve. You can provide a value for this parameter or the "startInitiatorID" parameter, but not both. """)
-@pass_context
-def list(ctx,
-           # Optional main parameter
-           startinitiatorid = None,
-           # Optional main parameter
-           limit = None,
-           # Optional main parameter
-           initiators = None):
-    """ListInitiators enables you to list initiator IQNs or World Wide Port Names (WWPNs)."""
-
-    cli_utils.establish_connection(ctx)
-    
-    
-    
-
-    initiators = parser.parse_array(initiators)
-    
-
-    ctx.logger.info("""startinitiatorid = """+str(startinitiatorid)+";" + """limit = """+str(limit)+";" + """initiators = """+str(initiators)+""";"""+"")
-    try:
-        _ListInitiatorsResult = ctx.element.list_initiators(start_initiator_id=startinitiatorid, limit=limit, initiators=initiators)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ListInitiatorsResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_ListInitiatorsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
+    """create delete modify list """
 
 @cli.command('create', short_help="""CreateInitiators enables you to create multiple new initiator IQNs or World Wide Port Names (WWPNs) and optionally assign them aliases and attributes. When you use CreateInitiators to create new initiators, you can also add them to volume access groups. If CreateInitiators fails to create one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible). """, cls=SolidFireCommand)
 @click.option('--initiators',
@@ -151,7 +103,7 @@ def create(ctx,
             exit(1)
     
 
-    ctx.logger.info("""initiators = """ + str(initiatorsArray)+""";"""+"")
+    ctx.logger.info(""": """"""initiators = """ + str(initiatorsArray)+""";"""+"")
     try:
         _CreateInitiatorsResult = ctx.element.create_initiators(initiators=initiatorsArray)
     except common.ApiServerError as e:
@@ -165,6 +117,44 @@ def create(ctx,
         return
     else:
         cli_utils.print_result(_CreateInitiatorsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('delete', short_help="""DeleteInitiators enables you to delete one or more initiators from the system (and from any associated volumes or volume access groups). If DeleteInitiators fails to delete one of the initiators provided in the parameter, the system returns an error and does not delete any initiators (no partial completion is possible). """, cls=SolidFireCommand)
+@click.option('--initiators',
+              type=str,
+              required=True,
+              prompt=True,
+              help="""An array of IDs of initiators to delete. """)
+@pass_context
+def delete(ctx,
+           # Mandatory main parameter
+           initiators):
+    """DeleteInitiators enables you to delete one or more initiators from the system (and from any associated volumes or volume access"""
+    """groups)."""
+    """If DeleteInitiators fails to delete one of the initiators provided in the parameter, the system returns an error and does not delete any"""
+    """initiators (no partial completion is possible)."""
+
+    cli_utils.establish_connection(ctx)
+    
+
+    initiators = parser.parse_array(initiators)
+    
+
+    ctx.logger.info(""": """"""initiators = """ + str(initiators)+""";"""+"")
+    try:
+        _DeleteInitiatorsResult = ctx.element.delete_initiators(initiators=initiators)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_DeleteInitiatorsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_DeleteInitiatorsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -246,7 +236,7 @@ def modify(ctx,
             exit(1)
     
 
-    ctx.logger.info("""initiators = """ + str(initiatorsArray)+""";"""+"")
+    ctx.logger.info(""": """"""initiators = """ + str(initiatorsArray)+""";"""+"")
     try:
         _ModifyInitiatorsResult = ctx.element.modify_initiators(initiators=initiatorsArray)
     except common.ApiServerError as e:
@@ -263,30 +253,40 @@ def modify(ctx,
 
 
 
-@cli.command('delete', short_help="""DeleteInitiators enables you to delete one or more initiators from the system (and from any associated volumes or volume access groups). If DeleteInitiators fails to delete one of the initiators provided in the parameter, the system returns an error and does not delete any initiators (no partial completion is possible). """, cls=SolidFireCommand)
+@cli.command('list', short_help="""ListInitiators enables you to list initiator IQNs or World Wide Port Names (WWPNs). """, cls=SolidFireCommand)
+@click.option('--startinitiatorid',
+              type=int,
+              required=False,
+              help="""The initiator ID at which to begin the listing. You can supply this parameter or the "initiators" parameter, but not both. """)
+@click.option('--limit',
+              type=int,
+              required=False,
+              help="""The maximum number of initiator objects to return. """)
 @click.option('--initiators',
               type=str,
-              required=True,
-              prompt=True,
-              help="""An array of IDs of initiators to delete. """)
+              required=False,
+              help="""A list of initiator IDs to retrieve. You can provide a value for this parameter or the "startInitiatorID" parameter, but not both. """)
 @pass_context
-def delete(ctx,
-           # Mandatory main parameter
-           initiators):
-    """DeleteInitiators enables you to delete one or more initiators from the system (and from any associated volumes or volume access"""
-    """groups)."""
-    """If DeleteInitiators fails to delete one of the initiators provided in the parameter, the system returns an error and does not delete any"""
-    """initiators (no partial completion is possible)."""
+def list(ctx,
+           # Optional main parameter
+           startinitiatorid = None,
+           # Optional main parameter
+           limit = None,
+           # Optional main parameter
+           initiators = None):
+    """ListInitiators enables you to list initiator IQNs or World Wide Port Names (WWPNs)."""
 
     cli_utils.establish_connection(ctx)
+    
+    
     
 
     initiators = parser.parse_array(initiators)
     
 
-    ctx.logger.info("""initiators = """ + str(initiators)+""";"""+"")
+    ctx.logger.info(""": """"""startinitiatorid = """+str(startinitiatorid)+";" + """limit = """+str(limit)+";" + """initiators = """+str(initiators)+""";"""+"")
     try:
-        _DeleteInitiatorsResult = ctx.element.delete_initiators(initiators=initiators)
+        _ListInitiatorsResult = ctx.element.list_initiators(start_initiator_id=startinitiatorid, limit=limit, initiators=initiators)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -294,8 +294,8 @@ def delete(ctx,
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_DeleteInitiatorsResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_ListInitiatorsResult), indent=4))
         return
     else:
-        cli_utils.print_result(_DeleteInitiatorsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_ListInitiatorsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

@@ -24,7 +24,43 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """resetnode networking shutdown services """
+    """networking resetnode shutdown services """
+
+@cli.command('networking', short_help="""The RestartNetworking API method enables you to restart the networking services on a node. Warning: This method restarts all networking services on a node, causing temporary loss of networking connectivity. Exercise caution when using this method. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
+@click.option('--force',
+              type=bool,
+              required=True,
+              prompt=True,
+              help="""Required parameter to successfully reset the node. """)
+@pass_context
+def networking(ctx,
+           # Mandatory main parameter
+           force):
+    """The RestartNetworking API method enables you to restart the networking services on a node."""
+    """Warning: This method restarts all networking services on a node, causing temporary loss of networking connectivity."""
+    """Exercise caution when using this method."""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
+
+    cli_utils.establish_connection(ctx)
+    
+    
+
+    ctx.logger.info(""": """"""force = """ + str(force)+""";"""+"")
+    try:
+        _dict = ctx.element.restart_networking(force=force)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_dict), indent=4))
+        return
+    else:
+        cli_utils.print_result(_dict, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
 
 @cli.command('resetnode', short_help="""The ResetNode API method enables you to reset a node to the factory settings. All data, packages (software upgrades, and so on), configurations, and log files are deleted from the node when you call this method. However, network settings for the node are preserved during this operation. Nodes that are participating in a cluster cannot be reset to the factory settings. The ResetNode API can only be used on nodes that are in an "Available" state. It cannot be used on nodes that are "Active" in a cluster, or in a "Pending" state. Caution: This method clears any data that is on the node. Exercise caution when using this method. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
 @click.option('--build',
@@ -70,7 +106,7 @@ def resetnode(ctx,
     
     
 
-    ctx.logger.info("""build = """ + str(build)+";"+"""force = """ + str(force)+";" + """options = """+str(options)+";" + """reboot = """+str(reboot)+""";"""+"")
+    ctx.logger.info(""": """"""build = """ + str(build)+";"+"""force = """ + str(force)+";" + """options = """+str(options)+";" + """reboot = """+str(reboot)+""";"""+"")
     try:
         _ResetNodeResult = ctx.element.reset_node(build=build, force=force, options=options, reboot=reboot)
     except common.ApiServerError as e:
@@ -84,42 +120,6 @@ def resetnode(ctx,
         return
     else:
         cli_utils.print_result(_ResetNodeResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('networking', short_help="""The RestartNetworking API method enables you to restart the networking services on a node. Warning: This method restarts all networking services on a node, causing temporary loss of networking connectivity. Exercise caution when using this method. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
-@click.option('--force',
-              type=bool,
-              required=True,
-              prompt=True,
-              help="""Required parameter to successfully reset the node. """)
-@pass_context
-def networking(ctx,
-           # Mandatory main parameter
-           force):
-    """The RestartNetworking API method enables you to restart the networking services on a node."""
-    """Warning: This method restarts all networking services on a node, causing temporary loss of networking connectivity."""
-    """Exercise caution when using this method."""
-    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
-
-    cli_utils.establish_connection(ctx)
-    
-    
-
-    ctx.logger.info("""force = """ + str(force)+""";"""+"")
-    try:
-        _dict = ctx.element.restart_networking(force=force)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_dict), indent=4))
-        return
-    else:
-        cli_utils.print_result(_dict, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -149,7 +149,7 @@ def shutdown(ctx,
     
     
 
-    ctx.logger.info("""nodes = """ + str(nodes)+";" + """option = """+str(option)+""";"""+"")
+    ctx.logger.info(""": """"""nodes = """ + str(nodes)+";" + """option = """+str(option)+""";"""+"")
     try:
         _ShutdownResult = ctx.element.shutdown(nodes=nodes, option=option)
     except common.ApiServerError as e:
@@ -198,7 +198,7 @@ def services(ctx,
     
     
 
-    ctx.logger.info("""force = """ + str(force)+";" + """service = """+str(service)+";" + """action = """+str(action)+""";"""+"")
+    ctx.logger.info(""": """"""force = """ + str(force)+";" + """service = """+str(service)+";" + """action = """+str(action)+""";"""+"")
     try:
         _dict = ctx.element.restart_services(force=force, service=service, action=action)
     except common.ApiServerError as e:

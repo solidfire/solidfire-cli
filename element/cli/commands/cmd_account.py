@@ -24,7 +24,142 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """add modify getefficiency remove getbyid getbyname list """
+    """getefficiency getbyname getbyid remove add modify list """
+
+@cli.command('getefficiency', short_help="""GetAccountEfficiency enables you to retrieve efficiency statistics about a volume account. This method returns efficiency information only for the account you specify as a parameter. """, cls=SolidFireCommand)
+@click.option('--accountid',
+              type=int,
+              required=True,
+              prompt=True,
+              help="""Specifies the volume account for which efficiency statistics are returned. """)
+@pass_context
+def getefficiency(ctx,
+           # Mandatory main parameter
+           accountid):
+    """GetAccountEfficiency enables you to retrieve efficiency statistics about a volume account. This method returns efficiency information"""
+    """only for the account you specify as a parameter."""
+
+    cli_utils.establish_connection(ctx)
+    
+    
+
+    ctx.logger.info(""": """"""accountid = """ + str(accountid)+""";"""+"")
+    try:
+        _GetEfficiencyResult = ctx.element.get_account_efficiency(account_id=accountid)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetEfficiencyResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetEfficiencyResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getbyname', short_help="""GetAccountByName enables you to retrieve details about a specific account, given its username. """, cls=SolidFireCommand)
+@click.option('--username',
+              type=str,
+              required=True,
+              prompt=True,
+              help="""Username for the account. """)
+@pass_context
+def getbyname(ctx,
+           # Mandatory main parameter
+           username):
+    """GetAccountByName enables you to retrieve details about a specific account, given its username."""
+
+    cli_utils.establish_connection(ctx)
+    
+    
+
+    ctx.logger.info(""": """"""username = """ + str(username)+""";"""+"")
+    try:
+        _GetAccountResult = ctx.element.get_account_by_name(username=username)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetAccountResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetAccountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getbyid', short_help="""GetAccountByID enables you to return details about a specific account, given its accountID. """, cls=SolidFireCommand)
+@click.option('--accountid',
+              type=int,
+              required=True,
+              prompt=True,
+              help="""Specifies the account for which details are gathered. """)
+@pass_context
+def getbyid(ctx,
+           # Mandatory main parameter
+           accountid):
+    """GetAccountByID enables you to return details about a specific account, given its accountID."""
+
+    cli_utils.establish_connection(ctx)
+    
+    
+
+    ctx.logger.info(""": """"""accountid = """ + str(accountid)+""";"""+"")
+    try:
+        _GetAccountResult = ctx.element.get_account_by_id(account_id=accountid)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetAccountResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetAccountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('remove', short_help="""RemoveAccount enables you to remove an existing account. You must delete and purge all volumes associated with the account using DeleteVolume before you can remove the account. If volumes on the account are still pending deletion, you cannot use RemoveAccount to remove the account. """, cls=SolidFireCommand)
+@click.option('--accountid',
+              type=int,
+              required=True,
+              prompt=True,
+              help="""Specifies the AccountID for the account to be removed. """)
+@pass_context
+def remove(ctx,
+           # Mandatory main parameter
+           accountid):
+    """RemoveAccount enables you to remove an existing account. You must delete and purge all volumes associated with the account"""
+    """using DeleteVolume before you can remove the account. If volumes on the account are still pending deletion, you cannot use"""
+    """RemoveAccount to remove the account."""
+
+    cli_utils.establish_connection(ctx)
+    
+    
+
+    ctx.logger.info(""": """"""accountid = """ + str(accountid)+""";"""+"")
+    try:
+        _RemoveAccountResult = ctx.element.remove_account(account_id=accountid)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_RemoveAccountResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_RemoveAccountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
 
 @cli.command('add', short_help="""You can use AddAccount to add a new account to the system. You can create new volumes under the new account. The CHAP settings you specify for the account apply to all volumes owned by the account. """, cls=SolidFireCommand)
 @click.option('--username',
@@ -75,7 +210,7 @@ def add(ctx,
     if targetsecret == "AUTO-GENERATE-CHAP-SECRET":
         targetsecret = CHAPSecret.auto_generate()
 
-    ctx.logger.info("""username = """ + str(username)+";" + """initiatorsecret = """+str(initiatorsecret)+";" + """targetsecret = """+str(targetsecret)+";" + """attributes = """+str(kwargsDict)+""";"""+"")
+    ctx.logger.info(""": """"""username = """ + str(username)+";" + """initiatorsecret = """+str(initiatorsecret)+";" + """targetsecret = """+str(targetsecret)+";" + """attributes = """+str(kwargsDict)+""";"""+"")
     try:
         _AddAccountResult = ctx.element.add_account(username=username, initiator_secret=initiatorsecret, target_secret=targetsecret, attributes=kwargsDict)
     except common.ApiServerError as e:
@@ -159,7 +294,7 @@ def modify(ctx,
     if targetsecret == "AUTO-GENERATE-CHAP-SECRET":
         targetsecret = CHAPSecret.auto_generate()
 
-    ctx.logger.info("""accountid = """ + str(accountid)+";" + """username = """+str(username)+";" + """status = """+str(status)+";" + """initiatorsecret = """+str(initiatorsecret)+";" + """targetsecret = """+str(targetsecret)+";" + """attributes = """+str(kwargsDict)+""";"""+"")
+    ctx.logger.info(""": """"""accountid = """ + str(accountid)+";" + """username = """+str(username)+";" + """status = """+str(status)+";" + """initiatorsecret = """+str(initiatorsecret)+";" + """targetsecret = """+str(targetsecret)+";" + """attributes = """+str(kwargsDict)+""";"""+"")
     try:
         _ModifyAccountResult = ctx.element.modify_account(account_id=accountid, username=username, status=status, initiator_secret=initiatorsecret, target_secret=targetsecret, attributes=kwargsDict)
     except common.ApiServerError as e:
@@ -173,141 +308,6 @@ def modify(ctx,
         return
     else:
         cli_utils.print_result(_ModifyAccountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getefficiency', short_help="""GetAccountEfficiency enables you to retrieve efficiency statistics about a volume account. This method returns efficiency information only for the account you specify as a parameter. """, cls=SolidFireCommand)
-@click.option('--accountid',
-              type=int,
-              required=True,
-              prompt=True,
-              help="""Specifies the volume account for which efficiency statistics are returned. """)
-@pass_context
-def getefficiency(ctx,
-           # Mandatory main parameter
-           accountid):
-    """GetAccountEfficiency enables you to retrieve efficiency statistics about a volume account. This method returns efficiency information"""
-    """only for the account you specify as a parameter."""
-
-    cli_utils.establish_connection(ctx)
-    
-    
-
-    ctx.logger.info("""accountid = """ + str(accountid)+""";"""+"")
-    try:
-        _GetEfficiencyResult = ctx.element.get_account_efficiency(account_id=accountid)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetEfficiencyResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_GetEfficiencyResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('remove', short_help="""RemoveAccount enables you to remove an existing account. You must delete and purge all volumes associated with the account using DeleteVolume before you can remove the account. If volumes on the account are still pending deletion, you cannot use RemoveAccount to remove the account. """, cls=SolidFireCommand)
-@click.option('--accountid',
-              type=int,
-              required=True,
-              prompt=True,
-              help="""Specifies the AccountID for the account to be removed. """)
-@pass_context
-def remove(ctx,
-           # Mandatory main parameter
-           accountid):
-    """RemoveAccount enables you to remove an existing account. You must delete and purge all volumes associated with the account"""
-    """using DeleteVolume before you can remove the account. If volumes on the account are still pending deletion, you cannot use"""
-    """RemoveAccount to remove the account."""
-
-    cli_utils.establish_connection(ctx)
-    
-    
-
-    ctx.logger.info("""accountid = """ + str(accountid)+""";"""+"")
-    try:
-        _RemoveAccountResult = ctx.element.remove_account(account_id=accountid)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_RemoveAccountResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_RemoveAccountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getbyid', short_help="""GetAccountByID enables you to return details about a specific account, given its accountID. """, cls=SolidFireCommand)
-@click.option('--accountid',
-              type=int,
-              required=True,
-              prompt=True,
-              help="""Specifies the account for which details are gathered. """)
-@pass_context
-def getbyid(ctx,
-           # Mandatory main parameter
-           accountid):
-    """GetAccountByID enables you to return details about a specific account, given its accountID."""
-
-    cli_utils.establish_connection(ctx)
-    
-    
-
-    ctx.logger.info("""accountid = """ + str(accountid)+""";"""+"")
-    try:
-        _GetAccountResult = ctx.element.get_account_by_id(account_id=accountid)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetAccountResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_GetAccountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getbyname', short_help="""GetAccountByName enables you to retrieve details about a specific account, given its username. """, cls=SolidFireCommand)
-@click.option('--username',
-              type=str,
-              required=True,
-              prompt=True,
-              help="""Username for the account. """)
-@pass_context
-def getbyname(ctx,
-           # Mandatory main parameter
-           username):
-    """GetAccountByName enables you to retrieve details about a specific account, given its username."""
-
-    cli_utils.establish_connection(ctx)
-    
-    
-
-    ctx.logger.info("""username = """ + str(username)+""";"""+"")
-    try:
-        _GetAccountResult = ctx.element.get_account_by_name(username=username)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetAccountResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_GetAccountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -340,7 +340,7 @@ def list(ctx,
     
     
 
-    ctx.logger.info("""startaccountid = """+str(startaccountid)+";" + """limit = """+str(limit)+";" + """includestoragecontainers = """+str(includestoragecontainers)+""";"""+"")
+    ctx.logger.info(""": """"""startaccountid = """+str(startaccountid)+";" + """limit = """+str(limit)+";" + """includestoragecontainers = """+str(includestoragecontainers)+""";"""+"")
     try:
         _ListAccountsResult = ctx.element.list_accounts(start_account_id=startaccountid, limit=limit, include_storage_containers=includestoragecontainers)
     except common.ApiServerError as e:
