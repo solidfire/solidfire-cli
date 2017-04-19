@@ -24,7 +24,33 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """listvolumestatsbyvirtualvolume gethardwareinfo getcompletestats listvolumestats getrawstats listdrivestats """
+    """getcompletestats listvolumestatsbyvirtualvolume listvolumestats getrawstats listdrivestats gethardwareinfo """
+
+@cli.command('getcompletestats', short_help="""NetApp engineering uses the GetCompleteStats API method to troubleshoot new features. The data returned from GetCompleteStats is not documented, changes frequently, and is not guaranteed to be accurate. NetApp does not recommend using GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster. """, cls=SolidFireCommand)
+@pass_context
+def getcompletestats(ctx):
+    """NetApp engineering uses the GetCompleteStats API method to troubleshoot new features. The data returned from GetCompleteStats is not documented, changes frequently, and is not guaranteed to be accurate. NetApp does not recommend using GetCompleteStats for collecting performance data or any other"""
+    """management integration with a SolidFire cluster."""
+
+    cli_utils.establish_connection(ctx)
+    
+
+    ctx.logger.info(""": """+""";"""+"")
+    try:
+        _dict = ctx.element.get_complete_stats()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_dict), indent=4))
+        return
+    else:
+        cli_utils.print_result(_dict, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
 
 @cli.command('listvolumestatsbyvirtualvolume', short_help="""ListVolumeStatsByVirtualVolume enables you to list volume statistics for any volumes in the system that are associated with virtual volumes. Statistics are cumulative from the creation of the volume. """, cls=SolidFireCommand)
 @click.option('--virtualvolumeids',
@@ -57,57 +83,6 @@ def listvolumestatsbyvirtualvolume(ctx,
         return
     else:
         cli_utils.print_result(_ListVolumeStatsByVirtualVolumeResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('gethardwareinfo', short_help="""The GetHardwareInfo API method enables you to return hardware information and status for a single node. This generally includes details about manufacturers, vendors, versions, drives, and other associated hardware identification information. """, cls=SolidFireCommand)
-@pass_context
-def gethardwareinfo(ctx):
-    """The GetHardwareInfo API method enables you to return hardware information and status for a single node. This generally includes details about manufacturers, vendors, versions, drives, and other associated hardware identification information."""
-
-    cli_utils.establish_connection(ctx)
-    
-
-    ctx.logger.info(""": """+""";"""+"")
-    try:
-        _GetHardwareInfoResult = ctx.element.get_hardware_info()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetHardwareInfoResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_GetHardwareInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getcompletestats', short_help="""NetApp engineering uses the GetCompleteStats API method to troubleshoot new features. The data returned from GetCompleteStats is not documented, changes frequently, and is not guaranteed to be accurate. NetApp does not recommend using GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster. """, cls=SolidFireCommand)
-@pass_context
-def getcompletestats(ctx):
-    """NetApp engineering uses the GetCompleteStats API method to troubleshoot new features. The data returned from GetCompleteStats is not documented, changes frequently, and is not guaranteed to be accurate. NetApp does not recommend using GetCompleteStats for collecting performance data or any other"""
-    """management integration with a SolidFire cluster."""
-
-    cli_utils.establish_connection(ctx)
-    
-
-    ctx.logger.info(""": """+""";"""+"")
-    try:
-        _dict = ctx.element.get_complete_stats()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_dict), indent=4))
-        return
-    else:
-        cli_utils.print_result(_dict, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -202,4 +177,29 @@ def listdrivestats(ctx,
         return
     else:
         cli_utils.print_result(_ListDriveStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('gethardwareinfo', short_help="""The GetHardwareInfo API method enables you to return hardware information and status for a single node. This generally includes details about manufacturers, vendors, versions, drives, and other associated hardware identification information. """, cls=SolidFireCommand)
+@pass_context
+def gethardwareinfo(ctx):
+    """The GetHardwareInfo API method enables you to return hardware information and status for a single node. This generally includes details about manufacturers, vendors, versions, drives, and other associated hardware identification information."""
+
+    cli_utils.establish_connection(ctx)
+    
+
+    ctx.logger.info(""": """+""";"""+"")
+    try:
+        _GetHardwareInfoResult = ctx.element.get_hardware_info()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetHardwareInfoResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetHardwareInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
