@@ -45,6 +45,11 @@ def invoke(ctx,
     """This will invoke any API method supported by the SolidFire API for the version and port the connection is using."""
     """Returns a nested hashtable of key/value pairs that contain the result of the invoked method."""
 
+    
+    if ctx.json is True:
+        ctx.logger.error("This command does not support the -j field. If you really need it, use sfapi invoke.")
+        exit(1)
+
     cli_utils.establish_connection(ctx)
     
     

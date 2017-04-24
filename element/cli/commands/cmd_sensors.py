@@ -37,6 +37,8 @@ def getipmiconfig(ctx,
            chassistype = None):
     """GetIpmiConfig enables you to retrieve hardware sensor information from sensors that are in your node."""
 
+    
+
     cli_utils.establish_connection(ctx)
     
     
@@ -62,6 +64,8 @@ def getipmiconfig(ctx,
 @pass_context
 def getipmiinfo(ctx):
     """GetIpmiInfo enables you to display a detailed reporting of sensors (objects) for node fans, intake and exhaust temperatures, and power supplies that are monitored by the system."""
+
+    
 
     cli_utils.establish_connection(ctx)
     

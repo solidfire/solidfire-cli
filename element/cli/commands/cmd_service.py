@@ -31,6 +31,8 @@ def cli(ctx):
 def list(ctx):
     """You can use ListServices to return the services information for nodes, drives, current software, and other services that are running on the cluster."""
 
+    
+
     cli_utils.establish_connection(ctx)
     
 

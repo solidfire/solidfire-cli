@@ -38,6 +38,8 @@ def list(ctx,
     """ListProtocolEndpoints enables you to retrieve information about all protocol endpoints in the cluster. Protocol endpoints govern"""
     """access to their associated virtual volume storage containers."""
 
+    
+
     cli_utils.establish_connection(ctx)
     
 
