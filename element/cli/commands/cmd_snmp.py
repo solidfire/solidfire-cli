@@ -24,7 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """setacl sendtesttraps enable gettrapinfo getacl settrapinfo setinfo getinfo disable getstate """
+    """setacl getinfo setinfo sendtesttraps disable gettrapinfo settrapinfo getacl getstate enable """
 
 @cli.command('setacl', short_help="""SetSnmpACL enables you to configure SNMP access permissions on the cluster nodes. The values you set with this interface apply to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to SetSnmpACL. Also note that the values set with this interface replace all network or usmUsers values set with the older SetSnmpInfo. """, cls=SolidFireCommand)
 @click.option('--networks',
@@ -157,7 +157,7 @@ def setacl(ctx,
 
     networksArray = None
     if len(networks) == 1 and accessnetworks[0] is None and cidr[0] is None and community[0] is None and network[0] is None:
-        remotehostsArray = []
+        networksArray = []
     elif(networks is not None and networks != ()):
         networksArray = []
         try:
@@ -170,7 +170,7 @@ def setacl(ctx,
 
     usmusersArray = None
     if len(usmusers) == 1 and accessusmusers[0] is None and name[0] is None and password[0] is None and passphrase[0] is None and seclevel[0] is None:
-        remotehostsArray = []
+        usmusersArray = []
     elif(usmusers is not None and usmusers != ()):
         usmusersArray = []
         try:
@@ -198,10 +198,13 @@ def setacl(ctx,
 
 
 
-@cli.command('sendtesttraps', short_help="""SnmpSendTestTraps enables you to test SNMP functionality for a cluster. This method instructs the cluster to send test SNMP traps to the currently configured SNMP manager. """, cls=SolidFireCommand)
+@cli.command('getinfo', short_help="""GetSnmpInfo enables you to retrieve the current simple network management protocol (SNMP) configuration information. Note: GetSnmpInfo is available for Element OS 8 and prior releases. It is deprecated for versions later than Element OS 8. NetApp recommends that you migrate to the GetSnmpState and SetSnmpACL methods. See details in the Element API Reference Guide for their descriptions and usage. """, cls=SolidFireCommand)
 @pass_context
-def sendtesttraps(ctx):
-    """SnmpSendTestTraps enables you to test SNMP functionality for a cluster. This method instructs the cluster to send test SNMP traps to the currently configured SNMP manager."""
+def getinfo(ctx):
+    """GetSnmpInfo enables you to retrieve the current simple network management protocol (SNMP) configuration information."""
+    """Note: GetSnmpInfo is available for Element OS 8 and prior releases. It is deprecated for versions later than Element OS 8."""
+    """NetApp recommends that you migrate to the GetSnmpState and SetSnmpACL methods. See details in the Element API Reference Guide"""
+    """for their descriptions and usage."""
 
     
 
@@ -210,7 +213,7 @@ def sendtesttraps(ctx):
 
     ctx.logger.info(""": """+""";"""+"")
     try:
-        _SnmpSendTestTrapsResult = ctx.element.snmp_send_test_traps()
+        _GetSnmpInfoResult = ctx.element.get_snmp_info()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -218,206 +221,10 @@ def sendtesttraps(ctx):
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_SnmpSendTestTrapsResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_GetSnmpInfoResult), indent=4))
         return
     else:
-        cli_utils.print_result(_SnmpSendTestTrapsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('enable', short_help="""EnableSnmp enables you to enable SNMP on cluster nodes. When you enable SNMP, the action applies to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to EnableSnmp. """, cls=SolidFireCommand)
-@click.option('--snmpv3enabled',
-              type=bool,
-              required=True,
-              prompt=True,
-              help="""If set to "true", then SNMP v3 is enabled on each node in the cluster. If set to "false", then SNMP v2 is enabled. """)
-@pass_context
-def enable(ctx,
-           # Mandatory main parameter
-           snmpv3enabled):
-    """EnableSnmp enables you to enable SNMP on cluster nodes. When you enable SNMP, the action applies to all nodes in the cluster, and"""
-    """the values that are passed replace, in whole, all values set in any previous call to EnableSnmp."""
-
-    
-
-    cli_utils.establish_connection(ctx)
-    
-    
-
-    ctx.logger.info(""": """"""snmpv3enabled = """ + str(snmpv3enabled)+""";"""+"")
-    try:
-        _EnableSnmpResult = ctx.element.enable_snmp(snmp_v3_enabled=snmpv3enabled)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_EnableSnmpResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_EnableSnmpResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('gettrapinfo', short_help="""You can use GetSnmpTrapInfo to return current SNMP trap configuration information. """, cls=SolidFireCommand)
-@pass_context
-def gettrapinfo(ctx):
-    """You can use GetSnmpTrapInfo to return current SNMP trap configuration information."""
-
-    
-
-    cli_utils.establish_connection(ctx)
-    
-
-    ctx.logger.info(""": """+""";"""+"")
-    try:
-        _GetSnmpTrapInfoResult = ctx.element.get_snmp_trap_info()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetSnmpTrapInfoResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_GetSnmpTrapInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getacl', short_help="""GetSnmpACL enables you to return the current SNMP access permissions on the cluster nodes. """, cls=SolidFireCommand)
-@pass_context
-def getacl(ctx):
-    """GetSnmpACL enables you to return the current SNMP access permissions on the cluster nodes."""
-
-    
-
-    cli_utils.establish_connection(ctx)
-    
-
-    ctx.logger.info(""": """+""";"""+"")
-    try:
-        _GetSnmpACLResult = ctx.element.get_snmp_acl()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetSnmpACLResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_GetSnmpACLResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('settrapinfo', short_help="""You can use SetSnmpTrapInfo to enable and disable the generation of cluster SNMP notifications (traps) and to specify the set of network host computers that receive the notifications. The values you pass with each SetSnmpTrapInfo method call replace all values set in any previous call to SetSnmpTrapInfo. """, cls=SolidFireCommand)
-@click.option('--traprecipients',
-              cls=SolidFireOption,
-              is_flag=True,
-              multiple=True,
-              subparameters=["host", "community", "port", ],
-              required=True,
-              help="""List of hosts that are to receive the traps generated by the Cluster Master. At least one object is required if any one of the trap types is enabled.  Has the following subparameters: --host --community --port """)
-@click.option('--host',
-              required=True,
-              prompt=True,
-              multiple=True,
-              type=str,
-              default=None,
-              is_sub_parameter=True,
-              help="""[subparameter] The IP address or host name of the target network management station. """,
-              cls=SolidFireOption)
-@click.option('--community',
-              required=True,
-              prompt=True,
-              multiple=True,
-              type=str,
-              default=None,
-              is_sub_parameter=True,
-              help="""[subparameter] SNMP community string. """,
-              cls=SolidFireOption)
-@click.option('--port',
-              required=True,
-              prompt=True,
-              multiple=True,
-              type=int,
-              default=None,
-              is_sub_parameter=True,
-              help="""[subparameter] The UDP port number on the host where the trap is to be sent. Valid range is 1 - 65535. 0 (zero) is not a valid port number. Default is 162. """,
-              cls=SolidFireOption)
-@click.option('--clusterfaulttrapsenabled',
-              type=bool,
-              required=True,
-              prompt=True,
-              help="""If the value is set to true, a corresponding solidFireClusterFaultNotification is sent to the configured list of trap recipients when a cluster fault is logged. The default value is false. """)
-@click.option('--clusterfaultresolvedtrapsenabled',
-              type=bool,
-              required=True,
-              prompt=True,
-              help="""If the value is set to true, a corresponding solidFireClusterFaultResolvedNotification is sent to the configured list of trap recipients when a cluster fault is resolved. The default value is false. """)
-@click.option('--clustereventtrapsenabled',
-              type=bool,
-              required=True,
-              prompt=True,
-              help="""If the value is set to true, a corresponding solidFireClusterEventNotification is sent to the configured list of trap recipients when a cluster event is logged. The default value is false. """)
-@pass_context
-def settrapinfo(ctx,
-           # Mandatory main parameter
-           traprecipients,
-           # Mandatory main parameter
-           clusterfaulttrapsenabled,
-           # Mandatory main parameter
-           clusterfaultresolvedtrapsenabled,
-           # Mandatory main parameter
-           clustereventtrapsenabled,
-           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
-           host,
-           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
-           community,
-           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
-           port):
-    """You can use SetSnmpTrapInfo to enable and disable the generation of cluster SNMP notifications (traps) and to specify the set of network host computers that receive the notifications. The values you pass with each SetSnmpTrapInfo method call replace all values set in any previous call to SetSnmpTrapInfo."""
-
-    
-
-    cli_utils.establish_connection(ctx)
-    
-
-    traprecipientsArray = None
-    if len(traprecipients) == 1 and host[0] is None and community[0] is None and port[0] is None:
-        remotehostsArray = []
-    elif(traprecipients is not None and traprecipients != ()):
-        traprecipientsArray = []
-        try:
-            for i, _traprecipients in enumerate(traprecipients):
-                traprecipientsArray.append(SnmpTrapRecipient(host=host[i], community=community[i], port=port[i], ))
-        except Exception as e:
-            ctx.logger.error(e.__str__())
-            exit(1)
-    
-    
-    
-    
-
-    ctx.logger.info(""": """"""traprecipients = """ + str(traprecipientsArray)+";"+"""clusterfaulttrapsenabled = """ + str(clusterfaulttrapsenabled)+";"+"""clusterfaultresolvedtrapsenabled = """ + str(clusterfaultresolvedtrapsenabled)+";"+"""clustereventtrapsenabled = """ + str(clustereventtrapsenabled)+""";"""+"")
-    try:
-        _SetSnmpTrapInfoResult = ctx.element.set_snmp_trap_info(trap_recipients=traprecipientsArray, cluster_fault_traps_enabled=clusterfaulttrapsenabled, cluster_fault_resolved_traps_enabled=clusterfaultresolvedtrapsenabled, cluster_event_traps_enabled=clustereventtrapsenabled)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_SetSnmpTrapInfoResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_SetSnmpTrapInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_GetSnmpInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -555,7 +362,7 @@ def setinfo(ctx,
 
     networksArray = None
     if len(networks) == 1 and accessnetworks[0] is None and cidr[0] is None and community[0] is None and network[0] is None:
-        remotehostsArray = []
+        networksArray = []
     elif(networks is not None and networks != ()):
         networksArray = []
         try:
@@ -570,7 +377,7 @@ def setinfo(ctx,
 
     usmusersArray = None
     if len(usmusers) == 1 and accessusmusers[0] is None and name[0] is None and password[0] is None and passphrase[0] is None and seclevel[0] is None:
-        remotehostsArray = []
+        usmusersArray = []
     elif(usmusers is not None and usmusers != ()):
         usmusersArray = []
         try:
@@ -598,13 +405,10 @@ def setinfo(ctx,
 
 
 
-@cli.command('getinfo', short_help="""GetSnmpInfo enables you to retrieve the current simple network management protocol (SNMP) configuration information. Note: GetSnmpInfo is available for Element OS 8 and prior releases. It is deprecated for versions later than Element OS 8. NetApp recommends that you migrate to the GetSnmpState and SetSnmpACL methods. See details in the Element API Reference Guide for their descriptions and usage. """, cls=SolidFireCommand)
+@cli.command('sendtesttraps', short_help="""SnmpSendTestTraps enables you to test SNMP functionality for a cluster. This method instructs the cluster to send test SNMP traps to the currently configured SNMP manager. """, cls=SolidFireCommand)
 @pass_context
-def getinfo(ctx):
-    """GetSnmpInfo enables you to retrieve the current simple network management protocol (SNMP) configuration information."""
-    """Note: GetSnmpInfo is available for Element OS 8 and prior releases. It is deprecated for versions later than Element OS 8."""
-    """NetApp recommends that you migrate to the GetSnmpState and SetSnmpACL methods. See details in the Element API Reference Guide"""
-    """for their descriptions and usage."""
+def sendtesttraps(ctx):
+    """SnmpSendTestTraps enables you to test SNMP functionality for a cluster. This method instructs the cluster to send test SNMP traps to the currently configured SNMP manager."""
 
     
 
@@ -613,7 +417,7 @@ def getinfo(ctx):
 
     ctx.logger.info(""": """+""";"""+"")
     try:
-        _GetSnmpInfoResult = ctx.element.get_snmp_info()
+        _SnmpSendTestTrapsResult = ctx.element.snmp_send_test_traps()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -621,10 +425,10 @@ def getinfo(ctx):
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetSnmpInfoResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_SnmpSendTestTrapsResult), indent=4))
         return
     else:
-        cli_utils.print_result(_GetSnmpInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_SnmpSendTestTrapsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -655,6 +459,166 @@ def disable(ctx):
 
 
 
+@cli.command('gettrapinfo', short_help="""You can use GetSnmpTrapInfo to return current SNMP trap configuration information. """, cls=SolidFireCommand)
+@pass_context
+def gettrapinfo(ctx):
+    """You can use GetSnmpTrapInfo to return current SNMP trap configuration information."""
+
+    
+
+    cli_utils.establish_connection(ctx)
+    
+
+    ctx.logger.info(""": """+""";"""+"")
+    try:
+        _GetSnmpTrapInfoResult = ctx.element.get_snmp_trap_info()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetSnmpTrapInfoResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetSnmpTrapInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('settrapinfo', short_help="""You can use SetSnmpTrapInfo to enable and disable the generation of cluster SNMP notifications (traps) and to specify the set of network host computers that receive the notifications. The values you pass with each SetSnmpTrapInfo method call replace all values set in any previous call to SetSnmpTrapInfo. """, cls=SolidFireCommand)
+@click.option('--traprecipients',
+              cls=SolidFireOption,
+              is_flag=True,
+              multiple=True,
+              subparameters=["host", "community", "port", ],
+              required=True,
+              help="""List of hosts that are to receive the traps generated by the Cluster Master. At least one object is required if any one of the trap types is enabled.  Has the following subparameters: --host --community --port """)
+@click.option('--host',
+              required=True,
+              prompt=True,
+              multiple=True,
+              type=str,
+              default=None,
+              is_sub_parameter=True,
+              help="""[subparameter] The IP address or host name of the target network management station. """,
+              cls=SolidFireOption)
+@click.option('--community',
+              required=True,
+              prompt=True,
+              multiple=True,
+              type=str,
+              default=None,
+              is_sub_parameter=True,
+              help="""[subparameter] SNMP community string. """,
+              cls=SolidFireOption)
+@click.option('--port',
+              required=True,
+              prompt=True,
+              multiple=True,
+              type=int,
+              default=None,
+              is_sub_parameter=True,
+              help="""[subparameter] The UDP port number on the host where the trap is to be sent. Valid range is 1 - 65535. 0 (zero) is not a valid port number. Default is 162. """,
+              cls=SolidFireOption)
+@click.option('--clusterfaulttrapsenabled',
+              type=bool,
+              required=True,
+              prompt=True,
+              help="""If the value is set to true, a corresponding solidFireClusterFaultNotification is sent to the configured list of trap recipients when a cluster fault is logged. The default value is false. """)
+@click.option('--clusterfaultresolvedtrapsenabled',
+              type=bool,
+              required=True,
+              prompt=True,
+              help="""If the value is set to true, a corresponding solidFireClusterFaultResolvedNotification is sent to the configured list of trap recipients when a cluster fault is resolved. The default value is false. """)
+@click.option('--clustereventtrapsenabled',
+              type=bool,
+              required=True,
+              prompt=True,
+              help="""If the value is set to true, a corresponding solidFireClusterEventNotification is sent to the configured list of trap recipients when a cluster event is logged. The default value is false. """)
+@pass_context
+def settrapinfo(ctx,
+           # Mandatory main parameter
+           traprecipients,
+           # Mandatory main parameter
+           clusterfaulttrapsenabled,
+           # Mandatory main parameter
+           clusterfaultresolvedtrapsenabled,
+           # Mandatory main parameter
+           clustereventtrapsenabled,
+           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
+           host,
+           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
+           community,
+           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
+           port):
+    """You can use SetSnmpTrapInfo to enable and disable the generation of cluster SNMP notifications (traps) and to specify the set of network host computers that receive the notifications. The values you pass with each SetSnmpTrapInfo method call replace all values set in any previous call to SetSnmpTrapInfo."""
+
+    
+
+    cli_utils.establish_connection(ctx)
+    
+
+    traprecipientsArray = None
+    if len(traprecipients) == 1 and host[0] is None and community[0] is None and port[0] is None:
+        traprecipientsArray = []
+    elif(traprecipients is not None and traprecipients != ()):
+        traprecipientsArray = []
+        try:
+            for i, _traprecipients in enumerate(traprecipients):
+                traprecipientsArray.append(SnmpTrapRecipient(host=host[i], community=community[i], port=port[i], ))
+        except Exception as e:
+            ctx.logger.error(e.__str__())
+            exit(1)
+    
+    
+    
+    
+
+    ctx.logger.info(""": """"""traprecipients = """ + str(traprecipientsArray)+";"+"""clusterfaulttrapsenabled = """ + str(clusterfaulttrapsenabled)+";"+"""clusterfaultresolvedtrapsenabled = """ + str(clusterfaultresolvedtrapsenabled)+";"+"""clustereventtrapsenabled = """ + str(clustereventtrapsenabled)+""";"""+"")
+    try:
+        _SetSnmpTrapInfoResult = ctx.element.set_snmp_trap_info(trap_recipients=traprecipientsArray, cluster_fault_traps_enabled=clusterfaulttrapsenabled, cluster_fault_resolved_traps_enabled=clusterfaultresolvedtrapsenabled, cluster_event_traps_enabled=clustereventtrapsenabled)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_SetSnmpTrapInfoResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_SetSnmpTrapInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getacl', short_help="""GetSnmpACL enables you to return the current SNMP access permissions on the cluster nodes. """, cls=SolidFireCommand)
+@pass_context
+def getacl(ctx):
+    """GetSnmpACL enables you to return the current SNMP access permissions on the cluster nodes."""
+
+    
+
+    cli_utils.establish_connection(ctx)
+    
+
+    ctx.logger.info(""": """+""";"""+"")
+    try:
+        _GetSnmpACLResult = ctx.element.get_snmp_acl()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetSnmpACLResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetSnmpACLResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
 @cli.command('getstate', short_help="""You can use GetSnmpState to return the current state of the SNMP feature. """, cls=SolidFireCommand)
 @pass_context
 def getstate(ctx):
@@ -679,4 +643,40 @@ def getstate(ctx):
         return
     else:
         cli_utils.print_result(_GetSnmpStateResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('enable', short_help="""EnableSnmp enables you to enable SNMP on cluster nodes. When you enable SNMP, the action applies to all nodes in the cluster, and the values that are passed replace, in whole, all values set in any previous call to EnableSnmp. """, cls=SolidFireCommand)
+@click.option('--snmpv3enabled',
+              type=bool,
+              required=True,
+              prompt=True,
+              help="""If set to "true", then SNMP v3 is enabled on each node in the cluster. If set to "false", then SNMP v2 is enabled. """)
+@pass_context
+def enable(ctx,
+           # Mandatory main parameter
+           snmpv3enabled):
+    """EnableSnmp enables you to enable SNMP on cluster nodes. When you enable SNMP, the action applies to all nodes in the cluster, and"""
+    """the values that are passed replace, in whole, all values set in any previous call to EnableSnmp."""
+
+    
+
+    cli_utils.establish_connection(ctx)
+    
+    
+
+    ctx.logger.info(""": """"""snmpv3enabled = """ + str(snmpv3enabled)+""";"""+"")
+    try:
+        _EnableSnmpResult = ctx.element.enable_snmp(snmp_v3_enabled=snmpv3enabled)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_EnableSnmpResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_EnableSnmpResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

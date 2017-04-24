@@ -24,43 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """listvolumestats listdrivestats getrawstats gethardwareinfo listvolumestatsbyvirtualvolume getcompletestats """
-
-@cli.command('listvolumestats', short_help="""ListVolumeStats returns high-level activity measurements for a single volume, list of volumes, or all volumes (if you omit the volumeIDs parameter). Measurement values are cumulative from the creation of the volume. """, cls=SolidFireCommand)
-@click.option('--volumeids',
-              type=str,
-              required=False,
-              help="""A list of volume IDs of volumes from which to retrieve activity information. """)
-@pass_context
-def listvolumestats(ctx,
-           # Optional main parameter
-           volumeids = None):
-    """ListVolumeStats returns high-level activity measurements for a single volume, list of volumes, or all volumes (if you omit the volumeIDs parameter). Measurement values are cumulative from the creation of the volume."""
-
-    
-
-    cli_utils.establish_connection(ctx)
-    
-
-    volumeids = parser.parse_array(volumeids)
-    
-
-    ctx.logger.info(""": """"""volumeids = """+str(volumeids)+""";"""+"")
-    try:
-        _ListVolumeStatsResult = ctx.element.list_volume_stats(volume_ids=volumeids)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ListVolumeStatsResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_ListVolumeStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
+    """listdrivestats listvolumestatsbyvirtualvolume getrawstats gethardwareinfo getcompletestats listvolumestats """
 
 @cli.command('listdrivestats', short_help="""ListDriveStats enables you to retrieve high-level activity measurements for multiple drives in the cluster. By default, this method returns statistics for all drives in the cluster, and these measurements are cumulative from the addition of the drive to the cluster. Some values this method returns are specific to block drives, and some are specific to metadata drives. """, cls=SolidFireCommand)
 @click.option('--drives',
@@ -95,6 +59,42 @@ def listdrivestats(ctx,
         return
     else:
         cli_utils.print_result(_ListDriveStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('listvolumestatsbyvirtualvolume', short_help="""ListVolumeStatsByVirtualVolume enables you to list volume statistics for any volumes in the system that are associated with virtual volumes. Statistics are cumulative from the creation of the volume. """, cls=SolidFireCommand)
+@click.option('--virtualvolumeids',
+              type=str,
+              required=False,
+              help="""A list of one or more virtual volume IDs for which to retrieve information. If you specify this parameter, the method returns information about only these virtual volumes. """)
+@pass_context
+def listvolumestatsbyvirtualvolume(ctx,
+           # Optional main parameter
+           virtualvolumeids = None):
+    """ListVolumeStatsByVirtualVolume enables you to list volume statistics for any volumes in the system that are associated with virtual volumes. Statistics are cumulative from the creation of the volume."""
+
+    
+
+    cli_utils.establish_connection(ctx)
+    
+
+    virtualvolumeids = parser.parse_array(virtualvolumeids)
+    
+
+    ctx.logger.info(""": """"""virtualvolumeids = """+str(virtualvolumeids)+""";"""+"")
+    try:
+        _ListVolumeStatsByVirtualVolumeResult = ctx.element.list_volume_stats_by_virtual_volume(virtual_volume_ids=virtualvolumeids)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListVolumeStatsByVirtualVolumeResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListVolumeStatsByVirtualVolumeResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -153,42 +153,6 @@ def gethardwareinfo(ctx):
 
 
 
-@cli.command('listvolumestatsbyvirtualvolume', short_help="""ListVolumeStatsByVirtualVolume enables you to list volume statistics for any volumes in the system that are associated with virtual volumes. Statistics are cumulative from the creation of the volume. """, cls=SolidFireCommand)
-@click.option('--virtualvolumeids',
-              type=str,
-              required=False,
-              help="""A list of one or more virtual volume IDs for which to retrieve information. If you specify this parameter, the method returns information about only these virtual volumes. """)
-@pass_context
-def listvolumestatsbyvirtualvolume(ctx,
-           # Optional main parameter
-           virtualvolumeids = None):
-    """ListVolumeStatsByVirtualVolume enables you to list volume statistics for any volumes in the system that are associated with virtual volumes. Statistics are cumulative from the creation of the volume."""
-
-    
-
-    cli_utils.establish_connection(ctx)
-    
-
-    virtualvolumeids = parser.parse_array(virtualvolumeids)
-    
-
-    ctx.logger.info(""": """"""virtualvolumeids = """+str(virtualvolumeids)+""";"""+"")
-    try:
-        _ListVolumeStatsByVirtualVolumeResult = ctx.element.list_volume_stats_by_virtual_volume(virtual_volume_ids=virtualvolumeids)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ListVolumeStatsByVirtualVolumeResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_ListVolumeStatsByVirtualVolumeResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
 @cli.command('getcompletestats', short_help="""NetApp engineering uses the GetCompleteStats API method to troubleshoot new features. The data returned from GetCompleteStats is not documented, changes frequently, and is not guaranteed to be accurate. NetApp does not recommend using GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster. """, cls=SolidFireCommand)
 @pass_context
 def getcompletestats(ctx):
@@ -214,4 +178,40 @@ def getcompletestats(ctx):
         return
     else:
         cli_utils.print_result(_dict, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('listvolumestats', short_help="""ListVolumeStats returns high-level activity measurements for a single volume, list of volumes, or all volumes (if you omit the volumeIDs parameter). Measurement values are cumulative from the creation of the volume. """, cls=SolidFireCommand)
+@click.option('--volumeids',
+              type=str,
+              required=False,
+              help="""A list of volume IDs of volumes from which to retrieve activity information. """)
+@pass_context
+def listvolumestats(ctx,
+           # Optional main parameter
+           volumeids = None):
+    """ListVolumeStats returns high-level activity measurements for a single volume, list of volumes, or all volumes (if you omit the volumeIDs parameter). Measurement values are cumulative from the creation of the volume."""
+
+    
+
+    cli_utils.establish_connection(ctx)
+    
+
+    volumeids = parser.parse_array(volumeids)
+    
+
+    ctx.logger.info(""": """"""volumeids = """+str(volumeids)+""";"""+"")
+    try:
+        _ListVolumeStatsResult = ctx.element.list_volume_stats(volume_ids=volumeids)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListVolumeStatsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListVolumeStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
