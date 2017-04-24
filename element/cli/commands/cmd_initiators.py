@@ -24,7 +24,106 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """list delete modify create """
+    """create list modify delete """
+
+@cli.command('create', short_help="""CreateInitiators enables you to create multiple new initiator IQNs or World Wide Port Names (WWPNs) and optionally assign them aliases and attributes. When you use CreateInitiators to create new initiators, you can also add them to volume access groups. If CreateInitiators fails to create one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible). """, cls=SolidFireCommand)
+@click.option('--initiators',
+              cls=SolidFireOption,
+              is_flag=True,
+              multiple=True,
+              subparameters=["name", "alias", "volumeaccessgroupid", "attributes", ],
+              required=True,
+              help="""A list of objects containing characteristics of each new initiator. Values are: name: (Required) The name of the initiator (IQN or WWPN) to create. (String) alias: (Optional) The friendly name to assign to this initiator. (String) attributes: (Optional) A set of JSON attributes to assign to this initiator. (JSON Object) volumeAccessGroupID: (Optional) The ID of the volume access group into to which this newly created initiator will be added. (Integer)  Has the following subparameters: --name --alias --volumeaccessgroupid --attributes """)
+@click.option('--name',
+              required=True,
+              prompt=True,
+              multiple=True,
+              type=str,
+              default=None,
+              is_sub_parameter=True,
+              help="""[subparameter] (Required) The name of the initiator (IQN or WWPN) to create. (String) """,
+              cls=SolidFireOption)
+@click.option('--alias',
+              required=False,
+              multiple=True,
+              type=str,
+              default=None,
+              is_sub_parameter=True,
+              help="""[subparameter] (Optional) The friendly name to assign to this initiator. (String) """,
+              cls=SolidFireOption)
+@click.option('--volumeaccessgroupid',
+              required=False,
+              multiple=True,
+              type=int,
+              default=None,
+              is_sub_parameter=True,
+              help="""[subparameter] (Optional) The ID of the volume access group to which this newly created initiator will be added. (Integer) """,
+              cls=SolidFireOption)
+@click.option('--attributes',
+              required=False,
+              multiple=True,
+              type=str,
+              default=None,
+              is_sub_parameter=True,
+              help="""[subparameter] (Optional) A set of JSON attributes assigned to this initiator. (JSON Object) """,
+              cls=SolidFireOption)
+@pass_context
+def create(ctx,
+           # Mandatory main parameter
+           initiators,
+           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
+           name,
+           # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
+           alias = None,
+           # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
+           volumeaccessgroupid = None,
+           # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
+           attributes = None):
+    """CreateInitiators enables you to create multiple new initiator IQNs or World Wide Port Names (WWPNs) and optionally assign them"""
+    """aliases and attributes. When you use CreateInitiators to create new initiators, you can also add them to volume access groups."""
+    """If CreateInitiators fails to create one of the initiators provided in the parameter, the method returns an error and does not create"""
+    """any initiators (no partial completion is possible)."""
+
+    
+
+    cli_utils.establish_connection(ctx)
+    
+    # If we have a submember that's an attributes array, we need to handle it.
+    attributes_json = [simplejson.loads(v) if v is not None else None for v in attributes]
+    
+
+    initiatorsArray = None
+    if len(initiators) == 1 and name[0] is None and alias[0] is None and volumeaccessgroupid[0] is None and attributes_json[0] is None:
+        initiatorsArray = []
+    elif(initiators is not None and initiators != ()):
+        initiatorsArray = []
+        try:
+            for i, _initiators in enumerate(initiators):
+                attributes_json = None
+                if attributes[i] != None:
+                    attributes_json = simplejson.loads(attributes[i])
+                initiatorsArray.append(CreateInitiator(name=name[i], alias=alias[i], volume_access_group_id=volumeaccessgroupid[i], attributes=attributes_json, ))
+        except Exception as e:
+            ctx.logger.error(e.__str__())
+            exit(1)
+    
+
+    ctx.logger.info(""": """"""initiators = """ + str(initiatorsArray)+""";"""+"")
+    try:
+        _CreateInitiatorsResult = ctx.element.create_initiators(initiators=initiatorsArray)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_CreateInitiatorsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_CreateInitiatorsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
 
 @cli.command('list', short_help="""ListInitiators enables you to list initiator IQNs or World Wide Port Names (WWPNs). """, cls=SolidFireCommand)
 @click.option('--startinitiatorid',
@@ -73,46 +172,6 @@ def list(ctx,
         return
     else:
         cli_utils.print_result(_ListInitiatorsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('delete', short_help="""DeleteInitiators enables you to delete one or more initiators from the system (and from any associated volumes or volume access groups). If DeleteInitiators fails to delete one of the initiators provided in the parameter, the system returns an error and does not delete any initiators (no partial completion is possible). """, cls=SolidFireCommand)
-@click.option('--initiators',
-              type=str,
-              required=True,
-              prompt=True,
-              help="""An array of IDs of initiators to delete. """)
-@pass_context
-def delete(ctx,
-           # Mandatory main parameter
-           initiators):
-    """DeleteInitiators enables you to delete one or more initiators from the system (and from any associated volumes or volume access"""
-    """groups)."""
-    """If DeleteInitiators fails to delete one of the initiators provided in the parameter, the system returns an error and does not delete any"""
-    """initiators (no partial completion is possible)."""
-
-    
-
-    cli_utils.establish_connection(ctx)
-    
-
-    initiators = parser.parse_array(initiators)
-    
-
-    ctx.logger.info(""": """"""initiators = """ + str(initiators)+""";"""+"")
-    try:
-        _DeleteInitiatorsResult = ctx.element.delete_initiators(initiators=initiators)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_DeleteInitiatorsResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_DeleteInitiatorsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -216,91 +275,32 @@ def modify(ctx,
 
 
 
-@cli.command('create', short_help="""CreateInitiators enables you to create multiple new initiator IQNs or World Wide Port Names (WWPNs) and optionally assign them aliases and attributes. When you use CreateInitiators to create new initiators, you can also add them to volume access groups. If CreateInitiators fails to create one of the initiators provided in the parameter, the method returns an error and does not create any initiators (no partial completion is possible). """, cls=SolidFireCommand)
+@cli.command('delete', short_help="""DeleteInitiators enables you to delete one or more initiators from the system (and from any associated volumes or volume access groups). If DeleteInitiators fails to delete one of the initiators provided in the parameter, the system returns an error and does not delete any initiators (no partial completion is possible). """, cls=SolidFireCommand)
 @click.option('--initiators',
-              cls=SolidFireOption,
-              is_flag=True,
-              multiple=True,
-              subparameters=["name", "alias", "volumeaccessgroupid", "attributes", ],
-              required=True,
-              help="""A list of objects containing characteristics of each new initiator. Values are: name: (Required) The name of the initiator (IQN or WWPN) to create. (String) alias: (Optional) The friendly name to assign to this initiator. (String) attributes: (Optional) A set of JSON attributes to assign to this initiator. (JSON Object) volumeAccessGroupID: (Optional) The ID of the volume access group into to which this newly created initiator will be added. (Integer)  Has the following subparameters: --name --alias --volumeaccessgroupid --attributes """)
-@click.option('--name',
+              type=str,
               required=True,
               prompt=True,
-              multiple=True,
-              type=str,
-              default=None,
-              is_sub_parameter=True,
-              help="""[subparameter] (Required) The name of the initiator (IQN or WWPN) to create. (String) """,
-              cls=SolidFireOption)
-@click.option('--alias',
-              required=False,
-              multiple=True,
-              type=str,
-              default=None,
-              is_sub_parameter=True,
-              help="""[subparameter] (Optional) The friendly name to assign to this initiator. (String) """,
-              cls=SolidFireOption)
-@click.option('--volumeaccessgroupid',
-              required=False,
-              multiple=True,
-              type=int,
-              default=None,
-              is_sub_parameter=True,
-              help="""[subparameter] (Optional) The ID of the volume access group to which this newly created initiator will be added. (Integer) """,
-              cls=SolidFireOption)
-@click.option('--attributes',
-              required=False,
-              multiple=True,
-              type=str,
-              default=None,
-              is_sub_parameter=True,
-              help="""[subparameter] (Optional) A set of JSON attributes assigned to this initiator. (JSON Object) """,
-              cls=SolidFireOption)
+              help="""An array of IDs of initiators to delete. """)
 @pass_context
-def create(ctx,
+def delete(ctx,
            # Mandatory main parameter
-           initiators,
-           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
-           name,
-           # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
-           alias = None,
-           # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
-           volumeaccessgroupid = None,
-           # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
-           attributes = None):
-    """CreateInitiators enables you to create multiple new initiator IQNs or World Wide Port Names (WWPNs) and optionally assign them"""
-    """aliases and attributes. When you use CreateInitiators to create new initiators, you can also add them to volume access groups."""
-    """If CreateInitiators fails to create one of the initiators provided in the parameter, the method returns an error and does not create"""
-    """any initiators (no partial completion is possible)."""
+           initiators):
+    """DeleteInitiators enables you to delete one or more initiators from the system (and from any associated volumes or volume access"""
+    """groups)."""
+    """If DeleteInitiators fails to delete one of the initiators provided in the parameter, the system returns an error and does not delete any"""
+    """initiators (no partial completion is possible)."""
 
     
 
     cli_utils.establish_connection(ctx)
     
-    # If we have a submember that's an attributes array, we need to handle it.
-    attributes_json = [simplejson.loads(v) if v is not None else None for v in attributes]
+
+    initiators = parser.parse_array(initiators)
     
 
-    initiatorsArray = None
-    if len(initiators) == 1 and name[0] is None and alias[0] is None and volumeaccessgroupid[0] is None and attributes_json[0] is None:
-        initiatorsArray = []
-    elif(initiators is not None and initiators != ()):
-        initiatorsArray = []
-        try:
-            for i, _initiators in enumerate(initiators):
-                attributes_json = None
-                if attributes[i] != None:
-                    attributes_json = simplejson.loads(attributes[i])
-                initiatorsArray.append(CreateInitiator(name=name[i], alias=alias[i], volume_access_group_id=volumeaccessgroupid[i], attributes=attributes_json, ))
-        except Exception as e:
-            ctx.logger.error(e.__str__())
-            exit(1)
-    
-
-    ctx.logger.info(""": """"""initiators = """ + str(initiatorsArray)+""";"""+"")
+    ctx.logger.info(""": """"""initiators = """ + str(initiators)+""";"""+"")
     try:
-        _CreateInitiatorsResult = ctx.element.create_initiators(initiators=initiatorsArray)
+        _DeleteInitiatorsResult = ctx.element.delete_initiators(initiators=initiators)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -308,8 +308,8 @@ def create(ctx,
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_CreateInitiatorsResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_DeleteInitiatorsResult), indent=4))
         return
     else:
-        cli_utils.print_result(_CreateInitiatorsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_DeleteInitiatorsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

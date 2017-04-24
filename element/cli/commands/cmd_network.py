@@ -24,34 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """listfibrechannelsessions listinterfaces listfibrechannelportinfo listiscsisessions listnodefibrechannelportinfo """
-
-@cli.command('listfibrechannelsessions', short_help="""ListFibreChannelSessions enables you to retrieve information about the active Fibre Channel sessions on a cluster.  """, cls=SolidFireCommand)
-@pass_context
-def listfibrechannelsessions(ctx):
-    """ListFibreChannelSessions enables you to retrieve information about the active Fibre Channel sessions on a cluster. """
-
-    
-
-    cli_utils.establish_connection(ctx)
-    
-
-    ctx.logger.info(""": """+""";"""+"")
-    try:
-        _ListFibreChannelSessionsResult = ctx.element.list_fibre_channel_sessions()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ListFibreChannelSessionsResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_ListFibreChannelSessionsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
+    """listinterfaces listfibrechannelportinfo listfibrechannelsessions listnodefibrechannelportinfo listiscsisessions """
 
 @cli.command('listinterfaces', short_help="""ListNetworkInterfaces enables you to retrieve information about each network interface on a node. The API method is intended for use on individual nodes; userid and password authentication is required for access to individual nodes. """, cls=SolidFireCommand)
 @pass_context
@@ -107,10 +80,10 @@ def listfibrechannelportinfo(ctx):
 
 
 
-@cli.command('listiscsisessions', short_help="""You can use ListISCSISessions to return iSCSI information for volumes in the cluster. """, cls=SolidFireCommand)
+@cli.command('listfibrechannelsessions', short_help="""ListFibreChannelSessions enables you to retrieve information about the active Fibre Channel sessions on a cluster.  """, cls=SolidFireCommand)
 @pass_context
-def listiscsisessions(ctx):
-    """You can use ListISCSISessions to return iSCSI information for volumes in the cluster."""
+def listfibrechannelsessions(ctx):
+    """ListFibreChannelSessions enables you to retrieve information about the active Fibre Channel sessions on a cluster. """
 
     
 
@@ -119,7 +92,7 @@ def listiscsisessions(ctx):
 
     ctx.logger.info(""": """+""";"""+"")
     try:
-        _ListISCSISessionsResult = ctx.element.list_iscsisessions()
+        _ListFibreChannelSessionsResult = ctx.element.list_fibre_channel_sessions()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -127,10 +100,10 @@ def listiscsisessions(ctx):
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ListISCSISessionsResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_ListFibreChannelSessionsResult), indent=4))
         return
     else:
-        cli_utils.print_result(_ListISCSISessionsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_ListFibreChannelSessionsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -158,4 +131,31 @@ def listnodefibrechannelportinfo(ctx):
         return
     else:
         cli_utils.print_result(_ListNodeFibreChannelPortInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('listiscsisessions', short_help="""You can use ListISCSISessions to return iSCSI information for volumes in the cluster. """, cls=SolidFireCommand)
+@pass_context
+def listiscsisessions(ctx):
+    """You can use ListISCSISessions to return iSCSI information for volumes in the cluster."""
+
+    
+
+    cli_utils.establish_connection(ctx)
+    
+
+    ctx.logger.info(""": """+""";"""+"")
+    try:
+        _ListISCSISessionsResult = ctx.element.list_iscsisessions()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListISCSISessionsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListISCSISessionsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
