@@ -24,40 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """setinfo getremotelogginghosts getinfo setremotelogginghosts """
-
-@cli.command('setinfo', short_help="""You can use SetLoginSessionInfo to set the period of time that a session's login authentication is valid. After the log in period elapses without activity on the system, the authentication expires. New login credentials are required for continued access to the cluster after the timeout period has elapsed. """, cls=SolidFireCommand)
-@click.option('--timeout',
-              type=str,
-              required=True,
-              prompt=True,
-              help="""Cluster authentication expiration period. Formatted in HH:mm:ss. For example, 01:30:00, 00:90:00, and 00:00:5400 can be used to equal a 90 minute timeout period. The default value is 30 minutes. """)
-@pass_context
-def setinfo(ctx,
-           # Mandatory main parameter
-           timeout):
-    """You can use SetLoginSessionInfo to set the period of time that a session&#x27;s login authentication is valid. After the log in period elapses without activity on the system, the authentication expires. New login credentials are required for continued access to the cluster after the timeout period has elapsed."""
-
-    cli_utils.establish_connection(ctx)
-    
-    
-
-    ctx.logger.info(""": """"""timeout = """ + str(timeout)+""";"""+"")
-    try:
-        _SetLoginSessionInfoResult = ctx.element.set_login_session_info(timeout=timeout)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_SetLoginSessionInfoResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_SetLoginSessionInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
+    """getremotelogginghosts getinfo setinfo setremotelogginghosts """
 
 @cli.command('getremotelogginghosts', short_help="""GetRemoteLoggingHosts enables you to retrieve the current list of log servers. """, cls=SolidFireCommand)
 @pass_context
@@ -106,6 +73,39 @@ def getinfo(ctx):
         return
     else:
         cli_utils.print_result(_GetLoginSessionInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('setinfo', short_help="""You can use SetLoginSessionInfo to set the period of time that a session's login authentication is valid. After the log in period elapses without activity on the system, the authentication expires. New login credentials are required for continued access to the cluster after the timeout period has elapsed. """, cls=SolidFireCommand)
+@click.option('--timeout',
+              type=str,
+              required=True,
+              prompt=True,
+              help="""Cluster authentication expiration period. Formatted in HH:mm:ss. For example, 01:30:00, 00:90:00, and 00:00:5400 can be used to equal a 90 minute timeout period. The default value is 30 minutes. """)
+@pass_context
+def setinfo(ctx,
+           # Mandatory main parameter
+           timeout):
+    """You can use SetLoginSessionInfo to set the period of time that a session&#x27;s login authentication is valid. After the log in period elapses without activity on the system, the authentication expires. New login credentials are required for continued access to the cluster after the timeout period has elapsed."""
+
+    cli_utils.establish_connection(ctx)
+    
+    
+
+    ctx.logger.info(""": """"""timeout = """ + str(timeout)+""";"""+"")
+    try:
+        _SetLoginSessionInfoResult = ctx.element.set_login_session_info(timeout=timeout)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_SetLoginSessionInfoResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_SetLoginSessionInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
