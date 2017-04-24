@@ -5,7 +5,7 @@ def parse_array(input_string):
         return None
     # If it is surrounded by brackets, we just remove the brackets:
     if(input_string[0] == '[' and input_string[-1] == ']'):
-        input_string = input_string[1:-2]
+        input_string = input_string[1:-1]
         # When we want an empty array.
         if input_string == '':
             return []
