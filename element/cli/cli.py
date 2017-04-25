@@ -11,8 +11,6 @@ from pkg_resources import Requirement, resource_filename
 import struct
 import base64
 
-from element.cli import cli as element_cli, utils as cli_utils
-
 logging.basicConfig()
 LOG = logging.getLogger(__name__)
 CONTEXT_SETTINGS = dict(auto_envvar_prefix='SOLIDFIRE', token_normalize_func=lambda x: x.lower())
@@ -23,6 +21,7 @@ DEBUG_LOGGING_MAP = {
     3: logging.DEBUG
 }
 CLI_VERSION = 'v1'
+click.disable_unicode_literals_warning = True
 
 class Context():
 

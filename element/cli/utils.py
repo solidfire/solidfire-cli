@@ -227,7 +227,7 @@ def establish_connection(ctx):
     # If we want the json output directly from the source, we'll have to override the send request method in the sdk:
     if ctx.json and ctx.element:
         def new_send_request(*args, **kwargs):
-            return ctx.element.__class__.__bases__[0].send_request(ctx.element, *args, **kwargs, return_response_raw=True)
+            return ctx.element.__class__.__bases__[0].send_request(ctx.element, return_response_raw=True, *args, **kwargs)
         ctx.element.send_request = new_send_request
 
     # The only time it is none is when we're asking for help or we're trying to store a connection.
