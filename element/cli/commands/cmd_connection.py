@@ -63,6 +63,7 @@ def push(ctx, mvip, username, password, version, port, name):
         ctx.element = ElementFactory.create(target=mvip,username=username,password=password,version=version,port=port,verify_ssl=ctx.verifyssl)
     except Exception as e:
         ctx.logger.error(e.__str__())
+        exit(1)
     connections = cli_utils.get_connections()
     # First, ensure that no other connections have the same name:
     sameName = [connection for connection in connections if connection["name"]==name]
