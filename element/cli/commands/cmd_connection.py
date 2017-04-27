@@ -20,7 +20,8 @@ from solidfire.factory import ElementFactory
 def cli(ctx):
     """Connection management"""
 
-@cli.command('push', short_help="Pushes the connection onto connection.csv to save for later use.")
+@cli.command('push', short_help="Pushes the connection onto connections.csv to save for later use. This is located at "+resource_filename(Requirement.parse("solidfire-cli"), "connections.csv")
+)
 @click.option('--mvip', '-m',
               default=None,
               help="SolidFire MVIP",
@@ -42,7 +43,7 @@ def cli(ctx):
               help="The name you want to associate with the connection'.",
               required=True,
               prompt=True)
-@click.option('--port',
+@click.option('--port', '-q',
               default = None,
               help="The port you wish to connect on",
               required=False)
