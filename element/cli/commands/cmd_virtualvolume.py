@@ -24,43 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """listtasks enablefeature list getfeaturestatus listhosts getcount listbindings """
-
-@cli.command('listtasks', short_help="""ListVirtualVolumeTasks returns a list of virtual volume tasks in the system. """, cls=SolidFireCommand)
-@click.option('--virtualvolumetaskids',
-              type=str,
-              required=False,
-              help="""A list of virtual volume task IDs for which to retrieve information. If you omit this parameter, the method returns information about all virtual volume tasks. """)
-@pass_context
-def listtasks(ctx,
-           # Optional main parameter
-           virtualvolumetaskids = None):
-    """ListVirtualVolumeTasks returns a list of virtual volume tasks in the system."""
-
-    
-
-    cli_utils.establish_connection(ctx)
-    
-
-    virtualvolumetaskids = parser.parse_array(virtualvolumetaskids)
-    
-
-    ctx.logger.info(""": """"""virtualvolumetaskids = """+str(virtualvolumetaskids)+""";"""+"")
-    try:
-        _ListVirtualVolumeTasksResult = ctx.element.list_virtual_volume_tasks(virtual_volume_task_ids=virtualvolumetaskids)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ListVirtualVolumeTasksResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_ListVirtualVolumeTasksResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
+    """enablefeature getfeaturestatus getcount list listtasks listhosts listbindings """
 
 @cli.command('enablefeature', short_help="""You can use EnableFeature to enable cluster features that are disabled by default. """, cls=SolidFireCommand)
 @click.option('--feature',
@@ -94,6 +58,67 @@ def enablefeature(ctx,
         return
     else:
         cli_utils.print_result(_EnableFeatureResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getfeaturestatus', short_help="""GetFeatureStatus enables you to retrieve the status of a cluster feature. """, cls=SolidFireCommand)
+@click.option('--feature',
+              type=str,
+              required=False,
+              help="""Specifies the feature for which the status is returned. Valid value is: vvols: Retrieve status for the NetApp SolidFire VVols cluster feature. """)
+@pass_context
+def getfeaturestatus(ctx,
+           # Optional main parameter
+           feature = None):
+    """GetFeatureStatus enables you to retrieve the status of a cluster feature."""
+
+    
+
+    cli_utils.establish_connection(ctx)
+    
+    
+
+    ctx.logger.info(""": """"""feature = """+str(feature)+""";"""+"")
+    try:
+        _GetFeatureStatusResult = ctx.element.get_feature_status(feature=feature)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetFeatureStatusResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetFeatureStatusResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getcount', short_help="""Enables retrieval of the number of virtual volumes currently in the system. """, cls=SolidFireCommand)
+@pass_context
+def getcount(ctx):
+    """Enables retrieval of the number of virtual volumes currently in the system."""
+
+    
+
+    cli_utils.establish_connection(ctx)
+    
+
+    ctx.logger.info(""": """+""";"""+"")
+    try:
+        _GetVirtualVolumeCountResult = ctx.element.get_virtual_volume_count()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetVirtualVolumeCountResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetVirtualVolumeCountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -162,26 +187,28 @@ def list(ctx,
 
 
 
-@cli.command('getfeaturestatus', short_help="""GetFeatureStatus enables you to retrieve the status of a cluster feature. """, cls=SolidFireCommand)
-@click.option('--feature',
+@cli.command('listtasks', short_help="""ListVirtualVolumeTasks returns a list of virtual volume tasks in the system. """, cls=SolidFireCommand)
+@click.option('--virtualvolumetaskids',
               type=str,
               required=False,
-              help="""Specifies the feature for which the status is returned. Valid value is: vvols: Retrieve status for the NetApp SolidFire VVols cluster feature. """)
+              help="""A list of virtual volume task IDs for which to retrieve information. If you omit this parameter, the method returns information about all virtual volume tasks. """)
 @pass_context
-def getfeaturestatus(ctx,
+def listtasks(ctx,
            # Optional main parameter
-           feature = None):
-    """GetFeatureStatus enables you to retrieve the status of a cluster feature."""
+           virtualvolumetaskids = None):
+    """ListVirtualVolumeTasks returns a list of virtual volume tasks in the system."""
 
     
 
     cli_utils.establish_connection(ctx)
     
+
+    virtualvolumetaskids = parser.parse_array(virtualvolumetaskids)
     
 
-    ctx.logger.info(""": """"""feature = """+str(feature)+""";"""+"")
+    ctx.logger.info(""": """"""virtualvolumetaskids = """+str(virtualvolumetaskids)+""";"""+"")
     try:
-        _GetFeatureStatusResult = ctx.element.get_feature_status(feature=feature)
+        _ListVirtualVolumeTasksResult = ctx.element.list_virtual_volume_tasks(virtual_volume_task_ids=virtualvolumetaskids)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -189,10 +216,10 @@ def getfeaturestatus(ctx,
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetFeatureStatusResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_ListVirtualVolumeTasksResult), indent=4))
         return
     else:
-        cli_utils.print_result(_GetFeatureStatusResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_ListVirtualVolumeTasksResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -230,33 +257,6 @@ def listhosts(ctx,
         return
     else:
         cli_utils.print_result(_ListVirtualVolumeHostsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getcount', short_help="""Enables retrieval of the number of virtual volumes currently in the system. """, cls=SolidFireCommand)
-@pass_context
-def getcount(ctx):
-    """Enables retrieval of the number of virtual volumes currently in the system."""
-
-    
-
-    cli_utils.establish_connection(ctx)
-    
-
-    ctx.logger.info(""": """+""";"""+"")
-    try:
-        _GetVirtualVolumeCountResult = ctx.element.get_virtual_volume_count()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetVirtualVolumeCountResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_GetVirtualVolumeCountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
