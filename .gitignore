@@ -17,3 +17,5 @@ connections.csv
 element/cli/commands/*.md
 element/cli/commands/*.txt
 .DS_Store
+/descriptor_version.json
+/generator_version.json
