@@ -206,6 +206,9 @@ def establish_connection(ctx):
     else:
         connections = get_connections()
         if(ctx.connectionindex is not None):
+            if ctx.connectionindex > len(connections)-1 or ctx.connectionindex < (-len(connections)):
+                ctx.logger.error("Please provide an index between "+str(-len(connections))+" and "+str(len(connections)-1))
+                exit(1)
             cfg = connections[ctx.connectionindex]
         elif(ctx.name is not None):
             filteredCfg = [connection for connection in connections if connection["name"] == ctx.name]
