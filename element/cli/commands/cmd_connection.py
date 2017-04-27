@@ -24,30 +24,26 @@ def cli(ctx):
 @click.option('--mvip', '-m',
               default=None,
               help="SolidFire MVIP",
-              required=True)
+              required=False)
 @click.option('--username', '-u',
               default=None,
               help="SolidFire cluster username",
-              required=True,
-              prompt=True,
-              hide_input=True)
+              required=False)
 @click.option('--password', '-p',
               default=None,
               help="SolidFire cluster password",
-              required=True,
-              prompt=True,
-              hide_input=True)
+              required=False)
 @click.option('--version', '-v',
-              default="9.0",
+              default = None,
               help='The version you would like to connect on',
-              required=True)
+              required=False)
 @click.option('--name', '-n',
               default = None,
               help="The name you want to associate with the connection'.",
               required=True,
               prompt=True)
 @click.option('--port',
-              default = 443,
+              default = None,
               help="The port you wish to connect on",
               required=False)
 @pass_context
@@ -55,15 +51,34 @@ def push(ctx, mvip, username, password, version, port, name):
     # First, attempt to establish the connection. If that's not possible,
     # throw the error.
 
-    # Verify that the mvip does not contain the port number:
-    if mvip and ":" in mvip:
-        ctx.logger.error('Please provide the port using the port parameter.')
-        exit(1)
-    try:
-        ctx.element = ElementFactory.create(target=mvip,username=username,password=password,version=version,port=port,verify_ssl=ctx.verifyssl)
-    except Exception as e:
-        ctx.logger.error(e.__str__())
-        exit(1)
+    if mvip and ctx.mvip:
+        ctx.logger.error("Please only provide the mvip once.")
+    if username and ctx.username:
+        ctx.logger.error("Please only provide the username once.")
+    if password and ctx.password:
+        ctx.logger.error("Please only provide the password once.")
+    if version and ctx.version:
+        ctx.logger.error("Please only provide the version once.")
+    if port and ctx.port:
+        ctx.logger.error("Please only provide the port once.")
+    if name and ctx.name:
+        ctx.logger.error("Please only provide the name once.")
+
+    if ctx.mvip is None and mvip is None:
+        ctx.logger.error("Please provide the mvip. It is a required parameter.")
+
+    if ctx.mvip is None:
+        ctx.mvip = mvip
+    if ctx.username is None:
+        ctx.username = username
+    if ctx.password is None:
+        ctx.password = password
+    if ctx.version is None:
+        ctx.version = version
+
+    # Verify that the connection exists or get the extra info.
+    cli_utils.establish_connection(ctx)
+
     connections = cli_utils.get_connections()
     # First, ensure that no other connections have the same name:
     sameName = [connection for connection in connections if connection["name"]==name]
@@ -71,16 +86,16 @@ def push(ctx, mvip, username, password, version, port, name):
         ctx.logger.error("A connection with that name already exists. Please try another.")
         exit(1)
 
-    if(username is not None and password is not None):
-        username = cli_utils.encrypt(username)
-        password = cli_utils.encrypt(password)
+    if(ctx.username is not None and ctx.password is not None):
+        ctx.username = cli_utils.encrypt(ctx.username)
+        ctx.password = cli_utils.encrypt(ctx.password)
 
-    connections = connections + [{'mvip': mvip,
-                                  'username': "b'"+username.decode('utf-8')+"'",
-                                  'password': "b'"+password.decode('utf-8')+"'",
-                                  'port': port,
-                                  'url': 'https://%s:%s' % (mvip, port),
-                                  'version': version,
+    connections = connections + [{'mvip': ctx.mvip,
+                                  'username': "b'"+ctx.username.decode('utf-8')+"'",
+                                  'password': "b'"+ctx.password.decode('utf-8')+"'",
+                                  'port': ctx.port,
+                                  'url': 'https://%s:%s' % (ctx.mvip, ctx.port),
+                                  'version': ctx.version,
                                   'name': name}]
     cli_utils.write_connections(connections)
 
