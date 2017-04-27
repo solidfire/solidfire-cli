@@ -37,7 +37,11 @@ def print_result(objs, log, as_json=False, as_pickle=False, depth=None, filter_t
 
     # If we have a filter, apply it.
     if filter_tree is not None:
-        objs_to_print = filter_objects_from_simple_keypaths(objs, filter_tree.split(','))
+        try:
+            objs_to_print = filter_objects_from_simple_keypaths(objs, filter_tree.split(','))
+        except Exception as e:
+            log.error(e.args[0])
+            exit(1)
     else:
         objs_to_print = objs
 
@@ -157,6 +161,9 @@ def filter_objects(objs, keyPaths):
         # If we've found a dict, we recurse deeper to pull out the objs.
         # Because this is a dict, we must advance our keyPaths recursion.
         # Consider the following example:
+        if key not in dictionaryOfInterest:
+            raise ValueError("'"+key+"' is not a valid key for this level. Valid keys are: "+','.join(dictionaryOfInterest.keys()))
+        print(dictionaryOfInterest[key])
         finalFilteredObjects[key] = filter_objects(dictionaryOfInterest[key], keyPaths[key])
     return finalFilteredObjects
 
