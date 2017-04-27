@@ -221,7 +221,7 @@ def establish_connection(ctx):
             cfg = filteredCfg[0]
         else:
             if len(connections) > 0:
-                cfg = connections[0]
+                cfg = connections[-1]
 
         # If we managed to find the connection we were looking for, we must try to establish the connection.
         if cfg is not None:
