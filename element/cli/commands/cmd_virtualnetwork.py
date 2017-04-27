@@ -24,7 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """modify list add remove """
+    """modify remove list add """
 
 @cli.command('modify', short_help="""You can use ModifyVirtualNetwork to change the attributes of an existing virtual network. This method enables you to add or remove address blocks, change the netmask, or modify the name or description of the virtual network. You can also use it to enable or disable namespaces, as well as add or remove a gateway if namespaces are enabled on the virtual network. Note: This method requires either the VirtualNetworkID or the VirtualNetworkTag as a parameter, but not both. Caution: Enabling or disabling the Routable Storage VLANs functionality for an existing virtual network by changing the "namespace" parameter disrupts any traffic handled by the virtual network. NetApp strongly recommends changing the "namespace" parameter only during a scheduled maintenance window. """, cls=SolidFireCommand)
 @click.option('--virtualnetworkid',
@@ -121,8 +121,8 @@ def modify(ctx,
     """disable namespaces, as well as add or remove a gateway if namespaces are enabled on the virtual network."""
     """Note: This method requires either the VirtualNetworkID or the VirtualNetworkTag as a parameter, but not both."""
     """Caution: Enabling or disabling the Routable Storage VLANs functionality for an existing virtual network by changing the"""
-    """&quot;namespace&quot; parameter disrupts any traffic handled by the virtual network. NetApp strongly recommends changing the"""
-    """&quot;namespace&quot; parameter only during a scheduled maintenance window."""
+    """"namespace" parameter disrupts any traffic handled by the virtual network. NetApp strongly recommends changing the"""
+    """"namespace" parameter only during a scheduled maintenance window."""
 
     
 
@@ -172,6 +172,48 @@ def modify(ctx,
         return
     else:
         cli_utils.print_result(_AddVirtualNetworkResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('remove', short_help="""RemoveVirtualNetwork enables you to remove a previously added virtual network. Note: This method requires either the virtualNetworkID or the virtualNetworkTag as a parameter, but not both. """, cls=SolidFireCommand)
+@click.option('--virtualnetworkid',
+              type=int,
+              required=False,
+              help="""Network ID that identifies the virtual network to remove. """)
+@click.option('--virtualnetworktag',
+              type=int,
+              required=False,
+              help="""Network tag that identifies the virtual network to remove. """)
+@pass_context
+def remove(ctx,
+           # Optional main parameter
+           virtualnetworkid = None,
+           # Optional main parameter
+           virtualnetworktag = None):
+    """RemoveVirtualNetwork enables you to remove a previously added virtual network."""
+    """Note: This method requires either the virtualNetworkID or the virtualNetworkTag as a parameter, but not both."""
+
+    
+
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+
+    ctx.logger.info(""": """"""virtualnetworkid = """+str(virtualnetworkid)+";" + """virtualnetworktag = """+str(virtualnetworktag)+""";"""+"")
+    try:
+        _RemoveVirtualNetworkResult = ctx.element.remove_virtual_network(virtual_network_id=virtualnetworkid, virtual_network_tag=virtualnetworktag)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_RemoveVirtualNetworkResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_RemoveVirtualNetworkResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -383,46 +425,4 @@ def add(ctx,
         return
     else:
         cli_utils.print_result(_AddVirtualNetworkResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('remove', short_help="""RemoveVirtualNetwork enables you to remove a previously added virtual network. Note: This method requires either the virtualNetworkID or the virtualNetworkTag as a parameter, but not both. """, cls=SolidFireCommand)
-@click.option('--virtualnetworkid',
-              type=int,
-              required=False,
-              help="""Network ID that identifies the virtual network to remove. """)
-@click.option('--virtualnetworktag',
-              type=int,
-              required=False,
-              help="""Network tag that identifies the virtual network to remove. """)
-@pass_context
-def remove(ctx,
-           # Optional main parameter
-           virtualnetworkid = None,
-           # Optional main parameter
-           virtualnetworktag = None):
-    """RemoveVirtualNetwork enables you to remove a previously added virtual network."""
-    """Note: This method requires either the virtualNetworkID or the virtualNetworkTag as a parameter, but not both."""
-
-    
-
-    cli_utils.establish_connection(ctx)
-    
-    
-    
-
-    ctx.logger.info(""": """"""virtualnetworkid = """+str(virtualnetworkid)+";" + """virtualnetworktag = """+str(virtualnetworktag)+""";"""+"")
-    try:
-        _RemoveVirtualNetworkResult = ctx.element.remove_virtual_network(virtual_network_id=virtualnetworkid, virtual_network_tag=virtualnetworktag)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_RemoveVirtualNetworkResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_RemoveVirtualNetworkResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

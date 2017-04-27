@@ -24,7 +24,47 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """modify delete list create """
+    """delete modify list create """
+
+@cli.command('delete', short_help="""DeleteInitiators enables you to delete one or more initiators from the system (and from any associated volumes or volume access groups). If DeleteInitiators fails to delete one of the initiators provided in the parameter, the system returns an error and does not delete any initiators (no partial completion is possible). """, cls=SolidFireCommand)
+@click.option('--initiators',
+              type=str,
+              required=True,
+              prompt=True,
+              help="""An array of IDs of initiators to delete. """)
+@pass_context
+def delete(ctx,
+           # Mandatory main parameter
+           initiators):
+    """DeleteInitiators enables you to delete one or more initiators from the system (and from any associated volumes or volume access"""
+    """groups)."""
+    """If DeleteInitiators fails to delete one of the initiators provided in the parameter, the system returns an error and does not delete any"""
+    """initiators (no partial completion is possible)."""
+
+    
+
+    cli_utils.establish_connection(ctx)
+    
+
+    initiators = parser.parse_array(initiators)
+    
+
+    ctx.logger.info(""": """"""initiators = """ + str(initiators)+""";"""+"")
+    try:
+        _DeleteInitiatorsResult = ctx.element.delete_initiators(initiators=initiators)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_DeleteInitiatorsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_DeleteInitiatorsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
 
 @cli.command('modify', short_help="""ModifyInitiators enables you to change the attributes of one or more existing initiators. You cannot change the name of an existing initiator. If you need to change the name of an initiator, delete it first with DeleteInitiators and create a new one with CreateInitiators. If ModifyInitiators fails to change one of the initiators provided in the parameter, the method returns an error and does not modify any initiators (no partial completion is possible). """, cls=SolidFireCommand)
 @click.option('--initiators',
@@ -123,46 +163,6 @@ def modify(ctx,
         return
     else:
         cli_utils.print_result(_ModifyInitiatorsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('delete', short_help="""DeleteInitiators enables you to delete one or more initiators from the system (and from any associated volumes or volume access groups). If DeleteInitiators fails to delete one of the initiators provided in the parameter, the system returns an error and does not delete any initiators (no partial completion is possible). """, cls=SolidFireCommand)
-@click.option('--initiators',
-              type=str,
-              required=True,
-              prompt=True,
-              help="""An array of IDs of initiators to delete. """)
-@pass_context
-def delete(ctx,
-           # Mandatory main parameter
-           initiators):
-    """DeleteInitiators enables you to delete one or more initiators from the system (and from any associated volumes or volume access"""
-    """groups)."""
-    """If DeleteInitiators fails to delete one of the initiators provided in the parameter, the system returns an error and does not delete any"""
-    """initiators (no partial completion is possible)."""
-
-    
-
-    cli_utils.establish_connection(ctx)
-    
-
-    initiators = parser.parse_array(initiators)
-    
-
-    ctx.logger.info(""": """"""initiators = """ + str(initiators)+""";"""+"")
-    try:
-        _DeleteInitiatorsResult = ctx.element.delete_initiators(initiators=initiators)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_DeleteInitiatorsResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_DeleteInitiatorsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 

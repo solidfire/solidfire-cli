@@ -24,7 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """modify get list create remove """
+    """modify remove list create get """
 
 @cli.command('modify', short_help="""ModifyBackupTarget enables you to change attributes of a backup target. """, cls=SolidFireCommand)
 @click.option('--backuptargetid',
@@ -83,17 +83,17 @@ def modify(ctx,
 
 
 
-@cli.command('get', short_help="""GetBackupTarget enables you to return information about a specific backup target that you have created. """, cls=SolidFireCommand)
+@cli.command('remove', short_help="""RemoveBackupTarget allows you to delete backup targets. """, cls=SolidFireCommand)
 @click.option('--backuptargetid',
               type=int,
               required=True,
               prompt=True,
-              help="""The unique identifier assigned to the backup target. """)
+              help="""The unique target ID of the target to remove. """)
 @pass_context
-def get(ctx,
+def remove(ctx,
            # Mandatory main parameter
            backuptargetid):
-    """GetBackupTarget enables you to return information about a specific backup target that you have created."""
+    """RemoveBackupTarget allows you to delete backup targets."""
 
     
 
@@ -103,7 +103,7 @@ def get(ctx,
 
     ctx.logger.info(""": """"""backuptargetid = """ + str(backuptargetid)+""";"""+"")
     try:
-        _GetBackupTargetResult = ctx.element.get_backup_target(backup_target_id=backuptargetid)
+        _RemoveBackupTargetResult = ctx.element.remove_backup_target(backup_target_id=backuptargetid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -111,10 +111,10 @@ def get(ctx,
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetBackupTargetResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_RemoveBackupTargetResult), indent=4))
         return
     else:
-        cli_utils.print_result(_GetBackupTargetResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_RemoveBackupTargetResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -195,17 +195,17 @@ def create(ctx,
 
 
 
-@cli.command('remove', short_help="""RemoveBackupTarget allows you to delete backup targets. """, cls=SolidFireCommand)
+@cli.command('get', short_help="""GetBackupTarget enables you to return information about a specific backup target that you have created. """, cls=SolidFireCommand)
 @click.option('--backuptargetid',
               type=int,
               required=True,
               prompt=True,
-              help="""The unique target ID of the target to remove. """)
+              help="""The unique identifier assigned to the backup target. """)
 @pass_context
-def remove(ctx,
+def get(ctx,
            # Mandatory main parameter
            backuptargetid):
-    """RemoveBackupTarget allows you to delete backup targets."""
+    """GetBackupTarget enables you to return information about a specific backup target that you have created."""
 
     
 
@@ -215,7 +215,7 @@ def remove(ctx,
 
     ctx.logger.info(""": """"""backuptargetid = """ + str(backuptargetid)+""";"""+"")
     try:
-        _RemoveBackupTargetResult = ctx.element.remove_backup_target(backup_target_id=backuptargetid)
+        _GetBackupTargetResult = ctx.element.get_backup_target(backup_target_id=backuptargetid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -223,8 +223,8 @@ def remove(ctx,
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_RemoveBackupTargetResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_GetBackupTargetResult), indent=4))
         return
     else:
-        cli_utils.print_result(_RemoveBackupTargetResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_GetBackupTargetResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
