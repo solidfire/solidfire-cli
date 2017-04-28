@@ -75,8 +75,10 @@ def push(ctx, mvip, username, password, version, port, name, verifyssl):
         ctx.username = username
     if ctx.password is None:
         ctx.password = password
-    if ctx.version is None:
+    if version is not None:
         ctx.version = version
+    if port is not None:
+        ctx.port = port
     ctx.verifyssl = ctx.verifyssl or verifyssl
 
     # Verify that the connection exists or get the extra info.
