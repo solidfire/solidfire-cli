@@ -24,29 +24,62 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """getbyname getbyid modify getefficiency remove list add """
+    """add modify getefficiency getbyname remove getbyid list """
 
-@cli.command('getbyname', short_help="""GetAccountByName enables you to retrieve details about a specific account, given its username. """, cls=SolidFireCommand)
+@cli.command('add', short_help="""You can use AddAccount to add a new account to the system. You can create new volumes under the new account. The CHAP settings you specify for the account apply to all volumes owned by the account. """, cls=SolidFireCommand)
 @click.option('--username',
               type=str,
               required=True,
               prompt=True,
-              help="""Username for the account. """)
+              help="""Specifies the username for this account. (Might be 1 to 64 characters in length). """)
+@click.option('--initiatorsecret',
+              type=str,
+              required=False,
+              help="""The CHAP secret to use for the initiator. This secret must be 12-16 characters in length and should be impenetrable. The initiator CHAP secret must be unique and cannot be the same as the target CHAP secret. If unspecified, a random secret is created. """)
+@click.option('--targetsecret',
+              type=str,
+              required=False,
+              help="""The CHAP secret to use for the target (mutual CHAP authentication). This secret must be 12-16 characters in length and should be impenetrable. The target CHAP secret must be unique and cannot be the same as the initiator CHAP secret. If unspecified, a random secret is created. """)
+@click.option('--attributes',
+              type=str,
+              required=False,
+              help="""List of name-value pairs in JSON object format.  Has the following subparameters: """)
 @pass_context
-def getbyname(ctx,
+def add(ctx,
            # Mandatory main parameter
-           username):
-    """GetAccountByName enables you to retrieve details about a specific account, given its username."""
+           username,
+           # Optional main parameter
+           initiatorsecret = None,
+           # Optional main parameter
+           targetsecret = None,
+           # Optional main parameter
+           attributes = None):
+    """You can use AddAccount to add a new account to the system. You can create new volumes under the new account. The CHAP settings you specify for the account apply to all volumes owned by the account."""
 
     
 
     cli_utils.establish_connection(ctx)
     
     
+    
+    
 
-    ctx.logger.info(""": """"""username = """ + str(username)+""";"""+"")
+    kwargsDict = None
+    if(attributes is not None and attributes != ()):
+        try:
+            kwargsDict = simplejson.loads(attributes)
+        except Exception as e:
+            ctx.logger.error(e.__str__())
+            exit(1)
+    
+    if initiatorsecret == "AUTO-GENERATE-CHAP-SECRET":
+        initiatorsecret = CHAPSecret.auto_generate()
+    if targetsecret == "AUTO-GENERATE-CHAP-SECRET":
+        targetsecret = CHAPSecret.auto_generate()
+
+    ctx.logger.info(""": """"""username = """ + str(username)+";" + """initiatorsecret = """+str(initiatorsecret)+";" + """targetsecret = """+str(targetsecret)+";" + """attributes = """+str(kwargsDict)+""";"""+"")
     try:
-        _GetAccountResult = ctx.element.get_account_by_name(username=username)
+        _AddAccountResult = ctx.element.add_account(username=username, initiator_secret=initiatorsecret, target_secret=targetsecret, attributes=kwargsDict)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -54,45 +87,10 @@ def getbyname(ctx,
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetAccountResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_AddAccountResult), indent=4))
         return
     else:
-        cli_utils.print_result(_GetAccountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getbyid', short_help="""GetAccountByID enables you to return details about a specific account, given its accountID. """, cls=SolidFireCommand)
-@click.option('--accountid',
-              type=int,
-              required=True,
-              prompt=True,
-              help="""Specifies the account for which details are gathered. """)
-@pass_context
-def getbyid(ctx,
-           # Mandatory main parameter
-           accountid):
-    """GetAccountByID enables you to return details about a specific account, given its accountID."""
-
-    
-
-    cli_utils.establish_connection(ctx)
-    
-    
-
-    ctx.logger.info(""": """"""accountid = """ + str(accountid)+""";"""+"")
-    try:
-        _GetAccountResult = ctx.element.get_account_by_id(account_id=accountid)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetAccountResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_GetAccountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_AddAccountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -218,6 +216,41 @@ def getefficiency(ctx,
 
 
 
+@cli.command('getbyname', short_help="""GetAccountByName enables you to retrieve details about a specific account, given its username. """, cls=SolidFireCommand)
+@click.option('--username',
+              type=str,
+              required=True,
+              prompt=True,
+              help="""Username for the account. """)
+@pass_context
+def getbyname(ctx,
+           # Mandatory main parameter
+           username):
+    """GetAccountByName enables you to retrieve details about a specific account, given its username."""
+
+    
+
+    cli_utils.establish_connection(ctx)
+    
+    
+
+    ctx.logger.info(""": """"""username = """ + str(username)+""";"""+"")
+    try:
+        _GetAccountResult = ctx.element.get_account_by_name(username=username)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetAccountResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetAccountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
 @cli.command('remove', short_help="""RemoveAccount enables you to remove an existing account. You must delete and purge all volumes associated with the account using DeleteVolume before you can remove the account. If volumes on the account are still pending deletion, you cannot use RemoveAccount to remove the account. """, cls=SolidFireCommand)
 @click.option('--accountid',
               type=int,
@@ -252,6 +285,41 @@ def remove(ctx,
         return
     else:
         cli_utils.print_result(_RemoveAccountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getbyid', short_help="""GetAccountByID enables you to return details about a specific account, given its accountID. """, cls=SolidFireCommand)
+@click.option('--accountid',
+              type=int,
+              required=True,
+              prompt=True,
+              help="""Specifies the account for which details are gathered. """)
+@pass_context
+def getbyid(ctx,
+           # Mandatory main parameter
+           accountid):
+    """GetAccountByID enables you to return details about a specific account, given its accountID."""
+
+    
+
+    cli_utils.establish_connection(ctx)
+    
+    
+
+    ctx.logger.info(""": """"""accountid = """ + str(accountid)+""";"""+"")
+    try:
+        _GetAccountResult = ctx.element.get_account_by_id(account_id=accountid)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetAccountResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetAccountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -300,72 +368,4 @@ def list(ctx,
         return
     else:
         cli_utils.print_result(_ListAccountsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('add', short_help="""You can use AddAccount to add a new account to the system. You can create new volumes under the new account. The CHAP settings you specify for the account apply to all volumes owned by the account. """, cls=SolidFireCommand)
-@click.option('--username',
-              type=str,
-              required=True,
-              prompt=True,
-              help="""Specifies the username for this account. (Might be 1 to 64 characters in length). """)
-@click.option('--initiatorsecret',
-              type=str,
-              required=False,
-              help="""The CHAP secret to use for the initiator. This secret must be 12-16 characters in length and should be impenetrable. The initiator CHAP secret must be unique and cannot be the same as the target CHAP secret. If unspecified, a random secret is created. """)
-@click.option('--targetsecret',
-              type=str,
-              required=False,
-              help="""The CHAP secret to use for the target (mutual CHAP authentication). This secret must be 12-16 characters in length and should be impenetrable. The target CHAP secret must be unique and cannot be the same as the initiator CHAP secret. If unspecified, a random secret is created. """)
-@click.option('--attributes',
-              type=str,
-              required=False,
-              help="""List of name-value pairs in JSON object format.  Has the following subparameters: """)
-@pass_context
-def add(ctx,
-           # Mandatory main parameter
-           username,
-           # Optional main parameter
-           initiatorsecret = None,
-           # Optional main parameter
-           targetsecret = None,
-           # Optional main parameter
-           attributes = None):
-    """You can use AddAccount to add a new account to the system. You can create new volumes under the new account. The CHAP settings you specify for the account apply to all volumes owned by the account."""
-
-    
-
-    cli_utils.establish_connection(ctx)
-    
-    
-    
-    
-
-    kwargsDict = None
-    if(attributes is not None and attributes != ()):
-        try:
-            kwargsDict = simplejson.loads(attributes)
-        except Exception as e:
-            ctx.logger.error(e.__str__())
-            exit(1)
-    
-    if initiatorsecret == "AUTO-GENERATE-CHAP-SECRET":
-        initiatorsecret = CHAPSecret.auto_generate()
-    if targetsecret == "AUTO-GENERATE-CHAP-SECRET":
-        targetsecret = CHAPSecret.auto_generate()
-
-    ctx.logger.info(""": """"""username = """ + str(username)+";" + """initiatorsecret = """+str(initiatorsecret)+";" + """targetsecret = """+str(targetsecret)+";" + """attributes = """+str(kwargsDict)+""";"""+"")
-    try:
-        _AddAccountResult = ctx.element.add_account(username=username, initiator_secret=initiatorsecret, target_secret=targetsecret, attributes=kwargsDict)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_AddAccountResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_AddAccountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
