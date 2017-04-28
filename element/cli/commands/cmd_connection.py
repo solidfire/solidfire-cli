@@ -105,8 +105,8 @@ def push(ctx, mvip, username, password, version, port, name, verifyssl):
                                   'verifyssl': verifyssl}]
     try:
         cli_utils.write_connections(connections)
-    except PermissionError as e:
-        ctx.logger.error(e.args[1]+" Please verify you have write permissions for "+resource_filename(Requirement.parse("solidfire-cli"), "connections.csv"))
+    except Exception as e:
+        ctx.logger.error(e.args)
 
 @cli.command('remove', short_help="Removes a given connection")
 @click.option('--name', '-n',
