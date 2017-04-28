@@ -19,3 +19,4 @@ element/cli/commands/*.txt
 .DS_Store
 /descriptor_version.json
 /generator_version.json
+default_connection.csv

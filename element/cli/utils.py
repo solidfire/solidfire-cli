@@ -11,6 +11,7 @@ import socket
 import getpass
 from solidfire.factory import ElementFactory
 from solidfire import Element
+import portalocker
 
 def kv_string_to_dict(kv_string):
     new_dict = {}
@@ -163,7 +164,6 @@ def filter_objects(objs, keyPaths):
         # Consider the following example:
         if key not in dictionaryOfInterest:
             raise ValueError("'"+key+"' is not a valid key for this level. Valid keys are: "+','.join(dictionaryOfInterest.keys()))
-        print(dictionaryOfInterest[key])
         finalFilteredObjects[key] = filter_objects(dictionaryOfInterest[key], keyPaths[key])
     return finalFilteredObjects
 
@@ -193,7 +193,6 @@ def establish_connection(ctx):
                'url': 'https://%s:%s' % (ctx.mvip, ctx.port),
                'version': ctx.version,
                'verifyssl': ctx.verifyssl}
-        print(cfg)
         try:
             ctx.element = ElementFactory.create(cfg["mvip"],cfg["username"],cfg["password"],port=cfg["port"],version=cfg["version"],verify_ssl=cfg["verifyssl"])
         except Exception as e:
@@ -206,13 +205,18 @@ def establish_connection(ctx):
 
     # If someone asked for a given connection or we need to default to using the connection at index 0 if it exists:
     else:
-        connections = get_connections()
-        if(ctx.connectionindex is not None):
+        change_default = False
+        if ctx.connectionindex is None and ctx.name is None:
+            cfg = get_default_connection(ctx)
+        elif ctx.connectionindex is not None:
+            connections = get_connections()
             if ctx.connectionindex > len(connections)-1 or ctx.connectionindex < (-len(connections)):
                 ctx.logger.error("Please provide an index between "+str(-len(connections))+" and "+str(len(connections)-1))
                 exit(1)
             cfg = connections[ctx.connectionindex]
-        elif(ctx.name is not None):
+            change_default = True
+        elif ctx.name is not None:
+            connections = get_connections()
             filteredCfg = [connection for connection in connections if connection["name"] == ctx.name]
             if(len(filteredCfg) > 1):
                 ctx.logger.error("Your connections.csv file has become corrupted. There are two connections of the same name.")
@@ -221,9 +225,7 @@ def establish_connection(ctx):
                 ctx.logger.error("Could not find a connection named "+ctx.name)
                 exit()
             cfg = filteredCfg[0]
-        else:
-            if len(connections) > 0:
-                cfg = connections[-1]
+            change_default = True
 
         # If we managed to find the connection we were looking for, we must try to establish the connection.
         if cfg is not None:
@@ -238,6 +240,11 @@ def establish_connection(ctx):
                 ctx.logger.error(e.__str__())
                 ctx.logger.error("The connection is corrupt. Run 'sfcli connection prune' to try and remove all broken connections or use 'sfcli connection remove -n name'")
                 ctx.logger.error(cfg)
+            if change_default:
+                try:
+                    write_default_connection(cfg)
+                except PermissionError as e:
+                    ctx.logger.warning("Cache is read only. This event will not be cached.")
 
     # If we want the json output directly from the source, we'll have to override the send request method in the sdk:
     if ctx.json and ctx.element:
@@ -255,11 +262,14 @@ def establish_connection(ctx):
         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
         exit()
 
+# this needs to be atomic.
 def get_connections():
     connectionsCsvLocation = resource_filename(Requirement.parse("solidfire-cli"), "connections.csv")
     if os.path.exists(connectionsCsvLocation):
         with open(connectionsCsvLocation, 'r') as connectionFile:
+            portalocker.lock(connectionFile, portalocker.LOCK_SH)
             connections = list(csv.DictReader(connectionFile, delimiter=','))
+            portalocker.unlock(connectionFile)
     else:
         connections = []
     return connections
@@ -267,28 +277,35 @@ def get_connections():
 def write_connections(connections):
     connectionsCsvLocation = resource_filename(Requirement.parse("solidfire-cli"), "connections.csv")
     with open(connectionsCsvLocation, 'w') as f:
+        portalocker.lock(f, portalocker.LOCK_SH)
         w = csv.DictWriter(f, ["name","mvip","port","username","password","version","url","verifyssl"], lineterminator='\n')
         w.writeheader()
         for connection in connections:
             if connection is not None:
                 w.writerow(connection)
+        portalocker.unlock(f)
 
-# Split up something like this:
-# name:value,name:value,name:value;name:value,name:value,name:value
-# into something like this:
-# [{name:value, name:value, name:value}, {name:value, name:value, name:value}]
-def loads(parametersString):
-    splitByObjects = parametersString[1:-1].split(')(') # Splits by objects(name:value,name:value,name:value;name:value,name:value,name:value)
-    splitByParams = [param.split(',') for param in splitByObjects] # Splits by parameters (name:value,name:value,name:value)
-    objectArray = []
-    for paramSet in splitByParams:
-        object = dict()
-        for param in paramSet:
-            splitByNameValue = param.split(':') # Splits between the name and value (name:value)
-            object[splitByNameValue[0]] = splitByNameValue[1]
-        objectArray += [object]
-    print(objectArray)
-    return objectArray
+def get_default_connection(ctx):
+    connectionCsvLocation = resource_filename(Requirement.parse("solidfire-cli"), "default_connection.csv")
+    if os.path.exists(connectionCsvLocation):
+        with open(connectionCsvLocation, 'r') as connectionFile:
+            portalocker.lock(connectionFile, portalocker.LOCK_SH)
+            connections = list(csv.DictReader(connectionFile, delimiter=','))
+            portalocker.unlock(connectionFile)
+        return connections[0]
+    else:
+        ctx.logger.error("Please provide connection information. There is no connection info in cache at this time.")
+        exit(1)
+
+def write_default_connection(connection):
+    connectionCsvLocation = resource_filename(Requirement.parse("solidfire-cli"), "default_connection.csv")
+    with open(connectionCsvLocation, 'w') as f:
+        portalocker.lock(f, portalocker.LOCK_SH)
+        w = csv.DictWriter(f, ["name", "mvip", "port", "username", "password", "version", "url", "verifyssl"],
+                           lineterminator='\n')
+        w.writeheader()
+        w.writerow(connection)
+        portalocker.unlock(f)
 
 # WARNING! This doesn't actually give us total security. It only gives us obscurity.
 def encrypt(sensitive_data):
