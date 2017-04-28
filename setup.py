@@ -37,7 +37,7 @@ setup(
         'jsonpickle >= 0.9.3',
 		'solidfire-sdk-python >= 1.2',
         'pycryptodome >= 2.6.1',
-        'portalocker'
+        'FileLock'
     ],
     tests_require=[
         'mock',

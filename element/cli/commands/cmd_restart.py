@@ -24,32 +24,31 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """services shutdown networking resetnode """
+    """resetnode shutdown networking services """
 
-@cli.command('services', short_help="""The RestartServices API method enables you to restart the services on a node. Caution: This method causes temporary node services interruption. Exercise caution when using this method. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
+@cli.command('resetnode', short_help="""The ResetNode API method enables you to reset a node to the factory settings. All data, packages (software upgrades, and so on), configurations, and log files are deleted from the node when you call this method. However, network settings for the node are preserved during this operation. Nodes that are participating in a cluster cannot be reset to the factory settings. The ResetNode API can only be used on nodes that are in an "Available" state. It cannot be used on nodes that are "Active" in a cluster, or in a "Pending" state. Caution: This method clears any data that is on the node. Exercise caution when using this method. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
+@click.option('--build',
+              type=str,
+              required=True,
+              prompt=True,
+              help="""Specifies the URL to a remote Element software image to which the node will be reset. """)
 @click.option('--force',
               type=bool,
               required=True,
               prompt=True,
-              help="""Required parameter to successfully restart services on a node. """)
-@click.option('--service',
-              type=str,
-              required=False,
-              help="""Service name to be restarted. """)
-@click.option('--action',
-              type=str,
-              required=False,
-              help="""Action to perform on the service (start, stop, restart). """)
+              help="""Required parameter to successfully reset the node. """)
 @pass_context
-def services(ctx,
+def resetnode(ctx,
            # Mandatory main parameter
-           force,
-           # Optional main parameter
-           service = None,
-           # Optional main parameter
-           action = None):
-    """The RestartServices API method enables you to restart the services on a node."""
-    """Caution: This method causes temporary node services interruption. Exercise caution when using this method."""
+           build,
+           # Mandatory main parameter
+           force):
+    """The ResetNode API method enables you to reset a node to the factory settings. All data, packages (software upgrades, and so on),"""
+    """configurations, and log files are deleted from the node when you call this method. However, network settings for the node are"""
+    """preserved during this operation. Nodes that are participating in a cluster cannot be reset to the factory settings."""
+    """The ResetNode API can only be used on nodes that are in an "Available" state. It cannot be used on nodes that are "Active" in a"""
+    """cluster, or in a "Pending" state."""
+    """Caution: This method clears any data that is on the node. Exercise caution when using this method."""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
 
     
@@ -58,11 +57,10 @@ def services(ctx,
     
     
     
-    
 
-    ctx.logger.info(""": """"""force = """ + str(force)+";" + """service = """+str(service)+";" + """action = """+str(action)+""";"""+"")
+    ctx.logger.info(""": """"""build = """ + str(build)+";"+"""force = """ + str(force)+""";"""+"")
     try:
-        _dict = ctx.element.restart_services(force=force, service=service, action=action)
+        _ResetNodeResult = ctx.element.reset_node(build=build, force=force)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -70,10 +68,10 @@ def services(ctx,
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_dict), indent=4))
+        print(simplejson.dumps(simplejson.loads(_ResetNodeResult), indent=4))
         return
     else:
-        cli_utils.print_result(_dict, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_ResetNodeResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -160,29 +158,30 @@ def networking(ctx,
 
 
 
-@cli.command('resetnode', short_help="""The ResetNode API method enables you to reset a node to the factory settings. All data, packages (software upgrades, and so on), configurations, and log files are deleted from the node when you call this method. However, network settings for the node are preserved during this operation. Nodes that are participating in a cluster cannot be reset to the factory settings. The ResetNode API can only be used on nodes that are in an "Available" state. It cannot be used on nodes that are "Active" in a cluster, or in a "Pending" state. Caution: This method clears any data that is on the node. Exercise caution when using this method. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
-@click.option('--build',
-              type=str,
-              required=True,
-              prompt=True,
-              help="""Specifies the URL to a remote Element software image to which the node will be reset. """)
+@cli.command('services', short_help="""The RestartServices API method enables you to restart the services on a node. Caution: This method causes temporary node services interruption. Exercise caution when using this method. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
 @click.option('--force',
               type=bool,
               required=True,
               prompt=True,
-              help="""Required parameter to successfully reset the node. """)
+              help="""Required parameter to successfully restart services on a node. """)
+@click.option('--service',
+              type=str,
+              required=False,
+              help="""Service name to be restarted. """)
+@click.option('--action',
+              type=str,
+              required=False,
+              help="""Action to perform on the service (start, stop, restart). """)
 @pass_context
-def resetnode(ctx,
+def services(ctx,
            # Mandatory main parameter
-           build,
-           # Mandatory main parameter
-           force):
-    """The ResetNode API method enables you to reset a node to the factory settings. All data, packages (software upgrades, and so on),"""
-    """configurations, and log files are deleted from the node when you call this method. However, network settings for the node are"""
-    """preserved during this operation. Nodes that are participating in a cluster cannot be reset to the factory settings."""
-    """The ResetNode API can only be used on nodes that are in an "Available" state. It cannot be used on nodes that are "Active" in a"""
-    """cluster, or in a "Pending" state."""
-    """Caution: This method clears any data that is on the node. Exercise caution when using this method."""
+           force,
+           # Optional main parameter
+           service = None,
+           # Optional main parameter
+           action = None):
+    """The RestartServices API method enables you to restart the services on a node."""
+    """Caution: This method causes temporary node services interruption. Exercise caution when using this method."""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
 
     
@@ -191,10 +190,11 @@ def resetnode(ctx,
     
     
     
+    
 
-    ctx.logger.info(""": """"""build = """ + str(build)+";"+"""force = """ + str(force)+""";"""+"")
+    ctx.logger.info(""": """"""force = """ + str(force)+";" + """service = """+str(service)+";" + """action = """+str(action)+""";"""+"")
     try:
-        _ResetNodeResult = ctx.element.reset_node(build=build, force=force)
+        _dict = ctx.element.restart_services(force=force, service=service, action=action)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -202,8 +202,8 @@ def resetnode(ctx,
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ResetNodeResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_dict), indent=4))
         return
     else:
-        cli_utils.print_result(_ResetNodeResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_dict, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

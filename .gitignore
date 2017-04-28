@@ -20,3 +20,5 @@ element/cli/commands/*.txt
 /descriptor_version.json
 /generator_version.json
 default_connection.csv
+connectionsLock
+defaultLock
