@@ -47,8 +47,13 @@ def cli(ctx):
               default = None,
               help="The port you wish to connect on",
               required=False)
+@click.option('--verifyssl', '-s',
+              default = None,
+              help="Enable this to check ssl connection for errors especially when using a hostname. It is invalid to set this to true when using an IP address in the target.",
+              required=False,
+              is_flag=True)
 @pass_context
-def push(ctx, mvip, username, password, version, port, name):
+def push(ctx, mvip, username, password, version, port, name, verifyssl):
     # First, attempt to establish the connection. If that's not possible,
     # throw the error.
 
@@ -76,6 +81,7 @@ def push(ctx, mvip, username, password, version, port, name):
         ctx.password = password
     if ctx.version is None:
         ctx.version = version
+    ctx.verifyssl = ctx.verifyssl or verifyssl
 
     # Verify that the connection exists or get the extra info.
     cli_utils.establish_connection(ctx)
@@ -97,8 +103,12 @@ def push(ctx, mvip, username, password, version, port, name):
                                   'port': ctx.port,
                                   'url': 'https://%s:%s' % (ctx.mvip, ctx.port),
                                   'version': ctx.version,
-                                  'name': name}]
-    cli_utils.write_connections(connections)
+                                  'name': name,
+                                  'verifyssl': verifyssl}]
+    try:
+        cli_utils.write_connections(connections)
+    except PermissionError as e:
+        ctx.logger.error(e.args[1]+" Please verify you have write permissions for "+resource_filename(Requirement.parse("solidfire-cli"), "connections.csv"))
 
 @cli.command('remove', short_help="Removes a given connection")
 @click.option('--name', '-n',

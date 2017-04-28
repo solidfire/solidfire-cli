@@ -191,7 +191,8 @@ def establish_connection(ctx):
                'password': ctx.password,
                'port': ctx.port,
                'url': 'https://%s:%s' % (ctx.mvip, ctx.port),
-               'version': ctx.version}
+               'version': ctx.version,
+               'verifyssl': ctx.verifyssl}
         try:
             ctx.element = ElementFactory.create(cfg["mvip"],cfg["username"],cfg["password"],port=cfg["port"],version=ctx.version,verify_ssl=ctx.verifyssl)
         except Exception as e:
@@ -228,7 +229,7 @@ def establish_connection(ctx):
             # Finally, we need to establish our connection via elementfactory:
 
             try:
-                ctx.element = Element(cfg["mvip"]+":"+str(cfg["port"]), decrypt(cfg["username"]), decrypt(cfg["password"]), cfg["version"], verify_ssl=ctx.verifyssl)
+                ctx.element = Element(cfg["mvip"]+":"+str(cfg["port"]), decrypt(cfg["username"]), decrypt(cfg["password"]), cfg["version"], verify_ssl=cfg["verifyssl"])
             except Exception as e:
                 ctx.logger.error(e.__str__())
                 ctx.logger.error("The connection is corrupt. Run 'sfcli connection prune' to try and remove all broken connections or use 'sfcli connection remove -n name'")
@@ -262,7 +263,7 @@ def get_connections():
 def write_connections(connections):
     connectionsCsvLocation = resource_filename(Requirement.parse("solidfire-cli"), "connections.csv")
     with open(connectionsCsvLocation, 'w') as f:
-        w = csv.DictWriter(f, ["name","mvip","port","username","password","version","url"], lineterminator='\n')
+        w = csv.DictWriter(f, ["name","mvip","port","username","password","version","url","verifyssl"], lineterminator='\n')
         w.writeheader()
         for connection in connections:
             if connection is not None:
