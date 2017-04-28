@@ -63,10 +63,6 @@ def push(ctx, mvip, username, password, version, port, name, verifyssl):
         ctx.logger.error("Please only provide the username once.")
     if password and ctx.password:
         ctx.logger.error("Please only provide the password once.")
-    if version and ctx.version:
-        ctx.logger.error("Please only provide the version once.")
-    if port and ctx.port:
-        ctx.logger.error("Please only provide the port once.")
     if name and ctx.name:
         ctx.logger.error("Please only provide the name once.")
 
