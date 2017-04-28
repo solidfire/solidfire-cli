@@ -193,8 +193,9 @@ def establish_connection(ctx):
                'url': 'https://%s:%s' % (ctx.mvip, ctx.port),
                'version': ctx.version,
                'verifyssl': ctx.verifyssl}
+        print(cfg)
         try:
-            ctx.element = ElementFactory.create(cfg["mvip"],cfg["username"],cfg["password"],port=cfg["port"],version=ctx.version,verify_ssl=ctx.verifyssl)
+            ctx.element = ElementFactory.create(cfg["mvip"],cfg["username"],cfg["password"],port=cfg["port"],version=cfg["version"],verify_ssl=cfg["verifyssl"])
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)
@@ -227,9 +228,17 @@ def establish_connection(ctx):
         # If we managed to find the connection we were looking for, we must try to establish the connection.
         if cfg is not None:
             # Finally, we need to establish our connection via elementfactory:
-
+            print("A")
+            print(cfg)
             try:
-                ctx.element = Element(cfg["mvip"]+":"+str(cfg["port"]), decrypt(cfg["username"]), decrypt(cfg["password"]), cfg["version"], verify_ssl=cfg["verifyssl"])
+                print(cfg["mvip"])
+                if int(cfg["port"]) != 443:
+                    address = cfg["mvip"] + ":" + cfg["port"]
+                else:
+                    print("GOOD")
+                    address = cfg["mvip"]+ ":" + cfg["port"]
+                print(address)
+                ctx.element = Element(address, decrypt(cfg["username"]), decrypt(cfg["password"]), cfg["version"], verify_ssl=cfg["verifyssl"])
             except Exception as e:
                 ctx.logger.error(e.__str__())
                 ctx.logger.error("The connection is corrupt. Run 'sfcli connection prune' to try and remove all broken connections or use 'sfcli connection remove -n name'")

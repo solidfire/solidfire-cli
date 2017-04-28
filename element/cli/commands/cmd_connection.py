@@ -76,7 +76,7 @@ def push(ctx, mvip, username, password, version, port, name, verifyssl):
     if ctx.password is None:
         ctx.password = password
     if version is not None:
-        ctx.version = version
+        ctx.version = str(float(version))
     if port is not None:
         ctx.port = port
     ctx.verifyssl = ctx.verifyssl or verifyssl
