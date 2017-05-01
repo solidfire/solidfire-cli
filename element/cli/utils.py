@@ -187,8 +187,8 @@ def establish_connection(ctx):
         if ctx.password is None:
             ctx.password = getpass.getpass("Password:")
         cfg = {'mvip': ctx.mvip,
-               'username': "b'"+encrypt(ctx.username.decode('utf-8'))+"'",
-               'password': "b'"+encrypt(ctx.password.decode('utf-8'))+"'",
+               'username': "b'"+encrypt(ctx.username).decode('utf-8')+"'",
+               'password': "b'"+encrypt(ctx.password).decode('utf-8')+"'",
                'port': ctx.port,
                'url': 'https://%s:%s' % (ctx.mvip, ctx.port),
                'version': ctx.version,
