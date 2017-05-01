@@ -103,10 +103,7 @@ def push(ctx, mvip, username, password, version, port, name, verifyssl):
                                   'version': ctx.version,
                                   'name': name,
                                   'verifyssl': verifyssl}]
-    try:
-        cli_utils.write_connections(connections)
-    except Exception as e:
-        ctx.logger.error(e.args)
+    cli_utils.write_connections(ctx, connections)
 
 @cli.command('remove', short_help="Removes a given connection")
 @click.option('--name', '-n',
@@ -136,7 +133,7 @@ def remove(ctx, name=None, index=None):
     # Filter by index
     if index is not None:
         del connections[index]
-    cli_utils.write_connections(connections)
+    cli_utils.write_connections(ctx, connections)
 
 @cli.command('list', short_help="Lists the stored connection info")
 @click.option('--name', '-n',
@@ -180,4 +177,4 @@ def prune(ctx):
             cli_utils.print_result(connection, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
             print(e.__str__())
             print()
-    cli_utils.write_connections(goodConnections)
+    cli_utils.write_connections(ctx, goodConnections)

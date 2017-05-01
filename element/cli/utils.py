@@ -278,16 +278,19 @@ def get_connections():
             connection["verifyssl"] = False
     return connections
 
-def write_connections(connections):
-    connectionsCsvLocation = resource_filename(Requirement.parse("solidfire-cli"), "connections.csv")
-    connectionsLock = resource_filename(Requirement.parse("solidfire-cli"), "connectionsLock")
-    with open(connectionsCsvLocation, 'w') as f:
-        with FileLock(connectionsLock):
-            w = csv.DictWriter(f, ["name","mvip","port","username","password","version","url","verifyssl"], lineterminator='\n')
-            w.writeheader()
-            for connection in connections:
-                if connection is not None:
-                    w.writerow(connection)
+def write_connections(ctx, connections):
+    try:
+        connectionsCsvLocation = resource_filename(Requirement.parse("solidfire-cli"), "connections.csv")
+        connectionsLock = resource_filename(Requirement.parse("solidfire-cli"), "connectionsLock")
+        with open(connectionsCsvLocation, 'w') as f:
+            with FileLock(connectionsLock):
+                w = csv.DictWriter(f, ["name","mvip","port","username","password","version","url","verifyssl"], lineterminator='\n')
+                w.writeheader()
+                for connection in connections:
+                    if connection is not None:
+                        w.writerow(connection)
+    except Exception as e:
+        ctx.logger.error("Problem writing connection file because: " + e.args)
 
 def get_default_connection(ctx):
     connectionCsvLocation = resource_filename(Requirement.parse("solidfire-cli"), "default_connection.csv")
@@ -311,15 +314,18 @@ def get_default_connection(ctx):
         ctx.logger.error("Please provide connection information. There is no connection info in cache at this time.")
         exit(1)
 
-def write_default_connection(connection):
-    connectionCsvLocation = resource_filename(Requirement.parse("solidfire-cli"), "default_connection.csv")
-    defaultLockLocation = resource_filename(Requirement.parse("solidfire-cli"), "defaultLock")
-    with FileLock(defaultLockLocation):
-        with open(connectionCsvLocation, 'w') as f:
-            w = csv.DictWriter(f, ["name", "mvip", "port", "username", "password", "version", "url", "verifyssl"],
-                               lineterminator='\n')
-            w.writeheader()
-            w.writerow(connection)
+def write_default_connection(ctx, connection):
+    try:
+        connectionCsvLocation = resource_filename(Requirement.parse("solidfire-cli"), "default_connection.csv")
+        defaultLockLocation = resource_filename(Requirement.parse("solidfire-cli"), "defaultLock")
+        with FileLock(defaultLockLocation):
+            with open(connectionCsvLocation, 'w') as f:
+                w = csv.DictWriter(f, ["name", "mvip", "port", "username", "password", "version", "url", "verifyssl"],
+                                   lineterminator='\n')
+                w.writeheader()
+                w.writerow(connection)
+    except Exception as e:
+        ctx.logger.error("Problem writing default connection file because: " + e.args)
 
 # WARNING! This doesn't actually give us total security. It only gives us obscurity.
 def encrypt(sensitive_data):
