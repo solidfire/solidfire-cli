@@ -252,7 +252,7 @@ def establish_connection(ctx):
         ctx.cfg = cfg
         cfg["name"] = cfg.get("name", "default")
         try:
-            write_default_connection(cfg)
+            write_default_connection(ctx, cfg)
         except Exception as e:
             ctx.logger.warning(e.args)
 
