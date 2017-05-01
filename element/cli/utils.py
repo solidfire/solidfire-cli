@@ -12,6 +12,7 @@ import getpass
 from solidfire.factory import ElementFactory
 from solidfire import Element
 from filelock import FileLock
+import sys
 
 def kv_string_to_dict(kv_string):
     new_dict = {}
@@ -85,7 +86,7 @@ def get_result_as_tree(objs, depth=1, currentDepth=0, lastKey = ""):
     stringToReturn = ""
     if(currentDepth > depth):
         return "<to see more details, increase depth>\n"
-    if(type(objs) is str or type(objs) is bool or type(objs) is int or type(objs) is type(u'') or objs is None or type(objs) is float):
+    if(type(objs) is str or type(objs) is bool or type(objs) is int or type(objs) is type(u'') or objs is None or type(objs) is float or (sys.version_info[0]<3 and type(objs) is long)):
         return str(objs) + "\n"
     if(type(objs) is list):
         stringToReturn += "\n"
