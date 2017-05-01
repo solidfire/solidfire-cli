@@ -232,6 +232,7 @@ def establish_connection(ctx):
                     address = cfg["mvip"] + ":" + cfg["port"]
                 else:
                     address = cfg["mvip"]
+                print(cfg["verifyssl"])
                 ctx.element = Element(address, decrypt(cfg["username"]), decrypt(cfg["password"]), cfg["version"], verify_ssl=cfg["verifyssl"])
             except Exception as e:
                 ctx.logger.error(e.__str__())
@@ -263,13 +264,19 @@ def establish_connection(ctx):
 # this needs to be atomic.
 def get_connections():
     connectionsCsvLocation = resource_filename(Requirement.parse("solidfire-cli"), "connections.csv")
+    connectionsLock = resource_filename(Requirement.parse("solidfire-cli"), "connectionsLock")
     if os.path.exists(connectionsCsvLocation):
-        connectionsLock = resource_filename(Requirement.parse("solidfire-cli"), "connectionsLock")
         with FileLock(connectionsLock):
             with open(connectionsCsvLocation, 'r') as connectionFile:
                 connections = list(csv.DictReader(connectionFile, delimiter=','))
     else:
         connections = []
+    for connection in connections:
+        connection["version"] = float(connection["version"])
+        if connection["verifyssl"] == "True":
+            connection["verifyssl"] = True
+        else:
+            connection["verifyssl"] = False
     return connections
 
 def write_connections(connections):
