@@ -232,7 +232,6 @@ def establish_connection(ctx):
                     address = cfg["mvip"] + ":" + cfg["port"]
                 else:
                     address = cfg["mvip"]
-                print(cfg["verifyssl"])
                 ctx.element = Element(address, decrypt(cfg["username"]), decrypt(cfg["password"]), cfg["version"], verify_ssl=cfg["verifyssl"])
             except Exception as e:
                 ctx.logger.error(e.__str__())
