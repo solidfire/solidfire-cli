@@ -290,7 +290,7 @@ def write_connections(ctx, connections):
                     if connection is not None:
                         w.writerow(connection)
     except Exception as e:
-        ctx.logger.error("Problem writing connection file because: " + e.args)
+        ctx.logger.error("Problem writing connection file because: " + str(e.args))
 
 def get_default_connection(ctx):
     connectionCsvLocation = resource_filename(Requirement.parse("solidfire-cli"), "default_connection.csv")
@@ -325,7 +325,7 @@ def write_default_connection(ctx, connection):
                 w.writeheader()
                 w.writerow(connection)
     except Exception as e:
-        ctx.logger.error("Problem writing default connection file because: " + e.args)
+        ctx.logger.error("Problem writing default connection file because: " + str(e.args))
 
 # WARNING! This doesn't actually give us total security. It only gives us obscurity.
 def encrypt(sensitive_data):
