@@ -275,7 +275,7 @@ def get_connections(ctx):
         connections = []
     for connection in connections:
         connection["version"] = float(connection["version"])
-        if connection["verifyssl"] == "True":
+        if connection.get("verifyssl") == "True":
             connection["verifyssl"] = True
         else:
             connection["verifyssl"] = False

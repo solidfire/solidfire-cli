@@ -37,7 +37,8 @@ setup(
         'jsonpickle >= 0.9.3',
 		'solidfire-sdk-python >= 1.2',
         'pycryptodome >= 2.6.1',
-        'FileLock'
+        'FileLock',
+        'getpass2'
     ],
     tests_require=[
         'mock',
