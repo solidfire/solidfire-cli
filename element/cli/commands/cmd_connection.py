@@ -84,7 +84,7 @@ def push(ctx, mvip, username, password, version, port, name, verifyssl):
     # Verify that the connection exists or get the extra info.
     cli_utils.establish_connection(ctx)
 
-    connections = cli_utils.get_connections()
+    connections = cli_utils.get_connections(ctx)
     # First, ensure that no other connections have the same name:
     sameName = [connection for connection in connections if connection["name"]==name]
     if sameName != []:
@@ -123,7 +123,7 @@ def remove(ctx, name=None, index=None):
         ctx.logger.error("You must provide either the name or the index of the connection to remove.")
         exit(1)
 
-    connections = cli_utils.get_connections()
+    connections = cli_utils.get_connections(ctx)
     if index is not None and index > (len(connections) - 1):
         ctx.logger.error("Your connection index is greater than the maximum index of your connections stack.")
 
@@ -147,7 +147,7 @@ def remove(ctx, name=None, index=None):
 @pass_context
 def list(ctx, name=None, index=None):
     connectionsCsvLocation = resource_filename(Requirement.parse("solidfire-cli"), "connections.csv")
-    connections = cli_utils.get_connections()
+    connections = cli_utils.get_connections(ctx)
     print(connectionsCsvLocation)
     if(name is None and index is None):
         cli_utils.print_result(connections, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
@@ -160,7 +160,7 @@ def list(ctx, name=None, index=None):
 @cli.command('prune', short_help="If something changes in your cluster, a connection which may have been valid before may not be valid now. To find and remove those connections, use prune.")
 @pass_context
 def prune(ctx):
-    connections = cli_utils.get_connections()
+    connections = cli_utils.get_connections(ctx)
     goodConnections = []
     for connection in connections:
         if not all (k in connection.keys() for k in ["mvip", "username", "password", "version", "port", "name"]):

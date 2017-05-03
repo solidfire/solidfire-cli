@@ -209,13 +209,13 @@ def establish_connection(ctx):
         if ctx.connectionindex is None and ctx.name is None:
             cfg = get_default_connection(ctx)
         elif ctx.connectionindex is not None:
-            connections = get_connections()
+            connections = get_connections(ctx)
             if int(ctx.connectionindex) > (len(connections)-1) or int(ctx.connectionindex) < (-len(connections)):
                 ctx.logger.error("Connection "+str(ctx.connectionindex)+" Please provide an index between "+str(-len(connections))+" and "+str(len(connections)-1))
                 exit(1)
             cfg = connections[ctx.connectionindex]
         elif ctx.name is not None:
-            connections = get_connections()
+            connections = get_connections(ctx)
             filteredCfg = [connection for connection in connections if connection["name"] == ctx.name]
             if(len(filteredCfg) > 1):
                 ctx.logger.error("Your connections.csv file has become corrupted. There are two connections of the same name.")
@@ -252,23 +252,25 @@ def establish_connection(ctx):
         cfg["port"] = int(cfg["port"])
         ctx.cfg = cfg
         cfg["name"] = cfg.get("name", "default")
-        try:
+        if not ctx.nocache:
             write_default_connection(ctx, cfg)
-        except Exception as e:
-            ctx.logger.warning(e.args)
 
     if ctx.element is None:
         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
         exit()
 
 # this needs to be atomic.
-def get_connections():
+def get_connections(ctx):
     connectionsCsvLocation = resource_filename(Requirement.parse("solidfire-cli"), "connections.csv")
     connectionsLock = resource_filename(Requirement.parse("solidfire-cli"), "connectionsLock")
     if os.path.exists(connectionsCsvLocation):
-        with FileLock(connectionsLock):
-            with open(connectionsCsvLocation, 'r') as connectionFile:
-                connections = list(csv.DictReader(connectionFile, delimiter=','))
+        try:
+            with FileLock(connectionsLock):
+                with open(connectionsCsvLocation, 'r') as connectionFile:
+                    connections = list(csv.DictReader(connectionFile, delimiter=','))
+        except Exception as e:
+            ctx.logger.error("Problem reading "+connectionsCsvLocation+" because: "+str(e.args)+" Try changing the permissions of that file.")
+            exit(1)
     else:
         connections = []
     for connection in connections:
@@ -291,15 +293,20 @@ def write_connections(ctx, connections):
                     if connection is not None:
                         w.writerow(connection)
     except Exception as e:
-        ctx.logger.error("Problem writing "+ connectionsCsvLocation + " " + str(e.args))
+        ctx.logger.error("Problem writing "+ connectionsCsvLocation + " " + str(e.args)+" Try changing the permissions of that file.")
+        exit(1)
 
 def get_default_connection(ctx):
     connectionCsvLocation = resource_filename(Requirement.parse("solidfire-cli"), "default_connection.csv")
     if os.path.exists(connectionCsvLocation):
         defaultLockLocation = resource_filename(Requirement.parse("solidfire-cli"), "defaultLock")
-        with FileLock(defaultLockLocation):
-            with open(connectionCsvLocation) as connectionFile:
-                connection = list(csv.DictReader(connectionFile, delimiter=','))
+        try:
+            with FileLock(defaultLockLocation):
+                with open(connectionCsvLocation) as connectionFile:
+                    connection = list(csv.DictReader(connectionFile, delimiter=','))
+        except Exception as e:
+            ctx.logger.error("Problem reading "+connectionCsvLocation+" because: "+str(e.args)+" Try changing the permissions of that file or specifying credentials.")
+            exit(1)
         if len(connection)>0:
             connection[0]["version"] = float(connection[0]["version"])
             if(connection[0]["verifyssl"] == "True"):
@@ -326,7 +333,7 @@ def write_default_connection(ctx, connection):
                 w.writeheader()
                 w.writerow(connection)
     except Exception as e:
-        ctx.logger.error("Problem writing "+ connectionCsvLocation + " " + str(e.args))
+        ctx.logger.warning("Problem writing "+ connectionCsvLocation + " " + str(e.args)+" Try using changing the permissions of that file or using the --nocache flag.")
 
 # WARNING! This doesn't actually give us total security. It only gives us obscurity.
 def encrypt(sensitive_data):
