@@ -196,6 +196,8 @@ def establish_connection(ctx):
                'verifyssl': ctx.verifyssl}
         try:
             ctx.element = ElementFactory.create(cfg["mvip"],decrypt(cfg["username"]),decrypt(cfg["password"]),port=cfg["port"],version=cfg["version"],verify_ssl=cfg["verifyssl"])
+            ctx.version = ctx.element._api_version
+            cfg["version"] = ctx.element._api_version
         except Exception as e:
             ctx.logger.error(e.__str__())
             exit(1)

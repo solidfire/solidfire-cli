@@ -216,7 +216,7 @@ class SolidFireCommand(click.Command):
               help="SolidFire cluster password",
               required=False)
 @click.option('--version', '-v',
-              default="9.0",
+              default=None,
               help='The version you would like to connect on',
               required=False)
 @click.option('--port', '-q',
@@ -278,7 +278,7 @@ def cli(ctx,
         filter_tree=None,
         debug=0,
         verbose=0,
-        version='9.0',
+        version=None,
         nocache=None):
     """Welcome to the SolidFire command line interface! For more information about how to use this, see the readme here: https://github.com/solidfire/Python-CLI"""
     # NOTE(jdg): This method is actually our console entry point,
