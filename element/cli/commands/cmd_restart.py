@@ -24,7 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """shutdown networking resetnode """
+    """shutdown resetnode networking """
 
 @cli.command('shutdown', short_help="""The Shutdown API method enables you to restart or shutdown a node that has not yet been added to a cluster. To use this method, log in to the MIP for the pending node, and enter the "shutdown" method with either the "restart" or "halt" options. """, cls=SolidFireCommand)
 @click.option('--nodes',
@@ -68,44 +68,6 @@ def shutdown(ctx,
         return
     else:
         cli_utils.print_result(_ShutdownResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('networking', short_help="""The RestartNetworking API method enables you to restart the networking services on a node. Warning: This method restarts all networking services on a node, causing temporary loss of networking connectivity. Exercise caution when using this method. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
-@click.option('--force',
-              type=bool,
-              required=True,
-              prompt=True,
-              help="""Required parameter to successfully reset the node. """)
-@pass_context
-def networking(ctx,
-           # Mandatory main parameter
-           force):
-    """The RestartNetworking API method enables you to restart the networking services on a node."""
-    """Warning: This method restarts all networking services on a node, causing temporary loss of networking connectivity."""
-    """Exercise caution when using this method."""
-    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
-
-    
-
-    cli_utils.establish_connection(ctx)
-    
-    
-
-    ctx.logger.info(""": """"""force = """ + str(force)+""";"""+"")
-    try:
-        _dict = ctx.element.restart_networking(force=force)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_dict), indent=4))
-        return
-    else:
-        cli_utils.print_result(_dict, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -155,4 +117,42 @@ def resetnode(ctx,
         return
     else:
         cli_utils.print_result(_ResetNodeResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('networking', short_help="""The RestartNetworking API method enables you to restart the networking services on a node. Warning: This method restarts all networking services on a node, causing temporary loss of networking connectivity. Exercise caution when using this method. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
+@click.option('--force',
+              type=bool,
+              required=True,
+              prompt=True,
+              help="""Required parameter to successfully reset the node. """)
+@pass_context
+def networking(ctx,
+           # Mandatory main parameter
+           force):
+    """The RestartNetworking API method enables you to restart the networking services on a node."""
+    """Warning: This method restarts all networking services on a node, causing temporary loss of networking connectivity."""
+    """Exercise caution when using this method."""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
+
+    
+
+    cli_utils.establish_connection(ctx)
+    
+    
+
+    ctx.logger.info(""": """"""force = """ + str(force)+""";"""+"")
+    try:
+        _dict = ctx.element.restart_networking(force=force)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_dict), indent=4))
+        return
+    else:
+        cli_utils.print_result(_dict, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

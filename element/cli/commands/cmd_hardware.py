@@ -24,7 +24,43 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """getnvraminfo getclusterinfo getinfo getconfig getnodeinfo """
+    """getnodeinfo getnvraminfo getclusterinfo getinfo getconfig """
+
+@cli.command('getnodeinfo', short_help="""GetNodeHardwareInfo enables you to return all the hardware information and status for the node specified. This generally includes details about manufacturers, vendors, versions, and other associated hardware identification information. """, cls=SolidFireCommand)
+@click.option('--nodeid',
+              type=int,
+              required=True,
+              prompt=True,
+              help="""The ID of the node for which hardware information is being requested. Information about a Fibre Channel node is returned if a Fibre Channel node is specified. """)
+@pass_context
+def getnodeinfo(ctx,
+           # Mandatory main parameter
+           nodeid):
+    """GetNodeHardwareInfo enables you to return all the hardware information and status for the node specified. This generally includes details about"""
+    """manufacturers, vendors, versions, and other associated hardware identification information."""
+
+    
+
+    cli_utils.establish_connection(ctx)
+    
+    
+
+    ctx.logger.info(""": """"""nodeid = """ + str(nodeid)+""";"""+"")
+    try:
+        _GetNodeHardwareInfoResult = ctx.element.get_node_hardware_info(node_id=nodeid)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetNodeHardwareInfoResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetNodeHardwareInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
 
 @cli.command('getnvraminfo', short_help="""GetNvramInfo enables you to retrieve information from each node about the NVRAM card. """, cls=SolidFireCommand)
 @click.option('--force',
@@ -148,40 +184,4 @@ def getconfig(ctx):
         return
     else:
         cli_utils.print_result(_GetHardwareConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getnodeinfo', short_help="""GetNodeHardwareInfo enables you to return all the hardware information and status for the node specified. This generally includes details about manufacturers, vendors, versions, and other associated hardware identification information. """, cls=SolidFireCommand)
-@click.option('--nodeid',
-              type=int,
-              required=True,
-              prompt=True,
-              help="""The ID of the node for which hardware information is being requested. Information about a Fibre Channel node is returned if a Fibre Channel node is specified. """)
-@pass_context
-def getnodeinfo(ctx,
-           # Mandatory main parameter
-           nodeid):
-    """GetNodeHardwareInfo enables you to return all the hardware information and status for the node specified. This generally includes details about"""
-    """manufacturers, vendors, versions, and other associated hardware identification information."""
-
-    
-
-    cli_utils.establish_connection(ctx)
-    
-    
-
-    ctx.logger.info(""": """"""nodeid = """ + str(nodeid)+""";"""+"")
-    try:
-        _GetNodeHardwareInfoResult = ctx.element.get_node_hardware_info(node_id=nodeid)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetNodeHardwareInfoResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_GetNodeHardwareInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
