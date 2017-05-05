@@ -24,7 +24,43 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """modify list delete create getefficiency """
+    """list modify getefficiency delete create """
+
+@cli.command('list', short_help="""ListStorageContainers enables you to retrieve information about all virtual volume storage containers known to the system. """, cls=SolidFireCommand)
+@click.option('--storagecontainerids',
+              type=str,
+              required=False,
+              help="""A list of storage container IDs for which to retrieve information. If you omit this parameter, the method returns information about all storage containers in the system. """)
+@pass_context
+def list(ctx,
+           # Optional main parameter
+           storagecontainerids = None):
+    """ListStorageContainers enables you to retrieve information about all virtual volume storage containers known to the system."""
+
+    
+
+    cli_utils.establish_connection(ctx)
+    
+
+    storagecontainerids = parser.parse_array(storagecontainerids)
+    
+
+    ctx.logger.info(""": """"""storagecontainerids = """+str(storagecontainerids)+""";"""+"")
+    try:
+        _ListStorageContainersResult = ctx.element.list_storage_containers(storage_container_ids=storagecontainerids)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListStorageContainersResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListStorageContainersResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
 
 @cli.command('modify', short_help="""ModifyStorageContainer enables you to make changes to an existing virtual volume storage container. """, cls=SolidFireCommand)
 @click.option('--storagecontainerid',
@@ -75,28 +111,27 @@ def modify(ctx,
 
 
 
-@cli.command('list', short_help="""ListStorageContainers enables you to retrieve information about all virtual volume storage containers known to the system. """, cls=SolidFireCommand)
-@click.option('--storagecontainerids',
+@cli.command('getefficiency', short_help="""GetStorageContainerEfficiency enables you to retrieve efficiency information about a virtual volume storage container. """, cls=SolidFireCommand)
+@click.option('--storagecontainerid',
               type=str,
-              required=False,
-              help="""A list of storage container IDs for which to retrieve information. If you omit this parameter, the method returns information about all storage containers in the system. """)
+              required=True,
+              prompt=True,
+              help="""The ID of the storage container for which to retrieve efficiency information. """)
 @pass_context
-def list(ctx,
-           # Optional main parameter
-           storagecontainerids = None):
-    """ListStorageContainers enables you to retrieve information about all virtual volume storage containers known to the system."""
+def getefficiency(ctx,
+           # Mandatory main parameter
+           storagecontainerid):
+    """GetStorageContainerEfficiency enables you to retrieve efficiency information about a virtual volume storage container."""
 
     
 
     cli_utils.establish_connection(ctx)
     
-
-    storagecontainerids = parser.parse_array(storagecontainerids)
     
 
-    ctx.logger.info(""": """"""storagecontainerids = """+str(storagecontainerids)+""";"""+"")
+    ctx.logger.info(""": """"""storagecontainerid = """ + str(storagecontainerid)+""";"""+"")
     try:
-        _ListStorageContainersResult = ctx.element.list_storage_containers(storage_container_ids=storagecontainerids)
+        _GetStorageContainerEfficiencyResult = ctx.element.get_storage_container_efficiency(storage_container_id=storagecontainerid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -104,10 +139,10 @@ def list(ctx,
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ListStorageContainersResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_GetStorageContainerEfficiencyResult), indent=4))
         return
     else:
-        cli_utils.print_result(_ListStorageContainersResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_GetStorageContainerEfficiencyResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -202,39 +237,4 @@ def create(ctx,
         return
     else:
         cli_utils.print_result(_CreateStorageContainerResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getefficiency', short_help="""GetStorageContainerEfficiency enables you to retrieve efficiency information about a virtual volume storage container. """, cls=SolidFireCommand)
-@click.option('--storagecontainerid',
-              type=str,
-              required=True,
-              prompt=True,
-              help="""The ID of the storage container for which to retrieve efficiency information. """)
-@pass_context
-def getefficiency(ctx,
-           # Mandatory main parameter
-           storagecontainerid):
-    """GetStorageContainerEfficiency enables you to retrieve efficiency information about a virtual volume storage container."""
-
-    
-
-    cli_utils.establish_connection(ctx)
-    
-    
-
-    ctx.logger.info(""": """"""storagecontainerid = """ + str(storagecontainerid)+""";"""+"")
-    try:
-        _GetStorageContainerEfficiencyResult = ctx.element.get_storage_container_efficiency(storage_container_id=storagecontainerid)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetStorageContainerEfficiencyResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_GetStorageContainerEfficiencyResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

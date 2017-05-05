@@ -24,7 +24,78 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """setloginsessioninfo getloginsessioninfo getremotehosts setremotehosts """
+    """setremotehosts setloginsessioninfo getloginsessioninfo getremotehosts """
+
+@cli.command('setremotehosts', short_help="""SetRemoteLoggingHosts enables you to configure remote logging from the nodes in the storage cluster to a centralized log server or servers. Remote logging is performed over TCP using the default port 514. This API does not add to the existing logging hosts. Rather, it replaces what currently exists with new values specified by this API method. You can use GetRemoteLoggingHosts to determine what the current logging hosts are, and then use SetRemoteLoggingHosts to set the desired list of current and new logging hosts. """, cls=SolidFireCommand)
+@click.option('--remotehosts',
+              cls=SolidFireOption,
+              is_flag=True,
+              multiple=True,
+              subparameters=["host", "port", ],
+              required=True,
+              help="""A list of hosts to send log messages to.  Has the following subparameters: --host --port """)
+@click.option('--host',
+              required=True,
+              prompt=True,
+              multiple=True,
+              type=str,
+              default=None,
+              is_sub_parameter=True,
+              help="""[subparameter] Hostname or IP address of the log server. """,
+              cls=SolidFireOption)
+@click.option('--port',
+              required=True,
+              prompt=True,
+              multiple=True,
+              type=int,
+              default=None,
+              is_sub_parameter=True,
+              help="""[subparameter] Port number that the log server is listening on. """,
+              cls=SolidFireOption)
+@pass_context
+def setremotehosts(ctx,
+           # Mandatory main parameter
+           remotehosts,
+           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
+           host,
+           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
+           port):
+    """SetRemoteLoggingHosts enables you to configure remote logging from the nodes in the storage cluster to a centralized log server or servers. Remote logging is performed over TCP using the default port 514. This API does not add to the existing logging hosts. Rather, it replaces what currently exists with new values specified by this API method. You can use GetRemoteLoggingHosts to determine what the current logging hosts are, and then use SetRemoteLoggingHosts to set the desired list of current and new logging hosts."""
+
+    
+
+    cli_utils.establish_connection(ctx)
+    
+
+    remotehostsArray = None
+    if len(remotehosts) == 1 and host[0] is None and port[0] is None:
+        remotehostsArray = []
+    elif(remotehosts is not None and remotehosts != ()):
+        remotehostsArray = []
+        try:
+            for i, _remotehosts in enumerate(remotehosts):
+                remotehostsArray.append(LoggingServer(host=host[i], port=port[i], ))
+        except Exception as e:
+            ctx.logger.error(e.__str__())
+            exit(1)
+    
+
+    ctx.logger.info(""": """"""remotehosts = """ + str(remotehostsArray)+""";"""+"")
+    try:
+        _SetRemoteLoggingHostsResult = ctx.element.set_remote_logging_hosts(remote_hosts=remotehostsArray)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_SetRemoteLoggingHostsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_SetRemoteLoggingHostsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
 
 @cli.command('setloginsessioninfo', short_help="""You can use SetLoginSessionInfo to set the period of time that a session's login authentication is valid. After the log in period elapses without activity on the system, the authentication expires. New login credentials are required for continued access to the cluster after the timeout period has elapsed. """, cls=SolidFireCommand)
 @click.option('--timeout',
@@ -112,75 +183,4 @@ def getremotehosts(ctx):
         return
     else:
         cli_utils.print_result(_GetRemoteLoggingHostsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('setremotehosts', short_help="""SetRemoteLoggingHosts enables you to configure remote logging from the nodes in the storage cluster to a centralized log server or servers. Remote logging is performed over TCP using the default port 514. This API does not add to the existing logging hosts. Rather, it replaces what currently exists with new values specified by this API method. You can use GetRemoteLoggingHosts to determine what the current logging hosts are, and then use SetRemoteLoggingHosts to set the desired list of current and new logging hosts. """, cls=SolidFireCommand)
-@click.option('--remotehosts',
-              cls=SolidFireOption,
-              is_flag=True,
-              multiple=True,
-              subparameters=["host", "port", ],
-              required=True,
-              help="""A list of hosts to send log messages to.  Has the following subparameters: --host --port """)
-@click.option('--host',
-              required=True,
-              prompt=True,
-              multiple=True,
-              type=str,
-              default=None,
-              is_sub_parameter=True,
-              help="""[subparameter] Hostname or IP address of the log server. """,
-              cls=SolidFireOption)
-@click.option('--port',
-              required=True,
-              prompt=True,
-              multiple=True,
-              type=int,
-              default=None,
-              is_sub_parameter=True,
-              help="""[subparameter] Port number that the log server is listening on. """,
-              cls=SolidFireOption)
-@pass_context
-def setremotehosts(ctx,
-           # Mandatory main parameter
-           remotehosts,
-           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
-           host,
-           # Mandatory subparameter of a mandatory main parameter (Not fully decomposed)
-           port):
-    """SetRemoteLoggingHosts enables you to configure remote logging from the nodes in the storage cluster to a centralized log server or servers. Remote logging is performed over TCP using the default port 514. This API does not add to the existing logging hosts. Rather, it replaces what currently exists with new values specified by this API method. You can use GetRemoteLoggingHosts to determine what the current logging hosts are, and then use SetRemoteLoggingHosts to set the desired list of current and new logging hosts."""
-
-    
-
-    cli_utils.establish_connection(ctx)
-    
-
-    remotehostsArray = None
-    if len(remotehosts) == 1 and host[0] is None and port[0] is None:
-        remotehostsArray = []
-    elif(remotehosts is not None and remotehosts != ()):
-        remotehostsArray = []
-        try:
-            for i, _remotehosts in enumerate(remotehosts):
-                remotehostsArray.append(LoggingServer(host=host[i], port=port[i], ))
-        except Exception as e:
-            ctx.logger.error(e.__str__())
-            exit(1)
-    
-
-    ctx.logger.info(""": """"""remotehosts = """ + str(remotehostsArray)+""";"""+"")
-    try:
-        _SetRemoteLoggingHostsResult = ctx.element.set_remote_logging_hosts(remote_hosts=remotehostsArray)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_SetRemoteLoggingHostsResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_SetRemoteLoggingHostsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
