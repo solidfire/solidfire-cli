@@ -24,7 +24,7 @@ If you are on a mac, you will have to set up a virtual environment first because
 
     pip install virtualenv
     virtualenv pythoncli
-    source pythoncli/bin/activate # This activates the virtual environment. T
+    source pythoncli/bin/activate # This activates the virtual environment. 
 
 Next, irrespective of your OS there are a few ways you can install the tool: from source or from pypi, using easy_install or using pip.
 
@@ -91,7 +91,7 @@ To list the stored connections, use the Connection List command.
 
 	sfcli connection list
 
-To prune broken connections from the connection.csv file, use the Connection Prune command.
+To prune broken connections from the connections.csv file, use the Connection Prune command.
 
 	sfcli connection prune
 
