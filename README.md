@@ -4,7 +4,7 @@ This tool is intended to be an easy-to-use command-line interface that enables y
 
 1. Quickly install a fully functional interface to the JSON-RPC using pip.
 2. Get help on how to use the commands by accessing the inline help.
-3. Execute any command supported by NetApp SolidFire Element OS version 9.0.
+3. Execute any command supported by NetApp SolidFire Element OS version 9.1.
 4. Utilize autofill on MacOS and Linux distributions to make constructing commands easier.
 5. Get responses in three different output formats: tree format, JSON format, and pickle format.
 6. Execute any non-public commands by using "sfcli sfapi invoke" with the necessary method name and parameters.
