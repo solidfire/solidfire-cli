@@ -42,6 +42,12 @@ Supported Operating Systems
 * Linux
 * MacOS
 
+## Documentation
+
+[User Guide](http://solidfire.github.io/solidfire-cli/raw/master/NetApp_SolidFire_CLI_User_Guide.pdf) This readme in .pdf form.
+
+[Release Notes](https://github.com/solidfire/solidfire-cli/raw/master/NetApp_SolidFire_Dot_Net_SDK_Release_Notes.pdf) v1.4
+
 Accessing Inline Help
 ---------------------
 The tool includes inline help that provides details about how to use the commands.
