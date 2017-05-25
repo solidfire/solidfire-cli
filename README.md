@@ -46,7 +46,7 @@ Supported Operating Systems
 
 [User Guide](https://solidfire.github.io/solidfire-cli/NetApp_SolidFire_CLI_User_Guide.pdf) This readme in .pdf form.
 
-[Release Notes](https://solidfire.github.io/solidfire-cli/NetApp_SolidFire_Dot_Net_SDK_Release_Notes.pdf) v1.4
+[Release Notes](https://solidfire.github.io/solidfire-cli/NetApp_SolidFire_CLI_Release_Notes.pdf) v1.4
 
 Accessing Inline Help
 ---------------------
