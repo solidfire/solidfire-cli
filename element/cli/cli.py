@@ -11,7 +11,9 @@ from pkg_resources import Requirement, resource_filename
 import struct
 import base64
 
-logging.basicConfig()
+logging.basicConfig(
+    level=logging.WARNING,
+    format=('%(asctime)s - %(name)s: in %(filename)s at %(lineno)s - %(levelname)s: %(message)s'))
 LOG = logging.getLogger(__name__)
 CONTEXT_SETTINGS = dict(auto_envvar_prefix='SOLIDFIRE', token_normalize_func=lambda x: x.lower())
 DEBUG_LOGGING_MAP = {
@@ -22,6 +24,7 @@ DEBUG_LOGGING_MAP = {
 }
 CLI_VERSION = 'v1'
 click.disable_unicode_literals_warning = True
+
 
 class Context():
 
@@ -286,12 +289,12 @@ def cli(ctx,
     # need to define a new entry point one level up that parses
     # out what version we want to uses
     ctx.debug = debug
-    logging.basicConfig(
-        level=logging.WARNING,
-        format=('%(levelname)s in %(filename)s@%(lineno)s: %(message)s'))
     LOG.setLevel(DEBUG_LOGGING_MAP[int(debug)])
 
-    logging.getLogger('solidfire.Element').setLevel(logging.CRITICAL)
+    element_logger = logging.getLogger('solidfire.Element')
+    element_logger.setLevel(DEBUG_LOGGING_MAP[int(debug)])
+    if element_logger.hasHandlers():
+        element_logger.handlers.clear()
     ctx.logger = LOG
     ctx.verbose = verbose
     ctx.username = username
