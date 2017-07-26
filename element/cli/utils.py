@@ -49,7 +49,7 @@ def print_result(objs, log, as_json=False, as_pickle=False, depth=None, filter_t
 
     # Set up a default depth
     if depth is None:
-        depth = 3
+        depth = 10
 
     # Next, print the tree to the appropriate depth
     print_result_as_tree(objs_to_print, depth)
