@@ -243,6 +243,7 @@ def establish_connection(ctx):
                 exit(1)
 
     # If we want the json output directly from the source, we'll have to override the send request method in the sdk:
+    # This is so that we can circumvent the python objects and get exactly what the json-rpc returns.
     if ctx.json and ctx.element:
         def new_send_request(*args, **kwargs):
             return ctx.element.__class__.__bases__[0].send_request(ctx.element, return_response_raw=True, *args, **kwargs)

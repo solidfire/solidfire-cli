@@ -21,7 +21,7 @@ setup(
     author='SolidFire, Inc.',
     author_email='ariel.hoffman@solidfire.com, adam.haid@solidfire.com',
     packages=find_packages(exclude=["element.tests"]),
-    license='MIT',
+    license='Apache License 2.0',
     zip_safe=False,
     url='https://github.com/solidfire/Python-CLI/tree/release0.0',
     entry_points={
@@ -50,7 +50,7 @@ setup(
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
         'Intended Audience :: System Administrators',
-        'License :: OSI Approved :: MIT License',
+        'License :: OSI Approved :: Apache License',
         'Operating System :: OS Independent',
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Programming Language :: Python :: 3',
