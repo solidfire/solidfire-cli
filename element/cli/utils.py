@@ -341,7 +341,7 @@ def write_default_connection(ctx, connection):
 # WARNING! This doesn't actually give us total security. It only gives us obscurity.
 def encrypt(sensitive_data):
     cipher = ARC4.new(socket.gethostname().encode('utf-8'))
-    encoded = base64.b64encode(cipher.encrypt(sensitive_data.encode('utf-8')))
+    encoded = base64.b64encode(cipher.encrypt(sensitive_data.encode('utf-8') + "SOLIDFIRE".encode('utf-8')))
     return encoded
 
 def decrypt(encoded_sensitive_data):
