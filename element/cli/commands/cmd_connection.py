@@ -59,15 +59,20 @@ def push(ctx, mvip, username, password, version, port, name, verifyssl):
 
     if mvip and ctx.mvip:
         ctx.logger.error("Please only provide the mvip once.")
+        exit(1)
     if username and ctx.username:
         ctx.logger.error("Please only provide the username once.")
+        exit(1)
     if password and ctx.password:
         ctx.logger.error("Please only provide the password once.")
+        exit(1)
     if name and ctx.name:
         ctx.logger.error("Please only provide the name once.")
+        exit(1)
 
     if ctx.mvip is None and mvip is None:
         ctx.logger.error("Please provide the mvip. It is a required parameter.")
+        exit(1)
 
     if ctx.mvip is None:
         ctx.mvip = mvip
