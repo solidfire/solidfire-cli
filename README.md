@@ -76,6 +76,8 @@ To run a command on a given connection without storing it away, use the mvip, us
 
     sfcli --mvip 10.117.60.15 --username username --password password account list
 
+To connect to an individual node rather than the cluster admin node, add `--port 442` to connection options.
+
 To store a given connection, use the connection push command and supply the name option.
 
     sfcli connection push --mvip 10.117.60.15 --username username --password password --name "Example"
@@ -429,7 +431,9 @@ You can use the following options in the tool:
     -l, --login TEXT
         SolidFire Cluster login
     -p, --password TEXT
-        SolidFire cluster password
+        SolidFire Cluster password
+    -q, --port INTEGER
+        The port number on which you wish to connect
     -n, --name TEXT
         The name of the connection you wish to use in connections.csv. You can use this if you have previously stored away a connection.
     -c, --connectionIndex INTEGER
