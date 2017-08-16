@@ -23,7 +23,7 @@ setup(
     packages=find_packages(exclude=["element.tests"]),
     license='Apache License 2.0',
     zip_safe=False,
-    url='https://github.com/solidfire/Python-CLI/tree/release0.0',
+    url='https://github.com/solidfire/solidfire-cli/tree/release0.0',
     entry_points={
         'console_scripts': [
             'sfcli=element.cli.cli:cli',
