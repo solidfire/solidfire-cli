@@ -293,8 +293,10 @@ def cli(ctx,
 
     element_logger = logging.getLogger('solidfire.Element')
     element_logger.setLevel(DEBUG_LOGGING_MAP[int(debug)])
-    if element_logger.hasHandlers():
-        element_logger.handlers.clear()
+    for h in element_logger.handlers:
+        element_logger.removeHandler(h)
+    #if element_logger.hasHandlers():
+    #    element_logger.handlers.clear()
     ctx.logger = LOG
     ctx.verbose = verbose
     ctx.username = username
