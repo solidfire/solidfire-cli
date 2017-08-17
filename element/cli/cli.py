@@ -7,6 +7,7 @@ import click.core
 import click.testing
 import copy
 import csv
+import pkg_resources
 from pkg_resources import Requirement, resource_filename
 import struct
 import base64
@@ -16,6 +17,10 @@ logging.basicConfig(
     format=('%(asctime)s - %(name)s: in %(filename)s at %(lineno)s - %(levelname)s: %(message)s'))
 LOG = logging.getLogger(__name__)
 CONTEXT_SETTINGS = dict(auto_envvar_prefix='SOLIDFIRE', token_normalize_func=lambda x: x.lower())
+HELP_STRING = """Welcome to the SolidFire Command Line Interface """ + pkg_resources.require("solidfire-cli")[0].version + """.
+    
+    For more information about how to use this, see the readme here: https://github.com/solidfire/solidfire-cli."""
+
 DEBUG_LOGGING_MAP = {
     0: logging.CRITICAL,
     1: logging.WARNING,
@@ -205,7 +210,7 @@ class SolidFireCommand(click.Command):
             param.add_to_parser(parser, ctx)
         return parser
 
-@click.command(cls=SolidFireCLI, context_settings=CONTEXT_SETTINGS)
+@click.command(cls=SolidFireCLI, context_settings=CONTEXT_SETTINGS, help=HELP_STRING)
 @click.option('--mvip', '-m',
               default=None,
               help="SolidFire MVIP",
@@ -288,6 +293,7 @@ def cli(ctx,
     # if/when we introduce a v2 of the shell and client, we may
     # need to define a new entry point one level up that parses
     # out what version we want to uses
+
     ctx.debug = debug
     LOG.setLevel(DEBUG_LOGGING_MAP[int(debug)])
 
