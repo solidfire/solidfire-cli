@@ -45,6 +45,7 @@ class Context():
         self.filter_tree = None
         self.table = None
         self.verifyssl = None
+        self.timeout = 30
         self.nocache = None
 
     def log(self, msg, *args):
@@ -213,23 +214,23 @@ class SolidFireCommand(click.Command):
 @click.command(cls=SolidFireCLI, context_settings=CONTEXT_SETTINGS, help=HELP_STRING)
 @click.option('--mvip', '-m',
               default=None,
-              help="SolidFire MVIP",
+              help="SolidFire MVIP.",
               required=False)
 @click.option('--username', '-u',
               default=None,
-              help="SolidFire Cluster username",
+              help="SolidFire Cluster username.",
               required=False)
 @click.option('--password', '-p',
               default=None,
-              help="SolidFire cluster password",
+              help="SolidFire cluster password.",
               required=False)
 @click.option('--version', '-v',
               default=None,
-              help='The version you would like to connect on',
+              help='The version you would like to connect on.',
               required=False)
 @click.option('--port', '-q',
               default=443,
-              help="The port number on which you wish to connect",
+              help="The port number on which you wish to connect.",
               required=False)
 @click.option('--name', '-n',
               default = None,
@@ -245,10 +246,14 @@ class SolidFireCommand(click.Command):
               help="Enable this to check ssl connection for errors especially when using a hostname. It is invalid to set this to true when using an IP address in the target.",
               required=False,
               is_flag=True)
+@click.option('--timeout', '-t',
+              default=30,
+              help="The request timeout in seconds.",
+              required=False)
 @click.option('--json', '-j',
               is_flag=True,
               required=False,
-              help="To print the full output in json format, use this flag")
+              help="To print the full output in json format, use this flag.")
 @click.option('--pickle', '-k',
               is_flag=True,
               required=False,
@@ -279,6 +284,7 @@ def cli(ctx,
         name=None,
         port=None,
         verifyssl=False,
+        timeout=30,
         connectionindex=None,
         json=None,
         pickle=None,
@@ -316,6 +322,7 @@ def cli(ctx,
     ctx.depth = depth
     ctx.filter_tree = filter_tree
     ctx.verifyssl = verifyssl
+    ctx.timeout = timeout
     ctx.version = version
     ctx.nocache = nocache
 

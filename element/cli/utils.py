@@ -6,7 +6,6 @@ import os
 import csv
 from Crypto.Cipher import ARC4
 import base64
-import base64
 import socket
 import getpass
 from solidfire.factory import ElementFactory
@@ -193,9 +192,10 @@ def establish_connection(ctx):
                'port': ctx.port,
                'url': 'https://%s:%s' % (ctx.mvip, ctx.port),
                'version': ctx.version,
-               'verifyssl': ctx.verifyssl}
+               'verifyssl': ctx.verifyssl,
+               'timeout': ctx.timeout}
         try:
-            ctx.element = ElementFactory.create(cfg["mvip"],decrypt(cfg["username"]),decrypt(cfg["password"]),port=cfg["port"],version=cfg["version"],verify_ssl=cfg["verifyssl"])
+            ctx.element = ElementFactory.create(cfg["mvip"],decrypt(cfg["username"]),decrypt(cfg["password"]),port=cfg["port"],version=cfg["version"],verify_ssl=cfg["verifyssl"],timeout=cfg["timeout"])
             ctx.version = ctx.element._api_version
             cfg["version"] = ctx.element._api_version
         except Exception as e:
@@ -236,6 +236,8 @@ def establish_connection(ctx):
                 else:
                     address = cfg["mvip"]
                 ctx.element = Element(address, decrypt(cfg["username"]), decrypt(cfg["password"]), cfg["version"], verify_ssl=cfg["verifyssl"])
+                if int(cfg["timeout"]) != 30:
+                    ctx.element.timeout(cfg["timeout"])
             except Exception as e:
                 ctx.logger.error(e.__str__())
                 ctx.logger.error("The connection is corrupt. Run 'sfcli connection prune' to try and remove all broken connections or use 'sfcli connection remove -n name'")
@@ -290,7 +292,7 @@ def write_connections(ctx, connections):
         connectionsLock = resource_filename(Requirement.parse("solidfire-cli"), "connectionsLock")
         with open(connectionsCsvLocation, 'w') as f:
             with FileLock(connectionsLock):
-                w = csv.DictWriter(f, ["name","mvip","port","username","password","version","url","verifyssl"], lineterminator='\n')
+                w = csv.DictWriter(f, ["name","mvip","port","username","password","version","url","verifyssl","timeout"], lineterminator='\n')
                 w.writeheader()
                 for connection in connections:
                     if connection is not None:
@@ -331,7 +333,7 @@ def write_default_connection(ctx, connection):
         defaultLockLocation = resource_filename(Requirement.parse("solidfire-cli"), "defaultLock")
         with FileLock(defaultLockLocation):
             with open(connectionCsvLocation, 'w') as f:
-                w = csv.DictWriter(f, ["name", "mvip", "port", "username", "password", "version", "url", "verifyssl"],
+                w = csv.DictWriter(f, ["name", "mvip", "port", "username", "password", "version", "url", "verifyssl", "timeout"],
                                    lineterminator='\n')
                 w.writeheader()
                 w.writerow(connection)

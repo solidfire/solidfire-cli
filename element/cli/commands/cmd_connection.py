@@ -52,8 +52,12 @@ def cli(ctx):
               help="Enable this to check ssl connection for errors especially when using a hostname. It is invalid to set this to true when using an IP address in the target.",
               required=False,
               is_flag=True)
+@click.option('--timeout', '-t',
+              default = None,
+              help="The request timeout in seconds",
+              required=False)
 @pass_context
-def push(ctx, mvip, username, password, version, port, name, verifyssl):
+def push(ctx, mvip, username, password, version, port, name, verifyssl, timeout):
     # First, attempt to establish the connection. If that's not possible,
     # throw the error.
 
@@ -84,6 +88,8 @@ def push(ctx, mvip, username, password, version, port, name, verifyssl):
         ctx.version = str(float(version))
     if port is not None:
         ctx.port = port
+    if timeout is not None:
+        ctx.timeout = timeout
     ctx.verifyssl = ctx.verifyssl or verifyssl
 
     # Verify that the connection exists or get the extra info.
@@ -107,7 +113,9 @@ def push(ctx, mvip, username, password, version, port, name, verifyssl):
                                   'url': 'https://%s:%s' % (ctx.mvip, ctx.port),
                                   'version': ctx.version,
                                   'name': name,
-                                  'verifyssl': verifyssl}]
+                                  'verifyssl': verifyssl,
+                                  'timeout': ctx.timeout}]
+
     cli_utils.write_connections(ctx, connections)
 
 @cli.command('remove', short_help="Removes a given connection")
