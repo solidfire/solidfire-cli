@@ -90,7 +90,8 @@ def push(ctx, mvip, username, password, version, port, name, verifyssl, timeout)
         ctx.port = port
     if timeout is not None:
         ctx.timeout = timeout
-    ctx.verifyssl = ctx.verifyssl or verifyssl
+    if verifyssl is not None:
+        ctx.verifyssl = verifyssl
 
     # Verify that the connection exists or get the extra info.
     cli_utils.establish_connection(ctx)
@@ -113,7 +114,7 @@ def push(ctx, mvip, username, password, version, port, name, verifyssl, timeout)
                                   'url': 'https://%s:%s' % (ctx.mvip, ctx.port),
                                   'version': ctx.version,
                                   'name': name,
-                                  'verifyssl': verifyssl,
+                                  'verifyssl': ctx.verifyssl,
                                   'timeout': ctx.timeout}]
 
     cli_utils.write_connections(ctx, connections)
