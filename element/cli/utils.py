@@ -93,7 +93,7 @@ def get_result_as_tree(objs, depth=1, currentDepth=0, lastKey = ""):
             obj = objs[i]
             stringToReturn += currentDepth*"    "+get_result_as_tree(obj, depth, currentDepth+1, lastKey)
         return stringToReturn
-    if(type(objs) is dict):
+    if(isinstance(objs, dict)):
         stringToReturn += "\n"
         for key in objs:
             stringToReturn += currentDepth*"    "+key+":   "+get_result_as_tree(objs[key], depth, currentDepth+1, key)
