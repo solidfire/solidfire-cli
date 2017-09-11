@@ -24,47 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """get modify create list """
-
-@cli.command('get', short_help="""You can use the GetSchedule method to retrieve information about a scheduled snapshot. You can see information about a specific schedule if there are many snapshot schedules in the system. You also retrieve information about more than one schedule with this method by specifying additional scheduleIDs in the parameter. """, cls=SolidFireCommand)
-@click.option('--scheduleid',
-              type=int,
-              required=True,
-              prompt=True,
-              help="""Specifies the unique ID of the schedule or multiple schedules to display. """)
-@pass_context
-def get(ctx,
-           # Mandatory main parameter
-           scheduleid):
-    """You can use the GetSchedule method to retrieve information about a scheduled snapshot. You can see information about a specific"""
-    """schedule if there are many snapshot schedules in the system. You also retrieve information about more than one schedule with this"""
-    """method by specifying additional scheduleIDs in the parameter."""
-
-    
-    if ctx.json is True:
-        ctx.logger.error("This command does not support the -j field. If you really need it, use sfapi invoke.")
-        exit(1)
-
-    cli_utils.establish_connection(ctx)
-    
-    
-
-    ctx.logger.info(""": """"""scheduleid = """ + str(scheduleid)+""";"""+"")
-    try:
-        _GetScheduleResult = ctx.element.get_schedule(schedule_id=scheduleid)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetScheduleResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_GetScheduleResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
+    """modify create list get """
 @cli.command('modify', short_help="""ModifySchedule is used to change the intervals at which a scheduled snapshot occurs. This allows for adjustment to the snapshot frequency and retention. """)
 @click.option('--scheduleid',
               type=int,
@@ -403,4 +363,44 @@ def list(ctx):
         return
     else:
         cli_utils.print_result(_ListSchedulesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('get', short_help="""You can use the GetSchedule method to retrieve information about a scheduled snapshot. You can see information about a specific schedule if there are many snapshot schedules in the system. You also retrieve information about more than one schedule with this method by specifying additional scheduleIDs in the parameter. """, cls=SolidFireCommand)
+@click.option('--scheduleid',
+              type=int,
+              required=True,
+              prompt=True,
+              help="""Specifies the unique ID of the schedule or multiple schedules to display. """)
+@pass_context
+def get(ctx,
+           # Mandatory main parameter
+           scheduleid):
+    """You can use the GetSchedule method to retrieve information about a scheduled snapshot. You can see information about a specific"""
+    """schedule if there are many snapshot schedules in the system. You also retrieve information about more than one schedule with this"""
+    """method by specifying additional scheduleIDs in the parameter."""
+
+    
+    if ctx.json is True:
+        ctx.logger.error("This command does not support the -j field. If you really need it, use sfapi invoke.")
+        exit(1)
+
+    cli_utils.establish_connection(ctx)
+    
+    
+
+    ctx.logger.info(""": """"""scheduleid = """ + str(scheduleid)+""";"""+"")
+    try:
+        _GetScheduleResult = ctx.element.get_schedule(schedule_id=scheduleid)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetScheduleResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetScheduleResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
