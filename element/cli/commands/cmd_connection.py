@@ -25,7 +25,8 @@ def cli(ctx):
 @click.option('--mvip', '-m',
               default=None,
               help="SolidFire MVIP",
-              required=False)
+              required=False,
+              prompt=True)
 @click.option('--username', '-u',
               default=None,
               help="SolidFire cluster username",
@@ -41,8 +42,8 @@ def cli(ctx):
 @click.option('--name', '-n',
               default = None,
               help="The name you want to associate with the connection'.",
-              required=True,
-              prompt=True)
+              required=False,
+              prompt=False)
 @click.option('--port', '-q',
               default = None,
               help="The port you wish to connect on",
@@ -76,7 +77,7 @@ def push(ctx, mvip, username, password, version, port, name, verifyssl, timeout)
 
     if ctx.mvip is None and mvip is None:
         ctx.logger.error("Please provide the mvip. It is a required parameter.")
-        exit(1)
+        exit(1) #Should never be hit, but leaving it in just in case.
 
     if ctx.mvip is None:
         ctx.mvip = mvip
@@ -92,13 +93,20 @@ def push(ctx, mvip, username, password, version, port, name, verifyssl, timeout)
         ctx.timeout = timeout
     if verifyssl is not None:
         ctx.verifyssl = verifyssl
+    if ctx.name is None:
+        ctx.name = name
 
     # Verify that the connection exists or get the extra info.
     cli_utils.establish_connection(ctx)
 
+    if ctx.name is None: #if user has not specified a name
+        if (str(ctx.port) == "443"): #port 443 is a cluster
+            ctx.name = ctx.element.get_cluster_info().cluster_info.name
+        elif (str(ctx.port) == "442"): #port 442 is node
+            ctx.name = ctx.element.get_config().config.cluster.name
     connections = cli_utils.get_connections(ctx)
     # First, ensure that no other connections have the same name:
-    sameName = [connection for connection in connections if connection["name"]==name]
+    sameName = [connection for connection in connections if connection["name"]==ctx.name]
     if sameName != []:
         ctx.logger.error("A connection with that name already exists. Please try another.")
         exit(1)
@@ -113,7 +121,7 @@ def push(ctx, mvip, username, password, version, port, name, verifyssl, timeout)
                                   'port': ctx.port,
                                   'url': 'https://%s:%s' % (ctx.mvip, ctx.port),
                                   'version': ctx.version,
-                                  'name': name,
+                                  'name': ctx.name,
                                   'verifyssl': ctx.verifyssl,
                                   'timeout': ctx.timeout}]
 
