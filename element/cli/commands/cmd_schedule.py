@@ -183,7 +183,7 @@ def modify(ctx,
         schedule.starting_date = startingdate
     if paused:
         schedule.paused = paused
-    if recurring:
+    if recurring is not None:
         schedule.recurring = recurring
     if runnextinterval:
         schedule.run_next_interval = runnextinterval
