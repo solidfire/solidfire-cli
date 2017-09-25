@@ -108,6 +108,11 @@ def modify(ctx,
                    name,
                    startingdate,
                    tobedeleted):
+
+    if ctx.json is True:
+        ctx.logger.error("This command does not support the -j field. If you really need it, use sfapi invoke.")
+        exit(1)
+
     """ModifySchedule is used to modify a schedule that will autonomously make a snapshot of a volume at a defined interval."""
     """"""
     """The snapshot can be used later as a backup or rollback to ensure the data on a volume or group of volumes is consistent for the point in time in which the snapshot was created. """
