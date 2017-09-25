@@ -97,6 +97,8 @@ def get_result_as_tree(objs, depth=1, currentDepth=0, lastKey = ""):
         for key in objs:
             stringToReturn += currentDepth*"    "+key+":   "+get_result_as_tree(objs[key], depth, currentDepth+1, key)
         return stringToReturn
+    if (isinstance(objs, tuple)):
+        return str(objs[0]) + "\n"
     if(objs is None):
         return stringToReturn
     mydict = objs.__dict__
