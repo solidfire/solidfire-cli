@@ -173,7 +173,7 @@ def modify(ctx,
         schedule.schedule_info.volume_ids = parser.parse_array(volumeids)
     if snapshotname:
         schedule.schedule_info.snapshot_name = snapshotname
-    if enableremotereplication:
+    if enableremotereplication is not None:
         schedule.schedule_info.enable_remote_replication = enableremotereplication
     if retention:
         schedule.schedule_info.retention = retention
@@ -181,15 +181,15 @@ def modify(ctx,
         schedule.name = name
     if startingdate:
         schedule.starting_date = startingdate
-    if paused:
+    if paused is not None:
         schedule.paused = paused
     if recurring is not None:
         schedule.recurring = recurring
-    if runnextinterval:
+    if runnextinterval is not None:
         schedule.run_next_interval = runnextinterval
     if scheduleid:
         schedule.schedule_id = scheduleid
-    if tobedeleted:
+    if tobedeleted is not None:
         schedule.to_be_deleted = tobedeleted
 
     ctx.logger.info("""schedule = """+str(schedule)+""";"""+"")
@@ -319,13 +319,11 @@ def create(ctx,
 
     schedule = Schedule(frequency=freq, schedule_info=scheduleInfo, name=name, starting_date=startingdate)
 
-    if haserror:
-        schedule.has_error = haserror
-    if paused:
+    if paused is not None:
         schedule.paused = paused
-    if recurring:
+    if recurring is not None:
         schedule.recurring = recurring
-    if runnextinterval:
+    if runnextinterval is not None:
         schedule.run_next_interval = runnextinterval
 
     ctx.logger.info("""schedule = """+str(schedule)+""";"""+"")
