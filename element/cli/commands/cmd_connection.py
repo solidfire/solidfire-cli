@@ -62,17 +62,17 @@ def push(ctx, mvip, username, password, version, port, name, verifyssl, timeout)
     # First, attempt to establish the connection. If that's not possible,
     # throw the error.
 
-    if mvip and ctx.mvip:
-        ctx.logger.error("Please only provide the mvip once.")
+    if mvip and ctx.mvip and mvip != ctx.mvip:
+        ctx.logger.error("Please only provide the mvip once. The two you provided are different.")
         exit(1)
-    if username and ctx.username:
-        ctx.logger.error("Please only provide the username once.")
+    if username and ctx.username and username != ctx.username:
+        ctx.logger.error("Please only provide the username once. The two you provided are different.")
         exit(1)
-    if password and ctx.password:
-        ctx.logger.error("Please only provide the password once.")
+    if password and ctx.password and password != ctx.password:
+        ctx.logger.error("Please only provide the password once. The two you provided are different.")
         exit(1)
-    if name and ctx.name:
-        ctx.logger.error("Please only provide the name once.")
+    if name and ctx.name and name != ctx.name:
+        ctx.logger.error("Please only provide the name once. The two you provided are different.")
         exit(1)
 
     if ctx.mvip is None and mvip is None:
