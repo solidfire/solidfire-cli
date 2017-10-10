@@ -20,17 +20,20 @@ of using this tool are the following:
 
 Installing SolidFire CLI Tools
 ----------
-If you are on a mac, you will have to set up a virtual environment first because the native mac python does not support setuptools. To create a virtualenvironment, run
+
+Note: If you are on a Linux OS, you will have to set up a virtual environment first because the native linux python does not support setuptools. To create a virtualenvironment, run
 
     pip install virtualenv
     virtualenv pythoncli
     source pythoncli/bin/activate # This activates the virtual environment. 
 
-Next, irrespective of your OS there are a few ways you can install the tool: from source or from pypi, using easy_install or using pip.
+**Installation Steps**
 
 To install from pypi using pip, execute the following command:
 
     pip install solidfire-cli
+
+-- or --
 
 To install from source using easy_install, navigate to solidfirecli*.tar.gz file (where the * stands for the version), and run
 
