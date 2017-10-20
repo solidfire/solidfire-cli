@@ -46,7 +46,8 @@ class Context():
         self.table = None
         self.verifyssl = None
         self.timeout = 30
-        self.nocache = None
+        self.nocache = None ##flag for removal awaiting adams approval.
+        self.default = False
 
     def log(self, msg, *args):
         """Logs a message to stderr."""

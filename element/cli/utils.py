@@ -207,11 +207,14 @@ def establish_connection(ctx):
                'url': 'https://%s:%s' % (ctx.mvip, ctx.port),
                'version': ctx.version,
                'verifyssl': ctx.verifyssl,
-               'timeout': ctx.timeout}
+               'timeout': ctx.timeout,
+               'default': ctx.default}
         try:
             ctx.element = ElementFactory.create(cfg["mvip"], cfg["username"], decrypt(cfg["password"]),
-                                                port=cfg["port"], version=cfg["version"], verify_ssl=cfg["verifyssl"],
-                                                timeout=cfg["timeout"])
+                                                port=cfg["port"], version=cfg["version"], verify_ssl=cfg["verifyssl"])
+            #ctx.element = ElementFactory.create(cfg["mvip"], cfg["username"], decrypt(cfg["password"]),
+            #                                    port=cfg["port"], version=cfg["version"], verify_ssl=cfg["verifyssl"],
+            #                                    timeout=cfg["timeout"])
             ctx.version = ctx.element._api_version
             cfg["version"] = ctx.element._api_version
         except Exception as e:
@@ -275,13 +278,14 @@ def establish_connection(ctx):
 
     # The only time it is none is when we're asking for help or we're trying to store a connection.
     # If that's not what we're doing, we catch it later.
+    # Changed by chris, not sure how much of this code is required, but writing connections here messes up the naming code back in cmd_connection.py for auto naming, so it must be done after it.
     if cfg is not None:
         cfg["port"] = int(cfg["port"])
         ctx.cfg = cfg
-        cfg["name"] = cfg.get("name", "default")
-        if not ctx.nocache:
-            ctx.logger.warning("Default connection has been set to " + str(cfg["name"]) + "-" + str(cfg["username"]) + "@" + str(cfg["mvip"]) + ":" + str(cfg["port"]))
-            write_default_connection(ctx, cfg)
+        # cfg["name"] = cfg.get("name", "default")
+        # if not ctx.nocache:
+        #     ctx.logger.warning("Default connection has been set to " + str(cfg["name"]) + "-" + str(cfg["username"]) + "@" + str(cfg["mvip"]) + ":" + str(cfg["port"]))
+        #     write_default_connection(ctx, cfg)
 
     if ctx.element is None:
         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
@@ -319,7 +323,7 @@ def write_connections(ctx, connections):
         with open(connectionsCsvLocation, 'w') as f:
             with FileLock(connectionsLock):
                 w = csv.DictWriter(f, ["name", "mvip", "port", "username", "password", "version", "url", "verifyssl",
-                                       "timeout"], lineterminator='\n')
+                                       "timeout", "default"], lineterminator='\n')
                 w.writeheader()
                 for connection in connections:
                     if connection is not None:
@@ -332,24 +336,44 @@ def write_connections(ctx, connections):
 
 def get_default_connection(ctx):
     connections = get_connections(ctx)
-    if len(connections) > 0:
-        return connections[0]
+    i = 0
+    for connection in connections: #kind of redunctant. Default should always be first (0th) index
+        if connection["default"] == "True":
+            return connection[i]
+        i += 1
     else:
         ctx.logger.error("Please provide connection information. There is no connection info in cache at this time.")
         exit(1)
 
+    # connections = get_connections(ctx) old code from Adam
+    # if len(connections) > 0:
+    #     return connections[0]
+    # else:
+    #     ctx.logger.error("Please provide connection information. There is no connection info in cache at this time.")
+    #     exit(1)
 
-def write_default_connection(ctx, default_connection):
+
+def write_default_connection(ctx, default_connection): # really only sets the default values to false then inserts the new connection. More of a helper function
     connections = get_connections(ctx)
-    for connection in connections:
-        if default_connection["mvip"] == connection["mvip"] and \
-                        default_connection["username"] == connection["username"] and \
-                        default_connection["port"] == connection["port"]:
-            connections.remove(connection)
-        if connection["name"] == "default":
-            connections.remove(connection)
+    clear_default(connections)
     connections.insert(0, default_connection)
     write_connections(ctx, connections)
+
+    # connections = get_connections(ctx) old code from Adam
+    # for connection in connections:
+    #     if default_connection["mvip"] == connection["mvip"] and \
+    #                     default_connection["username"] == connection["username"] and \
+    #                     default_connection["port"] == connection["port"]:
+    #         connections.remove(connection)
+    #     if connection["name"] == "default":
+    #         connections.remove(connection)
+    # connections.insert(0, default_connection)
+    # write_connections(ctx, connections)
+
+#sets false on all the connections so that when default is set, only 1 is set.
+def clear_default(connections):
+    for connection in connections:
+        connection["default"] = "False"
 
 
 # WARNING! This doesn't actually give us total security. It only gives us obscurity.

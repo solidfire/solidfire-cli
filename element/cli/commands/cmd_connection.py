@@ -7,11 +7,8 @@ from __future__ import unicode_literals
 
 import click
 
-import os
-import csv
 from element.cli.cli import pass_context
 from pkg_resources import Requirement, resource_filename
-import simplejson
 from element.cli import utils as cli_utils
 from solidfire.factory import ElementFactory
 
@@ -66,6 +63,9 @@ def push(ctx, mvip, username, password, version, port, name, verifyssl, timeout)
     # First, attempt to establish the connection. If that's not possible,
     # throw the error.
 
+    #Setting the most recent push to true.
+    ctx.default = "True"
+
     if mvip and ctx.mvip and mvip != ctx.mvip:
         ctx.logger.error("Please only provide the mvip once. The two you provided are different.")
         exit(1)
@@ -100,6 +100,7 @@ def push(ctx, mvip, username, password, version, port, name, verifyssl, timeout)
     if ctx.name is None:
         ctx.name = name
 
+
     # Verify that the connection exists or get the extra info.
     cli_utils.establish_connection(ctx)
 
@@ -108,26 +109,31 @@ def push(ctx, mvip, username, password, version, port, name, verifyssl, timeout)
             ctx.name = ctx.element.get_cluster_info().cluster_info.name
         elif (str(ctx.port) == "442"):  # port 442 is node
             ctx.name = ctx.element.get_config().config.cluster.name
+
     connections = cli_utils.get_connections(ctx)
     # First, ensure that no other connections have the same name:
     sameName = [connection for connection in connections if connection["name"] == ctx.name]
     if sameName != []:
+        ctx.logger.error("A connection with that name already exists. Please try another.")
         exit(1)
 
     if (ctx.username is not None and ctx.password is not None):
         ctx.password = cli_utils.encrypt(ctx.password)
 
-    connections = connections + [{'mvip': ctx.mvip,
-                                  'username': ctx.username,
-                                  'password': "b'" + ctx.password.decode('utf-8') + "'",
-                                  'port': ctx.port,
-                                  'url': 'https://%s:%s' % (ctx.mvip, ctx.port),
-                                  'version': ctx.version,
-                                  'name': ctx.name,
-                                  'verifyssl': ctx.verifyssl,
-                                  'timeout': ctx.timeout}]
+    cfg = {'mvip': ctx.mvip,
+            'username': ctx.username,
+            'password': "b'" + ctx.password.decode('utf-8') + "'",
+            'port': ctx.port,
+            'url': 'https://%s:%s' % (ctx.mvip, ctx.port),
+            'version': ctx.version,
+            'name': ctx.name,
+            'verifyssl': ctx.verifyssl,
+            'timeout': ctx.timeout,
+            'default': ctx.default}
 
-    cli_utils.write_connections(ctx, connections)
+    ctx.logger.warning("Default connection has been set to " + str(cfg["name"]) + "-" + str(cfg["username"]) + "@" + str(cfg["mvip"]) + ":" + str(cfg["port"]))
+    cli_utils.write_default_connection(ctx, cfg)
+
 
 
 @cli.command('remove', short_help="Removes a given connection")
