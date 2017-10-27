@@ -131,8 +131,36 @@ def push(ctx, mvip, username, password, version, port, name, verifyssl, timeout)
             'timeout': ctx.timeout,
             'default': ctx.default}
 
-    ctx.logger.warning("Default connection has been set to " + str(cfg["name"]) + "-" + str(cfg["username"]) + "@" + str(cfg["mvip"]) + ":" + str(cfg["port"]))
     cli_utils.write_default_connection(ctx, cfg)
+    ctx.logger.warning(
+        "Default connection has been set to " + str(cfg["name"]) + "-" + str(cfg["username"]) + "@" + str(
+            cfg["mvip"]) + ":" + str(cfg["port"]))
+
+
+@cli.command('setdefault', short_help="Sets already existing connection to the default.")
+@click.option('--name', '-n',
+              type=str,
+              required=False,
+              help="""The name of the connection you wish to set as default.""")
+@click.option('--index', '-i',
+              type=int,
+              required=False,
+              help="""The index of the connection you wish to set as default. """)
+@pass_context
+def setdefault(ctx, name=None, index=None):
+    connections = cli_utils.get_connections(ctx)
+    if (not name and not index):
+        ctx.logger.warning("Name or Index is required. (Name takes precedence)")
+        return
+    if (name and index):
+        ctx.logger.warning("Name and Index are both provided, using name as it takes precedence.")
+
+
+    #handle inputs
+    for connection in connections:
+        break
+        #find matching, set default
+    #unable to find
 
 
 

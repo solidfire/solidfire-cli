@@ -30,4 +30,14 @@ def check_functionality_of_connection_suite():
     print("Remove is working")
     print("Functionality is good")
 
-check_functionality_of_connection_suite()
+#check_functionality_of_connection_suite()
+
+#name checking, no dupes
+
+##connections correct
+
+##list correct #
+
+#set defaults and make sure they follow through
+
+#make sure coommands dont set default

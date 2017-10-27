@@ -46,7 +46,6 @@ class Context():
         self.table = None
         self.verifyssl = None
         self.timeout = 30
-        self.nocache = None ##flag for removal awaiting adams approval.
         self.default = False
 
     def log(self, msg, *args):
@@ -273,10 +272,7 @@ class SolidFireCommand(click.Command):
               help="Set the debug level",
               type=click.Choice(sorted([str(key) for key
                                         in DEBUG_LOGGING_MAP.keys()])))
-@click.option('--nocache',
-              required=False,
-              is_flag=True,
-              help="If you do not wish to cache the connection, supply this flag.")
+
 @pass_context
 def cli(ctx,
         mvip=None,
@@ -293,8 +289,7 @@ def cli(ctx,
         filter_tree=None,
         debug=0,
         verbose=0,
-        version=None,
-        nocache=None):
+        version=None):
     """Welcome to the SolidFire command line interface! For more information about how to use this, see the readme here: https://github.com/solidfire/solidfire-cli"""
     # NOTE(jdg): This method is actually our console entry point,
     # if/when we introduce a v2 of the shell and client, we may
@@ -325,7 +320,6 @@ def cli(ctx,
     ctx.verifyssl = verifyssl
     ctx.timeout = timeout
     ctx.version = version
-    ctx.nocache = nocache
 
 if __name__ == '__main__':
     """

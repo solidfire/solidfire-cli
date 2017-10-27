@@ -1,5 +1,7 @@
 import jsonpickle
 import json as serializer
+
+from __builtin__ import long
 from pkg_resources import Requirement, resource_filename
 import os
 import csv
@@ -91,7 +93,7 @@ def get_result_as_tree(objs, depth=1, currentDepth=0, lastKey=""):
     if (currentDepth > depth):
         return "<to see more details, increase depth>\n"
     if (type(objs) is str or type(objs) is bool or type(objs) is int or type(objs) is type(u'') or objs is None or type(
-            objs) is float):  # or (sys.version_info[0]<3 and type(objs) is long)):
+            objs) is float):  # or (sys.version_info[0]<3 )): or type(objs) is long
         return str(objs) + "\n"
     if (type(objs) is list):
         stringToReturn += "\n"
@@ -282,10 +284,6 @@ def establish_connection(ctx):
     if cfg is not None:
         cfg["port"] = int(cfg["port"])
         ctx.cfg = cfg
-        # cfg["name"] = cfg.get("name", "default")
-        # if not ctx.nocache:
-        #     ctx.logger.warning("Default connection has been set to " + str(cfg["name"]) + "-" + str(cfg["username"]) + "@" + str(cfg["mvip"]) + ":" + str(cfg["port"]))
-        #     write_default_connection(ctx, cfg)
 
     if ctx.element is None:
         ctx.logger.error("You must establish at least one connection and specify which you intend to use.")
