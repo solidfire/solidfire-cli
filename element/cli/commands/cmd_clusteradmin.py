@@ -24,7 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """getcurrent modify list add remove """
+    """getcurrent modify remove list add setloginbanner getloginbanner """
 
 @cli.command('getcurrent', short_help="""GetCurrentClusterAdmin returns information for the current primary cluster administrator. The primary Cluster Admin was created when the cluster was created. """, cls=SolidFireCommand)
 @pass_context
@@ -116,6 +116,41 @@ def modify(ctx,
         return
     else:
         cli_utils.print_result(_ModifyClusterAdminResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('remove', short_help="""You can use RemoveClusterAdmin to remove a Cluster Admin. You cannot remove the administrator cluster admin account. """, cls=SolidFireCommand)
+@click.option('--clusteradminid',
+              type=int,
+              required=True,
+              prompt=True,
+              help="""ClusterAdminID for the cluster admin to remove. """)
+@pass_context
+def remove(ctx,
+           # Mandatory main parameter
+           clusteradminid):
+    """You can use RemoveClusterAdmin to remove a Cluster Admin. You cannot remove the administrator cluster admin account."""
+
+    
+
+    cli_utils.establish_connection(ctx)
+    
+    
+
+    ctx.logger.info(""": """"""clusteradminid = """ + str(clusteradminid)+""";"""+"")
+    try:
+        _RemoveClusterAdminResult = ctx.element.remove_cluster_admin(cluster_admin_id=clusteradminid)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_RemoveClusterAdminResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_RemoveClusterAdminResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -223,27 +258,33 @@ def add(ctx,
 
 
 
-@cli.command('remove', short_help="""You can use RemoveClusterAdmin to remove a Cluster Admin. You cannot remove the administrator cluster admin account. """, cls=SolidFireCommand)
-@click.option('--clusteradminid',
-              type=int,
-              required=True,
-              prompt=True,
-              help="""ClusterAdminID for the cluster admin to remove. """)
+@cli.command('setloginbanner', short_help="""You can use the SetLoginBanner method to set the active Terms of Use banner users see when they log on to the web interface. """, cls=SolidFireCommand)
+@click.option('--banner',
+              type=str,
+              required=False,
+              help="""The desired text of the Terms of Use banner. """)
+@click.option('--enabled',
+              type=bool,
+              required=False,
+              help="""The status of the Terms of Use banner. Possible values: true: The Terms of Use banner is displayed upon web interface login. false: The Terms of Use banner is not displayed upon web interface login. """)
 @pass_context
-def remove(ctx,
-           # Mandatory main parameter
-           clusteradminid):
-    """You can use RemoveClusterAdmin to remove a Cluster Admin. You cannot remove the administrator cluster admin account."""
+def setloginbanner(ctx,
+           # Optional main parameter
+           banner = None,
+           # Optional main parameter
+           enabled = None):
+    """You can use the SetLoginBanner method to set the active Terms of Use banner users see when they log on to the web interface."""
 
     
 
     cli_utils.establish_connection(ctx)
     
     
+    
 
-    ctx.logger.info(""": """"""clusteradminid = """ + str(clusteradminid)+""";"""+"")
+    ctx.logger.info(""": """"""banner = """+str(banner)+";" + """enabled = """+str(enabled)+""";"""+"")
     try:
-        _RemoveClusterAdminResult = ctx.element.remove_cluster_admin(cluster_admin_id=clusteradminid)
+        _SetLoginBannerResult = ctx.element.set_login_banner(banner=banner, enabled=enabled)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -251,8 +292,35 @@ def remove(ctx,
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_RemoveClusterAdminResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_SetLoginBannerResult), indent=4))
         return
     else:
-        cli_utils.print_result(_RemoveClusterAdminResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_SetLoginBannerResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getloginbanner', short_help="""You can use the GetLoginBanner method to get the currently active Terms of Use banner that users see when they log on to the web interface. """, cls=SolidFireCommand)
+@pass_context
+def getloginbanner(ctx):
+    """You can use the GetLoginBanner method to get the currently active Terms of Use banner that users see when they log on to the web interface."""
+
+    
+
+    cli_utils.establish_connection(ctx)
+    
+
+    ctx.logger.info(""": """+""";"""+"")
+    try:
+        _GetLoginBannerResult = ctx.element.get_login_banner()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetLoginBannerResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetLoginBannerResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

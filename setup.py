@@ -15,15 +15,15 @@ else:
 
 setup(
     name='solidfire-cli',
-    version='1.4.0.339',
+    version='1.5.0.29',
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
     author='SolidFire, Inc.',
     author_email='ariel.hoffman@solidfire.com, adam.haid@solidfire.com',
     packages=find_packages(exclude=["element.tests"]),
-    license='MIT',
+    license='Apache License 2.0',
     zip_safe=False,
-    url='https://github.com/solidfire/Python-CLI/tree/release0.0',
+    url='https://github.com/solidfire/solidfire-cli/tree/release0.0',
     entry_points={
         'console_scripts': [
             'sfcli=element.cli.cli:cli',
@@ -50,7 +50,7 @@ setup(
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
         'Intended Audience :: System Administrators',
-        'License :: OSI Approved :: MIT License',
+        'License :: OSI Approved :: Apache Software License',
         'Operating System :: OS Independent',
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Programming Language :: Python :: 3',

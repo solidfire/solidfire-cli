@@ -1,4 +1,3 @@
-from element.exceptions import *
 import jsonpickle
 import json as serializer
 from pkg_resources import Requirement, resource_filename
@@ -6,11 +5,10 @@ import os
 import csv
 from Crypto.Cipher import ARC4
 import base64
-import base64
 import socket
 import getpass
 from solidfire.factory import ElementFactory
-from solidfire import Element
+
 from filelock import FileLock
 import sys
 
@@ -49,7 +47,7 @@ def print_result(objs, log, as_json=False, as_pickle=False, depth=None, filter_t
 
     # Set up a default depth
     if depth is None:
-        depth = 3
+        depth = 10
 
     # Next, print the tree to the appropriate depth
     print_result_as_tree(objs_to_print, depth)
@@ -86,7 +84,7 @@ def get_result_as_tree(objs, depth=1, currentDepth=0, lastKey = ""):
     stringToReturn = ""
     if(currentDepth > depth):
         return "<to see more details, increase depth>\n"
-    if(type(objs) is str or type(objs) is bool or type(objs) is int or type(objs) is type(u'') or objs is None or type(objs) is float or (sys.version_info[0]<3 and type(objs) is long)):
+    if(type(objs) is str or type(objs) is bool or type(objs) is int or type(objs) is type(u'') or objs is None or type(objs) is float):# or (sys.version_info[0]<3 and type(objs) is long)):
         return str(objs) + "\n"
     if(type(objs) is list):
         stringToReturn += "\n"
@@ -94,11 +92,13 @@ def get_result_as_tree(objs, depth=1, currentDepth=0, lastKey = ""):
             obj = objs[i]
             stringToReturn += currentDepth*"    "+get_result_as_tree(obj, depth, currentDepth+1, lastKey)
         return stringToReturn
-    if(type(objs) is dict):
+    if(isinstance(objs, dict)):
         stringToReturn += "\n"
         for key in objs:
             stringToReturn += currentDepth*"    "+key+":   "+get_result_as_tree(objs[key], depth, currentDepth+1, key)
         return stringToReturn
+    if (isinstance(objs, tuple)):
+        return str(objs[0]) + "\n"
     if(objs is None):
         return stringToReturn
     mydict = objs.__dict__
@@ -193,9 +193,10 @@ def establish_connection(ctx):
                'port': ctx.port,
                'url': 'https://%s:%s' % (ctx.mvip, ctx.port),
                'version': ctx.version,
-               'verifyssl': ctx.verifyssl}
+               'verifyssl': ctx.verifyssl,
+               'timeout': ctx.timeout}
         try:
-            ctx.element = ElementFactory.create(cfg["mvip"],decrypt(cfg["username"]),decrypt(cfg["password"]),port=cfg["port"],version=cfg["version"],verify_ssl=cfg["verifyssl"])
+            ctx.element = ElementFactory.create(cfg["mvip"],decrypt(cfg["username"]),decrypt(cfg["password"]),port=cfg["port"],version=cfg["version"],verify_ssl=cfg["verifyssl"],timeout=cfg["timeout"])
             ctx.version = ctx.element._api_version
             cfg["version"] = ctx.element._api_version
         except Exception as e:
@@ -235,7 +236,9 @@ def establish_connection(ctx):
                     address = cfg["mvip"] + ":" + cfg["port"]
                 else:
                     address = cfg["mvip"]
-                ctx.element = Element(address, decrypt(cfg["username"]), decrypt(cfg["password"]), cfg["version"], verify_ssl=cfg["verifyssl"])
+                ctx.element = ElementFactory.create(address, decrypt(cfg["username"]), decrypt(cfg["password"]), cfg["version"], verify_ssl=cfg["verifyssl"])
+                if int(cfg["timeout"]) != 30:
+                    ctx.element.timeout(cfg["timeout"])
             except Exception as e:
                 ctx.logger.error(e.__str__())
                 ctx.logger.error("The connection is corrupt. Run 'sfcli connection prune' to try and remove all broken connections or use 'sfcli connection remove -n name'")
@@ -243,6 +246,7 @@ def establish_connection(ctx):
                 exit(1)
 
     # If we want the json output directly from the source, we'll have to override the send request method in the sdk:
+    # This is so that we can circumvent the python objects and get exactly what the json-rpc returns.
     if ctx.json and ctx.element:
         def new_send_request(*args, **kwargs):
             return ctx.element.__class__.__bases__[0].send_request(ctx.element, return_response_raw=True, *args, **kwargs)
@@ -289,7 +293,7 @@ def write_connections(ctx, connections):
         connectionsLock = resource_filename(Requirement.parse("solidfire-cli"), "connectionsLock")
         with open(connectionsCsvLocation, 'w') as f:
             with FileLock(connectionsLock):
-                w = csv.DictWriter(f, ["name","mvip","port","username","password","version","url","verifyssl"], lineterminator='\n')
+                w = csv.DictWriter(f, ["name","mvip","port","username","password","version","url","verifyssl","timeout"], lineterminator='\n')
                 w.writeheader()
                 for connection in connections:
                     if connection is not None:
@@ -330,7 +334,7 @@ def write_default_connection(ctx, connection):
         defaultLockLocation = resource_filename(Requirement.parse("solidfire-cli"), "defaultLock")
         with FileLock(defaultLockLocation):
             with open(connectionCsvLocation, 'w') as f:
-                w = csv.DictWriter(f, ["name", "mvip", "port", "username", "password", "version", "url", "verifyssl"],
+                w = csv.DictWriter(f, ["name", "mvip", "port", "username", "password", "version", "url", "verifyssl", "timeout"],
                                    lineterminator='\n')
                 w.writeheader()
                 w.writerow(connection)
@@ -339,11 +343,11 @@ def write_default_connection(ctx, connection):
 
 # WARNING! This doesn't actually give us total security. It only gives us obscurity.
 def encrypt(sensitive_data):
-    cipher = ARC4.new(socket.gethostname().encode('utf-8'))
+    cipher = ARC4.new(socket.gethostname().encode('utf-8') + "SOLIDFIRE".encode('utf-8'))
     encoded = base64.b64encode(cipher.encrypt(sensitive_data.encode('utf-8')))
     return encoded
 
 def decrypt(encoded_sensitive_data):
-    cipher = ARC4.new(socket.gethostname().encode('utf-8'))
+    cipher = ARC4.new(socket.gethostname().encode('utf-8') + "SOLIDFIRE".encode('utf-8'))
     decoded = cipher.decrypt(base64.b64decode(encoded_sensitive_data[2:-1]))
     return decoded.decode('utf-8')

@@ -22,3 +22,5 @@ element/cli/commands/*.txt
 default_connection.csv
 connectionsLock
 defaultLock
+blackduck-cli.zip
+blackduck/

@@ -7,13 +7,20 @@ import click.core
 import click.testing
 import copy
 import csv
+import pkg_resources
 from pkg_resources import Requirement, resource_filename
 import struct
 import base64
 
-logging.basicConfig()
+logging.basicConfig(
+    level=logging.WARNING,
+    format=('%(asctime)s - %(name)s: in %(filename)s at %(lineno)s - %(levelname)s: %(message)s'))
 LOG = logging.getLogger(__name__)
 CONTEXT_SETTINGS = dict(auto_envvar_prefix='SOLIDFIRE', token_normalize_func=lambda x: x.lower())
+HELP_STRING = """Welcome to the SolidFire Command Line Interface """ + pkg_resources.require("solidfire-cli")[0].version + """.
+    
+    For more information about how to use this, see the readme here: https://github.com/solidfire/solidfire-cli."""
+
 DEBUG_LOGGING_MAP = {
     0: logging.CRITICAL,
     1: logging.WARNING,
@@ -22,6 +29,7 @@ DEBUG_LOGGING_MAP = {
 }
 CLI_VERSION = 'v1'
 click.disable_unicode_literals_warning = True
+
 
 class Context():
 
@@ -37,6 +45,7 @@ class Context():
         self.filter_tree = None
         self.table = None
         self.verifyssl = None
+        self.timeout = 30
         self.nocache = None
 
     def log(self, msg, *args):
@@ -202,26 +211,26 @@ class SolidFireCommand(click.Command):
             param.add_to_parser(parser, ctx)
         return parser
 
-@click.command(cls=SolidFireCLI, context_settings=CONTEXT_SETTINGS)
+@click.command(cls=SolidFireCLI, context_settings=CONTEXT_SETTINGS, help=HELP_STRING)
 @click.option('--mvip', '-m',
               default=None,
-              help="SolidFire MVIP",
+              help="SolidFire MVIP.",
               required=False)
 @click.option('--username', '-u',
               default=None,
-              help="SolidFire Cluster username",
+              help="SolidFire Cluster username.",
               required=False)
 @click.option('--password', '-p',
               default=None,
-              help="SolidFire cluster password",
+              help="SolidFire cluster password.",
               required=False)
 @click.option('--version', '-v',
               default=None,
-              help='The version you would like to connect on',
+              help='The version you would like to connect on.',
               required=False)
 @click.option('--port', '-q',
               default=443,
-              help="The port number on which you wish to connect",
+              help="The port number on which you wish to connect.",
               required=False)
 @click.option('--name', '-n',
               default = None,
@@ -237,10 +246,14 @@ class SolidFireCommand(click.Command):
               help="Enable this to check ssl connection for errors especially when using a hostname. It is invalid to set this to true when using an IP address in the target.",
               required=False,
               is_flag=True)
+@click.option('--timeout', '-t',
+              default=30,
+              help="The request timeout in seconds.",
+              required=False)
 @click.option('--json', '-j',
               is_flag=True,
               required=False,
-              help="To print the full output in json format, use this flag")
+              help="To print the full output in json format, use this flag.")
 @click.option('--pickle', '-k',
               is_flag=True,
               required=False,
@@ -271,6 +284,7 @@ def cli(ctx,
         name=None,
         port=None,
         verifyssl=False,
+        timeout=30,
         connectionindex=None,
         json=None,
         pickle=None,
@@ -280,18 +294,21 @@ def cli(ctx,
         verbose=0,
         version=None,
         nocache=None):
-    """Welcome to the SolidFire command line interface! For more information about how to use this, see the readme here: https://github.com/solidfire/Python-CLI"""
+    """Welcome to the SolidFire command line interface! For more information about how to use this, see the readme here: https://github.com/solidfire/solidfire-cli"""
     # NOTE(jdg): This method is actually our console entry point,
     # if/when we introduce a v2 of the shell and client, we may
     # need to define a new entry point one level up that parses
     # out what version we want to uses
+
     ctx.debug = debug
-    logging.basicConfig(
-        level=logging.WARNING,
-        format=('%(levelname)s in %(filename)s@%(lineno)s: %(message)s'))
     LOG.setLevel(DEBUG_LOGGING_MAP[int(debug)])
 
-    logging.getLogger('solidfire.Element').setLevel(logging.CRITICAL)
+    element_logger = logging.getLogger('solidfire.Element')
+    element_logger.setLevel(DEBUG_LOGGING_MAP[int(debug)])
+    for h in element_logger.handlers:
+        element_logger.removeHandler(h)
+    #if element_logger.hasHandlers():
+    #    element_logger.handlers.clear()
     ctx.logger = LOG
     ctx.verbose = verbose
     ctx.username = username
@@ -305,6 +322,7 @@ def cli(ctx,
     ctx.depth = depth
     ctx.filter_tree = filter_tree
     ctx.verifyssl = verifyssl
+    ctx.timeout = timeout
     ctx.version = version
     ctx.nocache = nocache
 

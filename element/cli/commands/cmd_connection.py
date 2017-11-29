@@ -25,7 +25,8 @@ def cli(ctx):
 @click.option('--mvip', '-m',
               default=None,
               help="SolidFire MVIP",
-              required=False)
+              required=False,
+              prompt=True)
 @click.option('--username', '-u',
               default=None,
               help="SolidFire cluster username",
@@ -41,8 +42,8 @@ def cli(ctx):
 @click.option('--name', '-n',
               default = None,
               help="The name you want to associate with the connection'.",
-              required=True,
-              prompt=True)
+              required=False,
+              prompt=False)
 @click.option('--port', '-q',
               default = None,
               help="The port you wish to connect on",
@@ -52,22 +53,31 @@ def cli(ctx):
               help="Enable this to check ssl connection for errors especially when using a hostname. It is invalid to set this to true when using an IP address in the target.",
               required=False,
               is_flag=True)
+@click.option('--timeout', '-t',
+              default = None,
+              help="The request timeout in seconds",
+              required=False)
 @pass_context
-def push(ctx, mvip, username, password, version, port, name, verifyssl):
+def push(ctx, mvip, username, password, version, port, name, verifyssl, timeout):
     # First, attempt to establish the connection. If that's not possible,
     # throw the error.
 
-    if mvip and ctx.mvip:
-        ctx.logger.error("Please only provide the mvip once.")
-    if username and ctx.username:
-        ctx.logger.error("Please only provide the username once.")
-    if password and ctx.password:
-        ctx.logger.error("Please only provide the password once.")
-    if name and ctx.name:
-        ctx.logger.error("Please only provide the name once.")
+    if mvip and ctx.mvip and mvip != ctx.mvip:
+        ctx.logger.error("Please only provide the mvip once. The two you provided are different.")
+        exit(1)
+    if username and ctx.username and username != ctx.username:
+        ctx.logger.error("Please only provide the username once. The two you provided are different.")
+        exit(1)
+    if password and ctx.password and password != ctx.password:
+        ctx.logger.error("Please only provide the password once. The two you provided are different.")
+        exit(1)
+    if name and ctx.name and name != ctx.name:
+        ctx.logger.error("Please only provide the name once. The two you provided are different.")
+        exit(1)
 
     if ctx.mvip is None and mvip is None:
         ctx.logger.error("Please provide the mvip. It is a required parameter.")
+        exit(1) #Should never be hit, but leaving it in just in case.
 
     if ctx.mvip is None:
         ctx.mvip = mvip
@@ -79,14 +89,24 @@ def push(ctx, mvip, username, password, version, port, name, verifyssl):
         ctx.version = str(float(version))
     if port is not None:
         ctx.port = port
-    ctx.verifyssl = ctx.verifyssl or verifyssl
+    if timeout is not None:
+        ctx.timeout = timeout
+    if verifyssl is not None:
+        ctx.verifyssl = verifyssl
+    if ctx.name is None:
+        ctx.name = name
 
     # Verify that the connection exists or get the extra info.
     cli_utils.establish_connection(ctx)
 
+    if ctx.name is None: #if user has not specified a name
+        if (str(ctx.port) == "443"): #port 443 is a cluster
+            ctx.name = ctx.element.get_cluster_info().cluster_info.name
+        elif (str(ctx.port) == "442"): #port 442 is node
+            ctx.name = ctx.element.get_config().config.cluster.name
     connections = cli_utils.get_connections(ctx)
     # First, ensure that no other connections have the same name:
-    sameName = [connection for connection in connections if connection["name"]==name]
+    sameName = [connection for connection in connections if connection["name"]==ctx.name]
     if sameName != []:
         ctx.logger.error("A connection with that name already exists. Please try another.")
         exit(1)
@@ -101,8 +121,10 @@ def push(ctx, mvip, username, password, version, port, name, verifyssl):
                                   'port': ctx.port,
                                   'url': 'https://%s:%s' % (ctx.mvip, ctx.port),
                                   'version': ctx.version,
-                                  'name': name,
-                                  'verifyssl': verifyssl}]
+                                  'name': ctx.name,
+                                  'verifyssl': ctx.verifyssl,
+                                  'timeout': ctx.timeout}]
+
     cli_utils.write_connections(ctx, connections)
 
 @cli.command('remove', short_help="Removes a given connection")
