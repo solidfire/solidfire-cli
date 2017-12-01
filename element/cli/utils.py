@@ -1,7 +1,6 @@
 import jsonpickle
 import json as serializer
 
-from __builtin__ import long
 from pkg_resources import Requirement, resource_filename
 import os
 import csv
@@ -280,7 +279,6 @@ def establish_connection(ctx):
 
     # The only time it is none is when we're asking for help or we're trying to store a connection.
     # If that's not what we're doing, we catch it later.
-    # Changed by chris, not sure how much of this code is required, but writing connections here messes up the naming code back in cmd_connection.py for auto naming, so it must be done after it.
     if cfg is not None:
         cfg["port"] = int(cfg["port"])
         ctx.cfg = cfg
@@ -323,9 +321,10 @@ def write_connections(ctx, connections):
                 w = csv.DictWriter(f, ["name", "mvip", "port", "username", "password", "version", "url", "verifyssl",
                                        "timeout", "default"], lineterminator='\n')
                 w.writeheader()
-                for connection in connections:
-                    if connection is not None:
-                        w.writerow(connection)
+                if connections is not None:
+                    for connection in connections:
+                        if connection is not None:
+                            w.writerow(connection)
     except Exception as e:
         ctx.logger.error("Problem writing " + connectionsCsvLocation + " " + str(
             e.args) + " Try changing the permissions of that file.")
@@ -334,11 +333,9 @@ def write_connections(ctx, connections):
 
 def get_default_connection(ctx):
     connections = get_connections(ctx)
-    i = 0
     for connection in connections: #kind of redunctant. Default should always be first (0th) index
         if connection["default"] == "True":
-            return connection[i]
-        i += 1
+            return connection
     else:
         ctx.logger.error("Please provide connection information. There is no connection info in cache at this time.")
         exit(1)
@@ -357,16 +354,6 @@ def write_default_connection(ctx, default_connection): # really only sets the de
     connections.insert(0, default_connection)
     write_connections(ctx, connections)
 
-    # connections = get_connections(ctx) old code from Adam
-    # for connection in connections:
-    #     if default_connection["mvip"] == connection["mvip"] and \
-    #                     default_connection["username"] == connection["username"] and \
-    #                     default_connection["port"] == connection["port"]:
-    #         connections.remove(connection)
-    #     if connection["name"] == "default":
-    #         connections.remove(connection)
-    # connections.insert(0, default_connection)
-    # write_connections(ctx, connections)
 
 #sets false on all the connections so that when default is set, only 1 is set.
 def clear_default(connections):

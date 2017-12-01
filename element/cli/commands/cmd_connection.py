@@ -194,25 +194,21 @@ def remove(ctx, name=None, index=None):
 
     connection_to_remove = None
 
-    # Filter by name
-    if name is not None:
-        connection_to_remove = next((i for i in connections if ["name"] == name), None)
-
     # Filter by index
     if index is not None:
         connection_to_remove = connections[index]
+        connections.remove(connection_to_remove)
 
-    if connection_to_remove:
+    # Filter by name
+    if name is not None:
         for conn in connections:
-            if conn["name"] == connection_to_remove["name"] or (
-                                conn["mvip"] == connection_to_remove["mvip"] and
-                                conn["username"] == connection_to_remove["username"] and
-                                conn["port"] == connection_to_remove["port"]):
+            if conn["name"] == name:
                 connections.remove(conn)
+    if (connections):
+        if connections[0]["default"] != "True":
+            connections[0]["default"] = "True"
+    cli_utils.write_connections(ctx,connections)
 
-    cli_utils.write_connections(ctx, connections)
-    if len(connections) > 0:
-        cli_utils.write_default_connection(ctx, connections[0])
 
 
 @cli.command('list', short_help="Lists the stored connection info")
