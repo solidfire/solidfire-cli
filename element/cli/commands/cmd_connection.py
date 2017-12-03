@@ -170,7 +170,8 @@ def remove(ctx, name=None, index=None):
 def list(ctx, name=None, index=None):
     connectionsCsvLocation = resource_filename(Requirement.parse("solidfire-cli"), "connections.csv")
     connections = cli_utils.get_connections(ctx)
-    print(connectionsCsvLocation)
+    if not ctx.json:
+        print(connectionsCsvLocation)
     if(name is None and index is None):
         cli_utils.print_result(connections, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
     if(name is None and index is not None):
