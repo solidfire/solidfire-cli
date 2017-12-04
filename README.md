@@ -21,7 +21,7 @@ of using this tool are the following:
 Installing SolidFire CLI Tools
 ----------
 
-Note: If you are on a Linux OS, you will have to set up a virtual environment first because the native linux python does not support setuptools. To create a virtualenvironment, run
+Note: If you are on a Linux OS, you will have to set up a virtual environment first because the native linux python does not support setuptools. To create a virtual environment, run:
 
     pip install virtualenv
     virtualenv pythoncli
@@ -146,7 +146,7 @@ Example output:
 Executing Commands with Grouped Parameters
 ------------------------------------------
 A parameter might have optional subparameters that you need to use to specify an attribute of the the parameter.
-In the following example, the --volumes parameter has subparameters, such as volumeid, accessvolumes, name, newaccountid, newsize,and attributes:
+In the following example, the --volumes parameter has subparameters, such as volumeid, accessvolumes, name, newaccountid, newsize, and attributes:
 
     sfcli volume clonemultiple --help
 
