@@ -15,7 +15,7 @@ else:
 
 setup(
     name='solidfire-cli',
-    version='1.6.0.12',
+    version='1.5.0.29',
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
     author='SolidFire, Inc.',
@@ -32,7 +32,7 @@ setup(
     install_requires=[
         'click >= 5',
 		'future',
-		'setuptools',
+		'setuptools >= 19.2',
         'simplejson',
         'jsonpickle >= 0.9.3',
 		'solidfire-sdk-python >= 1.2',
