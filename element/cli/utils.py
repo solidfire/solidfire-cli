@@ -1,3 +1,5 @@
+import re
+
 import jsonpickle
 import json as serializer
 from pkg_resources import Requirement, resource_filename
@@ -175,8 +177,9 @@ def print_result_as_tree(objs, depth=1):
     print(get_result_as_tree(objs, depth))
 
 def establish_connection(ctx):
-    # Verify that the mvip does not contain the port number:
-    if ctx.mvip and ":" in ctx.mvip:
+
+    # Verify that the mvip does not contain the port number if the mvip matches the IPv4 pattern:
+    if ctx.mvip and re.match(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$", ctx.mvip) and ":" in ctx.mvip:
         ctx.logger.error('Please provide the port using the port parameter.')
         exit(1)
 

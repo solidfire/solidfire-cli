@@ -24,7 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """getcurrent modify remove list add setloginbanner getloginbanner """
+    """getcurrent modify remove add setloginbanner lists getloginbanner """
 
 @cli.command('getcurrent', short_help="""GetCurrentClusterAdmin returns information for the current primary cluster administrator. The primary Cluster Admin was created when the cluster was created. """, cls=SolidFireCommand)
 @pass_context
@@ -154,33 +154,6 @@ def remove(ctx,
 
 
 
-@cli.command('list', short_help="""ListClusterAdmins returns the list of all cluster administrators for the cluster. There can be several cluster administrator accounts with different levels of permissions. There can be only one primary cluster administrator in the system. The primary Cluster Admin is the administrator that was created when the cluster was created. You can also create LDAP administrators when setting up an LDAP system on the cluster. """, cls=SolidFireCommand)
-@pass_context
-def list(ctx):
-    """ListClusterAdmins returns the list of all cluster administrators for the cluster. There can be several cluster administrator accounts with different levels of permissions. There can be only one primary cluster administrator in the system. The primary Cluster Admin is the administrator that was created when the cluster was created. You can also create LDAP administrators when setting up an LDAP system on the cluster."""
-
-    
-
-    cli_utils.establish_connection(ctx)
-    
-
-    ctx.logger.info(""": """+""";"""+"")
-    try:
-        _ListClusterAdminsResult = ctx.element.list_cluster_admins()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ListClusterAdminsResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_ListClusterAdminsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
 @cli.command('add', short_help="""You can use AddClusterAdmin to add a new cluster admin account. A cluster ddmin can manage the cluster using the API and management tools. Cluster admins are completely separate and unrelated to standard tenant accounts. Each cluster admin can be restricted to a subset of the API. NetApp recommends using multiple cluster admin accounts for different users and applications. You should give each cluster admin the minimal permissions necessary; this reduces the potential impact of credential compromise. You must accept the End User License Agreement (EULA) by setting the acceptEula parameter to true to add a cluster administrator account to the system. """, cls=SolidFireCommand)
 @click.option('--username',
               type=str,
@@ -199,7 +172,8 @@ def list(ctx):
               help="""Controls which methods this cluster admin can use. For more details on the levels of access, see Access Control in the Element API Reference Guide. """)
 @click.option('--accepteula',
               type=bool,
-              required=False,
+              required=True,
+              prompt=True,
               help="""Required to indicate your acceptance of the End User License Agreement when creating this cluster. To accept the EULA, set this parameter to true. """)
 @click.option('--attributes',
               type=str,
@@ -213,8 +187,8 @@ def add(ctx,
            password,
            # Mandatory main parameter
            access,
-           # Optional main parameter
-           accepteula = None,
+           # Mandatory main parameter
+           accepteula,
            # Optional main parameter
            attributes = None):
     """You can use AddClusterAdmin to add a new cluster admin account. A cluster ddmin can manage the cluster using the API and management tools. Cluster admins are completely separate and unrelated to standard tenant accounts."""
@@ -241,7 +215,7 @@ def add(ctx,
             exit(1)
     
 
-    ctx.logger.info(""": """"""username = """ + str(username)+";"+"""password = """ + str(password)+";"+"""access = """ + str(access)+";" + """accepteula = """+str(accepteula)+";" + """attributes = """+str(kwargsDict)+""";"""+"")
+    ctx.logger.info(""": """"""username = """ + str(username)+";"+"""password = """ + str(password)+";"+"""access = """ + str(access)+";"+"""accepteula = """ + str(accepteula)+";" + """attributes = """+str(kwargsDict)+""";"""+"")
     try:
         _AddClusterAdminResult = ctx.element.add_cluster_admin(username=username, password=password, access=access, accept_eula=accepteula, attributes=kwargsDict)
     except common.ApiServerError as e:
@@ -296,6 +270,33 @@ def setloginbanner(ctx,
         return
     else:
         cli_utils.print_result(_SetLoginBannerResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('lists', short_help="""ListClusterAdmins returns the list of all cluster administrators for the cluster. There can be several cluster administrator accounts with different levels of permissions. There can be only one primary cluster administrator in the system. The primary Cluster Admin is the administrator that was created when the cluster was created. You can also create LDAP administrators when setting up an LDAP system on the cluster. """, cls=SolidFireCommand)
+@pass_context
+def lists(ctx):
+    """ListClusterAdmins returns the list of all cluster administrators for the cluster. There can be several cluster administrator accounts with different levels of permissions. There can be only one primary cluster administrator in the system. The primary Cluster Admin is the administrator that was created when the cluster was created. You can also create LDAP administrators when setting up an LDAP system on the cluster."""
+
+    
+
+    cli_utils.establish_connection(ctx)
+    
+
+    ctx.logger.info(""": """+""";"""+"")
+    try:
+        _ListClusterAdminsResult = ctx.element.list_cluster_admins()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListClusterAdminsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListClusterAdminsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 

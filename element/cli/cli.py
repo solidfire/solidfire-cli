@@ -17,7 +17,8 @@ logging.basicConfig(
     format=('%(asctime)s - %(name)s: in %(filename)s at %(lineno)s - %(levelname)s: %(message)s'))
 LOG = logging.getLogger(__name__)
 CONTEXT_SETTINGS = dict(auto_envvar_prefix='SOLIDFIRE', token_normalize_func=lambda x: x.lower())
-HELP_STRING = """Welcome to the SolidFire Command Line Interface """ + pkg_resources.require("solidfire-cli")[0].version + """.
+HELP_STRING = """Welcome to the SolidFire Command Line Interface """ + pkg_resources.require("solidfire-cli")[
+    0].version + """.
     
     For more information about how to use this, see the readme here: https://github.com/solidfire/solidfire-cli."""
 
@@ -59,9 +60,11 @@ class Context():
         if self.verbose:
             self.log(msg, *args)
 
+
 pass_context = click.make_pass_decorator(Context, ensure=True)
 cmd_folder = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                           'commands'))
+
 
 class SolidFireCLI(click.MultiCommand):
 
@@ -69,7 +72,7 @@ class SolidFireCLI(click.MultiCommand):
         rv = []
         for filename in os.listdir(cmd_folder):
             if filename.endswith('.py') and \
-               filename.startswith('cmd_'):
+                    filename.startswith('cmd_'):
                 rv.append(filename[4:-3])
         rv.sort()
         return rv
@@ -79,17 +82,19 @@ class SolidFireCLI(click.MultiCommand):
             if sys.version_info[0] == 2:
                 name = name.encode('ascii', 'replace')
             import_string = (
-                "element.cli.commands.cmd_%s" % (name.lower()))
+                    "element.cli.commands.cmd_%s" % (name.lower()))
             mod = __import__(import_string, None, None, ['cli'])
         except ImportError as e:
-            LOG.error(name.lower()+" is not a valid module. Please run 'sfcli --help' for a list of valid modules.")
+            LOG.error(name.lower() + " is not a valid module. Please run 'sfcli --help' for a list of valid modules.")
             exit(1)
         return mod.cli
+
 
 class SolidFireParsingState(click.parser.ParsingState):
     def __init__(self, args):
         self.subparameters = []
         click.parser.ParsingState.__init__(self, args)
+
 
 class SolidFireParser(click.parser.OptionParser):
     # We overrided this guy because we needed to inject our custom parsing
@@ -118,10 +123,10 @@ class SolidFireParser(click.parser.OptionParser):
     def _match_long_opt(self, opt, explicit_value, state):
         option = self._long_opt.get(opt, None)
         if option != None:
-            if type(option.obj) == SolidFireOption and\
-                    option.obj.is_sub_parameter and\
+            if type(option.obj) == SolidFireOption and \
+                    option.obj.is_sub_parameter and \
                     opt[2:] not in state.subparameters:
-                raise click.parser.BadOptionUsage(opt+" is a subparameter and cannot be provided in this context.")
+                raise click.parser.BadOptionUsage(opt + " is a subparameter and cannot be provided in this context.")
 
             if state.subparameters != [] and opt[2:] not in state.subparameters:
                 # If we find out that there were some options we were expecting
@@ -130,12 +135,11 @@ class SolidFireParser(click.parser.OptionParser):
                 # We'll process them in the next iteration.
                 extraParams = []
                 for paramName in state.subparameters:
-                    extraParams.append("--"+paramName)
+                    extraParams.append("--" + paramName)
                     extraParams.append("")
                 extraParams.append(opt)
                 state.rargs = extraParams + state.rargs
                 return
-
 
             # If we've gotten here, it implies that we are either handling
             # an expected subparameter (ie opt[2:] in state.subparameters)
@@ -166,9 +170,10 @@ class SolidFireParser(click.parser.OptionParser):
                 state.rargs.append("--" + paramName)
                 state.rargs.append("")
 
+
 class SolidFireOption(click.core.Option):
     def __init__(self, param_decls=None, subparameters=[], is_sub_parameter=False, *args, **kwargs):
-        self.subparameters = subparameters # This is simply a list of names that depend on our given param.
+        self.subparameters = subparameters  # This is simply a list of names that depend on our given param.
         self.is_sub_parameter = is_sub_parameter
         if is_sub_parameter and subparameters != []:
             raise click.BadParameter("An option cannot be both a super parameter and a subparameter.")
@@ -192,11 +197,12 @@ class SolidFireOption(click.core.Option):
         def _convert(value, level):
             if level == 0:
                 if value == "":
-                    #if self.required and self.is_sub_parameter:
+                    # if self.required and self.is_sub_parameter:
                     #    raise click.BadParameter(self.name+" is a required member of its parameter group. Please provide it inline after the associated superparameter.")
                     return None
                 return self.type(value, self, ctx)
             return tuple(_convert(x, level - 1) for x in value or ())
+
         v = _convert(value, (self.nargs != 1) + bool(self.multiple))
         return _convert(value, (self.nargs != 1) + bool(self.multiple))
 
@@ -210,6 +216,7 @@ class SolidFireCommand(click.Command):
         for param in self.get_params(ctx):
             param.add_to_parser(parser, ctx)
         return parser
+
 
 @click.command(cls=SolidFireCLI, context_settings=CONTEXT_SETTINGS, help=HELP_STRING)
 @click.option('--mvip', '-m',
@@ -233,7 +240,7 @@ class SolidFireCommand(click.Command):
               help="The port number on which you wish to connect.",
               required=False)
 @click.option('--name', '-n',
-              default = None,
+              default=None,
               help="The name of the connection you wish to use in connections.csv. You can use this if you have previously stored away a connection with 'sfcli connection push'.",
               required=False)
 @click.option('--connectionIndex', '-c',
@@ -242,7 +249,7 @@ class SolidFireCommand(click.Command):
               help="The index of the connection you wish to use in connections.csv. You can use this if you have previously stored away a connection with 'sfcli connection push'.",
               required=False)
 @click.option('--verifyssl', '-s',
-              default = False,
+              default=False,
               help="Enable this to check ssl connection for errors especially when using a hostname. It is invalid to set this to true when using an IP address in the target.",
               required=False,
               is_flag=True)
@@ -295,10 +302,6 @@ def cli(ctx,
         version=None,
         nocache=None):
     """Welcome to the SolidFire command line interface! For more information about how to use this, see the readme here: https://github.com/solidfire/solidfire-cli"""
-    # NOTE(jdg): This method is actually our console entry point,
-    # if/when we introduce a v2 of the shell and client, we may
-    # need to define a new entry point one level up that parses
-    # out what version we want to uses
 
     ctx.debug = debug
     LOG.setLevel(DEBUG_LOGGING_MAP[int(debug)])
@@ -307,8 +310,6 @@ def cli(ctx,
     element_logger.setLevel(DEBUG_LOGGING_MAP[int(debug)])
     for h in element_logger.handlers:
         element_logger.removeHandler(h)
-    #if element_logger.hasHandlers():
-    #    element_logger.handlers.clear()
     ctx.logger = LOG
     ctx.verbose = verbose
     ctx.username = username
@@ -326,14 +327,6 @@ def cli(ctx,
     ctx.version = version
     ctx.nocache = nocache
 
+
 if __name__ == '__main__':
-    """
-    #pass_context()
-    #ctx = click.globals.get_current_context()
-    runner = click.testing.CliRunner()
-    runner.invoke(element_cli.cli,
-                  ["account", "list"])
-    runner.invoke(element_cli.cli,
-                  ['--mvip', "10.117.61.44", "--login", "admin", "--password", "admin", "--name", "b", "Connection",
-                   "PushConnection"])"""
     cli.main()

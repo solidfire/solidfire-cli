@@ -24,9 +24,9 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """listgroup modify create list deletegroup modifygroup rollbacktogroup rollbackto creategroup delete """
+    """listgroups create modify deletegroup lists modifygroup rollbacktogroup rollbackto creategroup delete """
 
-@cli.command('listgroup', short_help="""ListGroupSnapshots enables you to get information about all group snapshots that have been created. """, cls=SolidFireCommand)
+@cli.command('listgroups', short_help="""ListGroupSnapshots enables you to get information about all group snapshots that have been created. """, cls=SolidFireCommand)
 @click.option('--volumes',
               type=str,
               required=False,
@@ -36,7 +36,7 @@ def cli(ctx):
               required=False,
               help="""Retrieves information for a specific group snapshot ID. """)
 @pass_context
-def listgroup(ctx,
+def listgroups(ctx,
            # Optional main parameter
            volumes = None,
            # Optional main parameter
@@ -66,63 +66,6 @@ def listgroup(ctx,
         return
     else:
         cli_utils.print_result(_ListGroupSnapshotsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('modify', short_help="""ModifySnapshot enables you to change the attributes currently assigned to a snapshot. You can use this method to enable snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system. """, cls=SolidFireCommand)
-@click.option('--snapshotid',
-              type=int,
-              required=True,
-              prompt=True,
-              help="""Specifies the ID of the snapshot. """)
-@click.option('--expirationtime',
-              type=str,
-              required=False,
-              help="""Sets the time when the snapshot should be removed. """)
-@click.option('--enableremotereplication',
-              type=bool,
-              required=False,
-              help="""Replicates the snapshot created to a remote cluster. Possible values are: true: The snapshot is replicated to remote storage. false: Default. The snapshot is not replicated. """)
-@click.option('--snapmirrorlabel',
-              type=str,
-              required=False,
-              help="""Label used by SnapMirror software to specify snapshot retention policy on SnapMirror endpoint. """)
-@pass_context
-def modify(ctx,
-           # Mandatory main parameter
-           snapshotid,
-           # Optional main parameter
-           expirationtime = None,
-           # Optional main parameter
-           enableremotereplication = None,
-           # Optional main parameter
-           snapmirrorlabel = None):
-    """ModifySnapshot enables you to change the attributes currently assigned to a snapshot. You can use this method to enable snapshots created on"""
-    """the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system."""
-
-    
-
-    cli_utils.establish_connection(ctx)
-    
-    
-    
-    
-    
-
-    ctx.logger.info(""": """"""snapshotid = """ + str(snapshotid)+";" + """expirationtime = """+str(expirationtime)+";" + """enableremotereplication = """+str(enableremotereplication)+";" + """snapmirrorlabel = """+str(snapmirrorlabel)+""";"""+"")
-    try:
-        _ModifySnapshotResult = ctx.element.modify_snapshot(snapshot_id=snapshotid, expiration_time=expirationtime, enable_remote_replication=enableremotereplication, snap_mirror_label=snapmirrorlabel)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ModifySnapshotResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_ModifySnapshotResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -213,22 +156,36 @@ def create(ctx,
 
 
 
-@cli.command('list', short_help="""ListSnapshots enables you to return the attributes of each snapshot taken on the volume. Information about snapshots that reside on the target cluster is displayed on the source cluster when this method is called from the source cluster. """, cls=SolidFireCommand)
-@click.option('--volumeid',
-              type=int,
-              required=False,
-              help="""Retrieves snapshots for a volume. If volumeID is not provided, all snapshots for all volumes are returned. """)
+@cli.command('modify', short_help="""ModifySnapshot enables you to change the attributes currently assigned to a snapshot. You can use this method to enable snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system. """, cls=SolidFireCommand)
 @click.option('--snapshotid',
               type=int,
+              required=True,
+              prompt=True,
+              help="""Specifies the ID of the snapshot. """)
+@click.option('--expirationtime',
+              type=str,
               required=False,
-              help="""Retrieves information for a specific snapshot ID. """)
+              help="""Sets the time when the snapshot should be removed. """)
+@click.option('--enableremotereplication',
+              type=bool,
+              required=False,
+              help="""Replicates the snapshot created to a remote cluster. Possible values are: true: The snapshot is replicated to remote storage. false: Default. The snapshot is not replicated. """)
+@click.option('--snapmirrorlabel',
+              type=str,
+              required=False,
+              help="""Label used by SnapMirror software to specify snapshot retention policy on SnapMirror endpoint. """)
 @pass_context
-def list(ctx,
+def modify(ctx,
+           # Mandatory main parameter
+           snapshotid,
            # Optional main parameter
-           volumeid = None,
+           expirationtime = None,
            # Optional main parameter
-           snapshotid = None):
-    """ListSnapshots enables you to return the attributes of each snapshot taken on the volume. Information about snapshots that reside on the target cluster is displayed on the source cluster when this method is called from the source cluster."""
+           enableremotereplication = None,
+           # Optional main parameter
+           snapmirrorlabel = None):
+    """ModifySnapshot enables you to change the attributes currently assigned to a snapshot. You can use this method to enable snapshots created on"""
+    """the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system."""
 
     
 
@@ -236,10 +193,12 @@ def list(ctx,
     
     
     
+    
+    
 
-    ctx.logger.info(""": """"""volumeid = """+str(volumeid)+";" + """snapshotid = """+str(snapshotid)+""";"""+"")
+    ctx.logger.info(""": """"""snapshotid = """ + str(snapshotid)+";" + """expirationtime = """+str(expirationtime)+";" + """enableremotereplication = """+str(enableremotereplication)+";" + """snapmirrorlabel = """+str(snapmirrorlabel)+""";"""+"")
     try:
-        _ListSnapshotsResult = ctx.element.list_snapshots(volume_id=volumeid, snapshot_id=snapshotid)
+        _ModifySnapshotResult = ctx.element.modify_snapshot(snapshot_id=snapshotid, expiration_time=expirationtime, enable_remote_replication=enableremotereplication, snap_mirror_label=snapmirrorlabel)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -247,10 +206,10 @@ def list(ctx,
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ListSnapshotsResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_ModifySnapshotResult), indent=4))
         return
     else:
-        cli_utils.print_result(_ListSnapshotsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_ModifySnapshotResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -294,6 +253,47 @@ def deletegroup(ctx,
         return
     else:
         cli_utils.print_result(_DeleteGroupSnapshotResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('lists', short_help="""ListSnapshots enables you to return the attributes of each snapshot taken on the volume. Information about snapshots that reside on the target cluster is displayed on the source cluster when this method is called from the source cluster. """, cls=SolidFireCommand)
+@click.option('--volumeid',
+              type=int,
+              required=False,
+              help="""Retrieves snapshots for a volume. If volumeID is not provided, all snapshots for all volumes are returned. """)
+@click.option('--snapshotid',
+              type=int,
+              required=False,
+              help="""Retrieves information for a specific snapshot ID. """)
+@pass_context
+def lists(ctx,
+           # Optional main parameter
+           volumeid = None,
+           # Optional main parameter
+           snapshotid = None):
+    """ListSnapshots enables you to return the attributes of each snapshot taken on the volume. Information about snapshots that reside on the target cluster is displayed on the source cluster when this method is called from the source cluster."""
+
+    
+
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+
+    ctx.logger.info(""": """"""volumeid = """+str(volumeid)+";" + """snapshotid = """+str(snapshotid)+""";"""+"")
+    try:
+        _ListSnapshotsResult = ctx.element.list_snapshots(volume_id=volumeid, snapshot_id=snapshotid)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListSnapshotsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListSnapshotsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 

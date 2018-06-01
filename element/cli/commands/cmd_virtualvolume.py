@@ -24,7 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """listhosts listtasks enablefeature list listbindings listvolumestatsby getcount listprotocolendpoints getfeaturestatus """
+    """listhosts listtasks enablefeature lists listbindings listvolumestatsby getcount listprotocolendpoints getfeaturestatus """
 
 @cli.command('listhosts', short_help="""ListVirtualVolumeHosts returns a list of all virtual volume hosts known to the cluster. A virtual volume host is a VMware ESX host that has initiated a session with the VASA API provider. """, cls=SolidFireCommand)
 @click.option('--virtualvolumehostids',
@@ -134,7 +134,7 @@ def enablefeature(ctx,
 
 
 
-@cli.command('list', short_help="""ListVirtualVolumes enables you to list the virtual volumes currently in the system. You can use this method to list all virtual volumes, or only list a subset. """, cls=SolidFireCommand)
+@cli.command('lists', short_help="""ListVirtualVolumes enables you to list the virtual volumes currently in the system. You can use this method to list all virtual volumes, or only list a subset. """, cls=SolidFireCommand)
 @click.option('--details',
               type=bool,
               required=False,
@@ -156,7 +156,7 @@ def enablefeature(ctx,
               required=False,
               help="""A list of virtual volume IDs for which to retrieve information. If you specify this parameter, the method returns information about only these virtual volumes. """)
 @pass_context
-def list(ctx,
+def lists(ctx,
            # Optional main parameter
            details = None,
            # Optional main parameter

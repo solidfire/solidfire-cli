@@ -24,12 +24,13 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """getinfo getapi getrawstats getconfig deleteallsupportbundles getsystemstatus listfaults create removesslcertificate disableencryptionatrest setntpinfo setconfig listevents createsupportbundle modifyfullthreshold getlimits getcompletestats getcapacity getntpinfo enableencryptionatrest getversioninfo getsslcertificate clearfaults getstate setsslcertificate getstats getmasternodeid getfullthreshold listsyncjobs """
+    """removesslcertificate getapi getrawstats getconfig deleteallsupportbundles getsystemstatus getlimits create getinfo disableencryptionatrest setntpinfo setconfig listevents getcompletestats getstats listfaults createsupportbundle getcapacity getntpinfo listsyncjobs getversioninfo getsslcertificate clearfaults getstate setsslcertificate modifyfullthreshold getmasternodeid getfullthreshold enableencryptionatrest """
 
-@cli.command('getinfo', short_help="""GetClusterInfo enables you to return configuration information about the cluster. """, cls=SolidFireCommand)
+@cli.command('removesslcertificate', short_help="""You can use the RemoveSSLCertificate method to remove the user SSL certificate and private key for the cluster. After the certificate and private key are removed, the cluster is configured to use the default certificate and private key. """, cls=SolidFireCommand)
 @pass_context
-def getinfo(ctx):
-    """GetClusterInfo enables you to return configuration information about the cluster."""
+def removesslcertificate(ctx):
+    """You can use the RemoveSSLCertificate method to remove the user SSL certificate and private key for the cluster."""
+    """After the certificate and private key are removed, the cluster is configured to use the default certificate and private key."""
 
     
 
@@ -38,7 +39,7 @@ def getinfo(ctx):
 
     ctx.logger.info(""": """+""";"""+"")
     try:
-        _GetClusterInfoResult = ctx.element.get_cluster_info()
+        _RemoveSSLCertificateResult = ctx.element.remove_sslcertificate()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -46,10 +47,10 @@ def getinfo(ctx):
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetClusterInfoResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_RemoveSSLCertificateResult), indent=4))
         return
     else:
-        cli_utils.print_result(_GetClusterInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_RemoveSSLCertificateResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -189,33 +190,20 @@ def getsystemstatus(ctx):
 
 
 
-@cli.command('listfaults', short_help="""ListClusterFaults enables you to retrieve information about any faults detected on the cluster. With this method, you can retrieve both current faults as well as faults that have been resolved. The system caches faults every 30 seconds. """, cls=SolidFireCommand)
-@click.option('--bestpractices',
-              type=bool,
-              required=False,
-              help="""Specifies whether to include faults triggered by suboptimal system configuration. Possible values are: true false """)
-@click.option('--faulttypes',
-              type=str,
-              required=False,
-              help="""Determines the types of faults returned. Possible values are: current: List active, unresolved faults. resolved: List faults that were previously detected and resolved. all: (Default) List both current and resolved faults. You can see the fault status in the resolved field of the Cluster Fault object. """)
+@cli.command('getlimits', short_help="""GetLimits enables you to retrieve the limit values set by the API. These values might change between releases of Element OS, but do not change without an update to the system. Knowing the limit values set by the API can be useful when writing API scripts for user-facing tools. Note: The GetLimits method returns the limits for the current software version regardless of the API endpoint version used to pass the method. """, cls=SolidFireCommand)
 @pass_context
-def listfaults(ctx,
-           # Optional main parameter
-           bestpractices = None,
-           # Optional main parameter
-           faulttypes = None):
-    """ListClusterFaults enables you to retrieve information about any faults detected on the cluster. With this method, you can retrieve both current faults as well as faults that have been resolved. The system caches faults every 30 seconds."""
+def getlimits(ctx):
+    """GetLimits enables you to retrieve the limit values set by the API. These values might change between releases of Element OS, but do not change without an update to the system. Knowing the limit values set by the API can be useful when writing API scripts for user-facing tools."""
+    """Note: The GetLimits method returns the limits for the current software version regardless of the API endpoint version used to pass the method."""
 
     
 
     cli_utils.establish_connection(ctx)
     
-    
-    
 
-    ctx.logger.info(""": """"""bestpractices = """+str(bestpractices)+";" + """faulttypes = """+str(faulttypes)+""";"""+"")
+    ctx.logger.info(""": """+""";"""+"")
     try:
-        _ListClusterFaultsResult = ctx.element.list_cluster_faults(best_practices=bestpractices, fault_types=faulttypes)
+        _GetLimitsResult = ctx.element.get_limits()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -223,10 +211,10 @@ def listfaults(ctx,
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ListClusterFaultsResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_GetLimitsResult), indent=4))
         return
     else:
-        cli_utils.print_result(_ListClusterFaultsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_GetLimitsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -331,11 +319,10 @@ def create(ctx,
 
 
 
-@cli.command('removesslcertificate', short_help="""You can use the RemoveSSLCertificate method to remove the user SSL certificate and private key for the cluster. After the certificate and private key are removed, the cluster is configured to use the default certificate and private key. """, cls=SolidFireCommand)
+@cli.command('getinfo', short_help="""GetClusterInfo enables you to return configuration information about the cluster. """, cls=SolidFireCommand)
 @pass_context
-def removesslcertificate(ctx):
-    """You can use the RemoveSSLCertificate method to remove the user SSL certificate and private key for the cluster."""
-    """After the certificate and private key are removed, the cluster is configured to use the default certificate and private key."""
+def getinfo(ctx):
+    """GetClusterInfo enables you to return configuration information about the cluster."""
 
     
 
@@ -344,7 +331,7 @@ def removesslcertificate(ctx):
 
     ctx.logger.info(""": """+""";"""+"")
     try:
-        _RemoveSSLCertificateResult = ctx.element.remove_sslcertificate()
+        _GetClusterInfoResult = ctx.element.get_cluster_info()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -352,10 +339,10 @@ def removesslcertificate(ctx):
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_RemoveSSLCertificateResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_GetClusterInfoResult), indent=4))
         return
     else:
-        cli_utils.print_result(_RemoveSSLCertificateResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_GetClusterInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -642,6 +629,103 @@ def listevents(ctx,
 
 
 
+@cli.command('getcompletestats', short_help="""NetApp engineering uses the GetCompleteStats API method to troubleshoot new features. The data returned from GetCompleteStats is not documented, changes frequently, and is not guaranteed to be accurate. NetApp does not recommend using GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster. """, cls=SolidFireCommand)
+@pass_context
+def getcompletestats(ctx):
+    """NetApp engineering uses the GetCompleteStats API method to troubleshoot new features. The data returned from GetCompleteStats is not documented, changes frequently, and is not guaranteed to be accurate. NetApp does not recommend using GetCompleteStats for collecting performance data or any other"""
+    """management integration with a SolidFire cluster."""
+
+    
+
+    cli_utils.establish_connection(ctx)
+    
+
+    ctx.logger.info(""": """+""";"""+"")
+    try:
+        _dict = ctx.element.get_complete_stats()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_dict), indent=4))
+        return
+    else:
+        cli_utils.print_result(_dict, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getstats', short_help="""GetClusterStats enables you to retrieve high-level activity measurements for the cluster. Values returned are cumulative from the creation of the cluster. """, cls=SolidFireCommand)
+@pass_context
+def getstats(ctx):
+    """GetClusterStats enables you to retrieve high-level activity measurements for the cluster. Values returned are cumulative from the"""
+    """creation of the cluster."""
+
+    
+
+    cli_utils.establish_connection(ctx)
+    
+
+    ctx.logger.info(""": """+""";"""+"")
+    try:
+        _GetClusterStatsResult = ctx.element.get_cluster_stats()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetClusterStatsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetClusterStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('listfaults', short_help="""ListClusterFaults enables you to retrieve information about any faults detected on the cluster. With this method, you can retrieve both current faults as well as faults that have been resolved. The system caches faults every 30 seconds. """, cls=SolidFireCommand)
+@click.option('--bestpractices',
+              type=bool,
+              required=False,
+              help="""Specifies whether to include faults triggered by suboptimal system configuration. Possible values are: true false """)
+@click.option('--faulttypes',
+              type=str,
+              required=False,
+              help="""Determines the types of faults returned. Possible values are: current: List active, unresolved faults. resolved: List faults that were previously detected and resolved. all: (Default) List both current and resolved faults. You can see the fault status in the resolved field of the Cluster Fault object. """)
+@pass_context
+def listfaults(ctx,
+           # Optional main parameter
+           bestpractices = None,
+           # Optional main parameter
+           faulttypes = None):
+    """ListClusterFaults enables you to retrieve information about any faults detected on the cluster. With this method, you can retrieve both current faults as well as faults that have been resolved. The system caches faults every 30 seconds."""
+
+    
+
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+
+    ctx.logger.info(""": """"""bestpractices = """+str(bestpractices)+";" + """faulttypes = """+str(faulttypes)+""";"""+"")
+    try:
+        _ListClusterFaultsResult = ctx.element.list_cluster_faults(best_practices=bestpractices, fault_types=faulttypes)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListClusterFaultsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListClusterFaultsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
 @cli.command('createsupportbundle', short_help="""CreateSupportBundle enables you to create a support bundle file under the node's directory. After creation, the bundle is stored on the node as a tar.gz file. """, cls=SolidFireCommand)
 @click.option('--bundlename',
               type=str,
@@ -687,110 +771,6 @@ def createsupportbundle(ctx,
         return
     else:
         cli_utils.print_result(_CreateSupportBundleResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('modifyfullthreshold', short_help="""You can use ModifyClusterFullThreshold to change the level at which the system generates an event when the storage cluster approaches a certain capacity utilization. You can use the threshold setting to indicate the acceptable amount of utilized block storage before the system generates a warning. For example, if you want to be alerted when the system reaches 3% below the "Error" level block storage utilization, enter a value of "3" for the stage3BlockThresholdPercent parameter. If this level is reached, the system sends an alert to the Event Log in the Cluster Management Console. """, cls=SolidFireCommand)
-@click.option('--stage2awarethreshold',
-              type=int,
-              required=False,
-              help="""The number of nodes of capacity remaining in the cluster before the system triggers a capacity notification. """)
-@click.option('--stage3blockthresholdpercent',
-              type=int,
-              required=False,
-              help="""The percentage of block storage utilization below the "Error" threshold that causes the system to trigger a cluster "Warning" alert. """)
-@click.option('--maxmetadataoverprovisionfactor',
-              type=int,
-              required=False,
-              help="""A value representative of the number of times metadata space can be overprovisioned relative to the amount of space available. For example, if there was enough metadata space to store 100 TiB of volumes and this number was set to 5, then 500 TiB worth of volumes can be created. """)
-@pass_context
-def modifyfullthreshold(ctx,
-           # Optional main parameter
-           stage2awarethreshold = None,
-           # Optional main parameter
-           stage3blockthresholdpercent = None,
-           # Optional main parameter
-           maxmetadataoverprovisionfactor = None):
-    """You can use ModifyClusterFullThreshold to change the level at which the system generates an event when the storage cluster approaches a certain capacity utilization. You can use the threshold setting to indicate the acceptable amount of utilized block storage before the system generates a warning. For example, if you want to be alerted when the system reaches 3% below the "Error" level block storage utilization, enter a value of "3" for the stage3BlockThresholdPercent parameter. If this level is reached, the system sends an alert to the Event Log in the Cluster Management Console."""
-
-    
-
-    cli_utils.establish_connection(ctx)
-    
-    
-    
-    
-
-    ctx.logger.info(""": """"""stage2awarethreshold = """+str(stage2awarethreshold)+";" + """stage3blockthresholdpercent = """+str(stage3blockthresholdpercent)+";" + """maxmetadataoverprovisionfactor = """+str(maxmetadataoverprovisionfactor)+""";"""+"")
-    try:
-        _ModifyClusterFullThresholdResult = ctx.element.modify_cluster_full_threshold(stage2_aware_threshold=stage2awarethreshold, stage3_block_threshold_percent=stage3blockthresholdpercent, max_metadata_over_provision_factor=maxmetadataoverprovisionfactor)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ModifyClusterFullThresholdResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_ModifyClusterFullThresholdResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getlimits', short_help="""GetLimits enables you to retrieve the limit values set by the API. These values might change between releases of Element OS, but do not change without an update to the system. Knowing the limit values set by the API can be useful when writing API scripts for user-facing tools. Note: The GetLimits method returns the limits for the current software version regardless of the API endpoint version used to pass the method. """, cls=SolidFireCommand)
-@pass_context
-def getlimits(ctx):
-    """GetLimits enables you to retrieve the limit values set by the API. These values might change between releases of Element OS, but do not change without an update to the system. Knowing the limit values set by the API can be useful when writing API scripts for user-facing tools."""
-    """Note: The GetLimits method returns the limits for the current software version regardless of the API endpoint version used to pass the method."""
-
-    
-
-    cli_utils.establish_connection(ctx)
-    
-
-    ctx.logger.info(""": """+""";"""+"")
-    try:
-        _GetLimitsResult = ctx.element.get_limits()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetLimitsResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_GetLimitsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getcompletestats', short_help="""NetApp engineering uses the GetCompleteStats API method to troubleshoot new features. The data returned from GetCompleteStats is not documented, changes frequently, and is not guaranteed to be accurate. NetApp does not recommend using GetCompleteStats for collecting performance data or any other management integration with a SolidFire cluster. """, cls=SolidFireCommand)
-@pass_context
-def getcompletestats(ctx):
-    """NetApp engineering uses the GetCompleteStats API method to troubleshoot new features. The data returned from GetCompleteStats is not documented, changes frequently, and is not guaranteed to be accurate. NetApp does not recommend using GetCompleteStats for collecting performance data or any other"""
-    """management integration with a SolidFire cluster."""
-
-    
-
-    cli_utils.establish_connection(ctx)
-    
-
-    ctx.logger.info(""": """+""";"""+"")
-    try:
-        _dict = ctx.element.get_complete_stats()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_dict), indent=4))
-        return
-    else:
-        cli_utils.print_result(_dict, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -848,15 +828,11 @@ def getntpinfo(ctx):
 
 
 
-@cli.command('enableencryptionatrest', short_help="""You can use the EnableEncryptionAtRest method to enable the Advanced Encryption Standard (AES) 256-bit encryption at rest on the cluster, so that the cluster can manage the encryption key used for the drives on each node. This feature is not enabled by default. When you enable Encryption at Rest, the cluster automatically manages encryption keys internally for the drives on each node in the cluster. Nodes do not store the keys to unlock drives and the keys are never passed over the network. Two nodes participating in a cluster are required to access the key to disable encryption on a drive. The encryption management does not affect performance or efficiency on the cluster. If an encryption-enabled drive or node is removed from the cluster with the API, Encryption at Rest is disabled and the data is not secure erased. Data can be secure erased using the SecureEraseDrives API method. Note: If you have a node type with a model number ending in "-NE", the EnableEncryptionAtRest method call fails with a response of "Encryption not allowed. Cluster detected non-encryptable node". You should only enable or disable encryption when the cluster is running and in a healthy state. You can enable or disable encryption at your discretion and as often as you need. Note: This process is asynchronous and returns a response before encryption is enabled. You can use the GetClusterInfo method to poll the system to see when the process has completed. """, cls=SolidFireCommand)
+@cli.command('listsyncjobs', short_help="""ListSyncJobs enables you to return information about synchronization jobs that are running on a SolidFire cluster. The type of synchronization jobs that are returned with this method are slice, clone, and remote. """, cls=SolidFireCommand)
 @pass_context
-def enableencryptionatrest(ctx):
-    """You can use the EnableEncryptionAtRest method to enable the Advanced Encryption Standard (AES) 256-bit encryption at rest on the cluster, so that the cluster can manage the encryption key used for the drives on each node. This feature is not enabled by default."""
-    """When you enable Encryption at Rest, the cluster automatically manages encryption keys internally for the drives on each node in the cluster. Nodes do not store the keys to unlock drives and the keys are never passed over the network. Two nodes participating in a cluster are required to access the key to disable encryption on a drive. The encryption management does not affect performance or efficiency on the cluster. If an encryption-enabled drive or node is removed from the cluster with the API, Encryption at Rest is disabled and the data is not secure erased. Data can be secure erased using the SecureEraseDrives API method."""
-    """Note: If you have a node type with a model number ending in "-NE", the EnableEncryptionAtRest method call fails with a response of "Encryption not allowed. Cluster detected non-encryptable node"."""
-    """You should only enable or disable encryption when the cluster is running and in a healthy state. You can enable or disable encryption at your discretion and as often as you need."""
-    """Note: This process is asynchronous and returns a response before encryption is enabled. You can use the GetClusterInfo"""
-    """method to poll the system to see when the process has completed."""
+def listsyncjobs(ctx):
+    """ListSyncJobs enables you to return information about synchronization jobs that are running on a SolidFire cluster. The type of"""
+    """synchronization jobs that are returned with this method are slice, clone, and remote."""
 
     
 
@@ -865,7 +841,7 @@ def enableencryptionatrest(ctx):
 
     ctx.logger.info(""": """+""";"""+"")
     try:
-        _EnableEncryptionAtRestResult = ctx.element.enable_encryption_at_rest()
+        _ListSyncJobsResult = ctx.element.list_sync_jobs()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -873,10 +849,10 @@ def enableencryptionatrest(ctx):
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_EnableEncryptionAtRestResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_ListSyncJobsResult), indent=4))
         return
     else:
-        cli_utils.print_result(_EnableEncryptionAtRestResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_ListSyncJobsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1053,20 +1029,40 @@ def setsslcertificate(ctx,
 
 
 
-@cli.command('getstats', short_help="""GetClusterStats enables you to retrieve high-level activity measurements for the cluster. Values returned are cumulative from the creation of the cluster. """, cls=SolidFireCommand)
+@cli.command('modifyfullthreshold', short_help="""You can use ModifyClusterFullThreshold to change the level at which the system generates an event when the storage cluster approaches a certain capacity utilization. You can use the threshold setting to indicate the acceptable amount of utilized block storage before the system generates a warning. For example, if you want to be alerted when the system reaches 3% below the "Error" level block storage utilization, enter a value of "3" for the stage3BlockThresholdPercent parameter. If this level is reached, the system sends an alert to the Event Log in the Cluster Management Console. """, cls=SolidFireCommand)
+@click.option('--stage2awarethreshold',
+              type=int,
+              required=False,
+              help="""The number of nodes of capacity remaining in the cluster before the system triggers a capacity notification. """)
+@click.option('--stage3blockthresholdpercent',
+              type=int,
+              required=False,
+              help="""The percentage of block storage utilization below the "Error" threshold that causes the system to trigger a cluster "Warning" alert. """)
+@click.option('--maxmetadataoverprovisionfactor',
+              type=int,
+              required=False,
+              help="""A value representative of the number of times metadata space can be overprovisioned relative to the amount of space available. For example, if there was enough metadata space to store 100 TiB of volumes and this number was set to 5, then 500 TiB worth of volumes can be created. """)
 @pass_context
-def getstats(ctx):
-    """GetClusterStats enables you to retrieve high-level activity measurements for the cluster. Values returned are cumulative from the"""
-    """creation of the cluster."""
+def modifyfullthreshold(ctx,
+           # Optional main parameter
+           stage2awarethreshold = None,
+           # Optional main parameter
+           stage3blockthresholdpercent = None,
+           # Optional main parameter
+           maxmetadataoverprovisionfactor = None):
+    """You can use ModifyClusterFullThreshold to change the level at which the system generates an event when the storage cluster approaches a certain capacity utilization. You can use the threshold setting to indicate the acceptable amount of utilized block storage before the system generates a warning. For example, if you want to be alerted when the system reaches 3% below the "Error" level block storage utilization, enter a value of "3" for the stage3BlockThresholdPercent parameter. If this level is reached, the system sends an alert to the Event Log in the Cluster Management Console."""
 
     
 
     cli_utils.establish_connection(ctx)
     
+    
+    
+    
 
-    ctx.logger.info(""": """+""";"""+"")
+    ctx.logger.info(""": """"""stage2awarethreshold = """+str(stage2awarethreshold)+";" + """stage3blockthresholdpercent = """+str(stage3blockthresholdpercent)+";" + """maxmetadataoverprovisionfactor = """+str(maxmetadataoverprovisionfactor)+""";"""+"")
     try:
-        _GetClusterStatsResult = ctx.element.get_cluster_stats()
+        _ModifyClusterFullThresholdResult = ctx.element.modify_cluster_full_threshold(stage2_aware_threshold=stage2awarethreshold, stage3_block_threshold_percent=stage3blockthresholdpercent, max_metadata_over_provision_factor=maxmetadataoverprovisionfactor)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1074,10 +1070,10 @@ def getstats(ctx):
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetClusterStatsResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_ModifyClusterFullThresholdResult), indent=4))
         return
     else:
-        cli_utils.print_result(_GetClusterStatsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_ModifyClusterFullThresholdResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -1139,11 +1135,15 @@ def getfullthreshold(ctx):
 
 
 
-@cli.command('listsyncjobs', short_help="""ListSyncJobs enables you to return information about synchronization jobs that are running on a SolidFire cluster. The type of synchronization jobs that are returned with this method are slice, clone, and remote. """, cls=SolidFireCommand)
+@cli.command('enableencryptionatrest', short_help="""You can use the EnableEncryptionAtRest method to enable the Advanced Encryption Standard (AES) 256-bit encryption at rest on the cluster, so that the cluster can manage the encryption key used for the drives on each node. This feature is not enabled by default. When you enable Encryption at Rest, the cluster automatically manages encryption keys internally for the drives on each node in the cluster. Nodes do not store the keys to unlock drives and the keys are never passed over the network. Two nodes participating in a cluster are required to access the key to disable encryption on a drive. The encryption management does not affect performance or efficiency on the cluster. If an encryption-enabled drive or node is removed from the cluster with the API, Encryption at Rest is disabled and the data is not secure erased. Data can be secure erased using the SecureEraseDrives API method. Note: If you have a node type with a model number ending in "-NE", the EnableEncryptionAtRest method call fails with a response of "Encryption not allowed. Cluster detected non-encryptable node". You should only enable or disable encryption when the cluster is running and in a healthy state. You can enable or disable encryption at your discretion and as often as you need. Note: This process is asynchronous and returns a response before encryption is enabled. You can use the GetClusterInfo method to poll the system to see when the process has completed. """, cls=SolidFireCommand)
 @pass_context
-def listsyncjobs(ctx):
-    """ListSyncJobs enables you to return information about synchronization jobs that are running on a SolidFire cluster. The type of"""
-    """synchronization jobs that are returned with this method are slice, clone, and remote."""
+def enableencryptionatrest(ctx):
+    """You can use the EnableEncryptionAtRest method to enable the Advanced Encryption Standard (AES) 256-bit encryption at rest on the cluster, so that the cluster can manage the encryption key used for the drives on each node. This feature is not enabled by default."""
+    """When you enable Encryption at Rest, the cluster automatically manages encryption keys internally for the drives on each node in the cluster. Nodes do not store the keys to unlock drives and the keys are never passed over the network. Two nodes participating in a cluster are required to access the key to disable encryption on a drive. The encryption management does not affect performance or efficiency on the cluster. If an encryption-enabled drive or node is removed from the cluster with the API, Encryption at Rest is disabled and the data is not secure erased. Data can be secure erased using the SecureEraseDrives API method."""
+    """Note: If you have a node type with a model number ending in "-NE", the EnableEncryptionAtRest method call fails with a response of "Encryption not allowed. Cluster detected non-encryptable node"."""
+    """You should only enable or disable encryption when the cluster is running and in a healthy state. You can enable or disable encryption at your discretion and as often as you need."""
+    """Note: This process is asynchronous and returns a response before encryption is enabled. You can use the GetClusterInfo"""
+    """method to poll the system to see when the process has completed."""
 
     
 
@@ -1152,7 +1152,7 @@ def listsyncjobs(ctx):
 
     ctx.logger.info(""": """+""";"""+"")
     try:
-        _ListSyncJobsResult = ctx.element.list_sync_jobs()
+        _EnableEncryptionAtRestResult = ctx.element.enable_encryption_at_rest()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -1160,8 +1160,8 @@ def listsyncjobs(ctx):
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ListSyncJobsResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_EnableEncryptionAtRestResult), indent=4))
         return
     else:
-        cli_utils.print_result(_ListSyncJobsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_EnableEncryptionAtRestResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

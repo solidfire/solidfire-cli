@@ -24,59 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """list create modify modifylunassignments getlunassignments getefficiency delete """
-
-@cli.command('list', short_help="""ListVolumeAccessGroups enables you to return information about the volume access groups that are currently in the system. """, cls=SolidFireCommand)
-@click.option('--startvolumeaccessgroupid',
-              type=int,
-              required=False,
-              help="""The volume access group ID at which to begin the listing. If unspecified, there is no lower limit (implicitly 0). """)
-@click.option('--limit',
-              type=int,
-              required=False,
-              help="""The maximum number of results to return. This can be useful for paging. """)
-@click.option('--volumeaccessgroups',
-              type=str,
-              required=False,
-              help="""The list of ids of the volume access groups you wish to list """)
-@pass_context
-def list(ctx,
-           # Optional main parameter
-           startvolumeaccessgroupid = None,
-           # Optional main parameter
-           limit = None,
-           # Optional main parameter
-           volumeaccessgroups = None):
-    """ListVolumeAccessGroups enables you to return"""
-    """information about the volume access groups that are"""
-    """currently in the system."""
-
-    
-
-    cli_utils.establish_connection(ctx)
-    
-    
-    
-
-    volumeaccessgroups = parser.parse_array(volumeaccessgroups)
-    
-
-    ctx.logger.info(""": """"""startvolumeaccessgroupid = """+str(startvolumeaccessgroupid)+";" + """limit = """+str(limit)+";" + """volumeaccessgroups = """+str(volumeaccessgroups)+""";"""+"")
-    try:
-        _ListVolumeAccessGroupsResult = ctx.element.list_volume_access_groups(start_volume_access_group_id=startvolumeaccessgroupid, limit=limit, volume_access_groups=volumeaccessgroups)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ListVolumeAccessGroupsResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_ListVolumeAccessGroupsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
+    """create modify lists modifylunassignments getlunassignments getefficiency delete """
 
 @cli.command('create', short_help="""You can use CreateVolumeAccessGroup to create a new volume access group. When you create the volume access group, you need to give it a name, and you can optionally enter initiators and volumes. After you create the group, you can add volumes and initiator IQNs. Any initiator IQN that you add to the volume access group is able to access any volume in the group without CHAP authentication. """, cls=SolidFireCommand)
 @click.option('--name',
@@ -261,6 +209,58 @@ def modify(ctx,
         return
     else:
         cli_utils.print_result(_ModifyVolumeAccessGroupResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('lists', short_help="""ListVolumeAccessGroups enables you to return information about the volume access groups that are currently in the system. """, cls=SolidFireCommand)
+@click.option('--startvolumeaccessgroupid',
+              type=int,
+              required=False,
+              help="""The volume access group ID at which to begin the listing. If unspecified, there is no lower limit (implicitly 0). """)
+@click.option('--limit',
+              type=int,
+              required=False,
+              help="""The maximum number of results to return. This can be useful for paging. """)
+@click.option('--volumeaccessgroups',
+              type=str,
+              required=False,
+              help="""The list of ids of the volume access groups you wish to list """)
+@pass_context
+def lists(ctx,
+           # Optional main parameter
+           startvolumeaccessgroupid = None,
+           # Optional main parameter
+           limit = None,
+           # Optional main parameter
+           volumeaccessgroups = None):
+    """ListVolumeAccessGroups enables you to return"""
+    """information about the volume access groups that are"""
+    """currently in the system."""
+
+    
+
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+
+    volumeaccessgroups = parser.parse_array(volumeaccessgroups)
+    
+
+    ctx.logger.info(""": """"""startvolumeaccessgroupid = """+str(startvolumeaccessgroupid)+";" + """limit = """+str(limit)+";" + """volumeaccessgroups = """+str(volumeaccessgroups)+""";"""+"")
+    try:
+        _ListVolumeAccessGroupsResult = ctx.element.list_volume_access_groups(start_volume_access_group_id=startvolumeaccessgroupid, limit=limit, volume_access_groups=volumeaccessgroups)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListVolumeAccessGroupsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListVolumeAccessGroupsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
