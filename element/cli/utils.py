@@ -186,13 +186,13 @@ def ipv6_brackets(mvip):
 
 def establish_connection(ctx):
     # Verify that the mvip does not contain the port number if the mvip matches the IPv4 pattern:
-    if ctx.mvip and re.match(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$", ctx.mvip) and ":" in ctx.mvip:
-        ctx.logger.error('Please provide the port using the port parameter.')
-        exit(1)
-
-    # If the mvip doesnt match ipv4 but has a colon in it, we add brackets so that the api properly handles it without the user needing to do anything
-    if ctx.mvip and not re.match(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$", ctx.mvip) and ":" in ctx.mvip:
-        ctx.mvip = ipv6_brackets(ctx.mvip)
+    if ctx.mvip and ":" in ctx.mvip:
+        split_ip = ctx.mvip.split(":")
+        if re.match(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$", split_ip[0]):
+            ctx.logger.error('Please provide the port using the port parameter.')
+            exit(1)
+        else:  # If the mvip doesnt match ipv4 but has a colon in it, we add brackets so that the api properly handles it without the user needing to do anything
+            ctx.mvip = ipv6_brackets(ctx.mvip)
 
     cfg = None
     # Arguments take precedence regardless of env settings
@@ -201,7 +201,7 @@ def establish_connection(ctx):
             ctx.username = getpass.getpass("Username:")
         if ctx.password is None:
             ctx.password = getpass.getpass("Password:")
-
+        print(ctx.mvip)
         cfg = {'mvip': ctx.mvip,
                'username': "b'"+encrypt(ctx.username).decode('utf-8')+"'",
                'password': "b'"+encrypt(ctx.password).decode('utf-8')+"'",
