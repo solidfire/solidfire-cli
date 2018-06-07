@@ -24,7 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """invoke """
+    """invokesfapi """
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 #
