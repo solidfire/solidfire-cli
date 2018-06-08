@@ -201,7 +201,7 @@ def establish_connection(ctx):
             ctx.username = getpass.getpass("Username:")
         if ctx.password is None:
             ctx.password = getpass.getpass("Password:")
-        print(ctx.mvip)
+
         cfg = {'mvip': ctx.mvip,
                'username': "b'"+encrypt(ctx.username).decode('utf-8')+"'",
                'password': "b'"+encrypt(ctx.password).decode('utf-8')+"'",
