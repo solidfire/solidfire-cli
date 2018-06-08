@@ -24,15 +24,87 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """listhosts listtasks enablefeature lists listbindings listvolumestatsby getcount listprotocolendpoints getfeaturestatus """
+    """listvirtualvolumebindings listvirtualvolumetasks listvirtualvolumehosts getvirtualvolumecount enablefeature list listvolumestatsbyvirtualvolume listprotocolendpoints getfeaturestatus """
 
-@cli.command('listhosts', short_help="""ListVirtualVolumeHosts returns a list of all virtual volume hosts known to the cluster. A virtual volume host is a VMware ESX host that has initiated a session with the VASA API provider. """, cls=SolidFireCommand)
+@cli.command('listvirtualvolumebindings', short_help="""ListVirtualVolumeBindings returns a list of all virtual volumes in the cluster that are bound to protocol endpoints. """, cls=SolidFireCommand)
+@click.option('--virtualvolumebindingids',
+              type=str,
+              required=False,
+              help="""A list of virtual volume binding IDs for which to retrieve information. If you omit this parameter, the method returns information about all virtual volume bindings. """)
+@pass_context
+def listvirtualvolumebindings(ctx,
+           # Optional main parameter
+           virtualvolumebindingids = None):
+    """ListVirtualVolumeBindings returns a list of all virtual volumes in the cluster that are bound to protocol endpoints."""
+
+    
+
+    cli_utils.establish_connection(ctx)
+    
+
+    virtualvolumebindingids = parser.parse_array(virtualvolumebindingids)
+    
+
+    ctx.logger.info(""": """"""virtualvolumebindingids = """+str(virtualvolumebindingids)+""";"""+"")
+    try:
+        _ListVirtualVolumeBindingsResult = ctx.element.list_virtual_volume_bindings(virtual_volume_binding_ids=virtualvolumebindingids)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListVirtualVolumeBindingsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListVirtualVolumeBindingsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('listvirtualvolumetasks', short_help="""ListVirtualVolumeTasks returns a list of virtual volume tasks in the system. """, cls=SolidFireCommand)
+@click.option('--virtualvolumetaskids',
+              type=str,
+              required=False,
+              help="""A list of virtual volume task IDs for which to retrieve information. If you omit this parameter, the method returns information about all virtual volume tasks. """)
+@pass_context
+def listvirtualvolumetasks(ctx,
+           # Optional main parameter
+           virtualvolumetaskids = None):
+    """ListVirtualVolumeTasks returns a list of virtual volume tasks in the system."""
+
+    
+
+    cli_utils.establish_connection(ctx)
+    
+
+    virtualvolumetaskids = parser.parse_array(virtualvolumetaskids)
+    
+
+    ctx.logger.info(""": """"""virtualvolumetaskids = """+str(virtualvolumetaskids)+""";"""+"")
+    try:
+        _ListVirtualVolumeTasksResult = ctx.element.list_virtual_volume_tasks(virtual_volume_task_ids=virtualvolumetaskids)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListVirtualVolumeTasksResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListVirtualVolumeTasksResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('listvirtualvolumehosts', short_help="""ListVirtualVolumeHosts returns a list of all virtual volume hosts known to the cluster. A virtual volume host is a VMware ESX host that has initiated a session with the VASA API provider. """, cls=SolidFireCommand)
 @click.option('--virtualvolumehostids',
               type=str,
               required=False,
               help="""A list of virtual volume host IDs for which to retrieve information. If you omit this parameter, the method returns information about all virtual volume hosts. """)
 @pass_context
-def listhosts(ctx,
+def listvirtualvolumehosts(ctx,
            # Optional main parameter
            virtualvolumehostids = None):
     """ListVirtualVolumeHosts returns a list of all virtual volume hosts known to the cluster. A virtual volume host is a VMware ESX host"""
@@ -63,28 +135,19 @@ def listhosts(ctx,
 
 
 
-@cli.command('listtasks', short_help="""ListVirtualVolumeTasks returns a list of virtual volume tasks in the system. """, cls=SolidFireCommand)
-@click.option('--virtualvolumetaskids',
-              type=str,
-              required=False,
-              help="""A list of virtual volume task IDs for which to retrieve information. If you omit this parameter, the method returns information about all virtual volume tasks. """)
+@cli.command('getvirtualvolumecount', short_help="""Enables retrieval of the number of virtual volumes currently in the system. """, cls=SolidFireCommand)
 @pass_context
-def listtasks(ctx,
-           # Optional main parameter
-           virtualvolumetaskids = None):
-    """ListVirtualVolumeTasks returns a list of virtual volume tasks in the system."""
+def getvirtualvolumecount(ctx):
+    """Enables retrieval of the number of virtual volumes currently in the system."""
 
     
 
     cli_utils.establish_connection(ctx)
     
 
-    virtualvolumetaskids = parser.parse_array(virtualvolumetaskids)
-    
-
-    ctx.logger.info(""": """"""virtualvolumetaskids = """+str(virtualvolumetaskids)+""";"""+"")
+    ctx.logger.info(""": """+""";"""+"")
     try:
-        _ListVirtualVolumeTasksResult = ctx.element.list_virtual_volume_tasks(virtual_volume_task_ids=virtualvolumetaskids)
+        _GetVirtualVolumeCountResult = ctx.element.get_virtual_volume_count()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -92,10 +155,10 @@ def listtasks(ctx,
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ListVirtualVolumeTasksResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_GetVirtualVolumeCountResult), indent=4))
         return
     else:
-        cli_utils.print_result(_ListVirtualVolumeTasksResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_GetVirtualVolumeCountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -134,7 +197,7 @@ def enablefeature(ctx,
 
 
 
-@cli.command('lists', short_help="""ListVirtualVolumes enables you to list the virtual volumes currently in the system. You can use this method to list all virtual volumes, or only list a subset. """, cls=SolidFireCommand)
+@cli.command('list', short_help="""ListVirtualVolumes enables you to list the virtual volumes currently in the system. You can use this method to list all virtual volumes, or only list a subset. """, cls=SolidFireCommand)
 @click.option('--details',
               type=bool,
               required=False,
@@ -156,7 +219,7 @@ def enablefeature(ctx,
               required=False,
               help="""A list of virtual volume IDs for which to retrieve information. If you specify this parameter, the method returns information about only these virtual volumes. """)
 @pass_context
-def lists(ctx,
+def list(ctx,
            # Optional main parameter
            details = None,
            # Optional main parameter
@@ -199,49 +262,13 @@ def lists(ctx,
 
 
 
-@cli.command('listbindings', short_help="""ListVirtualVolumeBindings returns a list of all virtual volumes in the cluster that are bound to protocol endpoints. """, cls=SolidFireCommand)
-@click.option('--virtualvolumebindingids',
-              type=str,
-              required=False,
-              help="""A list of virtual volume binding IDs for which to retrieve information. If you omit this parameter, the method returns information about all virtual volume bindings. """)
-@pass_context
-def listbindings(ctx,
-           # Optional main parameter
-           virtualvolumebindingids = None):
-    """ListVirtualVolumeBindings returns a list of all virtual volumes in the cluster that are bound to protocol endpoints."""
-
-    
-
-    cli_utils.establish_connection(ctx)
-    
-
-    virtualvolumebindingids = parser.parse_array(virtualvolumebindingids)
-    
-
-    ctx.logger.info(""": """"""virtualvolumebindingids = """+str(virtualvolumebindingids)+""";"""+"")
-    try:
-        _ListVirtualVolumeBindingsResult = ctx.element.list_virtual_volume_bindings(virtual_volume_binding_ids=virtualvolumebindingids)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ListVirtualVolumeBindingsResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_ListVirtualVolumeBindingsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('listvolumestatsby', short_help="""ListVolumeStatsByVirtualVolume enables you to list volume statistics for any volumes in the system that are associated with virtual volumes. Statistics are cumulative from the creation of the volume. """, cls=SolidFireCommand)
+@cli.command('listvolumestatsbyvirtualvolume', short_help="""ListVolumeStatsByVirtualVolume enables you to list volume statistics for any volumes in the system that are associated with virtual volumes. Statistics are cumulative from the creation of the volume. """, cls=SolidFireCommand)
 @click.option('--virtualvolumeids',
               type=str,
               required=False,
               help="""A list of one or more virtual volume IDs for which to retrieve information. If you specify this parameter, the method returns information about only these virtual volumes. """)
 @pass_context
-def listvolumestatsby(ctx,
+def listvolumestatsbyvirtualvolume(ctx,
            # Optional main parameter
            virtualvolumeids = None):
     """ListVolumeStatsByVirtualVolume enables you to list volume statistics for any volumes in the system that are associated with virtual volumes. Statistics are cumulative from the creation of the volume."""
@@ -268,33 +295,6 @@ def listvolumestatsby(ctx,
         return
     else:
         cli_utils.print_result(_ListVolumeStatsByVirtualVolumeResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getcount', short_help="""Enables retrieval of the number of virtual volumes currently in the system. """, cls=SolidFireCommand)
-@pass_context
-def getcount(ctx):
-    """Enables retrieval of the number of virtual volumes currently in the system."""
-
-    
-
-    cli_utils.establish_connection(ctx)
-    
-
-    ctx.logger.info(""": """+""";"""+"")
-    try:
-        _GetVirtualVolumeCountResult = ctx.element.get_virtual_volume_count()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetVirtualVolumeCountResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_GetVirtualVolumeCountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 

@@ -24,7 +24,7 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """addclusteradmin getconfiguration testauthentication enableauthentication disableauthentication """
+    """addclusteradmin getconfiguration testauthentication disableauthentication enableauthentication """
 
 @cli.command('addclusteradmin', short_help="""AddLdapClusterAdmin enables you to add a new LDAP cluster administrator user. An LDAP cluster administrator can manage the cluster via the API and management tools. LDAP cluster admin accounts are completely separate and unrelated to standard tenant accounts. You can also use this method to add an LDAP group that has been defined in Active Directory. The access level that is given to the group is passed to the individual users in the LDAP group. """, cls=SolidFireCommand)
 @click.option('--username',
@@ -277,6 +277,33 @@ usersearchfilter
 
 
 
+@cli.command('disableauthentication', short_help="""The DisableLdapAuthentication method enables you to disable LDAP authentication and remove all LDAP configuration settings. This method does not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no longer be able to log in. """, cls=SolidFireCommand)
+@pass_context
+def disableauthentication(ctx):
+    """The DisableLdapAuthentication method enables you to disable LDAP authentication and remove all LDAP configuration settings. This method does not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no longer be able to log in."""
+
+    
+
+    cli_utils.establish_connection(ctx)
+    
+
+    ctx.logger.info(""": """+""";"""+"")
+    try:
+        _DisableLdapAuthenticationResult = ctx.element.disable_ldap_authentication()
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_DisableLdapAuthenticationResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_DisableLdapAuthenticationResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
 @cli.command('enableauthentication', short_help="""The EnableLdapAuthentication method enables you to configure an LDAP directory connection to use for LDAP authentication to a cluster. Users that are members of the LDAP directory can then log in to the storage system using their LDAP credentials. """, cls=SolidFireCommand)
 @click.option('--authtype',
               type=str,
@@ -374,31 +401,4 @@ def enableauthentication(ctx,
         return
     else:
         cli_utils.print_result(_EnableLdapAuthenticationResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('disableauthentication', short_help="""The DisableLdapAuthentication method enables you to disable LDAP authentication and remove all LDAP configuration settings. This method does not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no longer be able to log in. """, cls=SolidFireCommand)
-@pass_context
-def disableauthentication(ctx):
-    """The DisableLdapAuthentication method enables you to disable LDAP authentication and remove all LDAP configuration settings. This method does not remove any configured cluster admin accounts (user or group). However, those cluster admin accounts will no longer be able to log in."""
-
-    
-
-    cli_utils.establish_connection(ctx)
-    
-
-    ctx.logger.info(""": """+""";"""+"")
-    try:
-        _DisableLdapAuthenticationResult = ctx.element.disable_ldap_authentication()
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_DisableLdapAuthenticationResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_DisableLdapAuthenticationResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

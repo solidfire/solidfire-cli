@@ -24,7 +24,43 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """getnvraminfo getnodeinfo getclusterinfo getinfo getconfig """
+    """getclusterhardwareinfo getnvraminfo getnodehardwareinfo gethardwareinfo gethardwareconfig """
+
+@cli.command('getclusterhardwareinfo', short_help="""You can use the GetClusterHardwareInfo method to retrieve the hardware status and information for all Fibre Channel nodes, iSCSI nodes and drives in the cluster. This generally includes details about manufacturers, vendors, versions, and other associated hardware identification information. """, cls=SolidFireCommand)
+@click.option('--type',
+              type=str,
+              required=False,
+              help="""Includes only a certain type of hardware information in the response. Possible values are: drives: List only drive information in the response. nodes: List only node information in the response. all: Include both drive and node information in the response. If this parameter is omitted, a type of "all" is assumed. """)
+@pass_context
+def getclusterhardwareinfo(ctx,
+           # Optional main parameter
+           type = None):
+    """You can use the GetClusterHardwareInfo method to retrieve the hardware status and information for all Fibre Channel nodes, iSCSI"""
+    """nodes and drives in the cluster. This generally includes details about manufacturers, vendors, versions, and other associated hardware"""
+    """identification information."""
+
+    
+
+    cli_utils.establish_connection(ctx)
+    
+    
+
+    ctx.logger.info(""": """"""type = """+str(type)+""";"""+"")
+    try:
+        _GetClusterHardwareInfoResult = ctx.element.get_cluster_hardware_info(type=type)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetClusterHardwareInfoResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetClusterHardwareInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
 
 @cli.command('getnvraminfo', short_help="""GetNvramInfo enables you to retrieve information from each node about the NVRAM card. """, cls=SolidFireCommand)
 @click.option('--force',
@@ -60,14 +96,14 @@ def getnvraminfo(ctx,
 
 
 
-@cli.command('getnodeinfo', short_help="""GetNodeHardwareInfo enables you to return all the hardware information and status for the node specified. This generally includes details about manufacturers, vendors, versions, and other associated hardware identification information. """, cls=SolidFireCommand)
+@cli.command('getnodehardwareinfo', short_help="""GetNodeHardwareInfo enables you to return all the hardware information and status for the node specified. This generally includes details about manufacturers, vendors, versions, and other associated hardware identification information. """, cls=SolidFireCommand)
 @click.option('--nodeid',
               type=int,
               required=True,
               prompt=True,
               help="""The ID of the node for which hardware information is being requested. Information about a Fibre Channel node is returned if a Fibre Channel node is specified. """)
 @pass_context
-def getnodeinfo(ctx,
+def getnodehardwareinfo(ctx,
            # Mandatory main parameter
            nodeid):
     """GetNodeHardwareInfo enables you to return all the hardware information and status for the node specified. This generally includes details about"""
@@ -96,45 +132,9 @@ def getnodeinfo(ctx,
 
 
 
-@cli.command('getclusterinfo', short_help="""You can use the GetClusterHardwareInfo method to retrieve the hardware status and information for all Fibre Channel nodes, iSCSI nodes and drives in the cluster. This generally includes details about manufacturers, vendors, versions, and other associated hardware identification information. """, cls=SolidFireCommand)
-@click.option('--type',
-              type=str,
-              required=False,
-              help="""Includes only a certain type of hardware information in the response. Possible values are: drives: List only drive information in the response. nodes: List only node information in the response. all: Include both drive and node information in the response. If this parameter is omitted, a type of "all" is assumed. """)
+@cli.command('gethardwareinfo', short_help="""The GetHardwareInfo API method enables you to return hardware information and status for a single node. This generally includes details about manufacturers, vendors, versions, drives, and other associated hardware identification information. """, cls=SolidFireCommand)
 @pass_context
-def getclusterinfo(ctx,
-           # Optional main parameter
-           type = None):
-    """You can use the GetClusterHardwareInfo method to retrieve the hardware status and information for all Fibre Channel nodes, iSCSI"""
-    """nodes and drives in the cluster. This generally includes details about manufacturers, vendors, versions, and other associated hardware"""
-    """identification information."""
-
-    
-
-    cli_utils.establish_connection(ctx)
-    
-    
-
-    ctx.logger.info(""": """"""type = """+str(type)+""";"""+"")
-    try:
-        _GetClusterHardwareInfoResult = ctx.element.get_cluster_hardware_info(type=type)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetClusterHardwareInfoResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_GetClusterHardwareInfoResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('getinfo', short_help="""The GetHardwareInfo API method enables you to return hardware information and status for a single node. This generally includes details about manufacturers, vendors, versions, drives, and other associated hardware identification information. """, cls=SolidFireCommand)
-@pass_context
-def getinfo(ctx):
+def gethardwareinfo(ctx):
     """The GetHardwareInfo API method enables you to return hardware information and status for a single node. This generally includes details about manufacturers, vendors, versions, drives, and other associated hardware identification information."""
 
     
@@ -159,9 +159,9 @@ def getinfo(ctx):
 
 
 
-@cli.command('getconfig', short_help="""GetHardwareConfig enables you to display the hardware configuration information for a node. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
+@cli.command('gethardwareconfig', short_help="""GetHardwareConfig enables you to display the hardware configuration information for a node. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
 @pass_context
-def getconfig(ctx):
+def gethardwareconfig(ctx):
     """GetHardwareConfig enables you to display the hardware configuration information for a node."""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
 

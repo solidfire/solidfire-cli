@@ -24,11 +24,11 @@ from element.cli.cli import SolidFireOption, SolidFireCommand
 @click.group()
 @pass_context
 def cli(ctx):
-    """listlevels """
+    """listprotectiondomainlevels """
 
-@cli.command('listlevels', short_help="""ListProtectionDomainLevels returns the Tolerance and Resiliencty of the cluster from the perspective of each of the supported ProtectionDomainTypes. """, cls=SolidFireCommand)
+@cli.command('listprotectiondomainlevels', short_help="""ListProtectionDomainLevels returns the Tolerance and Resiliencty of the cluster from the perspective of each of the supported ProtectionDomainTypes. """, cls=SolidFireCommand)
 @pass_context
-def listlevels(ctx):
+def listprotectiondomainlevels(ctx):
     """ListProtectionDomainLevels returns the Tolerance and Resiliencty of the cluster from the perspective of each of the supported ProtectionDomainTypes."""
 
     
