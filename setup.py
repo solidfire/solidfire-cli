@@ -15,7 +15,7 @@ else:
 
 setup(
     name='solidfire-cli',
-    version='1.6.0.57',
+    version='1.6.0.58',
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
     author='SolidFire, Inc.',
