@@ -21,10 +21,283 @@ from element import exceptions
 from solidfire import common
 from element.cli.cli import SolidFireOption, SolidFireCommand
 
+class ProtectionSchemeVisibility(data_model.DataObject):
+    """ProtectionSchemeVisibility  
+    The public visibility of the protection scheme.
+
+    """
+    enum_values = ("customer", "testOnly", )
+
+    def __init__(self, value):
+        self._value = value
+
+    def __str__(self):
+        return str(self._value)
+
+    def get_value(self):
+        return self._value
+
+class RemoteClusterSnapshotStatus(data_model.DataObject):
+    """RemoteClusterSnapshotStatus  
+    Status of the remote snapshot on the target cluster as seen on the source cluster
+
+    """
+    enum_values = ("Present", "Not Present", "Syncing", "Deleted", "Unknown", )
+
+    def __init__(self, value):
+        self._value = value
+
+    def __str__(self):
+        return str(self._value)
+
+    def get_value(self):
+        return self._value
+
+class ProtectionSchemeCategory(data_model.DataObject):
+    """ProtectionSchemeCategory  
+    The category of the protection scheme.
+
+    """
+    enum_values = ("helix", "erasureCoded", )
+
+    def __init__(self, value):
+        self._value = value
+
+    def __str__(self):
+        return str(self._value)
+
+    def get_value(self):
+        return self._value
+
+class ProtectionScheme(data_model.DataObject):
+    """ProtectionScheme  
+    The method of protecting data on the cluster
+
+    """
+    enum_values = ("singleHelix", "doubleHelix", "tripleHelix", )
+
+    def __init__(self, value):
+        self._value = value
+
+    def __str__(self):
+        return str(self._value)
+
+    def get_value(self):
+        return self._value
+
+class AuthConfigType(data_model.DataObject):
+    """AuthConfigType  
+    This type indicates the configuration data which will be accessed or modified by the element auth container.
+
+    """
+    enum_values = ("mNode", "element", )
+
+    def __init__(self, value):
+        self._value = value
+
+    def __str__(self):
+        return str(self._value)
+
+    def get_value(self):
+        return self._value
+
+class DriveEncryptionCapabilityType(data_model.DataObject):
+    """DriveEncryptionCapabilityType  
+    This specifies a drive's encryption capability.
+
+    """
+    enum_values = ("none", "sed", "fips", )
+
+    def __init__(self, value):
+        self._value = value
+
+    def __str__(self):
+        return str(self._value)
+
+    def get_value(self):
+        return self._value
+
+class FipsDrivesStatusType(data_model.DataObject):
+    """FipsDrivesStatusType  
+    This specifies a node's FIPS 140-2 compliance status.
+
+    """
+    enum_values = ("None", "Partial", "Ready", )
+
+    def __init__(self, value):
+        self._value = value
+
+    def __str__(self):
+        return str(self._value)
+
+    def get_value(self):
+        return self._value
+
+class AuthMethod(data_model.DataObject):
+    """AuthMethod  
+    This type qualifies a ClusterAdmin with its authentication method.
+
+    """
+    enum_values = ("Cluster", "Ldap", "Idp", )
+
+    def __init__(self, value):
+        self._value = value
+
+    def __str__(self):
+        return str(self._value)
+
+    def get_value(self):
+        return self._value
+
+class MaintenanceMode(data_model.DataObject):
+    """MaintenanceMode  
+    Which mode a node is in when it is having maintenenace peformed.
+
+    """
+    enum_values = ("Disabled", "FailedToRecover", "Unexpected", "RecoveringFromMaintenance", "PreparingForMaintenance", "ReadyForMaintenance", )
+
+    def __init__(self, value):
+        self._value = value
+
+    def __str__(self):
+        return str(self._value)
+
+    def get_value(self):
+        return self._value
+
+class ProposedNodeErrorCode(data_model.DataObject):
+    """ProposedNodeErrorCode  
+    This specifies error code for a proposed node addition.
+
+    """
+    enum_values = ("nodesNoCapacity", "nodesTooLarge", "nodesConnectFailed", "nodesQueryFailed", "nodesClusterMember", "nonFipsNodeCapable", "nonFipsDrivesCapable", "nodeTypeUnsupported", "nodeTypesHeterogeneous", "nodeTypeInvalid", )
+
+    def __init__(self, value):
+        self._value = value
+
+    def __str__(self):
+        return str(self._value)
+
+    def get_value(self):
+        return self._value
+
+class VolumeAccess(data_model.DataObject):
+    """VolumeAccess  
+    Describes host access for a volume.
+
+    """
+    enum_values = ("locked", "readOnly", "readWrite", "replicationTarget", "snapMirrorTarget", )
+
+    def __init__(self, value):
+        self._value = value
+
+    def __str__(self):
+        return str(self._value)
+
+    def get_value(self):
+        return self._value
+
+class ProtectionDomainType(data_model.DataObject):
+    """ProtectionDomainType  
+    A Protection Domain is a set of one or more components whose simultaneous failure is protected
+    from causing data unavailability or loss. This specifies one of the types of Protection Domains
+    recognized by this cluster.
+
+    """
+    enum_values = ("node", "chassis", "custom", )
+
+    def __init__(self, value):
+        self._value = value
+
+    def __str__(self):
+        return str(self._value)
+
+    def get_value(self):
+        return self._value
+
 @click.group()
 @pass_context
 def cli(ctx):
-    """listgroup modify create list deletegroup modifygroup rollbacktogroup rollbackto creategroup delete """
+    """rollbackto listgroup delete deletegroup list create modifygroup rollbacktogroup modify creategroup """
+
+@cli.command('rollbackto', short_help="""RollbackToSnapshot enables you to make an existing snapshot of the "active" volume image. This method creates a new snapshot from an existing snapshot. The new snapshot becomes "active" and the existing snapshot is preserved until you delete it. The previously "active" snapshot is deleted unless you set the parameter saveCurrentState to true. Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """, cls=SolidFireCommand)
+@click.option('--volumeid',
+              type=int,
+              required=True,
+              prompt=True,
+              help="""VolumeID for the volume. """)
+@click.option('--snapshotid',
+              type=int,
+              required=True,
+              prompt=True,
+              help="""The ID of a previously created snapshot on the given volume. """)
+@click.option('--savecurrentstate',
+              type=bool,
+              required=True,
+              prompt=True,
+              help="""Specifies whether to save an active volume image or delete it. Values are: true: The previous active volume image is kept. false: (default) The previous active volume image is deleted. """)
+@click.option('--name',
+              type=str,
+              required=False,
+              help="""Name for the snapshot. If unspecified, the name of the snapshot being rolled back to is used with "- copy" appended to the end of the name. """)
+@click.option('--attributes',
+              type=str,
+              required=False,
+              help="""List of name-value pairs in JSON object format.  Has the following subparameters: """)
+@pass_context
+def rollbackto(ctx,
+           # Mandatory main parameter
+           volumeid,
+           # Mandatory main parameter
+           snapshotid,
+           # Mandatory main parameter
+           savecurrentstate,
+           # Optional main parameter
+           name = None,
+           # Optional main parameter
+           attributes = None):
+    """RollbackToSnapshot enables you to make an existing snapshot of the "active" volume image. This method creates a new snapshot"""
+    """from an existing snapshot. The new snapshot becomes "active" and the existing snapshot is preserved until you delete it."""
+    """The previously "active" snapshot is deleted unless you set the parameter saveCurrentState to true."""
+    """Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is"""
+    """at stage 4 or 5."""
+
+    
+
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+    
+    
+
+    kwargsDict = None
+    if(attributes is not None and attributes != ()):
+        try:
+            kwargsDict = simplejson.loads(attributes)
+        except Exception as e:
+            ctx.logger.error(e.__str__())
+            exit(1)
+    
+
+    
+
+    ctx.logger.info(""": """"""volumeid = """ + str(volumeid)+";"+"""snapshotid = """ + str(snapshotid)+";"+"""savecurrentstate = """ + str(savecurrentstate)+";" + """name = """+str(name)+";" + """attributes = """+str(kwargsDict)+""";"""+"")
+    try:
+        _RollbackToSnapshotResult = ctx.element.rollback_to_snapshot(volume_id=volumeid, snapshot_id=snapshotid, save_current_state=savecurrentstate, name=name, attributes=kwargsDict)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_RollbackToSnapshotResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_RollbackToSnapshotResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
 
 @cli.command('listgroup', short_help="""ListGroupSnapshots enables you to get information about all group snapshots that have been created. """, cls=SolidFireCommand)
 @click.option('--volumes',
@@ -52,6 +325,8 @@ def listgroup(ctx,
     
     
 
+    
+
     ctx.logger.info(""": """"""volumes = """+str(volumes)+";" + """groupsnapshotid = """+str(groupsnapshotid)+""";"""+"")
     try:
         _ListGroupSnapshotsResult = ctx.element.list_group_snapshots(volumes=volumes, group_snapshot_id=groupsnapshotid)
@@ -69,49 +344,30 @@ def listgroup(ctx,
 
 
 
-@cli.command('modify', short_help="""ModifySnapshot enables you to change the attributes currently assigned to a snapshot. You can use this method to enable snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system. """, cls=SolidFireCommand)
+@cli.command('delete', short_help="""DeleteSnapshot enables you to delete a snapshot. A snapshot that is currently the "active" snapshot cannot be deleted. You must rollback and make another snapshot "active" before the current snapshot can be deleted. For more details on rolling back snapshots, see RollbackToSnapshot. """, cls=SolidFireCommand)
 @click.option('--snapshotid',
               type=int,
               required=True,
               prompt=True,
-              help="""Specifies the ID of the snapshot. """)
-@click.option('--expirationtime',
-              type=str,
-              required=False,
-              help="""Sets the time when the snapshot should be removed. """)
-@click.option('--enableremotereplication',
-              type=bool,
-              required=False,
-              help="""Replicates the snapshot created to a remote cluster. Possible values are: true: The snapshot is replicated to remote storage. false: Default. The snapshot is not replicated. """)
-@click.option('--snapmirrorlabel',
-              type=str,
-              required=False,
-              help="""Label used by SnapMirror software to specify snapshot retention policy on SnapMirror endpoint. """)
+              help="""The ID of the snapshot to be deleted. """)
 @pass_context
-def modify(ctx,
+def delete(ctx,
            # Mandatory main parameter
-           snapshotid,
-           # Optional main parameter
-           expirationtime = None,
-           # Optional main parameter
-           enableremotereplication = None,
-           # Optional main parameter
-           snapmirrorlabel = None):
-    """ModifySnapshot enables you to change the attributes currently assigned to a snapshot. You can use this method to enable snapshots created on"""
-    """the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system."""
+           snapshotid):
+    """DeleteSnapshot enables you to delete a snapshot. A snapshot that is currently the "active" snapshot cannot be deleted. You must"""
+    """rollback and make another snapshot "active" before the current snapshot can be deleted. For more details on rolling back snapshots, see RollbackToSnapshot."""
 
     
 
     cli_utils.establish_connection(ctx)
     
     
-    
-    
+
     
 
-    ctx.logger.info(""": """"""snapshotid = """ + str(snapshotid)+";" + """expirationtime = """+str(expirationtime)+";" + """enableremotereplication = """+str(enableremotereplication)+";" + """snapmirrorlabel = """+str(snapmirrorlabel)+""";"""+"")
+    ctx.logger.info(""": """"""snapshotid = """ + str(snapshotid)+""";"""+"")
     try:
-        _ModifySnapshotResult = ctx.element.modify_snapshot(snapshot_id=snapshotid, expiration_time=expirationtime, enable_remote_replication=enableremotereplication, snap_mirror_label=snapmirrorlabel)
+        _DeleteSnapshotResult = ctx.element.delete_snapshot(snapshot_id=snapshotid)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -119,10 +375,98 @@ def modify(ctx,
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ModifySnapshotResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_DeleteSnapshotResult), indent=4))
         return
     else:
-        cli_utils.print_result(_ModifySnapshotResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_DeleteSnapshotResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('deletegroup', short_help="""DeleteGroupSnapshot enables you to delete a group snapshot. You can use the saveMembers parameter to preserve all the snapshots that were made for the volumes in the group, but the group association is removed. """, cls=SolidFireCommand)
+@click.option('--groupsnapshotid',
+              type=int,
+              required=True,
+              prompt=True,
+              help="""Specifies the unique ID of the group snapshot. """)
+@click.option('--savemembers',
+              type=bool,
+              required=True,
+              prompt=True,
+              help="""Specifies whether to preserve snapshots or delete them. Valid values are: true: Snapshots are preserved, but group association is removed. false: The group and snapshots are deleted. """)
+@pass_context
+def deletegroup(ctx,
+           # Mandatory main parameter
+           groupsnapshotid,
+           # Mandatory main parameter
+           savemembers):
+    """DeleteGroupSnapshot enables you to delete a group snapshot. You can use the saveMembers parameter to preserve all the snapshots that were made for the volumes in the group, but the group association is removed."""
+
+    
+
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+
+    
+
+    ctx.logger.info(""": """"""groupsnapshotid = """ + str(groupsnapshotid)+";"+"""savemembers = """ + str(savemembers)+""";"""+"")
+    try:
+        _DeleteGroupSnapshotResult = ctx.element.delete_group_snapshot(group_snapshot_id=groupsnapshotid, save_members=savemembers)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_DeleteGroupSnapshotResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_DeleteGroupSnapshotResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('list', short_help="""ListSnapshots enables you to return the attributes of each snapshot taken on the volume. Information about snapshots that reside on the target cluster is displayed on the source cluster when this method is called from the source cluster. """, cls=SolidFireCommand)
+@click.option('--volumeid',
+              type=int,
+              required=False,
+              help="""Retrieves snapshots for a volume. If volumeID is not provided, all snapshots for all volumes are returned. """)
+@click.option('--snapshotid',
+              type=int,
+              required=False,
+              help="""Retrieves information for a specific snapshot ID. """)
+@pass_context
+def list(ctx,
+           # Optional main parameter
+           volumeid = None,
+           # Optional main parameter
+           snapshotid = None):
+    """ListSnapshots enables you to return the attributes of each snapshot taken on the volume. Information about snapshots that reside on the target cluster is displayed on the source cluster when this method is called from the source cluster."""
+
+    
+
+    cli_utils.establish_connection(ctx)
+    
+    
+    
+
+    
+
+    ctx.logger.info(""": """"""volumeid = """+str(volumeid)+";" + """snapshotid = """+str(snapshotid)+""";"""+"")
+    try:
+        _ListSnapshotsResult = ctx.element.list_snapshots(volume_id=volumeid, snapshot_id=snapshotid)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListSnapshotsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListSnapshotsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -196,6 +540,8 @@ def create(ctx,
     
     
 
+    
+
     ctx.logger.info(""": """"""volumeid = """ + str(volumeid)+";" + """snapshotid = """+str(snapshotid)+";" + """name = """+str(name)+";" + """enableremotereplication = """+str(enableremotereplication)+";" + """retention = """+str(retention)+";" + """attributes = """+str(kwargsDict)+";" + """snapmirrorlabel = """+str(snapmirrorlabel)+""";"""+"")
     try:
         _CreateSnapshotResult = ctx.element.create_snapshot(volume_id=volumeid, snapshot_id=snapshotid, name=name, enable_remote_replication=enableremotereplication, retention=retention, attributes=kwargsDict, snap_mirror_label=snapmirrorlabel)
@@ -210,90 +556,6 @@ def create(ctx,
         return
     else:
         cli_utils.print_result(_CreateSnapshotResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('list', short_help="""ListSnapshots enables you to return the attributes of each snapshot taken on the volume. Information about snapshots that reside on the target cluster is displayed on the source cluster when this method is called from the source cluster. """, cls=SolidFireCommand)
-@click.option('--volumeid',
-              type=int,
-              required=False,
-              help="""Retrieves snapshots for a volume. If volumeID is not provided, all snapshots for all volumes are returned. """)
-@click.option('--snapshotid',
-              type=int,
-              required=False,
-              help="""Retrieves information for a specific snapshot ID. """)
-@pass_context
-def list(ctx,
-           # Optional main parameter
-           volumeid = None,
-           # Optional main parameter
-           snapshotid = None):
-    """ListSnapshots enables you to return the attributes of each snapshot taken on the volume. Information about snapshots that reside on the target cluster is displayed on the source cluster when this method is called from the source cluster."""
-
-    
-
-    cli_utils.establish_connection(ctx)
-    
-    
-    
-
-    ctx.logger.info(""": """"""volumeid = """+str(volumeid)+";" + """snapshotid = """+str(snapshotid)+""";"""+"")
-    try:
-        _ListSnapshotsResult = ctx.element.list_snapshots(volume_id=volumeid, snapshot_id=snapshotid)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ListSnapshotsResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_ListSnapshotsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('deletegroup', short_help="""DeleteGroupSnapshot enables you to delete a group snapshot. You can use the saveMembers parameter to preserve all the snapshots that were made for the volumes in the group, but the group association is removed. """, cls=SolidFireCommand)
-@click.option('--groupsnapshotid',
-              type=int,
-              required=True,
-              prompt=True,
-              help="""Specifies the unique ID of the group snapshot. """)
-@click.option('--savemembers',
-              type=bool,
-              required=True,
-              prompt=True,
-              help="""Specifies whether to preserve snapshots or delete them. Valid values are: true: Snapshots are preserved, but group association is removed. false: The group and snapshots are deleted. """)
-@pass_context
-def deletegroup(ctx,
-           # Mandatory main parameter
-           groupsnapshotid,
-           # Mandatory main parameter
-           savemembers):
-    """DeleteGroupSnapshot enables you to delete a group snapshot. You can use the saveMembers parameter to preserve all the snapshots that were made for the volumes in the group, but the group association is removed."""
-
-    
-
-    cli_utils.establish_connection(ctx)
-    
-    
-    
-
-    ctx.logger.info(""": """"""groupsnapshotid = """ + str(groupsnapshotid)+";"+"""savemembers = """ + str(savemembers)+""";"""+"")
-    try:
-        _DeleteGroupSnapshotResult = ctx.element.delete_group_snapshot(group_snapshot_id=groupsnapshotid, save_members=savemembers)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_DeleteGroupSnapshotResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_DeleteGroupSnapshotResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -334,6 +596,8 @@ def modifygroup(ctx,
     
     
     
+    
+
     
 
     ctx.logger.info(""": """"""groupsnapshotid = """ + str(groupsnapshotid)+";" + """expirationtime = """+str(expirationtime)+";" + """enableremotereplication = """+str(enableremotereplication)+";" + """snapmirrorlabel = """+str(snapmirrorlabel)+""";"""+"")
@@ -403,6 +667,8 @@ def rollbacktogroup(ctx,
             exit(1)
     
 
+    
+
     ctx.logger.info(""": """"""groupsnapshotid = """ + str(groupsnapshotid)+";"+"""savecurrentstate = """ + str(savecurrentstate)+";" + """name = """+str(name)+";" + """attributes = """+str(kwargsDict)+""";"""+"")
     try:
         _RollbackToGroupSnapshotResult = ctx.element.rollback_to_group_snapshot(group_snapshot_id=groupsnapshotid, save_current_state=savecurrentstate, name=name, attributes=kwargsDict)
@@ -420,47 +686,36 @@ def rollbacktogroup(ctx,
 
 
 
-@cli.command('rollbackto', short_help="""RollbackToSnapshot enables you to make an existing snapshot of the "active" volume image. This method creates a new snapshot from an existing snapshot. The new snapshot becomes "active" and the existing snapshot is preserved until you delete it. The previously "active" snapshot is deleted unless you set the parameter saveCurrentState to true. Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is at stage 4 or 5. """, cls=SolidFireCommand)
-@click.option('--volumeid',
-              type=int,
-              required=True,
-              prompt=True,
-              help="""VolumeID for the volume. """)
+@cli.command('modify', short_help="""ModifySnapshot enables you to change the attributes currently assigned to a snapshot. You can use this method to enable snapshots created on the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system. """, cls=SolidFireCommand)
 @click.option('--snapshotid',
               type=int,
               required=True,
               prompt=True,
-              help="""The ID of a previously created snapshot on the given volume. """)
-@click.option('--savecurrentstate',
+              help="""Specifies the ID of the snapshot. """)
+@click.option('--expirationtime',
+              type=str,
+              required=False,
+              help="""Sets the time when the snapshot should be removed. """)
+@click.option('--enableremotereplication',
               type=bool,
-              required=True,
-              prompt=True,
-              help="""Specifies whether to save an active volume image or delete it. Values are: true: The previous active volume image is kept. false: (default) The previous active volume image is deleted. """)
-@click.option('--name',
+              required=False,
+              help="""Replicates the snapshot created to a remote cluster. Possible values are: true: The snapshot is replicated to remote storage. false: Default. The snapshot is not replicated. """)
+@click.option('--snapmirrorlabel',
               type=str,
               required=False,
-              help="""Name for the snapshot. If unspecified, the name of the snapshot being rolled back to is used with "- copy" appended to the end of the name. """)
-@click.option('--attributes',
-              type=str,
-              required=False,
-              help="""List of name-value pairs in JSON object format.  Has the following subparameters: """)
+              help="""Label used by SnapMirror software to specify snapshot retention policy on SnapMirror endpoint. """)
 @pass_context
-def rollbackto(ctx,
-           # Mandatory main parameter
-           volumeid,
+def modify(ctx,
            # Mandatory main parameter
            snapshotid,
-           # Mandatory main parameter
-           savecurrentstate,
            # Optional main parameter
-           name = None,
+           expirationtime = None,
            # Optional main parameter
-           attributes = None):
-    """RollbackToSnapshot enables you to make an existing snapshot of the "active" volume image. This method creates a new snapshot"""
-    """from an existing snapshot. The new snapshot becomes "active" and the existing snapshot is preserved until you delete it."""
-    """The previously "active" snapshot is deleted unless you set the parameter saveCurrentState to true."""
-    """Note: Creating a snapshot is allowed if cluster fullness is at stage 2 or 3. Snapshots are not created when cluster fullness is"""
-    """at stage 4 or 5."""
+           enableremotereplication = None,
+           # Optional main parameter
+           snapmirrorlabel = None):
+    """ModifySnapshot enables you to change the attributes currently assigned to a snapshot. You can use this method to enable snapshots created on"""
+    """the Read/Write (source) volume to be remotely replicated to a target SolidFire storage system."""
 
     
 
@@ -471,18 +726,11 @@ def rollbackto(ctx,
     
     
 
-    kwargsDict = None
-    if(attributes is not None and attributes != ()):
-        try:
-            kwargsDict = simplejson.loads(attributes)
-        except Exception as e:
-            ctx.logger.error(e.__str__())
-            exit(1)
     
 
-    ctx.logger.info(""": """"""volumeid = """ + str(volumeid)+";"+"""snapshotid = """ + str(snapshotid)+";"+"""savecurrentstate = """ + str(savecurrentstate)+";" + """name = """+str(name)+";" + """attributes = """+str(kwargsDict)+""";"""+"")
+    ctx.logger.info(""": """"""snapshotid = """ + str(snapshotid)+";" + """expirationtime = """+str(expirationtime)+";" + """enableremotereplication = """+str(enableremotereplication)+";" + """snapmirrorlabel = """+str(snapmirrorlabel)+""";"""+"")
     try:
-        _RollbackToSnapshotResult = ctx.element.rollback_to_snapshot(volume_id=volumeid, snapshot_id=snapshotid, save_current_state=savecurrentstate, name=name, attributes=kwargsDict)
+        _ModifySnapshotResult = ctx.element.modify_snapshot(snapshot_id=snapshotid, expiration_time=expirationtime, enable_remote_replication=enableremotereplication, snap_mirror_label=snapmirrorlabel)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -490,10 +738,10 @@ def rollbackto(ctx,
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_RollbackToSnapshotResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_ModifySnapshotResult), indent=4))
         return
     else:
-        cli_utils.print_result(_RollbackToSnapshotResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_ModifySnapshotResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -561,6 +809,8 @@ def creategroup(ctx,
     
     
 
+    
+
     ctx.logger.info(""": """"""volumes = """ + str(volumes)+";" + """name = """+str(name)+";" + """enableremotereplication = """+str(enableremotereplication)+";" + """retention = """+str(retention)+";" + """attributes = """+str(kwargsDict)+";" + """snapmirrorlabel = """+str(snapmirrorlabel)+""";"""+"")
     try:
         _CreateGroupSnapshotResult = ctx.element.create_group_snapshot(volumes=volumes, name=name, enable_remote_replication=enableremotereplication, retention=retention, attributes=kwargsDict, snap_mirror_label=snapmirrorlabel)
@@ -576,39 +826,4 @@ def creategroup(ctx,
     else:
         cli_utils.print_result(_CreateGroupSnapshotResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
-
-
-@cli.command('delete', short_help="""DeleteSnapshot enables you to delete a snapshot. A snapshot that is currently the "active" snapshot cannot be deleted. You must rollback and make another snapshot "active" before the current snapshot can be deleted. For more details on rolling back snapshots, see RollbackToSnapshot. """, cls=SolidFireCommand)
-@click.option('--snapshotid',
-              type=int,
-              required=True,
-              prompt=True,
-              help="""The ID of the snapshot to be deleted. """)
-@pass_context
-def delete(ctx,
-           # Mandatory main parameter
-           snapshotid):
-    """DeleteSnapshot enables you to delete a snapshot. A snapshot that is currently the "active" snapshot cannot be deleted. You must"""
-    """rollback and make another snapshot "active" before the current snapshot can be deleted. For more details on rolling back snapshots, see RollbackToSnapshot."""
-
-    
-
-    cli_utils.establish_connection(ctx)
-    
-    
-
-    ctx.logger.info(""": """"""snapshotid = """ + str(snapshotid)+""";"""+"")
-    try:
-        _DeleteSnapshotResult = ctx.element.delete_snapshot(snapshot_id=snapshotid)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_DeleteSnapshotResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_DeleteSnapshotResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

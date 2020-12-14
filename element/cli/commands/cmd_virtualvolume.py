@@ -21,34 +21,229 @@ from element import exceptions
 from solidfire import common
 from element.cli.cli import SolidFireOption, SolidFireCommand
 
+class ProtectionSchemeVisibility(data_model.DataObject):
+    """ProtectionSchemeVisibility  
+    The public visibility of the protection scheme.
+
+    """
+    enum_values = ("customer", "testOnly", )
+
+    def __init__(self, value):
+        self._value = value
+
+    def __str__(self):
+        return str(self._value)
+
+    def get_value(self):
+        return self._value
+
+class RemoteClusterSnapshotStatus(data_model.DataObject):
+    """RemoteClusterSnapshotStatus  
+    Status of the remote snapshot on the target cluster as seen on the source cluster
+
+    """
+    enum_values = ("Present", "Not Present", "Syncing", "Deleted", "Unknown", )
+
+    def __init__(self, value):
+        self._value = value
+
+    def __str__(self):
+        return str(self._value)
+
+    def get_value(self):
+        return self._value
+
+class ProtectionSchemeCategory(data_model.DataObject):
+    """ProtectionSchemeCategory  
+    The category of the protection scheme.
+
+    """
+    enum_values = ("helix", "erasureCoded", )
+
+    def __init__(self, value):
+        self._value = value
+
+    def __str__(self):
+        return str(self._value)
+
+    def get_value(self):
+        return self._value
+
+class ProtectionScheme(data_model.DataObject):
+    """ProtectionScheme  
+    The method of protecting data on the cluster
+
+    """
+    enum_values = ("singleHelix", "doubleHelix", "tripleHelix", )
+
+    def __init__(self, value):
+        self._value = value
+
+    def __str__(self):
+        return str(self._value)
+
+    def get_value(self):
+        return self._value
+
+class AuthConfigType(data_model.DataObject):
+    """AuthConfigType  
+    This type indicates the configuration data which will be accessed or modified by the element auth container.
+
+    """
+    enum_values = ("mNode", "element", )
+
+    def __init__(self, value):
+        self._value = value
+
+    def __str__(self):
+        return str(self._value)
+
+    def get_value(self):
+        return self._value
+
+class DriveEncryptionCapabilityType(data_model.DataObject):
+    """DriveEncryptionCapabilityType  
+    This specifies a drive's encryption capability.
+
+    """
+    enum_values = ("none", "sed", "fips", )
+
+    def __init__(self, value):
+        self._value = value
+
+    def __str__(self):
+        return str(self._value)
+
+    def get_value(self):
+        return self._value
+
+class FipsDrivesStatusType(data_model.DataObject):
+    """FipsDrivesStatusType  
+    This specifies a node's FIPS 140-2 compliance status.
+
+    """
+    enum_values = ("None", "Partial", "Ready", )
+
+    def __init__(self, value):
+        self._value = value
+
+    def __str__(self):
+        return str(self._value)
+
+    def get_value(self):
+        return self._value
+
+class AuthMethod(data_model.DataObject):
+    """AuthMethod  
+    This type qualifies a ClusterAdmin with its authentication method.
+
+    """
+    enum_values = ("Cluster", "Ldap", "Idp", )
+
+    def __init__(self, value):
+        self._value = value
+
+    def __str__(self):
+        return str(self._value)
+
+    def get_value(self):
+        return self._value
+
+class MaintenanceMode(data_model.DataObject):
+    """MaintenanceMode  
+    Which mode a node is in when it is having maintenenace peformed.
+
+    """
+    enum_values = ("Disabled", "FailedToRecover", "Unexpected", "RecoveringFromMaintenance", "PreparingForMaintenance", "ReadyForMaintenance", )
+
+    def __init__(self, value):
+        self._value = value
+
+    def __str__(self):
+        return str(self._value)
+
+    def get_value(self):
+        return self._value
+
+class ProposedNodeErrorCode(data_model.DataObject):
+    """ProposedNodeErrorCode  
+    This specifies error code for a proposed node addition.
+
+    """
+    enum_values = ("nodesNoCapacity", "nodesTooLarge", "nodesConnectFailed", "nodesQueryFailed", "nodesClusterMember", "nonFipsNodeCapable", "nonFipsDrivesCapable", "nodeTypeUnsupported", "nodeTypesHeterogeneous", "nodeTypeInvalid", )
+
+    def __init__(self, value):
+        self._value = value
+
+    def __str__(self):
+        return str(self._value)
+
+    def get_value(self):
+        return self._value
+
+class VolumeAccess(data_model.DataObject):
+    """VolumeAccess  
+    Describes host access for a volume.
+
+    """
+    enum_values = ("locked", "readOnly", "readWrite", "replicationTarget", "snapMirrorTarget", )
+
+    def __init__(self, value):
+        self._value = value
+
+    def __str__(self):
+        return str(self._value)
+
+    def get_value(self):
+        return self._value
+
+class ProtectionDomainType(data_model.DataObject):
+    """ProtectionDomainType  
+    A Protection Domain is a set of one or more components whose simultaneous failure is protected
+    from causing data unavailability or loss. This specifies one of the types of Protection Domains
+    recognized by this cluster.
+
+    """
+    enum_values = ("node", "chassis", "custom", )
+
+    def __init__(self, value):
+        self._value = value
+
+    def __str__(self):
+        return str(self._value)
+
+    def get_value(self):
+        return self._value
+
 @click.group()
 @pass_context
 def cli(ctx):
-    """listhosts listtasks enablefeature list listbindings listvolumestatsby getcount listprotocolendpoints getfeaturestatus """
+    """listvolumestatsby enablefeature listtasks list listbindings getfeaturestatus getcount listhosts listprotocolendpoints """
 
-@cli.command('listhosts', short_help="""ListVirtualVolumeHosts returns a list of all virtual volume hosts known to the cluster. A virtual volume host is a VMware ESX host that has initiated a session with the VASA API provider. """, cls=SolidFireCommand)
-@click.option('--virtualvolumehostids',
+@cli.command('listvolumestatsby', short_help="""ListVolumeStatsByVirtualVolume enables you to list volume statistics for any volumes in the system that are associated with virtual volumes. Statistics are cumulative from the creation of the volume. """, cls=SolidFireCommand)
+@click.option('--virtualvolumeids',
               type=str,
               required=False,
-              help="""A list of virtual volume host IDs for which to retrieve information. If you omit this parameter, the method returns information about all virtual volume hosts. """)
+              help="""A list of one or more virtual volume IDs for which to retrieve information. If you specify this parameter, the method returns information about only these virtual volumes. """)
 @pass_context
-def listhosts(ctx,
+def listvolumestatsby(ctx,
            # Optional main parameter
-           virtualvolumehostids = None):
-    """ListVirtualVolumeHosts returns a list of all virtual volume hosts known to the cluster. A virtual volume host is a VMware ESX host"""
-    """that has initiated a session with the VASA API provider."""
+           virtualvolumeids = None):
+    """ListVolumeStatsByVirtualVolume enables you to list volume statistics for any volumes in the system that are associated with virtual volumes. Statistics are cumulative from the creation of the volume."""
 
     
 
     cli_utils.establish_connection(ctx)
     
 
-    virtualvolumehostids = parser.parse_array(virtualvolumehostids)
+    virtualvolumeids = parser.parse_array(virtualvolumeids)
     
 
-    ctx.logger.info(""": """"""virtualvolumehostids = """+str(virtualvolumehostids)+""";"""+"")
+    
+
+    ctx.logger.info(""": """"""virtualvolumeids = """+str(virtualvolumeids)+""";"""+"")
     try:
-        _ListVirtualVolumeHostsResult = ctx.element.list_virtual_volume_hosts(virtual_volume_host_ids=virtualvolumehostids)
+        _ListVolumeStatsByVirtualVolumeResult = ctx.element.list_volume_stats_by_virtual_volume(virtual_volume_ids=virtualvolumeids)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -56,10 +251,47 @@ def listhosts(ctx,
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ListVirtualVolumeHostsResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_ListVolumeStatsByVirtualVolumeResult), indent=4))
         return
     else:
-        cli_utils.print_result(_ListVirtualVolumeHostsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_ListVolumeStatsByVirtualVolumeResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('enablefeature', short_help="""You can use EnableFeature to enable cluster features that are disabled by default. """, cls=SolidFireCommand)
+@click.option('--feature',
+              type=str,
+              required=True,
+              prompt=True,
+              help="""Indicates which feature to enable. Valid values are: vvols: Enable the NetApp SolidFire VVols cluster feature. FipsDrives: Enable the NetApp SolidFire cluster FIPS 140-2 drive support. Fips: Enable FIPS 140-2 certified encryption for HTTPS communications. SnapMirror: Enable the SnapMirror replication cluster feature. """)
+@pass_context
+def enablefeature(ctx,
+           # Mandatory main parameter
+           feature):
+    """You can use EnableFeature to enable cluster features that are disabled by default."""
+
+    
+
+    cli_utils.establish_connection(ctx)
+    
+    
+
+    
+
+    ctx.logger.info(""": """"""feature = """ + str(feature)+""";"""+"")
+    try:
+        _EnableFeatureResult = ctx.element.enable_feature(feature=feature)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_EnableFeatureResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_EnableFeatureResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -82,6 +314,8 @@ def listtasks(ctx,
     virtualvolumetaskids = parser.parse_array(virtualvolumetaskids)
     
 
+    
+
     ctx.logger.info(""": """"""virtualvolumetaskids = """+str(virtualvolumetaskids)+""";"""+"")
     try:
         _ListVirtualVolumeTasksResult = ctx.element.list_virtual_volume_tasks(virtual_volume_task_ids=virtualvolumetaskids)
@@ -96,41 +330,6 @@ def listtasks(ctx,
         return
     else:
         cli_utils.print_result(_ListVirtualVolumeTasksResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('enablefeature', short_help="""You can use EnableFeature to enable cluster features that are disabled by default. """, cls=SolidFireCommand)
-@click.option('--feature',
-              type=str,
-              required=True,
-              prompt=True,
-              help="""Indicates which feature to enable. Valid value is: vvols: Enable the NetApp SolidFire VVols cluster feature. """)
-@pass_context
-def enablefeature(ctx,
-           # Mandatory main parameter
-           feature):
-    """You can use EnableFeature to enable cluster features that are disabled by default."""
-
-    
-
-    cli_utils.establish_connection(ctx)
-    
-    
-
-    ctx.logger.info(""": """"""feature = """ + str(feature)+""";"""+"")
-    try:
-        _EnableFeatureResult = ctx.element.enable_feature(feature=feature)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_EnableFeatureResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_EnableFeatureResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -182,6 +381,8 @@ def list(ctx,
     virtualvolumeids = parser.parse_array(virtualvolumeids)
     
 
+    
+
     ctx.logger.info(""": """"""details = """+str(details)+";" + """limit = """+str(limit)+";" + """recursive = """+str(recursive)+";" + """startvirtualvolumeid = """+str(startvirtualvolumeid)+";" + """virtualvolumeids = """+str(virtualvolumeids)+""";"""+"")
     try:
         _ListVirtualVolumesResult = ctx.element.list_virtual_volumes(details=details, limit=limit, recursive=recursive, start_virtual_volume_id=startvirtualvolumeid, virtual_volume_ids=virtualvolumeids)
@@ -218,6 +419,8 @@ def listbindings(ctx,
     virtualvolumebindingids = parser.parse_array(virtualvolumebindingids)
     
 
+    
+
     ctx.logger.info(""": """"""virtualvolumebindingids = """+str(virtualvolumebindingids)+""";"""+"")
     try:
         _ListVirtualVolumeBindingsResult = ctx.element.list_virtual_volume_bindings(virtual_volume_binding_ids=virtualvolumebindingids)
@@ -235,28 +438,28 @@ def listbindings(ctx,
 
 
 
-@cli.command('listvolumestatsby', short_help="""ListVolumeStatsByVirtualVolume enables you to list volume statistics for any volumes in the system that are associated with virtual volumes. Statistics are cumulative from the creation of the volume. """, cls=SolidFireCommand)
-@click.option('--virtualvolumeids',
+@cli.command('getfeaturestatus', short_help="""GetFeatureStatus enables you to retrieve the status of a cluster feature. """, cls=SolidFireCommand)
+@click.option('--feature',
               type=str,
               required=False,
-              help="""A list of one or more virtual volume IDs for which to retrieve information. If you specify this parameter, the method returns information about only these virtual volumes. """)
+              help="""Specifies the feature for which the status is returned. Valid values are: vvols: Retrieve status for the NetApp SolidFire VVols cluster feature. FipsDrives: Retrieve status for the FIPS 140-2 drive encryption feature. Fips: Retrieve status for the FIPS 140-2 encryption for HTTPS communication feature. SnapMirror: Retrieve status for the SnapMirror replication cluster feature. """)
 @pass_context
-def listvolumestatsby(ctx,
+def getfeaturestatus(ctx,
            # Optional main parameter
-           virtualvolumeids = None):
-    """ListVolumeStatsByVirtualVolume enables you to list volume statistics for any volumes in the system that are associated with virtual volumes. Statistics are cumulative from the creation of the volume."""
+           feature = None):
+    """GetFeatureStatus enables you to retrieve the status of a cluster feature."""
 
     
 
     cli_utils.establish_connection(ctx)
     
-
-    virtualvolumeids = parser.parse_array(virtualvolumeids)
     
 
-    ctx.logger.info(""": """"""virtualvolumeids = """+str(virtualvolumeids)+""";"""+"")
+    
+
+    ctx.logger.info(""": """"""feature = """+str(feature)+""";"""+"")
     try:
-        _ListVolumeStatsByVirtualVolumeResult = ctx.element.list_volume_stats_by_virtual_volume(virtual_volume_ids=virtualvolumeids)
+        _GetFeatureStatusResult = ctx.element.get_feature_status(feature=feature)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -264,10 +467,10 @@ def listvolumestatsby(ctx,
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ListVolumeStatsByVirtualVolumeResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_GetFeatureStatusResult), indent=4))
         return
     else:
-        cli_utils.print_result(_ListVolumeStatsByVirtualVolumeResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_GetFeatureStatusResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -279,6 +482,8 @@ def getcount(ctx):
     
 
     cli_utils.establish_connection(ctx)
+    
+
     
 
     ctx.logger.info(""": """+""";"""+"")
@@ -295,6 +500,45 @@ def getcount(ctx):
         return
     else:
         cli_utils.print_result(_GetVirtualVolumeCountResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('listhosts', short_help="""ListVirtualVolumeHosts returns a list of all virtual volume hosts known to the cluster. A virtual volume host is a VMware ESX host that has initiated a session with the VASA API provider. """, cls=SolidFireCommand)
+@click.option('--virtualvolumehostids',
+              type=str,
+              required=False,
+              help="""A list of virtual volume host IDs for which to retrieve information. If you omit this parameter, the method returns information about all virtual volume hosts. """)
+@pass_context
+def listhosts(ctx,
+           # Optional main parameter
+           virtualvolumehostids = None):
+    """ListVirtualVolumeHosts returns a list of all virtual volume hosts known to the cluster. A virtual volume host is a VMware ESX host"""
+    """that has initiated a session with the VASA API provider."""
+
+    
+
+    cli_utils.establish_connection(ctx)
+    
+
+    virtualvolumehostids = parser.parse_array(virtualvolumehostids)
+    
+
+    
+
+    ctx.logger.info(""": """"""virtualvolumehostids = """+str(virtualvolumehostids)+""";"""+"")
+    try:
+        _ListVirtualVolumeHostsResult = ctx.element.list_virtual_volume_hosts(virtual_volume_host_ids=virtualvolumehostids)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_ListVirtualVolumeHostsResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_ListVirtualVolumeHostsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
 
@@ -318,6 +562,8 @@ def listprotocolendpoints(ctx,
     protocolendpointids = parser.parse_array(protocolendpointids)
     
 
+    
+
     ctx.logger.info(""": """"""protocolendpointids = """+str(protocolendpointids)+""";"""+"")
     try:
         _ListProtocolEndpointsResult = ctx.element.list_protocol_endpoints(protocol_endpoint_ids=protocolendpointids)
@@ -333,37 +579,4 @@ def listprotocolendpoints(ctx,
     else:
         cli_utils.print_result(_ListProtocolEndpointsResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
-
-
-@cli.command('getfeaturestatus', short_help="""GetFeatureStatus enables you to retrieve the status of a cluster feature. """, cls=SolidFireCommand)
-@click.option('--feature',
-              type=str,
-              required=False,
-              help="""Specifies the feature for which the status is returned. Valid value is: vvols: Retrieve status for the NetApp SolidFire VVols cluster feature. """)
-@pass_context
-def getfeaturestatus(ctx,
-           # Optional main parameter
-           feature = None):
-    """GetFeatureStatus enables you to retrieve the status of a cluster feature."""
-
-    
-
-    cli_utils.establish_connection(ctx)
-    
-    
-
-    ctx.logger.info(""": """"""feature = """+str(feature)+""";"""+"")
-    try:
-        _GetFeatureStatusResult = ctx.element.get_feature_status(feature=feature)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_GetFeatureStatusResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_GetFeatureStatusResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 

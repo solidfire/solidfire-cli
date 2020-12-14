@@ -218,12 +218,78 @@ class ProtectionDomainType(data_model.DataObject):
 @click.group()
 @pass_context
 def cli(ctx):
-    """list restart """
+    """setconfig getconfig """
 
-@cli.command('list', short_help="""You can use ListServices to return the services information for nodes, drives, current software, and other services that are running on the cluster. """, cls=SolidFireCommand)
+@cli.command('setconfig', short_help="""Sets LLDP configuration options. If an option isn't set in the request, then it is unchanged from the previous value. """, cls=SolidFireCommand)
+
+@click.option('--enablelldp',
+              type=bool,
+              required=False,
+              help="""Enable the LLDP service """)
+
+@click.option('--enablemed',
+              type=bool,
+              required=False,
+              help="""Enable MED, an extension to LLDP that provides inventory information """)
+
+@click.option('--enableotherprotocols',
+              type=bool,
+              required=False,
+              help="""Enable other discovery protocols: CDP, FDP, EDP, and SONMP. """)
 @pass_context
-def list(ctx):
-    """You can use ListServices to return the services information for nodes, drives, current software, and other services that are running on the cluster."""
+def setconfig(ctx,
+           # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
+           enablelldp = None,
+           # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
+           enablemed = None,
+           # Non mandatory subparameter of a mandatory main parameter (not fully decomposed)
+           enableotherprotocols = None):
+    """Sets LLDP configuration options. If an option isn't set in the request, then it is unchanged from the previous value."""
+
+    
+
+    cli_utils.establish_connection(ctx)
+    
+
+    lldpconfig = None
+    if(enablelldp is not None or
+       enablemed is not None or
+       enableotherprotocols is not None or
+       False):
+        if not ( True):
+            ctx.logger.error("""If you choose to provide , you must include all of the following parameters:
+""")
+        kwargsDict = dict()
+        kwargsDict["enable_lldp"] = enablelldp
+        kwargsDict["enable_med"] = enablemed
+        kwargsDict["enable_other_protocols"] = enableotherprotocols
+
+        lldpconfig = LldpConfig(**kwargsDict)
+    
+
+    
+
+    ctx.logger.info(""": """"""lldpconfig = """ + str(lldpconfig)+""";"""+"")
+    try:
+        _GetLldpConfigResult = ctx.element.set_lldp_config(lldp_config=lldpconfig)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_GetLldpConfigResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_GetLldpConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('getconfig', short_help="""GetLldpConfig returns the current LLDP configuration for this node. """, cls=SolidFireCommand)
+@pass_context
+def getconfig(ctx):
+    """GetLldpConfig returns the current LLDP configuration for this node."""
 
     
 
@@ -234,7 +300,7 @@ def list(ctx):
 
     ctx.logger.info(""": """+""";"""+"")
     try:
-        _ListServicesResult = ctx.element.list_services()
+        _GetLldpConfigResult = ctx.element.get_lldp_config()
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -242,62 +308,9 @@ def list(ctx):
         ctx.logger.error(e.__str__())
         exit()
     if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_ListServicesResult), indent=4))
+        print(simplejson.dumps(simplejson.loads(_GetLldpConfigResult), indent=4))
         return
     else:
-        cli_utils.print_result(_ListServicesResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
-
-
-
-@cli.command('restart', short_help="""The RestartServices API method enables you to restart the services on a node. Caution: This method causes temporary node services interruption. Exercise caution when using this method. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
-@click.option('--force',
-              type=bool,
-              required=True,
-              prompt=True,
-              help="""Required parameter to successfully restart services on a node. """)
-@click.option('--service',
-              type=str,
-              required=False,
-              help="""Service name to be restarted. """)
-@click.option('--action',
-              type=str,
-              required=False,
-              help="""Action to perform on the service (start, stop, restart). """)
-@pass_context
-def restart(ctx,
-           # Mandatory main parameter
-           force,
-           # Optional main parameter
-           service = None,
-           # Optional main parameter
-           action = None):
-    """The RestartServices API method enables you to restart the services on a node."""
-    """Caution: This method causes temporary node services interruption. Exercise caution when using this method."""
-    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
-
-    
-
-    cli_utils.establish_connection(ctx)
-    
-    
-    
-    
-
-    
-
-    ctx.logger.info(""": """"""force = """ + str(force)+";" + """service = """+str(service)+";" + """action = """+str(action)+""";"""+"")
-    try:
-        _dict = ctx.element.restart_services(force=force, service=service, action=action)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_dict), indent=4))
-        return
-    else:
-        cli_utils.print_result(_dict, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+        cli_utils.print_result(_GetLldpConfigResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
 
