@@ -431,32 +431,34 @@ Command Options
 ---------------
 You can use the following options in the tool:
 
-    -m, --mvip TEXT
-        SolidFire MVIP
-    -u, --username TEXT
-        SolidFire Cluster username
-    -p, --password TEXT
-        SolidFire Cluster password
-    -q, --port INTEGER
-        The port number on which you wish to connect
-    -n, --name TEXT
-        The name of the connection you wish to use in connections.csv. You can use this if you have previously stored away a connection.
-    -c, --connectionIndex INTEGER
-        The index of the connection you wish to use in connections.csv. You can use this if you have previously stored away a connection.
-    -j, --json
-        To print the full output in json format, use this flag
-    -k, --pickle
-        To print the full output in a pickled json format, use this flag.
-    -s, --verifyssl      
+    -m, --mvip TEXT        
+        SolidFire MVIP.
+    -u, --username TEXT      
+        SolidFire Cluster username.
+    -p, --password TEXT      
+        SolidFire cluster password.
+    -v, --version TEXT       
+        The version you would like to connect on.
+    -q, --port INTEGER       
+        The port number on which you wish to connect.
+    -n, --name TEXT        
+        The name of the connection you wish to use in connections.csv. You can use this if you have previously stored away a connection with ‘sfcli connection push’.
+    -c, --connectionIndex INTEGER 
+        The index of the connection you wish to use in connections.csv. You can use this if you have previously stored away a connection with ‘sfcli connection push’.
+    -s, --verifyssl        
         Enable this to check ssl connection for errors especially when using a hostname. It is invalid to set this to true when using an IP address in the target.
-    -t, --timeout INTEGER 
+    -t, --timeout INTEGER     
         The request timeout in seconds.
-    --nocache
-        If you do not wish to cache the connection, supply this flag.
-    --debug [0|1|2|3]
+    -j, --json           
+        To print the full output in json format, use this flag.
+    -k, --pickle          
+        To print the full output in a pickled json format, use this flag.
+    --debug [0|1|2|3]       
         Set the debug level
-    --help
-        Show this help and exit.
+    --nocache           
+        If you do not wish to cache the connection, supply this flag.
+    --help             
+        Show this message and exit.
 
 Known Issues
 ---------------
