@@ -211,6 +211,11 @@ class SolidFireCommand(click.Command):
             param.add_to_parser(parser, ctx)
         return parser
 
+"""
+    SDK1.6 Note:
+    since print_tree output is not supported in SDK 1.6
+    depth and filter_tree params are removed from --help as they shold not be used.
+"""
 @click.command(cls=SolidFireCLI, context_settings=CONTEXT_SETTINGS, help=HELP_STRING)
 @click.option('--mvip', '-m',
               default=None,
@@ -258,14 +263,6 @@ class SolidFireCommand(click.Command):
               is_flag=True,
               required=False,
               help="To print the full output in a pickled json format, use this flag.")
-@click.option('--depth', '-d',
-              type=int,
-              required=False,
-              help="To print the output as a tree and specify the depth, use this option.")
-@click.option('--filter_tree', '-f',
-              required=False,
-              type=click.STRING,
-              help="To filter the fields that will be displayed in a tree, use this parameter. Supply fields in a comma separated list of keypaths. For example, to filter accounts list, if I wanted only the username and status, I could supply 'accounts.username,accounts.status'.")
 @click.option('--debug',
               required=False,
               default="1",
@@ -319,8 +316,13 @@ def cli(ctx,
     ctx.mvip = mvip
     ctx.json = json
     ctx.pickle = pickle
-    ctx.depth = depth
-    ctx.filter_tree = filter_tree
+    """
+        SDK1.6 Note:
+        since print_tree output is not supported in SDK 1.6
+        changing these two fields to None as they shold not be used.
+    """
+    ctx.depth = None
+    ctx.filter_tree = None
     ctx.verifyssl = verifyssl
     ctx.timeout = timeout
     ctx.version = version

@@ -148,6 +148,17 @@ def remove(ctx, name=None, index=None):
     connections = cli_utils.get_connections(ctx)
     if index is not None and index > (len(connections) - 1):
         ctx.logger.error("Your connection index is greater than the maximum index of your connections stack.")
+        return
+
+    #check if the name exists
+    if name is not None:
+        name_found = False
+        for connection in connections:
+            if connection["name"] == name:
+                name_found = True
+        if not name_found:
+            ctx.logger.error("Connection name does not exist. Please try with a valid name.")
+            return
 
     # Filter by name
     if name is not None:

@@ -30,11 +30,24 @@ def print_result(objs, log, as_json=False, as_pickle=False, depth=None, filter_t
         log.error("If you choose to print it as json, do not provide a depth or filter. Those are for printing it as a tree.")
         exit()
 
+    """
+        SDK1.6 Note:
+        Since print_tree is not supported in 1.6, when both the available output formats 
+        json and pickle formats are set to False, change the default output format (pickle) to True.
+    """
+    if as_json == False and as_pickle == False:
+        as_pickle = True
+
     # If json is true, we print it as json and return:
     if as_json == True or as_pickle == True:
         print_result_as_json(objs, as_pickle)
         return
 
+    """
+        SDK1.6 Note:
+        Commenting out these lines as print_tree is not supported in 1.6.
+    """
+    """
     # If we have a filter, apply it.
     if filter_tree is not None:
         try:
@@ -51,6 +64,7 @@ def print_result(objs, log, as_json=False, as_pickle=False, depth=None, filter_t
 
     # Next, print the tree to the appropriate depth
     print_result_as_tree(objs_to_print, depth)
+    """
 
 def print_result_as_json(objs, pickle=False):
     #print(jsonpickle.encode(objs))
@@ -80,8 +94,14 @@ def remove_pickling(nestedDict, filteredDict):
         return filteredDict
     return nestedDict
 
+"""
+    SDK1.6 Note:
+    Commenting this as print_tree is not supported in SDK 1.6.
+"""
+
 def get_result_as_tree(objs, depth=1, currentDepth=0, lastKey = ""):
-    stringToReturn = ""
+    print("print_tree is not supported in SDK1.6")
+    """stringToReturn = ""
     if(currentDepth > depth):
         return "<to see more details, increase depth>\n"
     if(type(objs) is str or type(objs) is bool or type(objs) is int or type(objs) is type(u'') or objs is None or type(objs) is float):# or (sys.version_info[0]<3 and type(objs) is long)):
@@ -107,6 +127,7 @@ def get_result_as_tree(objs, depth=1, currentDepth=0, lastKey = ""):
         stringToReturn += currentDepth*"    "
         stringToReturn += key+":   "+get_result_as_tree(mydict[key], depth, currentDepth+1, key)
     return stringToReturn
+    """
 
 def filter_objects_from_simple_keypaths(objs, simpleKeyPaths):
     # First, we assemble the key paths.

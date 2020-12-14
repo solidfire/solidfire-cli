@@ -34,28 +34,12 @@ To install from pypi using pip, execute the following command:
     pip install solidfire-cli
 
 -- or --
-
+Before you begin, must have solidfire-sdk-python installed in your environment.
 To install from source using easy_install, navigate to solidfirecli*.tar.gz file (where the * stands for the version), and run
 
 	easy_install solidfirecli*.tar.gz
 
 ___
-
-**SolidFire CLI Tools as Docker Container**
-
-To **start** a new container from our published image, use the following:
-
-    >: docker run -it netapp/solidfire-cli bin/bash
-
-You can **run** commands in the newly started container using standard sfcli commands from within it with the `bash-4.3#` prompt.
-
--- or --
-
-To **run** sfcli commands from the host on a running container, use the following: 
-
-    >: docker exec [container_name] [sfcli command] 
-
-Replace `[sfcli command]` with whichever cli command you are wanting to run. 
 
 Supported Operating Systems
 -----------------------------------
@@ -65,9 +49,9 @@ Supported Operating Systems
 
 ## Documentation
 
-[User Guide](https://solidfire.github.io/solidfire-cli/NetApp_SolidFire_CLI_User_Guide.pdf) This readme in .pdf form.
+[User Guide](NetAppElementCLIToolsUserGuide1_7.pdf)
 
-[Release Notes](https://solidfire.github.io/solidfire-cli/NetApp_SolidFire_CLI_Release_Notes.pdf) v1.5
+[Release Notes](NetAppElementCLIToolsReleaseNotes1_7.pdf)
 
 Accessing Inline Help
 ---------------------
@@ -447,30 +431,34 @@ Command Options
 ---------------
 You can use the following options in the tool:
 
-    -m, --mvip TEXT
-        SolidFire MVIP
-    -l, --login TEXT
-        SolidFire Cluster login
-    -p, --password TEXT
-        SolidFire Cluster password
-    -q, --port INTEGER
-        The port number on which you wish to connect
-    -n, --name TEXT
-        The name of the connection you wish to use in connections.csv. You can use this if you have previously stored away a connection.
-    -c, --connectionIndex INTEGER
-        The index of the connection you wish to use in connections.csv. You can use this if you have previously stored away a connection.
-    -j, --json
-        To print the full output in json format, use this flag
-    -k, --pickle
+    -m, --mvip TEXT        
+        SolidFire MVIP.
+    -u, --username TEXT      
+        SolidFire Cluster username.
+    -p, --password TEXT      
+        SolidFire cluster password.
+    -v, --version TEXT       
+        The version you would like to connect on.
+    -q, --port INTEGER       
+        The port number on which you wish to connect.
+    -n, --name TEXT        
+        The name of the connection you wish to use in connections.csv. You can use this if you have previously stored away a connection with ‘sfcli connection push’.
+    -c, --connectionIndex INTEGER 
+        The index of the connection you wish to use in connections.csv. You can use this if you have previously stored away a connection with ‘sfcli connection push’.
+    -s, --verifyssl        
+        Enable this to check ssl connection for errors especially when using a hostname. It is invalid to set this to true when using an IP address in the target.
+    -t, --timeout INTEGER     
+        The request timeout in seconds.
+    -j, --json           
+        To print the full output in json format, use this flag.
+    -k, --pickle          
         To print the full output in a pickled json format, use this flag.
-    -d, --depth INTEGER
-        To print the output as a tree and specify the depth, use this option.
-    -f, --filter_tree TEXT
-        To filter the fields that will be displayed in a tree, use this parameter. Supply fields in a comma separated list of keypaths. For example, to filter accounts list, if I wanted only the username and status, I could supply 'accounts.username,accounts.status'.
-    --debug [0|1|2|3]
+    --debug [0|1|2|3]       
         Set the debug level
-    --help
-        Show this help and exit.
+    --nocache           
+        If you do not wish to cache the connection, supply this flag.
+    --help             
+        Show this message and exit.
 
 Known Issues
 ---------------

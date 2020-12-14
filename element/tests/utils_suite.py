@@ -5,10 +5,16 @@ import solidfire
 import collections
 
 # Check the tree generator:
-def check_tree_generator():
+def test_check_tree_generator():
+    """
+        SDK1.6 Note:
+        Removing this test as print_tree is not supported in 1.6, 
+    """
+    print("print_tree is not supported in SDK1.6")
+    """
     # First, read in the appropriate values:
     # Input:
-    resources = os.path.join("resources", "FormatterUnitTests")
+    resources = os.path.join("element/tests/resources", "FormatterUnitTests")
     with open(os.path.join(resources, "JsonOutput.txt")) as f:
         objectModel=jsonpickle.decode(f.read())
 
@@ -30,5 +36,5 @@ def check_tree_generator():
         treeDepth5.split("\n")
     )
     print("Tree generator is working.")
+"""
 
-check_tree_generator()

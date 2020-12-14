@@ -1,0 +1,5 @@
+include LICENSE README.md
+recursive-include solidfire *
+recursive-exclude solidfire *.pyc
+include MANIFEST.in
+include cli_version.json

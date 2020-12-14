@@ -21,10 +21,204 @@ from element import exceptions
 from solidfire import common
 from element.cli.cli import SolidFireOption, SolidFireCommand
 
+class ProtectionSchemeVisibility(data_model.DataObject):
+    """ProtectionSchemeVisibility  
+    The public visibility of the protection scheme.
+
+    """
+    enum_values = ("customer", "testOnly", )
+
+    def __init__(self, value):
+        self._value = value
+
+    def __str__(self):
+        return str(self._value)
+
+    def get_value(self):
+        return self._value
+
+class RemoteClusterSnapshotStatus(data_model.DataObject):
+    """RemoteClusterSnapshotStatus  
+    Status of the remote snapshot on the target cluster as seen on the source cluster
+
+    """
+    enum_values = ("Present", "Not Present", "Syncing", "Deleted", "Unknown", )
+
+    def __init__(self, value):
+        self._value = value
+
+    def __str__(self):
+        return str(self._value)
+
+    def get_value(self):
+        return self._value
+
+class ProtectionSchemeCategory(data_model.DataObject):
+    """ProtectionSchemeCategory  
+    The category of the protection scheme.
+
+    """
+    enum_values = ("helix", "erasureCoded", )
+
+    def __init__(self, value):
+        self._value = value
+
+    def __str__(self):
+        return str(self._value)
+
+    def get_value(self):
+        return self._value
+
+class ProtectionScheme(data_model.DataObject):
+    """ProtectionScheme  
+    The method of protecting data on the cluster
+
+    """
+    enum_values = ("singleHelix", "doubleHelix", "tripleHelix", )
+
+    def __init__(self, value):
+        self._value = value
+
+    def __str__(self):
+        return str(self._value)
+
+    def get_value(self):
+        return self._value
+
+class AuthConfigType(data_model.DataObject):
+    """AuthConfigType  
+    This type indicates the configuration data which will be accessed or modified by the element auth container.
+
+    """
+    enum_values = ("mNode", "element", )
+
+    def __init__(self, value):
+        self._value = value
+
+    def __str__(self):
+        return str(self._value)
+
+    def get_value(self):
+        return self._value
+
+class DriveEncryptionCapabilityType(data_model.DataObject):
+    """DriveEncryptionCapabilityType  
+    This specifies a drive's encryption capability.
+
+    """
+    enum_values = ("none", "sed", "fips", )
+
+    def __init__(self, value):
+        self._value = value
+
+    def __str__(self):
+        return str(self._value)
+
+    def get_value(self):
+        return self._value
+
+class FipsDrivesStatusType(data_model.DataObject):
+    """FipsDrivesStatusType  
+    This specifies a node's FIPS 140-2 compliance status.
+
+    """
+    enum_values = ("None", "Partial", "Ready", )
+
+    def __init__(self, value):
+        self._value = value
+
+    def __str__(self):
+        return str(self._value)
+
+    def get_value(self):
+        return self._value
+
+class AuthMethod(data_model.DataObject):
+    """AuthMethod  
+    This type qualifies a ClusterAdmin with its authentication method.
+
+    """
+    enum_values = ("Cluster", "Ldap", "Idp", )
+
+    def __init__(self, value):
+        self._value = value
+
+    def __str__(self):
+        return str(self._value)
+
+    def get_value(self):
+        return self._value
+
+class MaintenanceMode(data_model.DataObject):
+    """MaintenanceMode  
+    Which mode a node is in when it is having maintenenace peformed.
+
+    """
+    enum_values = ("Disabled", "FailedToRecover", "Unexpected", "RecoveringFromMaintenance", "PreparingForMaintenance", "ReadyForMaintenance", )
+
+    def __init__(self, value):
+        self._value = value
+
+    def __str__(self):
+        return str(self._value)
+
+    def get_value(self):
+        return self._value
+
+class ProposedNodeErrorCode(data_model.DataObject):
+    """ProposedNodeErrorCode  
+    This specifies error code for a proposed node addition.
+
+    """
+    enum_values = ("nodesNoCapacity", "nodesTooLarge", "nodesConnectFailed", "nodesQueryFailed", "nodesClusterMember", "nonFipsNodeCapable", "nonFipsDrivesCapable", "nodeTypeUnsupported", "nodeTypesHeterogeneous", "nodeTypeInvalid", )
+
+    def __init__(self, value):
+        self._value = value
+
+    def __str__(self):
+        return str(self._value)
+
+    def get_value(self):
+        return self._value
+
+class VolumeAccess(data_model.DataObject):
+    """VolumeAccess  
+    Describes host access for a volume.
+
+    """
+    enum_values = ("locked", "readOnly", "readWrite", "replicationTarget", "snapMirrorTarget", )
+
+    def __init__(self, value):
+        self._value = value
+
+    def __str__(self):
+        return str(self._value)
+
+    def get_value(self):
+        return self._value
+
+class ProtectionDomainType(data_model.DataObject):
+    """ProtectionDomainType  
+    A Protection Domain is a set of one or more components whose simultaneous failure is protected
+    from causing data unavailability or loss. This specifies one of the types of Protection Domains
+    recognized by this cluster.
+
+    """
+    enum_values = ("node", "chassis", "custom", )
+
+    def __init__(self, value):
+        self._value = value
+
+    def __str__(self):
+        return str(self._value)
+
+    def get_value(self):
+        return self._value
+
 @click.group()
 @pass_context
 def cli(ctx):
-    """list ping connectmvip listutilities connectensemble connectsvip """
+    """list connectsvip ping connectmvip listutilities connectensemble """
 
 @cli.command('list', short_help="""You can use the ListTests API method to return the tests that are available to run on a node. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
 @pass_context
@@ -35,6 +229,8 @@ def list(ctx):
     
 
     cli_utils.establish_connection(ctx)
+    
+
     
 
     ctx.logger.info(""": """+""";"""+"")
@@ -54,7 +250,44 @@ def list(ctx):
 
 
 
-@cli.command('ping', short_help="""You can use the TestPing API method to validate the connection to all the nodes in a cluster on both 1G and 10G interfaces by using ICMP packets. The test uses the appropriate MTU sizes for each packet based on the MTU settings in the network configuration. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
+@cli.command('connectsvip', short_help="""The TestConnectSvip API method enables you to test the storage connection to the cluster. The test pings the SVIP using ICMP packets, and when successful, connects as an iSCSI initiator. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
+@click.option('--svip',
+              type=str,
+              required=False,
+              help="""If specified, tests the storage connection of a different SVIP. You do not need to use this value when testing the connection to the target cluster. This parameter is optional. """)
+@pass_context
+def connectsvip(ctx,
+           # Optional main parameter
+           svip = None):
+    """The TestConnectSvip API method enables you to test the storage connection to the cluster. The test pings the SVIP using ICMP packets, and when successful, connects as an iSCSI initiator."""
+    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
+
+    
+
+    cli_utils.establish_connection(ctx)
+    
+    
+
+    
+
+    ctx.logger.info(""": """"""svip = """+str(svip)+""";"""+"")
+    try:
+        _TestConnectSvipResult = ctx.element.test_connect_svip(svip=svip)
+    except common.ApiServerError as e:
+        ctx.logger.error(e.message)
+        exit()
+    except BaseException as e:
+        ctx.logger.error(e.__str__())
+        exit()
+    if ctx.json:
+        print(simplejson.dumps(simplejson.loads(_TestConnectSvipResult), indent=4))
+        return
+    else:
+        cli_utils.print_result(_TestConnectSvipResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
+
+
+
+@cli.command('ping', short_help="""The TestPing API allows to test the reachability to IP address(s) using ICMP packets. Source address(v4 or v6), interface and vlan tag can be specified. If not Bond1G/10G network is used to reach the target address. The test uses the appropriate MTU sizes for each packet based on the MTU settings in the network configuration. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
 @click.option('--attempts',
               type=int,
               required=False,
@@ -79,6 +312,22 @@ def list(ctx):
               type=bool,
               required=False,
               help="""Specifies that the Do not Fragment (DF) flag is enabled for the ICMP packets. """)
+@click.option('--sourceaddressv4',
+              type=str,
+              required=False,
+              help="""The ipv4 source address to be used in the ICMP ping packets sourceAddressV4 or sourceAddressV6 is required """)
+@click.option('--sourceaddressv6',
+              type=str,
+              required=False,
+              help="""The ipv6 source address to be used in the ICMP ping packets sourceAddressV4 or sourceAddressV6 is required """)
+@click.option('--interface',
+              type=str,
+              required=False,
+              help="""Existing interface on which the temporary vlan interface is created """)
+@click.option('--virtualnetworktag',
+              type=int,
+              required=False,
+              help="""VLAN on which host addresses reachability needs to be tested The temporary vlan interface is created with this tag """)
 @pass_context
 def ping(ctx,
            # Optional main parameter
@@ -92,9 +341,17 @@ def ping(ctx,
            # Optional main parameter
            pingtimeoutmsec = None,
            # Optional main parameter
-           prohibitfragmentation = None):
-    """You can use the TestPing API method to validate the"""
-    """connection to all the nodes in a cluster on both 1G and 10G interfaces by using ICMP packets. The test uses the appropriate MTU sizes for each packet based on the MTU settings in the network configuration."""
+           prohibitfragmentation = None,
+           # Optional main parameter
+           sourceaddressv4 = None,
+           # Optional main parameter
+           sourceaddressv6 = None,
+           # Optional main parameter
+           interface = None,
+           # Optional main parameter
+           virtualnetworktag = None):
+    """The TestPing API allows to test the reachability to IP address(s) using ICMP packets. Source address(v4 or v6), interface and vlan tag can be specified. If not Bond1G/10G network is used to reach the target address."""
+    """The test uses the appropriate MTU sizes for each packet based on the MTU settings in the network configuration."""
     """Note: This method is available only through the per-node API endpoint 5.0 or later."""
 
     
@@ -107,10 +364,16 @@ def ping(ctx,
     
     
     
+    
+    
+    
+    
 
-    ctx.logger.info(""": """"""attempts = """+str(attempts)+";" + """hosts = """+str(hosts)+";" + """totaltimeoutsec = """+str(totaltimeoutsec)+";" + """packetsize = """+str(packetsize)+";" + """pingtimeoutmsec = """+str(pingtimeoutmsec)+";" + """prohibitfragmentation = """+str(prohibitfragmentation)+""";"""+"")
+    
+
+    ctx.logger.info(""": """"""attempts = """+str(attempts)+";" + """hosts = """+str(hosts)+";" + """totaltimeoutsec = """+str(totaltimeoutsec)+";" + """packetsize = """+str(packetsize)+";" + """pingtimeoutmsec = """+str(pingtimeoutmsec)+";" + """prohibitfragmentation = """+str(prohibitfragmentation)+";" + """sourceaddressv4 = """+str(sourceaddressv4)+";" + """sourceaddressv6 = """+str(sourceaddressv6)+";" + """interface = """+str(interface)+";" + """virtualnetworktag = """+str(virtualnetworktag)+""";"""+"")
     try:
-        _TestPingResult = ctx.element.test_ping(attempts=attempts, hosts=hosts, total_timeout_sec=totaltimeoutsec, packet_size=packetsize, ping_timeout_msec=pingtimeoutmsec, prohibit_fragmentation=prohibitfragmentation)
+        _TestPingResult = ctx.element.test_ping(attempts=attempts, hosts=hosts, total_timeout_sec=totaltimeoutsec, packet_size=packetsize, ping_timeout_msec=pingtimeoutmsec, prohibit_fragmentation=prohibitfragmentation, source_address_v4=sourceaddressv4, source_address_v6=sourceaddressv6, interface=interface, virtual_network_tag=virtualnetworktag)
     except common.ApiServerError as e:
         ctx.logger.error(e.message)
         exit()
@@ -144,6 +407,8 @@ def connectmvip(ctx,
     
     
 
+    
+
     ctx.logger.info(""": """"""mvip = """+str(mvip)+""";"""+"")
     try:
         _TestConnectMvipResult = ctx.element.test_connect_mvip(mvip=mvip)
@@ -170,6 +435,8 @@ def listutilities(ctx):
     
 
     cli_utils.establish_connection(ctx)
+    
+
     
 
     ctx.logger.info(""": """+""";"""+"")
@@ -207,6 +474,8 @@ def connectensemble(ctx,
     
     
 
+    
+
     ctx.logger.info(""": """"""ensemble = """+str(ensemble)+""";"""+"")
     try:
         _TestConnectEnsembleResult = ctx.element.test_connect_ensemble(ensemble=ensemble)
@@ -222,38 +491,4 @@ def connectensemble(ctx,
     else:
         cli_utils.print_result(_TestConnectEnsembleResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
-
-
-@cli.command('connectsvip', short_help="""The TestConnectSvip API method enables you to test the storage connection to the cluster. The test pings the SVIP using ICMP packets, and when successful, connects as an iSCSI initiator. Note: This method is available only through the per-node API endpoint 5.0 or later. """, cls=SolidFireCommand)
-@click.option('--svip',
-              type=str,
-              required=False,
-              help="""If specified, tests the storage connection of a different SVIP. You do not need to use this value when testing the connection to the target cluster. This parameter is optional. """)
-@pass_context
-def connectsvip(ctx,
-           # Optional main parameter
-           svip = None):
-    """The TestConnectSvip API method enables you to test the storage connection to the cluster. The test pings the SVIP using ICMP packets, and when successful, connects as an iSCSI initiator."""
-    """Note: This method is available only through the per-node API endpoint 5.0 or later."""
-
-    
-
-    cli_utils.establish_connection(ctx)
-    
-    
-
-    ctx.logger.info(""": """"""svip = """+str(svip)+""";"""+"")
-    try:
-        _TestConnectSvipResult = ctx.element.test_connect_svip(svip=svip)
-    except common.ApiServerError as e:
-        ctx.logger.error(e.message)
-        exit()
-    except BaseException as e:
-        ctx.logger.error(e.__str__())
-        exit()
-    if ctx.json:
-        print(simplejson.dumps(simplejson.loads(_TestConnectSvipResult), indent=4))
-        return
-    else:
-        cli_utils.print_result(_TestConnectSvipResult, ctx.logger, as_json=ctx.json, as_pickle=ctx.pickle, depth=ctx.depth, filter_tree=ctx.filter_tree)
 
